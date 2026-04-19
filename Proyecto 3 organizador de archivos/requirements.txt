@@ -1,0 +1,3 @@
+# Este proyecto usa únicamente la biblioteca estándar de Python.
+# No se requieren dependencias externas (pip install).
+# Compatible con Python 3.6+
