@@ -2548,7 +2548,3 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProducts("all");
     updateCartCount();
 });
-
-
-// SIMULACIÓN ETAPA 6: Se habilitan todas las 23 velas aromáticas nuevas en el catálogo
-// PRODUCTS y SOAP_GALLERY están completamente habilitados
