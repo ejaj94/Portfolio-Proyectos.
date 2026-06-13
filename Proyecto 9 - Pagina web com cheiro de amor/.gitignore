@@ -1,0 +1,32 @@
+# Archivos temporales del sistema y del SO
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Configuración de Editores e IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Logs y caches de Node/NPM
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+# Entornos virtuales y caches de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+ENV/
+*.txt.bak
+verify-antigravity*

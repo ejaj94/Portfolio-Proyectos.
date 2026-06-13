@@ -1,0 +1,5 @@
+# Dependencias opcionales para el desarrollo web local con Python
+# Permite levantar un servidor web local con autorecarga para testing
+livereload==2.6.3
+requests==2.31.0
+urllib3==2.0.7
