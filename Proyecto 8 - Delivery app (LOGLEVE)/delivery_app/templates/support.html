@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centro de Apoio Inteligente - Logleve</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-nebula: radial-gradient(circle at 10% 20%, rgba(3, 7, 18, 0.95) 0%, rgba(11, 19, 41, 0.95) 90%);
+      --body-bg: #030712;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --brand-green: #10b981;
+      --brand-green-glow: rgba(16, 185, 129, 0.25);
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-nebula);
+      background-color: var(--body-bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Floating Lights Blobs */
+    .blob-container {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .blob {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.25;
+      animation: float-blob 16s infinite alternate;
+    }
+
+    .blob-green {
+      background: #10b981;
+      top: -50px;
+      left: -50px;
+    }
+
+    .blob-purple {
+      background: #8b5cf6;
+      bottom: -100px;
+      right: -50px;
+      animation-delay: 4s;
+    }
+
+    @keyframes float-blob {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 30px) scale(1.15); }
+    }
+
+    .support-container {
+      width: 100%;
+      max-width: 900px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(20px);
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      height: 600px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      .support-container {
+        grid-template-columns: 1fr;
+        height: auto;
+        max-height: none;
+      }
+    }
+
+    /* Left Sidebar: Role selector and Info */
+    .sidebar {
+      background: rgba(15, 23, 42, 0.4);
+      border-right: 1px solid var(--card-border);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--card-border);
+      }
+    }
+
+    .sidebar-header {
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .back-btn {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 16px;
+      transition: color 0.2s;
+    }
+
+    .back-btn:hover {
+      color: white;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .logo-img {
+      height: 36px;
+      width: auto;
+      filter: drop-shadow(0 0 6px var(--brand-green-glow));
+    }
+
+    .logo-text {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .sidebar-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .role-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .role-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.25s ease;
+    }
+
+    .role-btn:hover {
+      border-color: var(--brand-green);
+      background: rgba(16, 185, 129, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .role-btn.active {
+      border-color: var(--brand-green);
+      background: rgba(16, 185, 129, 0.12);
+      box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.1);
+    }
+
+    .role-btn i {
+      font-size: 18px;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .role-btn.active i {
+      color: var(--brand-green);
+    }
+
+    .role-btn h4 {
+      font-family: var(--font-title);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 2px;
+    }
+
+    .role-btn p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .sidebar-footer {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 24px;
+      text-align: left;
+    }
+
+    /* Right Main Panel: Chat Window */
+    .chat-panel {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: rgba(10, 15, 30, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .chat-panel {
+        height: 400px;
+      }
+    }
+
+    .chat-header {
+      background: rgba(15, 23, 42, 0.6);
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .agent-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .agent-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--brand-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+      box-shadow: 0 0 10px var(--brand-green-glow);
+    }
+
+    .agent-info {
+      text-align: left;
+    }
+
+    .agent-name {
+      font-family: var(--font-title);
+      font-size: 14.5px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .agent-status {
+      font-size: 11px;
+      color: var(--brand-green);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .agent-status::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--brand-green);
+      box-shadow: 0 0 6px var(--brand-green);
+    }
+
+    /* Chat Messages Box */
+    .chat-body {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    /* Custom scrollbar */
+    .chat-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .chat-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .chat-body::-webkit-scrollbar-thumb {
+      background: var(--card-border);
+      border-radius: 3px;
+    }
+    .chat-body::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    .chat-msg {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      text-align: left;
+      animation: msg-slide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes msg-slide {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg-bot {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .msg-user {
+      background: var(--brand-green);
+      color: #030712;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+      font-weight: 500;
+    }
+
+    .chat-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .opt-bubble {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .opt-bubble:hover {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: var(--brand-green);
+      transform: scale(1.03);
+    }
+
+    /* Input Box */
+    .chat-input-area {
+      background: rgba(15, 23, 42, 0.6);
+      border-top: 1px solid var(--card-border);
+      padding: 16px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: white;
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .chat-input:focus {
+      border-color: var(--brand-green);
+      box-shadow: 0 0 10px var(--brand-green-glow);
+    }
+
+    .btn-chat-send {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--brand-green);
+      border: none;
+      color: #030712;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .btn-chat-send:hover {
+      transform: translateY(-1px) scale(1.05);
+      box-shadow: 0 4px 12px var(--brand-green-glow);
+      filter: brightness(1.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob-container">
+    <div class="blob blob-green"></div>
+    <div class="blob blob-purple"></div>
+  </div>
+
+  <div class="support-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div>
+        <div class="sidebar-header">
+          <a href="/" class="back-btn">
+            <i class="fas fa-chevron-left"></i>
+            <span>Voltar à Página Inicial</span>
+          </a>
+          <div class="logo-container">
+            <img src="{{ url_for('static', filename='logo.png') }}" class="logo-img" alt="Logleve Logo">
+            <span class="logo-text">Logleve</span>
+          </div>
+          <p class="sidebar-desc">Centro de Apoio Operacional Inteligente. Selecione o seu perfil operacional para falar com o assistente especializado.</p>
+        </div>
+
+        <div class="role-selector">
+          <!-- Client -->
+          <div class="role-btn active" onclick="selectSupportRole('client')" id="roleBtn-client">
+            <i class="fas fa-shopping-bag"></i>
+            <div>
+              <h4>Apoio ao Cliente</h4>
+              <p>Encomendas, reembolsos e pagamentos Stripe / MB WAY.</p>
+            </div>
+          </div>
+          <!-- Courier -->
+          <div class="role-btn" onclick="selectSupportRole('courier')" id="roleBtn-courier">
+            <i class="fas fa-motorcycle"></i>
+            <div>
+              <h4>Apoio ao Estafeta</h4>
+              <p>Matrículas, licenças, carteira e rotas GPS.</p>
+            </div>
+          </div>
+          <!-- Restaurant -->
+          <div class="role-btn" onclick="selectSupportRole('restaurant')" id="roleBtn-restaurant">
+            <i class="fas fa-fire-burner"></i>
+            <div>
+              <h4>Apoio ao Restaurante</h4>
+              <p>KDS Monitor de Cozinha, menus e comandas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <p>&copy; 2026 Logleve Technologies.</p>
+        <p>Apoio Automatizado e Humano Integrados.</p>
+      </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-panel">
+      <div class="chat-header">
+        <div class="agent-profile">
+          <div class="agent-avatar" id="chatAvatar">🤖</div>
+          <div class="agent-info">
+            <h4 class="agent-name" id="chatAgentName">IA Logleve - Apoio Cliente</h4>
+            <p class="agent-status">Online de forma segura</p>
+          </div>
+        </div>
+        <i class="fas fa-headset" style="color: var(--text-muted); font-size: 18px;"></i>
+      </div>
+
+      <!-- Chat History -->
+      <div class="chat-body" id="chatHistoryBox">
+        <!-- Initial Message -->
+        <div class="chat-msg msg-bot" id="initialBotMsg">
+          Olá! Sou a Inteligência Artificial de Suporte da <strong>Logleve</strong>. Como posso ajudar nas suas compras ou na gestão da sua conta hoje?
+          <div class="chat-options" id="chatQuickOptions">
+            <span class="opt-bubble" onclick="quickMessage('Problema com uma encomenda')">Problema com encomenda</span>
+            <span class="opt-bubble" onclick="quickMessage('Reembolsos e pagamentos Stripe')">Reembolso Stripe / MB WAY</span>
+            <span class="opt-bubble" onclick="quickMessage('Falar com suporte humano')">Falar com Humano 🧑‍💻</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Bar -->
+      <div class="chat-input-area">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Digite a sua mensagem aqui..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+        <button class="btn-chat-send" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let activeSupportRole = 'client';
+
+    // Persona-specific assistants and dialog configurations
+    const supportPersonas = {
+      client: {
+        agentName: "IA Logleve - Apoio Cliente",
+        avatar: "🛍️",
+        welcome: "Olá! Sou a Inteligência Artificial de Apoio ao <strong>Cliente</strong>. Como posso ajudar hoje com as suas encomendas ou pagamentos?",
+        options: [
+          "Problema com uma encomenda",
+          "Reembolsos e pagamentos Stripe",
+          "Falar com suporte humano"
+        ],
+        answers: {
+          "encomenda": "Se tem um problema com uma encomenda em curso, verifique a secção de Monitorização em tempo real na sua aplicação para saber o ponto de entrega. Caso o pedido esteja atrasado ou incompleto, a nossa equipa pode coordenar diretamente com o restaurante.",
+          "reembolso": "Os pagamentos e reembolsos na Logleve são processados com total segurança através do Stripe. Um reembolso demora entre 3 a 5 dias úteis a surgir na sua conta bancária. Pode também pagar com MB WAY para total agilidade.",
+          "stripe": "Os pagamentos e reembolsos na Logleve são processados com total segurança através do Stripe. Um reembolso demora entre 3 a 5 dias úteis a surgir na sua conta bancária. Pode também pagar com MB WAY para total agilidade.",
+          "humano": "Vou transferir a conversa para um agente do Suporte Central da Logleve. Um momento, por favor...",
+          "mbway": "O MB WAY é totalmente suportado para pagamentos instantâneos. Ao pagar, receberá uma notificação direta no telemóvel para autorizar a transação em segurança.",
+          "default": "Compreendo a sua dúvida sobre o serviço ao cliente. Deseja obter informações sobre entregas, pagamentos de faturação ou prefere o suporte humano?"
+        }
+      },
+      courier: {
+        agentName: "IA Logleve - Suporte Estafeta",
+        avatar: "🛵",
+        welcome: "Olá! Sou o assistente de IA para <strong>Estafetas</strong> da Logleve. Tem dúvidas sobre candidaturas, documentação, matrículas ou cashout?",
+        options: [
+          "Preciso de matrícula para bicicleta/trotinete?",
+          "Documentos e licença exigidos",
+          "Como fazer levantamentos (Cashout)",
+          "Falar com suporte humano"
+        ],
+        answers: {
+          "matricula": "<strong>Excelente notícia!</strong> Bicicletas e trotinetes elétricas estão totalmente isentas de matrícula, carta de condução e seguro veicular no sistema Logleve. Apenas viaturas motorizadas (motociclos e automóveis) necessitam de matrícula no registo.",
+          "bicicleta": "<strong>Excelente notícia!</strong> Bicicletas e trotinetes elétricas estão totalmente isentas de matrícula, carta de condução e seguro veicular no sistema Logleve. Apenas viaturas motorizadas (motociclos e automóveis) necessitam de matrícula no registo.",
+          "trotinete": "<strong>Excelente notícia!</strong> Bicicletas e trotinetes elétricas estão totalmente isentas de matrícula, carta de condução e seguro veicular no sistema Logleve. Apenas viaturas motorizadas (motociclos e automóveis) necessitam de matrícula no registo.",
+          "documentos": "Para viaturas motorizadas, é necessário carregar: Cartão de Cidadão, Carta de Condução válida, Seguro Veicular e Matrícula. Para bicicletas ou trotinetes, apenas necessita do Cartão de Cidadão e da sua Foto de Perfil. Não necessita de carta nem seguro!",
+          "licença": "Para viaturas motorizadas, é necessário carregar: Cartão de Cidadão, Carta de Condução válida, Seguro Veicular e Matrícula. Para bicicletas ou trotinetes, apenas necessita do Cartão de Cidadão e da sua Foto de Perfil. Não necessita de carta nem seguro!",
+          "levantamento": "O saldo das comissões acumuladas na sua Carteira Virtual pode ser transferido imediatamente via IBAN/Stripe Connect. Basta aceder à secção 'Ganhos' no seu portal de estafeta e solicitar o cashout.",
+          "cashout": "O saldo das comissões acumuladas na sua Carteira Virtual pode ser transferido imediatamente via IBAN/Stripe Connect. Basta aceder à secção 'Ganhos' no seu portal de estafeta e solicitar o cashout.",
+          "humano": "Vou transferir a conversa para um operador do Suporte Operacional a Estafetas. Um momento, por favor...",
+          "default": "Como parceiro de entregas Logleve, pode tirar dúvidas sobre matrícula de viaturas, estado de aprovação de documentos ou transferências financeiras. O que precisa?"
+        }
+      },
+      restaurant: {
+        agentName: "IA Logleve - Suporte Restaurante",
+        avatar: "🍳",
+        welcome: "Olá! Sou o assistente de IA de apoio a <strong>Restaurantes</strong> da Logleve. Como posso ajudar com o KDS monitor, encomendas, menus ou NIF?",
+        options: [
+          "Como funciona o monitor KDS?",
+          "Como criar e atualizar o menu / pratos",
+          "Dúvidas sobre o NIF e faturamento",
+          "Falar com suporte humano"
+        ],
+        answers: {
+          "kds": "O monitor KDS (Kitchen Display System) funciona em tempo real. As novas comandas piscam no ecrã com alertas sonoros. Quando a cozinha terminar a preparação, basta clicar em 'Pronto' para notificar o estafeta mais próximo automaticamente.",
+          "monitor": "O monitor KDS (Kitchen Display System) funciona em tempo real. As novas comandas piscam no ecrã com alertas sonoros. Quando a cozinha terminar a preparação, basta clicar em 'Pronto' para notificar o estafeta mais próximo automaticamente.",
+          "menu": "Para atualizar o menu ou adicionar fotos dos pratos, aceda ao painel de administração do restaurante, clique em 'Gerir Menu', adicione o nome, preço e carregue a foto. Os pratos surgem imediatamente para os clientes da sua zona.",
+          "pratos": "Para atualizar o menu ou adicionar fotos dos pratos, aceda ao painel de administração do restaurante, clique em 'Gerir Menu', adicione o nome, preço e carregue a foto. Os pratos surgem imediatamente para os clientes da sua zona.",
+          "nif": "O seu NIF de faturação comercial é verificado automaticamente pela nossa IA junto do Portal das Finanças de Portugal para assegurar a conformidade fiscal antes do primeiro pagamento das faturas semanais.",
+          "humano": "Vou transferir o seu contacto para um gestor de contas de restaurantes. Um momento...",
+          "default": "Olá, parceiro comercial. Posso ajudar a configurar o monitor KDS de cozinha, gerir preços do menu ou tirar dúvidas fiscais sobre faturamento. Como podemos ajudar?"
+        }
+      }
+    };
+
+    // Empathetic and calming responses for frustrated keywords in Portuguese/Spanish
+    const frustratedKeywords = [
+      "frustrado", "tarde", "enojado", "mal", "malo", "no llega", "perdido", "merda", "atrasado", 
+      "ruim", "porcaria", "falha", "raiva", "chateado", "irritado", "atraso", "perdi", "estou farto",
+      "demora", "demorado", "reclamar", "roubo", "enganado"
+    ];
+
+    function selectSupportRole(role) {
+      activeSupportRole = role;
+      
+      // Update sidebar buttons
+      document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`roleBtn-${role}`).classList.add('active');
+      
+      // Update header details
+      const persona = supportPersonas[role];
+      document.getElementById('chatAgentName').innerText = persona.agentName;
+      document.getElementById('chatAvatar').innerText = persona.avatar;
+      
+      // Clear history box and append role-specific initial message
+      const box = document.getElementById('chatHistoryBox');
+      box.innerHTML = '';
+      
+      const msg = document.createElement('div');
+      msg.className = 'chat-msg msg-bot';
+      
+      let optionsHtml = '';
+      persona.options.forEach(opt => {
+        optionsHtml += `<span class="opt-bubble" onclick="quickMessage('${opt}')">${opt}</span>`;
+      });
+      
+      msg.innerHTML = `
+        ${persona.welcome}
+        <div class="chat-options">
+          ${optionsHtml}
+        </div>
+      `;
+      box.appendChild(msg);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function quickMessage(text) {
+      appendMessage(text, 'user');
+      processBotResponse(text);
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const val = input.value.trim();
+      if (!val) return;
+      
+      appendMessage(val, 'user');
+      input.value = '';
+      
+      processBotResponse(val);
+    }
+
+    function appendMessage(text, sender) {
+      const box = document.getElementById('chatHistoryBox');
+      const msg = document.createElement('div');
+      msg.className = `chat-msg ${sender === 'user' ? 'msg-user' : 'msg-bot'}`;
+      msg.innerHTML = text;
+      box.appendChild(msg);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function processBotResponse(val) {
+      const box = document.getElementById('chatHistoryBox');
+      
+      // typing simulator placeholder
+      const typingMsg = document.createElement('div');
+      typingMsg.className = 'chat-msg msg-bot';
+      typingMsg.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <em>Logleve IA está a responder...</em>';
+      box.appendChild(typingMsg);
+      box.scrollTop = box.scrollHeight;
+
+      setTimeout(() => {
+        // remove typing placeholder
+        box.removeChild(typingMsg);
+
+        const cleanVal = val.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        
+        // Frustration checker
+        const isFrustrated = frustratedKeywords.some(keyword => cleanVal.includes(keyword));
+        
+        let reply = "";
+        
+        if (isFrustrated) {
+          // Tone of high empathy and immediate human escalation
+          reply = `<strong>Lamento imenso a sua frustração e compreendo perfeitamente a gravidade da situação.</strong> A sua tranquilidade e satisfação são as nossas prioridades absolutas na Logleve. <br><br><i class="fas fa-circle-check" style="color: var(--brand-green);"></i> Para resolver esta situação imediatamente e com toda a atenção que merece, <strong>estou a transferir esta conversa diretamente para um Supervisor de Suporte Humano Sénior em caráter urgente.</strong><br><br>Por favor, não feche este chat. Ligando o canal prioritário em 5 segundos...`;
+          
+          appendMessage(reply, 'bot');
+          
+          setTimeout(() => {
+            appendMessage(`🤖 <em>Conexão prioritária redirecionada com sucesso!</em>`, 'bot');
+            appendMessage(`<strong>Olá! Sou o Ricardo, Supervisor de Turno da Logleve.</strong> Li a sua mensagem e assumi pessoalmente o seu caso. Vou contactar imediatamente o restaurante e o estafeta associado para lhe dar uma solução definitiva. Pode partilhar mais detalhes se desejar, estou aqui para ajudar e resolver o problema!`, 'bot');
+          }, 3500);
+          return;
+        }
+
+        // Standard persona match logic
+        const persona = supportPersonas[activeSupportRole];
+        let found = false;
+        
+        for (const key in persona.answers) {
+          if (cleanVal.includes(key) || key.includes(cleanVal)) {
+            reply = persona.answers[key];
+            found = true;
+            break;
+          }
+        }
+        
+        if (!found) {
+          reply = persona.answers["default"];
+        }
+        
+        appendMessage(reply, 'bot');
+        
+        // Human escalation check inside response
+        if (cleanVal.includes('atendente') || cleanVal.includes('humano') || cleanVal.includes('suporte') || cleanVal.includes('falar')) {
+          setTimeout(() => {
+            const humanName = activeSupportRole === 'client' ? 'Gabriel' : (activeSupportRole === 'restaurant' ? 'Pedro' : 'Mariana');
+            appendMessage(`🤖 <em>Ligando o seu chat com o suporte central...</em>`, 'bot');
+            appendMessage(`<strong>Olá! Sou o ${humanName} do Apoio Logleve.</strong> Recebi a sua chamada automática. Diga-me, como o posso ajudar pessoalmente a resolver a sua questão neste momento?`, 'bot');
+          }, 1800);
+        }
+      }, 900);
+    }
+  </script>
+</body>
+</html>
