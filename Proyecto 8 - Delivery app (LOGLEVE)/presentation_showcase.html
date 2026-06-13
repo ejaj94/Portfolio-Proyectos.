@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logleve - Premium Video Showcase Simulator</title>
+    
+    <!-- FontAwesome & Google Fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+      :root {
+        --bg-space: radial-gradient(circle at 50% 50%, #0c152b 0%, #030712 100%);
+        --brand-green: #10b981;
+        --brand-green-hover: #059669;
+        --brand-green-glow: rgba(16, 185, 129, 0.35);
+        --glass-bg: rgba(15, 23, 42, 0.65);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --text-light: #f1f5f9;
+        --text-muted: #94a3b8;
+        --font-main: 'Inter', sans-serif;
+        --font-title: 'Outfit', sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-main);
+        background: var(--bg-space);
+        color: var(--text-light);
+        min-height: 100vh;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      /* 🌌 ORGANIC BLUR BLOBS FOR HIGH-END COSMIC LOOK */
+      .blob-bg {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.15;
+        z-index: -1;
+        pointer-events: none;
+      }
+      .blob-1 {
+        width: 400px;
+        height: 400px;
+        background: #10b981;
+        top: -100px;
+        left: -100px;
+        animation: floatBlob 20s infinite alternate;
+      }
+      .blob-2 {
+        width: 500px;
+        height: 500px;
+        background: #0ea5e9;
+        bottom: -150px;
+        right: -100px;
+        animation: floatBlob 25s infinite alternate-reverse;
+      }
+      .blob-3 {
+        width: 300px;
+        height: 300px;
+        background: #8b5cf6;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: floatBlob 18s infinite alternate;
+      }
+
+      @keyframes floatBlob {
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(40px, 60px) scale(1.1); }
+      }
+
+      /* 📱 WRAPPER PRINCIPAL */
+      .presentation-container {
+        width: 100%;
+        max-width: 1080px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--glass-border);
+        border-radius: 28px;
+        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        position: relative;
+        z-index: 10;
+        animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes slideUpFade {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* 📱 TITLE & HEADER */
+      .showcase-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        padding-bottom: 20px;
+      }
+
+      .logo-area {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #10b981, #0ea5e9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #030712;
+        font-size: 24px;
+        box-shadow: 0 0 20px var(--brand-green-glow);
+      }
+
+      .logo-text h1 {
+        font-family: var(--font-title);
+        font-weight: 900;
+        font-size: 22px;
+        letter-spacing: -0.5px;
+        background: linear-gradient(90deg, #f1f5f9, #2dd4bf);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .logo-text p {
+        font-size: 11px;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .lang-switcher {
+        display: flex;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--glass-border);
+        padding: 4px;
+        border-radius: 12px;
+        gap: 4px;
+      }
+
+      .lang-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        padding: 6px 14px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .lang-btn.active {
+        background: var(--brand-green);
+        color: #030712;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+      }
+
+      /* 🎬 VIDEO SIMULATOR VIEWPORT */
+      .video-viewport {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        background: #030712;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        overflow: hidden;
+        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9);
+      }
+
+      .slide-image-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #030712;
+      }
+
+      /* 📺 BACKGROUND BLURRED COVERS FOR WIDESCREEN ASPECT FILL */
+      .slide-image-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: blur(25px) brightness(0.3);
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out;
+        z-index: 1;
+      }
+
+      .slide-image-bg.active {
+        opacity: 0.65;
+      }
+
+      /* 📱 FOREGROUND CRISP CONTAINED MOBILE VIEWS */
+      .slide-image {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out, transform 8s linear;
+        z-index: 2;
+      }
+
+      .slide-image.active {
+        opacity: 1;
+        transform: scale(1.02);
+      }
+
+      /* Animated UI overlay tag */
+      .slide-overlay-tag {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(16, 185, 129, 0.2);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #2dd4bf;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: 800;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-family: var(--font-title);
+        box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 10;
+        animation: pulseTag 2s infinite;
+      }
+
+      @keyframes pulseTag {
+        0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.25); }
+        50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.45); }
+      }
+
+      /* Neon visual alerts flashing on KDS and map transitions */
+      .neon-shutter {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        box-shadow: inset 0 0 50px rgba(16, 185, 129, 0);
+        z-index: 9;
+        transition: box-shadow 0.3s;
+      }
+      .neon-shutter.flash-alert {
+        box-shadow: inset 0 0 60px rgba(16, 185, 129, 0.4);
+        animation: borderPulse 1s 2 alternate;
+      }
+
+      @keyframes borderPulse {
+        from { box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1); }
+        to { box-shadow: inset 0 0 60px rgba(16, 185, 129, 0.4); }
+      }
+
+      /* 🎙️ NARRATOR SPEAKER CARD */
+      .speaker-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 18px;
+        padding: 20px 24px;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+
+      .speaker-avatar-box {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(16, 185, 129, 0.1);
+        border: 2px solid var(--brand-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--brand-green);
+        font-size: 24px;
+        box-shadow: 0 0 15px var(--brand-green-glow);
+      }
+
+      .audio-wave {
+        display: flex;
+        gap: 3px;
+        align-items: center;
+        position: absolute;
+        bottom: -2px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #030712;
+        padding: 2px 6px;
+        border-radius: 8px;
+        border: 1px solid var(--glass-border);
+      }
+
+      .wave-bar {
+        width: 3px;
+        height: 6px;
+        background: var(--brand-green);
+        border-radius: 2px;
+      }
+
+      .playing .wave-bar {
+        animation: wavePulse 1s infinite alternate;
+      }
+      .playing .wave-bar:nth-child(2) { animation-delay: 0.2s; }
+      .playing .wave-bar:nth-child(3) { animation-delay: 0.4s; }
+      .playing .wave-bar:nth-child(4) { animation-delay: 0.1s; }
+
+      @keyframes wavePulse {
+        0% { height: 6px; }
+        100% { height: 18px; }
+      }
+
+      .speaker-text-box {
+        flex: 1;
+      }
+
+      .speaker-title {
+        font-family: var(--font-title);
+        font-weight: 800;
+        font-size: 15px;
+        color: #2dd4bf;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .speaker-narration {
+        font-size: 14.5px;
+        line-height: 1.6;
+        color: var(--text-light);
+        min-height: 68px;
+        transition: opacity 0.3s;
+      }
+
+      /* 🎮 VIDEO PLAYBACK CONTROLS */
+      .player-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .progress-area {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .time-display {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--text-muted);
+        min-width: 80px;
+        text-align: center;
+      }
+
+      .progress-bar-container {
+        flex: 1;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 3px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #10b981, #0ea5e9);
+        border-radius: 3px;
+        transition: width 0.1s linear;
+      }
+
+      .control-buttons-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .main-controls {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .control-btn {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--glass-border);
+        color: var(--text-light);
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .control-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #2dd4bf;
+        transform: translateY(-2px);
+      }
+
+      .control-btn:active {
+        transform: translateY(0);
+      }
+
+      .control-btn.play-btn {
+        background: #10b981;
+        color: #030712;
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        font-size: 20px;
+        box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        border: none;
+      }
+
+      .control-btn.play-btn:hover {
+        background: #34d399;
+        transform: scale(1.05);
+        color: #030712;
+        box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+      }
+
+      .secondary-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* 📊 STORYBOARD SCENE LIST */
+      .storyboard-timeline {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+
+      .timeline-scene {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        padding: 12px 14px;
+        border-radius: 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: left;
+      }
+
+      .timeline-scene:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .timeline-scene.active {
+        background: rgba(16, 185, 129, 0.06);
+        border-color: var(--brand-green);
+        box-shadow: inset 0 0 8px rgba(16, 185, 129, 0.15);
+      }
+
+      .scene-meta {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--brand-green);
+        font-weight: 800;
+        margin-bottom: 4px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .scene-title {
+        font-family: var(--font-title);
+        font-weight: 800;
+        font-size: 12.5px;
+        color: var(--text-light);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .scene-duration {
+        color: var(--text-muted);
+        font-weight: normal;
+      }
+
+      /* Sound synthetic reading badge */
+      .tts-badge {
+        font-size: 10px;
+        background: rgba(14, 165, 233, 0.2);
+        border: 1px solid rgba(14, 165, 233, 0.3);
+        color: #38bdf8;
+        padding: 2px 6px;
+        border-radius: 6px;
+        font-family: var(--font-mono);
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        box-shadow: 0 0 8px rgba(14, 165, 233, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 🌌 BLUR EFFECT DECORATIONS -->
+    <div class="blob-bg blob-1"></div>
+    <div class="blob-bg blob-2"></div>
+    <div class="blob-bg blob-3"></div>
+
+    <div class="presentation-container">
+      <!-- HEADER -->
+      <div class="showcase-header">
+        <div class="logo-area">
+          <div class="logo-icon">
+            <i class="fas fa-play"></i>
+          </div>
+          <div class="logo-text">
+            <h1>LOGLEVE</h1>
+            <p>Showcase Virtual em Vídeo Interactiva</p>
+          </div>
+        </div>
+        
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="switchLanguage('pt')">PORTUGUÊS (PT)</button>
+          <button class="lang-btn" onclick="switchLanguage('es')">ESPAÑOL (ES)</button>
+        </div>
+      </div>
+
+      <!-- VIDEO VIEWPORT -->
+      <div class="video-viewport">
+        <div class="slide-overlay-tag" id="viewport-tag">
+          <i class="fas fa-mobile-alt"></i> Aplicación Cliente (Porto)
+        </div>
+        
+        <div class="neon-shutter" id="viewport-alert"></div>
+        
+        <div class="slide-image-container">
+          <!-- Widescreen Blurred Backdrops -->
+          <img src="client_app_interface.png" class="slide-image-bg active" id="slide-bg-0" alt="" />
+          <img src="restaurant_kds_monitor.png" class="slide-image-bg" id="slide-bg-1" alt="" />
+          <img src="courier_live_tracking.png" class="slide-image-bg" id="slide-bg-2" alt="" />
+          <img src="client_app_interface.png" class="slide-image-bg" id="slide-bg-3" alt="" />
+
+          <!-- Crisp Centered Device Views -->
+          <img src="client_app_interface.png" class="slide-image active" id="slide-img-0" alt="App Cliente Logleve" />
+          <img src="restaurant_kds_monitor.png" class="slide-image" id="slide-img-1" alt="Monitor KDS Logleve" />
+          <img src="courier_live_tracking.png" class="slide-image" id="slide-img-2" alt="Rastreo y Slider Logleve" />
+          <!-- Re-use final view as a concluding slide -->
+          <img src="client_app_interface.png" class="slide-image" id="slide-img-3" alt="Final Logleve" style="filter: brightness(0.7) saturate(1.2);" />
+        </div>
+      </div>
+
+      <!-- SPEAKER / NARRATOR SPEECH CARD -->
+      <div class="speaker-card" id="speaker-element">
+        <div class="speaker-avatar-box">
+          <i class="fas fa-microphone"></i>
+          <div class="audio-wave">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+          </div>
+        </div>
+        <div class="speaker-text-box">
+          <div class="speaker-title">
+            <span>🎙️ Locutor Antigravity AI</span>
+            <span class="tts-badge"><i class="fas fa-volume-up"></i> Áudio Sintetizado Activo</span>
+          </div>
+          <div class="speaker-narration" id="speaker-text">
+            Olá! Bem-vindo à demonstração do ecossistema tecnológico Logleve. Desenvolvemos uma plataforma premium de entregas ultrarrápida, 100% unificada com SQLite e WebSockets em tempo real. Vamos ver como funciona o fluxo completo!
+          </div>
+        </div>
+      </div>
+
+      <!-- PLAYER PLAYBACK CONTROLS -->
+      <div class="player-controls">
+        <div class="progress-area">
+          <span class="time-display" id="time-indicator">00:00 / 02:00</span>
+          <div class="progress-bar-container" id="progress-container">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+        
+        <div class="control-buttons-row">
+          <div class="main-controls">
+            <button class="control-btn" id="btn-prev" onclick="prevScene()" title="Cena Anterior">
+              <i class="fas fa-backward"></i>
+            </button>
+            <button class="control-btn play-btn" id="btn-play" onclick="togglePlay()" title="Reproduzir / Pausar">
+              <i class="fas fa-play" id="play-icon"></i>
+            </button>
+            <button class="control-btn" id="btn-next" onclick="nextScene()" title="Próxima Cena">
+              <i class="fas fa-forward"></i>
+            </button>
+            <button class="control-btn" id="btn-replay" onclick="replayShowcase()" title="Reiniciar Vídeo">
+              <i class="fas fa-redo"></i>
+            </button>
+          </div>
+
+          <div class="secondary-controls">
+            <button class="control-btn" id="btn-sound" onclick="toggleSpeech()" title="Ativar/Desativar Voz Virtual" style="width: 50px;">
+              <i class="fas fa-volume-up" id="sound-icon"></i>
+            </button>
+            <button class="control-btn" onclick="toggleFullscreen()" title="Ecrã Inteiro">
+              <i class="fas fa-expand"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STORYBOARD SCENES TIMELINE -->
+      <div class="storyboard-timeline">
+        <div class="timeline-scene active" id="scene-0" onclick="jumpToScene(0)">
+          <div class="scene-meta">
+            <span>Cena 1</span>
+            <span class="scene-duration">30s</span>
+          </div>
+          <div class="scene-title">1. App do Cliente & Compra</div>
+        </div>
+        <div class="timeline-scene" id="scene-1" onclick="jumpToScene(1)">
+          <div class="scene-meta">
+            <span>Cena 2</span>
+            <span class="scene-duration">30s</span>
+          </div>
+          <div class="scene-title">2. KDS Monitor em Cozinha</div>
+        </div>
+        <div class="timeline-scene" id="scene-2" onclick="jumpToScene(2)">
+          <div class="scene-meta">
+            <span>Cena 3</span>
+            <span class="scene-duration">30s</span>
+          </div>
+          <div class="scene-title">3. Chat em Vivo e Slider</div>
+        </div>
+        <div class="timeline-scene" id="scene-3" onclick="jumpToScene(3)">
+          <div class="scene-meta">
+            <span>Cena 4</span>
+            <span class="scene-duration">30s</span>
+          </div>
+          <div class="scene-title">4. Conclusão & SQLite</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentLanguage = 'pt';
+      let currentScene = 0;
+      let isPlaying = false;
+      let ttsEnabled = true;
+      let playbackInterval = null;
+      let totalDuration = 120; // 120 seconds = 2 minutes (30s per scene)
+      let elapsedSeconds = 0;
+
+      // NARRATION SCRIPTS IN BOTH LANGUAGES
+      const narrationData = {
+        pt: [
+          "Olá! Bem-vindo à demonstração do ecossistema tecnológico Logleve. Desenvolvemos uma plataforma premium de entregas ultrarrápida, 100% unificada com SQLite e WebSockets em tempo real. Vamos ver como funciona o fluxo completo a começar pela App do Cliente!",
+          "Assim que o cliente faz a encomenda dinâmica de pizzas e hambúrgueres em Porto na App, o Monitor de Cozinha KDS recebe instantaneamente a comanda com um som de campainha. O chefe de cozinha pode tachar as tarefas, conferir notas e cronometrar tudo em tempo real!",
+          "Quando o prato está pronto, o estafeta no radar aceita a comissão de 3.50€ e a rota satélite atualiza-se no mapa do cliente em direto. O chat em tempo real permite a comunicação direta com tradução automática por IA para o português, e a entrega é confirmada com o novo deslizador!",
+          "E pronto! Vimos o fluxo total a trabalhar em direto. Com um painel de restauração da base de dados sem registos acumulados e segurança financeira Stripe e MB WAY de Portugal, a Logleve oferece a tecnologia mais premium do mercado para expandir as vossas entregas!"
+        ],
+        es: [
+          "¡Hola! Bienvenido a la demostración del ecosistema tecnológico Logleve. Desarrollamos una plataforma premium de entregas ultrarrápida, 100% unificada con SQLite y WebSockets en tiempo real. ¡Veamos cómo funciona el flujo completo comenzando por la App del Cliente!",
+          "Tan pronto como el cliente realiza el pedido dinámico de pizzas y hamburguesas en Porto en la App, el Monitor de Cocina KDS recibe instantáneamente la comanda con un timbre. ¡El jefe de cocina puede tachar las tareas, revisar notas y cronometrar todo en tiempo real!",
+          "Cuando el plato está listo, el repartidor en el radar acepta la comisión de 3.50€ y la ruta satélite se actualiza en el mapa del cliente en vivo. El chat en tiempo real permite la comunicación directa con traducción automática por IA al portugués, ¡y la entrega se confirma con el nuevo deslizador!",
+          "¡Y listo! Vimos el flujo total trabajando en directo. Con un panel de restauración de la base de datos libre de registros antiguos y seguridad financiera con Stripe y MB WAY de Portugal, ¡Logleve ofrece la tecnología más premium del mercado para expandir vuestras entregas!"
+        ]
+      };
+
+      const tagsData = {
+        pt: [
+          "<i class='fas fa-mobile-alt'></i> 1. App Cliente (Porto)",
+          "<i class='fas fa-fire'></i> 2. Monitor KDS Cozinha",
+          "<i class='fas fa-comments'></i> 3. Chat IA & Slider",
+          "<i class='fas fa-check-double'></i> 4. Conclusão & SQLite"
+        ],
+        es: [
+          "<i class='fas fa-mobile-alt'></i> 1. App Cliente (Porto)",
+          "<i class='fas fa-fire'></i> 2. Monitor KDS Cocina",
+          "<i class='fas fa-comments'></i> 3. Chat IA y Deslizador",
+          "<i class='fas fa-check-double'></i> 4. Conclusión y SQLite"
+        ]
+      };
+
+      function switchLanguage(lang) {
+        currentLanguage = lang;
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        if (lang === 'pt') {
+          document.querySelectorAll('.lang-btn')[0].classList.add('active');
+        } else {
+          document.querySelectorAll('.lang-btn')[1].classList.add('active');
+        }
+        updateSceneContent();
+      }
+
+      function updateSceneContent() {
+        const textElement = document.getElementById('speaker-text');
+        textElement.style.opacity = 0;
+        setTimeout(() => {
+          textElement.innerHTML = narrationData[currentLanguage][currentScene];
+          textElement.style.opacity = 1;
+        }, 150);
+
+        document.getElementById('viewport-tag').innerHTML = tagsData[currentLanguage][currentScene];
+        
+        // Handle images toggle
+        document.querySelectorAll('.slide-image').forEach((img, index) => {
+          img.classList.remove('active');
+          if (index === currentScene) {
+            img.classList.add('active');
+          }
+        });
+
+        document.querySelectorAll('.slide-image-bg').forEach((bg, index) => {
+          bg.classList.remove('active');
+          if (index === currentScene) {
+            bg.classList.add('active');
+          }
+        });
+
+        // Toggle scene highlights in timeline
+        document.querySelectorAll('.timeline-scene').forEach((sc, index) => {
+          sc.classList.remove('active');
+          if (index === currentScene) {
+            sc.classList.add('active');
+          }
+        });
+
+        // Trigger Shutter Flash alert on Scene transitions
+        const shutter = document.getElementById('viewport-alert');
+        shutter.classList.add('flash-alert');
+        setTimeout(() => shutter.classList.remove('flash-alert'), 800);
+
+        // Speech synthesis trigger if active
+        if (isPlaying && ttsEnabled) {
+          speakNarration(narrationData[currentLanguage][currentScene]);
+        }
+      }
+
+      function togglePlay() {
+        const icon = document.getElementById('play-icon');
+        const speaker = document.getElementById('speaker-element');
+        
+        if (isPlaying) {
+          // Pause
+          isPlaying = false;
+          icon.className = "fas fa-play";
+          speaker.classList.remove('playing');
+          clearInterval(playbackInterval);
+          window.speechSynthesis.cancel();
+        } else {
+          // Play
+          isPlaying = true;
+          icon.className = "fas fa-pause";
+          speaker.classList.add('playing');
+          
+          playbackInterval = setInterval(() => {
+            elapsedSeconds++;
+            if (elapsedSeconds > totalDuration) {
+              elapsedSeconds = 0;
+              replayShowcase();
+              return;
+            }
+            updateProgressBar();
+            
+            // Auto switch scene every 30 seconds
+            if (elapsedSeconds % 30 === 0 && elapsedSeconds > 0) {
+              nextScene();
+            }
+          }, 1000);
+
+          speakNarration(narrationData[currentLanguage][currentScene]);
+        }
+      }
+
+      function updateProgressBar() {
+        const fill = document.getElementById('progress-fill');
+        const timeInd = document.getElementById('time-indicator');
+        const percentage = (elapsedSeconds / totalDuration) * 100;
+        
+        fill.style.width = percentage + '%';
+        
+        const elapsedMins = Math.floor(elapsedSeconds / 60);
+        const elapsedSecs = elapsedSeconds % 60;
+        const totalMins = Math.floor(totalDuration / 60);
+        const totalSecs = totalDuration % 60;
+        
+        const pad = (num) => String(num).padStart(2, '0');
+        timeInd.textContent = `${pad(elapsedMins)}:${pad(elapsedSecs)} / ${pad(totalMins)}:${pad(totalSecs)}`;
+      }
+
+      function jumpToScene(sceneIndex) {
+        currentScene = sceneIndex;
+        elapsedSeconds = sceneIndex * 30;
+        updateProgressBar();
+        updateSceneContent();
+      }
+
+      function nextScene() {
+        currentScene = (currentScene + 1) % 4;
+        elapsedSeconds = currentScene * 30;
+        updateProgressBar();
+        updateSceneContent();
+      }
+
+      function prevScene() {
+        currentScene = (currentScene - 1 + 4) % 4;
+        elapsedSeconds = currentScene * 30;
+        updateProgressBar();
+        updateSceneContent();
+      }
+
+      function replayShowcase() {
+        currentScene = 0;
+        elapsedSeconds = 0;
+        updateProgressBar();
+        updateSceneContent();
+        if (!isPlaying) {
+          togglePlay();
+        }
+      }
+
+      function toggleSpeech() {
+        const icon = document.getElementById('sound-icon');
+        const btn = document.getElementById('btn-sound');
+        
+        if (ttsEnabled) {
+          ttsEnabled = false;
+          icon.className = "fas fa-volume-mute";
+          btn.style.color = "var(--text-muted)";
+          window.speechSynthesis.cancel();
+        } else {
+          ttsEnabled = true;
+          icon.className = "fas fa-volume-up";
+          btn.style.color = "var(--brand-green)";
+          if (isPlaying) {
+            speakNarration(narrationData[currentLanguage][currentScene]);
+          }
+        }
+      }
+
+      function speakNarration(text) {
+        window.speechSynthesis.cancel(); // Stop current speech
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        // Detect and match correct language accent voice
+        utterance.lang = currentLanguage === 'pt' ? 'pt-PT' : 'es-ES';
+        utterance.rate = 1.05;
+        
+        // Listeners to animate waveform only during speech
+        utterance.onend = () => {
+          document.getElementById('speaker-element').classList.remove('playing');
+        };
+        utterance.onstart = () => {
+          if (isPlaying) {
+            document.getElementById('speaker-element').classList.add('playing');
+          }
+        };
+
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function toggleFullscreen() {
+        const elem = document.querySelector('.presentation-container');
+        if (!document.fullscreenElement) {
+          elem.requestFullscreen().catch(err => {
+            alert(`Erro ao tentar ativar ecrã inteiro: ${err.message}`);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      }
+    </script>
+  </body>
+</html>
