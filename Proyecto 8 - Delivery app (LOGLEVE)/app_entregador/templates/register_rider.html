@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Registro de Repartidor - Plataforma de Entregas{% endblock %}
+
+{% block content %}
+<style>
+  .onboarding-card {
+    background: linear-gradient(135deg, #1e3a8a, #0d9488);
+    color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  .form-card {
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  }
+  .custom-file-upload {
+    border: 2px dashed #cbd5e1 !important;
+    background-color: #f8fafc;
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.25s ease-in-out;
+  }
+  .custom-file-upload:hover {
+    border-color: #0d9488 !important;
+    background-color: #f0fdfa;
+    transform: translateY(-2px);
+  }
+  .custom-file-upload input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+  }
+  .btn-submit-premium {
+    background: linear-gradient(135deg, #0d9488, #0f766e);
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 12px 24px;
+    transition: all 0.2s ease-in-out;
+  }
+  .btn-submit-premium:hover {
+    background: linear-gradient(135deg, #0f766e, #115e59);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+  }
+  .animate-pulse-subtle {
+    animation: pulse-subtle 2s infinite;
+  }
+  @keyframes pulse-subtle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+</style>
+
+<div class="container py-4">
+  <div class="row g-4">
+    <!-- Columna Izquierda: Información de Onboarding -->
+    <div class="col-lg-4">
+      <div class="onboarding-card p-4 h-100 d-flex flex-column justify-content-between">
+        <div>
+          <div class="d-flex align-items-center mb-3">
+            <span class="bg-white text-dark rounded-circle p-2 d-inline-flex justify-content-center align-items-center me-2" style="width: 40px; height: 40px;">
+              <i class="fas fa-motorcycle fs-5 text-teal"></i>
+            </span>
+            <h4 class="mb-0 fw-bold">Únete como Repartidor</h4>
+          </div>
+          <p class="text-white-50 small mb-4">Forma parte de la red de entregas más rápida y eficiente de la ciudad. Registra tus datos y activa tu cuenta al instante.</p>
+          
+          <div class="mt-4">
+            <h5 class="fw-bold mb-3 small text-uppercase tracking-wider text-white-50">Requisitos de Ingreso</h5>
+            <ul class="list-unstyled">
+              <li class="d-flex align-items-start mb-3">
+                <i class="fas fa-check-circle text-white me-2 mt-1"></i>
+                <div>
+                  <span class="fw-semibold">Documento de Identificación</span>
+                  <p class="small text-white-50 mb-0">Cédula o pasaporte vigente en formato digital.</p>
+                </div>
+              </li>
+              <li class="d-flex align-items-start mb-3">
+                <i class="fas fa-check-circle text-white me-2 mt-1"></i>
+                <div>
+                  <span class="fw-semibold">Seguro del Vehículo</span>
+                  <p class="small text-white-50 mb-0">Póliza vigente contra todo riesgo o responsabilidad civil.</p>
+                </div>
+              </li>
+              <li class="d-flex align-items-start mb-3">
+                <i class="fas fa-check-circle text-white me-2 mt-1"></i>
+                <div>
+                  <span class="fw-semibold">Licencia de Conducir</span>
+                  <p class="small text-white-50 mb-0">Licencia activa correspondiente a tu categoría de vehículo.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="mt-4 pt-3 border-top border-white-10">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-shield-alt text-teal fs-4 me-3"></i>
+            <div class="small">
+              <span class="d-block fw-bold">Proceso 100% Seguro</span>
+              <span class="text-white-50">Tus datos y documentos están protegidos.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna Derecha: Formulario de Registro -->
+    <div class="col-lg-8">
+      <div class="card form-card border-0 bg-white p-4">
+        <h3 class="fw-bold text-dark mb-1">Registro de Entregador</h3>
+        <p class="text-muted small mb-4">Completa el formulario a continuación para subir tus documentos y verificar tu perfil.</p>
+
+        <form method="post" enctype="multipart/form-data" action="{{ url_for('app_entregador.register_rider') }}">
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-secondary small" for="name">Nombre Completo</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-user"></i></span>
+                <input type="text" name="name" id="name" required class="form-control bg-light border-start-0 ps-0" placeholder="Ej. Juan Pérez">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-secondary small" for="plate">Matrícula del Vehículo</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-hashtag"></i></span>
+                <input type="text" name="plate" id="plate" class="form-control bg-light border-start-0 ps-0" placeholder="Ej. ABC-1234">
+              </div>
+            </div>
+          </div>
+
+          <h5 class="fw-bold text-dark mb-3">Subir Documentación Requerida</h5>
+          <div class="row g-3 mb-4">
+            <!-- Documento de Identificación -->
+            <div class="col-md-4">
+              <label class="form-label fw-bold text-secondary small">Documento Identificación</label>
+              <div class="custom-file-upload shadow-sm" id="upload-id-container">
+                <input type="file" name="id_doc" required onchange="updateFileName(this, 'id-label')">
+                <div id="id-label">
+                  <i class="fas fa-id-card text-muted mb-2 fs-2 text-teal"></i>
+                  <p class="mb-1 fw-bold text-dark small">Identificación</p>
+                  <span class="text-muted x-small d-block">PNG, JPG, PDF</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Seguro del Vehículo -->
+            <div class="col-md-4">
+              <label class="form-label fw-bold text-secondary small">Seguro Vehículo</label>
+              <div class="custom-file-upload shadow-sm" id="upload-insurance-container">
+                <input type="file" name="vehicle_insurance" required onchange="updateFileName(this, 'insurance-label')">
+                <div id="insurance-label">
+                  <i class="fas fa-file-shield text-muted mb-2 fs-2 text-teal"></i>
+                  <p class="mb-1 fw-bold text-dark small">Seguro</p>
+                  <span class="text-muted x-small d-block">PNG, JPG, PDF</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Licencia de Conducir -->
+            <div class="col-md-4">
+              <label class="form-label fw-bold text-secondary small">Licencia Conducción</label>
+              <div class="custom-file-upload shadow-sm" id="upload-license-container">
+                <input type="file" name="driver_license" required onchange="updateFileName(this, 'license-label')">
+                <div id="license-label">
+                  <i class="fas fa-id-badge text-muted mb-2 fs-2 text-teal"></i>
+                  <p class="mb-1 fw-bold text-dark small">Licencia</p>
+                  <span class="text-muted x-small d-block">PNG, JPG, PDF</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cuadro de Consejo Moderno -->
+          <div class="alert alert-info border-0 shadow-sm d-flex align-items-start mb-4" style="background-color: #f0fdfa; border-left: 4px solid #0d9488 !important; border-radius: 8px;">
+            <i class="fas fa-lightbulb text-teal fs-5 me-3 mt-1 animate-pulse-subtle"></i>
+            <div>
+              <span class="fw-bold text-teal d-block mb-1">Pruebas del Sistema (OCR Automático)</span>
+              <p class="small text-secondary mb-0">Para simular fechas de expiración en las pruebas, puedes renombrar el archivo incluyendo <code class="text-teal font-monospace fw-bold">exp_YYYY-MM-DD</code> en su nombre original.</p>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-2">
+            <a href="{{ url_for('app_entregador.admin_login') }}" class="btn btn-link text-decoration-none small text-muted">
+              <i class="fas fa-lock me-1"></i> Panel de Administración
+            </a>
+            <button type="submit" class="btn btn-submit-premium px-4 d-inline-flex align-items-center">
+              <span>Enviar Registro</span>
+              <i class="fas fa-paper-plane ms-2 small"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function updateFileName(input, labelId) {
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const fileName = file.name;
+      const fileSize = (file.size / 1024 / 1024).toFixed(2);
+      
+      let icon = 'fa-file-circle-check';
+      if (labelId.includes('id')) icon = 'fa-id-card';
+      else if (labelId.includes('insurance')) icon = 'fa-file-shield';
+      else if (labelId.includes('license')) icon = 'fa-id-badge';
+
+      document.getElementById(labelId).innerHTML = `
+        <i class="fas ${icon} text-success mb-2 fs-2 animate__animated animate__bounceIn"></i>
+        <p class="mb-1 fw-bold text-success text-truncate small px-2" title="${fileName}">${fileName}</p>
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1" style="font-size: 0.75rem;">${fileSize} MB</span>
+      `;
+      
+      // Aplicar estilo de completado al contenedor
+      input.closest('.custom-file-upload').style.borderColor = '#10b981';
+      input.closest('.custom-file-upload').style.backgroundColor = '#ecfdf5';
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Estado de Verificación - Plataforma de Entregas{% endblock %}
+
+{% block content %}
+<style>
+  .status-hero {
+    border-radius: 16px;
+    color: white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  .status-approved {
+    background: linear-gradient(135deg, #10b981, #059669);
+  }
+  .status-rejected {
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+  }
+  .status-pending {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+  }
+  .details-card {
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  }
+  .ocr-preview {
+    background-color: #1e293b;
+    color: #e2e8f0;
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    padding: 12px;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  .doc-row {
+    border-bottom: 1px solid #f1f5f9;
+    padding: 16px 0;
+  }
+  .doc-row:last-child {
+    border-bottom: none;
+  }
+  .btn-action-premium {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: all 0.2s ease-in-out;
+  }
+</style>
+
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      
+      <!-- Héroe de Estado de Verificación -->
+      {% if status == 'approved' %}
+      <div class="status-hero status-approved p-5 text-center mb-4 animate__animated animate__fadeIn">
+        <div class="mb-3">
+          <i class="fas fa-check-circle fs-1 text-white shadow-sm rounded-circle"></i>
+        </div>
+        <h2 class="fw-bold mb-1">¡Registro Aprobado!</h2>
+        <p class="text-white-80 mb-0 opacity-75">Tus documentos han sido validados exitosamente y estás listo para realizar entregas.</p>
+      </div>
+      {% elif status == 'rejected' %}
+      <div class="status-hero status-rejected p-5 text-center mb-4 animate__animated animate__fadeIn">
+        <div class="mb-3">
+          <i class="fas fa-times-circle fs-1 text-white shadow-sm rounded-circle"></i>
+        </div>
+        <h2 class="fw-bold mb-1">Registro en Revisión</h2>
+        <p class="text-white-80 mb-0 opacity-75">Algunos documentos no pasaron la validación automática. Nuestro equipo los revisará manualmente.</p>
+      </div>
+      {% else %}
+      <div class="status-hero status-pending p-5 text-center mb-4 animate__animated animate__fadeIn">
+        <div class="mb-3">
+          <i class="fas fa-clock fs-1 text-white shadow-sm rounded-circle"></i>
+        </div>
+        <h2 class="fw-bold mb-1">Verificación Pendiente</h2>
+        <p class="text-white-80 mb-0 opacity-75">Tu registro se encuentra en proceso de validación por nuestro equipo de soporte.</p>
+      </div>
+      {% endif %}
+
+      <!-- Tarjeta de Detalles del Repartidor -->
+      <div class="card details-card border-0 bg-white p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+          <div>
+            <h4 class="fw-bold text-dark mb-0">Detalles del Perfil</h4>
+            <span class="text-muted small">Repartidor registrado en la plataforma</span>
+          </div>
+          <span class="badge {% if status == 'approved' %}bg-success-subtle text-success border border-success{% elif status == 'rejected' %}bg-danger-subtle text-danger border border-danger{% else %}bg-warning-subtle text-warning border border-warning{% endif %} px-3 py-2 rounded-pill fw-semibold">
+            {{ status|upper }}
+          </span>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <span class="d-block text-secondary small fw-bold">Nombre Completo</span>
+            <span class="fs-5 fw-semibold text-dark">{{ name }}</span>
+          </div>
+          <div class="col-md-6">
+            <span class="d-block text-secondary small fw-bold">Matrícula / Placa</span>
+            <span class="fs-5 fw-semibold text-dark">{% if plate %}{{ plate }}{% else %}<em class="text-muted small">No especificada</em>{% endif %}</span>
+          </div>
+        </div>
+
+        <h5 class="fw-bold text-dark mb-3">Resultado de la Validación de Documentos</h5>
+        
+        <div class="document-breakdown">
+          {% for key, info in result.items() %}
+          <div class="doc-row">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div class="d-flex align-items-center">
+                {% if key == 'id_doc' %}
+                  <span class="p-2 rounded bg-light me-3 text-secondary"><i class="fas fa-id-card fs-5"></i></span>
+                  <strong class="text-dark">Documento de Identidad</strong>
+                {% elif key == 'vehicle_insurance' %}
+                  <span class="p-2 rounded bg-light me-3 text-secondary"><i class="fas fa-file-shield fs-5"></i></span>
+                  <strong class="text-dark">Seguro de Vehículo</strong>
+                {% elif key == 'driver_license' %}
+                  <span class="p-2 rounded bg-light me-3 text-secondary"><i class="fas fa-id-badge fs-5"></i></span>
+                  <strong class="text-dark">Licencia de Conducir</strong>
+                {% else %}
+                  <span class="p-2 rounded bg-light me-3 text-secondary"><i class="fas fa-file fs-5"></i></span>
+                  <strong class="text-dark">{{ key }}</strong>
+                {% endif %}
+              </div>
+              
+              <span class="badge {% if info.status == 'valid' %}bg-success-subtle text-success border border-success-subtle{% else %}bg-danger-subtle text-danger border border-danger-subtle{% endif %} px-2.5 py-1">
+                {{ info.status|upper }}
+              </span>
+            </div>
+            
+            <p class="text-secondary small mb-2 ms-5 ps-1">{{ info.reason }}</p>
+
+            {% if info.text %}
+            <div class="ms-5 ps-1 mt-2">
+              <details class="border rounded bg-light p-2">
+                <summary class="text-teal fw-semibold small cursor-pointer" style="outline: none;">
+                  <i class="fas fa-eye me-1"></i> Ver texto extraído por OCR
+                </summary>
+                <div class="ocr-preview mt-2">
+                  {{ info.text }}
+                </div>
+              </details>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="d-flex justify-content-between align-items-center">
+        <a href="{{ url_for('app_entregador.admin_login') }}" class="btn btn-outline-secondary btn-action-premium px-4">
+          <i class="fas fa-lock me-2"></i> Panel Admin
+        </a>
+        <a href="{{ url_for('app_entregador.register_form') }}" class="btn btn-primary btn-action-premium px-4 shadow-sm">
+          <i class="fas fa-plus me-2"></i> Nuevo Registro
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

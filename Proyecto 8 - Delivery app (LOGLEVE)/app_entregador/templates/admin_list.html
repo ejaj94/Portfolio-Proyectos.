@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de Control Admin - Plataforma de Entregas{% endblock %}
+
+{% block content %}
+<style>
+  .metric-card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease-in-out;
+  }
+  .metric-card:hover {
+    transform: translateY(-2px);
+  }
+  .bg-blue-gradient {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  }
+  .bg-green-gradient {
+    background: linear-gradient(135deg, #10b981, #047857);
+  }
+  .bg-red-gradient {
+    background: linear-gradient(135deg, #f43f5e, #be123c);
+  }
+  .admin-table-container {
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    background-color: white;
+    overflow: hidden;
+  }
+  .table > tbody > tr {
+    transition: background-color 0.15s ease-in-out;
+  }
+  .table > tbody > tr:hover {
+    background-color: #f8fafc;
+  }
+  .doc-btn {
+    font-size: 0.8rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .doc-btn:hover {
+    transform: translateY(-1px);
+  }
+  .action-btn {
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    transition: all 0.2s;
+  }
+  .action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  }
+</style>
+
+<div class="container py-4">
+  
+  <!-- Header de Control de Administración -->
+  <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+    <div>
+      <h2 class="fw-bold text-dark mb-0">Panel de Repartidores</h2>
+      <p class="text-muted small mb-0">Audita, revisa y aprueba las solicitudes de registro de nuevos entregadores</p>
+    </div>
+    <div>
+      <a href="{{ url_for('app_entregador.admin_logout') }}" class="btn btn-outline-danger d-inline-flex align-items-center" style="border-radius: 8px; font-weight: 600;">
+        <i class="fas fa-power-off me-2"></i> Cerrar Sesión
+      </a>
+    </div>
+  </div>
+
+  <!-- Tarjetas Métricas Dinámicas -->
+  {% set total_riders = riders|length %}
+  {% set approved_riders = riders|selectattr('status', 'equalto', 'approved')|list|length %}
+  {% set rejected_riders = riders|selectattr('status', 'equalto', 'rejected')|list|length %}
+  {% set pending_riders = total_riders - approved_riders - rejected_riders %}
+
+  <div class="row g-3 mb-4">
+    <!-- Tarjeta Total -->
+    <div class="col-md-3">
+      <div class="card metric-card bg-blue-gradient text-white p-3 h-100 d-flex flex-row justify-content-between align-items-center">
+        <div>
+          <span class="d-block text-white-50 small fw-bold text-uppercase">Total Repartidores</span>
+          <span class="display-6 fw-bold">{{ total_riders }}</span>
+        </div>
+        <i class="fas fa-users fs-2 opacity-50"></i>
+      </div>
+    </div>
+    
+    <!-- Tarjeta Aprobados -->
+    <div class="col-md-3">
+      <div class="card metric-card bg-green-gradient text-white p-3 h-100 d-flex flex-row justify-content-between align-items-center">
+        <div>
+          <span class="d-block text-white-50 small fw-bold text-uppercase">Aprobados</span>
+          <span class="display-6 fw-bold">{{ approved_riders }}</span>
+        </div>
+        <i class="fas fa-user-check fs-2 opacity-50"></i>
+      </div>
+    </div>
+    
+    <!-- Tarjeta Rechazados / Pendientes de Acción -->
+    <div class="col-md-3">
+      <div class="card metric-card bg-red-gradient text-white p-3 h-100 d-flex flex-row justify-content-between align-items-center">
+        <div>
+          <span class="d-block text-white-50 small fw-bold text-uppercase">Rechazados</span>
+          <span class="display-6 fw-bold">{{ rejected_riders }}</span>
+        </div>
+        <i class="fas fa-user-times fs-2 opacity-50"></i>
+      </div>
+    </div>
+
+    <!-- Tarjeta Pendientes -->
+    <div class="col-md-3">
+      <div class="card metric-card bg-dark text-white p-3 h-100 d-flex flex-row justify-content-between align-items-center" style="background: linear-gradient(135deg, #4b5563, #1f2937);">
+        <div>
+          <span class="d-block text-white-50 small fw-bold text-uppercase">Verificando</span>
+          <span class="display-6 fw-bold">{{ pending_riders }}</span>
+        </div>
+        <i class="fas fa-user-clock fs-2 opacity-50"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor de la Tabla Principal -->
+  <div class="admin-table-container border-0">
+    <div class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-list me-2"></i>Lista de Solicitudes</h5>
+      <span class="badge bg-secondary-subtle text-secondary px-2.5 py-1">{{ total_riders }} registros encontrados</span>
+    </div>
+
+    {% if riders %}
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th class="ps-3" style="width: 80px;">ID</th>
+            <th>Repartidor / Datos</th>
+            <th>Matrícula</th>
+            <th>Estado</th>
+            <th>Fecha Registro</th>
+            <th class="pe-3" style="width: 380px;">Detalles de Validación & Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in riders %}
+          <tr>
+            <td class="ps-3"><span class="badge bg-light text-dark fw-bold border">{{ r.id }}</span></td>
+            <td>
+              <div class="d-flex align-items-center">
+                <span class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 d-inline-flex justify-content-center align-items-center me-3" style="width: 40px; height: 40px;">
+                  <i class="fas fa-user"></i>
+                </span>
+                <div>
+                  <span class="d-block fw-bold text-dark">{{ r.name }}</span>
+                  <span class="text-muted small">Registrado por OCR</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              {% if r.plate %}
+              <span class="font-monospace fw-bold bg-light px-2.5 py-1 rounded border small">{{ r.plate }}</span>
+              {% else %}
+              <span class="text-muted small">--</span>
+              {% endif %}
+            </td>
+            <td>
+              <span class="badge {% if r.status == 'approved' %}bg-success-subtle text-success border border-success-subtle{% elif r.status == 'rejected' %}bg-danger-subtle text-danger border border-danger-subtle{% else %}bg-warning-subtle text-warning border border-warning-subtle{% endif %} px-2.5 py-1.5 fw-semibold" style="font-size: 0.8rem;">
+                {{ r.status|upper }}
+              </span>
+            </td>
+            <td>
+              <span class="text-secondary small">{{ r.created_at.strftime('%Y-%m-%d %H:%M') if r.created_at else '--' }}</span>
+            </td>
+            <td class="pe-3 py-3">
+              <!-- Detalles de Validación Internos -->
+              <div class="validation-items mb-3">
+                {% for k, v in r._parsed.items() %}
+                <div class="d-flex align-items-center mb-1.5 small">
+                  <span class="badge {% if v.status == 'valid' %}bg-success text-white{% else %}bg-danger text-white{% endif %} me-2" style="font-size: 0.65rem; padding: 2px 6px;">
+                    {{ v.status|upper }}
+                  </span>
+                  <span class="text-dark fw-semibold me-1">
+                    {% if k == 'id_doc' %}ID:{% elif k == 'vehicle_insurance' %}Seguro:{% elif k == 'driver_license' %}Licencia:{% else %}{{ k }}:{% endif %}
+                  </span>
+                  <span class="text-secondary text-truncate" style="max-width: 200px;" title="{{ v.reason }}">{{ v.reason }}</span>
+                </div>
+                {% endfor %}
+              </div>
+
+              <!-- Enlaces a Archivos Físicos -->
+              <div class="d-flex flex-wrap gap-1.5 mb-3">
+                {% if r.id_doc_path %}
+                <a href="{{ url_for('app_entregador.uploaded_file', filename=r.id_doc_path) }}" target="_blank" class="btn btn-outline-secondary doc-btn btn-sm d-inline-flex align-items-center px-2 py-1">
+                  <i class="fas fa-file-pdf text-danger me-1"></i> ID
+                </a>
+                {% endif %}
+                
+                {% if r.insurance_path %}
+                <a href="{{ url_for('app_entregador.uploaded_file', filename=r.insurance_path) }}" target="_blank" class="btn btn-outline-secondary doc-btn btn-sm d-inline-flex align-items-center px-2 py-1">
+                  <i class="fas fa-file-shield text-primary me-1"></i> Seguro
+                </a>
+                {% endif %}
+                
+                {% if r.license_path %}
+                <a href="{{ url_for('app_entregador.uploaded_file', filename=r.license_path) }}" target="_blank" class="btn btn-outline-secondary doc-btn btn-sm d-inline-flex align-items-center px-2 py-1">
+                  <i class="fas fa-id-badge text-success me-1"></i> Licencia
+                </a>
+                {% endif %}
+              </div>
+
+              <!-- Botones de Aprobación/Rechazo Directos -->
+              <div class="d-flex gap-2">
+                <form method="post" action="{{ url_for('app_entregador.admin_approve', rider_id=r.id) }}" class="d-inline">
+                  <button class="btn btn-success action-btn btn-sm" type="submit">
+                    <i class="fas fa-check me-1"></i> Aprobar
+                  </button>
+                </form>
+                <form method="post" action="{{ url_for('app_entregador.admin_reject', rider_id=r.id) }}" class="d-inline">
+                  <button class="btn btn-danger action-btn btn-sm" type="submit">
+                    <i class="fas fa-times me-1"></i> Rechazar
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="p-5 text-center bg-white">
+      <i class="fas fa-folder-open text-muted fs-1 mb-3"></i>
+      <h5 class="fw-bold text-dark">No hay registros aún</h5>
+      <p class="text-secondary small mb-0">Los nuevos repartidores registrados aparecerán en esta pantalla de inmediato.</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="mt-4 text-center">
+    <a href="{{ url_for('app_entregador.register_form') }}" class="btn btn-link text-decoration-none text-secondary">
+      <i class="fas fa-plus-circle me-1"></i> Ir al Formulario de Registro
+    </a>
+  </div>
+</div>
+{% endblock %}

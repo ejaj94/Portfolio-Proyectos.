@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio de Sesión Admin - Plataforma de Entregas{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center py-5">
+  <div class="col-md-5">
+    
+    <!-- Login Card -->
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden animate__animated animate__zoomIn" style="box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08) !important;">
+      <div class="card-header bg-primary text-white text-center py-4 border-0 position-relative" style="background: linear-gradient(135deg, #1e3a8a, #0f766e) !important;">
+        <div class="mb-2">
+          <span class="bg-white bg-opacity-20 rounded-circle p-3 d-inline-flex justify-content-center align-items-center" style="width: 60px; height: 60px;">
+            <i class="fas fa-user-shield fs-3 text-white"></i>
+          </span>
+        </div>
+        <h4 class="fw-bold mb-0">Panel de Administración</h4>
+        <p class="text-white-50 small mb-0 mt-1">Ingresa tu contraseña para acceder al sistema</p>
+      </div>
+      
+      <div class="card-body p-4 bg-white">
+        {% if error %}
+        <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center mb-4" style="border-radius: 8px;">
+          <i class="fas fa-exclamation-circle fs-5 me-2"></i>
+          <span class="small fw-semibold">{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <form method="post">
+          <div class="mb-4">
+            <label class="form-label fw-bold text-secondary small" for="password">Contraseña de Acceso</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-lock"></i></span>
+              <input type="password" name="password" id="password" required class="form-control bg-light border-start-0 ps-0" placeholder="••••••••" style="padding-top: 10px; padding-bottom: 10px;">
+            </div>
+          </div>
+
+          <div class="d-grid mb-3">
+            <button type="submit" class="btn btn-primary py-2.5 fw-bold" style="background: linear-gradient(135deg, #1e3a8a, #111827); border: none; border-radius: 8px;">
+              <span>Iniciar Sesión</span>
+              <i class="fas fa-sign-in-alt ms-2"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="card-footer bg-light border-0 py-3 text-center">
+        <a href="{{ url_for('app_entregador.register_form') }}" class="text-decoration-none small text-secondary">
+          <i class="fas fa-arrow-left me-1"></i> Volver al Registro de Repartidores
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
