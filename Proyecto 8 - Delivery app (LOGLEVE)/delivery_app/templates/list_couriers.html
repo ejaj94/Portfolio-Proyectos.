@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Estafetas') }}{% endblock %}
+
+{% block content %}
+<style>
+  .courier-grid-card {
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    border: 1px solid #edf0f2 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .courier-grid-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 35px rgba(15, 23, 42, 0.08);
+    border-color: #cbd5e1 !important;
+  }
+  .courier-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.25);
+  }
+  .status-dot-pulse {
+    width: 8px;
+    height: 8px;
+    background-color: #10b981;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: dot-pulse 1.6s infinite;
+  }
+  @keyframes dot-pulse {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+    }
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+  }
+</style>
+
+<div class="container py-3">
+  <!-- Cabecera de listado -->
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3">
+    <div>
+      <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-1.5 rounded-pill mb-2 fw-semibold" style="font-size: 0.78rem; color: #b45309 !important; background-color: #fffbeb !important; border-color: #fde68a !important;">
+        <i class="fas fa-motorcycle me-1"></i> {{ _('Flota de Distribución') }}
+      </span>
+      <h2 class="fw-bold text-dark mb-0"><i class="fas fa-motorcycle text-teal me-2"></i>{{ _('Estafetas / Repartidores') }}</h2>
+      <p class="text-muted small mb-0">{{ _('Supervisión de mensajeros autorizados para transporte y entrega express de comandas.') }}</p>
+    </div>
+    <a href="{{ url_for('courier_blueprint.register_courier_form') }}" class="btn btn-primary px-4 py-2.5 d-inline-flex align-items-center shadow-sm">
+      <i class="fas fa-plus-circle me-2"></i> {{ _('Nuevo Estafeta') }}
+    </a>
+  </div>
+
+  {% if couriers %}
+  <div class="row g-4">
+    {% for courier in couriers %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card courier-grid-card h-100">
+        <div class="card-body p-4 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div class="d-flex align-items-center">
+                <div class="courier-avatar me-3">
+                  {{ courier.name[0] | upper if courier.name else '?' }}
+                </div>
+                <div>
+                  <h5 class="card-title text-dark fw-bold mb-0">{{ courier.name }}</h5>
+                  <span class="text-muted x-small">ID Repartidor: #{{ courier.id }}</span>
+                </div>
+              </div>
+              <div>
+                {% if courier.active %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 rounded-pill d-inline-flex align-items-center gap-1.5 fw-semibold" style="font-size: 0.75rem;">
+                  <span class="status-dot-pulse"></span> {{ _('ACTIVO') }}
+                </span>
+                {% else %}
+                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.75rem;">
+                  {{ _('INACTIVO') }}
+                </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="d-flex flex-column gap-2 mb-3 mt-3">
+              <div class="d-flex align-items-center text-secondary small">
+                <i class="fas fa-phone text-teal me-2.5 fs-6" style="width: 16px;"></i>
+                <span><strong class="text-dark">{{ _('Teléfono:') }}</strong> {{ courier.phone if courier.phone else 'N/A' }}</span>
+              </div>
+              <div class="d-flex align-items-center text-secondary small">
+                <i class="fab fa-whatsapp text-success me-2.5 fs-6" style="width: 16px;"></i>
+                <span><strong class="text-dark">{{ _('WhatsApp:') }}</strong> {{ courier.whatsapp if courier.whatsapp else 'N/A' }}</span>
+              </div>
+              <div class="d-flex align-items-center text-secondary small">
+                <i class="fas fa-envelope text-teal me-2.5 fs-6" style="width: 16px;"></i>
+                <span><strong class="text-dark">{{ _('Email:') }}</strong> {{ courier.email if courier.email else 'N/A' }}</span>
+              </div>
+              <div class="d-flex align-items-center text-secondary small">
+                {% set veh_icon = 'fa-motorcycle' if 'moto' in (courier.vehicle|lower) else 'fa-bicycle' %}
+                <i class="fas {{ veh_icon }} text-teal me-2.5 fs-6" style="width: 16px;"></i>
+                <span><strong class="text-dark">{{ _('Vehículo:') }}</strong> {{ courier.vehicle if courier.vehicle else 'N/A' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mt-3 pt-3 border-top">
+            <a href="/apps/courier/{{ courier.id }}" class="btn btn-outline-primary btn-sm flex-grow-1 text-center py-2 d-inline-flex align-items-center justify-content-center gap-1.5" style="border-radius: 8px; font-weight: 700;">
+              <i class="fas fa-satellite-dish fs-6"></i> {{ _('Abrir Radar Satelital') }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert alert-info border-0 shadow-sm p-4 d-flex align-items-start" style="background-color: #f0fdfa; border-left: 4px solid #0d9488 !important; border-radius: 12px;">
+    <i class="fas fa-info-circle text-teal fs-4 me-3 mt-1"></i>
+    <div>
+      <span class="fw-bold text-teal d-block mb-1">{{ _('Sin estafetas registrados') }}</span>
+      <p class="small text-secondary mb-0">{{ _('No se han encontrado registros de repartidores cargados en el panel de flota.') }}</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

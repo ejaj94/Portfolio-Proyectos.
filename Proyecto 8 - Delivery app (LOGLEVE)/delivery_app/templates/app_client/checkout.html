@@ -1,0 +1,1200 @@
+<!doctype html>
+<html lang="es">
+  <head>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirmar Pedido - Premium Delivery</title>
+    <!-- Stripe JS SDK oficial -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <!-- FontAwesome para iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+      /* 🎨 SISTEMA DE DISEÑO PREMIUM (HIGH-END DESIGN SYSTEM) */
+      :root {
+        --brand-green: #10b981;
+        --brand-green-hover: #059669;
+        --brand-green-light: rgba(16, 185, 129, 0.08);
+        --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        --accent-gradient: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+        --dark-gradient: linear-gradient(135deg, #0f172a 0%, #022c22 100%);
+        --card-gradient: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        
+        --bg-primary: #f8fafc;
+        --bg-card: #ffffff;
+        --bg-glass: rgba(255, 255, 255, 0.85);
+        --bg-pill: #f1f5f9;
+        
+        --border-color: rgba(226, 232, 240, 0.8);
+        --border-glass: rgba(255, 255, 255, 0.6);
+        
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --text-inverse: #ffffff;
+        
+        --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.02), 0 1px 3px rgba(15, 23, 42, 0.01);
+        --shadow-md: 0 12px 30px -4px rgba(15, 23, 42, 0.05), 0 4px 12px -2px rgba(15, 23, 42, 0.02);
+        --shadow-lg: 0 24px 48px -8px rgba(15, 23, 42, 0.08), 0 8px 20px -4px rgba(15, 23, 42, 0.03);
+        --shadow-glow: 0 8px 24px rgba(16, 185, 129, 0.15);
+        
+        --font-title: 'Outfit', sans-serif;
+        --font-body: 'Plus Jakarta Sans', sans-serif;
+        
+        --radius-sm: 14px;
+        --radius-md: 20px;
+        --radius-lg: 28px;
+        --radius-xl: 36px;
+        
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      /* 🌗 MODO OSCURO HIGH-END (OBSIDIAN NEON STYLE) */
+      body.dark-theme {
+        --bg-primary: #030712;
+        --bg-card: #0b1329;
+        --bg-glass: rgba(11, 19, 41, 0.85);
+        --bg-pill: #111827;
+        --card-gradient: linear-gradient(135deg, #0b1329 0%, #060b18 100%);
+        
+        --border-color: rgba(255, 255, 255, 0.05);
+        --border-glass: rgba(255, 255, 255, 0.04);
+        
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        
+        --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 16px 36px rgba(0, 0, 0, 0.5);
+        --shadow-lg: 0 24px 50px rgba(0, 0, 0, 0.6);
+        --shadow-glow: 0 8px 30px rgba(16, 185, 129, 0.22);
+      }
+
+      /* ✨ CONFIGURACIÓN GLOBAL */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        font-family: var(--font-body);
+        color: var(--text-main);
+        padding-bottom: 140px;
+        min-height: 100vh;
+        overflow-x: hidden;
+        transition: background-color 0.4s ease, color 0.4s ease;
+        background-attachment: fixed;
+      }
+
+      /* Fondos interactivos con blobs difuminados */
+      .blob-bg {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(120px);
+        z-index: -10;
+        pointer-events: none;
+        transition: var(--transition-smooth);
+      }
+      .blob-1 {
+        top: -10%; left: -10%;
+        width: 350px; height: 350px;
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+        animation: floatBlobs 25s infinite ease-in-out;
+      }
+      .blob-2 {
+        bottom: -10%; right: -10%;
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(239, 68, 68, 0.05) 0%, transparent 70%);
+        animation: floatBlobs 20s infinite ease-in-out 2s;
+      }
+      .blob-3 {
+        top: 40%; right: -20%;
+        width: 300px; height: 300px;
+        background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
+        animation: floatBlobs 30s infinite ease-in-out 4s;
+      }
+
+      body.dark-theme .blob-1 {
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.16) 0%, transparent 70%);
+      }
+      body.dark-theme .blob-2 {
+        background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%);
+      }
+
+      @keyframes floatBlobs {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.08); }
+        66% { transform: translate(-20px, 20px) scale(0.95); }
+      }
+
+      /* 📱 CABECERA PREMIUM FLOTANTE */
+      header {
+        background: var(--bg-glass);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 16px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-smooth);
+      }
+      .header-container {
+        max-width: 480px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .back-btn {
+        background: var(--bg-pill);
+        border: 1px solid var(--border-color);
+        font-size: 15px;
+        cursor: pointer;
+        text-decoration: none;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 15px;
+        transition: var(--transition-bounce);
+        box-shadow: var(--shadow-sm);
+      }
+      .back-btn:hover {
+        transform: scale(1.08) translateX(-2px);
+        background: var(--bg-card);
+        border-color: var(--brand-green);
+        color: var(--brand-green);
+      }
+      .back-btn:active {
+        transform: scale(0.95);
+      }
+      .header-title {
+        font-family: var(--font-title);
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: -0.3px;
+        color: var(--text-main);
+      }
+
+      /* Botón de alternancia de tema */
+      #theme-btn {
+        background: var(--bg-pill);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        width: 42px;
+        height: 42px;
+        border-radius: 15px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        transition: var(--transition-bounce);
+        box-shadow: var(--shadow-sm);
+      }
+      #theme-btn:hover {
+        transform: scale(1.08) rotate(15deg);
+        background: var(--bg-card);
+        border-color: var(--brand-green);
+        color: var(--brand-green);
+      }
+      #theme-btn:active {
+        transform: scale(0.95);
+      }
+
+      /* 📱 CONTENEDOR CENTRAL */
+      main {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* 🏪 TARJETAS DE CHECKOUT FROSTED GLASS */
+      .checkout-card {
+        background: var(--bg-glass);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-radius: var(--radius-md);
+        padding: 22px;
+        margin-bottom: 20px;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-smooth);
+      }
+      .checkout-card:hover {
+        box-shadow: var(--shadow-md);
+        border-color: rgba(16, 185, 129, 0.15);
+      }
+      .card-title {
+        font-family: var(--font-title);
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 18px;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .card-title i {
+        color: var(--brand-green);
+        filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.2));
+      }
+
+      .price-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14.5px;
+        margin-bottom: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+      }
+      .price-row.total {
+        border-top: 2px dashed var(--border-color);
+        margin-top: 18px;
+        padding-top: 18px;
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--text-main);
+        font-family: var(--font-title);
+        letter-spacing: -0.5px;
+      }
+
+      .simulated-card-input {
+        width: 100%;
+        border: 1.5px solid rgba(16, 185, 129, 0.3);
+        background-color: var(--brand-green-light);
+        border-radius: 16px;
+        padding: 16px;
+        font-size: 14.5px;
+        font-weight: 800;
+        text-align: center;
+        color: var(--brand-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.04);
+        transition: var(--transition-smooth);
+      }
+
+      /* TEXTAREA & INPUTS PREMIUM */
+      #customer-notes, #mbway-phone {
+        width: 100%;
+        border: 1.5px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        padding: 14px;
+        font-family: var(--font-body);
+        font-size: 13.5px;
+        font-weight: 600;
+        outline: none;
+        color: var(--text-main);
+        background: var(--bg-pill);
+        transition: var(--transition-smooth);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.01);
+      }
+      #customer-notes:focus, #mbway-phone:focus {
+        border-color: var(--brand-green);
+        background: var(--bg-card);
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.08), var(--shadow-sm);
+      }
+      #customer-notes {
+        height: 90px;
+        resize: none;
+      }
+
+      /* 💳 METODOS DE PAGO SELECCIONABLES PREMIUM */
+      .payment-methods-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .payment-option-card {
+        background: var(--bg-pill);
+        border: 1.5px solid var(--border-color);
+        border-radius: 18px;
+        padding: 18px 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition-bounce);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 800;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        box-shadow: var(--shadow-sm);
+      }
+      .payment-option-card i {
+        font-size: 24px;
+        color: var(--text-muted);
+        transition: var(--transition-bounce);
+      }
+      
+      .payment-option-card:hover {
+        transform: translateY(-3px);
+        background: var(--bg-card);
+        border-color: var(--brand-green);
+        color: var(--text-main);
+      }
+      .payment-option-card:hover i {
+        color: var(--brand-green);
+        transform: scale(1.1);
+      }
+      .payment-option-card.selected {
+        border-color: var(--brand-green);
+        background: var(--brand-green-light);
+        color: var(--brand-green);
+        box-shadow: var(--shadow-glow);
+        transform: translateY(-2px);
+      }
+      .payment-option-card.selected i {
+        color: var(--brand-green);
+        filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.25));
+      }
+      .payment-option-card:active {
+        transform: scale(0.94);
+      }
+      
+      /* Tarjetas guardadas container */
+      .saved-cards-section {
+        margin-top: 16px;
+        animation: fadeIn 0.3s ease;
+      }
+      .saved-card-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        border: 1.5px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        background: var(--bg-pill);
+      }
+      .saved-card-row:hover {
+        border-color: var(--brand-green);
+        background: var(--bg-card);
+        transform: translateY(-1px);
+      }
+      .saved-card-row.selected {
+        border-color: var(--brand-green);
+        background: var(--brand-green-light);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.06);
+      }
+      .card-info-flex {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 13.5px;
+        font-weight: 700;
+      }
+      .card-brand-icon {
+        font-size: 20px;
+        color: var(--brand-green);
+      }
+      .select-indicator {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid var(--text-muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-smooth);
+        background: transparent;
+      }
+      .saved-card-row.selected .select-indicator {
+        border-color: var(--brand-green);
+        background: var(--brand-green);
+      }
+      .saved-card-row.selected .select-indicator::after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: white;
+      }
+      
+      .warning-card-link {
+        background: var(--brand-green-light);
+        border: 1.5px dashed rgba(16, 185, 129, 0.3);
+        border-radius: 16px;
+        padding: 18px;
+        text-align: center;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--text-muted);
+      }
+      .warning-card-link a {
+        color: var(--brand-green);
+        text-decoration: none;
+        font-weight: 800;
+        display: inline-block;
+        margin-top: 8px;
+        border-bottom: 2px solid var(--brand-green);
+        padding-bottom: 2px;
+        transition: var(--transition-smooth);
+      }
+      .warning-card-link a:hover {
+        transform: translateY(-1px);
+        color: var(--brand-green-hover);
+        border-color: var(--brand-green-hover);
+      }
+
+      /* 📱 CAPSULA FLOTANTE DE ACCION INFERIOR */
+      .footer-action {
+        background: var(--bg-glass);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--border-color);
+        position: fixed;
+        bottom: 24px;
+        left: 20px;
+        right: 20px;
+        border-radius: 24px;
+        padding: 14px 20px;
+        z-index: 1000;
+        box-shadow: var(--shadow-lg);
+        max-width: 440px;
+        margin: 0 auto;
+        transition: var(--transition-smooth);
+      }
+      .footer-container {
+        max-width: 480px;
+        margin: 0 auto;
+      }
+      .submit-btn {
+        width: 100%;
+        background: var(--primary-gradient);
+        color: var(--text-inverse);
+        border: none;
+        font-size: 15px;
+        font-weight: 800;
+        padding: 15px;
+        border-radius: 16px;
+        cursor: pointer;
+        box-shadow: var(--shadow-glow);
+        transition: var(--transition-bounce);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(16, 185, 129, 0.28);
+      }
+      .submit-btn:active {
+        transform: scale(0.96);
+      }
+      .submit-btn:disabled {
+        background: var(--text-muted);
+        box-shadow: none;
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 🌌 BACKGROUND BLOBS FOR HIGH-END AESTHETIC -->
+    <div class="blob-bg blob-1"></div>
+    <div class="blob-bg blob-2"></div>
+    <div class="blob-bg blob-3"></div>
+
+    <!-- 📱 HEADER -->
+    <header>
+      <div class="header-container" style="justify-content: space-between; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <a href="/apps/client" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+          <h1 class="header-title">Resumen del Pedido</h1>
+        </div>
+        <button type="button" class="theme-toggle-btn" id="theme-btn" title="Alternar Modo Claro/Oscuro">
+          <i class="fas fa-moon" id="theme-icon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 📱 CONTENIDO -->
+    <main>
+      <div class="checkout-card" id="items-summary-card">
+        <h2 class="card-title"><i class="fas fa-utensils"></i> Productos en tu Pedido</h2>
+        <div id="items-list-container" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 4px;">
+          <!-- Cargado dinámicamente -->
+        </div>
+      </div>
+
+      <div class="checkout-card">
+        <h2 class="card-title"><i class="fas fa-receipt"></i> Resumen de Pago</h2>
+        <div class="price-row"><span>Subtotal</span><span id="label-subtotal">12.50 €</span></div>
+        <div class="price-row">
+          <span>Costo de Envío</span>
+          <span style="color: var(--brand-green); font-weight: 800">Gratis</span>
+        </div>
+        <div class="price-row total">
+          <span>Total</span><span id="label-total">12.50 €</span>
+        </div>
+      </div>
+
+      <div class="checkout-card">
+        <h2 class="card-title"><i class="fas fa-pizza-slice"></i> Notas para a Cozinha 🍳</h2>
+        <textarea id="customer-notes" placeholder="Ex: Sem cebola, bem grelhado, molho à parte..." style="
+          width: 100%;
+          border: 1px solid #cbd5e1;
+          border-radius: 12px;
+          padding: 12px;
+          font-family: var(--font-body);
+          font-size: 13px;
+          font-weight: 600;
+          outline: none;
+          resize: none;
+          height: 70px;
+          color: var(--text-main);
+          transition: all 0.2s;
+        " onfocus="this.style.borderColor='var(--brand-green)'" onblur="this.style.borderColor='#cbd5e1'"></textarea>
+      </div>
+
+      <div class="checkout-card">
+        <h2 class="card-title"><i class="fas fa-motorcycle"></i> Instruções para o Estafeta 🛵</h2>
+        <textarea id="delivery-notes" placeholder="Ex: Tocar o intercomunicador 3B, entrada das traseiras..." style="
+          width: 100%;
+          border: 1px solid #cbd5e1;
+          border-radius: 12px;
+          padding: 12px;
+          font-family: var(--font-body);
+          font-size: 13px;
+          font-weight: 600;
+          outline: none;
+          resize: none;
+          height: 70px;
+          color: var(--text-main);
+          transition: all 0.2s;
+        " onfocus="this.style.borderColor='var(--brand-green)'" onblur="this.style.borderColor='#cbd5e1'"></textarea>
+      </div>
+
+      <div class="checkout-card">
+        <h2 class="card-title"><i class="fas fa-credit-card"></i> Método de Pago</h2>
+        
+        <div class="payment-methods-grid">
+          <div class="payment-option-card selected" id="option-cash" onclick="selectPaymentMethod('cash')">
+            <i class="fas fa-wallet"></i>
+            <span>Efectivo</span>
+          </div>
+          <div class="payment-option-card" id="option-card" onclick="selectPaymentMethod('card')">
+            <i class="fas fa-credit-card"></i>
+            <span>Tarjeta</span>
+          </div>
+          <div class="payment-option-card" id="option-mbway" onclick="selectPaymentMethod('mb_way')">
+            <i class="fas fa-mobile-alt"></i>
+            <span>MB WAY</span>
+          </div>
+        </div>
+
+        <!-- MB WAY Phone Input Section -->
+        <div id="mbway-container" style="display: none; margin-top: 16px; animation: fadeIn 0.3s ease;">
+          <label style="font-family: var(--font-title); font-size: 13px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 8px;">
+            Número Telefónico MB WAY (Portugal)
+          </label>
+          <div style="position: relative; display: flex; align-items: center;">
+            <span style="position: absolute; left: 16px; font-weight: 700; font-size: 14px; color: var(--text-muted);">+351</span>
+            <input type="tel" id="mbway-phone" placeholder="912 345 678" style="
+              width: 100%;
+              border: 1px solid #cbd5e1;
+              border-radius: 14px;
+              padding: 14px 14px 14px 60px;
+              font-family: var(--font-body);
+              font-size: 14px;
+              font-weight: 700;
+              outline: none;
+              color: var(--text-main);
+              background: var(--bg-card);
+              transition: all 0.2s;
+            " onfocus="this.style.borderColor='var(--brand-green)'" onblur="this.style.borderColor='#cbd5e1'">
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px; font-weight: 600;">
+            <i class="fas fa-info-circle" style="color: var(--brand-green);"></i> Recibirás una notificación push para autorizar el cobro en tu app oficial.
+          </div>
+        </div>
+
+        <div id="saved-cards-container" class="saved-cards-section" style="display: none;">
+          <!-- Cargado dinámicamente -->
+          <div style="text-align: center; padding: 10px; color: var(--text-muted); font-size: 13px;">
+            <i class="fas fa-circle-notch fa-spin text-teal mr-2"></i> Cargando tarjetas guardadas...
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 📲 MODAL INTERACTIVO DE SIMULACIÓN DE PAGO MB WAY (GLASSMORPHIC) -->
+    <div id="mbway-modal" style="
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+    ">
+      <div style="
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 32px 24px;
+        width: 90%;
+        max-width: 380px;
+        text-align: center;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        overflow: hidden;
+      ">
+        <!-- Decoración neón de fondo -->
+        <div style="
+          position: absolute;
+          top: -50px;
+          left: -50px;
+          width: 150px;
+          height: 150px;
+          background: rgba(13, 148, 136, 0.15);
+          filter: blur(40px);
+          border-radius: 50%;
+        "></div>
+        
+        <div style="
+          width: 72px;
+          height: 72px;
+          border-radius: 50%;
+          background: var(--brand-green-light);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 20px;
+          box-shadow: 0 0 20px rgba(13, 148, 136, 0.2);
+          position: relative;
+        ">
+          <i class="fas fa-mobile-alt animate-pulse" style="font-size: 32px; color: var(--brand-green);"></i>
+          <span style="
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: #ef4444;
+            border: 2px solid var(--bg-card);
+            border-radius: 50%;
+          "></span>
+        </div>
+
+        <h3 style="font-family: var(--font-title); font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--text-main);">
+          Autoriza el pago en tu celular
+        </h3>
+        
+        <p style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5;">
+          Hemos enviado una notificación push de MB WAY al número <strong id="modal-mbway-phone" style="color: var(--text-main);">+351 912 345 678</strong>. Abre tu aplicación y confirma el pago por <strong id="modal-mbway-amount" style="color: var(--brand-green);">12.50 €</strong>.
+        </p>
+
+        <!-- Spinner personalizado de progreso -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px;">
+          <div class="mbway-spinner-dot" style="width: 10px; height: 10px; border-radius: 50%; background: var(--brand-green); animation: bounce 1.4s infinite ease-in-out both;"></div>
+          <div class="mbway-spinner-dot" style="width: 10px; height: 10px; border-radius: 50%; background: var(--brand-green); animation: bounce 1.4s infinite ease-in-out both; animation-delay: 0.2s;"></div>
+          <div class="mbway-spinner-dot" style="width: 10px; height: 10px; border-radius: 50%; background: var(--brand-green); animation: bounce 1.4s infinite ease-in-out both; animation-delay: 0.4s;"></div>
+        </div>
+
+        <span style="font-size: 11px; font-weight: 700; color: var(--brand-green); text-transform: uppercase; letter-spacing: 1px;">
+          Esperando confirmación...
+        </span>
+      </div>
+    </div>
+    
+    <style>
+      @keyframes bounce {
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1.0); }
+      }
+      .animate-pulse {
+        animation: pulse-glow 2s infinite alternate;
+      }
+      @keyframes pulse-glow {
+        from { transform: scale(1); filter: drop-shadow(0 0 2px rgba(13,148,136,0.3)); }
+        to { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(13,148,136,0.8)); }
+      }
+    </style>
+
+    <!-- 📱 BOTÓN INFERIOR -->
+    <div class="footer-action">
+      <div class="footer-container">
+        <button type="button" id="pay-button" class="submit-btn">
+          <i class="fas fa-lock"></i> Pagar por Adelantado (12.50 €)
+        </button>
+      </div>
+    </div>
+
+    <!-- 📱 LÓGICA DE CONTROL DE FLUJO AUTOMÁTICO -->
+    <script>
+      let paymentMethod = "cash";
+      let selectedCardId = null;
+      let stripeInstance = null;
+      let subtotal = 0;
+
+      async function getStripe() {
+        if (!stripeInstance) {
+          const res = await fetch("/api/v1/clients/payment-config");
+          const data = await res.json();
+          stripeInstance = Stripe(data.publishable_key);
+        }
+        return stripeInstance;
+      }
+
+      window.selectPaymentMethod = function(method) {
+        paymentMethod = method;
+        const optCash = document.getElementById("option-cash");
+        const optCard = document.getElementById("option-card");
+        const optMbway = document.getElementById("option-mbway");
+        const cardsContainer = document.getElementById("saved-cards-container");
+        const mbwayContainer = document.getElementById("mbway-container");
+        const payButton = document.getElementById("pay-button");
+
+        if (method === 'cash') {
+          optCash.classList.add("selected");
+          optCard.classList.remove("selected");
+          if (optMbway) optMbway.classList.remove("selected");
+          cardsContainer.style.display = "none";
+          mbwayContainer.style.display = "none";
+          payButton.innerHTML = `<i class="fas fa-wallet"></i> Confirmar Pedido (Efectivo - ${subtotal.toFixed(2)} €)`;
+        } else if (method === 'mb_way') {
+          optCash.classList.remove("selected");
+          optCard.classList.remove("selected");
+          if (optMbway) optMbway.classList.add("selected");
+          cardsContainer.style.display = "none";
+          mbwayContainer.style.display = "block";
+          payButton.innerHTML = `<i class="fas fa-mobile-alt"></i> Confirmar y Pagar con MB WAY (${subtotal.toFixed(2)} €)`;
+          
+          // Prefill telephone from localStorage if present
+          const userPhone = localStorage.getItem("active_client_phone") || "";
+          const phoneInput = document.getElementById("mbway-phone");
+          if (phoneInput && !phoneInput.value) {
+            let cleanPhone = userPhone.replace(/^\+351/, '').replace(/^351/, '').trim();
+            phoneInput.value = cleanPhone;
+          }
+        } else {
+          optCash.classList.remove("selected");
+          optCard.classList.add("selected");
+          if (optMbway) optMbway.classList.remove("selected");
+          cardsContainer.style.display = "block";
+          mbwayContainer.style.display = "none";
+          payButton.innerHTML = `<i class="fas fa-lock"></i> Confirmar y Pagar (${subtotal.toFixed(2)} €)`;
+          loadSavedCards();
+        }
+      };
+
+      window.loadSavedCards = function() {
+        const activeClientId = parseInt(localStorage.getItem("active_client_id")) || 1;
+        const container = document.getElementById("saved-cards-container");
+        container.innerHTML = `
+          <div style="text-align: center; padding: 20px; color: var(--text-muted);">
+            <i class="fas fa-circle-notch fa-spin text-teal mb-2" style="font-size: 18px;"></i>
+            Cargando tarjetas vinculadas...
+          </div>
+        `;
+
+        fetch(`/api/v1/clients/cards?client_id=${activeClientId}`)
+          .then(res => res.json())
+          .then(cards => {
+            container.innerHTML = "";
+            if (!cards || cards.length === 0) {
+              container.innerHTML = `
+                <div class="warning-card-link">
+                  <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 16px; margin-bottom: 8px; display: block;"></i>
+                  <span>No tienes tarjetas guardadas en tu cuenta.</span>
+                  <br>
+                  <a href="/apps/client?client_id=${activeClientId}&tab=wallet">Vincular una tarjeta en tu Billetera</a>
+                </div>
+              `;
+              selectedCardId = null;
+              return;
+            }
+
+            cards.forEach((card, index) => {
+              const row = document.createElement("div");
+              row.className = "saved-card-row" + (index === 0 ? " selected" : "");
+              if (index === 0) selectedCardId = card.id;
+
+              row.onclick = () => {
+                document.querySelectorAll(".saved-card-row").forEach(r => r.classList.remove("selected"));
+                row.classList.add("selected");
+                selectedCardId = card.id;
+              };
+
+              const brandIcon = card.brand.toLowerCase() === 'visa' ? 'fa-cc-visa' : (card.brand.toLowerCase() === 'mastercard' ? 'fa-cc-mastercard' : 'fa-credit-card');
+
+              row.innerHTML = `
+                <div class="card-info-flex">
+                  <i class="fab ${brandIcon} card-brand-icon" style="font-size: 24px;"></i>
+                  <div>
+                    <div style="font-size: 13px;">•••• •••• •••• ${card.last4}</div>
+                    <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">${card.brand} - Expiración ${card.exp_month.toString().padStart(2, '0')}/${card.exp_year.toString().slice(-2)}</div>
+                  </div>
+                </div>
+                <div class="select-indicator"></div>
+              `;
+              container.appendChild(row);
+            });
+          })
+          .catch(err => {
+            console.error(err);
+            container.innerHTML = `
+              <div style="color: #f43f5e; text-align: center; font-size: 12px; font-weight: 700; padding: 12px; background: #fff1f2; border-radius: 12px; border: 1px solid #ffe4e6;">
+                <i class="fas fa-exclamation-circle"></i> Error al cargar las tarjetas desde Stripe.
+              </div>
+            `;
+          });
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const themeBtn = document.getElementById("theme-btn");
+        const themeIcon = document.getElementById("theme-icon");
+
+        // 🌗 CONTROL DE MODO CLARO / OSCURO PERSISTENTE
+        let currentTheme = localStorage.getItem("app_client_theme") || "light";
+        if (currentTheme === "dark") {
+          document.body.classList.add("dark-theme");
+          themeIcon.className = "fas fa-sun";
+        } else {
+          document.body.classList.remove("dark-theme");
+          themeIcon.className = "fas fa-moon";
+        }
+
+        themeBtn.addEventListener("click", () => {
+          if (document.body.classList.contains("dark-theme")) {
+            document.body.classList.remove("dark-theme");
+            themeIcon.className = "fas fa-moon";
+            currentTheme = "light";
+          } else {
+            document.body.classList.add("dark-theme");
+            themeIcon.className = "fas fa-sun";
+            currentTheme = "dark";
+          }
+          localStorage.setItem("app_client_theme", currentTheme);
+        });
+
+        let cartData = null;
+        try {
+          cartData = JSON.parse(localStorage.getItem("selected_cart"));
+        } catch (e) {
+          console.error("Error cargando carrito:", e);
+        }
+
+        // Fallback robusto en caso de que accedan directo al checkout sin pasar por index
+        if (!cartData || !cartData.items || cartData.items.length === 0) {
+          cartData = {
+            restaurant_id: parseInt("{{ restaurant_id }}") || 1,
+            items: [{ key: "pizza", name: "Pizza Suprema", price: 12.50, quantity: 1, emoji: "🍕" }]
+          };
+        }
+
+        const itemsContainer = document.getElementById("items-list-container");
+        itemsContainer.innerHTML = "";
+        
+        subtotal = 0;
+        cartData.items.forEach(item => {
+          const itemTotal = item.price * item.quantity;
+          subtotal += itemTotal;
+
+          const row = document.createElement("div");
+          row.style.display = "flex";
+          row.style.justify = "space-between";
+          row.style.alignItems = "center";
+          row.style.fontSize = "13px";
+          row.style.fontWeight = "700";
+          row.style.color = "var(--text-main)";
+          row.innerHTML = `
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span style="font-size: 16px;">${item.emoji}</span>
+              <span style="color: var(--brand-green);">${item.quantity}x</span>
+              <span>${item.name}</span>
+            </div>
+            <span style="color: var(--text-muted);">${itemTotal.toFixed(2)} €</span>
+          `;
+          itemsContainer.appendChild(row);
+        });
+
+        // Actualizar valores de resumen
+        document.getElementById("label-subtotal").textContent = `${subtotal.toFixed(2)} €`;
+        document.getElementById("label-total").textContent = `${subtotal.toFixed(2)} €`;
+        
+        const payButton = document.getElementById("pay-button");
+        payButton.innerHTML = `<i class="fas fa-wallet"></i> Confirmar Pedido (Efectivo - ${subtotal.toFixed(2)} €)`;
+
+        payButton.addEventListener("click", async () => {
+          const activeClientId = parseInt(localStorage.getItem("active_client_id")) || 1;
+          const restId = parseInt("{{ restaurant_id }}") || 1;
+          const customerNote = document.getElementById("customer-notes").value.trim();
+          const deliveryNote = document.getElementById("delivery-notes").value.trim();
+
+          // 🌟 Empaquetar los productos en una cadena delimitada especial
+          const itemsString = cartData.items.map(item => `${item.quantity}x ${item.emoji} ${item.name}`).join(" | ");
+          const compiledNote = `${itemsString} || Note: ${customerNote || "Sin notas adicionales."}`;
+
+          if (paymentMethod === "card" && !selectedCardId) {
+            alert("Por favor, selecciona una tarjeta guardada o vincula una nueva en tu Billetera.");
+            return;
+          }
+
+          if (paymentMethod === "mb_way") {
+            const rawPhone = document.getElementById("mbway-phone").value.trim().replace(/\s/g, '');
+            if (!rawPhone) {
+              alert("Por favor, introduce tu número de teléfono de MB WAY.");
+              return;
+            }
+            if (!/^\d{9}$/.test(rawPhone)) {
+              alert("El número de teléfono de MB WAY en Portugal debe contener exactamente 9 dígitos numéricos.");
+              return;
+            }
+          }
+
+          payButton.disabled = true;
+          payButton.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Procesando transacción...';
+
+          try {
+            // Flujo especial para MB WAY
+            if (paymentMethod === "mb_way") {
+              const rawPhone = document.getElementById("mbway-phone").value.trim().replace(/\s/g, '');
+              const formattedPhone = "+351" + rawPhone;
+              
+              // 1. Iniciar intención de pago
+              const initRes = await fetch("/api/v1/clients/orders/initiate-payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  total_amount: Math.round(subtotal * 100),
+                  currency: "eur",
+                  payment_method_type: "mb_way"
+                })
+              });
+              
+              const initData = await initRes.json();
+              if (initData.error) {
+                alert("Error al iniciar pago con MB WAY: " + initData.error);
+                payButton.disabled = false;
+                payButton.innerHTML = `<i class="fas fa-mobile-alt"></i> Confirmar y Pagar con MB WAY (${subtotal.toFixed(2)} €)`;
+                return;
+              }
+              
+              // 2. Simulación o Pasarela Real
+              if (initData.client_secret.startsWith("pi_mock_mbway_")) {
+                // Modo simulado
+                document.getElementById("modal-mbway-phone").textContent = "+351 " + rawPhone;
+                document.getElementById("modal-mbway-amount").textContent = `${subtotal.toFixed(2)} €`;
+                const modal = document.getElementById("mbway-modal");
+                modal.style.display = "flex";
+                
+                await new Promise(resolve => setTimeout(resolve, 2500));
+                modal.style.display = "none";
+                
+                // Guardar pedido comanda en backend
+                const confirmRes = await fetch("/api/v1/clients/orders/confirm", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    payment_method: "mb_way",
+                    restaurant_id: restId,
+                    client_id: activeClientId,
+                    note: compiledNote,
+                    delivery_note: deliveryNote,
+                    payment_intent_id: initData.payment_intent_id
+                  })
+                });
+                
+                const confirmData = await confirmRes.json();
+                if (confirmData.error) {
+                  alert("Error al registrar pedido: " + confirmData.error);
+                  payButton.disabled = false;
+                  payButton.innerHTML = `<i class="fas fa-mobile-alt"></i> Confirmar y Pagar con MB WAY (${subtotal.toFixed(2)} €)`;
+                  return;
+                }
+                
+                completeOrderSuccess(confirmData.order_id);
+              } else {
+                // Modo real de Stripe Elements
+                try {
+                  const stripe = await getStripe();
+                  const result = await stripe.confirmMbWayPayment(initData.client_secret, {
+                    payment_method: {
+                      billing_details: {
+                        phone: formattedPhone
+                      }
+                    }
+                  });
+                  
+                  if (result.error) {
+                    alert("Pago fallido en la app de MB WAY: " + result.error.message);
+                    payButton.disabled = false;
+                    payButton.innerHTML = `<i class="fas fa-mobile-alt"></i> Confirmar y Pagar con MB WAY (${subtotal.toFixed(2)} €)`;
+                    return;
+                  }
+                  
+                  const confirmRes = await fetch("/api/v1/clients/orders/confirm", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      payment_method: "mb_way",
+                      restaurant_id: restId,
+                      client_id: activeClientId,
+                      note: compiledNote,
+                      delivery_note: deliveryNote,
+                      payment_intent_id: result.paymentIntent.id
+                    })
+                  });
+                  
+                  const confirmData = await confirmRes.json();
+                  if (confirmData.error) {
+                    alert("Error al registrar pedido pagado: " + confirmData.error);
+                    payButton.disabled = false;
+                    payButton.innerHTML = `<i class="fas fa-mobile-alt"></i> Confirmar y Pagar con MB WAY (${subtotal.toFixed(2)} €)`;
+                    return;
+                  }
+                  
+                  completeOrderSuccess(confirmData.order_id);
+                } catch (stripeErr) {
+                  console.error(stripeErr);
+                  alert("Error procesando pago con pasarela Stripe.");
+                  payButton.disabled = false;
+                  payButton.innerHTML = `<i class="fas fa-mobile-alt"></i> Confirmar y Pagar con MB WAY (${subtotal.toFixed(2)} €)`;
+                }
+              }
+              return;
+            }
+
+            const bodyPayload = {
+              payment_method: paymentMethod,
+              restaurant_id: restId,
+              client_id: activeClientId,
+              note: compiledNote,
+              delivery_note: deliveryNote
+            };
+
+            if (paymentMethod === "card") {
+              bodyPayload.payment_method_id = selectedCardId;
+              bodyPayload.total_amount = Math.round(subtotal * 100);
+            }
+
+            const response = await fetch("/api/v1/clients/orders/confirm", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(bodyPayload)
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+              alert("Error al procesar: " + data.error);
+              payButton.disabled = false;
+              if (paymentMethod === 'cash') {
+                payButton.innerHTML = `<i class="fas fa-wallet"></i> Confirmar Pedido (Efectivo - ${subtotal.toFixed(2)} €)`;
+              } else if (paymentMethod === 'mb_way') {
+                payButton.innerHTML = `<i class="fas fa-mobile-alt"></i> Confirmar y Pagar con MB WAY (${subtotal.toFixed(2)} €)`;
+              } else {
+                payButton.innerHTML = `<i class="fas fa-lock"></i> Confirmar y Pagar (${subtotal.toFixed(2)} €)`;
+              }
+              return;
+            }
+
+            // 🔒 MANEJAR FLUJO 3D SECURE (SCA)
+            if (data.status === "REQUIRES_ACTION") {
+              payButton.innerHTML = '<i class="fas fa-shield-alt fa-spin"></i> Autenticación 3D Secure...';
+              
+              try {
+                const stripe = await getStripe();
+                const result = await stripe.confirmCardPayment(data.client_secret);
+
+                if (result.error) {
+                  alert("Autenticación bancaria fallida: " + result.error.message);
+                  payButton.disabled = false;
+                  payButton.innerHTML = `<i class="fas fa-lock"></i> Confirmar y Pagar (${subtotal.toFixed(2)} €)`;
+                  return;
+                }
+
+                // Si se autenticó con éxito, enviar confirmación final al servidor
+                payButton.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Confirmando cobro autorizado...';
+                const finalRes = await fetch("/api/v1/clients/orders/confirm", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    payment_method: "card",
+                    restaurant_id: restId,
+                    client_id: activeClientId,
+                    note: compiledNote,
+                    payment_intent_id: result.paymentIntent.id
+                  })
+                });
+
+                const finalData = await finalRes.json();
+                if (finalData.error) {
+                  alert("Error al registrar el pedido pagado: " + finalData.error);
+                  payButton.disabled = false;
+                  payButton.innerHTML = `<i class="fas fa-lock"></i> Confirmar y Pagar (${subtotal.toFixed(2)} €)`;
+                  return;
+                }
+
+                // Pedido exitoso!
+                completeOrderSuccess(finalData.order_id);
+
+              } catch (stripeErr) {
+                console.error(stripeErr);
+                alert("Fallo al contactar la pasarela Stripe.");
+                payButton.disabled = false;
+                payButton.innerHTML = `<i class="fas fa-lock"></i> Confirmar y Pagar (${subtotal.toFixed(2)} €)`;
+              }
+            } else {
+              // ORDER_PROCESSED directo (Efectivo o Tarjeta mockeada / exitosa sin 3DS)
+              completeOrderSuccess(data.order_id);
+            }
+
+          } catch (err) {
+            console.error(err);
+            alert("Error en la conexión con la API de entregas.");
+            payButton.disabled = false;
+            if (paymentMethod === 'cash') {
+              payButton.innerHTML = `<i class="fas fa-wallet"></i> Confirmar Pedido (Efectivo - ${subtotal.toFixed(2)} €)`;
+            } else {
+              payButton.innerHTML = `<i class="fas fa-lock"></i> Confirmar y Pagar (${subtotal.toFixed(2)} €)`;
+            }
+          }
+        });
+
+        function completeOrderSuccess(orderId) {
+          payButton.innerHTML = '<i class="fas fa-check-circle animate__animated animate__bounceIn"></i> ¡Pedido Completado!';
+          localStorage.removeItem("selected_cart");
+
+          setTimeout(() => {
+            alert("¡Tu pedido ha sido procesado de forma real y exitosa! Iniciando rastreo por mapa...");
+            window.location.href = `/apps/client/tracking/${orderId}`;
+          }, 600);
+        }
+      });
+    </script>
+  </body>
+</html>

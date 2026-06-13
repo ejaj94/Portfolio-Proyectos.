@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registo de Parceiro - Logleve Entregador</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-nebula: radial-gradient(circle at 10% 20%, rgba(3, 7, 18, 0.95) 0%, rgba(11, 19, 41, 0.95) 90%);
+      --body-bg: #030712;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --brand-green: #10b981;
+      --brand-green-glow: rgba(16, 185, 129, 0.25);
+      --brand-gradient: linear-gradient(135deg, #10b981 0%, #2dd4bf 100%);
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-nebula);
+      background-color: var(--body-bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .register-container {
+      width: 100%;
+      max-width: 640px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      position: relative;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo-img {
+      height: 52px;
+      width: auto;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 8px var(--brand-green-glow));
+    }
+
+    .title {
+      font-family: var(--font-title);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13.5px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 580px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      text-align: left;
+    }
+
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 580px) {
+      .form-group.full-width {
+        grid-column: span 1;
+      }
+    }
+
+    .form-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .form-control {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 16px 14px 46px;
+      color: white;
+      font-family: var(--font-body);
+      font-size: 14.5px;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--brand-green);
+      box-shadow: 0 0 12px var(--brand-green-glow);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    select.form-control {
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .doc-section-title {
+      font-family: var(--font-title);
+      font-size: 16px;
+      font-weight: 700;
+      margin: 12px 0 16px 0;
+      grid-column: span 2;
+      color: white;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 8px;
+    }
+
+    @media (max-width: 580px) {
+      .doc-section-title {
+        grid-column: span 1;
+      }
+    }
+
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      grid-column: span 2;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 580px) {
+      .doc-grid {
+        grid-template-columns: 1fr;
+        grid-column: span 1;
+      }
+    }
+
+    .custom-file-upload {
+      border: 2px dashed var(--card-border);
+      background-color: rgba(15, 23, 42, 0.4);
+      border-radius: 16px;
+      padding: 24px 12px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .custom-file-upload:hover {
+      border-color: var(--brand-green);
+      background-color: rgba(16, 185, 129, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .custom-file-upload input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .upload-icon {
+      font-size: 24px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      transition: color 0.25s ease;
+    }
+
+    .custom-file-upload:hover .upload-icon {
+      color: var(--brand-green);
+    }
+
+    .upload-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .upload-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--brand-gradient);
+      border: none;
+      border-radius: 14px;
+      padding: 15px;
+      color: #030712;
+      font-family: var(--font-title);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      box-shadow: 0 4px 20px var(--brand-green-glow);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--brand-green-glow);
+      filter: brightness(1.1);
+    }
+
+    .footer-text {
+      margin-top: 28px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .footer-link {
+      color: var(--brand-green);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      text-decoration: underline;
+      color: #2dd4bf;
+    }
+
+    /* OCR Simulator notification box */
+    .ocr-tip {
+      background: rgba(45, 212, 191, 0.08);
+      border-left: 4px solid #2dd4bf;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      grid-column: span 2;
+      font-size: 13px;
+      color: #94a3b8;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    @media (max-width: 580px) {
+      .ocr-tip {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-container">
+    <div class="header">
+      <img src="{{ url_for('static', filename='logo.png') }}" class="logo-img" alt="Logleve Logo">
+      <h1 class="title">Registe-se como Entregador</h1>
+      <p class="subtitle">Faça o seu registo em poucos minutos e comece a faturar</p>
+    </div>
+
+    {% if error %}
+    <div class="alert-error">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('apps_view_blueprint.courier_register') }}">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" for="name">Nome Completo</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" id="name" name="name" class="form-control" placeholder="Ex. João Silva" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="phone">Telemóvel</label>
+          <div class="input-wrapper">
+            <i class="fas fa-phone input-icon"></i>
+            <select name="phone_prefix" style="position: absolute; left: 40px; width: 95px; background: #070b13; border: 1px solid var(--card-border); color: white; border-radius: 8px; padding: 6px; font-size: 13.5px; outline: none; height: calc(100% - 8px); margin: 4px 0; z-index: 5;">
+              <option value="+351" selected>🇵🇹 +351</option>
+              <option value="+34">🇪🇸 +34</option>
+              <option value="+55">🇧🇷 +55</option>
+              <option value="+244">🇦🇴 +244</option>
+              <option value="+258">🇲🇿 +258</option>
+              <option value="+238">🇨🇻 +238</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+39">🇮🇹 +39</option>
+              <option value="+52">🇲🇽 +52</option>
+              <option value="+58">🇻🇪 +58</option>
+              <option value="+57">🇨🇴 +57</option>
+              <option value="+54">🇦🇷 +54</option>
+            </select>
+            <input type="text" id="phone" name="phone" class="form-control" style="padding-left: 145px;" placeholder="919 876 543" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">E-mail</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" id="email" name="email" class="form-control" placeholder="joao@exemplo.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Palavra-passe</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="password" name="password" class="form-control" style="padding-right: 46px;" placeholder="Mínimo 6 caracteres" required>
+            <i class="fas fa-eye" style="position: absolute; right: 16px; color: var(--text-muted); cursor: pointer; transition: color 0.2s;" onclick="togglePasswordVisibility('password', this)"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="nif">NIF (Contribuinte)</label>
+          <div class="input-wrapper">
+            <i class="fas fa-file-invoice input-icon"></i>
+            <input type="text" id="nif" name="nif" class="form-control" placeholder="Ex. 200 987 654" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="vehicle">Tipo de Veículo</label>
+          <div class="input-wrapper">
+            <i class="fas fa-motorcycle input-icon"></i>
+            <select id="vehicle" name="vehicle" class="form-control" onchange="togglePlateField()" required>
+              <option value="motorcycle" selected>Motociclo / Mota</option>
+              <option value="car">Carro / Automóvel</option>
+              <option value="bicycle">Bicicleta</option>
+              <option value="scooter">Trotinette Elétrica</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group full-width" id="plate-group">
+          <label class="form-label" for="plate">Matrícula do Veículo</label>
+          <div class="input-wrapper">
+            <i class="fas fa-hashtag input-icon"></i>
+            <input type="text" id="plate" name="plate" class="form-control" placeholder="Ex. AA-00-XX" required>
+          </div>
+        </div>
+
+        <h3 class="doc-section-title">Documentação Obrigatória</h3>
+
+        <div class="ocr-tip">
+          <i class="fas fa-lightbulb" style="color: #2dd4bf; font-size: 18px; margin-top: 2px;"></i>
+          <div>
+            <strong>Dica de Validação (Simulador OCR):</strong> Para garantir a aprovação automática e imediata das fotos, certifique-se de que os nomes dos arquivos contêm o padrão <code style="background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 4px; color: #2dd4bf;">exp_2030-12-31</code> para simular a validade do documento.
+          </div>
+        </div>
+
+        <div class="doc-grid">
+          <!-- PROFILE PICTURE -->
+          <div class="custom-file-upload" id="profile-pic-box">
+            <input type="file" name="profile_picture" required onchange="handleFileChange(this, 'profile-pic-box', 'profile-pic-icon', 'profile-pic-title')">
+            <i class="fas fa-camera upload-icon" id="profile-pic-icon"></i>
+            <span class="upload-title" id="profile-pic-title">Foto de Perfil</span>
+            <span class="upload-desc">Rosto visível</span>
+          </div>
+
+          <!-- ID DOC -->
+          <div class="custom-file-upload" id="id-doc-box">
+            <input type="file" name="id_doc" required onchange="handleFileChange(this, 'id-doc-box', 'id-icon', 'id-title')">
+            <i class="fas fa-id-card upload-icon" id="id-icon"></i>
+            <span class="upload-title" id="id-title">Documento de Identidade ou Seguro</span>
+            <span class="upload-desc">Frente e Verso</span>
+          </div>
+
+          <!-- DRIVER LICENSE -->
+          <div class="custom-file-upload" id="license-box">
+            <input type="file" name="driver_license" required onchange="handleFileChange(this, 'license-box', 'license-icon', 'license-title')">
+            <i class="fas fa-id-badge upload-icon" id="license-icon"></i>
+            <span class="upload-title" id="license-title">Carta Condução</span>
+            <span class="upload-desc">Categorias Ativas</span>
+          </div>
+
+          <!-- INSURANCE -->
+          <div class="custom-file-upload" id="insurance-box">
+            <input type="file" name="vehicle_insurance" required onchange="handleFileChange(this, 'insurance-box', 'insurance-icon', 'insurance-title')">
+            <i class="fas fa-file-shield upload-icon" id="insurance-icon"></i>
+            <span class="upload-title" id="insurance-title">Seguro Veicular</span>
+            <span class="upload-desc">Apólice de Seguro</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit full-width">
+          <span>Enviar Candidatura</span>
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </form>
+
+    <p class="footer-text">
+      Já tem uma conta de entregador? 
+      <a href="{{ url_for('apps_view_blueprint.courier_login') }}" class="footer-link">Faça login aqui</a>
+    </p>
+  </div>
+
+  <script>
+    function togglePlateField() {
+      const vehicleSelect = document.getElementById("vehicle");
+      const plateGroup = document.getElementById("plate-group");
+      const plateInput = document.getElementById("plate");
+      
+      const licenseBox = document.getElementById("license-box");
+      const insuranceBox = document.getElementById("insurance-box");
+      
+      const licenseInput = licenseBox.querySelector("input[type='file']");
+      const insuranceInput = insuranceBox.querySelector("input[type='file']");
+      
+      if (vehicleSelect.value === "bicycle" || vehicleSelect.value === "scooter") {
+        plateGroup.style.display = "none";
+        plateInput.removeAttribute("required");
+        
+        licenseBox.style.display = "none";
+        licenseInput.removeAttribute("required");
+        
+        insuranceBox.style.display = "none";
+        insuranceInput.removeAttribute("required");
+      } else {
+        plateGroup.style.display = "block";
+        plateInput.setAttribute("required", "required");
+        
+        licenseBox.style.display = "flex";
+        licenseInput.setAttribute("required", "required");
+        
+        insuranceBox.style.display = "flex";
+        insuranceInput.setAttribute("required", "required");
+      }
+    }
+
+    function togglePasswordVisibility(inputId, icon) {
+      const input = document.getElementById(inputId);
+      if (input.type === "password") {
+        input.type = "text";
+        icon.className = "fas fa-eye-slash";
+        icon.style.color = "var(--brand-green)";
+      } else {
+        input.type = "password";
+        icon.className = "fas fa-eye";
+        icon.style.color = "var(--text-muted)";
+      }
+    }
+
+    function handleFileChange(input, boxId, iconId, titleId) {
+      const box = document.getElementById(boxId);
+      const icon = document.getElementById(iconId);
+      const title = document.getElementById(titleId);
+      
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
+        
+        box.style.borderColor = "#10b981";
+        box.style.backgroundColor = "rgba(16, 185, 129, 0.05)";
+        
+        icon.className = "fas fa-circle-check upload-icon";
+        icon.style.color = "#10b981";
+        
+        title.innerText = file.name;
+        title.style.color = "#10b981";
+        
+        const desc = box.querySelector(".upload-desc");
+        if (desc) {
+          desc.innerText = `${fileSizeMB} MB`;
+        }
+      }
+    }
+
+    // Trigger on load to match initial vehicle selection
+    window.addEventListener("DOMContentLoaded", () => {
+      togglePlateField();
+
+      const selects = document.querySelectorAll('select[name="phone_prefix"]');
+      const prefixes = [
+        { code: "+351", name: "Portugal", flag: "🇵🇹" },
+        { code: "+34", name: "España", flag: "🇪🇸" },
+        { code: "+55", name: "Brasil", flag: "🇧🇷" },
+        { code: "+1", name: "EUA/Canada", flag: "🇺🇸" },
+        { code: "+44", name: "Reino Unido", flag: "🇬🇧" },
+        { code: "+33", name: "Francia", flag: "🇫🇷" },
+        { code: "+49", name: "Alemania", flag: "🇩🇪" },
+        { code: "+39", name: "Italia", flag: "🇮🇹" },
+        { code: "+52", name: "México", flag: "🇲🇽" },
+        { code: "+58", name: "Venezuela", flag: "🇻🇪" },
+        { code: "+57", name: "Colombia", flag: "🇨🇴" },
+        { code: "+54", name: "Argentina", flag: "🇦🇷" },
+        { code: "+56", name: "Chile", flag: "🇨🇱" },
+        { code: "+51", name: "Perú", flag: "🇵🇪" },
+        { code: "+593", name: "Ecuador", flag: "🇪🇨" },
+        { code: "+502", name: "Guatemala", flag: "🇬🇹" },
+        { code: "+506", name: "Costa Rica", flag: "🇨🇷" },
+        { code: "+595", name: "Paraguay", flag: "🇵🇾" },
+        { code: "+598", name: "Uruguay", flag: "🇺🇾" },
+        { code: "+591", name: "Bolivia", flag: "🇧🇴" },
+        { code: "+507", name: "Panamá", flag: "🇵🇦" },
+        { code: "+505", name: "Nicaragua", flag: "🇳🇮" },
+        { code: "+503", name: "El Salvador", flag: "🇸🇻" },
+        { code: "+504", name: "Honduras", flag: "🇭🇳" },
+        { code: "+244", name: "Angola", flag: "🇦🇴" },
+        { code: "+258", name: "Mozambique", flag: "🇲🇿" },
+        { code: "+238", name: "Cabo Verde", flag: "🇨🇻" },
+        { code: "+224", name: "Guinea", flag: "🇬🇳" },
+        { code: "+245", name: "Guinea-Bissau", flag: "🇬🇼" },
+        { code: "+239", name: "Santo Tomé", flag: "🇸🇹" },
+        { code: "+670", name: "Timor Oriental", flag: "🇹🇱" },
+        { code: "+86", name: "China", flag: "🇨🇳" },
+        { code: "+91", name: "India", flag: "🇮🇳" },
+        { code: "+7", name: "Rusia", flag: "🇷🇺" },
+        { code: "+81", name: "Japón", flag: "🇯🇵" },
+        { code: "+82", name: "Corea del Sur", flag: "🇰🇷" },
+        { code: "+41", name: "Suiza", flag: "🇨🇭" },
+        { code: "+31", name: "Países Bajos", flag: "🇳🇱" },
+        { code: "+32", name: "Bélgica", flag: "🇧🇪" },
+        { code: "+43", name: "Austria", flag: "🇦🇹" },
+        { code: "+46", name: "Suecia", flag: "🇸🇪" },
+        { code: "+47", name: "Noruega", flag: "🇳🇴" },
+        { code: "+45", name: "Dinamarca", flag: "🇩🇰" },
+        { code: "+358", name: "Finlandia", flag: "🇫🇮" },
+        { code: "+353", name: "Irlanda", flag: "🇮🇪" },
+        { code: "+30", name: "Grecia", flag: "🇬🇷" },
+        { code: "+90", name: "Turquía", flag: "🇹🇷" },
+        { code: "+966", name: "Arabia Saudí", flag: "🇸🇦" },
+        { code: "+971", name: "Emiratos Árabes", flag: "🇦🇪" },
+        { code: "+20", name: "Egipto", flag: "🇪🇬" },
+        { code: "+27", name: "Sudáfrica", flag: "🇿🇦" },
+        { code: "+234", name: "Nigeria", flag: "🇳🇬" },
+        { code: "+254", name: "Kenia", flag: "🇰🇪" },
+        { code: "+212", name: "Marruecos", flag: "🇲🇦" },
+        { code: "+61", name: "Australia", flag: "🇦🇺" },
+        { code: "+64", name: "Nueva Zelanda", flag: "🇳🇿" },
+        { code: "+63", name: "Filipinas", flag: "🇵🇭" },
+        { code: "+62", name: "Indonesia", flag: "🇮🇩" },
+        { code: "+60", name: "Malasia", flag: "🇲🇾" },
+        { code: "+66", name: "Tailandia", flag: "🇹🇭" },
+        { code: "+84", name: "Vietnam", flag: "🇻🇳" },
+        { code: "+92", name: "Pakistán", flag: "🇵🇰" },
+        { code: "+880", name: "Bangladés", flag: "🇧🇩" },
+        { code: "+98", name: "Irán", flag: "🇮🇷" },
+        { code: "+380", name: "Ucrania", flag: "🇺🇦" },
+        { code: "+48", name: "Polonia", flag: "🇵🇱" },
+        { code: "+40", name: "Rumania", flag: "🇷🇴" }
+      ];
+
+      selects.forEach(select => {
+        select.innerHTML = '';
+        
+        prefixes.sort((a, b) => a.name.localeCompare(b.name));
+        
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '+351';
+        defaultOption.text = '🇵🇹 +351 (PT)';
+        defaultOption.selected = true;
+        select.appendChild(defaultOption);
+
+        prefixes.forEach(p => {
+          if (p.code !== '+351') {
+            const opt = document.createElement('option');
+            opt.value = p.code;
+            opt.text = `${p.flag} ${p.code} (${p.name})`;
+            select.appendChild(opt);
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

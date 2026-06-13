@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificar Telemóvel - Logleve</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-nebula: radial-gradient(circle at 10% 20%, rgba(3, 7, 18, 0.95) 0%, rgba(11, 19, 41, 0.95) 90%);
+      --body-bg: #030712;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --brand-green: #10b981;
+      --brand-green-glow: rgba(16, 185, 129, 0.25);
+      --brand-gradient: linear-gradient(135deg, #10b981 0%, #2dd4bf 100%);
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-nebula);
+      background-color: var(--body-bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .verify-container {
+      width: 100%;
+      max-width: 440px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      text-align: center;
+      position: relative;
+    }
+
+    .logo-img {
+      height: 52px;
+      width: auto;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 0 8px var(--brand-green-glow));
+    }
+
+    .title {
+      font-family: var(--font-title);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13.5px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .pin-input-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .pin-box {
+      width: 54px;
+      height: 60px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .pin-box:focus {
+      border-color: var(--brand-green);
+      box-shadow: 0 0 12px var(--brand-green-glow);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--brand-gradient);
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      color: #030712;
+      font-family: var(--font-title);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px var(--brand-green-glow);
+      margin-bottom: 20px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--brand-green-glow);
+      filter: brightness(1.1);
+    }
+
+    .pin-demo-tip {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.15);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13px;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .footer-link {
+      color: var(--brand-green);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13.5px;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      text-decoration: underline;
+      color: #2dd4bf;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="verify-container">
+    <img src="{{ url_for('static', filename='logo.png') }}" class="logo-img" alt="Logleve Logo">
+    <h1 class="title">Verificação PIN</h1>
+    <p class="subtitle">
+      {% if client and client.verification_method == 'sms' %}
+        Enviamos um código SMS de 4 dígitos para o seu telemóvel ({{ client.phone }}) para verificar a sua conta.
+      {% else %}
+        Enviamos um código de 4 dígitos para o seu e-mail ({{ client.email }}) para verificar a sua conta.
+      {% endif %}
+    </p>
+
+    {% if error %}
+    <div class="alert-error">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
+
+    {% if pin_demo %}
+    <div class="pin-demo-tip">
+      <i class="fas fa-sms"></i>
+      <span>Código recebido (Demo): <strong>{{ pin_demo }}</strong></span>
+    </div>
+    {% endif %}
+
+    <form id="verifyForm" method="POST" action="{{ url_for('apps_view_blueprint.client_verify') }}">
+      <!-- Hidden full pin field to submit -->
+      <input type="hidden" id="fullPin" name="pin">
+
+      <div class="pin-input-group">
+        <input type="text" class="pin-box" maxlength="1" pattern="[0-9]" required oninput="moveNext(this, 1)" onkeydown="moveBack(event, 0)">
+        <input type="text" class="pin-box" maxlength="1" pattern="[0-9]" required oninput="moveNext(this, 2)" onkeydown="moveBack(event, 1)">
+        <input type="text" class="pin-box" maxlength="1" pattern="[0-9]" required oninput="moveNext(this, 3)" onkeydown="moveBack(event, 2)">
+        <input type="text" class="pin-box" maxlength="1" pattern="[0-9]" required oninput="moveNext(this, 4)" onkeydown="moveBack(event, 3)">
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <span>Confirmar Código</span>
+        <i class="fas fa-shield-halved"></i>
+      </button>
+    </form>
+
+    <a href="{{ url_for('apps_view_blueprint.client_logout') }}" class="footer-link">Sair e voltar ao Login</a>
+  </div>
+
+  <script>
+    // Autofocus first pin box
+    window.onload = () => {
+      document.querySelectorAll('.pin-box')[0].focus();
+    };
+
+    function moveNext(current, nextIndex) {
+      if (current.value.length >= 1) {
+        if (nextIndex < 4) {
+          document.querySelectorAll('.pin-box')[nextIndex].focus();
+        } else {
+          // If the last box is filled, assemble full pin and submit
+          assemblePin();
+        }
+      }
+    }
+
+    function moveBack(event, prevIndex) {
+      if (event.key === 'Backspace' && event.target.value.length === 0) {
+        if (prevIndex >= 0) {
+          document.querySelectorAll('.pin-box')[prevIndex].focus();
+        }
+      }
+    }
+
+    function assemblePin() {
+      const boxes = document.querySelectorAll('.pin-box');
+      let pin = "";
+      boxes.forEach(b => {
+        pin += b.value;
+      });
+      document.getElementById('fullPin').value = pin;
+    }
+
+    document.getElementById('verifyForm').onsubmit = () => {
+      assemblePin();
+    };
+  </script>
+
+</body>
+</html>

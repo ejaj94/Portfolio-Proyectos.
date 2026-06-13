@@ -1,0 +1,1738 @@
+<!doctype html>
+<html lang="es">
+  <head>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Cocina - Restaurante #{{ restaurant_id }}</title>
+    
+    <!-- 🌟 CORREGIDO: CDN REAL DE SOCKET.IO -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    
+    <!-- FontAwesome para iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+      :root {
+        --bg-dark: #070b13;
+        --brand-teal: #2dd4bf;
+        --brand-teal-glow: rgba(45, 212, 191, 0.25);
+        --brand-emerald: #10b981;
+        --brand-amber: #f59e0b;
+        --brand-amber-glow: rgba(245, 158, 11, 0.25);
+        --text-light: #f8fafc;
+        --text-muted: #94a3b8;
+        --glass-bg: rgba(15, 23, 42, 0.6);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --font-title: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+
+      /* 🌗 SOPORTE COMPLETO PARA MODO CLARO (ESTILO CORPORATIVO SLATE) */
+      body.light-theme {
+        --bg-dark: #f1f5f9;
+        --brand-teal: #0d9488;
+        --brand-teal-glow: rgba(13, 148, 136, 0.15);
+        --brand-emerald: #10b981;
+        --brand-amber: #d97706;
+        --brand-amber-glow: rgba(217, 119, 6, 0.15);
+        --text-light: #0f172a;
+        --text-muted: #475569;
+        --glass-bg: rgba(255, 255, 255, 0.85);
+        --glass-border: rgba(13, 148, 136, 0.2);
+      }
+      body.light-theme {
+        background: radial-gradient(circle at 50% 0%, rgba(13, 148, 136, 0.08) 0%, rgba(241, 245, 249, 0.1) 50%, rgba(241, 245, 249, 1) 100%), #f1f5f9 !important;
+        background-image: 
+          linear-gradient(rgba(15, 23, 42, 0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(15, 23, 42, 0.02) 1px, transparent 1px) !important;
+      }
+      body.light-theme header {
+        background: rgba(255, 255, 255, 0.85) !important;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08) !important;
+      }
+      body.light-theme .nav-title {
+        background: linear-gradient(135deg, #0f172a, var(--brand-teal)) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+      }
+      body.light-theme .order-number {
+        color: #0f172a !important;
+      }
+      body.light-theme .client-id {
+        background: rgba(15, 23, 42, 0.05) !important;
+      }
+      body.light-theme .order-card {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 1px solid rgba(13, 148, 136, 0.15) !important;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05) !important;
+      }
+      body.light-theme .ticket-item {
+        background: rgba(15, 23, 42, 0.03) !important;
+        border: 1px solid rgba(15, 23, 42, 0.05) !important;
+      }
+      body.light-theme .ticket-item:hover {
+        background: rgba(15, 23, 42, 0.06) !important;
+        border-color: rgba(15, 23, 42, 0.1) !important;
+      }
+      body.light-theme .item-checkbox {
+        border-color: rgba(15, 23, 42, 0.25) !important;
+      }
+      body.light-theme .ticket-client-note {
+        background: rgba(217, 119, 6, 0.08) !important;
+        border: 1px solid rgba(217, 119, 6, 0.2) !important;
+        color: #92400e !important;
+      }
+      body.light-theme .order-note {
+        color: #1e293b !important;
+        background: rgba(0, 0, 0, 0.02) !important;
+        border: 1px solid rgba(0, 0, 0, 0.03) !important;
+      }
+      body.light-theme .custom-toast {
+        background: rgba(255, 255, 255, 0.95) !important;
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15) !important;
+      }
+      body.light-theme .toast-title {
+        color: #0f172a !important;
+      }
+      body.light-theme .theme-toggle-btn {
+        background: rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        color: #0f172a !important;
+      }
+      body.light-theme .theme-toggle-btn:hover {
+        background-color: rgba(0, 0, 0, 0.1) !important;
+      }
+      body.light-theme .ticket-item.completed .item-checkbox {
+        background: #10b981 !important;
+      }
+      body.light-theme .ticket-item.completed .item-name {
+        color: #94a3b8 !important;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: radial-gradient(circle at 50% 0%, rgba(13, 148, 136, 0.12) 0%, rgba(15, 23, 42, 0.05) 50%, rgba(7, 11, 19, 1) 100%), #070b13;
+        background-image: 
+          linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+        background-size: 24px 24px;
+        font-family: var(--font-body);
+        color: var(--text-light);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      header {
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+        padding: 18px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      .nav-title {
+        font-family: var(--font-title);
+        font-size: 20px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffffff, var(--brand-teal));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .status-badge {
+        font-size: 11px;
+        font-weight: 800;
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: var(--brand-emerald);
+        padding: 6px 14px;
+        border-radius: 100px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        letter-spacing: 1px;
+        box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--brand-emerald);
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 8px var(--brand-emerald);
+        animation: pulseAnimation 1.5s infinite;
+      }
+
+      /* KDS Grid Layout */
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        padding: 24px;
+        max-width: 1300px;
+        margin: 0 auto;
+        height: calc(100vh - 75px);
+      }
+
+      .column-panel {
+        background: var(--glass-bg);
+        border-radius: 24px;
+        border: 1px solid var(--glass-border);
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(15px);
+      }
+
+      /* Colores diferenciales de columnas */
+      .panel-pending {
+        border-top: 4px solid var(--brand-amber);
+      }
+      .panel-cooking {
+        border-top: 4px solid var(--brand-teal);
+      }
+
+      .column-title {
+        font-family: var(--font-title);
+        font-size: 17px;
+        font-weight: 800;
+        margin-bottom: 20px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        letter-spacing: 0.5px;
+      }
+
+      .order-count {
+        font-family: var(--font-title);
+        font-size: 13px;
+        font-weight: 800;
+        padding: 3px 12px;
+        border-radius: 100px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .panel-pending .order-count {
+        color: var(--brand-amber);
+        border-color: rgba(245, 158, 11, 0.2);
+        background: rgba(245, 158, 11, 0.05);
+      }
+      .panel-cooking .order-count {
+        color: var(--brand-teal);
+        border-color: rgba(45, 212, 191, 0.2);
+        background: rgba(45, 212, 191, 0.05);
+      }
+
+      .orders-list {
+        flex-grow: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding-right: 4px;
+      }
+      
+      .orders-list::-webkit-scrollbar { 
+        width: 6px; 
+      }
+      .orders-list::-webkit-scrollbar-thumb { 
+        background: rgba(255, 255, 255, 0.08); 
+        border-radius: 10px; 
+      }
+
+      /* 🧾 TICKET ESTILIZADO DE COMANDA */
+      .order-card {
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        background: rgba(15, 23, 42, 0.4);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        animation: cardSlideIn 0.40s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .card-pending {
+        border-left: 5px solid var(--brand-amber);
+      }
+      .card-pending:hover {
+        border-color: rgba(245, 158, 11, 0.35);
+        box-shadow: 0 10px 30px var(--brand-amber-glow);
+        transform: translateY(-2px);
+      }
+
+      .card-cooking {
+        border-left: 5px solid var(--brand-teal);
+      }
+      .card-cooking:hover {
+        border-color: rgba(45, 212, 191, 0.35);
+        box-shadow: 0 10px 30px var(--brand-teal-glow);
+        transform: translateY(-2px);
+      }
+
+      /* Flash de entrada para llamar la atención */
+      .card-pending.new-order-flash {
+        animation: cardFlash 1.5s infinite alternate;
+      }
+
+      .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .order-number { 
+        font-family: var(--font-title);
+        font-size: 16px; 
+        font-weight: 800; 
+        color: #ffffff;
+      }
+
+      .client-id {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 3px 8px;
+        border-radius: 6px;
+      }
+
+      .order-note {
+        font-size: 13px;
+        font-weight: 500;
+        color: #e2e8f0;
+        margin-bottom: 18px;
+        background: rgba(255, 255, 255, 0.02);
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        line-height: 1.5;
+      }
+
+      .action-btn {
+        width: 100%;
+        border: none;
+        padding: 14px;
+        font-family: var(--font-title);
+        font-size: 13px;
+        font-weight: 800;
+        border-radius: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .btn-pending { 
+        background: linear-gradient(135deg, var(--brand-amber), #b45309); 
+        color: #070b13; 
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+      }
+      .btn-pending:hover { 
+        background: linear-gradient(135deg, #fbbf24, var(--brand-amber)); 
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+      }
+
+      .btn-cooking { 
+        background: linear-gradient(135deg, var(--brand-teal), #0f766e); 
+        color: #070b13;
+        box-shadow: 0 4px 15px rgba(45, 212, 191, 0.2);
+      }
+      .btn-cooking:hover { 
+        background: linear-gradient(135deg, #2dd4bf, #14b8a6); 
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(45, 212, 191, 0.35);
+      }
+
+      /* 🌟 CUSTOM TOAST NOTIFICATION SYSTEM */
+      .custom-toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        transform: translateY(100px);
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--brand-teal);
+        border-radius: 16px;
+        padding: 16px 20px;
+        width: 350px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 15px var(--brand-teal-glow);
+        z-index: 1000;
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .custom-toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .toast-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: rgba(45, 212, 191, 0.1);
+        border: 1px solid rgba(45, 212, 191, 0.2);
+        color: var(--brand-teal);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+
+      .toast-content {
+        flex-grow: 1;
+      }
+
+      .toast-title {
+        font-family: var(--font-title);
+        font-weight: 800;
+        font-size: 14px;
+        color: var(--text-light);
+        margin-bottom: 2px;
+      }
+
+      .toast-message {
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      /* ANIMATIONS */
+      @keyframes pulseAnimation {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+        70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+      }
+
+      @keyframes cardSlideIn {
+        from { opacity: 0; transform: translateY(25px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      @keyframes cardFlash {
+        0% { border-left-color: var(--brand-amber); box-shadow: 0 0 0 rgba(245, 158, 11, 0); }
+        100% { border-left-color: #fbbf24; box-shadow: 0 0 20px rgba(245, 158, 11, 0.2); }
+      }
+
+      /* 🧾 ESTILOS PARA EL TICKET DE COMANDA E INTERACTIVIDAD */
+      .ticket-divider {
+        border-top: 2px dashed rgba(255, 255, 255, 0.15);
+        margin: 12px 0;
+      }
+
+      .ticket-items-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .ticket-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.2s ease;
+      }
+
+      .ticket-item:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.1);
+        transform: translateX(2px);
+      }
+
+      .ticket-item.completed {
+        opacity: 0.45;
+        background: rgba(16, 185, 129, 0.04);
+        border-color: rgba(16, 185, 129, 0.12);
+      }
+
+      .ticket-item.completed .item-name {
+        text-decoration: line-through;
+        color: var(--text-muted);
+      }
+
+      .item-checkbox {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .ticket-item.completed .item-checkbox {
+        border-color: var(--brand-emerald);
+        background: var(--brand-emerald);
+        color: #070b13;
+      }
+
+      .item-checkbox i {
+        font-size: 10px;
+        display: none;
+      }
+
+      .ticket-item.completed .item-checkbox i {
+        display: block;
+      }
+
+      .item-qty-badge {
+        font-family: var(--font-title);
+        font-size: 12px;
+        font-weight: 800;
+        padding: 2px 8px;
+        border-radius: 6px;
+        background: linear-gradient(135deg, var(--brand-amber), #b45309);
+        color: #070b13;
+        box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+      }
+
+      .card-cooking .item-qty-badge {
+        background: linear-gradient(135deg, var(--brand-teal), #0f766e);
+        box-shadow: 0 2px 8px rgba(45, 212, 191, 0.2);
+      }
+
+      .item-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-light);
+      }
+
+      .ticket-client-note {
+        background: rgba(245, 158, 11, 0.08);
+        border: 1px solid rgba(245, 158, 11, 0.2);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #fef3c7;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.05);
+      }
+
+      .ticket-client-note i {
+        color: var(--brand-amber);
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+
+      @keyframes pulseRed {
+        0% { opacity: 0.6; text-shadow: 0 0 0 rgba(239, 68, 68, 0); }
+        100% { opacity: 1; text-shadow: 0 0 10px rgba(239, 68, 68, 0.6); }
+      }
+
+      .pulse-red {
+        animation: pulseRed 1s infinite alternate;
+      }
+
+      /* 💬 CONTENEDOR DE SOPORTE KDS */
+      .kds-support-btn {
+        background: var(--brand-teal-glow);
+        border: 1px solid var(--brand-teal);
+        color: var(--brand-teal);
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-family: var(--font-title);
+        font-size: 13px;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+      }
+      .kds-support-btn:hover {
+        background: var(--brand-teal);
+        color: #070b13;
+        box-shadow: 0 0 15px var(--brand-teal-glow);
+      }
+      
+      .restaurant-support-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        max-width: 440px;
+        height: 100vh;
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-left: 1px solid var(--glass-border);
+        z-index: 3000;
+        box-shadow: -15px 0 45px rgba(0, 0, 0, 0.5);
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        color: var(--text-light);
+      }
+      .restaurant-support-drawer.open {
+        transform: translateX(0);
+      }
+
+      .drawer-header-kds {
+        padding: 20px;
+        background: linear-gradient(135deg, #0f172a 0%, #042f2e 100%);
+        border-bottom: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+      }
+      body.light-theme .drawer-header-kds {
+        background: linear-gradient(135deg, #ffffff 0%, #ccfbf1 100%);
+        color: #0f172a;
+      }
+      .drawer-close-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        color: var(--text-light);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+      }
+      .drawer-close-btn:hover {
+        background: #ef4444;
+        color: white;
+        transform: rotate(90deg);
+      }
+      
+      .drawer-kds-content-scroll {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .drawer-kds-content-scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .drawer-kds-content-scroll::-webkit-scrollbar-thumb {
+        background: var(--glass-border);
+        border-radius: 4px;
+      }
+      
+      /* FAQ card for restaurant */
+      .faq-kds-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        transition: all 0.3s;
+      }
+      body.light-theme .faq-kds-card {
+        background: rgba(0, 0, 0, 0.02);
+      }
+      .faq-kds-card:hover {
+        border-color: var(--brand-teal);
+        box-shadow: 0 4px 12px var(--brand-teal-glow);
+      }
+      .faq-kds-header {
+        padding: 14px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 13.5px;
+        user-select: none;
+      }
+      .faq-kds-header i {
+        color: var(--text-muted);
+        transition: transform 0.3s;
+        font-size: 11px;
+      }
+      .faq-kds-card.open .faq-kds-header {
+        background: rgba(45, 212, 191, 0.06);
+        color: var(--brand-teal);
+      }
+      .faq-kds-card.open .faq-kds-header i {
+        transform: rotate(180deg);
+        color: var(--brand-teal);
+      }
+      .faq-kds-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 12.5px;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+      .faq-kds-content-inner {
+        padding: 14px 18px;
+        border-top: 1px solid var(--glass-border);
+      }
+
+      /* Restaurant Chat bot inside drawer */
+      .kds-chat-container {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        height: 380px;
+        overflow: hidden;
+        position: relative;
+      }
+      .kds-chat-messages {
+        flex-grow: 1;
+        padding: 16px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .kds-msg-bubble {
+        max-width: 82%;
+        padding: 10px 14px;
+        border-radius: 14px;
+        font-size: 13px;
+        line-height: 1.4;
+        font-weight: 500;
+        animation: messageSlideIn 0.2s ease-out;
+      }
+      .kds-msg-bubble.bot {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-light);
+        align-self: flex-start;
+        border-bottom-left-radius: 3px;
+        border: 1px solid var(--glass-border);
+      }
+      .kds-msg-bubble.user {
+        background: linear-gradient(135deg, var(--brand-teal), var(--brand-emerald));
+        color: #070b13;
+        align-self: flex-end;
+        border-bottom-right-radius: 3px;
+        box-shadow: 0 4px 12px var(--brand-teal-glow);
+        font-weight: 700;
+      }
+      .kds-msg-bubble.agent {
+        background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+        color: white;
+        align-self: flex-start;
+        border-bottom-left-radius: 3px;
+        box-shadow: 0 4px 12px var(--brand-amber-glow);
+        font-weight: 600;
+      }
+
+      .kds-chat-input-area {
+        padding: 12px;
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.2);
+      }
+      .kds-chat-text-input {
+        flex-grow: 1;
+        border: 1px solid var(--glass-border);
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 100px;
+        padding: 10px 16px;
+        font-family: var(--font-body);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-light);
+        outline: none;
+        transition: all 0.3s;
+      }
+      .kds-chat-text-input:focus {
+        border-color: var(--brand-teal);
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .kds-chat-send-btn {
+        background: var(--brand-teal);
+        color: #070b13;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13.5px;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px var(--brand-teal-glow);
+      }
+      .kds-chat-send-btn:hover {
+        transform: scale(1.08);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Alarma sonora corregida con un recurso de audio directo -->
+    <audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-84.wav" preload="auto"></audio>
+
+    <header>
+      <div class="nav-title">
+        <i class="fas fa-utensils" style="color: var(--brand-teal);"></i> Monitor de Cozinha Interno
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <button type="button" class="kds-support-btn" onclick="toggleRestaurantConfig(true)">
+          <i class="fas fa-cog"></i> Configuração & Pratos
+        </button>
+        <button type="button" class="kds-support-btn" onclick="toggleKDSSupport(true)">
+          <i class="fas fa-headset"></i> Suporte KDS
+        </button>
+        <a href="{{ url_for('apps_view_blueprint.restaurant_logout') }}" class="kds-support-btn" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </a>
+        <button type="button" class="theme-toggle-btn" id="theme-btn" style="
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid var(--glass-border);
+          color: var(--text-light);
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 15px;
+          transition: all 0.2s;
+        " title="Alternar Modo Claro/Oscuro">
+          <i class="fas fa-moon" id="theme-icon"></i>
+        </button>
+        <div class="status-badge">
+          <span class="status-dot"></span> TRANSMITIENDO EN VIVO
+        </div>
+      </div>
+    </header>
+
+    <!-- 📱 DRAWER LATERAL DE SOPORTE KDS -->
+    <div id="support-panel-restaurant" class="restaurant-support-drawer">
+      <div class="drawer-header-kds">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 20px;">💬</span>
+          <div>
+            <div style="font-family: var(--font-title); font-weight: 800; font-size: 15px; letter-spacing: -0.2px;">Suporte Operações KDS</div>
+            <div style="font-size: 11px; opacity: 0.85; font-weight: 600;">Controlador de Despacho Ativo</div>
+          </div>
+        </div>
+        <button onclick="toggleKDSSupport(false)" class="drawer-close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="drawer-kds-content-scroll">
+        <!-- Central de Ajuda -->
+        <div>
+          <h2 class="section-title" style="font-size: 14px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--brand-teal);">
+            <i class="fas fa-book-open"></i> Central de Ajuda
+          </h2>
+          <div class="search-wrapper" style="margin-bottom: 14px; position: relative;">
+            <i class="fas fa-search search-icon" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--text-muted); pointer-events: none;"></i>
+            <input
+              type="text"
+              id="faq-kds-search"
+              placeholder="Pesquisar ajuda para KDS..."
+              class="search-box"
+              style="padding: 10px 10px 10px 40px; font-size: 13px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); width: 100%; color: var(--text-light); outline: none;"
+              oninput="filterKDSFAQs()"
+            />
+          </div>
+
+          <div id="faq-kds-container">
+            <!-- FAQ 1 -->
+            <div class="faq-kds-card" data-keywords="preparacao tempo ticket cronometro comanda">
+              <div class="faq-kds-header" onclick="toggleKDSFAQ(this)">
+                ¿Cómo altero el tiempo de preparación?
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="faq-kds-content">
+                <div class="faq-kds-content-inner">
+                  Os tickets de comanda possuem stopwatches ativos automáticos. Se quiser ajustar o tempo padrão, acesse o painel administrativo de configurações do seu restaurante ou use o chat KDS abaixo para notificar alterações na sua escala de trabalho.
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="faq-kds-card" data-keywords="entregador motorista demora atraso estafeta radar">
+              <div class="faq-kds-header" onclick="toggleKDSFAQ(this)">
+                ¿El entregador no ha llegado?
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="faq-kds-content">
+                <div class="faq-kds-content-inner">
+                  Se a comanda foi marcada como 'Listo/Llamar Estafeta' e nenhum repartidor aceitou o encargo após 5 minutos, você puede usar o chat automático abaixo e selecionar <strong>Entregador demorado</strong>. Isso re-transmitirá o sinal com destaque neón aos radares ativos da zona.
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="faq-kds-card" data-keywords="observacoes comanda notas cliente ingrediente alergia">
+              <div class="faq-kds-header" onclick="toggleKDSFAQ(this)">
+                ¿Dónde veo las notas personalizadas del cliente?
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="faq-kds-content">
+                <div class="faq-kds-content-inner">
+                  Qualquer nota ou especificação do cliente (ex: 'Sem Cebola', 'Sem Molho') é automaticamente identificada e exibida como um <strong>alerta âmbar destacado</strong> no topo do ticket impresso no monitor para evitar qualquer falha culinária.
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="faq-kds-card" data-keywords="cardapio menu pausar produto esgotado ingrediente">
+              <div class="faq-kds-header" onclick="toggleKDSFAQ(this)">
+                ¿Cómo pausar la venta de platos agotados?
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="faq-kds-content">
+                <div class="faq-kds-content-inner">
+                  Para suspender temporariamente a oferta de pizzas, burgers ou bebidas esgotadas, acesse a aba Menu no painel administrativo principal e marque o produto correspondente como indisponível para atualização quente na app do cliente.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat de incidentes KDS -->
+        <div>
+          <h2 class="section-title" style="font-size: 14px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--brand-teal);">
+            <i class="fas fa-comment-dots"></i> Suporte de Operações
+          </h2>
+          <div class="kds-chat-container">
+            <div id="kds-chat-messages-box" class="kds-chat-messages">
+              <!-- Mensajes dinámicos -->
+            </div>
+            <div class="kds-chat-input-area">
+              <input
+                type="text"
+                id="kds-chat-input"
+                placeholder="Ex: entregador atrasado, erro de ticket..."
+                class="kds-chat-text-input"
+                onkeypress="handleKDSChatKeyPress(event)"
+              />
+              <button onclick="sendKDSUserMessage()" class="kds-chat-send-btn">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🍳 MODAL GLASSMORPHIC DE GESTÃO DE PRATOS E CONFIGURAÇÃO -->
+    <div id="restaurant-config-modal" class="restaurant-support-drawer" style="max-width: 600px; transform: translateX(100%);">
+      <div class="drawer-header-kds">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 20px;">⚙️</span>
+          <div>
+            <div style="font-family: var(--font-title); font-weight: 800; font-size: 15px; letter-spacing: -0.2px;">Gestão de Pratos & Configuração</div>
+            <div style="font-size: 11px; opacity: 0.85; font-weight: 600;">Personalização e Menu Logleve</div>
+          </div>
+        </div>
+        <button onclick="toggleRestaurantConfig(false)" class="drawer-close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="drawer-kds-content-scroll" style="padding: 20px;">
+        <!-- SEÇÃO 1: CONFIGURAÇÃO VISUAL -->
+        <div style="margin-bottom: 24px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px;">
+          <h3 style="font-family: var(--font-title); font-size: 14px; color: var(--brand-teal); text-transform: uppercase; margin-bottom: 15px;">
+            <i class="fas fa-paint-brush"></i> Aparência e Região
+          </h3>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">Logotipo do Restaurante (URL da Foto):</label>
+              <input type="text" id="config-logo-url" style="width: 100%; padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-light); font-size: 13px;" />
+            </div>
+            <div>
+              <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">Banner Principal (URL da Foto):</label>
+              <input type="text" id="config-banner-url" style="width: 100%; padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-light); font-size: 13px;" />
+            </div>
+            <div>
+              <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">Região de Entrega:</label>
+              <select id="config-region" style="width: 100%; padding: 10px; border-radius: 10px; background: #070b13; border: 1px solid var(--glass-border); color: var(--text-light); font-size: 13px;">
+                <option value="Porto">Porto</option>
+                <option value="Lisboa">Lisboa</option>
+                <option value="Braga">Braga</option>
+                <option value="Coimbra">Coimbra</option>
+              </select>
+            </div>
+            <button onclick="saveRestaurantConfig()" class="action-btn btn-cooking" style="padding: 10px; font-size: 12px; margin-top: 5px;">
+              <i class="fas fa-save"></i> Salvar Configuração
+            </button>
+          </div>
+        </div>
+        
+        <!-- SEÇÃO 2: ADICIONAR PRATO -->
+        <div style="margin-bottom: 24px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px;">
+          <h3 style="font-family: var(--font-title); font-size: 14px; color: var(--brand-teal); text-transform: uppercase; margin-bottom: 15px;">
+            <i class="fas fa-plus-circle"></i> Adicionar Novo Prato
+          </h3>
+          <div id="add-plate-form" style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+              <div>
+                <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Nome do Prato *</label>
+                <input type="text" id="plate-name" required placeholder="Ex: Pizza Margherita" style="width: 100%; padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-light); font-size: 12px;" />
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Preço (€) *</label>
+                <input type="number" step="0.01" id="plate-price" required placeholder="Ex: 9.99" style="width: 100%; padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-light); font-size: 12px;" />
+              </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div>
+                <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Categoria</label>
+                <select id="plate-category" style="width: 100%; padding: 8px 12px; border-radius: 8px; background: #070b13; border: 1px solid var(--glass-border); color: var(--text-light); font-size: 12px;">
+                  <option value="Pizzas">Pizzas</option>
+                  <option value="Hambúrgueres">Hambúrgueres</option>
+                  <option value="Pastas">Pastas</option>
+                  <option value="Bebidas">Bebidas</option>
+                  <option value="Sobremesas">Sobremesas</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Foto do Prato (Carregar Ficheiro)</label>
+                <input type="file" id="plate-image-file" accept="image/*" style="width: 100%; padding: 6px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-light); font-size: 12px;" />
+              </div>
+            </div>
+            
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Descrição</label>
+              <textarea id="plate-desc" placeholder="Ingredientes, alérgenos, etc..." rows="2" style="width: 100%; padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-light); font-size: 12px; font-family: var(--font-body); resize: none;"></textarea>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" id="plate-weekly" style="width: 16px; height: 16px; accent-color: var(--brand-teal);" />
+              <label for="plate-weekly" style="font-size: 12px; font-weight: 600; cursor: pointer;">Definir como Prato Semanal / Destaque</label>
+            </div>
+            
+            <button onclick="addRestaurantPlate()" class="action-btn btn-pending" style="padding: 10px; font-size: 12px;">
+              <i class="fas fa-plus"></i> Adicionar ao Cardápio
+            </button>
+          </div>
+        </div>
+        
+        <!-- SEÇÃO 3: LISTAGEM E REMOÇÃO -->
+        <div>
+          <h3 style="font-family: var(--font-title); font-size: 14px; color: var(--brand-teal); text-transform: uppercase; margin-bottom: 15px;">
+            <i class="fas fa-list"></i> Pratos Atuais no Cardápio
+          </h3>
+          <div id="config-plates-list" style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- Se llena dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="column-panel panel-pending">
+        <h2 class="column-title">
+          Nuevos Pedidos <span class="order-count" id="count-pending">0</span>
+        </h2>
+        <div class="orders-list" id="list-pending"></div>
+      </div>
+      <div class="column-panel panel-cooking">
+        <h2 class="column-title">
+          En Cocina / Preparación <span class="order-count" id="count-cooking">0</span>
+        </h2>
+        <div class="orders-list" id="list-cooking"></div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // 💬 LÓGICA DE SOPORTE PARA EL RESTAURANTE KDS (KITCHEN SUPPORT ENGINE)
+        let kdsChatMessages = [];
+        
+        window.toggleKDSSupport = function(show) {
+          const drawer = document.getElementById("support-panel-restaurant");
+          if (show) {
+            drawer.classList.add("open");
+            initializeKDSChat();
+          } else {
+            drawer.classList.remove("open");
+          }
+        };
+
+        window.toggleKDSFAQ = function(headerElement) {
+          const card = headerElement.parentElement;
+          const content = card.querySelector(".faq-kds-content");
+          
+          if (card.classList.contains("open")) {
+            card.classList.remove("open");
+            content.style.maxHeight = null;
+          } else {
+            document.querySelectorAll(".faq-kds-card").forEach(c => {
+              c.classList.remove("open");
+              c.querySelector(".faq-kds-content").style.maxHeight = null;
+            });
+            card.classList.add("open");
+            content.style.maxHeight = content.scrollHeight + "px";
+          }
+        };
+
+        window.filterKDSFAQs = function() {
+          const query = document.getElementById("faq-kds-search").value.toLowerCase().trim();
+          const cards = document.querySelectorAll("#faq-kds-container .faq-kds-card");
+          
+          cards.forEach(card => {
+            const title = card.querySelector(".faq-kds-header").textContent.toLowerCase();
+            const content = card.querySelector(".faq-kds-content-inner").textContent.toLowerCase();
+            const keywords = card.getAttribute("data-keywords").toLowerCase();
+            
+            if (title.includes(query) || content.includes(query) || keywords.includes(query)) {
+              card.style.display = "block";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        };
+
+        // 🍳 COMPORTAMENTO FASE 10: CONFIGURAÇÃO & PRATOS DO RESTAURANTE
+        window.toggleRestaurantConfig = function(show) {
+          const drawer = document.getElementById("restaurant-config-modal");
+          if (show) {
+            drawer.classList.add("open");
+            loadRestaurantConfig();
+            loadRestaurantPlates();
+          } else {
+            drawer.classList.remove("open");
+          }
+        };
+
+        function loadRestaurantConfig() {
+          fetch(`/api/v1/restaurants/${currentRestaurantId}/config`)
+            .then(res => res.json())
+            .then(data => {
+              if (data.error) return;
+              document.getElementById("config-logo-url").value = data.logo_url || "";
+              document.getElementById("config-banner-url").value = data.banner_url || "";
+              document.getElementById("config-region").value = data.region || "Porto";
+            })
+            .catch(err => console.error("Error loading config:", err));
+        }
+
+        window.saveRestaurantConfig = function() {
+          const logo_url = document.getElementById("config-logo-url").value.trim();
+          const banner_url = document.getElementById("config-banner-url").value.trim();
+          const region = document.getElementById("config-region").value;
+          
+          fetch(`/api/v1/restaurants/${currentRestaurantId}/config`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ logo_url, banner_url, region })
+          })
+            .then(res => res.json())
+            .then(data => {
+              if (data.error) {
+                showToast("Erro ao Salvar", data.error, "error");
+              } else {
+                showToast("Sucesso", "Configuração salva com sucesso!", "success");
+              }
+            })
+            .catch(err => showToast("Erro", "Falha de rede", "error"));
+        };
+
+        function loadRestaurantPlates() {
+          const container = document.getElementById("config-plates-list");
+          container.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 10px;">Carregando pratos...</div>`;
+          
+          fetch(`/api/v1/restaurants/${currentRestaurantId}/plates`)
+            .then(res => res.json())
+            .then(plates => {
+              container.innerHTML = "";
+              if (plates.length === 0) {
+                container.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 15px; border: 1px dashed var(--glass-border); border-radius: 12px;">Nenhum prato cadastrado ainda.</div>`;
+                return;
+              }
+              
+              plates.forEach(p => {
+                const item = document.createElement("div");
+                item.className = "ticket-item";
+                item.style.justifyContent = "space-between";
+                item.style.alignItems = "center";
+                item.style.cursor = "default";
+                item.style.transform = "none";
+                
+                const weeklyBadge = p.is_weekly ? `<span style="font-size: 10px; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); color: var(--brand-amber); padding: 2px 6px; border-radius: 4px; margin-left: 6px;">Semanal</span>` : '';
+                
+                const leftDiv = document.createElement("div");
+                leftDiv.style.display = "flex";
+                leftDiv.style.alignItems = "center";
+                leftDiv.style.gap = "10px";
+                
+                const img = p.image_url ? `<img src="${p.image_url}" style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'" />` : `<div style="width: 32px; height: 32px; border-radius: 6px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 14px;">🍳</div>`;
+                
+                leftDiv.innerHTML = `
+                  ${img}
+                  <div>
+                    <div style="font-weight: 700; font-size: 13px;">${p.name}${weeklyBadge}</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">${p.category} • ${p.price.toFixed(2)}€</div>
+                  </div>
+                `;
+                
+                const rightDiv = document.createElement("div");
+                rightDiv.innerHTML = `
+                  <button onclick="deleteRestaurantPlate(${p.id})" style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" title="Remover Prato">
+                    <i class="fas fa-trash-alt" style="font-size: 11px; margin: 0 !important;"></i>
+                  </button>
+                `;
+                
+                item.appendChild(leftDiv);
+                item.appendChild(rightDiv);
+                container.appendChild(item);
+              });
+            })
+            .catch(err => console.error("Error loading plates:", err));
+        }
+
+        window.addRestaurantPlate = function() {
+          const name = document.getElementById("plate-name").value.trim();
+          const price = parseFloat(document.getElementById("plate-price").value);
+          const category = document.getElementById("plate-category").value;
+          const description = document.getElementById("plate-desc").value.trim();
+          const is_weekly = document.getElementById("plate-weekly").checked;
+          const fileInput = document.getElementById("plate-image-file");
+          
+          if (!name || isNaN(price)) {
+            showToast("Campos Obrigatórios", "Por favor preencha o Nome e o Preço.", "error");
+            return;
+          }
+          
+          const submitPlate = (imageUrl) => {
+            fetch(`/api/v1/restaurants/${currentRestaurantId}/plates`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name, price, category, image_url: imageUrl, description, is_weekly })
+            })
+              .then(res => res.json())
+              .then(data => {
+                if (data.error) {
+                  showToast("Erro ao Adicionar", data.error, "error");
+                } else {
+                  showToast("Sucesso", "Prato adicionado com sucesso!", "success");
+                  // Reset form fields
+                  document.getElementById("plate-name").value = "";
+                  document.getElementById("plate-price").value = "";
+                  if (fileInput) fileInput.value = "";
+                  document.getElementById("plate-desc").value = "";
+                  document.getElementById("plate-weekly").checked = false;
+                  loadRestaurantPlates();
+                }
+              })
+              .catch(err => showToast("Erro", "Falha de rede ao criar prato", "error"));
+          };
+
+          if (fileInput && fileInput.files.length > 0) {
+            const formData = new FormData();
+            formData.append("plate_image", fileInput.files[0]);
+            
+            showToast("Enviando Imagem", "A carregar a foto do prato...", "info");
+            
+            fetch(`/api/v1/restaurants/${currentRestaurantId}/upload-plate-image`, {
+              method: "POST",
+              body: formData
+            })
+              .then(res => res.json())
+              .then(data => {
+                if (data.error) {
+                  showToast("Erro de Imagem", data.error, "error");
+                } else {
+                  submitPlate(data.image_url);
+                }
+              })
+              .catch(err => showToast("Erro", "Falha de rede ao carregar imagem", "error"));
+          } else {
+            submitPlate("");
+          }
+        };
+
+        window.deleteRestaurantPlate = function(plateId) {
+          if (!confirm("Tem certeza que deseja remover este prato?")) return;
+          
+          fetch(`/api/v1/restaurants/plates/${plateId}`, {
+            method: "DELETE"
+          })
+            .then(res => res.json())
+            .then(data => {
+              showToast("Sucesso", "Prato removido com sucesso!", "success");
+              loadRestaurantPlates();
+            })
+            .catch(err => showToast("Erro", "Falha de rede", "error"));
+        };
+
+        function initializeKDSChat() {
+          const chatBox = document.getElementById("kds-chat-messages-box");
+          const history = localStorage.getItem("app_restaurant_chat_history");
+          
+          if (history) {
+            kdsChatMessages = JSON.parse(history);
+            renderKDSChat();
+          } else {
+            kdsChatMessages = [
+              { sender: 'bot', text: 'Olá Chef! Sou o assistente de operações KDS. Qual o incidente técnico ou de entregas em sua cozinha hoje?' }
+            ];
+            saveKDSChat();
+            renderKDSChat();
+          }
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function saveKDSChat() {
+          localStorage.setItem("app_restaurant_chat_history", JSON.stringify(kdsChatMessages));
+        }
+
+        function renderKDSChat() {
+          const chatBox = document.getElementById("kds-chat-messages-box");
+          chatBox.innerHTML = "";
+          
+          kdsChatMessages.forEach(msg => {
+            const bubble = document.createElement("div");
+            bubble.className = `kds-msg-bubble ${msg.sender}`;
+            bubble.innerHTML = msg.text;
+            chatBox.appendChild(bubble);
+          });
+          
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        window.handleKDSChatKeyPress = function(e) {
+          if (e.key === 'Enter') {
+            sendKDSUserMessage();
+          }
+        };
+
+        window.sendKDSUserMessage = function() {
+          const input = document.getElementById("kds-chat-input");
+          const text = input.value.trim();
+          if (!text) return;
+          
+          input.value = "";
+          kdsChatMessages.push({ sender: 'user', text: text });
+          saveKDSChat();
+          renderKDSChat();
+          
+          showKDSTyping();
+          
+          setTimeout(() => {
+            removeKDSTyping();
+            const response = getKDSBotResponse(text);
+            kdsChatMessages.push({ sender: 'bot', text: response });
+            saveKDSChat();
+            renderKDSChat();
+          }, 1200);
+        };
+
+        function showKDSTyping() {
+          const chatBox = document.getElementById("kds-chat-messages-box");
+          const indicator = document.createElement("div");
+          indicator.className = "typing-indicator";
+          indicator.id = "kds-typing-indicator";
+          indicator.style.background = "rgba(255, 255, 255, 0.05)";
+          indicator.style.border = "1px solid var(--glass-border)";
+          indicator.innerHTML = `
+            <span class="typing-dot" style="background: var(--text-muted);"></span>
+            <span class="typing-dot" style="background: var(--text-muted);"></span>
+            <span class="typing-dot" style="background: var(--text-muted);"></span>
+          `;
+          chatBox.appendChild(indicator);
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function removeKDSTyping() {
+          const node = document.getElementById("kds-typing-indicator");
+          if (node) node.remove();
+        }
+
+        function getKDSBotResponse(userInput) {
+          const input = userInput.toLowerCase();
+          
+          if (input.includes("entregador") || input.includes("motorista") || input.includes("demora") || input.includes("radar") || input.includes("estafeta")) {
+            return "Compreendido, Chef. Lançamos um alerta prioritário de coleta na área. Os entregadores com radar ativo na zona serão notificados para aceitar a comanda pendente.";
+          }
+          if (input.includes("tempo") || input.includes("preparacao") || input.includes("cronometro") || input.includes("ticket") || input.includes("comanda")) {
+            return "Os stopwatches são automáticos para controle KDS. Se precisar de ajustes finos permanentes nos tempos padrão, contate a gerência de sistemas.";
+          }
+          if (input.includes("cardapio") || input.includes("menu") || input.includes("esgotado") || input.includes("pausar")) {
+            return "Recomendamos acessar a aba de Menu do painel de administração geral para pausar pratos esgotados imediatamente.";
+          }
+          if (input.includes("falar") || input.includes("atendente") || input.includes("operacoes") || input.includes("central") || input.includes("suporte")) {
+            connectToKDSOperations();
+            return "<i>Redirecionando você para o controlador de despacho e operações central...</i>";
+          }
+          
+          return "Desculpe, Chef! Não entendi perfeitamente sua consulta operacional. Tente pesquisar na Central de Ajuda acima ou envie 'falar com a central' para suporte humano.";
+        }
+
+        function connectToKDSOperations() {
+          showKDSTyping();
+          
+          setTimeout(() => {
+            removeKDSTyping();
+            kdsChatMessages.push({ sender: 'bot', text: '<i>Conectado com o despachador de operações centrais...</i>' });
+            renderKDSChat();
+            
+            showKDSTyping();
+            
+            setTimeout(() => {
+              removeKDSTyping();
+              kdsChatMessages.push({ sender: 'agent', text: '🧑‍💻 <b>Despacho Pedro:</b> Olá Chef! Pedro online aqui. Identifiquei o KDS do seu local. Qual o incidente operacional que está ocorrendo?' });
+              saveKDSChat();
+              renderKDSChat();
+            }, 1800);
+          }, 1000);
+        }
+
+        const currentRestaurantId = parseInt("{{ restaurant_id }}") || 1;
+        const localOrdersCache = new Map();
+        const themeBtn = document.getElementById("theme-btn");
+        const themeIcon = document.getElementById("theme-icon");
+
+        // 🌗 CONTROL DE MODO CLARO / OSCURO PERSISTENTE
+        let currentTheme = localStorage.getItem("app_restaurant_theme") || "dark";
+        if (currentTheme === "light") {
+          document.body.classList.add("light-theme");
+          themeIcon.className = "fas fa-sun";
+        } else {
+          document.body.classList.remove("light-theme");
+          themeIcon.className = "fas fa-moon";
+        }
+
+        themeBtn.addEventListener("click", () => {
+          if (document.body.classList.contains("light-theme")) {
+            document.body.classList.remove("light-theme");
+            themeIcon.className = "fas fa-moon";
+            currentTheme = "dark";
+          } else {
+            document.body.classList.add("light-theme");
+            themeIcon.className = "fas fa-sun";
+            currentTheme = "light";
+          }
+          localStorage.setItem("app_restaurant_theme", currentTheme);
+        });
+        
+        // 🌟 NORMALIZE ORDER PROPERTIES FOR ID CONSISTENCY
+        function normalizeOrder(order) {
+          if (order) {
+            if (!order.id && order.order_id) {
+              order.id = order.order_id;
+            }
+            if (!order.order_id && order.id) {
+              order.order_id = order.id;
+            }
+          }
+          return order;
+        }
+
+        // 🌟 PARSE CUSTOM ORDER NOTE COMPILE FORMAT
+        function parseOrderNote(note) {
+          if (!note) {
+            return { items: [], customerNote: "" };
+          }
+
+          if (note.includes(" || ")) {
+            const parts = note.split(" || ");
+            const itemsString = parts[0];
+            const customerNotePart = parts[1] || "";
+            
+            const items = itemsString.split(" | ").map(itemStr => {
+              const match = itemStr.trim().match(/^(\d+)x\s+(.+)$/);
+              if (match) {
+                return {
+                  qty: parseInt(match[1]),
+                  name: match[2].trim()
+                };
+              }
+              return { qty: 1, name: itemStr.trim() };
+            });
+
+            let cleanNote = customerNotePart.trim();
+            if (cleanNote.toLowerCase().startsWith("nota:")) {
+              cleanNote = cleanNote.substring(5).trim();
+            }
+
+            return { items, customerNote: cleanNote };
+          }
+
+          // Fallback legacy structure
+          return { items: [], customerNote: note };
+        }
+
+        // 🌟 FORMAT DATE TO HOURS:MINUTES
+        function formatTime(isoString) {
+          if (!isoString) return "--:--";
+          const date = new Date(isoString);
+          return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // 🌟 TOGGLE LINE THROUGH INTERACTIVITY
+        window.toggleItemCompleted = function (element) {
+          element.classList.toggle("completed");
+        };
+
+        // 🌟 CUSTOM TOAST NOTIFICATION SYSTEM
+        function showToast(title, message, type = "success") {
+          const toast = document.createElement("div");
+          toast.className = `custom-toast`;
+          toast.innerHTML = `
+            <div class="toast-icon">
+              ${type === 'success' ? '👨‍🍳' : '⚠️'}
+            </div>
+            <div class="toast-content">
+              <div class="toast-title">${title}</div>
+              <div class="toast-message">${message}</div>
+            </div>
+          `;
+          document.body.appendChild(toast);
+          
+          setTimeout(() => toast.classList.add("show"), 10);
+          
+          setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => toast.remove(), 450);
+          }, 3500);
+        }
+
+        // 🌟 CORREGIDO: Conexión forzada al puerto local para evitar pérdidas de canal
+        const socket = io(window.location.origin, { transports: ["polling", "websocket"] });
+
+        // Carga HTTP de historial inicial
+        fetch(`/api/v1/restaurants/${currentRestaurantId}/orders`)
+          .then((res) => res.json())
+          .then((orders) => {
+            orders.forEach((order) => {
+              normalizeOrder(order);
+              localOrdersCache.set(order.id, order);
+              if (order.status === "PENDIENTE" || order.status === "PAGADO_Y_PROCESADO" || order.status === "created") {
+                renderOrderCard(order, "pending");
+              } else if (order.status === "EN_PREPARACION") {
+                renderOrderCard(order, "cooking");
+              }
+            });
+            updateCounters();
+          })
+          .catch((err) => {
+            console.error("Error obteniendo órdenes iniciales:", err);
+            showToast("Error de Carga", "No se pudo sincronizar el historial inicial.", "error");
+          });
+
+        // Evento en tiempo real
+        socket.on("nuevo_pedido", (data) => {
+          if (parseInt(data.restaurant_id) === currentRestaurantId) {
+            const alarm = document.getElementById("alarm-sound");
+            if (alarm) alarm.play().catch(() => console.log("Interacción requerida para audio"));
+
+            normalizeOrder(data);
+            localOrdersCache.set(data.id, data);
+            renderOrderCard(data, "pending", true);
+            updateCounters();
+            showToast("¡Nuevo Pedido!", `Llegó la Orden #${data.id} con nuevas comandas.`, "success");
+          }
+        });
+
+        function renderOrderCard(order, targetColumn, isNew = false) {
+          const listContainer = document.getElementById(`list-${targetColumn}`);
+          if (!listContainer) return;
+
+          const orderId = order.id || order.order_id;
+          
+          // Prevenir duplicados redundantes
+          const existingCard = document.getElementById(`order-${orderId}`);
+          if (existingCard) {
+            existingCard.remove();
+          }
+
+          const card = document.createElement("div");
+          card.id = `order-${orderId}`;
+          card.className = `order-card card-${targetColumn}`;
+          
+          if (targetColumn === 'pending' && isNew) {
+            card.classList.add('new-order-flash');
+          }
+          
+          const parsed = parseOrderNote(order.note);
+          
+          let itemsHtml = "";
+          if (parsed.items && parsed.items.length > 0) {
+            itemsHtml = `
+              <div class="ticket-divider"></div>
+              <div class="ticket-items-list">
+                ${parsed.items.map(item => `
+                  <div class="ticket-item" onclick="toggleItemCompleted(this)">
+                    <div class="item-checkbox"><i class="fas fa-check"></i></div>
+                    <span class="item-qty-badge">${item.qty}x</span>
+                    <span class="item-name">${item.name}</span>
+                  </div>
+                `).join('')}
+              </div>
+            `;
+          }
+
+          let noteHtml = "";
+          if (parsed.customerNote) {
+            noteHtml = `
+              <div class="ticket-client-note">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                  <strong>Nota del Cliente:</strong>
+                  <div style="margin-top: 3px; font-weight: 500;">${parsed.customerNote}</div>
+                </div>
+              </div>
+            `;
+          } else if (!parsed.items || parsed.items.length === 0) {
+            noteHtml = `
+              <p class="order-note"><strong>Nota:</strong> Sin especificaciones del cliente.</p>
+            `;
+          }
+
+          card.innerHTML = `
+            <div class="order-header">
+              <span class="order-number">📦 Orden #${orderId}</span>
+              <span class="client-id">Cliente: #${order.client_id}</span>
+            </div>
+            <div class="order-meta-info" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 12px; color: var(--text-muted);">
+              <span class="order-time-badge" id="elapsed-${orderId}" data-created="${order.created_at}">⏱️ --:--</span>
+              <span>Recepción: ${formatTime(order.created_at)}</span>
+            </div>
+            ${itemsHtml}
+            ${noteHtml}
+            <button class="action-btn btn-${targetColumn}" onclick="triggerStatusUpdate(${orderId}, '${targetColumn}')">
+              ${targetColumn === "pending" ? "<i class='fas fa-fire'></i> Empezar a Cocinar" : "<i class='fas fa-check'></i> Listo / Llamar Estafeta"}
+            </button>
+          `;
+          listContainer.appendChild(card);
+        }
+
+        window.triggerStatusUpdate = function (orderId, currentColumn) {
+          const action = currentColumn === "pending" ? "start" : "complete";
+
+          fetch(`/api/v1/restaurants/orders/${orderId}/status`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: action }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.error) {
+                showToast("Acción Cancelada", data.error, "error");
+                return;
+              }
+
+              const card = document.getElementById(`order-${orderId}`);
+              if (!card) return;
+
+              if (currentColumn === "pending") {
+                card.remove();
+                const cached = localOrdersCache.get(orderId) || { id: orderId, client_id: "...", note: "Ver en admin" };
+                normalizeOrder(cached);
+                renderOrderCard(cached, "cooking");
+                showToast("Comanda Iniciada", `Orden #${orderId} movida a Cocina/Preparación.`, "success");
+              } else {
+                card.remove();
+                localOrdersCache.delete(orderId);
+                showToast("Comanda Completada", `Orden #${orderId} lista para reparto. Notificando estafetas...`, "success");
+              }
+              updateCounters();
+            })
+            .catch((err) => {
+              console.error("Error al actualizar:", err);
+              showToast("Error de Envío", "No se pudo actualizar el estado.", "error");
+            });
+        };
+
+        function updateCounters() {
+          document.getElementById("count-pending").textContent = document.getElementById("list-pending").children.length;
+          document.getElementById("count-cooking").textContent = document.getElementById("list-cooking").children.length;
+        }
+
+        // ⏱️ ACTIVE STOPWATCH TICKER FOR REAL-TIME PREPARATION TRACKING
+        setInterval(() => {
+          document.querySelectorAll(".order-time-badge").forEach(badge => {
+            const createdStr = badge.getAttribute("data-created");
+            if (!createdStr || createdStr === "null" || createdStr === "undefined") {
+              badge.textContent = "⏱️ --:--";
+              return;
+            }
+            
+            const createdTime = new Date(createdStr).getTime();
+            const now = new Date().getTime();
+            
+            const diffMs = now - createdTime;
+            const diffSecs = Math.max(0, Math.floor(diffMs / 1000));
+            
+            const minutes = Math.floor(diffSecs / 60);
+            const seconds = diffSecs % 60;
+            
+            const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            badge.textContent = `⏱️ ${formatted}`;
+            
+            if (minutes >= 10) {
+              badge.style.color = "#ef4444";
+              badge.style.fontWeight = "800";
+              badge.classList.add("pulse-red");
+            } else if (minutes >= 5) {
+              badge.style.color = "var(--brand-amber)";
+              badge.style.fontWeight = "700";
+              badge.classList.remove("pulse-red");
+            } else {
+              badge.style.color = "var(--brand-teal)";
+              badge.style.fontWeight = "500";
+              badge.classList.remove("pulse-red");
+            }
+          });
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

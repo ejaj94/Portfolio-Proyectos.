@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Lista de Restaurantes') }}{% endblock %}
+
+{% block content %}
+<style>
+  .restaurant-grid-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    border: 1px solid #edf0f2 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .restaurant-grid-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 35px rgba(15, 23, 42, 0.08);
+    border-color: #cbd5e1 !important;
+  }
+  .restaurant-banner-img {
+    height: 160px;
+    width: 100%;
+    object-fit: cover;
+    background-color: #f1f5f9;
+  }
+  .restaurant-avatar-badge {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: var(--primary-gradient);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-top: -30px;
+    margin-left: 20px;
+    border: 4px solid #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+  }
+  .btn-action-view {
+    background-color: #f0fdfa;
+    color: #0d9488;
+    border: 1px solid #ccfbf1;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 8px 16px;
+    transition: all 0.2s;
+  }
+  .btn-action-view:hover {
+    background: var(--primary-gradient);
+    color: white;
+    border-color: transparent;
+    transform: translateY(-1px);
+  }
+</style>
+
+<div class="container py-3">
+  <!-- Cabecera de listado -->
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3">
+    <div>
+      <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill mb-2 fw-semibold" style="font-size: 0.78rem;">
+        <i class="fas fa-store me-1"></i> {{ _('Gestión Comercial') }}
+      </span>
+      <h2 class="fw-bold text-dark mb-0"><i class="fas fa-store text-teal me-2"></i>{{ _('Restaurantes Registrados') }}</h2>
+      <p class="text-muted small mb-0">{{ _('Comercios afiliados habilitados para recibir pedidos en tiempo real.') }}</p>
+    </div>
+    <a href="{{ url_for('restaurant_blueprint.register_restaurant_form') }}" class="btn btn-primary px-4 py-2.5 d-inline-flex align-items-center shadow-sm">
+      <i class="fas fa-plus-circle me-2"></i> {{ _('Nuevo Restaurante') }}
+    </a>
+  </div>
+
+  {% if restaurants %}
+  <div class="row g-4">
+    {% for restaurant in restaurants %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card restaurant-grid-card">
+        <!-- Imagen representativa premium -->
+        {% set cover = restaurant.logo_url if restaurant.logo_url and restaurant.logo_url.startswith('http') else 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=500&auto=format&fit=crop' %}
+        <img src="{{ cover }}" alt="{{ restaurant.name }}" class="restaurant-banner-img">
+        
+        <div class="restaurant-avatar-badge">
+          <i class="fas fa-utensils"></i>
+        </div>
+
+        <div class="card-body p-4 pt-3">
+          <h4 class="card-title text-dark fw-bold mb-3">{{ restaurant.name }}</h4>
+          
+          <div class="d-flex flex-column gap-2 mb-4">
+            <div class="d-flex align-items-center text-secondary small">
+              <i class="fas fa-user-circle text-teal me-2.5 fs-6" style="width: 16px;"></i>
+              <span><strong class="text-dark">{{ _('Dueño:') }}</strong> {{ restaurant.owner_name if restaurant.owner_name else 'N/A' }}</span>
+            </div>
+            <div class="d-flex align-items-center text-secondary small">
+              <i class="fas fa-phone text-teal me-2.5 fs-6" style="width: 16px;"></i>
+              <span><strong class="text-dark">{{ _('Teléfono:') }}</strong> {{ restaurant.phone if restaurant.phone else 'N/A' }}</span>
+            </div>
+            <div class="d-flex align-items-center text-secondary small">
+              <i class="fas fa-envelope text-teal me-2.5 fs-6" style="width: 16px;"></i>
+              <span><strong class="text-dark">{{ _('Email:') }}</strong> {{ restaurant.email if restaurant.email else 'N/A' }}</span>
+            </div>
+            <div class="d-flex align-items-start text-secondary small">
+              <i class="fas fa-map-marker-alt text-teal me-2.5 mt-1 fs-6" style="width: 16px;"></i>
+              <span><strong class="text-dark">{{ _('Dirección:') }}</strong> {{ restaurant.address }}</span>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            {% if restaurant.map_link %}
+            <a href="{{ restaurant.map_link }}" target="_blank" class="btn btn-action-view flex-grow-1 text-center">
+              <i class="fas fa-map-marked-alt me-1.5"></i> {{ _('Ver en Mapa') }}
+            </a>
+            {% endif %}
+            <a href="/apps/restaurant/{{ restaurant.id }}" class="btn btn-outline-primary px-3 rounded-3" title="{{ _('Abrir Cocina') }}">
+              <i class="fas fa-desktop"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert alert-info border-0 shadow-sm p-4 d-flex align-items-start" style="background-color: #f0fdfa; border-left: 4px solid #0d9488 !important; border-radius: 12px;">
+    <i class="fas fa-info-circle text-teal fs-4 me-3 mt-1"></i>
+    <div>
+      <span class="fw-bold text-teal d-block mb-1">{{ _('Sin establecimientos registrados') }}</span>
+      <p class="small text-secondary mb-0">{{ _('No hay restaurantes cargados en la base de datos central en este momento.') }}</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

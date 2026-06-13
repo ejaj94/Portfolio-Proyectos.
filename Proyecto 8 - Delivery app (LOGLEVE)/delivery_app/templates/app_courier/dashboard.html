@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Entregador - Logleve</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <style>
+    :root {
+      --bg-nebula: #030712;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(17, 24, 39, 0.95);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --brand-green: #10b981;
+      --brand-green-hover: #059669;
+      --brand-green-glow: rgba(16, 185, 129, 0.3);
+      --brand-gradient: linear-gradient(135deg, #10b981 0%, #2dd4bf 100%);
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-nebula);
+      color: var(--text-main);
+      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    #map {
+      width: 100%;
+      flex-grow: 1;
+      z-index: 1;
+    }
+
+    /* Top Floating Panel */
+    .top-floating-bar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .top-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      pointer-events: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .profile-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #1f2937;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      cursor: pointer;
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .profile-btn:hover {
+      border-color: var(--brand-green);
+      box-shadow: 0 0 10px var(--brand-green-glow);
+    }
+
+    .earnings-badge {
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--brand-green);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    /* Bottom Controller Sheet */
+    .bottom-controller-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--card-bg);
+      border-top: 1px solid var(--card-border);
+      border-top-left-radius: 28px;
+      border-top-right-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(15px);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Status offline screen content */
+    .offline-state {
+      text-align: center;
+    }
+
+    .status-text {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .go-btn {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--brand-gradient);
+      color: #030712;
+      border: none;
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 25px var(--brand-green-glow), 0 0 50px rgba(16, 185, 129, 0.1);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .go-btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 0 35px var(--brand-green-glow), 0 0 60px rgba(16, 185, 129, 0.2);
+    }
+
+    /* Online state pulsing label */
+    .online-state {
+      display: none;
+      text-align: center;
+    }
+
+    .pulse-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .pulse-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--brand-green);
+      box-shadow: 0 0 10px var(--brand-green);
+      animation: pulse-ring 1.5s infinite;
+    }
+
+    /* Active Trip Offer Box */
+    .trip-offer-state {
+      display: none;
+      text-align: left;
+    }
+
+    .offer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .offer-badge {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--brand-green);
+      color: var(--brand-green);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .offer-payout {
+      font-family: var(--font-title);
+      font-size: 24px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .trip-route-info {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .route-node {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .route-node:last-child {
+      margin-bottom: 0;
+    }
+
+    .node-icon {
+      font-size: 14px;
+      margin-top: 3px;
+    }
+
+    .node-icon.pickup {
+      color: var(--brand-green);
+    }
+
+    .node-icon.dropoff {
+      color: #3b82f6;
+    }
+
+    .node-details h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 2px;
+    }
+
+    .node-details p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    /* Slide Confirmation Bar Widget */
+    .slide-confirm-container {
+      position: relative;
+      width: 100%;
+      height: 56px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .slide-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .slide-button {
+      position: absolute;
+      left: 4px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--brand-gradient);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #030712;
+      font-size: 18px;
+      cursor: grab;
+      z-index: 3;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: left 0.1s ease;
+    }
+
+    .slide-button:active {
+      cursor: grabbing;
+    }
+
+    .slide-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      background: rgba(16, 185, 129, 0.15);
+      border-radius: 28px 0 0 28px;
+      z-index: 1;
+    }
+
+    /* Active delivery stages */
+    .active-trip-state {
+      display: none;
+      text-align: left;
+    }
+
+    .active-trip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .active-trip-title {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .support-btn {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    /* Floating support drawer */
+    .support-drawer {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      height: 300px;
+      background: var(--card-bg);
+      border-top: 1px solid var(--card-border);
+      border-top-left-radius: 28px;
+      border-top-right-radius: 28px;
+      z-index: 1001;
+      padding: 24px;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.6);
+      transition: transform 0.3s ease;
+    }
+
+    .support-drawer.open {
+      transform: translateY(-300px);
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .drawer-header h3 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .support-option {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: white;
+      text-decoration: none;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .support-option:hover {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .support-option-icon {
+      font-size: 18px;
+      color: #ef4444;
+      width: 24px;
+    }
+
+    /* Sound chime alert */
+    #timbre-notification {
+      display: none;
+    }
+
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Map element -->
+  <div id="map"></div>
+
+  <!-- Top control panel -->
+  <div class="top-floating-bar">
+    <a href="{{ url_for('apps_view_blueprint.courier_app_profile') }}" class="profile-btn top-card" title="Perfil">
+      <i class="fas fa-user-tie"></i>
+    </a>
+    <a href="{{ url_for('apps_view_blueprint.courier_app_earnings') }}" class="top-card earnings-badge" title="Ganhos">
+      <i class="fas fa-wallet"></i>
+      <span id="top-balance-display">€{{ "%.2f"|format(courier.balance) }}</span>
+    </a>
+  </div>
+
+  <!-- Bottom Interactive Card Panel -->
+  <div class="bottom-controller-sheet" id="bottomSheet">
+    <!-- 1. Offline Mode -->
+    <div class="offline-state" id="offlineState">
+      <p class="status-text">Está Offline</p>
+      <button class="go-btn" onclick="goOnline()">GO</button>
+    </div>
+
+    <!-- 2. Online Mode (Searching) -->
+    <div class="online-state" id="onlineState">
+      <div class="pulse-container">
+        <div class="pulse-dot"></div>
+      </div>
+      <p class="status-text" style="color: var(--brand-green);">Procurando viagens...</p>
+      <button class="btn-action logout-btn" onclick="goOffline()" style="margin-top: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--card-border); color: white; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer;">Ficar Offline</button>
+    </div>
+
+    <!-- 3. Trip Offer (Invitation) Card -->
+    <div class="trip-offer-state" id="tripOfferState">
+      <div class="offer-header">
+        <span class="offer-badge">Entrega Disponível</span>
+        <span class="offer-payout" id="offerPayout">€3.50</span>
+      </div>
+
+      <div class="trip-route-info">
+        <div class="route-node">
+          <i class="fas fa-store route-node-icon pickup node-icon"></i>
+          <div class="node-details">
+            <h4 id="offerRestName">Carregando Restaurante...</h4>
+            <p id="offerRestAddr">Morada do restaurante</p>
+          </div>
+        </div>
+        <div class="route-node" style="margin-top: 12px;">
+          <i class="fas fa-location-dot route-node-icon dropoff node-icon"></i>
+          <div class="node-details">
+            <h4>Entrega ao Cliente</h4>
+            <p id="offerClientAddr">Morada do cliente</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide widget for acceptance -->
+      <div class="slide-confirm-container" id="acceptSliderContainer">
+        <div class="slide-fill" id="acceptSlideFill"></div>
+        <span class="slide-text">Deslize para Aceitar</span>
+        <div class="slide-button" id="acceptSlideBtn">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Active Trip State (Stages) -->
+    <div class="active-trip-state" id="activeTripState">
+      <div class="active-trip-header">
+        <span class="active-trip-title" id="activeTripTitle">Recolha de Pedido</span>
+        <button class="support-btn" onclick="openSupport()"><i class="fas fa-circle-info"></i> Ajuda</button>
+      </div>
+
+      <div class="trip-route-info" style="margin-bottom: 20px;">
+        <div class="route-node">
+          <i class="fas fa-location-dot node-icon" id="stageNodeIcon" style="color: var(--brand-green);"></i>
+          <div class="node-details">
+            <h4 id="stageName">Com Cheiro de Amor</h4>
+            <p id="stageAddress">Morada</p>
+          </div>
+        </div>
+        <!-- Client Note / Spec -->
+        <div class="ocr-tip" id="deliveryNoteBox" style="margin-top: 12px; margin-bottom: 0; background: rgba(59, 130, 246, 0.08); border-left-color: #3b82f6;">
+          <i class="fas fa-message" style="color: #3b82f6;"></i>
+          <div>
+            <strong>Instruções do Cliente:</strong>
+            <span id="deliveryNoteText">Entregar na porta de trás</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide Confirmation slider -->
+      <div class="slide-confirm-container" id="tripSliderContainer">
+        <div class="slide-fill" id="tripSlideFill"></div>
+        <span class="slide-text" id="tripSliderText">Deslizar para Recolha</span>
+        <div class="slide-button" id="tripSlideBtn">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Support Drawer -->
+  <div class="support-drawer" id="supportDrawer">
+    <div class="drawer-header">
+      <h3>Suporte à Viagem</h3>
+      <button class="drawer-close" onclick="closeSupport()"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="support-option" onclick="reportDelay()">
+      <i class="fas fa-store-slash support-option-icon"></i>
+      <div>
+        <strong>Atraso no Restaurante</strong>
+        <p style="font-size: 11.5px; color: var(--text-muted);">Notificar a cozinha de que está à espera do pedido.</p>
+      </div>
+    </div>
+    <div class="support-option" onclick="reportNoAnswer()">
+      <i class="fas fa-phone-slash support-option-icon"></i>
+      <div>
+        <strong>Cliente não atende</strong>
+        <p style="font-size: 11.5px; color: var(--text-muted);">Acionar o protocolo de contacto do cliente.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio sound notifications -->
+  <audio id="timbre-notification" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-500.wav" preload="auto"></audio>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socketio/4.7.5/socketio.min.js"></script>
+
+  <script>
+    // System vars
+    const courierId = {{ courier.id }};
+    let isOnline = false;
+    let activeOrder = null;
+    let currentStage = 0; // 0=none, 1=heading_to_rest, 2=heading_to_client
+
+    // Initialize Map (Porto Defaults)
+    const map = L.map('map', { zoomControl: false }).setView([41.1579, -8.6291], 14);
+    
+    // Custom dark mode theme tiles for premium looks
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; CARTO'
+    }).addTo(map);
+
+    // Repartidor marker
+    const riderIcon = L.divIcon({
+      html: '<div style="background-color: #10b981; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(16,185,129,0.8);"></div>',
+      className: 'rider-marker',
+      iconSize: [16, 16],
+      iconAnchor: [8, 8]
+    });
+    
+    let riderMarker = L.marker([41.1579, -8.6291], { icon: riderIcon }).addTo(map);
+
+    // GPS Simulation & Coordinates streaming
+    function streamLocation(latitude, longitude) {
+      if (!isOnline) return;
+      
+      // Update Marker
+      riderMarker.setLatLng([latitude, longitude]);
+      
+      // Post coordinates to API
+      fetch('/api/v1/couriers/gps', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          courier_id: courierId,
+          order_id: activeOrder ? activeOrder.id : null,
+          latitude: latitude,
+          longitude: longitude
+        })
+      });
+    }
+
+    // Geolocation API tracker
+    let watchId = null;
+    function startGPSTracking() {
+      if (navigator.geolocation) {
+        watchId = navigator.geolocation.watchPosition(
+          (position) => {
+            streamLocation(position.coords.latitude, position.coords.longitude);
+          },
+          (error) => {
+            console.error("GPS tracking error: ", error);
+            // Fallback simulation if browser location is blocked
+            simulateGPS();
+          },
+          { enableHighAccuracy: true }
+        );
+      } else {
+        simulateGPS();
+      }
+    }
+
+    function stopGPSTracking() {
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+      }
+    }
+
+    // Fallback GPS simulation route vector
+    let simInterval = null;
+    function simulateGPS() {
+      let lat = 41.1579;
+      let lng = -8.6291;
+      
+      simInterval = setInterval(() => {
+        if (!isOnline) {
+          clearInterval(simInterval);
+          return;
+        }
+        
+        // Add random movements to simulate driving
+        lat += (Math.random() - 0.5) * 0.001;
+        lng += (Math.random() - 0.5) * 0.001;
+        streamLocation(lat, lng);
+      }, 4000);
+    }
+
+    // Toggle Online/Offline
+    function goOnline() {
+      isOnline = true;
+      document.getElementById("offlineState").style.display = "none";
+      document.getElementById("onlineState").style.display = "block";
+      
+      // Update database online status via API or Fetch
+      fetch('/api/v1/couriers/gps', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          courier_id: courierId,
+          latitude: 41.1579,
+          longitude: -8.6291
+        })
+      });
+      
+      startGPSTracking();
+      checkForOffers();
+    }
+
+    function goOffline() {
+      isOnline = false;
+      document.getElementById("onlineState").style.display = "none";
+      document.getElementById("offlineState").style.display = "block";
+      document.getElementById("tripOfferState").style.display = "none";
+      document.getElementById("activeTripState").style.display = "none";
+      stopGPSTracking();
+      if (simInterval) clearInterval(simInterval);
+    }
+
+    // Check for available orders in the area (KDS dispatched orders)
+    let searchTimer = null;
+    function checkForOffers() {
+      if (!isOnline || activeOrder) return;
+      
+      fetch('/api/v1/couriers/available-orders')
+        .then(res => res.json())
+        .then(orders => {
+          if (orders && orders.length > 0) {
+            showOffer(orders[0]);
+          } else {
+            // Keep polling every 5s if online
+            searchTimer = setTimeout(checkForOffers, 5000);
+          }
+        });
+    }
+
+    function showOffer(order) {
+      activeOrder = order;
+      
+      // Play alert chime sound
+      const sound = document.getElementById("timbre-notification");
+      if (sound) {
+        sound.play().catch(e => console.log("Sound check: ", e));
+      }
+      
+      document.getElementById("onlineState").style.display = "none";
+      document.getElementById("tripOfferState").style.display = "block";
+      
+      document.getElementById("offerRestName").innerText = "Restaurante Demo"; // Seeded Rest ID 1
+      document.getElementById("offerRestAddr").innerText = "Rua de Santa Catarina 123, Porto";
+      document.getElementById("offerClientAddr").innerText = order.delivery_note || "Avenida dos Aliados 45, Porto";
+      document.getElementById("offerPayout").innerText = `€${order.fare_amount || '3.50'}`;
+      
+      // Center map on the restaurant
+      map.setView([41.1579, -8.6291], 15);
+      
+      setupAcceptSlider();
+    }
+
+    // Acceptance Slider gesture
+    function setupAcceptSlider() {
+      const container = document.getElementById("acceptSliderContainer");
+      const btn = document.getElementById("acceptSlideBtn");
+      const fill = document.getElementById("acceptSlideFill");
+      let isDragging = false;
+      let startX = 0;
+      
+      btn.style.left = "4px";
+      fill.style.width = "0px";
+
+      function onStart(e) {
+        isDragging = true;
+        startX = (e.type === 'touchstart') ? e.touches[0].clientX : e.clientX;
+      }
+
+      function onMove(e) {
+        if (!isDragging) return;
+        const currentX = (e.type === 'touchmove') ? e.touches[0].clientX : e.clientX;
+        const deltaX = currentX - startX;
+        const maxOffset = container.clientWidth - btn.clientWidth - 8;
+        
+        let offset = Math.max(4, Math.min(maxOffset, deltaX));
+        btn.style.left = offset + "px";
+        fill.style.width = (offset + 24) + "px";
+        
+        if (offset >= maxOffset - 5) {
+          isDragging = false;
+          acceptTrip();
+        }
+      }
+
+      function onEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        // Snap back
+        btn.style.left = "4px";
+        fill.style.width = "0px";
+      }
+
+      btn.addEventListener('mousedown', onStart);
+      btn.addEventListener('touchstart', onStart);
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('touchmove', onMove);
+      window.addEventListener('mouseup', onEnd);
+      window.addEventListener('touchend', onEnd);
+    }
+
+    function acceptTrip() {
+      fetch(`/api/v1/couriers/orders/${activeOrder.id}/accept`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ courier_id: courierId })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("tripOfferState").style.display = "none";
+        document.getElementById("activeTripState").style.display = "block";
+        startStage(1); // Stage 1: heading to restaurant
+      });
+    }
+
+    // Active delivery stages flow
+    function startStage(stage) {
+      currentStage = stage;
+      
+      const sliderText = document.getElementById("tripSliderText");
+      const activeTitle = document.getElementById("activeTripTitle");
+      const stageIcon = document.getElementById("stageNodeIcon");
+      const stageName = document.getElementById("stageName");
+      const stageAddr = document.getElementById("stageAddress");
+      const noteBox = document.getElementById("deliveryNoteBox");
+      const noteText = document.getElementById("deliveryNoteText");
+      
+      if (stage === 1) {
+        activeTitle.innerText = "Recolha de Pedido";
+        sliderText.innerText = "Deslizar para Recolha";
+        stageIcon.className = "fas fa-store node-icon";
+        stageIcon.style.color = "var(--brand-green)";
+        stageName.innerText = "Com Cheiro de Amor";
+        stageAddr.innerText = "Rua de Santa Catarina 123, Porto";
+        noteBox.style.display = "none";
+      } else if (stage === 2) {
+        activeTitle.innerText = "Entrega ao Cliente";
+        sliderText.innerText = "Deslizar para Entregar";
+        stageIcon.className = "fas fa-location-dot node-icon";
+        stageIcon.style.color = "#3b82f6";
+        stageName.innerText = "Cliente Demo";
+        stageAddr.innerText = activeOrder.delivery_note || "Avenida dos Aliados 45, Porto";
+        
+        // Show notes
+        noteBox.style.display = "flex";
+        noteText.innerText = activeOrder.note || "Sem instruções adicionais.";
+      }
+      
+      setupTripStageSlider();
+    }
+
+    function setupTripStageSlider() {
+      const container = document.getElementById("tripSliderContainer");
+      const btn = document.getElementById("tripSlideBtn");
+      const fill = document.getElementById("tripSlideFill");
+      let isDragging = false;
+      let startX = 0;
+      
+      btn.style.left = "4px";
+      fill.style.width = "0px";
+
+      function onStart(e) {
+        isDragging = true;
+        startX = (e.type === 'touchstart') ? e.touches[0].clientX : e.clientX;
+      }
+
+      function onMove(e) {
+        if (!isDragging) return;
+        const currentX = (e.type === 'touchmove') ? e.touches[0].clientX : e.clientX;
+        const deltaX = currentX - startX;
+        const maxOffset = container.clientWidth - btn.clientWidth - 8;
+        
+        let offset = Math.max(4, Math.min(maxOffset, deltaX));
+        btn.style.left = offset + "px";
+        fill.style.width = (offset + 24) + "px";
+        
+        if (offset >= maxOffset - 5) {
+          isDragging = false;
+          advanceStage();
+        }
+      }
+
+      function onEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        // Snap back
+        btn.style.left = "4px";
+        fill.style.width = "0px";
+      }
+
+      btn.addEventListener('mousedown', onStart);
+      btn.addEventListener('touchstart', onStart);
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('touchmove', onMove);
+      window.addEventListener('mouseup', onEnd);
+      window.addEventListener('touchend', onEnd);
+    }
+
+    function advanceStage() {
+      if (currentStage === 1) {
+        // Collect from kitchen
+        fetch(`/api/v1/couriers/orders/${activeOrder.id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'start' })
+        })
+        .then(res => res.json())
+        .then(data => {
+          startStage(2); // Advance to delivery stage
+        });
+      } else if (currentStage === 2) {
+        // Completed delivery to customer
+        fetch(`/api/v1/couriers/orders/${activeOrder.id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'complete' })
+        })
+        .then(res => res.json())
+        .then(data => {
+          // Increment Local balance view
+          const currentBalance = parseFloat(document.getElementById("top-balance-display").innerText.replace("€", ""));
+          const payout = activeOrder.fare_amount || 3.50;
+          document.getElementById("top-balance-display").innerText = `€${(currentBalance + payout).toFixed(2)}`;
+          
+          // Clear active order state
+          activeOrder = null;
+          currentStage = 0;
+          
+          document.getElementById("activeTripState").style.display = "none";
+          document.getElementById("onlineState").style.display = "block";
+          
+          // Resume checking for new offers
+          checkForOffers();
+        });
+      }
+    }
+
+    // Support Drawer toggles
+    function openSupport() {
+      document.getElementById("supportDrawer").classList.add("open");
+    }
+
+    function closeSupport() {
+      document.getElementById("supportDrawer").classList.remove("open");
+    }
+
+    function reportDelay() {
+      alert("Atraso reportado com sucesso à cozinha do restaurante!");
+      closeSupport();
+    }
+
+    function reportNoAnswer() {
+      alert("Suporte Técnico Logleve: Foi iniciada a contagem decrescente de 5 minutos para contacto e cancelamento seguro do pedido.");
+      closeSupport();
+    }
+  </script>
+
+</body>
+</html>

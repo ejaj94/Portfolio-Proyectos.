@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Os Meus Ganhos - Logleve</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-nebula: radial-gradient(circle at 10% 20%, rgba(3, 7, 18, 0.95) 0%, rgba(11, 19, 41, 0.95) 90%);
+      --body-bg: #030712;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --brand-green: #10b981;
+      --brand-green-glow: rgba(16, 185, 129, 0.25);
+      --brand-gradient: linear-gradient(135deg, #10b981 0%, #2dd4bf 100%);
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-nebula);
+      background-color: var(--body-bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 30px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .earnings-container {
+      width: 100%;
+      max-width: 520px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      text-align: center;
+      position: relative;
+    }
+
+    .header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .back-btn {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+
+    .back-btn:hover {
+      color: white;
+    }
+
+    .page-title {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .balance-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 28px;
+    }
+
+    .balance-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .balance-amount {
+      font-family: var(--font-title);
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--brand-green);
+      margin-bottom: 18px;
+    }
+
+    .btn-cashout {
+      background: var(--brand-gradient);
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      color: #030712;
+      font-family: var(--font-title);
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px var(--brand-green-glow);
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-cashout:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px var(--brand-green-glow);
+    }
+
+    /* Weekly chart simulation */
+    .chart-section {
+      text-align: left;
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-family: var(--font-title);
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .bar-chart {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      height: 120px;
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+    }
+
+    .chart-bar-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chart-bar {
+      width: 14px;
+      border-radius: 4px;
+      background: linear-gradient(to top, #10b981, #2dd4bf);
+      transition: height 0.5s ease;
+    }
+
+    .chart-day {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* History Trip List */
+    .history-section {
+      text-align: left;
+    }
+
+    .trip-item {
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .trip-info h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 2px;
+    }
+
+    .trip-info p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .trip-payout {
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 14.5px;
+      color: var(--brand-green);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-muted);
+      font-size: 13.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="earnings-container">
+    <div class="header-nav">
+      <a href="{{ url_for('apps_view_blueprint.courier_app_dashboard') }}" class="back-btn">
+        <i class="fas fa-chevron-left"></i>
+        <span>Voltar</span>
+      </a>
+      <h2 class="page-title">Ganhos</h2>
+      <div style="width: 42px;"></div> <!-- spacer -->
+    </div>
+
+    <!-- Balance Card -->
+    <div class="balance-card">
+      <p class="balance-title">Saldo Disponível</p>
+      <h1 class="balance-amount" id="balanceText">€{{ "%.2f"|format(courier.balance) }}</h1>
+      <button class="btn-cashout" onclick="simulateCashout()">
+        <i class="fas fa-money-bill-transfer"></i>
+        <span>Transferir para Banco</span>
+      </button>
+    </div>
+
+    <!-- Chart simulation -->
+    <div class="chart-section">
+      <h3 class="section-title">Resumo Semanal</h3>
+      <div class="bar-chart">
+        <div class="chart-bar-wrapper">
+          <div class="chart-bar" style="height: 35px;"></div>
+          <span class="chart-day">S</span>
+        </div>
+        <div class="chart-bar-wrapper">
+          <div class="chart-bar" style="height: 50px;"></div>
+          <span class="chart-day">T</span>
+        </div>
+        <div class="chart-bar-wrapper">
+          <div class="chart-bar" style="height: 20px;"></div>
+          <span class="chart-day">Q</span>
+        </div>
+        <div class="chart-bar-wrapper">
+          <div class="chart-bar" style="height: 75px;"></div>
+          <span class="chart-day">Q</span>
+        </div>
+        <div class="chart-bar-wrapper">
+          <div class="chart-bar" style="height: 10px;"></div>
+          <span class="chart-day">S</span>
+        </div>
+        <div class="chart-bar-wrapper">
+          <div class="chart-bar" style="height: 85px;"></div>
+          <span class="chart-day">S</span>
+        </div>
+        <div class="chart-bar-wrapper">
+          <div class="chart-bar" style="height: 60px;"></div>
+          <span class="chart-day">D</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trip History list -->
+    <div class="history-section">
+      <h3 class="section-title">Histórico de Viagens</h3>
+      
+      {% if courier.balance > 0 %}
+        <!-- Simulado -->
+        <div class="trip-item">
+          <div class="trip-info">
+            <h4>Recolha: Com Cheiro de Amor</h4>
+            <p>Porto • Hoje</p>
+          </div>
+          <span class="trip-payout">+ €3.50</span>
+        </div>
+        <div class="trip-item">
+          <div class="trip-info">
+            <h4>Recolha: Com Cheiro de Amor</h4>
+            <p>Porto • Ontem</p>
+          </div>
+          <span class="trip-payout">+ €3.50</span>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <i class="fas fa-motorcycle" style="font-size: 24px; margin-bottom: 8px; display: block; opacity: 0.5;"></i>
+          Nenhuma viagem realizada esta semana.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    function simulateCashout() {
+      const balanceText = document.getElementById("balanceText");
+      const currentBalance = parseFloat(balanceText.innerText.replace("€", ""));
+      
+      if (currentBalance <= 0) {
+        alert("Não possui saldo suficiente para efetuar transferência.");
+        return;
+      }
+      
+      if (confirm(`Deseja transferir €${currentBalance.toFixed(2)} para a sua conta bancária registada?`)) {
+        alert("Sucesso! A transferência está em processamento e estará disponível em 1-2 dias úteis.");
+        balanceText.innerText = "€0.00";
+        
+        // Update database balance to 0 via backend request
+        // Since we simulate cashout, we can just let it clear locally or make a fetch if needed.
+      }
+    }
+  </script>
+
+</body>
+</html>

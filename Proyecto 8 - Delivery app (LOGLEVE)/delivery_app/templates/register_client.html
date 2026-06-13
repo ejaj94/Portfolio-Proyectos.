@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Registrar Cliente') }}{% endblock %}
+
+{% block content %}
+<style>
+  .premium-form-card {
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.05);
+    border: 1px solid #edf0f2 !important;
+    overflow: hidden;
+  }
+  .form-header-gradient {
+    background: var(--dark-gradient);
+    padding: 30px;
+    color: white;
+    border-bottom: 2px solid rgba(20, 184, 166, 0.15);
+  }
+  .input-icon-group {
+    position: relative;
+  }
+  .input-icon-group i {
+    position: absolute;
+    left: 16px;
+    top: 14px;
+    color: #64748b;
+    font-size: 1rem;
+    transition: color 0.2s;
+  }
+  .input-icon-group .form-control {
+    padding-left: 44px;
+  }
+  .input-icon-group .form-control:focus + i {
+    color: #0d9488;
+  }
+</style>
+
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card premium-form-card border-0">
+        <!-- Encabezado Gradient -->
+        <div class="form-header-gradient">
+          <div class="d-flex align-items-center mb-2">
+            <span class="bg-white bg-opacity-10 text-teal rounded-circle p-2 d-inline-flex justify-content-center align-items-center me-3" style="width: 46px; height: 46px;">
+              <i class="fas fa-user-plus fs-4"></i>
+            </span>
+            <div>
+              <h3 class="mb-0 fw-extrabold text-white">{{ _('Registrar Nuevo Cliente') }}</h3>
+              <p class="text-white-50 small mb-0">{{ _('Añade un perfil de cliente para simular sus compras y entregas en la plataforma.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+          {% if error %}
+          <div class="alert alert-danger border-0 shadow-sm mb-4 p-3 d-flex align-items-center" style="border-left: 4px solid #f43f5e !important; background-color: #fff1f2; border-radius: 8px;">
+            <i class="fas fa-exclamation-triangle text-danger fs-5 me-3"></i>
+            <span class="text-danger small fw-semibold">{{ error }}</span>
+          </div>
+          {% endif %}
+
+          <form method="post" action="{{ url_for('client_blueprint.register_client_web') }}">
+            <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom"><i class="fas fa-info-circle text-teal me-2"></i>{{ _('Datos de la Cuenta') }}</h5>
+            
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label" for="client_id_display">{{ _('Identificador Interno (ID)') }}</label>
+                <div class="input-icon-group">
+                  <input class="form-control bg-light" id="client_id_display" type="text" value="{{ _('Asignación Automática') }}" disabled>
+                  <i class="fas fa-fingerprint"></i>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="name">{{ _('Nombre Completo') }}</label>
+                <div class="input-icon-group">
+                  <input class="form-control" id="name" name="name" type="text" required placeholder="Ej. Ana García López">
+                  <i class="fas fa-user"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label" for="phone">{{ _('Teléfono Móvil') }}</label>
+                <div class="input-icon-group">
+                  <input class="form-control" id="phone" name="phone" type="tel" required placeholder="Ej. +34 600 111 222">
+                  <i class="fas fa-phone"></i>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="whatsapp">{{ _('WhatsApp (Opcional)') }}</label>
+                <div class="input-icon-group">
+                  <input class="form-control" id="whatsapp" name="whatsapp" type="tel" placeholder="Ej. +34 600 111 222">
+                  <i class="fab fa-whatsapp"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label" for="email">{{ _('Correo Electrónico') }}</label>
+              <div class="input-icon-group">
+                <input class="form-control" id="email" name="email" type="email" required placeholder="Ej. ana.garcia@email.com">
+                <i class="fas fa-envelope"></i>
+              </div>
+            </div>
+
+            <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom pt-2"><i class="fas fa-map-marker-alt text-teal me-2"></i>{{ _('Dirección de Envío Principal') }}</h5>
+
+            <div class="mb-4">
+              <label class="form-label" for="address">{{ _('Dirección Física') }}</label>
+              <textarea class="form-control" id="address" name="address" rows="3" required placeholder="Ej. Avenida de la Constitución, 45, 3º B, 28002 Madrid"></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label" for="map_link">{{ _('Enlace Satélite de Mapa / Coordenadas (Opcional)') }}</label>
+              <div class="input-icon-group">
+                <input class="form-control" id="map_link" name="map_link" type="url" placeholder="https://maps.google.com/...">
+                <i class="fas fa-map-marked-alt"></i>
+              </div>
+            </div>
+
+            <!-- Botones Premium -->
+            <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-4">
+              <a href="{{ url_for('client_blueprint.list_clients') }}" class="btn btn-secondary px-4 py-2.5">
+                <i class="fas fa-arrow-left me-2"></i> {{ _('Volver al Listado') }}
+              </a>
+              <button type="submit" class="btn btn-primary px-4 py-2.5 shadow-sm">
+                <i class="fas fa-save me-2"></i> {{ _('Guardar Perfil') }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

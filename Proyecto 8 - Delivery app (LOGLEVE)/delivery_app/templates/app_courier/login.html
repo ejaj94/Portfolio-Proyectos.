@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar - Logleve Entregador</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-nebula: radial-gradient(circle at 10% 20%, rgba(3, 7, 18, 0.95) 0%, rgba(11, 19, 41, 0.95) 90%);
+      --body-bg: #030712;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --brand-green: #10b981;
+      --brand-green-glow: rgba(16, 185, 129, 0.35);
+      --brand-gradient: linear-gradient(135deg, #10b981 0%, #2dd4bf 100%);
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-nebula);
+      background-color: var(--body-bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Floating light blobs */
+    .blob {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.15;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .blob-green {
+      background: var(--brand-green);
+      top: 10%;
+      left: 10%;
+    }
+    .blob-orange {
+      background: #f97316;
+      bottom: 10%;
+      right: 10%;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 440px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      text-align: center;
+      position: relative;
+    }
+
+    .logo-img {
+      height: 64px;
+      width: auto;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 0 8px var(--brand-green-glow));
+    }
+
+    .title {
+      font-family: var(--font-title);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff, #9ca3af);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13.5px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    .form-control {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 16px 14px 46px;
+      color: white;
+      font-family: var(--font-body);
+      font-size: 14.5px;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--brand-green);
+      box-shadow: 0 0 12px var(--brand-green-glow);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--brand-gradient);
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      color: #030712;
+      font-family: var(--font-title);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      box-shadow: 0 4px 20px var(--brand-green-glow);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--brand-green-glow);
+      filter: brightness(1.1);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .footer-text {
+      margin-top: 32px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    .footer-link {
+      color: var(--brand-green);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      text-decoration: underline;
+      color: #2dd4bf;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-green"></div>
+  <div class="blob blob-orange"></div>
+
+  <div class="login-container">
+    <img src="{{ url_for('static', filename='logo.png') }}" class="logo-img" alt="Logleve Logo">
+    <h1 class="title">Área do Entregador</h1>
+    <p class="subtitle">Faça login para gerir as suas entregas em tempo real</p>
+
+    {% if error %}
+    <div class="alert-error">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('apps_view_blueprint.courier_login') }}">
+      <div class="form-group">
+        <label class="form-label" for="email">E-mail</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope input-icon"></i>
+          <input type="email" id="email" name="email" class="form-control" placeholder="exemplo@logleve.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Palavra-passe</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" id="password" name="password" class="form-control" style="padding-right: 46px;" placeholder="••••••••" required>
+          <i class="fas fa-eye" style="position: absolute; right: 16px; color: var(--text-muted); cursor: pointer; transition: color 0.2s;" onclick="togglePasswordVisibility('password', this)"></i>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <span>Iniciar Sessão</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </form>
+
+    <p class="footer-text">
+      Não tem uma conta de entregador? <br>
+      <a href="{{ url_for('apps_view_blueprint.courier_register') }}" class="footer-link">Registe-se como parceiro</a>
+    </p>
+  </div>
+
+  <script>
+    function togglePasswordVisibility(inputId, icon) {
+      const input = document.getElementById(inputId);
+      if (input.type === "password") {
+        input.type = "text";
+        icon.className = "fas fa-eye-slash";
+        icon.style.color = "var(--brand-green)";
+      } else {
+        input.type = "password";
+        icon.className = "fas fa-eye";
+        icon.style.color = "var(--text-muted)";
+      }
+    }
+  </script>
+</body>
+</html>

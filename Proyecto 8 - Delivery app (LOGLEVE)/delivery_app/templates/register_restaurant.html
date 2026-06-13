@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Registrar Restaurante') }}{% endblock %}
+
+{% block content %}
+<style>
+  .premium-form-card {
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.05);
+    border: 1px solid #edf0f2 !important;
+    overflow: hidden;
+  }
+  .form-header-gradient {
+    background: var(--dark-gradient);
+    padding: 30px;
+    color: white;
+    border-bottom: 2px solid rgba(20, 184, 166, 0.15);
+  }
+  .input-icon-group {
+    position: relative;
+  }
+  .input-icon-group i {
+    position: absolute;
+    left: 16px;
+    top: 14px;
+    color: #64748b;
+    font-size: 1rem;
+    transition: color 0.2s;
+  }
+  .input-icon-group .form-control {
+    padding-left: 44px;
+  }
+  .input-icon-group .form-control:focus + i {
+    color: #0d9488;
+  }
+</style>
+
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card premium-form-card border-0">
+        <!-- Encabezado Gradient -->
+        <div class="form-header-gradient">
+          <div class="d-flex align-items-center mb-2">
+            <span class="bg-white bg-opacity-10 text-teal rounded-circle p-2 d-inline-flex justify-content-center align-items-center me-3" style="width: 46px; height: 46px;">
+              <i class="fas fa-store-alt fs-4"></i>
+            </span>
+            <div>
+              <h3 class="mb-0 fw-extrabold text-white">{{ _('Registrar Nuevo Restaurante') }}</h3>
+              <p class="text-white-50 small mb-0">{{ _('Completa los detalles comerciales para dar de alta al nuevo socio en el sistema.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+          <form method="post" action="{{ url_for('restaurant_blueprint.register_restaurant_form') }}">
+            <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom"><i class="fas fa-info-circle text-teal me-2"></i>{{ _('Datos del Comercio') }}</h5>
+            
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label for="name" class="form-label">{{ _('Nombre del Restaurante') }}</label>
+                <div class="input-icon-group">
+                  <input type="text" class="form-control" id="name" name="name" required placeholder="Ej. Pizzería Bella Italia">
+                  <i class="fas fa-store"></i>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="owner_name" class="form-label">{{ _('Nombre del Dueño') }}</label>
+                <div class="input-icon-group">
+                  <input type="text" class="form-control" id="owner_name" name="owner_name" required placeholder="Ej. Giovanni Rossi">
+                  <i class="fas fa-user"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label for="nif" class="form-label">{{ _('NIF / Documento Identidad') }}</label>
+                <div class="input-icon-group">
+                  <input type="text" class="form-control" id="nif" name="nif" required placeholder="Ej. B12345678">
+                  <i class="fas fa-id-card"></i>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="phone" class="form-label">{{ _('Teléfono de Contacto') }}</label>
+                <div class="input-icon-group">
+                  <input type="tel" class="form-control" id="phone" name="phone" required placeholder="Ej. +34 600 000 000">
+                  <i class="fas fa-phone"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label for="whatsapp" class="form-label">{{ _('Canal WhatsApp (Opcional)') }}</label>
+                <div class="input-icon-group">
+                  <input type="tel" class="form-control" id="whatsapp" name="whatsapp" placeholder="Ej. +34 600 000 000">
+                  <i class="fab fa-whatsapp"></i>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="email" class="form-label">{{ _('Correo Electrónico') }}</label>
+                <div class="input-icon-group">
+                  <input type="email" class="form-control" id="email" name="email" required placeholder="Ej. contacto@bellaitalia.com">
+                  <i class="fas fa-envelope"></i>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom pt-2"><i class="fas fa-map-marker-alt text-teal me-2"></i>{{ _('Localización y Recursos Visuales') }}</h5>
+
+            <div class="mb-4">
+              <label for="address" class="form-label">{{ _('Dirección Completa') }}</label>
+              <textarea class="form-control" id="address" name="address" rows="3" required placeholder="Calle Mayor, Nº 12, Planta Baja, 28013 Madrid"></textarea>
+            </div>
+
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label for="map_link" class="form-label">{{ _('Enlace de Google Maps (Opcional)') }}</label>
+                <div class="input-icon-group">
+                  <input type="url" class="form-control" id="map_link" name="map_link" placeholder="https://maps.google.com/...">
+                  <i class="fas fa-map-marked-alt"></i>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="logo_url" class="form-label">{{ _('URL de Imagen de Portada / Logo (Opcional)') }}</label>
+                <div class="input-icon-group">
+                  <input type="url" class="form-control" id="logo_url" name="logo_url" placeholder="https://images.unsplash.com/...">
+                  <i class="fas fa-image"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botones Premium -->
+            <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-4">
+              <a href="{{ url_for('restaurant_blueprint.list_restaurants') }}" class="btn btn-secondary px-4 py-2.5">
+                <i class="fas fa-arrow-left me-2"></i> {{ _('Volver al Listado') }}
+              </a>
+              <button type="submit" class="btn btn-primary px-4 py-2.5 shadow-sm">
+                <i class="fas fa-save me-2"></i> {{ _('Registrar Establecimiento') }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

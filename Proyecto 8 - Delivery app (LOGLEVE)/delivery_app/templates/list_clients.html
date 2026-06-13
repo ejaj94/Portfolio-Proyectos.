@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Lista de Clientes') }}{% endblock %}
+
+{% block content %}
+<style>
+  .client-grid-card {
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    border: 1px solid #edf0f2 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .client-grid-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 35px rgba(15, 23, 42, 0.08);
+    border-color: #cbd5e1 !important;
+  }
+  .client-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25);
+  }
+</style>
+
+<div class="container py-3">
+  <!-- Cabecera de listado -->
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3">
+    <div>
+      <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill mb-2 fw-semibold" style="font-size: 0.78rem;">
+        <i class="fas fa-users me-1"></i> {{ _('Gestión de Clientes') }}
+      </span>
+      <h2 class="fw-bold text-dark mb-0"><i class="fas fa-users text-teal me-2"></i>{{ _('Clientes Registrados') }}</h2>
+      <p class="text-muted small mb-0">{{ _('Administración centralizada de perfiles de clientes y direcciones frecuentes de envío.') }}</p>
+    </div>
+    <a href="{{ url_for('client_blueprint.register_client_form') }}" class="btn btn-primary px-4 py-2.5 d-inline-flex align-items-center shadow-sm">
+      <i class="fas fa-plus-circle me-2"></i> {{ _('Nuevo Cliente') }}
+    </a>
+  </div>
+
+  {% if clients %}
+  <div class="row g-4">
+    {% for client in clients %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card client-grid-card h-100">
+        <div class="card-body p-4 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex align-items-center mb-3">
+              <div class="client-avatar me-3">
+                {{ client.name[0] | upper if client.name else '?' }}
+              </div>
+              <div>
+                <h5 class="card-title text-dark fw-bold mb-0">{{ client.name }}</h5>
+                <span class="text-muted x-small">ID Cliente: #{{ client.id }}</span>
+              </div>
+            </div>
+
+            <div class="d-flex flex-column gap-2 mb-3 mt-3">
+              <div class="d-flex align-items-center text-secondary small">
+                <i class="fas fa-phone text-teal me-2.5 fs-6" style="width: 16px;"></i>
+                <span><strong class="text-dark">{{ _('Teléfono:') }}</strong> {{ client.phone }}</span>
+              </div>
+              <div class="d-flex align-items-center text-secondary small">
+                <i class="fab fa-whatsapp text-success me-2.5 fs-6" style="width: 16px;"></i>
+                <span><strong class="text-dark">{{ _('WhatsApp:') }}</strong> {{ client.whatsapp if client.whatsapp else 'N/A' }}</span>
+              </div>
+              <div class="d-flex align-items-center text-secondary small">
+                <i class="fas fa-envelope text-teal me-2.5 fs-6" style="width: 16px;"></i>
+                <span><strong class="text-dark">{{ _('Email:') }}</strong> {{ client.email if client.email else 'N/A' }}</span>
+              </div>
+              <div class="d-flex align-items-start text-secondary small">
+                <i class="fas fa-map-marker-alt text-teal me-2.5 mt-1 fs-6" style="width: 16px;"></i>
+                <span><strong class="text-dark">{{ _('Dirección:') }}</strong> {{ client.address }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mt-3 pt-3 border-top">
+            {% if client.map_link %}
+            <a href="{{ client.map_link }}" target="_blank" class="btn btn-outline-secondary btn-sm flex-grow-1 text-center py-2" style="border-radius: 8px; font-weight: 700;">
+              <i class="fas fa-map-marked-alt me-1.5"></i> {{ _('Dirección Satélite') }}
+            </a>
+            {% endif %}
+            <a href="/apps/client" class="btn btn-outline-primary btn-sm px-3 py-2" style="border-radius: 8px;" title="{{ _('Panel de Compras') }}">
+              <i class="fas fa-shopping-bag"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert alert-info border-0 shadow-sm p-4 d-flex align-items-start" style="background-color: #f0fdfa; border-left: 4px solid #0d9488 !important; border-radius: 12px;">
+    <i class="fas fa-info-circle text-teal fs-4 me-3 mt-1"></i>
+    <div>
+      <span class="fw-bold text-teal d-block mb-1">{{ _('Sin clientes registrados') }}</span>
+      <p class="small text-secondary mb-0">{{ _('No se han encontrado registros de clientes cargados en el sistema principal.') }}</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

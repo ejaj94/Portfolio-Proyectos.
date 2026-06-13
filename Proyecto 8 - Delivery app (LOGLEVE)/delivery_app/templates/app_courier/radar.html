@@ -1,0 +1,2500 @@
+<!doctype html>
+<html lang="es">
+  <head>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>App Repartidor - Radar de Envíos Premium</title>
+
+    <!-- Socket.IO Client -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <!-- FontAwesome para iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <style>
+      :root {
+        /* DARK THEME (DEFAULT) */
+        --bg-dark: #070b13;
+        --brand-teal: #2dd4bf;
+        --brand-teal-glow: rgba(45, 212, 191, 0.35);
+        --brand-emerald: #10b981;
+        --brand-orange: #f97316;
+        --text-light: #f8fafc;
+        --text-muted: #94a3b8;
+        --glass-bg: rgba(15, 23, 42, 0.65);
+        --glass-border: rgba(20, 184, 166, 0.2);
+        --glass-hover: rgba(20, 184, 166, 0.35);
+        --font-title: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        --theme-toggle-color: #2dd4bf;
+      }
+
+      /* LIGHT THEME OVERRIDES */
+      body.light-theme {
+        --bg-dark: #f1f5f9;
+        --text-light: #0f172a;
+        --text-muted: #475569;
+        --glass-bg: rgba(255, 255, 255, 0.85);
+        --glass-border: rgba(13, 148, 136, 0.25);
+        --glass-hover: rgba(13, 148, 136, 0.4);
+        --theme-toggle-color: #0d9488;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        font-family: var(--font-body);
+        min-height: 100vh;
+        padding-bottom: 60px;
+        overflow-x: hidden;
+        transition: background-color 0.4s ease, color 0.4s ease;
+      }
+      
+      body:not(.light-theme) {
+        background: radial-gradient(circle at 50% 0%, rgba(13, 148, 136, 0.15) 0%, rgba(15, 23, 42, 0.05) 50%, rgba(7, 11, 19, 1) 100%), #070b13;
+        background-image: 
+          linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+        background-size: 24px 24px;
+      }
+
+      body.light-theme {
+        background: radial-gradient(circle at 50% 0%, rgba(13, 148, 136, 0.08) 0%, rgba(241, 245, 249, 0.1) 50%, rgba(241, 245, 249, 1) 100%), #f1f5f9;
+        background-image: 
+          linear-gradient(rgba(15, 23, 42, 0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(15, 23, 42, 0.02) 1px, transparent 1px);
+        background-size: 24px 24px;
+      }
+
+      header {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+        padding: 16px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.4s ease;
+      }
+
+      .header-title-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-title {
+        font-family: var(--font-title);
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        background: linear-gradient(135deg, var(--text-light), var(--theme-toggle-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .courier-info {
+        font-size: 11px;
+        color: var(--theme-toggle-color);
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-top: 2px;
+        letter-spacing: 1.5px;
+        text-shadow: 0 0 10px rgba(45, 212, 191, 0.2);
+      }
+
+      .theme-toggle-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        color: var(--text-light);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        transition: all 0.2s;
+      }
+      .theme-toggle-btn:hover {
+        background: var(--theme-toggle-color);
+        color: #070b13;
+      }
+
+      main {
+        max-width: 460px;
+        margin: 0 auto;
+        padding: 20px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      /* 📡 SECCIÓN DEL RADAR VISUAL */
+      .radar-scanner-wrapper {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        transition: all 0.4s ease;
+      }
+
+      .radar-scanner {
+        position: relative;
+        width: 170px;
+        height: 170px;
+        border-radius: 50%;
+        border: 2px solid rgba(45, 212, 191, 0.15);
+        background: radial-gradient(circle, rgba(13, 148, 136, 0.08) 0%, transparent 80%);
+        overflow: hidden;
+        margin-bottom: 16px;
+      }
+
+      .radar-sweep {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, var(--brand-teal-glow) 0deg, transparent 75deg, transparent 360deg);
+        animation: rotateSweep 4s linear infinite;
+        transform-origin: center center;
+        z-index: 2;
+      }
+
+      .radar-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid rgba(45, 212, 191, 0.1);
+        border-radius: 50%;
+      }
+      .ring-1 { width: 50px; height: 50px; }
+      .ring-2 { width: 100px; height: 100px; }
+      .ring-3 { width: 140px; height: 140px; }
+
+      .radar-crosshair-x {
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        right: 5%;
+        height: 1px;
+        background: rgba(45, 212, 191, 0.08);
+      }
+      .radar-crosshair-y {
+        position: absolute;
+        left: 50%;
+        top: 5%;
+        bottom: 5%;
+        width: 1px;
+        background: rgba(45, 212, 191, 0.08);
+      }
+
+      .radar-ping {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background-color: var(--theme-toggle-color);
+        border-radius: 50%;
+        box-shadow: 0 0 12px var(--theme-toggle-color);
+        z-index: 3;
+      }
+      .ping-1 { top: 30%; left: 65%; animation: pingPulse 2s ease-in-out infinite; }
+      .ping-2 { top: 68%; left: 25%; animation: pingPulse 2.5s ease-in-out infinite 0.7s; }
+      .ping-3 { top: 45%; left: 40%; animation: pingPulse 1.8s ease-in-out infinite 1.2s; }
+
+      .radar-status-text {
+        font-family: var(--font-title);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-transform: uppercase;
+      }
+
+      .pulse-indicator {
+        width: 7px;
+        height: 7px;
+        background-color: var(--theme-toggle-color);
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 10px var(--theme-toggle-color);
+        animation: pulseAnimation 1.5s infinite;
+      }
+
+      .gps-status {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        padding: 12px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        transition: all 0.4s ease;
+      }
+
+      .gps-text {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+      }
+
+      .gps-indicator {
+        font-size: 11px;
+        font-weight: 800;
+        color: #070b13;
+        background: linear-gradient(135deg, var(--theme-toggle-color), var(--brand-emerald));
+        padding: 5px 12px;
+        border-radius: 100px;
+        letter-spacing: 0.5px;
+        box-shadow: 0 0 12px rgba(45, 212, 191, 0.35);
+      }
+
+      .section-title {
+        font-family: var(--font-title);
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--text-light);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .section-title i {
+        color: var(--theme-toggle-color);
+      }
+
+      /* 📦 ACTIVE N NAVIGATION VIEW (OVERLAY) */
+      .card {
+        background: var(--glass-bg);
+        border-radius: 24px;
+        border: 1px solid var(--glass-border);
+        padding: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(15px);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        transition: all 0.4s ease;
+      }
+
+      .map-wrapper {
+        height: 280px;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--glass-border);
+        position: relative;
+      }
+
+      #active-map {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Radio Pill Selectors for GPS Mode */
+      .gps-mode-selector {
+        display: flex;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 4px;
+        justify-content: space-between;
+      }
+
+      .gps-pill-btn {
+        flex: 1;
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 800;
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .gps-pill-btn.active {
+        background: var(--theme-toggle-color);
+        color: #070b13;
+        box-shadow: 0 4px 10px rgba(45, 212, 191, 0.25);
+      }
+
+      .delivery-details {
+        font-size: 13px;
+        line-height: 1.6;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        padding: 12px 16px;
+        border-radius: 12px;
+      }
+
+      .delivery-details strong {
+        color: var(--text-light);
+      }
+
+      .action-workflow-btn {
+        width: 100%;
+        background: linear-gradient(135deg, var(--theme-toggle-color), var(--brand-emerald));
+        color: #070b13;
+        border: none;
+        font-family: var(--font-title);
+        font-size: 14px;
+        font-weight: 800;
+        padding: 14px;
+        border-radius: 100px;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(45, 212, 191, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.2s;
+      }
+
+      .action-workflow-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 25px rgba(45, 212, 191, 0.4);
+      }
+
+      .action-workflow-btn:disabled {
+        background: #475569 !important;
+        color: #94a3b8 !important;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
+
+      /* Radar Offers Grid */
+      #radar-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .offer-card {
+        background: var(--glass-bg);
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        position: relative;
+        overflow: hidden;
+        animation: cardEntrance 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: all 0.3s ease;
+      }
+
+      .offer-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--theme-toggle-color), var(--brand-emerald));
+      }
+
+      .offer-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--glass-hover);
+        box-shadow: 0 15px 35px rgba(45, 212, 191, 0.15);
+      }
+
+      .offer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: var(--font-title);
+        font-size: 15px;
+        font-weight: 800;
+        margin-bottom: 12px;
+      }
+
+      .offer-badge {
+        background: rgba(45, 212, 191, 0.1);
+        border: 1px solid rgba(45, 212, 191, 0.3);
+        color: var(--theme-toggle-color);
+        font-size: 12px;
+        font-weight: 800;
+        padding: 4px 10px;
+        border-radius: 100px;
+      }
+
+      .offer-body {
+        font-size: 13px;
+        color: var(--text-muted);
+        font-weight: 500;
+        line-height: 1.6;
+        margin-bottom: 18px;
+        background: rgba(255, 255, 255, 0.02);
+        padding: 12px 16px;
+        border-radius: 12px;
+      }
+
+      .offer-body strong {
+        color: var(--text-light);
+      }
+
+      .accept-btn {
+        width: 100%;
+        background: linear-gradient(135deg, var(--theme-toggle-color), #0f766e);
+        color: #070b13;
+        border: none;
+        font-family: var(--font-title);
+        font-size: 14px;
+        font-weight: 800;
+        padding: 14px;
+        border-radius: 100px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 20px rgba(45, 212, 191, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-transform: uppercase;
+      }
+      .accept-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 25px rgba(45, 212, 191, 0.35);
+      }
+
+      .scanner-placeholder {
+        text-align: center;
+        padding: 40px 24px;
+        color: var(--text-muted);
+        font-size: 13px;
+        font-weight: 600;
+        background: var(--glass-bg);
+        border-radius: 20px;
+        border: 1px solid var(--glass-border);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .scanner-pulse-ring {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid var(--theme-toggle-color);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .scanner-pulse-ring::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: var(--theme-toggle-color);
+        opacity: 0.25;
+        animation: pulseAnimation 2s infinite;
+      }
+
+      .scanner-pulse-ring i {
+        color: var(--theme-toggle-color);
+        font-size: 16px;
+      }
+
+      /* 🌟 CUSTOM TOAST */
+      .custom-toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--theme-toggle-color);
+        border-radius: 16px;
+        padding: 16px 20px;
+        width: 90%;
+        max-width: 400px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .custom-toast.show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+
+      .toast-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: rgba(45, 212, 191, 0.1);
+        color: var(--theme-toggle-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+
+      .toast-content {
+        flex-grow: 1;
+      }
+
+      .toast-title {
+        font-family: var(--font-title);
+        font-weight: 800;
+        font-size: 14px;
+        color: #fff;
+        margin-bottom: 2px;
+      }
+
+      .toast-message {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      /* ANIMATIONS */
+      @keyframes rotateSweep {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      @keyframes pingPulse {
+        0% { transform: scale(0.8); opacity: 0.3; }
+        50% { transform: scale(1.2); opacity: 1; }
+        100% { transform: scale(0.8); opacity: 0.3; }
+      }
+
+      @keyframes pulseAnimation {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.5); }
+        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(45, 212, 191, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+      }
+
+      @keyframes cardEntrance {
+        from { opacity: 0; transform: translateY(20px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      /* 📞 BOTÓN FLOTANTE SOPORTE COURIER */
+      .courier-support-float {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: linear-gradient(135deg, var(--theme-toggle-color), var(--brand-emerald));
+        color: #070b13;
+        padding: 12px 20px;
+        border-radius: 100px;
+        font-family: var(--font-title);
+        font-size: 13.5px;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 8px 24px var(--brand-teal-glow);
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+        z-index: 999;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .courier-support-float:hover {
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 12px 30px rgba(45, 212, 191, 0.4);
+      }
+      .courier-support-float:active {
+        transform: scale(0.95);
+      }
+
+      /* 📱 DRAWER LATERAL SLIDEOUT DE SOPORTE */
+      .support-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        max-width: 440px;
+        height: 100vh;
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-left: 1px solid var(--glass-border);
+        z-index: 2000;
+        box-shadow: -15px 0 45px rgba(0, 0, 0, 0.5);
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+      }
+      .support-drawer.open {
+        transform: translateX(0);
+      }
+      
+      .drawer-header-custom {
+        padding: 20px;
+        background: linear-gradient(135deg, #0f172a 0%, #042f2e 100%);
+        border-bottom: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+      }
+      body.light-theme .drawer-header-custom {
+        background: linear-gradient(135deg, #ffffff 0%, #ccfbf1 100%);
+        color: #0f172a;
+      }
+      .drawer-close-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        color: var(--text-light);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+      }
+      .drawer-close-btn:hover {
+        background: #ef4444;
+        color: white;
+        transform: rotate(90deg);
+      }
+
+      .drawer-content-scroll {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .drawer-content-scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .drawer-content-scroll::-webkit-scrollbar-thumb {
+        background: var(--glass-border);
+        border-radius: 4px;
+      }
+      
+      /* FAQ card for rider */
+      .faq-rider-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        transition: all 0.3s;
+      }
+      body.light-theme .faq-rider-card {
+        background: rgba(0, 0, 0, 0.02);
+      }
+      .faq-rider-card:hover {
+        border-color: var(--theme-toggle-color);
+        box-shadow: 0 4px 12px var(--brand-teal-glow);
+      }
+      .faq-rider-header {
+        padding: 14px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 13.5px;
+        user-select: none;
+      }
+      .faq-rider-header i {
+        color: var(--text-muted);
+        transition: transform 0.3s;
+        font-size: 11px;
+      }
+      .faq-rider-card.open .faq-rider-header {
+        background: rgba(45, 212, 191, 0.06);
+        color: var(--theme-toggle-color);
+      }
+      .faq-rider-card.open .faq-rider-header i {
+        transform: rotate(180deg);
+        color: var(--theme-toggle-color);
+      }
+      .faq-rider-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 12.5px;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+      .faq-rider-content-inner {
+        padding: 14px 18px;
+        border-top: 1px solid var(--glass-border);
+      }
+
+      /* Courier Chat bot inside drawer */
+      .courier-chat-container {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        height: 380px;
+        overflow: hidden;
+        position: relative;
+      }
+      .courier-chat-messages {
+        flex-grow: 1;
+        padding: 16px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .courier-msg-bubble {
+        max-width: 82%;
+        padding: 10px 14px;
+        border-radius: 14px;
+        font-size: 13px;
+        line-height: 1.4;
+        font-weight: 500;
+        animation: messageSlideIn 0.2s ease-out;
+      }
+      .courier-msg-bubble.bot {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-light);
+        align-self: flex-start;
+        border-bottom-left-radius: 3px;
+        border: 1px solid var(--glass-border);
+      }
+      .courier-msg-bubble.user {
+        background: linear-gradient(135deg, var(--theme-toggle-color), var(--brand-emerald));
+        color: #070b13;
+        align-self: flex-end;
+        border-bottom-right-radius: 3px;
+        box-shadow: 0 4px 12px var(--brand-teal-glow);
+        font-weight: 700;
+      }
+      .courier-msg-bubble.agent {
+        background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+        color: white;
+        align-self: flex-start;
+        border-bottom-left-radius: 3px;
+        box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+        font-weight: 600;
+      }
+
+      .courier-chat-input-area {
+        padding: 12px;
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.2);
+      }
+      .courier-chat-text-input {
+        flex-grow: 1;
+        border: 1px solid var(--glass-border);
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 100px;
+        padding: 10px 16px;
+        font-family: var(--font-body);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-light);
+        outline: none;
+        transition: all 0.3s;
+      }
+      .courier-chat-text-input:focus {
+        border-color: var(--theme-toggle-color);
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .courier-chat-send-btn {
+        background: var(--theme-toggle-color);
+        color: #070b13;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13.5px;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px var(--brand-teal-glow);
+      }
+      .courier-chat-send-btn:hover {
+        transform: scale(1.08);
+      }
+
+      /* ==========================================
+         💬 GLASSMORPHISM CHAT SYSTEM (PT-PT LOCALIZED)
+         ========================================== */
+      .chat-float-btn {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: rgba(45, 212, 191, 0.2);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2dd4bf;
+        font-size: 22px;
+        cursor: pointer;
+        z-index: 999;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: pulseTealGlow 2s infinite;
+      }
+
+      @keyframes pulseTealGlow {
+        0% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4); }
+        70% { box-shadow: 0 0 0 15px rgba(45, 212, 191, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+      }
+
+      @keyframes shakeToggle {
+        0%, 100% { transform: scale(1); }
+        25% { transform: scale(1.1) rotate(-10deg); }
+        75% { transform: scale(1.1) rotate(10deg); }
+      }
+
+      .chat-float-btn:hover {
+        transform: scale(1.1) rotate(5deg);
+        background: rgba(45, 212, 191, 0.3);
+        color: #5eead4;
+      }
+
+      .chat-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 14px;
+        height: 14px;
+        background-color: #ef4444;
+        border-radius: 50%;
+        border: 2px solid #0d111a;
+        box-shadow: 0 0 8px #ef4444;
+      }
+
+      .chat-drawer-container {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        max-width: 420px;
+        height: 80%;
+        max-height: 600px;
+        background: rgba(13, 17, 26, 0.85);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .chat-drawer-container.open {
+        transform: translateY(0);
+      }
+
+      .chat-header-custom {
+        padding: 18px 24px;
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .chat-messages-container {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        scroll-behavior: smooth;
+      }
+
+      .chat-message-bubble {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: 16px;
+        font-size: 13.5px;
+        line-height: 1.5;
+        position: relative;
+        word-wrap: break-word;
+        animation: slideUpIn 0.3s ease;
+      }
+
+      @keyframes slideUpIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .chat-message-bubble.client {
+        background: rgba(45, 212, 191, 0.15);
+        border: 1px solid rgba(45, 212, 191, 0.25);
+        color: #e2e8f0;
+        align-self: flex-start; /* Cliente es el remitente externo para el repartidor */
+        border-bottom-left-radius: 4px;
+      }
+
+      .chat-message-bubble.courier {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #e2e8f0;
+        align-self: flex-end; /* Repartidor es el remitente local */
+        border-bottom-right-radius: 4px;
+      }
+
+      .chat-message-bubble.system {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        color: #94a3b8;
+        font-style: italic;
+        font-size: 11px;
+        text-align: center;
+        align-self: center;
+        max-width: 90%;
+        border-radius: 10px;
+        padding: 6px 12px;
+      }
+
+      .chat-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 6px;
+        font-size: 10px;
+        color: #94a3b8;
+        gap: 10px;
+      }
+
+      .chat-translate-btn {
+        background: none;
+        border: none;
+        color: #2dd4bf;
+        cursor: pointer;
+        padding: 2px 6px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 700;
+        transition: background 0.2s;
+      }
+
+      .chat-translate-btn:hover {
+        background: rgba(45, 212, 191, 0.1);
+        color: #5eead4;
+      }
+
+      .chat-translated-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(45, 212, 191, 0.15);
+        border: 1px solid rgba(45, 212, 191, 0.3);
+        color: #2dd4bf;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 9px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 0 6px rgba(45, 212, 191, 0.2);
+      }
+
+      .chat-input-area {
+        padding: 16px 20px;
+        background: rgba(255, 255, 255, 0.01);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .chat-text-input {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 12px 16px;
+        color: #f1f5f9;
+        font-size: 13.5px;
+        outline: none;
+        transition: all 0.3s;
+      }
+
+      .chat-text-input:focus {
+        border-color: rgba(45, 212, 191, 0.4);
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 0 10px rgba(45, 212, 191, 0.1);
+      }
+
+      .chat-send-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: #2dd4bf;
+        color: #0d111a;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 0 12px rgba(45, 212, 191, 0.3);
+      }
+
+      .chat-send-btn:hover {
+        background: #5eead4;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(45, 212, 191, 0.4);
+      }
+
+      .chat-send-btn:active {
+        transform: translateY(0);
+      }
+
+      /* ==========================================
+         🎚️ SLIDE TO DELIVER STYLES (PREMIUM GESTURE)
+         ========================================== */
+      .slide-to-deliver-container {
+        position: relative;
+        width: 100%;
+        height: 56px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 15px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        user-select: none;
+      }
+      
+      .slide-text {
+        font-family: var(--font-title);
+        font-weight: 800;
+        font-size: 13.5px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #94a3b8;
+        z-index: 1;
+        pointer-events: none;
+        transition: opacity 0.3s;
+      }
+      
+      .slide-fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, rgba(45, 212, 191, 0.1), rgba(45, 212, 191, 0.3));
+        border-right: 1px solid rgba(45, 212, 191, 0.5);
+        pointer-events: none;
+      }
+      
+      .slide-handle {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: #2dd4bf;
+        color: #0d111a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        cursor: grab;
+        box-shadow: 0 4px 15px rgba(45, 212, 191, 0.4);
+        z-index: 2;
+        transition: background-color 0.2s, transform 0.1s;
+      }
+      
+      .slide-handle:active {
+        cursor: grabbing;
+        background-color: #5eead4;
+        transform: scale(0.98);
+      }
+      
+      /* Glowing Pulsating Recolha Button */
+      .action-workflow-btn.pulse-recolha {
+        animation: pulseTeal 1.5s infinite;
+        background: #2dd4bf !important;
+        color: #0d111a !important;
+        font-weight: 800 !important;
+        box-shadow: 0 0 15px rgba(45, 212, 191, 0.6) !important;
+      }
+      
+      @keyframes pulseTeal {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.7); }
+        70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(45, 212, 191, 0); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+      }
+
+      /* LIGHT THEME FOR SLIDER & CHAT */
+      body.light-theme .slide-to-deliver-container {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.08);
+      }
+      body.light-theme .slide-text {
+        color: #64748b;
+      }
+      body.light-theme .slide-fill {
+        background: linear-gradient(90deg, rgba(13, 148, 136, 0.1), rgba(13, 148, 136, 0.25));
+        border-right-color: rgba(13, 148, 136, 0.4);
+      }
+      body.light-theme .slide-handle {
+        background: #0d9488;
+        color: #ffffff;
+        box-shadow: 0 4px 15px rgba(13, 148, 136, 0.3);
+      }
+      body.light-theme .slide-handle:active {
+        background-color: #0f766e;
+      }
+      body.light-theme .chat-drawer-container {
+        background: rgba(248, 250, 252, 0.95);
+        border-color: rgba(0, 0, 0, 0.08);
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+      }
+      body.light-theme .chat-header-custom {
+        background: rgba(0, 0, 0, 0.02);
+        border-bottom-color: rgba(0, 0, 0, 0.06);
+      }
+      body.light-theme .chat-message-bubble.client {
+        background: rgba(13, 148, 136, 0.12);
+        border-color: rgba(13, 148, 136, 0.2);
+        color: #0f172a;
+      }
+      body.light-theme .chat-message-bubble.courier {
+        background: rgba(0, 0, 0, 0.04);
+        border-color: rgba(0, 0, 0, 0.06);
+        color: #1e293b;
+      }
+      body.light-theme .chat-text-input {
+        background: rgba(0, 0, 0, 0.02);
+        border-color: rgba(0, 0, 0, 0.08);
+        color: #1e293b;
+      }
+      body.light-theme .chat-text-input:focus {
+        border-color: #0d9488;
+        background: rgba(0, 0, 0, 0.04);
+      }
+      body.light-theme .chat-meta {
+        color: #64748b;
+      }
+      body.light-theme .chat-send-btn {
+        background: #0d9488;
+        color: #ffffff;
+        box-shadow: 0 0 12px rgba(13, 148, 136, 0.2);
+      }
+      body.light-theme .chat-send-btn:hover {
+        background: #0f766e;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 📱 TOP BAR -->
+    <header>
+      <div class="header-title-container">
+        <h1 class="header-title">
+          <i class="fas fa-satellite-dish"></i> Radar de Envíos Estafeta
+        </h1>
+        <div class="courier-info">
+          Repartidor ID: #{{ courier_id }}
+        </div>
+      </div>
+      <button type="button" class="theme-toggle-btn" id="theme-btn" title="Alternar Modo Claro/Oscuro">
+        <i class="fas fa-moon" id="theme-icon"></i>
+      </button>
+    </header>
+
+    <!-- 📱 PANEL CENTRAL -->
+    <main>
+      <!-- SECTION 1: RADAR SCANNER AND LIST OF OFFERS -->
+      <div id="radar-search-view">
+        <div class="radar-scanner-wrapper" style="margin-bottom: 20px;">
+          <div class="radar-scanner">
+            <div class="radar-sweep"></div>
+            <div class="radar-crosshair-x"></div>
+            <div class="radar-crosshair-y"></div>
+            <div class="radar-ring ring-1"></div>
+            <div class="radar-ring ring-2"></div>
+            <div class="radar-ring ring-3"></div>
+            <div class="radar-ping ping-1"></div>
+            <div class="radar-ping ping-2"></div>
+            <div class="radar-ping ping-3"></div>
+          </div>
+          <div class="radar-status-text">
+            <span class="pulse-indicator"></span> Satélites buscando comisiones
+          </div>
+        </div>
+
+        <div class="gps-status" style="margin-bottom: 20px;">
+          <span class="gps-text">Ubicación Satelital del Dispositivo</span>
+          <span class="gps-indicator" id="gps-label">Buscando GPS...</span>
+        </div>
+
+        <h2 class="section-title" style="margin-bottom: 16px;">
+          <i class="fas fa-map-marker-alt"></i> Ofertas en tu Zona
+        </h2>
+
+        <div id="radar-container">
+          <div id="no-offers" class="scanner-placeholder">
+            <div class="scanner-pulse-ring">
+              <i class="fas fa-satellite"></i>
+            </div>
+            <div>📡 Escaneando mapa en busca de pedidos listos en cocina...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ACTIVE DELIVERY ROUTING PANEL -->
+      <div id="active-delivery-view" style="display: none;">
+        <div class="card">
+          <h2 class="section-title">
+            <i class="fas fa-navigation"></i> Entrega en Progreso (#<span id="active-order-id">0</span>)
+          </h2>
+          
+          <div class="gps-mode-selector">
+            <button type="button" class="gps-pill-btn active" id="btn-gps-real">
+              <i class="fas fa-mobile-alt"></i> GPS Real (Dispositivo)
+            </button>
+            <button type="button" class="gps-pill-btn" id="btn-gps-sim">
+              <i class="fas fa-robot"></i> Simular Ruta (Demo)
+            </button>
+          </div>
+
+          <div class="map-wrapper">
+            <div id="active-map"></div>
+          </div>
+
+          <div class="delivery-details">
+            <div><strong>Restaurante:</strong> <span id="active-rest-name">Establecimiento</span></div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;"><i class="fas fa-store"></i> <span id="active-rest-address">Calle de Origen</span></div>
+            <div><strong>Cliente Destino:</strong> Dirección Registrada</div>
+            <div style="font-size: 11px; color: var(--text-muted);"><i class="fas fa-home"></i> <span id="active-client-address">Calle del Destino</span></div>
+          </div>
+
+          <div id="gps-coordinates-readout" style="font-size: 11px; font-weight: 800; color: var(--theme-toggle-color); text-align: center; font-family: monospace;">
+            Ubicación GPS: Esperando señal...
+          </div>
+
+          <!-- Botão pulsante para Recolha -->
+          <button type="button" class="action-workflow-btn pulse-recolha" id="btn-delivery-action">
+            Recolher de Cozinha (Retirar Pedido) 🛵
+          </button>
+
+          <!-- premium Slider-to-Deliver para Entrega -->
+          <div id="slide-to-deliver-wrapper" style="display: none;">
+            <div class="slide-to-deliver-container">
+              <div class="slide-fill" id="slide-fill"></div>
+              <div class="slide-handle" id="slide-handle">
+                <i class="fas fa-angle-double-right"></i>
+              </div>
+              <span class="slide-text">Deslizar para entregar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 📞 BOTÓN FLOTANTE SOPORTE COURIER -->
+    <div class="courier-support-float" onclick="toggleCourierSupport(true)">
+      <i class="fas fa-headset"></i> Suporte Técnico
+    </div>
+
+    <!-- 📱 DRAWER LATERAL DE SOPORTE -->
+    <div id="support-drawer-courier" class="support-drawer">
+      <div class="drawer-header-custom">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 20px;">📞</span>
+          <div>
+            <div style="font-family: var(--font-title); font-weight: 800; font-size: 15px; letter-spacing: -0.2px;">Suporte de Rotas</div>
+            <div style="font-size: 11px; opacity: 0.85; font-weight: 600;">Assistente Técnico On-duty</div>
+          </div>
+        </div>
+        <button onclick="toggleCourierSupport(false)" class="drawer-close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="drawer-content-scroll">
+        <!-- Central de Ajuda -->
+        <div>
+          <h2 class="section-title" style="font-size: 14px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--theme-toggle-color);">
+            <i class="fas fa-book-open"></i> Central de Ajuda
+          </h2>
+          <div class="search-wrapper" style="margin-bottom: 14px; position: relative;">
+            <i class="fas fa-search search-icon" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--text-muted); pointer-events: none;"></i>
+            <input
+              type="text"
+              id="faq-courier-search"
+              placeholder="Pesquisar ajuda para entregas..."
+              class="search-box"
+              style="padding: 10px 10px 10px 40px; font-size: 13px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); width: 100%; color: var(--text-light); outline: none;"
+              oninput="filterCourierFAQs()"
+            />
+          </div>
+
+          <div id="faq-courier-container">
+            <!-- FAQ 1 -->
+            <div class="faq-rider-card" data-keywords="aceitar comissao corrida comissao rota">
+              <div class="faq-rider-header" onclick="toggleRiderFAQ(this)">
+                ¿Cómo puedo aceptar una corrida?
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="faq-rider-content">
+                <div class="faq-rider-content-inner">
+                  Quando o KDS do restaurante finaliza um pedido, ele aparece no seu Radar no painel central. Basta clicar em <strong>Aceptar Comisión</strong> e a rota de geolocalização no Google Maps se abrirá de forma integrada e automática.
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="faq-rider-card" data-keywords="gps simulador erro falha localizacao rota">
+              <div class="faq-rider-header" onclick="toggleRiderFAQ(this)">
+                ¿Problema con el GPS o Simulador?
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="faq-rider-content">
+                <div class="faq-rider-content-inner">
+                  O GPS do dispositivo móvel usa geolocalización por satélite nativa. Em computadores desktop sem hardware de GPS físico, o sistema ativa automaticamente o <strong>Simulador de Rota cinemático</strong> para você realizar testes fluidos.
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="faq-rider-card" data-keywords="atraso demora restaurante loja espera comanda">
+              <div class="faq-rider-header" onclick="toggleRiderFAQ(this)">
+                ¿El restaurante está demorando?
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="faq-rider-content">
+                <div class="faq-rider-content-inner">
+                  Se estiver no restaurante e houver demora superior ao previsto, você pode usar o chat automático de suporte abaixo e selecionar <strong>Atraso no Restaurante</strong>. Nossa central enviará um alerta visual de alta visibilidade intermitente (vermelho piscante) ao KDS da cozinha.
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="faq-rider-card" data-keywords="dinheiro comissoes saldo carteira ganhos sacar">
+              <div class="faq-rider-header" onclick="toggleRiderFAQ(this)">
+                ¿Cómo cobro mis comisiones?
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="faq-rider-content">
+                <div class="faq-rider-content-inner">
+                  Por cada entrega que completes marcando-a como 'Entregado' no painel, o sistema adiciona uma tarifa garantida de +3.50€ de forma instantânea ao seu perfil de entregador. Os saques são processados todas as sextas-feiras pela central.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat de incidentes -->
+        <div>
+          <h2 class="section-title" style="font-size: 14px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--theme-toggle-color);">
+            <i class="fas fa-comment-dots"></i> Suporte de Incidentes
+          </h2>
+          <div class="courier-chat-container">
+            <div id="courier-chat-messages-box" class="courier-chat-messages">
+              <!-- Mensajes dinámicos -->
+            </div>
+            <div class="courier-chat-input-area">
+              <input
+                type="text"
+                id="courier-chat-input"
+                placeholder="Ex: atraso restaurante, falha de gps..."
+                class="courier-chat-text-input"
+                onkeypress="handleCourierChatKeyPress(event)"
+              />
+              <button onclick="sendCourierUserMessage()" class="courier-chat-send-btn">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 💬 BOTÓN FLOTANTE CHAT COURIER -->
+    <div class="chat-float-btn" id="chat-toggle-btn" style="display: none;">
+      <i class="fas fa-comments"></i>
+      <span class="chat-badge" id="chat-unread-dot" style="display: none;"></span>
+    </div>
+
+    <!-- 📱 DRAWER LATERAL DE CHAT COURIER-CLIENT -->
+    <div id="chat-drawer-container" class="chat-drawer-container">
+      <div class="chat-header-custom">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 20px;">💬</span>
+          <div>
+            <div style="font-family: var(--font-title); font-weight: 800; font-size: 15px; letter-spacing: -0.2px;">Chat com Cliente</div>
+            <div style="font-size: 11px; opacity: 0.85; font-weight: 600;">Canal Direto de Entrega</div>
+          </div>
+        </div>
+        <button id="chat-close-btn" class="drawer-close-btn" style="background: none; border: none; color: var(--text-light); font-size: 18px; cursor: pointer;">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="chat-messages-container" id="chat-messages-box">
+        <!-- Mensajes dinámicos -->
+      </div>
+
+      <div class="chat-input-area">
+        <input
+          type="text"
+          id="chat-message-input"
+          placeholder="Escreva uma mensagem para o cliente..."
+          class="chat-text-input"
+        />
+        <button id="chat-send-btn" class="chat-send-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </main>
+
+    <!-- ⚡ GOOGLE MAPS API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuk-nI03nHTHyC_fjIKH4uMbNPYwFogtw&libraries=places,directions"></script>
+
+    <!-- 📱 MOTOR DE RADAR, GPS REAL Y SIMULADOR -->
+    <script>
+      // MAP STYLE PALETTES
+      const darkMapStyles = [
+        { elementType: "geometry", stylers: [{ color: "#161b26" }] },
+        { elementType: "labels.text.stroke", stylers: [{ color: "#161b26" }] },
+        { elementType: "labels.text.fill", stylers: [{ color: "#5d6d7e" }] },
+        { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#2dd4bf" }] },
+        { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#0d111a" }] },
+        { featureType: "poi", elementType: "geometry", stylers: [{ color: "#161b26" }] },
+        { featureType: "road", elementType: "geometry", stylers: [{ color: "#212836" }] },
+        { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#1b212c" }] },
+        { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#2c3e50" }] },
+        { featureType: "water", elementType: "geometry", stylers: [{ color: "#0a0d14" }] }
+      ];
+
+      const lightMapStyles = [
+        { elementType: "geometry", stylers: [{ color: "#f8fafc" }] },
+        { elementType: "labels.text.fill", stylers: [{ color: "#475569" }] },
+        { elementType: "labels.text.stroke", stylers: [{ color: "#f8fafc" }] },
+        { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#f1f5f9" }] },
+        { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
+        { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#e2e8f0" }] },
+        { featureType: "water", elementType: "geometry", stylers: [{ color: "#cbd5e1" }] }
+      ];
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // 📞 LÓGICA DE SOPORTE PARA EL REPARTIDOR (COURIER SUPPORT ENGINE)
+        let courierChatMessages = [];
+        
+        window.toggleCourierSupport = function(show) {
+          const drawer = document.getElementById("support-drawer-courier");
+          if (show) {
+            drawer.classList.add("open");
+            initializeCourierChat();
+          } else {
+            drawer.classList.remove("open");
+          }
+        };
+
+        window.toggleRiderFAQ = function(headerElement) {
+          const card = headerElement.parentElement;
+          const content = card.querySelector(".faq-rider-content");
+          
+          if (card.classList.contains("open")) {
+            card.classList.remove("open");
+            content.style.maxHeight = null;
+          } else {
+            document.querySelectorAll(".faq-rider-card").forEach(c => {
+              c.classList.remove("open");
+              c.querySelector(".faq-rider-content").style.maxHeight = null;
+            });
+            card.classList.add("open");
+            content.style.maxHeight = content.scrollHeight + "px";
+          }
+        };
+
+        window.filterCourierFAQs = function() {
+          const query = document.getElementById("faq-courier-search").value.toLowerCase().trim();
+          const cards = document.querySelectorAll("#faq-courier-container .faq-rider-card");
+          
+          cards.forEach(card => {
+            const title = card.querySelector(".faq-rider-header").textContent.toLowerCase();
+            const content = card.querySelector(".faq-rider-content-inner").textContent.toLowerCase();
+            const keywords = card.getAttribute("data-keywords").toLowerCase();
+            
+            if (title.includes(query) || content.includes(query) || keywords.includes(query)) {
+              card.style.display = "block";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        };
+
+        function initializeCourierChat() {
+          const chatBox = document.getElementById("courier-chat-messages-box");
+          const history = localStorage.getItem("app_courier_chat_history");
+          
+          if (history) {
+            courierChatMessages = JSON.parse(history);
+            renderCourierChat();
+          } else {
+            courierChatMessages = [
+              { sender: 'bot', text: 'Olá Repartidor! Sou o seu assistente de rotas Premium. Como posso ajudar com sua entrega ativa ou ganhos?' }
+            ];
+            saveCourierChat();
+            renderCourierChat();
+          }
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function saveCourierChat() {
+          localStorage.setItem("app_courier_chat_history", JSON.stringify(courierChatMessages));
+        }
+
+        function renderCourierChat() {
+          const chatBox = document.getElementById("courier-chat-messages-box");
+          chatBox.innerHTML = "";
+          
+          courierChatMessages.forEach(msg => {
+            const bubble = document.createElement("div");
+            bubble.className = `courier-msg-bubble ${msg.sender}`;
+            bubble.innerHTML = msg.text;
+            chatBox.appendChild(bubble);
+          });
+          
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        window.handleCourierChatKeyPress = function(e) {
+          if (e.key === 'Enter') {
+            sendCourierUserMessage();
+          }
+        };
+
+        window.sendCourierUserMessage = function() {
+          const input = document.getElementById("courier-chat-input");
+          const text = input.value.trim();
+          if (!text) return;
+          
+          input.value = "";
+          courierChatMessages.push({ sender: 'user', text: text });
+          saveCourierChat();
+          renderCourierChat();
+          
+          showCourierTyping();
+          
+          setTimeout(() => {
+            removeCourierTyping();
+            const response = getCourierBotResponse(text);
+            courierChatMessages.push({ sender: 'bot', text: response });
+            saveCourierChat();
+            renderCourierChat();
+          }, 1200);
+        };
+
+        function showCourierTyping() {
+          const chatBox = document.getElementById("courier-chat-messages-box");
+          const indicator = document.createElement("div");
+          indicator.className = "typing-indicator";
+          indicator.id = "courier-typing-indicator";
+          indicator.style.background = "rgba(255, 255, 255, 0.05)";
+          indicator.style.border = "1px solid var(--glass-border)";
+          indicator.innerHTML = `
+            <span class="typing-dot" style="background: var(--text-muted);"></span>
+            <span class="typing-dot" style="background: var(--text-muted);"></span>
+            <span class="typing-dot" style="background: var(--text-muted);"></span>
+          `;
+          chatBox.appendChild(indicator);
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function removeCourierTyping() {
+          const node = document.getElementById("courier-typing-indicator");
+          if (node) node.remove();
+        }
+
+        function getCourierBotResponse(userInput) {
+          const input = userInput.toLowerCase();
+          
+          if (input.includes("atraso") || input.includes("demora") || input.includes("loja") || input.includes("restaurante") || input.includes("espera")) {
+            return "Entendido. Enviamos um sinal de urgência visual ao KDS do restaurante. Por favor, aguarde na área de coleta. O painel da cozinha piscará para priorizar o seu ticket.";
+          }
+          if (input.includes("gps") || input.includes("rota") || input.includes("simulador") || input.includes("erro") || input.includes("mapa")) {
+            return "Se o GPS nativo falhar, clique no botão <strong>Simular Ruta</strong> no painel de entrega ativa para completar o trajeto cinemático de testes.";
+          }
+          if (input.includes("cliente") || input.includes("morada") || input.includes("casa") || input.includes("atende")) {
+            return "Tente buzinar sutilmente ou fazer contato telefônico. Se o cliente não responder em 5 minutos, você pode retornar à central com a comanda.";
+          }
+          if (input.includes("dinheiro") || input.includes("comissão") || input.includes("ganho") || input.includes("saldo") || input.includes("carteira")) {
+            return "Cada entrega bem-sucedida gera +3.50€ garantidos à sua conta. Saques automáticos todas as sextas-feiras.";
+          }
+          if (input.includes("falar") || input.includes("atendente") || input.includes("central") || input.includes("suporte")) {
+            connectToCourierCentral();
+            return "<i>Redirecionando você para o despachador de rotas da Central...</i>";
+          }
+          
+          return "Desculpe, não captei perfeitamente sua dúvida técnica. Tente pesquisar na Central de Ajuda acima ou envie 'falar com a central' para suporte humano.";
+        }
+
+        function connectToCourierCentral() {
+          showCourierTyping();
+          
+          setTimeout(() => {
+            removeCourierTyping();
+            courierChatMessages.push({ sender: 'bot', text: '<i>Conectado com a central de despacho em tempo real...</i>' });
+            renderCourierChat();
+            
+            showCourierTyping();
+            
+            setTimeout(() => {
+              removeCourierTyping();
+              courierChatMessages.push({ sender: 'agent', text: '👩‍💻 <b>Central Mariana:</b> Olá Repartidor! Vi seu status no radar de rotas. O que está acontecendo com sua comanda ativa?' });
+              saveCourierChat();
+              renderCourierChat();
+            }, 1800);
+          }, 1000);
+        }
+
+        const courierId = parseInt("{{ courier_id }}") || 1;
+        const radar = document.getElementById("radar-container");
+        const noOffersMessage = document.getElementById("no-offers");
+        const themeBtn = document.getElementById("theme-btn");
+        const themeIcon = document.getElementById("theme-icon");
+
+        const radarView = document.getElementById("radar-search-view");
+        const activeView = document.getElementById("active-delivery-view");
+
+        let activeOrderId = null;
+        let activeOrderData = null;
+        let activeMap = null;
+        let directionsService = null;
+        let directionsRenderer = null;
+        let courierMarker = null;
+
+        // GPS Tracking states
+        let gpsMode = "real"; // "real" or "sim"
+        let watchPositionId = null;
+        let simulationIntervalId = null;
+        let simulatedRouteCoords = [];
+        let simulatedStepIndex = 0;
+
+        // Mock coordinates for Sol/Retiro Madrid
+        const fallbackCourierStart = { lat: 40.415000, lng: -3.708000 };
+        const fallbackRestCoord = { lat: 40.416775, lng: -3.703790 };
+        const fallbackClientCoord = { lat: 40.420300, lng: -3.688600 };
+
+        // 🌗 LIGHT/DARK THEME INITIALIZATION AND PERSISTENCE
+        let currentTheme = localStorage.getItem("app_courier_theme") || "dark";
+        if (currentTheme === "light") {
+          document.body.classList.add("light-theme");
+          themeIcon.className = "fas fa-sun";
+        }
+
+        themeBtn.addEventListener("click", () => {
+          if (document.body.classList.contains("light-theme")) {
+            document.body.classList.remove("light-theme");
+            themeIcon.className = "fas fa-moon";
+            currentTheme = "dark";
+          } else {
+            document.body.classList.add("light-theme");
+            themeIcon.className = "fas fa-sun";
+            currentTheme = "light";
+          }
+          localStorage.setItem("app_courier_theme", currentTheme);
+          
+          if (activeMap) {
+            activeMap.setOptions({
+              styles: currentTheme === "light" ? lightMapStyles : darkMapStyles
+            });
+          }
+        });
+
+        // 🌟 TOAST NOTIFICATION SYSTEM
+        function showToast(title, message, type = "success") {
+          const toast = document.createElement("div");
+          toast.className = `custom-toast`;
+          toast.innerHTML = `
+            <div class="toast-icon">
+              ${type === 'success' ? '⚡' : '⚠️'}
+            </div>
+            <div class="toast-content">
+              <div class="toast-title">${title}</div>
+              <div class="toast-message">${message}</div>
+            </div>
+          `;
+          document.body.appendChild(toast);
+          
+          setTimeout(() => toast.classList.add("show"), 10);
+          
+          setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => toast.remove(), 450);
+          }, 3500);
+        }
+
+        // Initialize socket client
+        const socket = io(window.location.origin);
+
+        const gpsLabel = document.getElementById("gps-label");
+        if (gpsLabel) {
+          gpsLabel.textContent = "GPS ACTIVO (REAL)";
+        }
+
+        // 1. Fetch available orders in area
+        fetch("/api/v1/couriers/available-orders")
+          .then((res) => res.json())
+          .then((orders) => {
+            if (orders && orders.length > 0) {
+              noOffersMessage.style.display = "none";
+              orders.forEach((order) => renderOfferCard(order));
+            }
+          })
+          .catch((err) => {
+            console.error("Error cargando rutas:", err);
+            showToast("Fallo Satelital", "No se pudo sincronizar la red de reparto.", "error");
+          });
+
+        // 2. Real-time offer notification via WebSockets
+        socket.on("oferta_disponible", (data) => {
+          if (noOffersMessage) noOffersMessage.style.display = "none";
+          renderOfferCard({
+            id: data.order_id,
+            restaurant_id: data.restaurant_id,
+          });
+          showToast("¡Nueva Comisión!", `Establecimiento #${data.restaurant_id} sacó comanda lista para reparto.`, "success");
+        });
+
+        function renderOfferCard(order) {
+          if (document.getElementById(`offer-${order.id}`)) return;
+
+          const card = document.createElement("div");
+          card.id = `offer-${order.id}`;
+          card.className = "offer-card";
+          card.innerHTML = `
+            <div class="offer-header">
+              <span>📦 Ruta de Reparto (#${order.id})</span>
+              <span class="offer-badge">+3.50 €</span>
+            </div>
+            <div class="offer-body">
+              <strong>Punto de Recogida:</strong> Comercio #${order.restaurant_id}<br>
+              <strong>Entrega final:</strong> Dirección Registrada del Cliente
+            </div>
+            <button class="accept-btn" onclick="acceptDelivery(${order.id})">
+              <i class="fas fa-motorcycle"></i> Aceptar Comisión
+            </button>
+          `;
+          radar.appendChild(card);
+        }
+
+        // 3. Accept order and transition to live routing dashboard
+        window.acceptDelivery = function (orderId) {
+          fetch(`/api/v1/couriers/orders/${orderId}/accept`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ courier_id: courierId }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.error) {
+                showToast("Acción Denegada", data.error, "error");
+                return;
+              }
+
+              const targetCard = document.getElementById(`offer-${orderId}`);
+              if (targetCard) targetCard.remove();
+
+              showToast("¡Viaje Aceptado!", "Estableciendo coordenadas y ruta de navegación...", "success");
+
+              // Fetch detailed address information
+              fetch(`/api/v1/clients/orders/${orderId}`)
+                .then(res => res.json())
+                .then(orderData => {
+                  activeOrderId = orderId;
+                  activeOrderData = orderData;
+                  
+                  // Hide radar search view, slide in navigation map view
+                  radarView.style.display = "none";
+                  activeView.style.display = "block";
+                  
+                  document.getElementById("active-order-id").textContent = orderId;
+                  document.getElementById("active-rest-name").textContent = orderData.restaurant.name;
+                  document.getElementById("active-rest-address").textContent = orderData.restaurant.address || "Origen";
+                  document.getElementById("active-client-address").textContent = orderData.client.address || "Destino";
+
+                  // Enable and show client-courier chat float button
+                  document.getElementById("chat-toggle-btn").style.display = "flex";
+                  socket.emit("join_order_chat", { order_id: orderId });
+
+                  // Set Button workflow to Pickup phase
+                  setupWorkflowButton("pickup");
+
+                  // Load dynamic map routing
+                  initActiveDeliveryMap(orderData.restaurant.address, orderData.client.address);
+                });
+            })
+            .catch((err) => {
+              console.error(err);
+              showToast("Error de Red", "No se pudo comunicar con el servidor.", "error");
+            });
+        };
+
+        // 🗺️ INITIALIZE NATIVE ACTIVE DELIVERY GOOGLE MAPS
+        function initActiveDeliveryMap(originAddress, destinationAddress) {
+          directionsService = new google.maps.DirectionsService();
+          directionsRenderer = new google.maps.DirectionsRenderer({
+            polylineOptions: {
+              strokeColor: currentTheme === "light" ? "#0d9488" : "#2dd4bf",
+              strokeWeight: 6,
+              strokeOpacity: 0.9
+            },
+            suppressMarkers: true
+          });
+
+          const mapOptions = {
+            zoom: 14,
+            center: fallbackRestCoord,
+            styles: currentTheme === "light" ? lightMapStyles : darkMapStyles,
+            disableDefaultUI: true,
+            zoomControl: true
+          };
+
+          activeMap = new google.maps.Map(document.getElementById("active-map"), mapOptions);
+          directionsRenderer.setMap(activeMap);
+
+          // Get directions & coordinates
+          calculateActiveNavigationRoute(originAddress, destinationAddress);
+        }
+
+        function calculateActiveNavigationRoute(origin, dest) {
+          const request = {
+            origin: origin,
+            destination: dest,
+            travelMode: 'DRIVING'
+          };
+
+          directionsService.route(request, (result, status) => {
+            if (status === 'OK') {
+              directionsRenderer.setDirections(result);
+              
+              // Draw static markers
+              const leg = result.routes[0].legs[0];
+              
+              // Restaurant marker
+              new google.maps.Marker({
+                position: leg.start_location,
+                map: activeMap,
+                title: "Establecimiento Origen",
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 8,
+                  fillColor: "#f59e0b",
+                  fillOpacity: 1,
+                  strokeColor: "#ffffff",
+                  strokeWeight: 2
+                }
+              });
+
+              // Client marker
+              new google.maps.Marker({
+                position: leg.end_location,
+                map: activeMap,
+                title: "Casa del Cliente",
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 8,
+                  fillColor: "#10b981",
+                  fillOpacity: 1,
+                  strokeColor: "#ffffff",
+                  strokeWeight: 2
+                }
+              });
+
+              // Compile simulated coordinates along the actual road vectors
+              simulatedRouteCoords = result.routes[0].overview_path;
+              simulatedStepIndex = 0;
+
+            } else {
+              // Fallback routing if text directions fail in mock environments
+              plotActiveFallbackRoute();
+            }
+          });
+        }
+
+        function plotActiveFallbackRoute() {
+          const request = {
+            origin: fallbackRestCoord,
+            destination: fallbackClientCoord,
+            travelMode: 'DRIVING'
+          };
+
+          directionsService.route(request, (result, status) => {
+            if (status === 'OK') {
+              directionsRenderer.setDirections(result);
+              
+              new google.maps.Marker({
+                position: fallbackRestCoord,
+                map: activeMap,
+                title: "Establecimiento Origen",
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 8,
+                  fillColor: "#f59e0b",
+                  fillOpacity: 1,
+                  strokeColor: "#ffffff",
+                  strokeWeight: 2
+                }
+              });
+
+              new google.maps.Marker({
+                position: fallbackClientCoord,
+                map: activeMap,
+                title: "Cliente Destino",
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 8,
+                  fillColor: "#10b981",
+                  fillOpacity: 1,
+                  strokeColor: "#ffffff",
+                  strokeWeight: 2
+                }
+              });
+
+              simulatedRouteCoords = result.routes[0].overview_path;
+              simulatedStepIndex = 0;
+            }
+          });
+        }
+
+        // 🎛️ WORKFLOW BUTTON STATES (PICKUP -> TRANSIT -> FINISH)
+        function setupWorkflowButton(phase) {
+          const mainActionBtn = document.getElementById("btn-delivery-action");
+          const sliderWrapper = document.getElementById("slide-to-deliver-wrapper");
+          
+          if (phase === "pickup") {
+            mainActionBtn.style.display = "block";
+            mainActionBtn.className = "action-workflow-btn pulse-recolha";
+            mainActionBtn.textContent = "Recolher de Cozinha (Confirmar Recolha) 🛵";
+            sliderWrapper.style.display = "none";
+            mainActionBtn.onclick = () => {
+              updateOrderStatus("start");
+            };
+          } else if (phase === "transit") {
+            mainActionBtn.style.display = "none";
+            sliderWrapper.style.display = "block";
+            initSlideToDeliver();
+          }
+        }
+
+        // Send status modifications to backend
+        function updateOrderStatus(action) {
+          const mainActionBtn = document.getElementById("btn-delivery-action");
+          mainActionBtn.disabled = true;
+          mainActionBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Comunicando satélite...';
+
+          fetch(`/api/v1/couriers/orders/${activeOrderId}/status`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: action })
+          })
+            .then(res => res.json())
+            .then(data => {
+              mainActionBtn.disabled = false;
+              if (data.error) {
+                showToast("Acción bloqueada", data.error, "error");
+                setupWorkflowButton(action === "start" ? "pickup" : "transit");
+                return;
+              }
+
+              if (action === "start") {
+                showToast("Pedido retirado", "Comienza el reparto en vivo. ¡Vía segura!", "success");
+                setupWorkflowButton("transit");
+                
+                // Start streaming coordinates
+                activateGPSTracking();
+              } else if (action === "complete") {
+                showToast("¡Viaje Exitoso!", "Servicio marcado como ENTREGADO correctamente.", "success");
+                
+                // Reset chat drawer
+                document.getElementById("chat-toggle-btn").style.display = "none";
+                document.getElementById("chat-drawer-container").classList.remove("open");
+                document.getElementById("chat-messages-box").innerHTML = "";
+
+                // Terminate tracking
+                stopGPSTracking();
+                
+                // Reset view to radar search
+                activeOrderId = null;
+                activeView.style.display = "none";
+                radarView.style.display = "block";
+                
+                if (radar.children.length === 1) {
+                  noOffersMessage.style.display = "block";
+                }
+              }
+            })
+            .catch(err => {
+              mainActionBtn.disabled = false;
+              console.error(err);
+              showToast("Fallo de red", "Sin señal con servidor central.", "error");
+            });
+        }
+
+        // 🛰️ COURIER GEOLOCATION STREAMING MOTOR (REAL DEVICE GPS VS ROUTE SIMULATOR)
+        const btnGpsReal = document.getElementById("btn-gps-real");
+        const btnGpsSim = document.getElementById("btn-gps-sim");
+
+        btnGpsReal.addEventListener("click", () => {
+          if (gpsMode === "real") return;
+          gpsMode = "real";
+          btnGpsReal.classList.add("active");
+          btnGpsSim.classList.remove("active");
+          
+          if (watchPositionId || simulationIntervalId) {
+            // Hot reload tracking
+            stopGPSTracking();
+            activateGPSTracking();
+          }
+        });
+
+        btnGpsSim.addEventListener("click", () => {
+          if (gpsMode === "sim") return;
+          gpsMode = "sim";
+          btnGpsSim.classList.add("active");
+          btnGpsReal.classList.remove("active");
+          
+          if (watchPositionId || simulationIntervalId) {
+            // Hot reload tracking
+            stopGPSTracking();
+            activateGPSTracking();
+          }
+        });
+
+        function activateGPSTracking() {
+          stopGPSTracking();
+          
+          const readout = document.getElementById("gps-coordinates-readout");
+          
+          if (gpsMode === "real") {
+            // 🚀 PRODUCTION REAL-WORLD DEVICE GPS HARDWARE TRACKING
+            if ("geolocation" in navigator) {
+              readout.textContent = "Buscando satélites reales...";
+              watchPositionId = navigator.geolocation.watchPosition(
+                (position) => {
+                  const lat = position.coords.latitude;
+                  const lng = position.coords.longitude;
+                  
+                  readout.textContent = `GPS REAL: Lat ${lat.toFixed(5)}, Lng ${lng.toFixed(5)}`;
+                  
+                  // Stream location update
+                  sendGPSCoordinate(lat, lng);
+                },
+                (error) => {
+                  console.warn("GPS Real falló o fue denegado:", error);
+                  readout.textContent = "Fallo GPS real. Habilitando simulador como fallback automático...";
+                  // Automatic fallback to simulation if permission denied
+                  gpsMode = "sim";
+                  btnGpsReal.classList.remove("active");
+                  btnGpsSim.classList.add("active");
+                  activateGPSTracking();
+                },
+                { enableHighAccuracy: true, maximumAge: 1000 }
+              );
+            } else {
+              readout.textContent = "Geolocalización no soportada. Habilitando simulador...";
+              gpsMode = "sim";
+              activateGPSTracking();
+            }
+          } else {
+            // 🤖 DESK DEMO / TESTING ROAD PATH SIMULATOR
+            readout.textContent = "Iniciando Simulador cinemático...";
+            simulatedStepIndex = 0;
+            
+            simulationIntervalId = setInterval(() => {
+              if (simulatedRouteCoords.length === 0) return;
+              
+              if (simulatedStepIndex >= simulatedRouteCoords.length) {
+                // Keep standing at destination when route finishes
+                simulatedStepIndex = simulatedRouteCoords.length - 1;
+              }
+              
+              const stepCoord = simulatedRouteCoords[simulatedStepIndex];
+              const lat = stepCoord.lat();
+              const lng = stepCoord.lng();
+              
+              readout.textContent = `SIMULADOR: Paso ${simulatedStepIndex + 1}/${simulatedRouteCoords.length} -> Lat ${lat.toFixed(5)}, Lng ${lng.toFixed(5)}`;
+              
+              // Stream location update
+              sendGPSCoordinate(lat, lng);
+              
+              simulatedStepIndex++;
+            }, 3000); // Send coordinates step by step every 3 seconds
+          }
+        }
+
+        function sendGPSCoordinate(lat, lng) {
+          // Update map marker on courier dashboard
+          updateCourierMarker(lat, lng);
+
+          // POST coordinate to backend for live broadcast
+          fetch("/api/v1/couriers/gps", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              latitude: lat,
+              longitude: lng,
+              courier_id: courierId,
+              order_id: activeOrderId
+            })
+          }).catch(err => console.error("Error al transmitir GPS:", err));
+        }
+
+        function updateCourierMarker(lat, lng) {
+          const pos = new google.maps.LatLng(lat, lng);
+          
+          if (!courierMarker) {
+            courierMarker = new google.maps.Marker({
+              position: pos,
+              map: activeMap,
+              title: "Tú (Repartidor)",
+              label: {
+                text: "🛵",
+                fontSize: "18px"
+              },
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 16,
+                fillColor: "#070b13",
+                fillOpacity: 0.9,
+                strokeColor: currentTheme === "light" ? "#0d9488" : "#2dd4bf",
+                strokeWeight: 2
+              }
+            });
+          } else {
+            courierMarker.setPosition(pos);
+          }
+
+          // Pan active map to keep courier centered
+          activeMap.panTo(pos);
+        }
+
+        function stopGPSTracking() {
+          if (watchPositionId) {
+            navigator.geolocation.clearWatch(watchPositionId);
+            watchPositionId = null;
+          }
+          if (simulationIntervalId) {
+            clearInterval(simulationIntervalId);
+            simulationIntervalId = null;
+          }
+          if (courierMarker) {
+            courierMarker.setMap(null);
+            courierMarker = null;
+          }
+        }
+
+        // ==========================================
+        // 🎚️ Horizontal Slide confirmation logic
+        // ==========================================
+        function initSlideToDeliver() {
+          const container = document.querySelector('.slide-to-deliver-container');
+          const handle = document.getElementById('slide-handle');
+          const fill = document.getElementById('slide-fill');
+          
+          let isDragging = false;
+          let startX = 0;
+          let maxSlide = container.clientWidth - handle.clientWidth - 8; // margins
+          
+          function onStart(e) {
+            isDragging = true;
+            startX = (e.type === 'touchstart') ? e.touches[0].clientX : e.clientX;
+            handle.style.transition = 'none';
+            fill.style.transition = 'none';
+          }
+          
+          function onMove(e) {
+            if (!isDragging) return;
+            const currentX = (e.type === 'touchmove') ? e.touches[0].clientX : e.clientX;
+            let deltaX = currentX - startX;
+            
+            if (deltaX < 0) deltaX = 0;
+            if (deltaX > maxSlide) deltaX = maxSlide;
+            
+            handle.style.left = (deltaX + 4) + 'px';
+            const percentage = (deltaX / maxSlide) * 100;
+            fill.style.width = percentage + '%';
+            
+            if (percentage > 98) {
+              // Successfully delivered!
+              isDragging = false;
+              onSuccess();
+            }
+          }
+          
+          function onEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            // Snap back
+            handle.style.transition = 'all 0.3s ease';
+            fill.style.transition = 'all 0.3s ease';
+            handle.style.left = '4px';
+            fill.style.width = '0%';
+          }
+          
+          function onSuccess() {
+            handle.style.transition = 'all 0.2s ease';
+            fill.style.transition = 'all 0.2s ease';
+            handle.style.left = (maxSlide + 4) + 'px';
+            fill.style.width = '100%';
+            
+            handle.innerHTML = '<i class="fas fa-check"></i>';
+            handle.style.backgroundColor = '#10b981';
+            
+            setTimeout(() => {
+              // Reset handle styling for next time
+              handle.style.left = '4px';
+              fill.style.width = '0%';
+              handle.innerHTML = '<i class="fas fa-angle-double-right"></i>';
+              handle.style.backgroundColor = '';
+              
+              // Trigger order status update
+              updateOrderStatus("complete");
+            }, 300);
+          }
+          
+          // Mouse listeners
+          handle.addEventListener('mousedown', onStart);
+          window.addEventListener('mousemove', onMove);
+          window.addEventListener('mouseup', onEnd);
+          
+          // Touch listeners
+          handle.addEventListener('touchstart', onStart);
+          window.addEventListener('touchmove', onMove);
+          window.addEventListener('touchend', onEnd);
+          
+          // Re-calculate maxSlide on window resize
+          window.addEventListener('resize', () => {
+            maxSlide = container.clientWidth - handle.clientWidth - 8;
+          });
+        }
+
+        // ==========================================
+        // 💬 COURIER-CLIENT REAL-TIME CHAT MOTOR
+        // ==========================================
+        
+        // Dictionary for high-fidelity Pt-PT translation simulation
+        const translationDictionary = {
+          "hola": "Olá! Tudo bem?",
+          "hola!": "Olá! Tudo bem?",
+          "buenos dias": "Bom dia!",
+          "buenos días": "Bom dia!",
+          "ya salio mi pedido?": "O meu pedido já saiu?",
+          "¿ya salió mi pedido?": "O meu pedido já saiu?",
+          "gracias": "Obrigado!",
+          "muchas gracias": "Muito obrigado!",
+          "puedes tocar el timbre 3b?": "Pode tocar à campainha 3B?",
+          "¿puedes tocar el timbre 3b?": "Pode tocar à campainha 3B?",
+          "deja el pedido en recepción": "Deixe o pedido na receção, por favor.",
+          "estoy abajo": "Estou cá abaixo à espera.",
+          "estoy en la entrada": "Estou na entrada principal.",
+          "hola, ¿dónde estás?": "Olá, onde se encontra?",
+          "¿dónde estás?": "Onde se encontra?",
+          "dónde estás?": "Onde se encontra?",
+          "hola, ya voy en camino": "Olá! Já estou a caminho para a entrega.",
+          "estoy en el restaurante recogiendo tu comida": "Estou no restaurante a recolher a sua refeição.",
+          "ya tengo tu pedido, voy hacia alla": "Já recolhi o seu pedido, estou a caminho!",
+          "ya tengo tu pedido, voy hacia allá": "Já recolhi o seu pedido, estou a caminho!",
+          "hay mucho trafico pero ya casi llego": "Há muito trânsito, mas estou quase a chegar.",
+          "hay mucho tráfico pero ya casi llego": "Há muito trânsito, mas estou quase a chegar.",
+          "estoy afuera": "Estou cá fora à sua porta.",
+          "estoy en la puerta": "Estou na porta de entrada.",
+          "puedes bajar?": "Pode descer, por favor?",
+          "¿puedes bajar?": "Pode descer, por favor?",
+          "llegué": "Cheguei ao seu destino!",
+          "llego en 5 minutos": "Chego em 5 minutos.",
+          "llegó el estafeta": "O estafeta chegou!"
+        };
+
+        function appendChatMessage(sender, text, timestamp) {
+          const box = document.getElementById("chat-messages-box");
+          const bubble = document.createElement("div");
+          bubble.className = `chat-message-bubble ${sender}`;
+          
+          const timeStr = timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          
+          let contentHtml = `<div class="chat-text-content">${text}</div>`;
+          
+          let metaHtml = `
+            <div class="chat-meta">
+              <span>${timeStr}</span>
+          `;
+          
+          if (sender !== 'system') {
+            metaHtml += `
+              <button class="chat-translate-btn" onclick="translateMessage(this, \`${text.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)">
+                <i class="fas fa-globe"></i> Traduzir
+              </button>
+            `;
+          }
+          
+          metaHtml += `</div>`;
+          bubble.innerHTML = contentHtml + metaHtml;
+          box.appendChild(bubble);
+          box.scrollTop = box.scrollHeight;
+          
+          // Unread indicator if drawer is closed
+          const drawer = document.getElementById("chat-drawer-container");
+          if (!drawer.classList.contains("open") && sender !== 'system') {
+            document.getElementById("chat-unread-dot").style.display = "block";
+            const toggleBtn = document.getElementById("chat-toggle-btn");
+            toggleBtn.style.animation = "shakeToggle 0.5s ease";
+            setTimeout(() => toggleBtn.style.animation = "pulseTealGlow 2s infinite", 500);
+          }
+        }
+
+        window.translateMessage = function(btnElement, originalText) {
+          const textContainer = btnElement.closest('.chat-message-bubble').querySelector('.chat-text-content');
+          const lowerText = originalText.trim().toLowerCase();
+          let translatedText = translationDictionary[lowerText];
+          
+          if (!translatedText) {
+            // Contextual mock translation
+            translatedText = originalText
+              .replace(/\bgracias\b/gi, "obrigado")
+              .replace(/\bhola\b/gi, "olá")
+              .replace(/\bcamino\b/gi, "caminho")
+              .replace(/\bespera\b/gi, "espera")
+              .replace(/\btrafico\b/gi, "trânsito")
+              .replace(/\btráfico\b/gi, "trânsito")
+              .replace(/\bpuerta\b/gi, "porta")
+              .replace(/\bcomida\b/gi, "comida")
+              .replace(/\bentrega\b/gi, "entrega")
+              .replace(/\bpedido\b/gi, "pedido");
+            
+            if (translatedText === originalText) {
+              translatedText = "Olá! (Traduzido) " + originalText;
+            }
+          }
+          
+          textContainer.innerHTML = translatedText;
+          btnElement.outerHTML = `
+            <span class="chat-translated-badge">
+              <i class="fas fa-check-circle"></i> Traduzido por IA
+            </span>
+          `;
+        };
+
+        // Socket events for chat
+        socket.on("chat_system_message", (data) => {
+          appendChatMessage("system", data.message);
+        });
+
+        socket.on("receive_order_message", (data) => {
+          if (activeOrderId && parseInt(data.order_id) === activeOrderId) {
+            const bubbleStyle = data.sender === 'client' ? 'client' : 'courier';
+            appendChatMessage(bubbleStyle, data.text, data.timestamp);
+          }
+        });
+
+        function sendChatMessage() {
+          const input = document.getElementById("chat-message-input");
+          const text = input.value.trim();
+          if (!text || !activeOrderId) return;
+          
+          const payload = {
+            order_id: activeOrderId,
+            sender: 'courier',
+            text: text,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+          
+          socket.emit("send_order_message", payload);
+          input.value = "";
+          input.focus();
+        }
+
+        document.getElementById("chat-send-btn").addEventListener("click", sendChatMessage);
+        document.getElementById("chat-message-input").addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            sendChatMessage();
+          }
+        });
+
+        const chatToggleBtn = document.getElementById("chat-toggle-btn");
+        const chatDrawer = document.getElementById("chat-drawer-container");
+        const chatCloseBtn = document.getElementById("chat-close-btn");
+
+        chatToggleBtn.addEventListener("click", () => {
+          chatDrawer.classList.toggle("open");
+          document.getElementById("chat-unread-dot").style.display = "none";
+          const box = document.getElementById("chat-messages-box");
+          box.scrollTop = box.scrollHeight;
+        });
+
+        chatCloseBtn.addEventListener("click", () => {
+          chatDrawer.classList.remove("open");
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,458 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Verificación de Cuenta') }}{% endblock %}
+
+{% block content %}
+<style>
+  .verification-body {
+    background: radial-gradient(at 0% 0%, rgba(243, 244, 246, 0.8) 0, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(240, 253, 250, 0.4) 0, transparent 50%);
+    min-height: calc(100vh - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
+    overflow: hidden;
+    max-width: 500px;
+    width: 100%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-header {
+    background: var(--dark-gradient);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    border-bottom: 2px solid rgba(20, 184, 166, 0.15);
+  }
+
+  .glass-body {
+    padding: 40px 30px;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .status-pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .status-verified {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  /* PIN input styling */
+  .pin-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .pin-input {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    font-weight: 800;
+    text-align: center;
+    border-radius: 14px;
+    border: 2px solid #cbd5e1;
+    background: #f8fafc;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: var(--font-title);
+  }
+
+  .pin-input:focus {
+    border-color: #0d9488;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15);
+    outline: none;
+  }
+
+  /* Developer Helper Box */
+  .dev-helper {
+    background: rgba(15, 23, 42, 0.03);
+    border: 1px dashed rgba(13, 148, 136, 0.3);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 30px;
+  }
+
+  .dev-title {
+    font-family: var(--font-title);
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0f766e;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Step visual progress indicators */
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 16px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+  }
+
+  .step-indicator.completed {
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.02);
+  }
+
+  .step-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #64748b;
+    transition: all 0.3s;
+  }
+
+  .completed .step-icon {
+    background: #10b981;
+    color: white;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25);
+  }
+
+  .step-details {
+    flex-grow: 1;
+  }
+
+  .step-title {
+    font-family: var(--font-title);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 2px;
+  }
+
+  .step-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+</style>
+
+<div class="verification-body">
+  <div class="glass-card" id="verification-card">
+    <div class="glass-header">
+      <span class="bg-white bg-opacity-10 text-teal rounded-circle p-2 d-inline-flex justify-content-center align-items-center mb-3" style="width: 48px; height: 48px;">
+        <i class="fas fa-shield-alt fs-4 text-white"></i>
+      </span>
+      <h3 class="mb-1 text-white">{{ _('Verificación de Cuenta') }}</h3>
+      <p class="text-white-50 small mb-0">{{ _('Para tu seguridad, necesitamos verificar tus datos de registro.') }}</p>
+    </div>
+
+    <div class="glass-body">
+      <!-- DETALLES DEL CLIENTE -->
+      <div class="text-center mb-4">
+        <h5 class="fw-bold text-dark mb-1">{{ client.name }}</h5>
+        <p class="text-muted small mb-0"><i class="fas fa-envelope me-1.5 text-teal"></i>{{ client.email }} | <i class="fas fa-phone me-1.5 text-teal"></i>{{ client.phone }}</p>
+      </div>
+
+      <!-- ESTADO DE EMAIL -->
+      <div class="step-indicator {% if client.is_email_verified %}completed{% endif %}" id="email-step">
+        <div class="step-icon">
+          <i class="{% if client.is_email_verified %}fas fa-check{% else %}fas fa-envelope{% endif %}" id="email-icon"></i>
+        </div>
+        <div class="step-details">
+          <h6 class="step-title">{{ _('Paso 1: Confirmación de Email') }}</h6>
+          <p class="step-desc" id="email-desc">
+            {% if client.is_email_verified %}
+              {{ _('¡Tu dirección de correo electrónico ha sido confirmada con éxito!') }}
+            {% else %}
+              {{ _('Te hemos enviado un enlace de confirmación. Haz clic en él para verificar tu cuenta.') }}
+            {% endif %}
+          </p>
+        </div>
+        <span class="status-badge {% if client.is_email_verified %}status-verified{% else %}status-pending{% endif %}" id="email-badge">
+          {% if client.is_email_verified %}{{ _('Verificado') }}{% else %}{{ _('Pendiente') }}{% endif %}
+        </span>
+      </div>
+
+      <!-- ESTADO DE TELÉFONO -->
+      <div class="step-indicator {% if client.is_phone_verified %}completed{% endif %}" id="phone-step">
+        <div class="step-icon">
+          <i class="{% if client.is_phone_verified %}fas fa-check{% else %}fas fa-mobile-alt{% endif %}" id="phone-icon"></i>
+        </div>
+        <div class="step-details">
+          <h6 class="step-title">{{ _('Paso 2: Código PIN Telefónico') }}</h6>
+          <p class="step-desc" id="phone-desc">
+            {% if client.is_phone_verified %}
+              {{ _('¡Tu número telefónico ha sido verificado con éxito!') }}
+            {% else %}
+              {{ _('Introduce el código PIN de 4 dígitos enviado a tu número de móvil.') }}
+            {% endif %}
+          </p>
+
+          <!-- Interfaz de PIN interactiva -->
+          <div id="pin-section" style="{% if client.is_phone_verified %}display: none;{% endif %}">
+            <div class="pin-container">
+              <input type="text" class="pin-input" maxlength="1" pattern="[0-9]" inputmode="numeric" id="pin-1" autocomplete="off">
+              <input type="text" class="pin-input" maxlength="1" pattern="[0-9]" inputmode="numeric" id="pin-2" autocomplete="off">
+              <input type="text" class="pin-input" maxlength="1" pattern="[0-9]" inputmode="numeric" id="pin-3" autocomplete="off">
+              <input type="text" class="pin-input" maxlength="1" pattern="[0-9]" inputmode="numeric" id="pin-4" autocomplete="off">
+            </div>
+            
+            <div id="pin-error-alert" class="alert alert-danger border-0 small fw-bold py-2 px-3 align-items-center" style="display: none; border-radius: 8px;">
+              <i class="fas fa-exclamation-triangle me-2"></i> <span id="pin-error-message"></span>
+            </div>
+          </div>
+        </div>
+        <span class="status-badge {% if client.is_phone_verified %}status-verified{% else %}status-pending{% endif %}" id="phone-badge">
+          {% if client.is_phone_verified %}{{ _('Verificado') }}{% else %}{{ _('Pendiente') }}{% endif %}
+        </span>
+      </div>
+
+      <!-- REDIRECCIÓN FINAL -->
+      <div id="celebration-box" style="display: none;" class="text-center py-3">
+        <div class="spinner-border text-teal mb-3" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <h5 class="fw-bold text-teal mb-1"><i class="fas fa-sparkles text-warning me-1.5"></i>{{ _('¡Verificación Completada!') }}</h5>
+        <p class="text-muted small mb-0">{{ _('Redirigiéndote automáticamente a la plataforma de compras...') }}</p>
+      </div>
+
+      <!-- DEVELOPER TESTER HUB -->
+      <div class="dev-helper">
+        <div class="dev-title">
+          <i class="fas fa-code text-teal"></i> {{ _('Developer Sandbox Assistant') }}
+        </div>
+        <p class="text-muted x-small mb-3" style="line-height: 1.4;">
+          {{ _('Como estás probando de forma local y no hay un servidor de mensajería real configurado, puedes usar los siguientes valores capturados en vivo del registro del backend para simular el éxito:') }}
+        </p>
+        
+        <div class="d-flex flex-column gap-2.5">
+          <div class="p-2.5 bg-white border rounded-12 d-flex justify-content-between align-items-center small">
+            <div>
+              <span class="d-block text-muted x-small fw-bold">{{ _('PIN DE TELÉFONO GENERADO') }}</span>
+              <strong class="text-teal font-monospace fs-5">{{ client.phone_verification_pin }}</strong>
+            </div>
+            <button onclick="autofillPIN('{{ client.phone_verification_pin }}')" class="btn btn-sm btn-outline-primary px-3 py-1.5" style="border-radius: 8px; font-size: 0.78rem;">
+              <i class="fas fa-magic me-1"></i> {{ _('Auto-rellenar') }}
+            </button>
+          </div>
+
+          <div class="p-2.5 bg-white border rounded-12 small">
+            <span class="d-block text-muted x-small fw-bold mb-1">{{ _('ENLACE DE CONFIRMACIÓN DE EMAIL') }}</span>
+            <div class="d-flex gap-2">
+              <input type="text" readonly class="form-control form-control-sm font-monospace bg-light" style="font-size: 0.78rem;" id="dev-email-url" value="{{ request.host_url.rstrip('/') }}{{ url_for('client_blueprint.verify_email', token=client.email_verification_token) }}">
+              <a href="{{ url_for('client_blueprint.verify_email', token=client.email_verification_token) }}" target="_blank" class="btn btn-sm btn-teal d-flex align-items-center justify-content-center px-3" style="border-radius: 8px;">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="{{ url_for('client_blueprint.list_clients') }}" class="text-teal fw-bold small text-decoration-none"><i class="fas fa-arrow-left me-1.5"></i>{{ _('Volver a la Lista de Clientes') }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const inputs = [
+      document.getElementById("pin-1"),
+      document.getElementById("pin-2"),
+      document.getElementById("pin-3"),
+      document.getElementById("pin-4")
+    ];
+
+    // Gestión del auto-foco y movimiento entre campos PIN
+    inputs.forEach((input, index) => {
+      input.addEventListener("input", (e) => {
+        const val = e.target.value;
+        // Solo permitir números
+        if (!/^[0-9]$/.test(val)) {
+          e.target.value = "";
+          return;
+        }
+
+        // Foco al siguiente input si existe
+        if (val && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+
+        // Si se han completado los 4 campos, enviar
+        checkAndSubmitPIN();
+      });
+
+      input.addEventListener("keydown", (e) => {
+        // Volver atrás con retroceso (Backspace)
+        if (e.key === "Backspace" && !e.target.value && index > 0) {
+          inputs[index - 1].focus();
+          inputs[index - 1].value = "";
+        }
+      });
+    });
+
+    // Rellenado dinámico desde el Developer Hub
+    window.autofillPIN = function(pin) {
+      const chars = pin.split("");
+      inputs.forEach((input, idx) => {
+        if (chars[idx]) {
+          input.value = chars[idx];
+        }
+      });
+      checkAndSubmitPIN();
+    };
+
+    function checkAndSubmitPIN() {
+      const pin = inputs.map(i => i.value).join("");
+      if (pin.length === 4) {
+        // Enviar PIN por AJAX
+        fetch("/api/v1/clients/verify-phone", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            client_id: {{ client.id }},
+            pin: pin
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "verified") {
+            // Actualizar interfaz del teléfono
+            document.getElementById("pin-error-alert").style.display = "none";
+            document.getElementById("pin-section").style.display = "none";
+            
+            const phoneStep = document.getElementById("phone-step");
+            phoneStep.classList.add("completed");
+            
+            const icon = document.getElementById("phone-icon");
+            icon.className = "fas fa-check";
+            
+            const desc = document.getElementById("phone-desc");
+            desc.textContent = "{{ _('¡Tu número telefónico ha sido verificado con éxito!') }}";
+            
+            const badge = document.getElementById("phone-badge");
+            badge.className = "status-badge status-verified";
+            badge.textContent = "{{ _('Verificado') }}";
+            
+            // Verificar si el flujo entero está completado
+            checkOverallStatus();
+          } else {
+            // Mostrar error
+            const errorAlert = document.getElementById("pin-error-alert");
+            const errorMessage = document.getElementById("pin-error-message");
+            errorMessage.textContent = data.error || "PIN incorrecto";
+            errorAlert.style.display = "flex";
+            
+            // Limpiar inputs
+            inputs.forEach(i => i.value = "");
+            inputs[0].focus();
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          const errorAlert = document.getElementById("pin-error-alert");
+          const errorMessage = document.getElementById("pin-error-message");
+          errorMessage.textContent = "Error al conectar con el servidor.";
+          errorAlert.style.display = "flex";
+        });
+      }
+    }
+
+    // Polling dinámico en tiempo real para rastrear la verificación de email
+    const pollInterval = setInterval(() => {
+      fetch(`/api/v1/clients/verify-status?client_id={{ client.id }}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.is_email_verified) {
+            const emailStep = document.getElementById("email-step");
+            if (!emailStep.classList.contains("completed")) {
+              emailStep.classList.add("completed");
+              document.getElementById("email-icon").className = "fas fa-check";
+              document.getElementById("email-desc").textContent = "{{ _('¡Tu dirección de correo electrónico ha sido confirmada con éxito!') }}";
+              
+              const badge = document.getElementById("email-badge");
+              badge.className = "status-badge status-verified";
+              badge.textContent = "{{ _('Verificado') }}";
+              
+              checkOverallStatus();
+            }
+          }
+          if (data.is_phone_verified) {
+            const phoneStep = document.getElementById("phone-step");
+            if (!phoneStep.classList.contains("completed")) {
+              phoneStep.classList.add("completed");
+              document.getElementById("phone-icon").className = "fas fa-check";
+              document.getElementById("phone-desc").textContent = "{{ _('¡Tu número telefónico ha sido verificado con éxito!') }}";
+              
+              const badge = document.getElementById("phone-badge");
+              badge.className = "status-badge status-verified";
+              badge.textContent = "{{ _('Verificado') }}";
+              
+              document.getElementById("pin-section").style.display = "none";
+              checkOverallStatus();
+            }
+          }
+        });
+    }, 1500);
+
+    function checkOverallStatus() {
+      // Si ambos están completos en la interfaz
+      const emailComp = document.getElementById("email-step").classList.contains("completed");
+      const phoneComp = document.getElementById("phone-step").classList.contains("completed");
+      
+      if (emailComp && phoneComp) {
+        clearInterval(pollInterval);
+        
+        // Registrar el cliente en localStorage de la app cliente
+        localStorage.setItem("active_client_id", "{{ client.id }}");
+        localStorage.setItem("active_client_name", "{{ client.name }}");
+        
+        // Mostrar animación de celebración y redirigir
+        document.getElementById("celebration-box").style.display = "block";
+        
+        setTimeout(() => {
+          window.location.href = `/apps/client?client_id={{ client.id }}`;
+        }, 2500);
+      }
+    }
+
+    // Inicialmente comprobar el estado
+    checkOverallStatus();
+  });
+</script>
+{% endblock %}

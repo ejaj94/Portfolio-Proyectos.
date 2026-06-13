@@ -1,0 +1,2837 @@
+<!doctype html>
+<html lang="es">
+  <head>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>App Cliente - Premium Delivery</title>
+    <!-- Stripe JS SDK oficial -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <!-- FontAwesome para iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+      /* 🎨 SISTEMA DE DISEÑO PREMIUM (HIGH-END DESIGN SYSTEM) */
+      :root {
+        --brand-green: #10b981;
+        --brand-green-hover: #059669;
+        --brand-green-light: rgba(16, 185, 129, 0.08);
+        --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        --accent-gradient: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+        --dark-gradient: linear-gradient(135deg, #0f172a 0%, #022c22 100%);
+        --card-gradient: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        
+        --bg-primary: #f8fafc;
+        --bg-card: #ffffff;
+        --bg-glass: rgba(255, 255, 255, 0.85);
+        --bg-pill: #f1f5f9;
+        
+        --border-color: rgba(226, 232, 240, 0.8);
+        --border-glass: rgba(255, 255, 255, 0.6);
+        
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --text-inverse: #ffffff;
+        
+        --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.02), 0 1px 3px rgba(15, 23, 42, 0.01);
+        --shadow-md: 0 12px 30px -4px rgba(15, 23, 42, 0.05), 0 4px 12px -2px rgba(15, 23, 42, 0.02);
+        --shadow-lg: 0 24px 48px -8px rgba(15, 23, 42, 0.08), 0 8px 20px -4px rgba(15, 23, 42, 0.03);
+        --shadow-glow: 0 8px 24px rgba(16, 185, 129, 0.15);
+        
+        --font-title: 'Outfit', sans-serif;
+        --font-body: 'Plus Jakarta Sans', sans-serif;
+        
+        --radius-sm: 14px;
+        --radius-md: 20px;
+        --radius-lg: 28px;
+        --radius-xl: 36px;
+        
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      /* 🌗 MODO OSCURO HIGH-END (OBSIDIAN NEON STYLE) */
+      body.dark-theme {
+        --bg-primary: #030712;
+        --bg-card: #0b1329;
+        --bg-glass: rgba(11, 19, 41, 0.85);
+        --bg-pill: #111827;
+        --card-gradient: linear-gradient(135deg, #0b1329 0%, #060b18 100%);
+        
+        --border-color: rgba(255, 255, 255, 0.05);
+        --border-glass: rgba(255, 255, 255, 0.04);
+        
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        
+        --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 16px 36px rgba(0, 0, 0, 0.5);
+        --shadow-lg: 0 24px 50px rgba(0, 0, 0, 0.6);
+        --shadow-glow: 0 8px 30px rgba(16, 185, 129, 0.22);
+      }
+
+      /* ✨ CONFIGURACIÓN GLOBAL */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        font-family: var(--font-body);
+        color: var(--text-main);
+        padding-bottom: 120px;
+        min-height: 100vh;
+        overflow-x: hidden;
+        transition: background-color 0.4s ease, color 0.4s ease;
+        background-attachment: fixed;
+      }
+
+      /* Fondos interactivos con blobs difuminados */
+      .blob-bg {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(120px);
+        z-index: -10;
+        pointer-events: none;
+        transition: var(--transition-smooth);
+      }
+      .blob-1 {
+        top: -10%; left: -10%;
+        width: 350px; height: 350px;
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+      }
+      .blob-2 {
+        bottom: -10%; right: -10%;
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(239, 68, 68, 0.05) 0%, transparent 70%);
+      }
+      .blob-3 {
+        top: 40%; right: -20%;
+        width: 300px; height: 300px;
+        background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
+      }
+
+      body.dark-theme .blob-1 {
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.16) 0%, transparent 70%);
+      }
+      body.dark-theme .blob-2 {
+        background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%);
+      }
+
+      /* 📱 CABECERA PREMIUM FLOTANTE */
+      header {
+        background: var(--bg-glass);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 16px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-smooth);
+      }
+      .header-container {
+        max-width: 480px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .location-wrapper {
+        cursor: pointer;
+        display: inline-block;
+        transition: transform 0.2s ease;
+      }
+      .location-wrapper:active {
+        transform: scale(0.97);
+      }
+      .sub-title {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        font-weight: 800;
+        letter-spacing: 1.2px;
+      }
+      .main-title {
+        font-family: var(--font-title);
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 2px;
+      }
+      .main-title i.fa-map-marker-alt {
+        color: var(--brand-green);
+        filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3));
+        font-size: 15px;
+      }
+      .main-title i.fa-chevron-down {
+        font-size: 9px;
+        color: var(--text-muted);
+        transition: transform 0.3s ease;
+      }
+      .location-wrapper:hover .main-title i.fa-chevron-down {
+        transform: translateY(2px);
+        color: var(--brand-green);
+      }
+
+      /* Botón de alternancia de tema */
+      .theme-btn-custom {
+        background: var(--bg-pill);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        width: 42px;
+        height: 42px;
+        border-radius: 15px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        transition: var(--transition-bounce);
+        box-shadow: var(--shadow-sm);
+      }
+      .theme-btn-custom:hover {
+        transform: scale(1.08) rotate(15deg);
+        background: var(--bg-card);
+        border-color: var(--brand-green);
+        color: var(--brand-green);
+      }
+      .theme-btn-custom:active {
+        transform: scale(0.95);
+      }
+
+      /* Avatar de Perfil */
+      .profile-avatar-custom {
+        width: 42px;
+        height: 42px;
+        background: var(--primary-gradient);
+        color: white;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        text-decoration: none;
+        cursor: pointer;
+        box-shadow: var(--shadow-glow);
+        border: 2px solid var(--bg-card);
+        transition: var(--transition-bounce);
+        font-weight: 800;
+        font-family: var(--font-title);
+      }
+      .profile-avatar-custom:hover {
+        transform: scale(1.08) translateY(-2px);
+        box-shadow: 0 10px 24px rgba(16, 185, 129, 0.3);
+      }
+      .profile-avatar-custom:active {
+        transform: scale(0.95);
+      }
+
+      /* 📱 CONTENEDOR CENTRAL */
+      main {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* 🔍 BARRA DE BÚSQUEDA MODERNA CAPSULE */
+      .search-wrapper {
+        position: relative;
+        margin-bottom: 24px;
+        transition: var(--transition-smooth);
+      }
+      .search-box {
+        width: 100%;
+        border: 1.5px solid var(--border-color);
+        background-color: var(--bg-card);
+        border-radius: 18px;
+        padding: 16px 16px 16px 50px;
+        font-family: var(--font-body);
+        font-size: 15px;
+        font-weight: 600;
+        outline: none;
+        transition: var(--transition-smooth);
+        color: var(--text-main);
+        box-shadow: var(--shadow-sm);
+      }
+      .search-box::placeholder {
+        color: var(--text-muted);
+        opacity: 0.7;
+      }
+      .search-box:focus {
+        border-color: var(--brand-green);
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.12), var(--shadow-md);
+        transform: translateY(-1px);
+      }
+      .search-icon {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px;
+        color: var(--text-muted);
+        transition: var(--transition-smooth);
+      }
+      .search-box:focus + .search-icon {
+        color: var(--brand-green);
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      /* 🎁 HERO BANNER PROMOCIONAL */
+      .promo-banner-container {
+        margin-bottom: 28px;
+      }
+      .promo-banner-card {
+        background: linear-gradient(135deg, #10b981 0%, #065f46 100%);
+        border-radius: var(--radius-md);
+        padding: 22px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 14px 28px -6px rgba(16, 185, 129, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .promo-banner-card::before {
+        content: '';
+        position: absolute;
+        width: 140px;
+        height: 140px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+        top: -40px;
+        right: -30px;
+        pointer-events: none;
+      }
+      .promo-banner-content {
+        max-width: 65%;
+        z-index: 2;
+      }
+      .promo-badge-tag {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(8px);
+        color: #ffffff;
+        font-size: 10px;
+        font-weight: 800;
+        padding: 4px 10px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 10px;
+      }
+      .promo-banner-content h2 {
+        font-family: var(--font-title);
+        font-size: 22px;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+      }
+      .promo-banner-content p {
+        font-size: 13px;
+        font-weight: 500;
+        opacity: 0.9;
+      }
+      .promo-banner-content .coupon-code {
+        background: #f59e0b;
+        color: #000000;
+        font-family: var(--font-title);
+        font-weight: 800;
+        padding: 1px 6px;
+        border-radius: 6px;
+        margin-left: 2px;
+        font-size: 12px;
+      }
+      .promo-banner-art {
+        position: relative;
+        width: 100px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+      }
+      .floating-emoji {
+        font-size: 40px;
+        position: absolute;
+        filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.15));
+      }
+      .anim-float-1 {
+        animation: floatArt 3s infinite ease-in-out;
+        font-size: 44px;
+        top: 10px; right: 20px;
+      }
+      .anim-float-2 {
+        animation: floatArt 2.5s infinite ease-in-out 0.5s;
+        font-size: 28px;
+        bottom: 0; left: 10px;
+      }
+      .anim-float-3 {
+        animation: floatArt 3.5s infinite ease-in-out 1s;
+        font-size: 24px;
+        top: 0; left: 15px;
+      }
+      @keyframes floatArt {
+        0%, 100% { transform: translateY(0) rotate(0); }
+        50% { transform: translateY(-8px) rotate(4deg); }
+      }
+
+      /* 🏷️ CATEGORÍAS ERGONÓMICAS */
+      .section-title {
+        font-family: var(--font-title);
+        font-size: 19px;
+        font-weight: 800;
+        margin-bottom: 16px;
+        letter-spacing: -0.5px;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .section-title span {
+        font-size: 12px;
+        font-family: var(--font-body);
+        color: var(--brand-green);
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .scroll-categories {
+        display: flex;
+        overflow-x: auto;
+        gap: 12px;
+        padding: 4px 4px 14px 4px;
+        margin-bottom: 26px;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+      }
+      .scroll-categories::-webkit-scrollbar {
+        display: none;
+      }
+      .category-box {
+        min-width: 90px;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition-bounce);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: var(--bg-card);
+        padding: 14px 10px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+      }
+      .category-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        margin-bottom: 8px;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+      }
+      /* Diseños de fondo hermosos en degradado para las categorías */
+      .category-box:nth-child(1) .category-icon { background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); }
+      .category-box:nth-child(2) .category-icon { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+      .category-box:nth-child(3) .category-icon { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); }
+      .category-box:nth-child(4) .category-icon { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); }
+
+      body.dark-theme .category-box {
+        background: var(--card-gradient);
+      }
+      body.dark-theme .category-box:nth-child(1) .category-icon { background: linear-gradient(135deg, #2d1012 0%, #4c1219 100%); }
+      body.dark-theme .category-box:nth-child(2) .category-icon { background: linear-gradient(135deg, #2a1f06 0%, #452c04 100%); }
+      body.dark-theme .category-box:nth-child(3) .category-icon { background: linear-gradient(135deg, #022c22 0%, #064e3b 100%); }
+      body.dark-theme .category-box:nth-child(4) .category-icon { background: linear-gradient(135deg, #0b1f3c 0%, #1e3a8a 100%); }
+
+      .category-box:hover {
+        transform: translateY(-6px);
+        border-color: var(--brand-green);
+        box-shadow: var(--shadow-md);
+      }
+      .category-box:hover .category-icon {
+        transform: scale(1.08);
+      }
+      .category-box:active {
+        transform: scale(0.92);
+      }
+      .category-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-muted);
+        transition: var(--transition-smooth);
+      }
+      .category-box:hover .category-name {
+        color: var(--text-main);
+      }
+
+      /* 🏪 TARJETAS DE RESTAURANTES (ESTILO ULTRA LUXURY) */
+      .restaurant-card {
+        background: var(--card-gradient);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        transition: var(--transition-smooth);
+        position: relative;
+        cursor: pointer;
+      }
+      .restaurant-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+        border-color: rgba(16, 185, 129, 0.2);
+      }
+
+      .image-container {
+        position: relative;
+        height: 180px;
+        width: 100%;
+        background: var(--bg-pill);
+        overflow: hidden;
+      }
+      .card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .restaurant-card:hover .card-img {
+        transform: scale(1.05);
+      }
+
+      /* Capa de sombreado elegante en la imagen */
+      .image-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 45%;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+        pointer-events: none;
+      }
+
+      /* Insignias Flotantes sobre la Imagen */
+      .rating-badge {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        color: #0f172a;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 5px 10px;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        z-index: 10;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      body.dark-theme .rating-badge {
+        background: rgba(15, 23, 42, 0.85);
+        color: #f8fafc;
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+      .rating-badge i {
+        color: #f59e0b;
+        filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.3));
+      }
+
+      .promo-badge {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        background: var(--primary-gradient);
+        color: white;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 5px 10px;
+        border-radius: var(--radius-sm);
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+        z-index: 10;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .card-body {
+        padding: 18px 20px;
+      }
+      .card-header-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .rest-name {
+        font-family: var(--font-title);
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--text-main);
+        margin-bottom: 4px;
+        letter-spacing: -0.2px;
+        line-height: 1.2;
+      }
+      .rest-address {
+        font-size: 13px;
+        color: var(--text-muted);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .rest-address i {
+        color: var(--brand-green);
+        font-size: 12px;
+      }
+      .time-badge {
+        background: var(--bg-pill);
+        color: var(--text-main);
+        font-size: 11.5px;
+        font-weight: 700;
+        padding: 5px 10px;
+        border-radius: 8px;
+        white-space: nowrap;
+        border: 1px solid var(--border-color);
+      }
+
+      .card-footer-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1.5px dashed var(--border-color);
+      }
+      .delivery-text {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--brand-green);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .delivery-text i {
+        font-size: 14px;
+      }
+
+      .order-btn {
+        background: var(--primary-gradient);
+        color: var(--text-inverse);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 800;
+        padding: 8px 18px;
+        border-radius: var(--radius-sm);
+        transition: var(--transition-bounce);
+        border: none;
+        box-shadow: var(--shadow-glow);
+        display: inline-block;
+      }
+      .restaurant-card:hover .order-btn {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(16, 185, 129, 0.22);
+      }
+      .order-btn:active {
+        transform: scale(0.95);
+      }
+
+      /* 📱 MENÚ DE NAVEGACIÓN INFERIOR (CÁPSULA FLOTANTE) */
+      .bottom-nav {
+        background: var(--bg-glass);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--border-color);
+        position: fixed;
+        bottom: 24px;
+        left: 20px;
+        right: 20px;
+        border-radius: 24px;
+        padding: 10px 8px 10px;
+        z-index: 1000;
+        box-shadow: var(--shadow-lg);
+        max-width: 440px;
+        margin: 0 auto;
+      }
+      .nav-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .nav-btn {
+        background: none;
+        border: none;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-align: center;
+        cursor: pointer;
+        width: 25%;
+        transition: var(--transition-bounce);
+        outline: none;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        position: relative;
+      }
+      .nav-btn.active {
+        color: var(--brand-green);
+        transform: translateY(-2px);
+      }
+      .nav-icon {
+        font-size: 22px;
+        margin-bottom: 1px;
+        display: block;
+        transition: var(--transition-bounce);
+      }
+      .nav-btn:hover {
+        color: var(--brand-green);
+      }
+      .nav-btn:active .nav-icon {
+        transform: scale(0.8);
+      }
+      .nav-btn.active .nav-icon {
+        filter: drop-shadow(0 4px 10px rgba(16, 185, 129, 0.4));
+      }
+      /* Punto indicador activo */
+      .nav-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        width: 5px;
+        height: 5px;
+        background: var(--brand-green);
+        border-radius: 50%;
+        box-shadow: 0 0 8px var(--brand-green);
+      }
+
+      /* 💳 WALLET PREMIUM CUSTOM STYLES */
+      .tab-view {
+        animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      @keyframes slideUpFade {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .wallet-header {
+        background: var(--dark-gradient);
+        border-radius: var(--radius-md);
+        padding: 24px;
+        color: white;
+        margin-bottom: 24px;
+        box-shadow: 0 16px 36px -10px rgba(16, 185, 129, 0.3);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(16, 185, 129, 0.15);
+      }
+      .wallet-header::before {
+        content: '';
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, transparent 70%);
+        border-radius: 50%;
+        top: -60px;
+        right: -60px;
+        pointer-events: none;
+      }
+      .wallet-title {
+        font-family: var(--font-title);
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        opacity: 0.85;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .wallet-title i {
+        color: #10b981;
+      }
+      .wallet-balance {
+        font-family: var(--font-title);
+        font-size: 34px;
+        font-weight: 800;
+        margin-top: 8px;
+        letter-spacing: -0.5px;
+        background: linear-gradient(to right, #ffffff, #a7f3d0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+      }
+      
+      /* Tarjetas de Crédito */
+      .credit-card {
+        aspect-ratio: 1.586/1;
+        border-radius: 20px;
+        padding: 24px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 12px;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: var(--transition-smooth);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .credit-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(45deg, rgba(255,255,255,0.08) 0%, transparent 60%);
+        pointer-events: none;
+      }
+      .credit-card:hover {
+        transform: translateY(-4px) rotate(0.5deg);
+        box-shadow: var(--shadow-lg), 0 10px 30px rgba(0, 0, 0, 0.2);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+      .credit-card.visa {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 40%, #0f172a 100%);
+      }
+      .credit-card.mastercard {
+        background: linear-gradient(135deg, #1e1b4b 0%, #ea580c 60%, #e11d48 100%);
+      }
+      .credit-card.generic {
+        background: linear-gradient(135deg, #0f766e 0%, #0f172a 100%);
+      }
+      
+      .card-chip {
+        width: 42px;
+        height: 30px;
+        background: linear-gradient(135deg, #ffe082 0%, #ffb300 100%);
+        border-radius: 6px;
+        position: relative;
+        overflow: hidden;
+        border: 1.5px solid rgba(255,255,255,0.15);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+      }
+      .card-chip::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 6px),
+                    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 6px);
+      }
+      .card-brand {
+        font-family: var(--font-title);
+        font-weight: 900;
+        font-size: 19px;
+        letter-spacing: -0.5px;
+        text-transform: uppercase;
+        font-style: italic;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .card-number {
+        font-family: 'Outfit', monospace;
+        font-size: 19px;
+        letter-spacing: 2.2px;
+        margin: 20px 0;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      }
+      .card-holder {
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        opacity: 0.7;
+        font-weight: 700;
+      }
+      
+      .delete-card-flex {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: -14px;
+        margin-bottom: 16px;
+        position: relative;
+        z-index: 10;
+      }
+      .delete-card-btn {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.15);
+        color: #ef4444;
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition-bounce);
+        backdrop-filter: blur(4px);
+      }
+      .delete-card-btn:hover {
+        background: #ef4444;
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+      }
+      .delete-card-btn:active {
+        transform: scale(0.95);
+      }
+
+      .add-card-btn {
+        width: 100%;
+        background: var(--brand-green-light);
+        border: 2px dashed rgba(16, 185, 129, 0.3);
+        color: var(--brand-green);
+        border-radius: var(--radius-md);
+        padding: 16px;
+        font-family: var(--font-body);
+        font-size: 14.5px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: var(--transition-smooth);
+        outline: none;
+      }
+      .add-card-btn:hover {
+        background: rgba(16, 185, 129, 0.12);
+        border-color: var(--brand-green);
+        transform: translateY(-2px);
+      }
+      .add-card-btn:active {
+        transform: scale(0.98);
+      }
+      
+      /* 🔒 MODAL DE STRIPE GLASSMÓRFICO */
+      .stripe-modal {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(3, 7, 18, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        z-index: 3000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .stripe-modal-content {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        width: 100%;
+        max-width: 420px;
+        padding: 24px;
+        box-shadow: var(--shadow-lg);
+        position: relative;
+        animation: modalScaleUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      @keyframes modalScaleUp {
+        from { transform: scale(0.92); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+      }
+      
+      .stripe-element-container {
+        border: 1.5px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        padding: 14px;
+        background: var(--bg-pill);
+        margin: 20px 0;
+        transition: var(--transition-smooth);
+      }
+      .stripe-element-container.focused {
+        border-color: var(--brand-green);
+        background: var(--bg-card);
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+      }
+
+      .modal-close-btn-custom {
+        background: var(--bg-pill);
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        cursor: pointer;
+        color: var(--text-main);
+        transition: var(--transition-smooth);
+      }
+      .modal-close-btn-custom:hover {
+        background: #ef4444;
+        color: white;
+        transform: rotate(90deg);
+      }
+
+      /* 🍕 MODAL DE SELECCIÓN DE MENÚ (BOTTOM SHEET) */
+      .menu-modal-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(3, 7, 18, 0.55);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        z-index: 2000;
+        display: none;
+        align-items: flex-end;
+        justify-content: center;
+        transition: var(--transition-smooth);
+      }
+      .menu-bottom-drawer {
+        background: var(--bg-card);
+        width: 100%;
+        max-width: 480px;
+        border-top-left-radius: var(--radius-xl);
+        border-top-right-radius: var(--radius-xl);
+        padding: 24px;
+        box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.15);
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        max-height: 82vh;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--border-color);
+        border-bottom: none;
+      }
+      .drawer-handle {
+        width: 42px;
+        height: 5px;
+        background: var(--text-muted);
+        opacity: 0.3;
+        border-radius: 100px;
+        margin: -8px auto 20px;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+      }
+      .drawer-handle:hover {
+        opacity: 0.5;
+        transform: scaleX(1.1);
+      }
+
+      /* Listado de items del Menú */
+      .menu-items-scroll {
+        flex-grow: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding-bottom: 20px;
+        padding-right: 4px;
+      }
+      .menu-items-scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .menu-items-scroll::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 10px;
+      }
+
+      /* Carta de plato del Menú */
+      .menu-item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px;
+        border: 1.5px solid var(--border-color);
+        background: var(--bg-pill);
+        border-radius: var(--radius-md);
+        transition: var(--transition-smooth);
+      }
+      .menu-item-row:hover {
+        border-color: rgba(16, 185, 129, 0.25);
+        background: var(--bg-card);
+        box-shadow: var(--shadow-sm);
+      }
+      
+      .menu-item-left {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .menu-item-emoji {
+        width: 48px;
+        height: 48px;
+        background: var(--bg-card);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+        transition: var(--transition-bounce);
+      }
+      .menu-item-row:hover .menu-item-emoji {
+        transform: scale(1.08) rotate(-4deg);
+        box-shadow: var(--shadow-md);
+      }
+
+      .menu-item-info h5 {
+        font-size: 14.5px;
+        font-weight: 800;
+        color: var(--text-main);
+        letter-spacing: -0.2px;
+      }
+      .menu-item-info p {
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 500;
+        margin-top: 3px;
+        line-height: 1.3;
+      }
+      .menu-item-price {
+        font-size: 13.5px;
+        font-weight: 800;
+        color: var(--brand-green);
+        display: block;
+        margin-top: 4px;
+      }
+
+      /* Controles de cantidad interactivos */
+      .qty-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--bg-card);
+        padding: 5px 12px;
+        border-radius: 100px;
+        border: 1.5px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+      }
+      .qty-btn {
+        background: none;
+        border: none;
+        font-size: 16px;
+        font-weight: 800;
+        cursor: pointer;
+        color: var(--text-muted);
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-bounce);
+        border-radius: 50%;
+      }
+      .qty-btn.plus {
+        color: var(--brand-green);
+      }
+      .qty-btn:hover {
+        background: var(--bg-pill);
+        transform: scale(1.15);
+      }
+      .qty-btn:active {
+        transform: scale(0.9);
+      }
+      .qty-val {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--text-main);
+        min-width: 14px;
+        text-align: center;
+      }
+
+      /* Botón de Checkout principal en Drawer */
+      .checkout-submit-btn {
+        width: 100%;
+        border: none;
+        font-size: 15px;
+        font-weight: 800;
+        padding: 15px;
+        border-radius: var(--radius-md);
+        transition: var(--transition-smooth);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+      }
+
+      /* Estilo dinámico de loaders */
+      .pulse-loader {
+        animation: subtlePulse 2s infinite ease-in-out;
+      }
+      @keyframes subtlePulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(0.98); opacity: 0.8; }
+      }
+
+      /* 💬 CONTENEDOR DE SOPORTE Y CHAT BOT */
+      .support-view-container {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        animation: fadeIn 0.4s ease-out;
+      }
+      
+      /* Acordeón FAQ */
+      .faq-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        margin-bottom: 12px;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-smooth);
+      }
+      .faq-card:hover {
+        border-color: var(--brand-green);
+        box-shadow: var(--shadow-md);
+      }
+      .faq-header {
+        padding: 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 14.5px;
+        color: var(--text-main);
+        user-select: none;
+        transition: var(--transition-smooth);
+      }
+      .faq-header i {
+        color: var(--text-muted);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 12px;
+      }
+      .faq-card.open .faq-header {
+        background: var(--brand-green-light);
+        color: var(--brand-green);
+      }
+      .faq-card.open .faq-header i {
+        transform: rotate(180deg);
+        color: var(--brand-green);
+      }
+      .faq-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 13px;
+        color: var(--text-muted);
+        line-height: 1.5;
+        background: var(--bg-card);
+      }
+      .faq-content-inner {
+        padding: 16px 20px;
+        border-top: 1px solid var(--border-color);
+      }
+      
+      /* Chat Widget */
+      .chat-bot-container {
+        background: var(--card-gradient);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        display: flex;
+        flex-direction: column;
+        height: 480px;
+        overflow: hidden;
+        position: relative;
+        backdrop-filter: blur(10px);
+      }
+      .chat-header {
+        padding: 16px 20px;
+        background: var(--primary-gradient);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+      .chat-bot-avatar {
+        width: 38px;
+        height: 38px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        border: 1px solid rgba(255,255,255,0.25);
+        position: relative;
+      }
+      .online-dot {
+        position: absolute;
+        bottom: 1px;
+        right: 1px;
+        width: 10px;
+        height: 10px;
+        background: #10b981;
+        border: 2px solid white;
+        border-radius: 50%;
+      }
+      body.dark-theme .online-dot {
+        border-color: #0b1329;
+      }
+      .chat-bot-title {
+        font-family: var(--font-title);
+        font-weight: 800;
+        font-size: 15px;
+      }
+      .chat-bot-subtitle {
+        font-size: 11px;
+        opacity: 0.85;
+        font-weight: 500;
+      }
+      
+      /* Messages Area */
+      .chat-messages {
+        flex-grow: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        background: rgba(0,0,0,0.01);
+      }
+      .chat-messages::-webkit-scrollbar {
+        width: 4px;
+      }
+      .chat-messages::-webkit-scrollbar-thumb {
+        background: rgba(0,0,0,0.08);
+        border-radius: 4px;
+      }
+      .msg-bubble {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: var(--radius-sm);
+        font-size: 13.5px;
+        line-height: 1.45;
+        font-weight: 500;
+        animation: messageSlideIn 0.25s ease-out;
+      }
+      @keyframes messageSlideIn {
+        from { transform: translateY(8px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      .msg-bubble.bot {
+        background: var(--bg-pill);
+        color: var(--text-main);
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+        border: 1px solid var(--border-color);
+      }
+      .msg-bubble.user {
+        background: var(--primary-gradient);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);
+      }
+      .msg-bubble.agent {
+        background: linear-gradient(135deg, #0e5aed 0%, #1e3a8a 100%);
+        color: white;
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+        box-shadow: 0 4px 10px rgba(14, 90, 237, 0.15);
+      }
+      
+      /* Typings animation */
+      .typing-indicator {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 12px 18px;
+        background: var(--bg-pill);
+        border: 1px solid var(--border-color);
+        align-self: flex-start;
+        border-radius: var(--radius-sm);
+        border-bottom-left-radius: 4px;
+        animation: messageSlideIn 0.2s ease-out;
+      }
+      .typing-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--text-muted);
+        border-radius: 50%;
+        animation: typingDotBounce 1.4s infinite ease-in-out both;
+      }
+      .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+      .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+      @keyframes typingDotBounce {
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1); }
+      }
+      
+      /* Quick Replies Grid */
+      .quick-replies-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 20px;
+        background: rgba(0,0,0,0.01);
+        border-top: 1px dashed var(--border-color);
+      }
+      .quick-reply-btn {
+        background: var(--bg-card);
+        border: 1.5px solid var(--border-color);
+        color: var(--text-main);
+        padding: 8px 14px;
+        border-radius: 100px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition-bounce);
+        box-shadow: var(--shadow-sm);
+      }
+      .quick-reply-btn:hover {
+        border-color: var(--brand-green);
+        background: var(--brand-green-light);
+        color: var(--brand-green);
+        transform: translateY(-2px);
+      }
+      .quick-reply-btn:active {
+        transform: scale(0.95);
+      }
+      
+      /* Chat Input */
+      .chat-input-area {
+        padding: 14px 20px;
+        background: var(--bg-card);
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .chat-text-input {
+        flex-grow: 1;
+        border: 1.5px solid var(--border-color);
+        background: var(--bg-pill);
+        border-radius: 14px;
+        padding: 12px 16px;
+        font-family: var(--font-body);
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--text-main);
+        outline: none;
+        transition: var(--transition-smooth);
+      }
+      .chat-text-input:focus {
+        border-color: var(--brand-green);
+        background: var(--bg-card);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.06);
+      }
+      .chat-send-btn {
+        background: var(--primary-gradient);
+        color: white;
+        border: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        cursor: pointer;
+        transition: var(--transition-bounce);
+        box-shadow: var(--shadow-glow);
+      }
+      .chat-send-btn:hover {
+        transform: scale(1.06) translateY(-1px);
+        box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25);
+      }
+      .chat-send-btn:active {
+        transform: scale(0.95);
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Capas de fondo interactivas (blobs) -->
+    <div class="blob-bg blob-1"></div>
+    <div class="blob-bg blob-2"></div>
+    <div class="blob-bg blob-3"></div>
+
+    <!-- 📱 HEADER -->
+    <header>
+      <div class="header-container">
+        <div class="location-wrapper" style="position: relative;">
+          <p class="sub-title">Região / Área</p>
+          <h6 class="main-title" style="gap: 4px;">
+            <i class="fas fa-map-marker-alt"></i>
+            <select id="header-region-filter" onchange="filterRestaurantsByRegion()" style="background: transparent; border: none; font-family: var(--font-title); font-size: 15px; font-weight: 800; color: var(--text-main); outline: none; cursor: pointer; padding-left: 0; padding-right: 15px;">
+              <option value="ALL">Todas as Regiões</option>
+              <option value="Porto">Porto</option>
+              <option value="Lisboa">Lisboa</option>
+              <option value="Braga">Braga</option>
+              <option value="Coimbra">Coimbra</option>
+            </select>
+          </h6>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button type="button" class="theme-btn-custom" id="theme-btn" title="Alternar Modo Claro/Oscuro">
+            <i class="fas fa-moon" id="theme-icon"></i>
+          </button>
+          <a href="{{ url_for('apps_view_blueprint.client_logout') }}" class="profile-avatar-custom" title="Sair / Logout"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+      </div>
+    </header>
+
+    <!-- 📱 CUERPO DE LA APP -->
+    <main>
+      <!-- VISTA DE INICIO (HOME) -->
+      <div id="home-view" class="tab-view">
+        <div class="search-wrapper">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            placeholder="¿Qué se te antoja hoy?"
+            class="search-box"
+          />
+        </div>
+
+
+
+        <section>
+          <h6 class="section-title">Restaurantes Cercanos</h6>
+          <div id="restaurants-container">
+            <div
+              style="
+                text-align: center;
+                padding: 40px 0;
+                color: var(--text-muted);
+                font-size: 14px;
+                font-weight: 500;
+              "
+            >
+              <i class="fas fa-circle-notch fa-spin text-teal me-2"></i> Buscando restaurantes comerciales...
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- VISTA DE BILLETERA (WALLET) -->
+      <div id="wallet-view" class="tab-view" style="display: none;">
+        <div class="wallet-header">
+          <div class="wallet-title">Billetera Digital</div>
+          <div class="wallet-balance" id="wallet-balance-amount">25.00 €</div>
+          <div style="font-size: 12px; opacity: 0.9; margin-top: 4px; font-weight: 600;">
+            <i class="fas fa-gift"></i> Saldo promocional y cupones activos
+          </div>
+        </div>
+
+        <h6 class="section-title" style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          Mis Tarjetas Guardadas
+          <span style="font-size: 11px; text-transform: uppercase; color: var(--brand-green); font-weight: 800; letter-spacing: 0.5px;">Seguridad SSL 🔒</span>
+        </h6>
+
+        <div id="cards-list-container" style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px;">
+          <!-- Cargado dinámicamente o mockups realistas -->
+          <div style="text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 14px; font-weight: 600; background: var(--bg-card); border-radius: 20px; border: 1px dashed rgba(16, 185, 129, 0.3);">
+            <i class="fas fa-circle-notch fa-spin text-teal mb-3 d-block" style="font-size: 24px;"></i> Sincronizando tarjetas con Stripe...
+          </div>
+        </div>
+
+        <button type="button" class="add-card-btn" onclick="openAddCardModal()">
+          <i class="fas fa-plus-circle"></i> Agregar Tarjeta de Crédito/Débito
+        </button>
+      </div>
+
+      <!-- VISTA DE SOPORTE (SUPPORT) -->
+      <div id="support-view" class="tab-view" style="display: none;">
+        <div class="support-view-container">
+          <!-- Central de Ajuda -->
+          <div>
+            <h6 class="section-title">Central de Ajuda</h6>
+            <div class="search-wrapper" style="margin-bottom: 16px;">
+              <i class="fas fa-search search-icon"></i>
+              <input
+                type="text"
+                id="faq-search"
+                placeholder="Pesquise por ajuda (ex: pagamento, pedido)..."
+                class="search-box"
+                oninput="filterClientFAQs()"
+              />
+            </div>
+            
+            <div id="faq-list-container">
+              <!-- FAQ Item 1 -->
+              <div class="faq-card" data-keywords="pedido comida atrasado status rastrear">
+                <div class="faq-header" onclick="toggleFAQ(this)">
+                  ¿Cómo puedo rastrear mi pedido?
+                  <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-content">
+                  <div class="faq-content-inner">
+                    Puedes ver el estado de tu pedido en tiempo real y el movimiento GPS del repartidor accediendo a la sección de <strong>Pedidos</strong> en la barra inferior, seleccionando tu pedido activo.
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ Item 2 -->
+              <div class="faq-card" data-keywords="pagamento cartao mbway dinheiro stripe element">
+                <div class="faq-header" onclick="toggleFAQ(this)">
+                  ¿Qué métodos de pago son aceptados?
+                  <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-content">
+                  <div class="faq-content-inner">
+                    Aceptamos pagos en efectivo en la entrega, tarjetas de crédito/débito tokenizadas de forma segura mediante Stripe Elements en la pestaña <strong>Billetera</strong>, y pagos móviles instantáneos con <strong>MB WAY Portugal</strong> (+351).
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ Item 3 -->
+              <div class="faq-card" data-keywords="cancelar reembolso pedido engano errado">
+                <div class="faq-header" onclick="toggleFAQ(this)">
+                  ¿Cómo puedo cancelar un pedido?
+                  <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-content">
+                  <div class="faq-content-inner">
+                    Si tu pedido aún está como "PENDIENTE" en el monitor de cocina, puedes cancelarlo directamente en el chat automático o contactando de inmediato con el soporte. Si ya está "EN PREPARACIÓN", debes llamar al restaurante asociado.
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ Item 4 -->
+              <div class="faq-card" data-keywords="perfil conta senha numero pin sms email confirmar">
+                <div class="faq-header" onclick="toggleFAQ(this)">
+                  ¿Por qué debo verificar mi número con PIN SMS?
+                  <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-content">
+                  <div class="faq-content-inner">
+                    Para garantizar la seguridad de tus pedidos y la validez de los contactos del repartidor, requerimos una verificación de 2 factores (PIN de 4 dígitos enviado por SMS y enlace de confirmación por email) al registrarte.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Chat Bot -->
+          <div>
+            <h6 class="section-title">Chat de Suporte Automatizado</h6>
+            <div class="chat-bot-container">
+              <!-- Chat Header -->
+              <div class="chat-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div class="chat-bot-avatar">
+                    🤖
+                    <span class="online-dot"></span>
+                  </div>
+                  <div>
+                    <div class="chat-bot-title">Premium Assistente</div>
+                    <div class="chat-bot-subtitle">Online • Responde al instante</div>
+                  </div>
+                </div>
+                <button onclick="clearChatHistory()" class="modal-close-btn-custom" title="Limpar Historial" style="background: rgba(255,255,255,0.15); color: white; display: flex; align-items: center; justify-content: center;">
+                  <i class="fas fa-trash-arrow-up"></i>
+                </button>
+              </div>
+              
+              <!-- Chat Messages -->
+              <div id="chat-messages-container" class="chat-messages">
+                <!-- Burubujas dinámicas -->
+              </div>
+              
+              <!-- Quick replies -->
+              <div id="quick-replies-box" class="quick-replies-container">
+                <!-- Botones rápidos -->
+              </div>
+              
+              <!-- Chat Input area -->
+              <div class="chat-input-area">
+                <input
+                  type="text"
+                  id="chat-user-input"
+                  placeholder="Escribe tu consulta..."
+                  class="chat-text-input"
+                  onkeypress="handleChatKeyPress(event)"
+                />
+                <button onclick="sendUserMessage()" class="chat-send-btn">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA DE HISTORIAL DE COMPRAS (MY ORDERS / HISTÓRICO SPA) -->
+      <div id="history-view" class="tab-view" style="display: none;">
+        <div class="wallet-header" style="background: linear-gradient(135deg, #0b1329 0%, #1e3a8a 100%); border-color: rgba(14, 90, 237, 0.2); box-shadow: 0 16px 36px -10px rgba(14, 90, 237, 0.2); margin-bottom: 24px;">
+          <div class="wallet-title"><i class="fas fa-history" style="color: #60a5fa;"></i> O meu Historial</div>
+          <div class="wallet-balance" style="font-size: 26px; background: linear-gradient(to right, #ffffff, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 8px;">Minhas Encomendas</div>
+          <div style="font-size: 11px; opacity: 0.9; margin-top: 4px; font-weight: 600;">
+            Veja as suas compras e estados de entrega em tempo real
+          </div>
+        </div>
+
+        <h6 class="section-title">Histórico de Pedidos</h6>
+        <div id="history-list-container" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
+          <!-- Cargado dinámicamente -->
+        </div>
+      </div>
+    </main>
+
+    <!-- 📱 MENU INFERIOR MÓVIL (PILL FLOTANTE) -->
+    <nav class="bottom-nav">
+      <div class="nav-container">
+        <button onclick="switchTab('home')" class="nav-btn active" id="btn-nav-home">
+          <span class="nav-icon">🏠</span>Inicio
+        </button>
+        <button onclick="switchTab('wallet')" class="nav-btn" id="btn-nav-wallet">
+          <span class="nav-icon">💳</span>Billetera
+        </button>
+        <button onclick="switchTab('history')" class="nav-btn" id="btn-nav-history">
+          <span class="nav-icon">📋</span>Histórico
+        </button>
+        <button onclick="switchTab('support')" class="nav-btn" id="btn-nav-support">
+          <span class="nav-icon">💬</span>Suporte
+        </button>
+        <a href="/" class="nav-btn">
+          <span class="nav-icon">⚙️</span>Admin
+        </a>
+      </div>
+    </nav>
+
+    <!-- 📱 CARGA DINÁMICA DE LA BASE DE DATOS Y LÓGICA CORE -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const container = document.getElementById("restaurants-container");
+        const themeBtn = document.getElementById("theme-btn");
+        const themeIcon = document.getElementById("theme-icon");
+
+        // 🌗 CONTROL DE MODO CLARO / OSCURO PERSISTENTE
+        let currentTheme = localStorage.getItem("app_client_theme") || "light";
+        if (currentTheme === "dark") {
+          document.body.classList.add("dark-theme");
+          themeIcon.className = "fas fa-sun";
+        } else {
+          document.body.classList.remove("dark-theme");
+          themeIcon.className = "fas fa-moon";
+        }
+
+        themeBtn.addEventListener("click", () => {
+          if (document.body.classList.contains("dark-theme")) {
+            document.body.classList.remove("dark-theme");
+            themeIcon.className = "fas fa-moon";
+            currentTheme = "light";
+          } else {
+            document.body.classList.add("dark-theme");
+            themeIcon.className = "fas fa-sun";
+            currentTheme = "dark";
+          }
+          localStorage.setItem("app_client_theme", currentTheme);
+        });
+
+        // 🌟 SINCRO DE CREDENCIALES DEL CLIENTE ACTIVO EN LOCALSTORAGE
+        const urlParams = new URLSearchParams(window.location.search);
+        let clientId = urlParams.get('client_id');
+        let activeTab = urlParams.get('tab');
+        if (activeTab === 'wallet') {
+          setTimeout(() => { switchTab('wallet'); }, 100);
+        }
+        if (clientId) {
+          localStorage.setItem("active_client_id", clientId);
+          fetch('/clients/', { headers: { 'Accept': 'application/json' } })
+            .then(res => res.json())
+            .then(clients => {
+              const active = clients.find(c => c.id == parseInt(clientId));
+              if (active) {
+                localStorage.setItem("active_client_name", active.name);
+                localStorage.setItem("active_client_address", active.address);
+                localStorage.setItem("active_client_phone", active.phone);
+                
+                const avatar = document.querySelector('.profile-avatar-custom');
+                if (avatar) {
+                  avatar.innerHTML = `<span style="font-weight:800; font-family:var(--font-title);">${active.name.charAt(0).toUpperCase()}</span>`;
+                }
+              }
+            })
+            .catch(e => console.error("Error al sincronizar datos de cliente:", e));
+        } else {
+          const activeId = localStorage.getItem("active_client_id");
+          const activeName = localStorage.getItem("active_client_name");
+          if (activeId && activeName) {
+            const avatar = document.querySelector('.profile-avatar-custom');
+            if (avatar) {
+              avatar.innerHTML = `<span style="font-weight:800; font-family:var(--font-title);">${activeName.charAt(0).toUpperCase()}</span>`;
+            }
+          }
+        }
+
+        // 🏪 FASE 10: CARGA DINÂMICA DE RESTAURANTES, FAVORITOS E FILTRO POR REGIÃO
+        window.loadRestaurants = function(region = "ALL") {
+          const activeClientId = parseInt(localStorage.getItem("active_client_id")) || 1;
+          const container = document.getElementById("restaurants-container");
+          container.innerHTML = `
+            <div style="text-align: center; padding: 40px 0; color: var(--text-muted); font-size: 14px; font-weight: 500;">
+              <i class="fas fa-circle-notch fa-spin text-teal me-2"></i> Procurando restaurantes comerciais...
+            </div>
+          `;
+
+          // 1. Obtener favoritos del cliente
+          fetch(`/api/v1/clients/${activeClientId}/favorites`)
+            .then(res => res.json())
+            .then(favs => {
+              const favoriteSet = new Set(favs || []);
+              
+              // 2. Obtener restaurantes (filtrados por región si procede)
+              const url = region && region !== "ALL" ? `/api/v1/clients/restaurants?region=${region}` : "/api/v1/clients/restaurants";
+              return fetch(url).then(res => res.json()).then(data => {
+                container.innerHTML = "";
+
+                if (data.length === 0) {
+                  container.innerHTML = `
+                  <div class="pulse-loader" style="text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 14px; font-weight: 600; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px dashed var(--border-color); box-shadow: var(--shadow-sm);">
+                    <i class="fas fa-store-slash fa-2x mb-3 d-block" style="color: var(--brand-green); opacity: 0.6;"></i> Não há restaurantes disponíveis nesta região no momento.
+                  </div>`;
+                  return;
+                }
+
+                data.forEach((restaurant) => {
+                  const card = document.createElement("div");
+                  card.className = "restaurant-card";
+
+                  const coverImg =
+                    restaurant.banner_url && restaurant.banner_url.startsWith("http")
+                      ? restaurant.banner_url
+                      : (restaurant.logo_url && restaurant.logo_url.startsWith("http")
+                        ? restaurant.logo_url
+                        : "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=600&auto=format&fit=crop");
+
+                  const isFav = favoriteSet.has(restaurant.id);
+                  const heartIconClass = isFav ? "fa-solid fa-heart" : "fa-regular fa-heart";
+                  const heartStyle = isFav ? "color: #ef4444; filter: drop-shadow(0 0 4px rgba(239,68,68,0.4));" : "color: #ffffff; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));";
+
+                  card.innerHTML = `
+                  <div class="image-container" onclick="openMenuModal(${restaurant.id}, '${restaurant.name.replace(/'/g, "\\'")}')">
+                    <img src="${coverImg}" alt="${restaurant.name}" class="card-img">
+                    <span class="promo-badge">${restaurant.region || 'Porto'} 📍</span>
+                    <button type="button" onclick="toggleFavorite(event, ${restaurant.id}, ${isFav})" class="favorite-heart-btn" style="position: absolute; top: 14px; right: 14px; background: rgba(0,0,0,0.45); border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; transition: all 0.2s; z-index: 20;">
+                      <i class="${heartIconClass}" style="${heartStyle}"></i>
+                    </button>
+                  </div>
+                  <div class="card-body">
+                    <div class="card-header-flex" onclick="openMenuModal(${restaurant.id}, '${restaurant.name.replace(/'/g, "\\'")}')">
+                      <div>
+                        <h3 class="rest-name">${restaurant.name}</h3>
+                        <p class="rest-address"><i class="fas fa-map-marker-alt"></i> ${restaurant.address}</p>
+                      </div>
+                      <span class="time-badge">15-25 min</span>
+                    </div>
+                    <div class="card-footer-flex">
+                      <span class="delivery-text"><i class="fas fa-motorcycle"></i> Entrega Rápida</span>
+                      <a href="javascript:void(0)" onclick="openMenuModal(${restaurant.id}, '${restaurant.name.replace(/'/g, "\\'")}')" class="order-btn">Pedir agora</a>
+                    </div>
+                  </div>
+                `;
+                  container.appendChild(card);
+                });
+              });
+            })
+            .catch((error) => {
+              console.error(error);
+              container.innerHTML = `<div style="color: #f43f5e; text-align: center; font-size: 13px; font-weight: 700; padding: 16px; background: rgba(244, 63, 94, 0.08); border-radius: var(--radius-md); border: 1px solid rgba(244, 63, 94, 0.2);"><i class="fas fa-exclamation-circle me-1"></i> Erro de sincronização com o servidor central.</div>`;
+            });
+        };
+
+        window.toggleFavorite = function(event, restaurantId, isCurrentlyFav) {
+          event.stopPropagation();
+          const activeClientId = parseInt(localStorage.getItem("active_client_id")) || 1;
+          const action = isCurrentlyFav ? "remove" : "add";
+
+          fetch(`/api/v1/clients/${activeClientId}/favorites`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ restaurant_id: restaurantId, action: action })
+          })
+            .then(res => res.json())
+            .then(data => {
+              const currentRegion = document.getElementById("header-region-filter").value;
+              loadRestaurants(currentRegion);
+            })
+            .catch(err => console.error("Error toggling favorite:", err));
+        };
+
+        window.filterRestaurantsByRegion = function() {
+          const region = document.getElementById("header-region-filter").value;
+          loadRestaurants(region);
+        };
+
+        // Carga inicial
+        loadRestaurants("ALL");
+      });
+
+      // 🌟 LÓGICA DEL CARRITO DINÁMICO Y CARDÁPIO PERSISTENTE (FASE 10)
+      let currentRestaurantId = null;
+      const cart = {};
+
+      function getEmojiByCategory(category) {
+        const cat = (category || "").toLowerCase();
+        if (cat.includes("pizza")) return "🍕";
+        if (cat.includes("hamb") || cat.includes("burger")) return "🍔";
+        if (cat.includes("pasta") || cat.includes("massa")) return "🍝";
+        if (cat.includes("bebida") || cat.includes("refresco") || cat.includes("suco")) return "🥤";
+        if (cat.includes("sobremesa") || cat.includes("doce") || cat.includes("gelado")) return "🍰";
+        return "🍳";
+      }
+
+      window.openMenuModal = function(restaurantId, restaurantName) {
+        currentRestaurantId = restaurantId;
+        document.getElementById("modal-restaurant-name").textContent = restaurantName;
+        
+        // Limpar cart anterior
+        for (const key in cart) {
+          delete cart[key];
+        }
+        
+        const listContainer = document.getElementById("menu-items-list");
+        listContainer.innerHTML = `
+          <div style="text-align: center; padding: 30px; color: var(--text-muted);">
+            <i class="fas fa-circle-notch fa-spin text-teal mb-2 d-block" style="font-size: 20px;"></i>
+            Procurando pratos saborosos...
+          </div>
+        `;
+        
+        fetch(`/api/v1/restaurants/${restaurantId}/plates`)
+          .then(res => res.json())
+          .then(plates => {
+            listContainer.innerHTML = "";
+            
+            if (plates.length === 0) {
+              listContainer.innerHTML = `
+                <div style="text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 13px; font-weight: 600; background: var(--bg-pill); border-radius: 20px; border: 1px dashed var(--border-color);">
+                  <i class="fas fa-utensils fa-2x mb-3" style="color: var(--brand-green); opacity: 0.6; display: block; margin: 0 auto;"></i>
+                  <p>Este restaurante ainda não tem pratos cadastrados.</p>
+                </div>
+              `;
+              updateSubmitButton();
+              return;
+            }
+            
+            plates.forEach(p => {
+              const emoji = getEmojiByCategory(p.category);
+              cart[p.id] = {
+                id: p.id,
+                name: p.name,
+                price: p.price,
+                quantity: 0,
+                emoji: emoji
+              };
+              
+              const row = document.createElement("div");
+              row.className = "menu-item-row";
+              
+              const imgHtml = p.image_url ? `<img src="${p.image_url}" style="width: 50px; height: 50px; border-radius: 12px; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />` : '';
+              const emojiDisplay = p.image_url ? 'none' : 'flex';
+              
+              row.innerHTML = `
+                <div class="menu-item-left">
+                  <div style="position: relative; width: 50px; height: 50px;">
+                    ${imgHtml}
+                    <div class="menu-item-emoji" style="display: ${emojiDisplay}; width: 50px; height: 50px; border-radius: 12px; background: var(--bg-pill); align-items: center; justify-content: center; font-size: 22px;">${emoji}</div>
+                  </div>
+                  <div class="menu-item-info">
+                    <h5 style="font-weight: 800; color: var(--text-main); font-size: 14px;">${p.name}</h5>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">${p.description || 'Ingredientes clássicos de alta qualidade.'}</p>
+                    <span class="menu-item-price" style="font-family: var(--font-title); font-weight: 700; color: var(--brand-green); font-size: 13.5px; margin-top: 4px; display: inline-block;">${p.price.toFixed(2)} €</span>
+                  </div>
+                </div>
+                <div class="qty-control">
+                  <button onclick="changeQuantity(${p.id}, -1)" class="qty-btn">-</button>
+                  <span id="qty-${p.id}" class="qty-val">0</span>
+                  <button onclick="changeQuantity(${p.id}, 1)" class="qty-btn plus">+</button>
+                </div>
+              `;
+              listContainer.appendChild(row);
+            });
+            updateSubmitButton();
+          })
+          .catch(err => {
+            console.error("Error loading plates:", err);
+            listContainer.innerHTML = `<div style="color: #ef4444; font-size: 12px; font-weight: 700; text-align: center; padding: 15px;">Fallo al cargar el menú del restaurante.</div>`;
+          });
+
+        const modal = document.getElementById("menu-modal");
+        const sheet = document.getElementById("menu-bottom-sheet");
+        
+        modal.style.display = "flex";
+        setTimeout(() => {
+          sheet.style.transform = "translateY(0)";
+        }, 50);
+      };
+
+      window.closeMenuModal = function() {
+        const modal = document.getElementById("menu-modal");
+        const sheet = document.getElementById("menu-bottom-sheet");
+        
+        sheet.style.transform = "translateY(100%)";
+        setTimeout(() => {
+          modal.style.display = "none";
+        }, 300);
+      };
+
+      window.changeQuantity = function(itemKey, delta) {
+        const item = cart[itemKey];
+        if (!item) return;
+
+        item.quantity = Math.max(0, item.quantity + delta);
+        document.getElementById(`qty-${itemKey}`).textContent = item.quantity;
+        
+        updateSubmitButton();
+      };
+
+      function updateSubmitButton() {
+        const btn = document.getElementById("btn-submit-cart");
+        let total = 0;
+        let count = 0;
+
+        for (const key in cart) {
+          total += cart[key].price * cart[key].quantity;
+          count += cart[key].quantity;
+        }
+
+        if (count > 0) {
+          btn.disabled = false;
+          btn.style.background = "var(--primary-gradient)";
+          btn.style.cursor = "pointer";
+          btn.style.boxShadow = "0 8px 20px rgba(16, 185, 129, 0.25)";
+          btn.innerHTML = `<i class="fas fa-shopping-cart"></i> Continuar ao Pago (${total.toFixed(2)} €)`;
+        } else {
+          btn.disabled = true;
+          btn.style.background = "#94a3b8";
+          btn.style.cursor = "not-allowed";
+          btn.style.boxShadow = "none";
+          btn.innerHTML = `<i class="fas fa-shopping-cart"></i> Selecciona ítems (0.00 €)`;
+        }
+      }
+
+      window.proceedToCheckout = function() {
+        const selectedItems = [];
+        for (const key in cart) {
+          if (cart[key].quantity > 0) {
+            selectedItems.push({
+              key: key,
+              name: cart[key].name,
+              price: cart[key].price,
+              quantity: cart[key].quantity,
+              emoji: cart[key].emoji
+            });
+          }
+        }
+
+        localStorage.setItem("selected_cart", JSON.stringify({
+          restaurant_id: currentRestaurantId,
+          items: selectedItems
+        }));
+
+        window.location.href = `/apps/client/checkout/${currentRestaurantId}`;
+      };
+
+      // Cerrar modal al hacer clic fuera del bottom sheet
+      document.getElementById("menu-modal").addEventListener("click", (e) => {
+        if (e.target.id === "menu-modal") {
+          closeMenuModal();
+        }
+      });
+
+      // 💳 LÓGICA DE LA BILLETERA DIGITAL SPA Y STRIPE ELEMENTS
+      let stripeInstance = null;
+      let elements = null;
+      let cardElement = null;
+
+      window.switchTab = function(tabId) {
+        const btnHome = document.getElementById("btn-nav-home");
+        const btnWallet = document.getElementById("btn-nav-wallet");
+        const btnHistory = document.getElementById("btn-nav-history");
+        const btnSupport = document.getElementById("btn-nav-support");
+        
+        if (tabId === 'home') {
+          document.getElementById("home-view").style.display = "block";
+          document.getElementById("wallet-view").style.display = "none";
+          document.getElementById("history-view").style.display = "none";
+          document.getElementById("support-view").style.display = "none";
+          btnHome.classList.add("active");
+          btnWallet.classList.remove("active");
+          btnHistory.classList.remove("active");
+          btnSupport.classList.remove("active");
+        } else if (tabId === 'wallet') {
+          document.getElementById("home-view").style.display = "none";
+          document.getElementById("wallet-view").style.display = "block";
+          document.getElementById("history-view").style.display = "none";
+          document.getElementById("support-view").style.display = "none";
+          btnHome.classList.remove("active");
+          btnWallet.classList.add("active");
+          btnHistory.classList.remove("active");
+          btnSupport.classList.remove("active");
+          
+          loadWallet();
+        } else if (tabId === 'history') {
+          document.getElementById("home-view").style.display = "none";
+          document.getElementById("wallet-view").style.display = "none";
+          document.getElementById("history-view").style.display = "block";
+          document.getElementById("support-view").style.display = "none";
+          btnHome.classList.remove("active");
+          btnWallet.classList.remove("active");
+          btnHistory.classList.add("active");
+          btnSupport.classList.remove("active");
+          
+          loadHistory();
+        } else if (tabId === 'support') {
+          document.getElementById("home-view").style.display = "none";
+          document.getElementById("wallet-view").style.display = "none";
+          document.getElementById("history-view").style.display = "none";
+          document.getElementById("support-view").style.display = "block";
+          btnHome.classList.remove("active");
+          btnWallet.classList.remove("active");
+          btnHistory.classList.remove("active");
+          btnSupport.classList.add("active");
+          
+          initializeClientChat();
+        }
+      };
+
+      window.loadHistory = function() {
+        const activeClientId = parseInt(localStorage.getItem("active_client_id")) || 1;
+        const container = document.getElementById("history-list-container");
+        container.innerHTML = `
+          <div style="text-align: center; padding: 30px; color: var(--text-muted);">
+            <i class="fas fa-circle-notch fa-spin text-teal mb-2 d-block" style="font-size: 20px;"></i>
+            Procurando as suas encomendas...
+          </div>
+        `;
+        
+        fetch(`/api/v1/clients/${activeClientId}/orders`)
+          .then(res => res.json())
+          .then(orders => {
+            container.innerHTML = "";
+            
+            if (!orders || orders.length === 0) {
+              container.innerHTML = `
+                <div style="text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 13px; font-weight: 600; background: var(--bg-card); border-radius: 20px; border: 1px dashed var(--border-color);">
+                  <i class="fas fa-receipt fa-2x mb-3" style="color: var(--brand-green); opacity: 0.6; display: block; margin: 0 auto;"></i>
+                  <p>Você ainda não realizou nenhuma encomenda.</p>
+                </div>
+              `;
+              return;
+            }
+            
+            orders.forEach(o => {
+              const dateStr = o.created_at ? new Date(o.created_at).toLocaleDateString("pt-PT", { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Recentemente';
+              
+              let statusText = "Pendente";
+              let statusColor = "var(--brand-amber)";
+              let statusBg = "rgba(245, 158, 11, 0.15)";
+              let activeTrackingBtn = "";
+              
+              const statusLower = (o.status || "").toUpperCase();
+              
+              if (statusLower === "EN_PREPARACION" || statusLower === "PREPARANDO") {
+                statusText = "Em Preparação 🍳";
+                statusColor = "var(--brand-green)";
+                statusBg = "rgba(16, 185, 129, 0.15)";
+                activeTrackingBtn = `<button onclick="window.location.href='/apps/client/tracking/${o.id}'" class="order-btn" style="width:100%; text-align:center; margin-top:10px;"><i class="fas fa-map-location-dot"></i> Rastrear Pedido</button>`;
+              } else if (statusLower === "LISTO_PARA_RECOGER" || statusLower === "LISTO") {
+                statusText = "Pronto para Recolha 🛵";
+                statusColor = "var(--brand-green)";
+                statusBg = "rgba(16, 185, 129, 0.15)";
+                activeTrackingBtn = `<button onclick="window.location.href='/apps/client/tracking/${o.id}'" class="order-btn" style="width:100%; text-align:center; margin-top:10px;"><i class="fas fa-map-location-dot"></i> Rastrear Pedido</button>`;
+              } else if (statusLower === "EN_RUTA" || statusLower === "RUTING" || statusLower === "ROUTE") {
+                statusText = "A Caminho 🚀";
+                statusColor = "#3b82f6";
+                statusBg = "rgba(59, 130, 246, 0.15)";
+                activeTrackingBtn = `<button onclick="window.location.href='/apps/client/tracking/${o.id}'" class="order-btn" style="width:100%; text-align:center; margin-top:10px; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);"><i class="fas fa-map-location-dot"></i> Rastrear Pedido</button>`;
+              } else if (statusLower === "ENTREGADO" || statusLower === "DELIVERED") {
+                statusText = "Entregue com sucesso ✓";
+                statusColor = "var(--text-muted)";
+                statusBg = "rgba(255,255,255,0.06)";
+              } else {
+                statusText = "Pendente de Confirmação";
+                activeTrackingBtn = `<button onclick="window.location.href='/apps/client/tracking/${o.id}'" class="order-btn" style="width:100%; text-align:center; margin-top:10px;"><i class="fas fa-map-location-dot"></i> Rastrear Pedido</button>`;
+              }
+              
+              // Formatar comanda simplificada
+              let cleanNote = o.note || "";
+              if (cleanNote.includes(" || ")) {
+                cleanNote = cleanNote.split(" || ")[0]; // Solo coger los platos
+              }
+              
+              const card = document.createElement("div");
+              card.className = "restaurant-card";
+              card.style.padding = "20px";
+              card.style.display = "flex";
+              card.style.flexDirection = "column";
+              card.style.gap = "8px";
+              card.style.cursor = "default";
+              card.style.transform = "none";
+              
+              card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-family:var(--font-title); font-weight:800; font-size:16px; color:var(--text-main);">#${o.id} • ${o.restaurant_name}</span>
+                  <span style="font-size:11px; font-weight:800; color:${statusColor}; background:${statusBg}; padding:4px 8px; border-radius:6px; text-transform:uppercase;">${statusText}</span>
+                </div>
+                <div style="font-size:12px; color:var(--text-muted); font-weight:600;">${dateStr}</div>
+                <div style="font-size:13.5px; color:var(--text-main); background:var(--bg-pill); padding:10px 14px; border-radius:12px; border:1px solid var(--border-color); line-height:1.45; margin-top:4px;">
+                  ${cleanNote}
+                </div>
+                ${activeTrackingBtn}
+              `;
+              container.appendChild(card);
+            });
+          })
+          .catch(err => {
+            console.error(err);
+            container.innerHTML = `<div style="color:#ef4444; font-size:12px; font-weight:700; text-align:center; padding:15px;">Fallo al cargar el historial.</div>`;
+          });
+      };
+
+      // Acordeones de la Central de Ayuda
+      window.toggleFAQ = function(headerElement) {
+        const card = headerElement.parentElement;
+        const content = card.querySelector(".faq-content");
+        
+        if (card.classList.contains("open")) {
+          card.classList.remove("open");
+          content.style.maxHeight = null;
+        } else {
+          // Close others
+          document.querySelectorAll(".faq-card").forEach(c => {
+            c.classList.remove("open");
+            c.querySelector(".faq-content").style.maxHeight = null;
+          });
+          
+          card.classList.add("open");
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      };
+      
+      // Filtrar FAQs en tiempo real
+      window.filterClientFAQs = function() {
+        const query = document.getElementById("faq-search").value.toLowerCase().trim();
+        const cards = document.querySelectorAll("#faq-list-container .faq-card");
+        
+        cards.forEach(card => {
+          const title = card.querySelector(".faq-header").textContent.toLowerCase();
+          const content = card.querySelector(".faq-content-inner").textContent.toLowerCase();
+          const keywords = card.getAttribute("data-keywords").toLowerCase();
+          
+          if (title.includes(query) || content.includes(query) || keywords.includes(query)) {
+            card.style.display = "block";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      };
+
+      // 💬 LÓGICA DEL CHAT BOT DE SOPORTE CLIENTE CON PERSISTENCIA
+      let clientChatMessages = [];
+      const quickReplies = [
+        "Problema com Pedido 🍔",
+        "Métodos de Pagamento 💳",
+        "Verificar minha Conta 🔒",
+        "Falar com Atendente 🧑‍💻"
+      ];
+      
+      window.initializeClientChat = function() {
+        const chatContainer = document.getElementById("chat-messages-container");
+        const history = localStorage.getItem("app_client_chat_history");
+        
+        if (history) {
+          clientChatMessages = JSON.parse(history);
+          renderClientChat();
+        } else {
+          clientChatMessages = [
+            { sender: 'bot', text: 'Olá! Sou o seu assistente virtual Premium. Como posso ajudar você hoje?' }
+          ];
+          saveClientChat();
+          renderClientChat();
+        }
+        
+        renderQuickReplies();
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      };
+      
+      function saveClientChat() {
+        localStorage.setItem("app_client_chat_history", JSON.stringify(clientChatMessages));
+      }
+      
+      function renderClientChat() {
+        const chatContainer = document.getElementById("chat-messages-container");
+        chatContainer.innerHTML = "";
+        
+        clientChatMessages.forEach(msg => {
+          const bubble = document.createElement("div");
+          bubble.className = `msg-bubble ${msg.sender}`;
+          bubble.innerHTML = msg.text;
+          chatContainer.appendChild(bubble);
+        });
+        
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+      
+      function renderQuickReplies() {
+        const repliesBox = document.getElementById("quick-replies-box");
+        repliesBox.innerHTML = "";
+        
+        quickReplies.forEach(reply => {
+          const btn = document.createElement("button");
+          btn.className = "quick-reply-btn";
+          btn.textContent = reply;
+          btn.onclick = () => handleQuickReplyClick(reply);
+          repliesBox.appendChild(btn);
+        });
+      }
+      
+      window.clearChatHistory = function() {
+        if (confirm("¿Estás seguro de que deseas limpiar el historial de chat de soporte?")) {
+          localStorage.removeItem("app_client_chat_history");
+          clientChatMessages = [
+            { sender: 'bot', text: 'Olá! Sou o seu assistente virtual Premium. Como posso ajudar você hoje?' }
+          ];
+          saveClientChat();
+          renderClientChat();
+          renderQuickReplies();
+        }
+      };
+      
+      window.handleChatKeyPress = function(e) {
+        if (e.key === 'Enter') {
+          sendUserMessage();
+        }
+      };
+      
+      window.sendUserMessage = function() {
+        const input = document.getElementById("chat-user-input");
+        const text = input.value.trim();
+        if (!text) return;
+        
+        input.value = "";
+        clientChatMessages.push({ sender: 'user', text: text });
+        saveClientChat();
+        renderClientChat();
+        
+        showTypingIndicator();
+        
+        setTimeout(() => {
+          removeTypingIndicator();
+          const response = getBotResponse(text);
+          clientChatMessages.push({ sender: 'bot', text: response });
+          saveClientChat();
+          renderClientChat();
+        }, 1200);
+      };
+      
+      function handleQuickReplyClick(replyText) {
+        clientChatMessages.push({ sender: 'user', text: replyText });
+        saveClientChat();
+        renderClientChat();
+        
+        showTypingIndicator();
+        
+        setTimeout(() => {
+          removeTypingIndicator();
+          let response = "";
+          
+          if (replyText.includes("Pedido")) {
+            response = "Se você tiver problemas com seu pedido ativo, pode ver o status em tempo real na aba de <strong>Pedidos</strong> o contactar diretamente con el restaurante. Si es urgente y la comanda está PENDIENTE, podemos procesar la cancelación inmediata.";
+          } else if (replyText.includes("Pagamento")) {
+            response = "Aceitamos pagamentos por Stripe (Cartões vinculados na aba Billetera), Dinheiro em mãos no ato da entrega e <strong>MB WAY (+351)</strong>. Todos os pagamentos são assegurados via encriptación SSL corporativa.";
+          } else if (replyText.includes("Conta")) {
+            response = "Para garantir a segurança, você deve confirmar seu e-mail e número telefônico. Um PIN de 4 dígitos é enviado e validado no ato de registro de sua conta.";
+          } else if (replyText.includes("Atendente")) {
+            connectToHumanAgent();
+            return;
+          }
+          
+          clientChatMessages.push({ sender: 'bot', text: response });
+          saveClientChat();
+          renderClientChat();
+        }, 1000);
+      }
+      
+      function showTypingIndicator() {
+        const chatContainer = document.getElementById("chat-messages-container");
+        const indicator = document.createElement("div");
+        indicator.className = "typing-indicator";
+        indicator.id = "typing-indicator-node";
+        indicator.innerHTML = `
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+        `;
+        chatContainer.appendChild(indicator);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+      
+      function removeTypingIndicator() {
+        const node = document.getElementById("typing-indicator-node");
+        if (node) node.remove();
+      }
+      
+      function getBotResponse(userInput) {
+        const input = userInput.toLowerCase();
+        
+        if (input.includes("pagamento") || input.includes("stripe") || input.includes("cartão") || input.includes("mbway") || input.includes("dinheiro")) {
+          return "Aceitamos pagamentos por Stripe, Dinheiro na entrega e <strong>MB WAY</strong> Portugal. Você puede vincular cartões de forma totalmente PCI-DSS na aba <strong>Billetera</strong>.";
+        }
+        if (input.includes("pedido") || input.includes("comida") || input.includes("atraso") || input.includes("rastrear") || input.includes("gps")) {
+          return "Você pode rastrear o progresso do seu pedido call por call na seção <strong>Pedidos</strong> em tempo real, com o radar do entregador.";
+        }
+        if (input.includes("cancelar") || input.includes("reembolso")) {
+          return "Para cancelar um pedido, verifique se ele ainda está pendente na aba de Pedidos. Se já estiver em preparação, contate o restaurante diretamente ou selecione 'Falar com Atendente'.";
+        }
+        if (input.includes("pin") || input.includes("sms") || input.includes("verificar") || input.includes("telefone")) {
+          return "O PIN SMS de 4 dígitos e a validação de e-mail são essenciais para manter la integridad física de su cuenta.";
+        }
+        if (input.includes("ola") || input.includes("oi") || input.includes("bom dia") || input.includes("boa tarde")) {
+          return "Olá! Sou o assistente de suporte de alta fidelidade. Como posso ajudar com sua plataforma hoje? Você também pode falar com um atendente humano!";
+        }
+        
+        return "Desculpe, não entendi perfeitamente sua dúvida. Você pode refinar la búsqueda en la Central de Ayuda arriba o hacer clic en <strong>Falar com Atendente 🧑‍💻</strong> abajo.";
+      }
+      
+      function connectToHumanAgent() {
+        showTypingIndicator();
+        
+        setTimeout(() => {
+          removeTypingIndicator();
+          clientChatMessages.push({ sender: 'bot', text: '<i>Conectando com o suporte central de alta velocidade...</i>' });
+          renderClientChat();
+          
+          showTypingIndicator();
+          
+          setTimeout(() => {
+            removeTypingIndicator();
+            clientChatMessages.push({ sender: 'bot', text: '🧑‍💻 <b>Suporte Central:</b> Olá! Meu nome é Gabriel. Fui atribuído ao seu caso. Como posso ajudar você de forma personalizada hoje?' });
+            saveClientChat();
+            renderClientChat();
+            
+            const repliesBox = document.getElementById("quick-replies-box");
+            repliesBox.innerHTML = "";
+            
+            const btn1 = document.createElement("button");
+            btn1.className = "quick-reply-btn";
+            btn1.textContent = "Agradecer e finalizar 👍";
+            btn1.onclick = () => {
+              clientChatMessages.push({ sender: 'user', text: "Obrigado Gabriel!" });
+              clientChatMessages.push({ sender: 'bot', text: "🧑‍💻 <b>Gabriel:</b> Por nada! É sempre um prazer servir você. Tenha um ótimo dia e bom apetite! Chat finalizado." });
+              saveClientChat();
+              renderClientChat();
+              setTimeout(() => { initializeClientChat(); }, 3000);
+            };
+            repliesBox.appendChild(btn1);
+          }, 2000);
+        }, 1000);
+      }
+
+      window.loadWallet = function() {
+        const activeClientId = parseInt(localStorage.getItem("active_client_id")) || 1;
+        const container = document.getElementById("cards-list-container");
+        container.innerHTML = `
+          <div style="text-align: center; padding: 30px; color: var(--text-muted);">
+            <i class="fas fa-circle-notch fa-spin text-teal mb-2 d-block" style="font-size: 20px;"></i>
+            Actualizando billetera...
+          </div>
+        `;
+        
+        fetch(`/api/v1/clients/cards?client_id=${activeClientId}`)
+          .then(res => res.json())
+          .then(cards => {
+            container.innerHTML = "";
+            
+            if (!cards || cards.length === 0) {
+              container.innerHTML = `
+                <div style="text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 13px; font-weight: 600; background: var(--bg-card); border-radius: 20px; border: 1px dashed rgba(16, 185, 129, 0.3);">
+                  <i class="fas fa-credit-card fa-2x mb-3" style="color: var(--brand-green); opacity: 0.6; display: block; margin: 0 auto;"></i>
+                  <p>No tienes tarjetas de crédito o débito vinculadas aún.</p>
+                  <p style="font-size: 11px; opacity: 0.8; margin-top: 4px;">Usa Stripe Elements para agregar una.</p>
+                </div>
+              `;
+              return;
+            }
+            
+            cards.forEach(card => {
+              const brandClass = card.brand.toLowerCase() === 'visa' ? 'visa' : (card.brand.toLowerCase() === 'mastercard' ? 'mastercard' : 'generic');
+              const brandLogo = card.brand.toUpperCase();
+              
+              const cardEl = document.createElement("div");
+              cardEl.style.position = "relative";
+              cardEl.innerHTML = `
+                <div class="credit-card ${brandClass}">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="card-chip"></div>
+                    <div class="card-brand">${brandLogo}</div>
+                  </div>
+                  <div class="card-number">•••• •••• •••• ${card.last4}</div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                      <div class="card-holder">Titular de Tarjeta</div>
+                      <div style="font-family: var(--font-title); font-weight: 700; font-size: 13px; margin-top: 2px;">${card.cardholder || 'Cliente Premium'}</div>
+                    </div>
+                    <div>
+                      <div class="card-holder">Vence</div>
+                      <div class="card-expiry" style="font-weight: 700; font-size: 13px; margin-top: 2px;">${card.exp_month.toString().padStart(2, '0')}/${card.exp_year.toString().slice(-2)}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="delete-card-flex">
+                  <button class="delete-card-btn" onclick="detachCard('${card.id}')" title="Eliminar Tarjeta">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              `;
+              container.appendChild(cardEl);
+            });
+          })
+          .catch(err => {
+            console.error(err);
+            container.innerHTML = `
+              <div style="color: #ef4444; text-align: center; font-size: 12px; font-weight: 700; padding: 16px; background: rgba(239, 68, 68, 0.08); border-radius: 14px; border: 1px solid rgba(239, 68, 68, 0.15);">
+                <i class="fas fa-exclamation-circle me-1"></i> Fallo al recuperar tarjetas de Stripe.
+              </div>
+            `;
+          });
+      };
+
+      window.detachCard = function(paymentMethodId) {
+        const activeClientId = parseInt(localStorage.getItem("active_client_id")) || 1;
+        if (!confirm("¿Estás seguro de que deseas eliminar esta tarjeta de tu billetera?")) return;
+        
+        fetch("/api/v1/clients/cards/detach", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            client_id: activeClientId,
+            payment_method_id: paymentMethodId
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            alert("Error al eliminar la tarjeta: " + data.error);
+          } else {
+            alert("Tarjeta eliminada con éxito.");
+            loadWallet();
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Error de comunicación con el servidor central.");
+        });
+      };
+
+      window.openAddCardModal = function() {
+        const modal = document.getElementById("stripe-modal");
+        modal.style.display = "flex";
+        
+        if (!stripeInstance) {
+          fetch("/api/v1/clients/payment-config")
+            .then(res => res.json())
+            .then(data => {
+              stripeInstance = Stripe(data.publishable_key);
+              elements = stripeInstance.elements();
+              
+              const isDark = document.body.classList.contains("dark-theme");
+              const style = {
+                base: {
+                  color: isDark ? "#f8fafc" : "#0f172a",
+                  fontFamily: '"Plus Jakarta Sans", sans-serif',
+                  fontSmoothing: "antialiased",
+                  fontSize: "15px",
+                  "::placeholder": {
+                    color: isDark ? "#64748b" : "#94a3b8"
+                  }
+                },
+                invalid: {
+                  color: "#ef4444",
+                  iconColor: "#ef4444"
+                }
+              };
+              
+              cardElement = elements.create("card", { style: style, hidePostalCode: true });
+              cardElement.mount("#card-element");
+              
+              const elementContainer = document.getElementById("card-element-container");
+              cardElement.on("focus", () => elementContainer.classList.add("focused"));
+              cardElement.on("blur", () => elementContainer.classList.remove("focused"));
+              
+              cardElement.on("change", (event) => {
+                const displayError = document.getElementById("card-errors");
+                if (event.error) {
+                  displayError.textContent = event.error.message;
+                  displayError.style.display = "block";
+                } else {
+                  displayError.textContent = "";
+                  displayError.style.display = "none";
+                }
+              });
+              
+              document.getElementById("btn-save-card").addEventListener("click", submitCardToStripe);
+            })
+            .catch(err => {
+              console.error("Error al configurar Stripe Elements:", err);
+              alert("Error al cargar la pasarela de Stripe. Comprueba tu conexión.");
+            });
+        }
+      };
+
+      window.closeAddCardModal = function() {
+        document.getElementById("stripe-modal").style.display = "none";
+        const displayError = document.getElementById("card-errors");
+        displayError.textContent = "";
+        displayError.style.display = "none";
+      };
+
+      async function submitCardToStripe() {
+        const activeClientId = parseInt(localStorage.getItem("active_client_id")) || 1;
+        const saveBtn = document.getElementById("btn-save-card");
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Registrando tarjeta segura...';
+        
+        try {
+          const setupRes = await fetch("/api/v1/clients/cards/setup-intent", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ client_id: activeClientId })
+          });
+          const setupData = await setupRes.json();
+          
+          if (setupData.error) {
+            throw new Error(setupData.error);
+          }
+          
+          if (setupData.client_secret.startsWith("seti_mock_secret")) {
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            const attachRes = await fetch("/api/v1/clients/cards/attach", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                client_id: activeClientId,
+                payment_method_id: "pm_mock_visa_" + Math.random().toString(36).substring(7)
+              })
+            });
+            const attachData = await attachRes.json();
+            
+            if (attachData.error) {
+              throw new Error(attachData.error);
+            }
+            
+            alert("¡Tarjeta agregada con éxito en entorno de simulación!");
+            closeAddCardModal();
+            loadWallet();
+          } else {
+            const activeName = localStorage.getItem("active_client_name") || "Cliente Premium";
+            const result = await stripeInstance.confirmCardSetup(setupData.client_secret, {
+              payment_method: {
+                card: cardElement,
+                billing_details: { name: activeName }
+              }
+            });
+            
+            if (result.error) {
+              throw new Error(result.error.message);
+            } else {
+              const attachRes = await fetch("/api/v1/clients/cards/attach", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  client_id: activeClientId,
+                  payment_method_id: result.setupIntent.payment_method
+                })
+              });
+              const attachData = await attachRes.json();
+              
+              if (attachData.error) {
+                throw new Error(attachData.error);
+              }
+              
+              alert("¡Tarjeta vinculada exitosamente con Stripe Elements!");
+              closeAddCardModal();
+              loadWallet();
+            }
+          }
+        } catch (err) {
+          console.error(err);
+          const displayError = document.getElementById("card-errors");
+          displayError.textContent = err.message || "Error al procesar la vinculación.";
+          displayError.style.display = "block";
+        } finally {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = '<i class="fas fa-lock"></i> Guardar Tarjeta de Forma Segura';
+        }
+      }
+    </script>
+
+    <!-- 🌟 MODAL PREMIUM DE SELECCIÓN DE MENÚ (ESTILO APP NATIVA MÓVIL) -->
+    <div id="menu-modal" class="menu-modal-overlay">
+      <div id="menu-bottom-sheet" class="menu-bottom-drawer">
+        <div class="drawer-handle" onclick="closeMenuModal()"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+          <div>
+            <h4 id="modal-restaurant-name" style="font-family: var(--font-title); font-size: 20px; font-weight: 800; color: var(--text-main);">Menú del Restaurante</h4>
+            <p style="font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 2px;">Selecciona tus platillos favoritos</p>
+          </div>
+          <button onclick="closeMenuModal()" class="modal-close-btn-custom">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div id="menu-items-list" class="menu-items-scroll">
+          <!-- Pizza Card -->
+          <div class="menu-item-row">
+            <div class="menu-item-left">
+              <div class="menu-item-emoji">🍕</div>
+              <div class="menu-item-info">
+                <h5>Pizza Suprema</h5>
+                <p>Queso extra, pepperoni y albahaca fresca.</p>
+                <span class="menu-item-price">12.50 €</span>
+              </div>
+            </div>
+            <div class="qty-control">
+              <button onclick="changeQuantity('pizza', -1)" class="qty-btn">-</button>
+              <span id="qty-pizza" class="qty-val">0</span>
+              <button onclick="changeQuantity('pizza', 1)" class="qty-btn plus">+</button>
+            </div>
+          </div>
+
+          <!-- Burger Card -->
+          <div class="menu-item-row">
+            <div class="menu-item-left">
+              <div class="menu-item-emoji">🍔</div>
+              <div class="menu-item-info">
+                <h5>Hamburguesa Doble</h5>
+                <p>Carne Black Angus, cheddar derretido.</p>
+                <span class="menu-item-price">9.50 €</span>
+              </div>
+            </div>
+            <div class="qty-control">
+              <button onclick="changeQuantity('burger', -1)" class="qty-btn">-</button>
+              <span id="qty-burger" class="qty-val">0</span>
+              <button onclick="changeQuantity('burger', 1)" class="qty-btn plus">+</button>
+            </div>
+          </div>
+
+          <!-- Postre Card -->
+          <div class="menu-item-row">
+            <div class="menu-item-left">
+              <div class="menu-item-emoji">🍦</div>
+              <div class="menu-item-info">
+                <h5>Postre Cremoso</h5>
+                <p>Helado artesanal de vainilla y fudge.</p>
+                <span class="menu-item-price">5.00 €</span>
+              </div>
+            </div>
+            <div class="qty-control">
+              <button onclick="changeQuantity('postre', -1)" class="qty-btn">-</button>
+              <span id="qty-postre" class="qty-val">0</span>
+              <button onclick="changeQuantity('postre', 1)" class="qty-btn plus">+</button>
+            </div>
+          </div>
+
+          <!-- Cafe Card -->
+          <div class="menu-item-row">
+            <div class="menu-item-left">
+              <div class="menu-item-emoji">☕</div>
+              <div class="menu-item-info">
+                <h5>Café Vainilla</h5>
+                <p>Café espresso con jarabe de vainilla dulce.</p>
+                <span class="menu-item-price">3.50 €</span>
+              </div>
+            </div>
+            <div class="qty-control">
+              <button onclick="changeQuantity('cafe', -1)" class="qty-btn">-</button>
+              <span id="qty-cafe" class="qty-val">0</span>
+              <button onclick="changeQuantity('cafe', 1)" class="qty-btn plus">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button id="btn-submit-cart" onclick="proceedToCheckout()" disabled class="checkout-submit-btn" style="
+            background: #94a3b8;
+            color: #ffffff;
+            border: none;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 16px;
+            border-radius: 16px;
+            cursor: not-allowed;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+          ">
+            <i class="fas fa-shopping-cart"></i> Selecciona ítems (0.00 €)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 💳 MODAL DE REGISTRO DE TARJETAS (STRIPE ELEMENTS REAL) -->
+    <div id="stripe-modal" class="stripe-modal">
+      <div class="stripe-modal-content">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+          <div>
+            <h4 style="font-family: var(--font-title); font-size: 18px; font-weight: 800; color: var(--text-main);">Agregar Tarjeta</h4>
+            <p style="font-size: 12px; color: var(--text-muted); font-weight: 600; margin-top: 2px;">Vincular tarjeta de forma 100% segura</p>
+          </div>
+          <button onclick="closeAddCardModal()" class="modal-close-btn-custom">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <!-- Stripe Card Input Container -->
+        <div id="card-element-container" class="stripe-element-container">
+          <div id="card-element">
+            <!-- A Stripe Element will be inserted here. -->
+          </div>
+        </div>
+
+        <!-- Error feedback container -->
+        <div id="card-errors" role="alert" style="color: #ef4444; font-size: 12px; font-weight: 700; margin-bottom: 16px; display: none;"></div>
+
+        <button id="btn-save-card" style="
+          width: 100%;
+          background: var(--primary-gradient);
+          color: #ffffff;
+          border: none;
+          font-size: 15px;
+          font-weight: 700;
+          padding: 16px;
+          border-radius: 16px;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+          transition: all 0.25s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+        ">
+          <i class="fas fa-lock"></i> Guardar Tarjeta de Forma Segura
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

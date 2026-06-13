@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registo de Cliente - Logleve</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-nebula: radial-gradient(circle at 10% 20%, rgba(3, 7, 18, 0.95) 0%, rgba(11, 19, 41, 0.95) 90%);
+      --body-bg: #030712;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --brand-green: #10b981;
+      --brand-green-glow: rgba(16, 185, 129, 0.25);
+      --brand-gradient: linear-gradient(135deg, #10b981 0%, #2dd4bf 100%);
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-nebula);
+      background-color: var(--body-bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .register-container {
+      width: 100%;
+      max-width: 540px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      position: relative;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo-img {
+      height: 52px;
+      width: auto;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 8px var(--brand-green-glow));
+    }
+
+    .title {
+      font-family: var(--font-title);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13.5px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .form-control {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 16px 14px 46px;
+      color: white;
+      font-family: var(--font-body);
+      font-size: 14.5px;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--brand-green);
+      box-shadow: 0 0 12px var(--brand-green-glow);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    textarea.form-control {
+      padding-left: 16px;
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--brand-gradient);
+      border: none;
+      border-radius: 14px;
+      padding: 15px;
+      color: #030712;
+      font-family: var(--font-title);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      box-shadow: 0 4px 20px var(--brand-green-glow);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--brand-green-glow);
+      filter: brightness(1.1);
+    }
+
+    .footer-text {
+      margin-top: 28px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .footer-link {
+      color: var(--brand-green);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      text-decoration: underline;
+      color: #2dd4bf;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-container">
+    <div class="header">
+      <img src="{{ url_for('static', filename='logo.png') }}" class="logo-img" alt="Logleve Logo">
+      <h1 class="title">Criar Conta Cliente</h1>
+      <p class="subtitle">Registe-se em segundos para ter acesso a entregas ultrarrápidas</p>
+    </div>
+
+    {% if error %}
+    <div class="alert-error">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('apps_view_blueprint.client_register') }}">
+      <div class="form-group">
+        <label class="form-label" for="name">Nome Completo</label>
+        <div class="input-wrapper">
+          <i class="fas fa-user input-icon"></i>
+          <input type="text" id="name" name="name" class="form-control" placeholder="Ex. Ana Silva" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">E-mail</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope input-icon"></i>
+          <input type="email" id="email" name="email" class="form-control" placeholder="ana@exemplo.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Palavra-passe</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" id="password" name="password" class="form-control" style="padding-right: 46px;" placeholder="Mínimo 6 caracteres" required>
+          <i class="fas fa-eye" style="position: absolute; right: 16px; color: var(--text-muted); cursor: pointer; transition: color 0.2s;" onclick="togglePasswordVisibility('password', this)"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="phone">Telemóvel</label>
+        <div class="input-wrapper">
+          <i class="fas fa-phone input-icon"></i>
+          <select name="phone_prefix" style="position: absolute; left: 40px; width: 95px; background: #070b13; border: 1px solid var(--card-border); color: white; border-radius: 8px; padding: 6px; font-size: 13.5px; outline: none; height: calc(100% - 8px); margin: 4px 0; z-index: 5;">
+            <option value="+351" selected>🇵🇹 +351</option>
+          </select>
+          <input type="text" id="phone" name="phone" class="form-control" style="padding-left: 145px;" placeholder="912 345 678" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="verification_method">Método de Verificação</label>
+        <div class="input-wrapper">
+          <i class="fas fa-shield-halved input-icon"></i>
+          <select id="verification_method" name="verification_method" class="form-control" style="padding-left: 46px; background: #070b13; border: 1px solid var(--card-border); color: white; border-radius: 8px; font-size: 14px; outline: none; height: 50px;">
+            <option value="email" selected>E-mail (Código por Correio Eletrónico)</option>
+            <option value="sms">SMS (Código por telemóvel)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="address">Morada Principal de Entrega</label>
+        <textarea id="address" name="address" class="form-control" placeholder="Rua, número, andar e código postal..." required></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <span>Criar Conta</span>
+        <i class="fas fa-user-plus"></i>
+      </button>
+    </form>
+
+    <p class="footer-text">
+      Já tem uma cuenta de cliente? 
+      <a href="{{ url_for('apps_view_blueprint.client_login') }}" class="footer-link">Faça login aqui</a>
+    </p>
+  </div>
+
+  <script>
+    function togglePasswordVisibility(inputId, icon) {
+      const input = document.getElementById(inputId);
+      if (input.type === "password") {
+        input.type = "text";
+        icon.className = "fas fa-eye-slash";
+        icon.style.color = "var(--brand-green)";
+      } else {
+        input.type = "password";
+        icon.className = "fas fa-eye";
+        icon.style.color = "var(--text-muted)";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const selects = document.querySelectorAll('select[name="phone_prefix"]');
+      const prefixes = [
+        { code: "+351", name: "Portugal", flag: "🇵🇹" },
+        { code: "+34", name: "España", flag: "🇪🇸" },
+        { code: "+55", name: "Brasil", flag: "🇧🇷" },
+        { code: "+1", name: "EUA/Canada", flag: "🇺🇸" },
+        { code: "+44", name: "Reino Unido", flag: "🇬🇧" },
+        { code: "+33", name: "Francia", flag: "🇫🇷" },
+        { code: "+49", name: "Alemania", flag: "🇩🇪" },
+        { code: "+39", name: "Italia", flag: "🇮🇹" },
+        { code: "+52", name: "México", flag: "🇲🇽" },
+        { code: "+58", name: "Venezuela", flag: "🇻🇪" },
+        { code: "+57", name: "Colombia", flag: "🇨🇴" },
+        { code: "+54", name: "Argentina", flag: "🇦🇷" },
+        { code: "+56", name: "Chile", flag: "🇨🇱" },
+        { code: "+51", name: "Perú", flag: "🇵🇪" },
+        { code: "+593", name: "Ecuador", flag: "🇪🇨" },
+        { code: "+502", name: "Guatemala", flag: "🇬🇹" },
+        { code: "+506", name: "Costa Rica", flag: "🇨🇷" },
+        { code: "+595", name: "Paraguay", flag: "🇵🇾" },
+        { code: "+598", name: "Uruguay", flag: "🇺🇾" },
+        { code: "+591", name: "Bolivia", flag: "🇧🇴" },
+        { code: "+507", name: "Panamá", flag: "🇵🇦" },
+        { code: "+505", name: "Nicaragua", flag: "🇳🇮" },
+        { code: "+503", name: "El Salvador", flag: "🇸🇻" },
+        { code: "+504", name: "Honduras", flag: "🇭🇳" },
+        { code: "+244", name: "Angola", flag: "🇦🇴" },
+        { code: "+258", name: "Mozambique", flag: "🇲🇿" },
+        { code: "+238", name: "Cabo Verde", flag: "🇨🇻" },
+        { code: "+224", name: "Guinea", flag: "🇬🇳" },
+        { code: "+245", name: "Guinea-Bissau", flag: "🇬🇼" },
+        { code: "+239", name: "Santo Tomé", flag: "🇸🇹" },
+        { code: "+670", name: "Timor Oriental", flag: "🇹🇱" },
+        { code: "+86", name: "China", flag: "🇨🇳" },
+        { code: "+91", name: "India", flag: "🇮🇳" },
+        { code: "+7", name: "Rusia", flag: "🇷🇺" },
+        { code: "+81", name: "Japón", flag: "🇯🇵" },
+        { code: "+82", name: "Corea del Sur", flag: "🇰🇷" },
+        { code: "+41", name: "Suiza", flag: "🇨🇭" },
+        { code: "+31", name: "Países Bajos", flag: "🇳🇱" },
+        { code: "+32", name: "Bélgica", flag: "🇧🇪" },
+        { code: "+43", name: "Austria", flag: "🇦🇹" },
+        { code: "+46", name: "Suecia", flag: "🇸🇪" },
+        { code: "+47", name: "Noruega", flag: "🇳🇴" },
+        { code: "+45", name: "Dinamarca", flag: "🇩🇰" },
+        { code: "+358", name: "Finlandia", flag: "🇫🇮" },
+        { code: "+353", name: "Irlanda", flag: "🇮🇪" },
+        { code: "+30", name: "Grecia", flag: "🇬🇷" },
+        { code: "+90", name: "Turquía", flag: "🇹🇷" },
+        { code: "+966", name: "Arabia Saudí", flag: "🇸🇦" },
+        { code: "+971", name: "Emiratos Árabes", flag: "🇦🇪" },
+        { code: "+20", name: "Egipto", flag: "🇪🇬" },
+        { code: "+27", name: "Sudáfrica", flag: "🇿🇦" },
+        { code: "+234", name: "Nigeria", flag: "🇳🇬" },
+        { code: "+254", name: "Kenia", flag: "🇰🇪" },
+        { code: "+212", name: "Marruecos", flag: "🇲🇦" },
+        { code: "+61", name: "Australia", flag: "🇦🇺" },
+        { code: "+64", name: "Nueva Zelanda", flag: "🇳🇿" },
+        { code: "+63", name: "Filipinas", flag: "🇵🇭" },
+        { code: "+62", name: "Indonesia", flag: "🇮🇩" },
+        { code: "+60", name: "Malasia", flag: "🇲🇾" },
+        { code: "+66", name: "Tailandia", flag: "🇹🇭" },
+        { code: "+84", name: "Vietnam", flag: "🇻🇳" },
+        { code: "+92", name: "Pakistán", flag: "🇵🇰" },
+        { code: "+880", name: "Bangladés", flag: "🇧🇩" },
+        { code: "+98", name: "Irán", flag: "🇮🇷" },
+        { code: "+380", name: "Ucrania", flag: "🇺🇦" },
+        { code: "+48", name: "Polonia", flag: "🇵🇱" },
+        { code: "+40", name: "Rumania", flag: "🇷🇴" }
+      ];
+
+      selects.forEach(select => {
+        select.innerHTML = '';
+        
+        prefixes.sort((a, b) => a.name.localeCompare(b.name));
+        
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '+351';
+        defaultOption.text = '🇵🇹 +351 (PT)';
+        defaultOption.selected = true;
+        select.appendChild(defaultOption);
+
+        prefixes.forEach(p => {
+          if (p.code !== '+351') {
+            const opt = document.createElement('option');
+            opt.value = p.code;
+            opt.text = `${p.flag} ${p.code} (${p.name})`;
+            select.appendChild(opt);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

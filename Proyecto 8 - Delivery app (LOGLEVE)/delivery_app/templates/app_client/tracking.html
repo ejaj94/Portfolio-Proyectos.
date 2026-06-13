@@ -1,0 +1,1419 @@
+<!doctype html>
+<html lang="es">
+  <head>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Satelital Tracking - Premium Delivery</title>
+    
+    <!-- Socket.IO Client -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+      /* 🎨 SISTEMA DE DISEÑO PREMIUM (HIGH-END DESIGN SYSTEM) */
+      :root {
+        --brand-green: #10b981;
+        --brand-green-hover: #059669;
+        --brand-green-light: rgba(16, 185, 129, 0.08);
+        --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        --accent-gradient: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+        --dark-gradient: linear-gradient(135deg, #0f172a 0%, #022c22 100%);
+        --card-gradient: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        
+        --bg-primary: #f8fafc;
+        --bg-card: #ffffff;
+        --bg-glass: rgba(255, 255, 255, 0.85);
+        --bg-pill: #f1f5f9;
+        
+        --border-color: rgba(226, 232, 240, 0.8);
+        --border-glass: rgba(255, 255, 255, 0.6);
+        
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --text-inverse: #ffffff;
+        
+        --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.02), 0 1px 3px rgba(15, 23, 42, 0.01);
+        --shadow-md: 0 12px 30px -4px rgba(15, 23, 42, 0.05), 0 4px 12px -2px rgba(15, 23, 42, 0.02);
+        --shadow-lg: 0 24px 48px -8px rgba(15, 23, 42, 0.08), 0 8px 20px -4px rgba(15, 23, 42, 0.03);
+        --shadow-glow: 0 8px 24px rgba(16, 185, 129, 0.15);
+        
+        --font-title: 'Outfit', sans-serif;
+        --font-body: 'Plus Jakarta Sans', sans-serif;
+        
+        --radius-sm: 14px;
+        --radius-md: 20px;
+        --radius-lg: 28px;
+        --radius-xl: 36px;
+        
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      /* 🌗 MODO OSCURO HIGH-END (OBSIDIAN NEON STYLE) */
+      body.dark-theme {
+        --bg-primary: #030712;
+        --bg-card: #0b1329;
+        --bg-glass: rgba(11, 19, 41, 0.85);
+        --bg-pill: #111827;
+        --card-gradient: linear-gradient(135deg, #0b1329 0%, #060b18 100%);
+        
+        --border-color: rgba(255, 255, 255, 0.05);
+        --border-glass: rgba(255, 255, 255, 0.04);
+        
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        
+        --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 16px 36px rgba(0, 0, 0, 0.5);
+        --shadow-lg: 0 24px 50px rgba(0, 0, 0, 0.6);
+        --shadow-glow: 0 8px 30px rgba(16, 185, 129, 0.22);
+      }
+
+      /* ✨ CONFIGURACIÓN GLOBAL */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        font-family: var(--font-body);
+        color: var(--text-main);
+        padding-bottom: 40px;
+        min-height: 100vh;
+        overflow-x: hidden;
+        transition: background-color 0.4s ease, color 0.4s ease;
+        background-attachment: fixed;
+      }
+
+      /* Fondos interactivos con blobs difuminados */
+      .blob-bg {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(120px);
+        z-index: -10;
+        pointer-events: none;
+        transition: var(--transition-smooth);
+      }
+      .blob-1 {
+        top: -10%; left: -10%;
+        width: 350px; height: 350px;
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+        animation: floatBlobs 25s infinite ease-in-out;
+      }
+      .blob-2 {
+        bottom: -10%; right: -10%;
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(239, 68, 68, 0.05) 0%, transparent 70%);
+        animation: floatBlobs 20s infinite ease-in-out 2s;
+      }
+      .blob-3 {
+        top: 40%; right: -20%;
+        width: 300px; height: 300px;
+        background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
+        animation: floatBlobs 30s infinite ease-in-out 4s;
+      }
+
+      body.dark-theme .blob-1 {
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.16) 0%, transparent 70%);
+      }
+      body.dark-theme .blob-2 {
+        background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%);
+      }
+
+      @keyframes floatBlobs {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.08); }
+        66% { transform: translate(-20px, 20px) scale(0.95); }
+      }
+
+      /* 📱 CABECERA PREMIUM FLOTANTE */
+      header {
+        background: var(--bg-glass);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 16px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-smooth);
+      }
+      .header-container {
+        max-width: 480px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .back-btn {
+        background: var(--bg-pill);
+        border: 1px solid var(--border-color);
+        font-size: 15px;
+        cursor: pointer;
+        text-decoration: none;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 15px;
+        transition: var(--transition-bounce);
+        box-shadow: var(--shadow-sm);
+      }
+      .back-btn:hover {
+        transform: scale(1.08) translateX(-2px);
+        background: var(--bg-card);
+        border-color: var(--brand-green);
+        color: var(--brand-green);
+      }
+      .back-btn:active {
+        transform: scale(0.95);
+      }
+      .header-title {
+        font-family: var(--font-title);
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: -0.3px;
+        color: var(--text-main);
+      }
+
+      /* Botón de alternancia de tema */
+      #theme-btn {
+        background: var(--bg-pill);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        width: 42px;
+        height: 42px;
+        border-radius: 15px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        transition: var(--transition-bounce);
+        box-shadow: var(--shadow-sm);
+      }
+      #theme-btn:hover {
+        transform: scale(1.08) rotate(15deg);
+        background: var(--bg-card);
+        border-color: var(--brand-green);
+        color: var(--brand-green);
+      }
+      #theme-btn:active {
+        transform: scale(0.95);
+      }
+
+      /* 📱 CONTENEDOR CENTRAL */
+      main {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      /* 🚀 MAP WRAPPER WITH GLOWING GLASS EFFECT */
+      .map-wrapper {
+        background: var(--bg-glass);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        height: 320px;
+        position: relative;
+        transition: var(--transition-smooth);
+      }
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+
+      .map-overlay-badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        background: rgba(15, 23, 42, 0.85);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 100px;
+        padding: 6px 14px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        z-index: 10;
+        box-shadow: var(--shadow-sm);
+      }
+      .map-overlay-badge i {
+        color: var(--brand-green);
+        filter: drop-shadow(0 0 4px var(--brand-green));
+      }
+
+      /* 📊 STATUS STEPPERS WITH SMART GLOW */
+      .card {
+        background: var(--bg-glass);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-radius: var(--radius-md);
+        padding: 22px;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-smooth);
+      }
+      .card:hover {
+        box-shadow: var(--shadow-md);
+        border-color: rgba(16, 185, 129, 0.15);
+      }
+      .card-title {
+        font-family: var(--font-title);
+        font-size: 14.5px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-main);
+      }
+      .card-title i {
+        color: var(--brand-green);
+        filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.2));
+      }
+
+      .stepper {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: relative;
+        padding-left: 32px;
+      }
+      .stepper::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 6px;
+        bottom: 6px;
+        width: 3px;
+        background: var(--border-color);
+        z-index: 1;
+        border-radius: 4px;
+      }
+
+      .step {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        opacity: 0.45;
+        transition: var(--transition-smooth);
+      }
+      .step-dot {
+        position: absolute;
+        left: -32px;
+        top: 2px;
+        width: 23px;
+        height: 23px;
+        border-radius: 50%;
+        background: var(--bg-pill);
+        border: 2px solid var(--text-muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        transition: var(--transition-bounce);
+      }
+      .step-dot i {
+        font-size: 9px;
+        color: transparent;
+        transition: var(--transition-smooth);
+      }
+      .step-label {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--text-main);
+      }
+      .step-desc {
+        font-size: 11.5px;
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+
+      /* ACTIVE STEP CLASSES */
+      .step.active {
+        opacity: 1;
+        transform: scale(1.02) translateX(2px);
+      }
+      .step.active .step-dot {
+        border-color: var(--brand-green);
+        background: var(--brand-green);
+        box-shadow: var(--shadow-glow), 0 0 12px var(--brand-green);
+      }
+      .step.active .step-dot i {
+        color: var(--text-inverse);
+      }
+      .step.completed {
+        opacity: 0.8;
+      }
+      .step.completed .step-dot {
+        border-color: var(--brand-green);
+        background: var(--brand-green-light);
+      }
+      .step.completed .step-dot i {
+        color: var(--brand-green);
+      }
+
+      /* 🛵 COURIER DETAILS PANEL */
+      .courier-card {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        position: relative;
+      }
+      .courier-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+        box-shadow: var(--shadow-glow);
+        border: 2px solid var(--bg-card);
+      }
+      .courier-details {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex-grow: 1;
+      }
+      .courier-name {
+        font-family: var(--font-title);
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--text-main);
+      }
+      .courier-vehicle {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .courier-vehicle i {
+        color: var(--brand-green);
+      }
+
+      .courier-call-btn {
+        background: var(--bg-pill);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: var(--transition-bounce);
+        box-shadow: var(--shadow-sm);
+      }
+      .courier-call-btn:hover {
+        transform: scale(1.08);
+        background: var(--brand-green-light);
+        border-color: var(--brand-green);
+        color: var(--brand-green);
+      }
+      .courier-call-btn:active {
+        transform: scale(0.95);
+      }
+
+      .order-info-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13.5px;
+        margin-bottom: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+      }
+      .order-info-row strong {
+        color: var(--text-main);
+        font-weight: 700;
+      }
+
+      /* ==========================================
+         💬 GLASSMORPHISM CHAT SYSTEM (PT-PT LOCALIZED)
+         ========================================== */
+      .chat-float-btn {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: rgba(45, 212, 191, 0.2);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2dd4bf;
+        font-size: 22px;
+        cursor: pointer;
+        z-index: 999;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: pulseTealGlow 2s infinite;
+      }
+
+      @keyframes pulseTealGlow {
+        0% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4); }
+        70% { box-shadow: 0 0 0 15px rgba(45, 212, 191, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+      }
+
+      @keyframes shakeToggle {
+        0%, 100% { transform: scale(1); }
+        25% { transform: scale(1.1) rotate(-10deg); }
+        75% { transform: scale(1.1) rotate(10deg); }
+      }
+
+      .chat-float-btn:hover {
+        transform: scale(1.1) rotate(5deg);
+        background: rgba(45, 212, 191, 0.3);
+        color: #5eead4;
+      }
+
+      .chat-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 14px;
+        height: 14px;
+        background-color: #ef4444;
+        border-radius: 50%;
+        border: 2px solid #0d111a;
+        box-shadow: 0 0 8px #ef4444;
+      }
+
+      .chat-drawer-container {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        max-width: 420px;
+        height: 80%;
+        max-height: 600px;
+        background: rgba(13, 17, 26, 0.85);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .chat-drawer-container.open {
+        transform: translateY(0);
+      }
+
+      .chat-header-custom {
+        padding: 18px 24px;
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .chat-messages-container {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        scroll-behavior: smooth;
+      }
+
+      .chat-message-bubble {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: 16px;
+        font-size: 13.5px;
+        line-height: 1.5;
+        position: relative;
+        word-wrap: break-word;
+        animation: slideUpIn 0.3s ease;
+      }
+
+      @keyframes slideUpIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .chat-message-bubble.client {
+        background: rgba(45, 212, 191, 0.15);
+        border: 1px solid rgba(45, 212, 191, 0.25);
+        color: #e2e8f0;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+      }
+
+      .chat-message-bubble.courier {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #e2e8f0;
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+      }
+
+      .chat-message-bubble.system {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        color: #94a3b8;
+        font-style: italic;
+        font-size: 11px;
+        text-align: center;
+        align-self: center;
+        max-width: 90%;
+        border-radius: 10px;
+        padding: 6px 12px;
+      }
+
+      .chat-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 6px;
+        font-size: 10px;
+        color: #94a3b8;
+        gap: 10px;
+      }
+
+      .chat-translate-btn {
+        background: none;
+        border: none;
+        color: #2dd4bf;
+        cursor: pointer;
+        padding: 2px 6px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 700;
+        transition: background 0.2s;
+      }
+
+      .chat-translate-btn:hover {
+        background: rgba(45, 212, 191, 0.1);
+        color: #5eead4;
+      }
+
+      .chat-translated-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(45, 212, 191, 0.15);
+        border: 1px solid rgba(45, 212, 191, 0.3);
+        color: #2dd4bf;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 9px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 0 6px rgba(45, 212, 191, 0.2);
+      }
+
+      .chat-input-area {
+        padding: 16px 20px;
+        background: rgba(255, 255, 255, 0.01);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .chat-text-input {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 12px 16px;
+        color: #f1f5f9;
+        font-size: 13.5px;
+        outline: none;
+        transition: all 0.3s;
+      }
+
+      .chat-text-input:focus {
+        border-color: rgba(45, 212, 191, 0.4);
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 0 10px rgba(45, 212, 191, 0.1);
+      }
+
+      .chat-send-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: #2dd4bf;
+        color: #0d111a;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 0 12px rgba(45, 212, 191, 0.3);
+      }
+
+      .chat-send-btn:hover {
+        background: #5eead4;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(45, 212, 191, 0.4);
+      }
+
+      .chat-send-btn:active {
+        transform: translateY(0);
+      }
+
+      /* LIGHT THEME CORRECTIONS */
+      body.light-theme .chat-drawer-container {
+        background: rgba(248, 250, 252, 0.95);
+        border-color: rgba(0, 0, 0, 0.08);
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+      }
+      body.light-theme .chat-header-custom {
+        background: rgba(0, 0, 0, 0.02);
+        border-bottom-color: rgba(0, 0, 0, 0.06);
+      }
+      body.light-theme .chat-message-bubble.courier {
+        background: rgba(0, 0, 0, 0.04);
+        border-color: rgba(0, 0, 0, 0.06);
+        color: #1e293b;
+      }
+      body.light-theme .chat-message-bubble.client {
+        background: rgba(13, 148, 136, 0.12);
+        border-color: rgba(13, 148, 136, 0.2);
+        color: #0f172a;
+      }
+      body.light-theme .chat-text-input {
+        background: rgba(0, 0, 0, 0.02);
+        border-color: rgba(0, 0, 0, 0.08);
+        color: #1e293b;
+      }
+      body.light-theme .chat-text-input:focus {
+        border-color: #0d9488;
+        background: rgba(0, 0, 0, 0.04);
+      }
+      body.light-theme .chat-meta {
+        color: #64748b;
+      }
+      body.light-theme .chat-send-btn {
+        background: #0d9488;
+        color: #ffffff;
+        box-shadow: 0 0 12px rgba(13, 148, 136, 0.2);
+      }
+      body.light-theme .chat-send-btn:hover {
+        background: #0f766e;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 🌌 BACKGROUND BLOBS FOR HIGH-END AESTHETIC -->
+    <div class="blob-bg blob-1"></div>
+    <div class="blob-bg blob-2"></div>
+    <div class="blob-bg blob-3"></div>
+
+    <!-- 📱 HEADER -->
+    <header>
+      <div class="header-container">
+        <div class="header-left">
+          <a href="/apps/client" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+          <h1 class="header-title">Seguimiento en Vivo</h1>
+        </div>
+        <button type="button" class="theme-toggle-btn" id="theme-btn" title="Alternar Modo Claro/Oscuro">
+          <i class="fas fa-moon" id="theme-icon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 📱 MAIN PANEL -->
+    <main>
+      <!-- 📡 REAL-TIME GOOGLE MAPS -->
+      <div class="map-wrapper">
+        <div class="map-overlay-badge">
+          <i class="fas fa-satellite"></i>
+          <span id="map-radar-text">Cargando Satélites...</span>
+        </div>
+        <div id="map"></div>
+      </div>
+
+      <!-- 🛵 REPARTIDOR ASIGNADO CARD -->
+      <div class="card" id="courier-profile-card" style="display: none;">
+        <h2 class="card-title"><i class="fas fa-motorcycle"></i> Tu Repartidor</h2>
+        <div class="courier-card">
+          <div class="courier-avatar">🛵</div>
+          <div class="courier-details">
+            <div class="courier-name" id="c-name">Juan Estafeta</div>
+            <div class="courier-vehicle">
+              <i class="fas fa-bicycle"></i>
+              <span id="c-vehicle">Moto Honda Eco (Verde)</span>
+            </div>
+          </div>
+          <a href="tel:#" class="courier-call-btn" id="c-phone" title="Llamar repartidor">
+            <i class="fas fa-phone-alt"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 📊 STEPPER DE SEGUIMIENTO -->
+      <div class="card">
+        <h2 class="card-title"><i class="fas fa-route"></i> Estado del Pedido</h2>
+        <div class="stepper">
+          <div class="step" id="step-pendiente">
+            <div class="step-dot"><i class="fas fa-check"></i></div>
+            <div class="step-label">Pedido Confirmado</div>
+            <div class="step-desc">Pago verificado y enviado al restaurante</div>
+          </div>
+          <div class="step" id="step-cocina">
+            <div class="step-dot"><i class="fas fa-check"></i></div>
+            <div class="step-label">Preparando tu comida</div>
+            <div class="step-desc">El chef está cocinando tu selección especial</div>
+          </div>
+          <div class="step" id="step-listo">
+            <div class="step-dot"><i class="fas fa-check"></i></div>
+            <div class="step-label">¡Pedido listo en cocina!</div>
+            <div class="step-desc">Listo y empacado. Esperando recolector</div>
+          </div>
+          <div class="step" id="step-reparto">
+            <div class="step-dot"><i class="fas fa-check"></i></div>
+            <div class="step-label">Repartidor en camino</div>
+            <div class="step-desc">El estafeta lleva tu comanda calientita a tu destino</div>
+          </div>
+          <div class="step" id="step-entregado">
+            <div class="step-dot"><i class="fas fa-check"></i></div>
+            <div class="step-label">¡Entregado!</div>
+            <div class="step-desc">Buen provecho, agradecemos tu preferencia</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🏢 FICHA DEL PEDIDO -->
+      <div class="card">
+        <h2 class="card-title"><i class="fas fa-receipt"></i> Ficha del Servicio</h2>
+        <div class="order-info-row">
+          <span>Identificador de Orden:</span>
+          <strong id="label-order-id">#{{ order_id }}</strong>
+        </div>
+        <div class="order-info-row">
+          <span>Comercio Origen:</span>
+          <strong id="label-rest-name">Restaurante</strong>
+        </div>
+        <div class="order-info-row">
+          <span>Establecimiento Address:</span>
+          <strong id="label-rest-address" style="text-align: right; max-width: 60%; font-size:12px;">Cargando...</strong>
+        </div>
+        <div class="order-info-row">
+          <span>Destino Cliente:</span>
+          <strong id="label-client-address" style="text-align: right; max-width: 60%; font-size:12px;">Cargando...</strong>
+        </div>
+        <div class="order-info-row" style="margin-top: 12px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;">
+          <span>Detalle Pedido:</span>
+          <span id="label-items" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: right; max-width: 60%;">Cargando comandas...</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- 💬 BOTÓN FLOTANTE CHAT CLIENTE -->
+    <div class="chat-float-btn" id="chat-toggle-btn" style="display: none;">
+      <i class="fas fa-comments"></i>
+      <span class="chat-badge" id="chat-unread-dot" style="display: none;"></span>
+    </div>
+
+    <!-- 📱 DRAWER LATERAL DE CHAT -->
+    <div id="chat-drawer-container" class="chat-drawer-container">
+      <div class="chat-header-custom">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 20px;">💬</span>
+          <div>
+            <div style="font-family: var(--font-title); font-weight: 800; font-size: 15px; letter-spacing: -0.2px;">Chat de Entrega</div>
+            <div style="font-size: 11px; opacity: 0.85; font-weight: 600;">Contacto Direto com Estafeta</div>
+          </div>
+        </div>
+        <button id="chat-close-btn" class="drawer-close-btn" style="background: none; border: none; color: var(--text-light); font-size: 18px; cursor: pointer;">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="chat-messages-container" id="chat-messages-box">
+        <!-- Mensajes dinámicos -->
+      </div>
+
+      <div class="chat-input-area">
+        <input
+          type="text"
+          id="chat-message-input"
+          placeholder="Escreva uma mensagem para o estafeta..."
+          class="chat-text-input"
+        />
+        <button id="chat-send-btn" class="chat-send-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ⚡ GOOGLE MAPS API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuk-nI03nHTHyC_fjIKH4uMbNPYwFogtw&libraries=places,directions"></script>
+
+    <script>
+      // MAP STYLES CONFIGURATION FOR TRUE NEON DARK MODE
+      const darkMapStyles = [
+        { elementType: "geometry", stylers: [{ color: "#161b26" }] },
+        { elementType: "labels.text.stroke", stylers: [{ color: "#161b26" }] },
+        { elementType: "labels.text.fill", stylers: [{ color: "#5d6d7e" }] },
+        { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#2dd4bf" }] },
+        { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#0d111a" }] },
+        { featureType: "poi", elementType: "geometry", stylers: [{ color: "#161b26" }] },
+        { featureType: "road", elementType: "geometry", stylers: [{ color: "#212836" }] },
+        { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#1b212c" }] },
+        { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#2c3e50" }] },
+        { featureType: "water", elementType: "geometry", stylers: [{ color: "#0a0d14" }] }
+      ];
+
+      const lightMapStyles = [
+        { elementType: "geometry", stylers: [{ color: "#f8fafc" }] },
+        { elementType: "labels.text.fill", stylers: [{ color: "#475569" }] },
+        { elementType: "labels.text.stroke", stylers: [{ color: "#f8fafc" }] },
+        { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#f1f5f9" }] },
+        { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
+        { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#e2e8f0" }] },
+        { featureType: "water", elementType: "geometry", stylers: [{ color: "#cbd5e1" }] }
+      ];
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const orderId = parseInt("{{ order_id }}");
+        const themeBtn = document.getElementById("theme-btn");
+        const themeIcon = document.getElementById("theme-icon");
+        
+        let map = null;
+        let directionsService = null;
+        let directionsRenderer = null;
+        let courierMarker = null;
+
+        // Coordinates fallback if mock address fails to geocode
+        const fallbackRestCoord = { lat: 40.416775, lng: -3.703790 }; // Sol, Madrid
+        const fallbackClientCoord = { lat: 40.420300, lng: -3.688600 }; // Retiro, Madrid
+
+        // 🌗 LIGHT/DARK THEME TOGGLER
+        let currentTheme = localStorage.getItem("app_client_theme") || "dark";
+        if (currentTheme === "light") {
+          document.body.classList.add("light-theme");
+          themeIcon.className = "fas fa-sun";
+        }
+
+        themeBtn.addEventListener("click", () => {
+          if (document.body.classList.contains("light-theme")) {
+            document.body.classList.remove("light-theme");
+            themeIcon.className = "fas fa-moon";
+            currentTheme = "dark";
+          } else {
+            document.body.classList.add("light-theme");
+            themeIcon.className = "fas fa-sun";
+            currentTheme = "light";
+          }
+          localStorage.setItem("app_client_theme", currentTheme);
+          
+          // Dynamically toggle Map styling
+          if (map) {
+            map.setOptions({
+              styles: currentTheme === "light" ? lightMapStyles : darkMapStyles
+            });
+          }
+        });
+
+        // 🗺️ INITIALIZE GOOGLE MAP
+        function initGoogleMap(restAddress, clientAddress) {
+          directionsService = new google.maps.DirectionsService();
+          directionsRenderer = new google.maps.DirectionsRenderer({
+            polylineOptions: {
+              strokeColor: currentTheme === "light" ? "#0d9488" : "#2dd4bf",
+              strokeWeight: 5,
+              strokeOpacity: 0.85
+            },
+            suppressMarkers: true
+          });
+
+          const mapOptions = {
+            zoom: 14,
+            center: fallbackRestCoord,
+            styles: currentTheme === "light" ? lightMapStyles : darkMapStyles,
+            disableDefaultUI: true,
+            zoomControl: false
+          };
+
+          map = new google.maps.Map(document.getElementById("map"), mapOptions);
+          directionsRenderer.setMap(map);
+
+          // Calculate Route path with Directions API
+          calculateGoogleRoute(restAddress, clientAddress);
+        }
+
+        function calculateGoogleRoute(originAddress, destinationAddress) {
+          const request = {
+            origin: originAddress,
+            destination: destinationAddress,
+            travelMode: 'DRIVING'
+          };
+
+          directionsService.route(request, (result, status) => {
+            if (status === 'OK') {
+              directionsRenderer.setDirections(result);
+              document.getElementById("map-radar-text").textContent = "GPS Conectado";
+
+              // Draw beautiful markers
+              const route = result.routes[0].legs[0];
+              
+              // Restaurant Marker
+              new google.maps.Marker({
+                position: route.start_location,
+                map: map,
+                title: "Establecimiento",
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 8,
+                  fillColor: "#f59e0b",
+                  fillOpacity: 1,
+                  strokeColor: "#ffffff",
+                  strokeWeight: 2
+                }
+              });
+
+              // Client Marker
+              new google.maps.Marker({
+                position: route.end_location,
+                map: map,
+                title: "Tu casa",
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 8,
+                  fillColor: "#10b981",
+                  fillOpacity: 1,
+                  strokeColor: "#ffffff",
+                  strokeWeight: 2
+                }
+              });
+            } else {
+              console.warn("Geocodificación fallida de direcciones de texto, aplicando fallback de coordenadas reales.");
+              // Fallback if fake address strings are parsed
+              plotFallbackRoute();
+            }
+          });
+        }
+
+        function plotFallbackRoute() {
+          const request = {
+            origin: fallbackRestCoord,
+            destination: fallbackClientCoord,
+            travelMode: 'DRIVING'
+          };
+
+          directionsService.route(request, (result, status) => {
+            if (status === 'OK') {
+              directionsRenderer.setDirections(result);
+              document.getElementById("map-radar-text").textContent = "GPS Conectado (Simulado)";
+              
+              // Draw fallback Markers
+              new google.maps.Marker({
+                position: fallbackRestCoord,
+                map: map,
+                title: "Establecimiento Origen",
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 8,
+                  fillColor: "#f59e0b",
+                  fillOpacity: 1,
+                  strokeColor: "#ffffff",
+                  strokeWeight: 2
+                }
+              });
+
+              new google.maps.Marker({
+                position: fallbackClientCoord,
+                map: map,
+                title: "Tu ubicación",
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 8,
+                  fillColor: "#10b981",
+                  fillOpacity: 1,
+                  strokeColor: "#ffffff",
+                  strokeWeight: 2
+                }
+              });
+            }
+          });
+        }
+
+        // 🛵 COURIER PIN UPDATER
+        function updateCourierLocation(lat, lng) {
+          const position = new google.maps.LatLng(lat, lng);
+          
+          if (!courierMarker) {
+            // Lazy load the dynamic 🛵 marker
+            courierMarker = new google.maps.Marker({
+              position: position,
+              map: map,
+              title: "Repartidor",
+              label: {
+                text: "🛵",
+                fontSize: "20px"
+              },
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 18,
+                fillColor: "#070b13",
+                fillOpacity: 0.9,
+                strokeColor: currentTheme === "light" ? "#0d9488" : "#2dd4bf",
+                strokeWeight: 2
+              }
+            });
+          } else {
+            // Animate moving pin smoothly
+            courierMarker.setPosition(position);
+          }
+          
+          // Pan map to keep courier in center focus
+          map.panTo(position);
+        }
+
+        // 📊 SYNCHRONIZE PROGRESS STEPPER
+        function updateStepperStatus(status) {
+          // Reset classes
+          document.querySelectorAll(".step").forEach(step => {
+            step.classList.remove("active", "completed");
+          });
+
+          const stepPendiente = document.getElementById("step-pendiente");
+          const stepCocina = document.getElementById("step-cocina");
+          const stepListo = document.getElementById("step-listo");
+          const stepReparto = document.getElementById("step-reparto");
+          const stepEntregado = document.getElementById("step-entregado");
+
+          // Clean states mapping
+          if (status === "PENDIENTE") {
+            stepPendiente.classList.add("active");
+          } else if (status === "EN_PREPARACION") {
+            stepPendiente.classList.add("completed");
+            stepCocina.classList.add("active");
+          } else if (status === "LISTO_PARA_RECOGER") {
+            stepPendiente.classList.add("completed");
+            stepCocina.classList.add("completed");
+            stepListo.classList.add("active");
+          } else if (status === "accepted" || status === "picked_up") {
+            stepPendiente.classList.add("completed");
+            stepCocina.classList.add("completed");
+            stepListo.classList.add("completed");
+            stepReparto.classList.add("active");
+            document.getElementById("map-radar-text").textContent = "Estafeta en Movimiento";
+          } else if (status === "delivered" || status === "ENTREGADO") {
+            stepPendiente.classList.add("completed");
+            stepCocina.classList.add("completed");
+            stepListo.classList.add("completed");
+            stepReparto.classList.add("completed");
+            stepEntregado.classList.add("active", "completed");
+            document.getElementById("map-radar-text").textContent = "Entrega Completada";
+          }
+        }
+
+        // 🔗 RENDER COURIER PROFILE SECTION
+        function renderCourierProfile(courier) {
+          if (!courier) return;
+          document.getElementById("c-name").textContent = courier.name;
+          document.getElementById("c-vehicle").textContent = courier.vehicle || "Estafeta en Ruta";
+          document.getElementById("c-phone").href = `tel:${courier.phone || '#'}`;
+          
+          // Display the custom card
+          document.getElementById("courier-profile-card").style.display = "block";
+
+          // Enable client-courier chat toggle button
+          document.getElementById("chat-toggle-btn").style.display = "flex";
+        }
+
+        // 🌐 LOAD ORDER TECHNICAL DETAILS VIA API
+        fetch(`/api/v1/clients/orders/${orderId}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.error) {
+              alert("No se pudo cargar la comanda.");
+              return;
+            }
+
+            // Fill technical panel
+            document.getElementById("label-rest-name").textContent = data.restaurant.name;
+            document.getElementById("label-rest-address").textContent = data.restaurant.address || "Establecimiento";
+            document.getElementById("label-client-address").textContent = data.client.address || "Dirección del Cliente";
+            
+            // Format order notes
+            if (data.note) {
+              const notesParts = data.note.split("||");
+              document.getElementById("label-items").textContent = notesParts[0].trim();
+            } else {
+              document.getElementById("label-items").textContent = "Sin desglose de comida.";
+            }
+
+            // Sync steps
+            updateStepperStatus(data.status);
+
+            // Render courier if assigned
+            if (data.courier) {
+              renderCourierProfile(data.courier);
+            }
+
+            // Initialize Maps Routing
+            initGoogleMap(data.restaurant.address, data.client.address);
+          })
+          .catch(err => {
+            console.error("Error cargando detalles del pedido:", err);
+            // Default load map in case of errors
+            initGoogleMap("Madrid, Sol", "Madrid, Retiro");
+          });
+
+        // ⚡ CONNECT WEBSOCKET SUBSCRIBER
+        const socket = io(window.location.origin);
+
+        // 1. Order status changed
+        socket.on("cambio_estado_pedido", (data) => {
+          if (parseInt(data.order_id) === orderId) {
+            updateStepperStatus(data.status);
+            
+            // Hide Courier profile if delivered
+            if (data.status === "delivered" || data.status === "ENTREGADO") {
+              if (courierMarker) courierMarker.setMap(null);
+            }
+          }
+        });
+
+        // 2. Courier accepted the order
+        socket.on("repartidor_asignado", (data) => {
+          if (parseInt(data.order_id) === orderId) {
+            // Fetch updated order info to show courier
+            fetch(`/api/v1/clients/orders/${orderId}`)
+              .then(res => res.json())
+              .then(resData => {
+                if (resData.courier) {
+                  renderCourierProfile(resData.courier);
+                }
+                updateStepperStatus(resData.status);
+              });
+          }
+        });
+
+        // 3. Live GPS Coordinates updates stream
+        socket.on("rastreo_gps_en_vivo", (data) => {
+          if (parseInt(data.order_id) === orderId) {
+            const lat = parseFloat(data.latitude);
+            const lng = parseFloat(data.longitude);
+            if (!isNaN(lat) && !isNaN(lng)) {
+              updateCourierLocation(lat, lng);
+            }
+          }
+        });
+
+        // ==========================================
+        // 💬 CLIENT-COURIER REAL-TIME CHAT MOTOR
+        // ==========================================
+        
+        // Dictionary for high-fidelity Pt-PT translation simulation
+        const translationDictionary = {
+          "hola": "Olá! Tudo bem?",
+          "hola!": "Olá! Tudo bem?",
+          "buenos dias": "Bom dia!",
+          "buenos días": "Bom dia!",
+          "ya salio mi pedido?": "O meu pedido já saiu?",
+          "¿ya salió mi pedido?": "O meu pedido já saiu?",
+          "gracias": "Obrigado!",
+          "muchas gracias": "Muito obrigado!",
+          "puedes tocar el timbre 3b?": "Pode tocar à campainha 3B?",
+          "¿puedes tocar el timbre 3b?": "Pode tocar à campainha 3B?",
+          "deja el pedido en recepción": "Deixe o pedido na receção, por favor.",
+          "estoy abajo": "Estou cá abaixo à espera.",
+          "estoy en la entrada": "Estou na entrada principal.",
+          "hola, ¿dónde estás?": "Olá, onde se encontra?",
+          "¿dónde estás?": "Onde se encontra?",
+          "dónde estás?": "Onde se encontra?",
+          "hola, ya voy en camino": "Olá! Já estou a caminho para a entrega.",
+          "estoy en el restaurante recogiendo tu comida": "Estou no restaurante a recolher a sua refeição.",
+          "ya tengo tu pedido, voy hacia alla": "Já recolhi o seu pedido, estou a caminho!",
+          "ya tengo tu pedido, voy hacia allá": "Já recolhi o seu pedido, estou a caminho!",
+          "hay mucho trafico pero ya casi llego": "Há muito trânsito, mas estou quase a chegar.",
+          "hay mucho tráfico pero ya casi llego": "Há muito trânsito, mas estou quase a chegar.",
+          "estoy afuera": "Estou cá fora à sua porta.",
+          "estoy en la puerta": "Estou na porta de entrada.",
+          "puedes bajar?": "Pode descer, por favor?",
+          "¿puedes bajar?": "Pode descer, por favor?",
+          "llegué": "Cheguei ao seu destino!",
+          "llego en 5 minutos": "Chego em 5 minutos.",
+          "llegó el estafeta": "O estafeta chegou!"
+        };
+
+        // Join the chat room for this specific order
+        socket.emit("join_order_chat", { order_id: orderId });
+
+        function appendChatMessage(sender, text, timestamp) {
+          const box = document.getElementById("chat-messages-box");
+          const bubble = document.createElement("div");
+          bubble.className = `chat-message-bubble ${sender}`;
+          
+          const timeStr = timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          
+          let contentHtml = `<div class="chat-text-content">${text}</div>`;
+          
+          let metaHtml = `
+            <div class="chat-meta">
+              <span>${timeStr}</span>
+          `;
+          
+          if (sender !== 'system') {
+            metaHtml += `
+              <button class="chat-translate-btn" onclick="translateMessage(this, \`${text.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)">
+                <i class="fas fa-globe"></i> Traduzir
+              </button>
+            `;
+          }
+          
+          metaHtml += `</div>`;
+          bubble.innerHTML = contentHtml + metaHtml;
+          box.appendChild(bubble);
+          box.scrollTop = box.scrollHeight;
+          
+          // Unread indicator if drawer is closed
+          const drawer = document.getElementById("chat-drawer-container");
+          if (!drawer.classList.contains("open") && sender !== 'system') {
+            document.getElementById("chat-unread-dot").style.display = "block";
+            const toggleBtn = document.getElementById("chat-toggle-btn");
+            toggleBtn.style.animation = "shakeToggle 0.5s ease";
+            setTimeout(() => toggleBtn.style.animation = "pulseTealGlow 2s infinite", 500);
+          }
+        }
+
+        window.translateMessage = function(btnElement, originalText) {
+          const textContainer = btnElement.closest('.chat-message-bubble').querySelector('.chat-text-content');
+          const lowerText = originalText.trim().toLowerCase();
+          let translatedText = translationDictionary[lowerText];
+          
+          if (!translatedText) {
+            // Contextual mock translation
+            translatedText = originalText
+              .replace(/\bgracias\b/gi, "obrigado")
+              .replace(/\bhola\b/gi, "olá")
+              .replace(/\bcamino\b/gi, "caminho")
+              .replace(/\bespera\b/gi, "espera")
+              .replace(/\btrafico\b/gi, "trânsito")
+              .replace(/\btráfico\b/gi, "trânsito")
+              .replace(/\bpuerta\b/gi, "porta")
+              .replace(/\bcomida\b/gi, "comida")
+              .replace(/\bentrega\b/gi, "entrega")
+              .replace(/\bpedido\b/gi, "pedido");
+            
+            if (translatedText === originalText) {
+              translatedText = "Olá! (Traduzido) " + originalText;
+            }
+          }
+          
+          textContainer.innerHTML = translatedText;
+          btnElement.outerHTML = `
+            <span class="chat-translated-badge">
+              <i class="fas fa-check-circle"></i> Traduzido por IA
+            </span>
+          `;
+        };
+
+        // Socket events for chat
+        socket.on("chat_system_message", (data) => {
+          appendChatMessage("system", data.message);
+        });
+
+        socket.on("receive_order_message", (data) => {
+          if (parseInt(data.order_id) === orderId) {
+            const bubbleStyle = data.sender === 'client' ? 'client' : 'courier';
+            appendChatMessage(bubbleStyle, data.text, data.timestamp);
+          }
+        });
+
+        function sendChatMessage() {
+          const input = document.getElementById("chat-message-input");
+          const text = input.value.trim();
+          if (!text) return;
+          
+          const payload = {
+            order_id: orderId,
+            sender: 'client',
+            text: text,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+          
+          socket.emit("send_order_message", payload);
+          input.value = "";
+          input.focus();
+        }
+
+        document.getElementById("chat-send-btn").addEventListener("click", sendChatMessage);
+        document.getElementById("chat-message-input").addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            sendChatMessage();
+          }
+        });
+
+        const chatToggleBtn = document.getElementById("chat-toggle-btn");
+        const chatDrawer = document.getElementById("chat-drawer-container");
+        const chatCloseBtn = document.getElementById("chat-close-btn");
+
+        chatToggleBtn.addEventListener("click", () => {
+          chatDrawer.classList.toggle("open");
+          document.getElementById("chat-unread-dot").style.display = "none";
+          const box = document.getElementById("chat-messages-box");
+          box.scrollTop = box.scrollHeight;
+        });
+
+        chatCloseBtn.addEventListener("click", () => {
+          chatDrawer.classList.remove("open");
+        });
+      });
+    </script>
+  </body>
+</html>

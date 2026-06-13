@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estado da Candidatura - Logleve Entregador</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-nebula: radial-gradient(circle at 10% 20%, rgba(3, 7, 18, 0.95) 0%, rgba(11, 19, 41, 0.95) 90%);
+      --body-bg: #030712;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --brand-green: #10b981;
+      --brand-green-glow: rgba(16, 185, 129, 0.25);
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-nebula);
+      background-color: var(--body-bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .status-container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      text-align: center;
+    }
+
+    .logo-img {
+      height: 48px;
+      width: auto;
+      margin-bottom: 28px;
+      filter: drop-shadow(0 0 8px var(--brand-green-glow));
+    }
+
+    .status-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+      display: inline-block;
+    }
+
+    .status-icon.pending {
+      color: #f59e0b;
+      animation: pulse 2s infinite;
+    }
+
+    .status-icon.rejected {
+      color: #ef4444;
+    }
+
+    .title {
+      font-family: var(--font-title);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+
+    .desc {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .info-card {
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 13.5px;
+    }
+
+    .info-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-label {
+      color: var(--text-muted);
+    }
+
+    .info-value {
+      font-weight: 600;
+      color: white;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      background: var(--brand-green);
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      color: #030712;
+      font-family: var(--font-title);
+      font-size: 15.5px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px var(--brand-green-glow);
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px var(--brand-green-glow);
+      filter: brightness(1.1);
+    }
+
+    .btn-action.logout-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      box-shadow: none;
+      margin-top: 12px;
+    }
+
+    .btn-action.logout-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--text-muted);
+      transform: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="status-container">
+    <img src="{{ url_for('static', filename='logo.png') }}" class="logo-img" alt="Logleve Logo">
+    
+    {% if status == 'pending' %}
+      <div class="status-icon pending">
+        <i class="fas fa-clock-rotate-left"></i>
+      </div>
+      <h1 class="title">Candidatura em Revisão</h1>
+      <p class="desc">Agradecemos o seu registo, <strong>{{ courier.name }}</strong>. A nossa equipa está a analisar a sua documentação. Receberá uma resposta no prazo de 24 a 48 horas.</p>
+    {% else %}
+      <div class="status-icon rejected">
+        <i class="fas fa-circle-xmark"></i>
+      </div>
+      <h1 class="title">Candidatura Não Aprovada</h1>
+      <p class="desc">Lamentamos, <strong>{{ courier.name }}</strong>, mas a sua candidatura não cumpre com os requisitos necessários no momento. Verifique se os documentos estão legíveis e dentro do prazo de validade.</p>
+    {% endif %}
+
+    <div class="info-card">
+      <div class="info-item">
+        <span class="info-label">Nome</span>
+        <span class="info-value">{{ courier.name }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">NIF</span>
+        <span class="info-value">{{ courier.nif }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Veículo</span>
+        <span class="info-value" style="text-transform: capitalize;">{{ courier.vehicle }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Estado</span>
+        {% if status == 'pending' %}
+          <span class="info-value" style="color: #f59e0b;">Pendente</span>
+        {% else %}
+          <span class="info-value" style="color: #ef4444;">Rejeitado</span>
+        {% endif %}
+      </div>
+      {% if status == 'rejected' and session.get('ia_rejection_reason') %}
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--card-border); text-align: left;">
+        <span style="font-size: 11px; font-weight: 700; color: #f87171; text-transform: uppercase; display: block; margin-bottom: 4px;">Relatório de Validação IA:</span>
+        <p style="font-size: 13px; color: #fca5a5; font-family: monospace; line-height: 1.4;">{{ session.get('ia_rejection_reason') }}</p>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if status == 'rejected' %}
+      <a href="{{ url_for('apps_view_blueprint.courier_register') }}" class="btn-action">
+        <i class="fas fa-arrows-rotate" style="margin-right: 8px;"></i>
+        Tentar Novamente
+      </a>
+    {% endif %}
+
+    <a href="{{ url_for('apps_view_blueprint.courier_logout') }}" class="btn-action logout-btn">
+      <i class="fas fa-right-from-bracket" style="margin-right: 8px;"></i>
+      Sair da Conta
+    </a>
+  </div>
+
+</body>
+</html>

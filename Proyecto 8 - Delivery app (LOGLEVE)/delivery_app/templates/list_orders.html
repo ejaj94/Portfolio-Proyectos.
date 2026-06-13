@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Órdenes de Entrega') }}{% endblock %}
+
+{% block content %}
+<style>
+  .order-grid-card {
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    border: 1px solid #edf0f2 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+  .order-grid-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 35px rgba(15, 23, 42, 0.08);
+    border-color: #cbd5e1 !important;
+  }
+  .order-card-header {
+    background-color: #f8fafc;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 16px 20px;
+  }
+  .order-badge-id {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0f172a;
+    background-color: #e2e8f0;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+  }
+</style>
+
+<div class="container py-3">
+  <!-- Cabecera de listado -->
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3">
+    <div>
+      <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill mb-2 fw-semibold" style="font-size: 0.78rem;">
+        <i class="fas fa-box me-1"></i> {{ _('Logística Central') }}
+      </span>
+      <h2 class="fw-bold text-dark mb-0"><i class="fas fa-box text-teal me-2"></i>{{ _('Órdenes de Entrega') }}</h2>
+      <p class="text-muted small mb-0">{{ _('Consola de monitoreo y tracking de pedidos gestionados por la plataforma central.') }}</p>
+    </div>
+    <a href="{{ url_for('order_blueprint.register_order_form') }}" class="btn btn-primary px-4 py-2.5 d-inline-flex align-items-center shadow-sm">
+      <i class="fas fa-plus-circle me-2"></i> {{ _('Nueva Órden') }}
+    </a>
+  </div>
+
+  {% if orders %}
+  <div class="row g-4">
+    {% for order in orders %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card order-grid-card h-100">
+        <!-- Header de Tarjeta -->
+        <div class="order-card-header d-flex justify-content-between align-items-center">
+          <span class="order-badge-id">📦 #{{ order.id }}</span>
+          <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 fw-semibold" style="font-size: 0.75rem;">
+            {{ _('PROCESADA') }}
+          </span>
+        </div>
+
+        <div class="card-body p-4 d-flex flex-column justify-content-between">
+          <div class="d-flex flex-column gap-2.5 mb-3">
+            <div class="d-flex align-items-center text-secondary small">
+              <i class="fas fa-store text-teal me-2.5 fs-6" style="width: 16px;"></i>
+              <span><strong class="text-dark">{{ _('Establecimiento ID:') }}</strong> #{{ order.restaurant_id }}</span>
+            </div>
+            <div class="d-flex align-items-center text-secondary small">
+              <i class="fas fa-user text-teal me-2.5 fs-6" style="width: 16px;"></i>
+              <span><strong class="text-dark">{{ _('Cliente Destino ID:') }}</strong> #{{ order.client_id }}</span>
+            </div>
+            <div class="d-flex align-items-center text-secondary small">
+              <i class="fas fa-motorcycle text-teal me-2.5 fs-6" style="width: 16px;"></i>
+              <span>
+                <strong class="text-dark">{{ _('Estafeta Asignado:') }}</strong> 
+                {% if order.courier_id %}
+                <span class="badge bg-info-subtle text-info border border-info-subtle font-monospace px-2 py-0.5" style="font-size: 0.75rem;">#{{ order.courier_id }}</span>
+                {% else %}
+                <span class="text-muted italic">{{ _('Esperando aceptación') }}</span>
+                {% endif %}
+              </span>
+            </div>
+            <div class="d-flex align-items-start text-secondary small">
+              <i class="fas fa-comment-alt text-teal me-2.5 mt-1 fs-6" style="width: 16px;"></i>
+              <span><strong class="text-dark">{{ _('Nota de Ruta:') }}</strong> {{ order.note if order.note else 'N/A' }}</span>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mt-4 pt-3 border-top">
+            <a href="/apps/client" class="btn btn-outline-secondary btn-sm flex-grow-1 text-center py-2 d-inline-flex align-items-center justify-content-center gap-1.5" style="border-radius: 8px; font-weight: 700;">
+              <i class="fas fa-user-circle"></i> {{ _('Comprador') }}
+            </a>
+            <a href="/apps/restaurant/{{ order.restaurant_id }}" class="btn btn-outline-primary btn-sm flex-grow-1 text-center py-2 d-inline-flex align-items-center justify-content-center gap-1.5" style="border-radius: 8px; font-weight: 700;">
+              <i class="fas fa-utensils"></i> {{ _('Establecimiento') }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert alert-info border-0 shadow-sm p-4 d-flex align-items-start" style="background-color: #f0fdfa; border-left: 4px solid #0d9488 !important; border-radius: 12px;">
+    <i class="fas fa-info-circle text-teal fs-4 me-3 mt-1"></i>
+    <div>
+      <span class="fw-bold text-teal d-block mb-1">{{ _('Sin órdenes registradas') }}</span>
+      <p class="small text-secondary mb-0">{{ _('No se han encontrado órdenes de entrega registradas en el monitor central de despacho.') }}</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
