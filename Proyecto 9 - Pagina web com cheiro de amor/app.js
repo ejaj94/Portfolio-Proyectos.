@@ -2550,9 +2550,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// SIMULACIÓN ETAPA 4: Velas/sets base, piezas decorativas y jabones de SOAP_GALLERY
+// SIMULACIÓN ETAPA 5: Mejoras de diseño de paginación y animación lateral del carrusel
 const baseIds = ['candle-lavender', 'candle-orange', 'gift-love', 'gift-spa', 'soap-honey', 'soap-rose'];
 const filtered = PRODUCTS.filter(p => baseIds.includes(p.id) || p.category === 'decorativa');
 PRODUCTS.length = 0;
 PRODUCTS.push(...filtered);
-// SOAP_GALLERY se queda completo
+// El carrusel ahora se navega lateralmente y los botones tienen diseño circular
