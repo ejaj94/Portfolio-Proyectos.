@@ -2550,9 +2550,5 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// SIMULACIÓN ETAPA 5: Mejoras de diseño de paginación y animación lateral del carrusel
-const baseIds = ['candle-lavender', 'candle-orange', 'gift-love', 'gift-spa', 'soap-honey', 'soap-rose'];
-const filtered = PRODUCTS.filter(p => baseIds.includes(p.id) || p.category === 'decorativa');
-PRODUCTS.length = 0;
-PRODUCTS.push(...filtered);
-// El carrusel ahora se navega lateralmente y los botones tienen diseño circular
+// SIMULACIÓN ETAPA 6: Se habilitan todas las 23 velas aromáticas nuevas en el catálogo
+// PRODUCTS y SOAP_GALLERY están completamente habilitados
