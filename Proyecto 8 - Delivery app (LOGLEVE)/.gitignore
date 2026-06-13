@@ -1,0 +1,62 @@
+# Databases
+*.db
+*.db-journal
+*.db-wal
+
+# Python virtual environment and compilation caches
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+dist/
+build/
+*.egg-info/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.zip
+uploads/*
+!uploads/.gitkeep
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Android intermediate and configuration files
+.gradle/
+.kotlin/
+local.properties
+.idea/workspace.xml
+.idea/libraries/
+.idea/caches/
+.idea/modules.xml
+.idea/gradle.xml
+.idea/compiler.xml
+.idea/misc.xml
+.idea/vcs.xml
+build/
+app/build/
+client/.gradle/
+client/.kotlin/
+client/build/
+client/local.properties
+courier/.gradle/
+courier/.kotlin/
+courier/build/
+courier/local.properties
+restaurant/.gradle/
+restaurant/.kotlin/
+restaurant/build/
+restaurant/local.properties
+
+# OS specific files
+.DS_Store
+Thumbs.db
