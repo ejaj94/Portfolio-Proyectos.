@@ -2550,9 +2550,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// SIMULACIÓN ETAPA 3: Solo velas/sets base y piezas decorativas de yeso
+// SIMULACIÓN ETAPA 4: Velas/sets base, piezas decorativas y jabones de SOAP_GALLERY
 const baseIds = ['candle-lavender', 'candle-orange', 'gift-love', 'gift-spa', 'soap-honey', 'soap-rose'];
 const filtered = PRODUCTS.filter(p => baseIds.includes(p.id) || p.category === 'decorativa');
 PRODUCTS.length = 0;
 PRODUCTS.push(...filtered);
-SOAP_GALLERY.length = 0; // Sin jabones adicionales
+// SOAP_GALLERY se queda completo
