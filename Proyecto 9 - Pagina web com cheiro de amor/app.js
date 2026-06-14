@@ -2132,6 +2132,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return SOAP_GALLERY;
         } else if (category === "all") {
             return PRODUCTS;
+        } else if (category === "verao") {
+            return PRODUCTS.filter(p => p.id.startsWith("verao-"));
         } else {
             return PRODUCTS.filter(p => p.category === category);
         }
