@@ -1442,17 +1442,17 @@ for (let i = 1; i <= 10; i++) {
 
 const VERAO_ITEMS = [
     { pt: "Vela Aromática Brisa do Mar", es: "Vela Aromática Brisa del Mar", en: "Sailing Breeze Scented Candle", fr: "Bougie Parfumée Brise Marine", category: "vela", price: 14.90, descPt: "Frescura marinha com notas de sal e brisa costeira.", descEs: "Frescura marina con notas de sal y brisa costera.", descEn: "Ocean freshness with notes of sea salt and coastal breeze.", descFr: "Fraîcheur océanique avec des notes de sel marin et de brise côtière." },
-    { pt: "Sabonete de Coco & Lima de Verão", es: "Jabón de Coco & Lima de Verano", en: "Summer Coconut & Lime Soap", fr: "Savon Coco & Limette d'Été", category: "sabonete", price: 5.90, descPt: "Fórmula hidratante com aroma tropical de coco e raspa de lima.", descEs: "Fórmula hidratante con aroma tropical a coco y ralladura de lima.", descEn: "Moisturizing formula with a tropical scent of coconut and lime zest.", descFr: "Formule hydratante au parfum tropical de noix de coco et zeste de lime." },
+    { pt: "Peça Decorativa Coco & Lima", es: "Pieza Decorativa Coco y Lima", en: "Coco & Lime Decorative Piece", fr: "Pièce Décorative Coco & Limette", category: "decorativa", price: 5.90, descPt: "Design elegante e fresco para decoração de verão.", descEs: "Diseño elegante y fresco para decoración de verano.", descEn: "Elegant and fresh design for summer decoration.", descFr: "Design élégant et frais pour la décoration d'été." },
     { pt: "Vela Aromática Sol de Verão", es: "Vela Aromática Sol de Verano", en: "Summer Sun Scented Candle", fr: "Bougie Parfumée Soleil d'Été", category: "vela", price: 13.90, descPt: "Notas cítricas brilhantes de tangerina e tangerina de verão.", descEs: "Notas cítricas brillantes de mandarina y mandarina de verano.", descEn: "Bright citrus notes of summer mandarin and tangerine.", descFr: "Notes d'agrumes éclatantes de mandarine et tangerine d'été." },
-    { pt: "Sabonete Esfoliante de Sal e Citrinos", es: "Jabón Exfoliante de Sal y Cítricos", en: "Citrus & Salt Exfoliating Soap", fr: "Savon Exfoliant Sel & Agrumes", category: "sabonete", price: 6.50, descPt: "Esfoliação revigorante com sal marinho e óleos cítricos.", descEs: "Exfoliación revitalizante con sal marina y aceites cítricos.", descEn: "Invigorating exfoliation with sea salt and citrus essential oils.", descFr: "Exfoliation tonifiante au sel de mer et huiles essentielles d'agrumes." },
+    { pt: "Peça Decorativa Sal e Citrinos", es: "Pieza Decorativa Sal y Cítricos", en: "Salt & Citrus Decorative Piece", fr: "Pièce Décorative Sel & Agrumes", category: "decorativa", price: 6.50, descPt: "Peça decorativa em forma de concha marinha com design artesanal.", descEs: "Pieza de decoración en forma de concha marina con diseño artesanal.", descEn: "Decorative piece in the shape of a seashell with handcrafted design.", descFr: "Pièce décorative en forme de coquillage avec un design artisanal." },
     { pt: "Vela Aromática Margaridas do Campo", es: "Vela Aromática Margaritas del Campo", en: "Wild Daisy Scented Candle", fr: "Bougie Parfumée Marguerites des Champs", category: "vela", price: 14.50, descPt: "Notas florais alegres e frescas que trazem a natureza para dentro de casa.", descEs: "Notas florales alegres y frescas que traen la naturaleza al hogar.", descEn: "Cheerful and fresh floral notes that bring nature indoors.", descFr: "Notes florales fraîches et joyeuses qui font entrer la nature chez vous." },
-    { pt: "Sabonete de Hortelã e Limão Refrescante", es: "Jabón de Menta y Limón Refrescante", en: "Refreshing Mint & Lemon Soap", fr: "Savon Rafraîchissant Menthe & Citron", category: "sabonete", price: 5.90, descPt: "Efeito refrescante e estimulante para o banho nos dias quentes.", descEs: "Efecto refrescante y estimulante para el baño en días calurosos.", descEn: "Cooling and stimulating effect for bath time on warm days.", descFr: "Effet rafraîchissant et stimulant pour le bain lors des journées chaudes." },
-    { pt: "Vela Aromática Pôr do Sol", es: "Vela Aromática Atardecer de Verano", en: "Sunset Scented Candle", fr: "Bougie Parfumée Coucher de Soleil", category: "vela", price: 14.90, descPt: "Uma fragrância quente e aveludada de pêssego e baunilha.", descEs: "Una fragancia cálida y azerciopelada de melocotón y vainilla.", descEn: "A warm and velvety fragrance of summer peach and vanilla.", descFr: "Un parfum chaud et velouté de pêche d'été et de vanille." },
-    { pt: "Sabonete Hidratante Aloe de Verão", es: "Jabón Hidratante Aloe de Verano", en: "Summer Aloe Moisturizing Soap", fr: "Savon Hydratant Aloe d'Été", category: "sabonete", price: 5.90, descPt: "Hidratação calmante pós-sol com extrato natural de aloe vera.", descEs: "Hidratación calmante para después del sol con extracto de aloe vera.", descEn: "Calming post-sun hydration with natural aloe vera extract.", descFr: "Hydratation apaisante après-soleil à l'extrait naturel d'aloe vera." },
+    { pt: "Peça Decorativa Hortelã e Limão", es: "Pieza Decorativa Menta y Limón", en: "Mint & Lemon Decorative Piece", fr: "Pièce Décorative Menthe & Citron", category: "decorativa", price: 5.90, descPt: "Peça decorativa inspirada no frescor de hortelã e limão.", descEs: "Pieza decorativa inspirada en la frescura de la menta y el limón.", descEn: "Decorative piece inspired by the freshness of mint and lemon.", descFr: "Pièce décorative inspirée par la fraîcheur de la menthe et du citron." },
+    { pt: "Vela Aromática Pôr do Sol", es: "Vela Aromática Atardecer de Verano", en: "Sunset Scented Candle", fr: "Bougie Parfumée Coucher de Soleil", category: "vela", price: 14.90, descPt: "Uma fragrância quente e aveludada de pêssego e baunilha.", descEs: "Una fragancia cálida y terciopelada de melocotón y vainilla.", descEn: "A warm and velvety fragrance of summer peach and vanilla.", descFr: "Un parfum chaud et velouté de pêche d'été et de vanille." },
+    { pt: "Peça Decorativa Aloe de Verão", es: "Pieza Decorativa Aloe de Verano", en: "Summer Aloe Decorative Piece", fr: "Pièce Décorative Aloe d'Été", category: "decorativa", price: 5.90, descPt: "Design minimalista e relaxante de aloe para o seu lar.", descEs: "Diseño minimalista y relajante de aloe para tu hogar.", descEn: "Minimalist and relaxing aloe design for your home.", descFr: "Design minimaliste et relaxant d'aloe pour votre maison." },
     { pt: "Vela Aromática Frutas Tropicais", es: "Vela Aromática Frutas Tropicales", en: "Tropical Fruits Scented Candle", fr: "Bougie Parfumée Fruits Tropicaux", category: "vela", price: 13.90, descPt: "Fragrância doce e exótica de manga, maracujá e papaia.", descEs: "Fragancia dulce y exótica de mango, maracuyá y papaya.", descEn: "Sweet and exotic fragrance of mango, passionfruit, and papaya.", descFr: "Parfum doux et exotique de mangue, fruit de la passion et papaye." },
-    { pt: "Sabonete Suave de Manga & Papaia", es: "Jabón Suave de Mango & Papaya", en: "Mango & Papaya Soft Soap", fr: "Savon Doux Mangue & Papaye", category: "sabonete", price: 5.90, descPt: "Nutrição tropical com espuma cremosa e aroma frutado doce.", descEs: "Nutrición tropical con espuma cremosa y aroma frutado dulce.", descEn: "Tropical nourishment with creamy lather and sweet fruity scent.", descFr: "Nutrition tropicale avec une mousse crémeuse et un parfum fruité doux." },
-    { pt: "Vela Aromática Noites de Verão", es: "Vela Aromática Noches de Verano", en: "Summer Nights Scented Candle", fr: "Bougie Parfumée Nuits d'Été", category: "vela", price: 14.90, descPt: "Sedução noturna com jasmim da meia-noite e sândalo quente.", descEs: "Seducción nocturna con jazmín de medianoche y sándalo cálido.", descEn: "Night seduction with midnight jasmine and warm sandalwood.", descFr: "Séduction nocturne avec du jasmin de minuit et du bois de santal chaud." },
-    { pt: "Sabonete de Lavanda de Verão", es: "Jabón de Lavanda de Verano", en: "Summer Lavender Soap", fr: "Savon Lavande d'Été", category: "sabonete", price: 5.90, descPt: "Relaxamento fresco de lavanda colhida no pico do verão.", descEs: "Relajación fresca de lavanda cosechada en el pico del verano.", descEn: "Fresh relaxation of lavender harvested at peak summer.", descFr: "Relaxation fraîche de lavande récoltée au cœur de l'été." }
+    { pt: "Peça Decorativa Manga & Papaia", es: "Pieza Decorativa Mango & Papaya", en: "Mango & Papaya Decorative Piece", fr: "Pièce Décorative Mangue & Papaye", category: "decorativa", price: 5.90, descPt: "Acabamento premium artesanal com padrão de concha marinha.", descEs: "Acabado premium artesanal con patrón de concha marina.", descEn: "Handcrafted premium finish with a seashell pattern.", descFr: "Finition premium artisanale avec un motif de coquillage." },
+    { pt: "Vela Aromática Noites de Verão", es: "Vela Aromática Noches de Verano", en: "Summer Nights Scented Candle", fr: "Bougie Parfumée Nuits d'Été", category: "vela", price: 14.90, descPt: "Sedução noturna com jasmim da meia-noite e sândalo quente.", descEs: "Seducción nocturna con jazmín de medianoche y sándalo cálido.", descEn: "Night seduction with midnight jasmine and warm sandalwood.", descFr: "Seduction nocturne avec du jasmin de minuit et du bois de santal chaud." },
+    { pt: "Peça Decorativa Lavanda de Verão", es: "Pieza Decorativa Lavanda de Verano", en: "Summer Lavender Decorative Piece", fr: "Pièce Décorative Lavande d'Été", category: "decorativa", price: 5.90, descPt: "Design elegante e calmante de lavanda colhida no verão.", descEs: "Diseño elegante y calmante de lavanda cosechada en verano.", descEn: "Elegant and soothing design of summer harvested lavender.", descFr: "Design élégant et apaisant de lavande récoltée en été." }
 ];
 
 for (let i = 1; i <= 12; i++) {
@@ -1465,30 +1465,38 @@ for (let i = 1; i <= 12; i++) {
         qty: 1,
         pt: {
             name: item.pt,
-            categoryLabel: item.category === "vela" ? "Vela Aromática (Verão)" : "Sabonete de Verão",
+            categoryLabel: item.category === "vela" ? "Vela Aromática (Verão)" : "Peça Decorativa (Verão)",
             aromaBrief: item.descPt,
-            description: `${item.pt} da nossa coleção exclusiva de Verão. Feito à mão com ingredientes naturais e selecionados para trazer o frescor da estação.`,
+            description: item.category === "vela" 
+                ? `${item.pt} da nossa coleção exclusiva de Verão. Vela aromática feita à mão com cera de soja e essências selecionadas.`
+                : `${item.pt} da nossa coleção exclusiva de Verão. Peça decorativa feita à mão com gesso ecológico e acabamento impermeabilizado.`,
             aromaProfile: "Verão, Frescor, Edição Limitada"
         },
         es: {
             name: item.es,
-            categoryLabel: item.category === "vela" ? "Vela Aromática (Verano)" : "Jabón de Verano",
+            categoryLabel: item.category === "vela" ? "Vela Aromática (Verano)" : "Pieza Decorativa (Verano)",
             aromaBrief: item.descEs,
-            description: `${item.es} de nuestra colección exclusiva de Verano. Hecho a mano con ingredientes naturales y seleccionados para traer la frescura de la estación.`,
+            description: item.category === "vela" 
+                ? `${item.es} de nuestra colección exclusiva de Verano. Vela aromática hecha a mano con cera de soja y esencias seleccionadas.`
+                : `${item.es} de nuestra colección exclusiva de Verano. Pieza decorativa hecha a mano con yeso ecológico y acabado impermeabilizado.`,
             aromaProfile: "Verano, Frescura, Edición Limitada"
         },
         en: {
             name: item.en,
-            categoryLabel: item.category === "vela" ? "Scented Candle (Summer)" : "Summer Soap",
+            categoryLabel: item.category === "vela" ? "Scented Candle (Summer)" : "Decorative Piece (Summer)",
             aromaBrief: item.descEn,
-            description: `${item.en} from our exclusive Summer Collection. Handcrafted with natural ingredients chosen to bring the seasonal freshness.`,
+            description: item.category === "vela" 
+                ? `${item.en} from our exclusive Summer Collection. Scented candle handcrafted with soy wax and selected fragrances.`
+                : `${item.en} from our exclusive Summer Collection. Decorative piece handcrafted with premium eco-friendly plaster and waterproof finish.`,
             aromaProfile: "Summer, Freshness, Limited Edition"
         },
         fr: {
             name: item.fr,
-            categoryLabel: item.category === "vela" ? "Bougie Parfumée (Été)" : "Savon d'Été",
+            categoryLabel: item.category === "vela" ? "Bougie Parfumée (Été)" : "Pièce Décorative (Été)",
             aromaBrief: item.descFr,
-            description: `${item.fr} de notre collection exclusive d'Été. Fait main avec des ingrédients naturels pour apporter la fraîcheur de la saison.`,
+            description: item.category === "vela" 
+                ? `${item.fr} de notre collection exclusive d'Été. Bougie parfumée fabriquée à la main avec de la cire de soja et des essences sélectionnées.`
+                : `${item.fr} de notre collection exclusive d'Été. Pièce décortive fabriquée à la main avec du plâtre écologique et une finition imperméabilisée.`,
             aromaProfile: "Été, Fraîcheur, Édition Limitée"
         }
     };
@@ -1755,6 +1763,12 @@ const TRANSLATIONS = {
         es: "Piezas Decorativas",
         en: "Decorative Pieces",
         fr: "Pièces Décoratives"
+    },
+    "filter-verao": {
+        pt: "Coleção de Verão",
+        es: "Colección de Verano",
+        en: "Summer Collection",
+        fr: "Collection d'Été"
     },
     "brand-reg-title": {
         pt: "Marca Oficial Registada",
@@ -2292,6 +2306,8 @@ document.addEventListener("DOMContentLoaded", () => {
             filteredProducts = SOAP_GALLERY;
         } else if (categoryFilter === "all") {
             filteredProducts = PRODUCTS;
+        } else if (categoryFilter === "verao") {
+            filteredProducts = PRODUCTS.filter(p => p.id.startsWith("verao-"));
         } else {
             filteredProducts = PRODUCTS.filter(p => p.category === categoryFilter);
         }
