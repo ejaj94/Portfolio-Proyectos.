@@ -1099,27 +1099,27 @@ const SOAP_GALLERY = [
         price: 5.50,
         image: "assets/soap_camomila.jpeg",
         pt: {
-            name: "Sabonete de Camomila & Flor de Laranjeira",
+            name: "Sabonete de Camomila",
             desc: "Acalma a pele irritada e ajuda na renovação cutânea.",
-            longDesc: "Ingredientes: Água, glicerina 100% vegetal, camomila e essência 100% vegetal de camomila e flor de laranjeira. Benefícios estéticos: Acalma a pele irritada, ajuda em problemas de eczema ou acne. Renovação da pele. Espiritualmente: Ajuda a ficar mais tranquilo e equilibrado. Ajuda nas tomadas de decisões e a restaurar forças.",
+            longDesc: "Ingredientes: Água, glicerina 100% vegetal, camomila e essência de camomila. Benefícios estéticos: Acalma a pele irritada, ajuda em problemas de eczema ou acne. Renovação da pele. Espiritualmente: Ajuda a ficar mais tranquilo e equilibrado. Ajuda nas tomadas de decisões e a restaurar forças.",
             aromaProfile: "Tranquilidade, Equilíbrio, Restauração"
         },
         es: {
-            name: "Jabón de Manzanilla & Azahar",
+            name: "Jabón de Manzanilla",
             desc: "Calma la piel irritada y ayuda a la renovación cutánea.",
-            longDesc: "Ingredientes: Agua, glicerina 100% vegetal, manzanilla y esencia 100% vegetal de manzanilla y flor de azahar. Beneficios estéticos: Calma la piel irritada, ayuda en problemas de eczema o acné. Renovación de la piel. Espiritualmente: Ayuda a estar más tranquilo y equilibrado. Ayuda en la toma de decisiones y a restaurar fuerzas.",
+            longDesc: "Ingredientes: Agua, glicerina 100% vegetal, manzanilla y esencia de manzanilla. Beneficios estéticos: Calma la piel irritada, ayuda en problemas de eczema o acné. Renovación de la piel. Espiritualmente: Ayuda a estar más tranquilo y equilibrado. Ayuda en la toma de decisiones y a restaurar fuerzas.",
             aromaProfile: "Tranquilidad, Equilibrio, Restauración"
         },
         en: {
-            name: "Chamomile & Orange Blossom Soap",
+            name: "Chamomile Soap",
             desc: "Soothes irritated skin and helps with skin renewal.",
-            longDesc: "Ingredients: Water, 100% vegetable glycerin, chamomile, and 100% vegetable chamomile and orange blossom fragrance. Aesthetic benefits: Soothes irritated skin, helps with eczema or acne. Skin renewal. Spiritually: Helps to stay calm and balanced. Helps in decision-making and restoring strength.",
+            longDesc: "Ingredients: Water, 100% vegetable glycerin, chamomile, and chamomile fragrance. Aesthetic benefits: Soothes irritated skin, helps with eczema or acne. Skin renewal. Spiritually: Helps to stay calm and balanced. Helps in decision-making and restoring strength.",
             aromaProfile: "Tranquility, Balance, Restoration"
         },
         fr: {
-            name: "Savon Camomille & Fleur d'Oranger",
+            name: "Savon à la Camomille",
             desc: "Apaise la peau irritée et aide au renouvellement cutané.",
-            longDesc: "Ingrédients: Eau, glycérine 100% végétale, camomille et essence 100% végétale de camomille et fleur d'oranger. Bienfaits esthétiques: Apaise la peau irritée, aide en cas d'eczéma ou d'acné. Renouvellement de la peau. Spirituellement: Aide à rester plus tranquille et équilibré. Aide à la prise de décision et à restaurer les forces.",
+            longDesc: "Ingrédients: Eau, glycérine 100% végétale, camomille et essence de camomille. Bienfaits esthétiques: Aide à hydrater la peau irritée, aide en cas d'eczéma ou d'acné. Renouvellement de la peau. Spirituellement: Aide à rester plus tranquille et équilibré. Aide à la prise de décision et à restaurer les forces.",
             aromaProfile: "Tranquillité, Équilibre, Restauration"
         }
     },
@@ -1128,57 +1128,57 @@ const SOAP_GALLERY = [
         price: 6.90,
         image: "assets/soap_carvao.jpeg",
         pt: {
-            name: "Sabonete de Carbão Ativo & Limão",
+            name: "Sabonete de Carbão",
             desc: "Controla a oleosidade e limpa profundamente os poros.",
-            longDesc: "Ingredientes: Glicerina 100% vegetal, carvão ativo, água e sumo de limão. Benefícios estéticos: Controla a oleosidade da pele, limpeza dos poros, clareador de manchas. Espiritualmente: Ajuda a eliminar energias negativas.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, carvão ativo e água. Benefícios estéticos: Controla a oleosidade da pele, limpeza dos poros, clareador de manchas. Espiritualmente: Ajuda a eliminar energias negativas.",
             aromaProfile: "Purificação, Limpeza, Proteção Energética"
         },
         es: {
-            name: "Jabón de Carbón Activo & Limón",
+            name: "Jabón de Carbón",
             desc: "Controla la grasa y limpia profundamente los poros.",
-            longDesc: "Ingredientes: Glicerina 100% vegetal, carbón activo, agua y zumo de limón. Beneficios estéticos: Controla la grasa de la piel, limpieza de los poros, aclara manchas. Espiritualmente: Ayuda a eliminar energías negativas.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, carbón activo y agua. Beneficios estéticos: Controla la grasa de la piel, limpieza de los poros, aclara manchas. Espiritualmente: Ayuda a eliminar energías negativas.",
             aromaProfile: "Purificación, Limpieza, Protección Energética"
         },
         en: {
-            name: "Activated Charcoal & Lemon Soap",
+            name: "Charcoal Soap",
             desc: "Controls oiliness and deeply cleanses the pores.",
-            longDesc: "Ingredients: 100% vegetable glycerin, activated charcoal, water, and lemon juice. Aesthetic benefits: Controls skin oiliness, cleanses pores, and lightens dark spots. Spiritually: Helps eliminate negative energies.",
+            longDesc: "Ingredients: 100% vegetable glycerin, activated charcoal, and water. Aesthetic benefits: Controls skin oiliness, cleanses pores, and lightens dark spots. Spiritually: Helps eliminate negative energies.",
             aromaProfile: "Purification, Cleansing, Energy Protection"
         },
         fr: {
-            name: "Savon au Charbon Actif & Citron",
+            name: "Savon au Charbon",
             desc: "Contrôle l'excès de sébum et nettoie les pores en profondeur.",
-            longDesc: "Ingrédients: Glycérine 100% végétale, charbon actif, eau et jus de citron. Bienfaits esthétiques: Contrôle l'excès de sébum de la peau, nettoie les pores, éclaircit les taches. Spirituellement: Aide à éliminer les énergies négatives.",
+            longDesc: "Ingrédients: Glycérine 100% végétale, charbon actif et eau. Bienfaits esthétiques: Contrôle l'excès de sébum de la peau, nettoie les pores, éclaircit les taches. Spirituellement: Aide à éliminer les énergies négatives.",
             aromaProfile: "Purification, Nettoyage, Protection Énergétique"
         }
     },
     {
-        id: "soap-alecrim",
+        id: "soap-chia",
         price: 5.90,
-        image: "assets/soap_alecrim.jpeg",
+        image: "assets/soap_chia.jpeg",
         pt: {
-            name: "Sabonete de Alecrim",
-            desc: "Ajuda na cicatrização e firmeza da pele.",
-            longDesc: "Ingredientes: Alecrim, água, glicerina 100% vegetal e essência vegetal de alecrim. Benefícios estéticos: Ajuda na cicatrização. O alecrim ajuda no aumento do fluxo sanguíneo e produção de colagénio impedindo que a pele fique flácida. Espiritualmente: Proporciona motivação, confiança e mais energia.",
-            aromaProfile: "Motivação, Confiança, Energia"
+            name: "Sabonete de Chia",
+            desc: "Massagem esfoliante estimulante que ativa a microcirculação.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, água, sementes de chia e essência de hortelã. Benefícios estéticos: Massagem esfoliante estimulante que ativa a microcirculação, removendo impurezas e células mortas. Espiritualmente: A chia simboliza prosperidade, crescimento e renovação de energias.",
+            aromaProfile: "Prosperidade, Crescimento, Renovação"
         },
         es: {
-            name: "Jabón de Romero",
-            desc: "Ayuda a la cicatrización y firmeza de la piel.",
-            longDesc: "Ingredientes: Romero, agua, glicerina 100% vegetal y esencia vegetal de romero. Beneficios estéticos: Ayuda a la cicatrización. El romero ayuda a aumentar el flujo sanguíneo y la producción de colágeno, evitando la flacidez de la piel. Espiritualmente: Proporciona motivación, confianza y más energía.",
-            aromaProfile: "Motivación, Confianza, Energía"
+            name: "Jabón de Chía",
+            desc: "Masaje exfoliante estimulante que activa la microcirculación.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, agua, semillas de chía y esencia de menta. Beneficios estéticos: Masaje exfoliante estimulante que activa la microcirculación, eliminando impurezas y células muertas. Espiritualmente: La chía simboliza prosperidad, crecimiento y renovación de energías.",
+            aromaProfile: "Prosperidad, Crecimiento, Renovación"
         },
         en: {
-            name: "Rosemary Soap",
-            desc: "Helps with healing and skin firmness.",
-            longDesc: "Ingredients: Rosemary, water, 100% vegetable glycerin, and rosemary essential oil. Aesthetic benefits: Helps with healing. Rosemary helps increase blood flow and collagen production, preventing sagging skin. Spiritually: Provides motivation, confidence, and more energy.",
-            aromaProfile: "Motivation, Confidence, Energy"
+            name: "Chia Seed Soap",
+            desc: "Stimulating exfoliating massage that boosts microcirculation.",
+            longDesc: "Ingredients: 100% vegetable glycerin, water, chia seeds, and mint fragrance. Aesthetic benefits: Stimulating exfoliating massage that boosts microcirculation, removing impurities and dead cells. Spiritually: Chia symbolizes prosperity, growth, and energy renewal.",
+            aromaProfile: "Prosperity, Growth, Renewal"
         },
         fr: {
-            name: "Savon au Romarin",
-            desc: "Aide à la cicatrisation et à la fermeté de la peau.",
-            longDesc: "Ingrédients: Romarin, eau, glycérine 100% végétale et essence végétale de romarin. Bienfaits esthétiques: Aide à la cicatrisation. Le romarin aide à augmenter le flux sanguin et la production de collagène, empêchant le relâchement cutané. Spirituellement: Apporte de la motivation, de la confiance et plus d'énergie.",
-            aromaProfile: "Motivation, Confiance, Énergie"
+            name: "Savon aux Graines de Chia",
+            desc: "Massage exfoliant stimulant qui active la microcirculation.",
+            longDesc: "Ingrédients: Glycérine 100% végétale, eau, graines de chia et essence de menthe. Bienfaits esthétiques: Massage exfoliant stimulant qui active la microcirculation, éliminant les impuretés et les cellules mortes. Spirituellement: Le chia symbolise la prospérité, la croissance et le renouvellement des énergies.",
+            aromaProfile: "Prospérité, Croissance, Renouvellement"
         }
     },
     {
@@ -1186,27 +1186,27 @@ const SOAP_GALLERY = [
         price: 5.90,
         image: "assets/soap_coco.jpeg",
         pt: {
-            name: "Sabonete de Coco & Óleo de Coco",
+            name: "Sabonete de Coco",
             desc: "Hidratante facial e corporal, ideal para aliviar queimaduras solares.",
-            longDesc: "Ingredientes: Glicerina 100% vegetal, água, coco ralado, óleo de coco e essência natural de coco. Benefícios estéticos: Hidratante facial e corporal. Limpa impurezas. Calmante e excelente para aliviar queimaduras provocadas pela exposição solar. Espiritualmente: O coco simboliza fertilidade e prosperidade.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, água, coco ralado e essência natural de coco. Benefícios estéticos: Hidratante facial e corporal. Limpa impurezas. Calmante e excelente para aliviar queimaduras provocadas pela exposição solar. Espiritualmente: O coco simboliza fertilidade e prosperidade.",
             aromaProfile: "Fertilidade, Prosperidade, Alívio"
         },
         es: {
-            name: "Jabón de Coco & Aceite de Coco",
+            name: "Jabón de Coco",
             desc: "Hidratante facial y corporal, ideal para aliviar quemaduras solares.",
-            longDesc: "Ingredientes: Glicerina 100% vegetal, agua, coco rallado, aceite de coco y esencia natural de coco. Beneficios estéticos: Hidratante facial y corporal. Limpia impurezas. Calmante y excelente para aliviar quemaduras provocadas por la exposición solar. Espiritualmente: El coco simboliza fertilidad y prosperidad.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, agua, coco rallado y esencia natural de coco. Beneficios estéticos: Hidratante facial y corporal. Limpia impurezas. Calmante y excelente para aliviar quemaduras provocadas por la exposición solar. Espiritualmente: El coco simboliza fertilidad y prosperidad.",
             aromaProfile: "Fertilidad, Prosperidad, Alivio"
         },
         en: {
-            name: "Coconut & Coconut Oil Soap",
+            name: "Coconut Soap",
             desc: "Facial and body moisturizer, ideal for soothing sunburns.",
-            longDesc: "Ingredients: 100% vegetable glycerin, water, grated coconut, coconut oil, and natural coconut fragrance. Aesthetic benefits: Facial and body moisturizer. Cleanses impurities. Soothing and excellent for relieving sunburns caused by sun exposure. Spiritually: Coconut symbolizes fertility and prosperity.",
+            longDesc: "Ingredients: 100% vegetable glycerin, water, grated coconut, and natural coconut fragrance. Aesthetic benefits: Facial and body moisturizer. Cleanses impurities. Soothing and excellent for relieving sunburns caused by sun exposure. Spiritually: Coconut symbolizes fertility and prosperity.",
             aromaProfile: "Fertility, Prosperity, Relief"
         },
         fr: {
-            name: "Savon Noix de Coco & Huile de Coco",
+            name: "Savon Noix de Coco",
             desc: "Hydratant visage et corps, idéal pour apaiser les coups de soleil.",
-            longDesc: "Ingrédients: Glycérine 100% végétale, eau, noix de coco râpée, huile de coco et essence naturelle de noix de coco. Bienfaits esthétiques: Hydratant visage et corps. Nettoie les impuretés. Apaisant et excellent pour soulager les brûlures causées par l'exposition solaire. Spirituellement: La noix de coco symbolise la fertilité et la prospérité.",
+            longDesc: "Ingrédients: Glycérine 100% végétale, eau, noix de coco râpée et essence naturelle de noix de coco. Bienfaits esthétiques: Hydratant visage et corps. Nettoie les impuretés. Apaisant et excellent pour soulager les brûlures causées par l'exposition solaire. Spirituellement: La noix de coco symbolise la fertilité et la prospérité.",
             aromaProfile: "Fertilité, Prospérité, Soulagement"
         }
     },
@@ -1645,10 +1645,10 @@ const TRANSLATIONS = {
     },
     // Navigation
     "logo-sub": {
-        pt: "Velas & Sabonetes",
-        es: "Velas & Jabones",
-        en: "Candles & Soaps",
-        fr: "Bougies & Savons"
+        pt: "Velas, Sabonetes e Peças Decorativas",
+        es: "Velas, Jabones y Piezas Decorativas",
+        en: "Candles, Soaps and Decorative Pieces",
+        fr: "Bougies, Savons et Pièces Décoratives"
     },
     "nav-link-home": {
         pt: "Início",
