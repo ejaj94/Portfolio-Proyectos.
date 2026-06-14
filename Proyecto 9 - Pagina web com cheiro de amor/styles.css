@@ -1695,3 +1695,134 @@ body.lang-fade-active {
   }
 }
 
+/* ==========================================================================
+   DARK THEME VARIABLE OVERRIDES
+   ========================================================================== */
+body.dark-theme {
+  --color-bg-primary: #151110;
+  --color-bg-secondary: #211c1a;
+  --color-text-main: #fcf9f5;
+  --color-text-muted: #a99d9a;
+  --color-accent-terracotta: #d7a193;
+  --color-accent-terracotta-dark: #c08a7c;
+  --color-accent-rose: #3e3230;
+  --color-accent-gold: #e2c07d;
+  --color-white: #1d1817;
+
+  --shadow-subtle: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --shadow-medium: 0 15px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Smooth transitions for theme switching */
+body, 
+header, 
+aside, 
+.modal-wrapper, 
+.product-card, 
+.certificacao-box, 
+.theme-toggle,
+.lang-select,
+.cart-notes,
+footer {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Specific Dark Theme Overrides */
+body.dark-theme .navbar {
+  background: rgba(21, 17, 16, 0.85);
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-main);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+body.dark-theme .story-signature-line {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-theme .catalog-nav-btn {
+  background: rgba(29, 24, 23, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-main);
+}
+
+body.dark-theme .catalog-nav-btn:hover {
+  background: var(--color-accent-terracotta);
+  color: var(--color-white);
+}
+
+body.dark-theme .certificacao-box {
+  background-color: var(--color-bg-secondary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+body.dark-theme .modal-wrapper {
+  background-color: var(--color-bg-primary);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.dark-theme .qty-btn {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-main);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .qty-btn:hover {
+  background-color: var(--color-accent-terracotta);
+  color: var(--color-white);
+}
+
+/* ==========================================================================
+   THEME TOGGLE BUTTON STYLING
+   ========================================================================== */
+.theme-toggle {
+  background: transparent;
+  border: none;
+  color: var(--color-text-main);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: var(--transition-fast);
+  padding: 0;
+  margin-right: 0.5rem;
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-accent-terracotta);
+  transform: scale(1.05);
+}
+
+/* Icon toggling */
+.theme-toggle .sun-icon {
+  display: none;
+}
+
+.theme-toggle .moon-icon {
+  display: block;
+}
+
+body.dark-theme .theme-toggle .sun-icon {
+  display: block;
+  color: var(--color-accent-gold);
+}
+
+body.dark-theme .theme-toggle .moon-icon {
+  display: none;
+}
+
+

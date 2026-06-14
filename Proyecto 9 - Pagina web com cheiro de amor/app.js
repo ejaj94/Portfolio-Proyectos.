@@ -993,457 +993,633 @@ for (let i = 1; i <= 39; i++) {
             name: `${nameTemplate.en} #${i}`,
             categoryLabel: "Decorative Piece",
             aromaBrief: "Minimalist and elegant design in eco-friendly plaster with waterproof finish.",
-            description: "An exclusive handcrafted decorative piece made of premium eco-friendly plaster, finished with a satin waterproof coating. Perfect for organizing jewelry, perfumes, soaps, or as a base for our scented candles. Each piece is unique and individually molded in Portugal.",
-            aromaProfile: "Eco-friendly, Exclusive Design, Handcrafted"
+            description: "An exclusive handcrafted decorative piece made of premium eco-friendly plaster, with a satin waterproof finish. Perfect for organizing jewelry, perfumes, soaps or as a base for our scented candles. Each piece is unique and individually molded in Portugal.",
+            aromaProfile: "Eco-friendly, Exclusive Design, Hand Painted"
         },
         fr: {
             name: `${nameTemplate.fr} #${i}`,
             categoryLabel: "Pièce Décorative",
             aromaBrief: "Design minimaliste et élégant en plâtre écologique avec finition imperméable.",
-            description: "Une pièce de plâtre écologique haut de gamme fabriquée à la main, avec une finition satinée imperméable. Parfaite pour organiser des bijoux, des parfums, des savons ou comme support pour nos bougies. Chaque pièce est unique et moulée individuellement en Portugal.",
-            aromaProfile: "Éco-responsable, Design Exclusif, Fait Main"
+            description: "Une pièce décorative exclusive fabriquée à la main en plâtre écologique de qualité supérieure, avec une finition imperméable satinée. Parfaite pour organiser bijoux, parfums, savons ou comme base pour nos bougies parfumées. Chaque pièce est unique et moulée individuellement au Portugal.",
+            aromaProfile: "Éco-responsable, Design Exclusif, Peint à la Main"
         }
     });
 }
 
-// 15 Soap Gallery Items for Showcase with multi-language name and descriptions to support perfect 3-by-3 layout
 const SOAP_GALLERY = [
     {
-        id: "soap-rose",
+        id: "soap-aloe-vera",
         price: 5.90,
-        image: "assets/soap_rose.png",
+        image: "assets/soap_aloe_vera.jpeg",
         pt: {
-            name: "Sabonete de Rosas & Argila Rosa",
-            desc: "Uma fragrância romântica de pétalas de rosa com as propriedades purificantes da argila rosa.",
-            longDesc: "Sabonete artesanal elaborado pelo método tradicional de saponificação a frio (cold process). Rico em óleos vegetais de amêndoas doces e manteiga de karité, nutre profundamente a pele. A argila rosa limpa suavemente as impurezas enquanto as pétalas de rosa proporcionam uma leve esfoliação natural.",
-            aromaProfile: "Floral Clássico, Delicado, Atalcado, Hidratante"
+            name: "Sabonete de Aloe Vera",
+            desc: "Ajuda na hidratação da pele e rugas. Suaviza a pele.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, água, extrato de aloe vera e essência de aloe vera. Benefícios estéticos: Ajuda na hidratação da pele e rugas. Suaviza a pele. Espiritualmente: Simboliza proteção, esperança, longevidade e sorte.",
+            aromaProfile: "Proteção, Esperança, Longevidade e Sorte"
         },
         es: {
-            name: "Jabón de Rosas & Arcilla Rosa",
-            desc: "Una fragancia romántica de pétalos de rosa con las propiedades purificantes de la arcilla rosa.",
-            longDesc: "Jabón artesanal elaborado por el método tradicional de saponificación en frío (cold process). Rico en aceites vegetales de almendras dulces y manteca de karité, nutre profundamente la piel. La arcilla rosa limpia suavemente las impurezas mientras que los pétalos de rosa proporcionan una exfoliación natural suave.",
-            aromaProfile: "Floral Clásico, Delicado, Atalcado, Hidratante"
+            name: "Jabón de Aloe Vera",
+            desc: "Ayuda a hidratar la piel y reducir arrugas. Suaviza la piel.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, agua, extracto de aloe vera y esencia de aloe vera. Beneficios estéticos: Ayuda a hidratar la piel y reducir arrugas. Suaviza la piel. Espiritualmente: Simboliza protección, esperanza, longevidad y suerte.",
+            aromaProfile: "Protección, Esperanza, Longevidad y Suerte"
         },
         en: {
-            name: "Rose & Pink Clay Soap",
-            desc: "A romantic fragrance of rose petals combined with the purifying properties of pink clay.",
-            longDesc: "Handcrafted soap made using the traditional cold process saponification method. Rich in sweet almond vegetable oils and shea butter, it deeply nourishes the skin. Pink clay gently cleanses impurities while rose petals provide a gentle natural exfoliation.",
-            aromaProfile: "Classic Floral, Delicate, Powdery, Moisturizing"
+            name: "Aloe Vera Soap",
+            desc: "Helps with skin hydration and wrinkles. Softens the skin.",
+            longDesc: "Ingredients: 100% vegetable glycerin, water, aloe vera extract, and aloe vera fragrance. Aesthetic benefits: Helps with skin hydration and wrinkles. Softens the skin. Spiritually: Symbolizes protection, hope, longevity, and luck.",
+            aromaProfile: "Protection, Hope, Longevity, and Luck"
         },
         fr: {
-            name: "Savon aux Roses & Argile Rose",
-            desc: "Un parfum romantique de pétales de rose associé aux propriétés purifiantes de l'argile rose.",
-            longDesc: "Savon artisanal élaboré selon la méthode traditionnelle de saponification à froid (cold process). Riche en huiles végétales d'amande douce et en beurre de karité, il nourrit la peau en profondeur. L'argile rose nettoie en douceur les impuretés tandis que les pétales de rose procurent une légère exfoliation naturelle.",
-            aromaProfile: "Floral Classique, Délicat, Poudré, Hydratant"
+            name: "Savon à l'Aloe Vera",
+            desc: "Aide à hydrater la peau et réduire les rides. Adoucit la peau.",
+            longDesc: "Ingrédients: Glycérine 100% végétale, eau, extrait d'aloe vera et essence d'aloe vera. Bienfaits esthétiques: Aide à hydrater la peau et réduire les rides. Adoucit la peau. Spirituellement: Symbolise la protection, l'espoir, la longévité et la chance.",
+            aromaProfile: "Protection, Espoir, Longévité et Chance"
         }
     },
     {
-        id: "soap-honey",
-        price: 5.90,
-        image: "assets/soap_honey.png",
+        id: "soap-amendoa-aveia",
+        price: 6.50,
+        image: "assets/soap_amendoa_aveia.jpeg",
         pt: {
-            name: "Sabonete de Aveia & Mel de Flores",
-            desc: "Notas doces e nutritivas de mel silvestre misturadas com a esfoliação suave da aveia integral.",
-            longDesc: "Altamente hidratante, acalma peles secas e sensíveis. Combina mel de abelhas local, que atua como humectante natural, com aveia triturada para uma massagem esfoliante estimulante. Produz uma espuma rica, cremosa e deliciosamente perfumada que deixa a pele incrivelmente macia.",
-            aromaProfile: "Doce de Mel, Quente, Amendoado, Esfoliante"
+            name: "Sabonete de Aveia & Amêndoa",
+            desc: "Ideal para nutrir, proteger e rejuvenescer a pele.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, essência natural de aveia e mel, mel, amêndoa e flocos de aveia e óleo de amêndoas doces. Benefícios estéticos: A amêndoa e a aveia são ricos em propriedades estéticas complementares ideais para nutrir, proteger e rejuvenescer a pele. Enquanto o óleo de amêndoa atua na hidratação e luminosidade, a aveia foca na regeneração celular, firmeza e suavidade. Espiritualmente: Elas nutrem o corpo físico para promover a clareza mental, o equilíbrio emocional e a elevação da vibração energética.",
+            aromaProfile: "Clareza Mental, Equilíbrio Emocional, Nutrição"
         },
         es: {
-            name: "Jabón de Avena & Miel de Flores",
-            desc: "Notas dulces y nutritivas de miel silvestre mezcladas con la exfoliación suave de la avena integral.",
-            longDesc: "Altamente hidratante, calma las pieles secas y sensibles. Combina miel de abejas local, que actúa como humectante natural, con avena triturada para un masaje exfoliante estimulante. Produce una espuma rica, cremosa y deliciosamente perfumada que deja la piel increíblemente suave.",
-            aromaProfile: "Dulce de Miel, Cálido, Almendrado, Exfoliante"
+            name: "Jabón de Avena & Almendra",
+            desc: "Ideal para nutrir, proteger y rejuvenecer la piel.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, esencia natural de avena y miel, miel, almendra, copos de avena y aceite de almendras dulces. Beneficios estéticos: La almendra y la avena son ricas en propiedades estéticas complementarias ideales para nutrir, proteger y rejuvenecer la piel. Mientras que el aceite de almendras actúa en la hidratación y luminosidad, la avena se enfoca en la regeneración celular, firmeza y suavidad. Espiritualmente: Nutren el cuerpo físico para promover la claridad mental, el equilibrio emocional y la elevación de la vibración energética.",
+            aromaProfile: "Claridad Mental, Equilibrio Emocional, Nutrición"
         },
         en: {
-            name: "Oatmeal & Flower Honey Soap",
-            desc: "Sweet and nourishing wild honey notes mixed with the gentle exfoliation of whole oats.",
-            longDesc: "Highly moisturizing, it soothes dry and sensitive skins. Combines local bee honey, which acts as a natural humectant, with ground oats for a stimulating exfoliating massage. Produces a rich, creamy, and deliciously scented lather that leaves skin incredibly soft.",
-            aromaProfile: "Sweet Honey, Warm, Nutty, Exfoliating"
+            name: "Oatmeal & Almond Soap",
+            desc: "Ideal for nourishing, protecting, and rejuvenating the skin.",
+            longDesc: "Ingredients: 100% vegetable glycerin, natural oat and honey fragrance, honey, almond, oat flakes, and sweet almond oil. Aesthetic benefits: Almond and oatmeal are rich in complementary aesthetic properties ideal for nourishing, protecting, and rejuvenating the skin. While almond oil acts on hydration and glow, oatmeal focuses on cell regeneration, firmness, and softness. Spiritually: They nourish the physical body to promote mental clarity, emotional balance, and energy vibration elevation.",
+            aromaProfile: "Mental Clarity, Emotional Balance, Nourishment"
         },
         fr: {
-            name: "Savon Flocons d'Avoine & Miel",
-            desc: "Des notes douces et nourrissantes de miel sauvage mélangées à l'exfoliation douce de l'avoine entière.",
-            longDesc: "Hautement hydratant, il apaise les peaux sèches et sensibles. Il combine le miel d'abeilles local, qui agit comme un humectant naturel, et l'avoine moulue pour un massage exfoliant stimulant. Produit une mousse riche, crémeuse et délicieusement parfumée qui laisse la peau incroyablement douce.",
-            aromaProfile: "Doux de Miel, Chaud, Amande, Exfoliant"
+            name: "Savon Avoine & Amande",
+            desc: "Idéal pour nourrir, protéger et rajeunir la peau.",
+            longDesc: "Ingrédients: Glycérine 100% végétale, essence naturelle d'avoine et miel, miel, amande, flocons d'avoine et huile d'amande douce. Bienfaits esthétiques: L'amande et l'avoine sont riches en propriétés esthétiques complémentaires idéales pour nourrir, protéger et rajeunir la peau. Tandis que l'huile d'amande agit sur l'hydratation et l'éclat, l'avoine se concentre sur la régénération cellulaire, la fermeté et la douceur. Spirituellement: Ils nourrissent le corps physique pour favoriser la clarté mentale, l'équilibre émotionnel et l'élévation de la vibration énergétique.",
+            aromaProfile: "Clarté Mentale, Équilibre Émotionnel, Nutrition"
         }
     },
     {
-        id: "soap-gallery-1",
+        id: "soap-anis-mel",
         price: 5.90,
-        image: "assets/soap_gallery_1.jpg",
+        image: "assets/soap_anis_mel.jpeg",
         pt: {
-            name: "Sabonete Rosas & Argila",
-            desc: "Esfoliação suave e tonificante botânica com pétalas de rosa.",
-            longDesc: "Infundido com argila rosa purificante, este sabonete limpa profundamente a pele sem a ressecar. As pétalas secas de rosa no topo oferecem uma esfoliação física muito suave, estimulando a regeneração celular.",
-            aromaProfile: "Floral Clássico, Suave, Hidratante"
+            name: "Sabonete de Anis Estrelado & Mel",
+            desc: "Estimula o colagénio, renovação celular e firmeza da pele.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, água, mel, anis estrelado e canela em pó, essência de mel e canela. Benefícios estéticos: Estimula a produção de colágeno, renovação celular, ajuda a deixar a pele mais firme. Ajuda na acne, dermatite e eczemas. Hidrata profundamente, combate a acne, previne o envelhecimento precoce e promove a cicatrização de pequenas irritações na pele. Espiritualmente: O Anis ajuda na abertura da mediunidade. O mel ajuda na harmonia e a atração de energias positivas.",
+            aromaProfile: "Abertura, Harmonia, Energias Positivas"
         },
         es: {
-            name: "Jabón de Rosas & Arcilla",
-            desc: "Exfoliación suave y tonificación botánica con pétalos de rosa.",
-            longDesc: "Infundido con arcilla rosa purificante, este jabón limpia profundamente la piel sin resecarla. Los pétalos secos de rosa en la parte superior ofrecen una exfoliación física muy suave, estimulando la regeneración celular.",
-            aromaProfile: "Floral Clásico, Suave, Hidratante"
-        },
-        en: {
-            name: "Rose & Clay Soap",
-            desc: "Gentle exfoliation and botanical toning with rose petals.",
-            longDesc: "Infused with purifying pink clay, this soap deeply cleanses the skin without drying it out. The dried rose petals on top offer a very gentle physical exfoliation, stimulating cellular regeneration.",
-            aromaProfile: "Classic Floral, Gentle, Moisturizing"
-        },
-        fr: {
-            name: "Savon Rose & Argile",
-            desc: "Exfoliation douce et tonification botanique avec des pétales de rose.",
-            longDesc: "Infusé d'argile rose purifiante, ce savon nettoie en profondeur la peau sans la dessécher. Les pétales de rose séchés sur le dessus offrent une exfoliation physique très douce, stimulant la régénération cellulaire.",
-            aromaProfile: "Floral Classique, Doux, Hydratant"
-        }
-    },
-    {
-        id: "soap-gallery-2",
-        price: 5.90,
-        image: "assets/soap_gallery_2.jpg",
-        pt: {
-            name: "Sabonete Mel & Aveia",
-            desc: "Nutrição e hidratação profunda natural com mel local.",
-            longDesc: "Combinando as propriedades cicatrizantes do mel de abelhas local e a ação calmante da aveia integral. Cria uma espuma cremosa ideal para peles sensíveis, ásperas ou com tendência a irritações.",
-            aromaProfile: "Doce de Mel, Amendoado, Suave"
-        },
-        es: {
-            name: "Jabón de Miel & Avena",
-            desc: "Nutrición e hidratación profunda natural con miel local.",
-            longDesc: "Combinando las propiedades cicatrizantes de la miel de abejas local y la acción calmante de la avena integral. Crea una espuma cremosa ideal para pieles sensibles, ásperas o con tendencia a irritaciones.",
-            aromaProfile: "Dulce de Miel, Almendrado, Suave"
-        },
-        en: {
-            name: "Honey & Oats Soap",
-            desc: "Natural deep nourishment and hydration with local honey.",
-            longDesc: "Combining the healing properties of local bee honey and the soothing action of whole oats. Creates a creamy lather ideal for sensitive, rough, or irritation-prone skins.",
-            aromaProfile: "Sweet Honey, Nutty, Soothing"
-        },
-        fr: {
-            name: "Savon Miel & Avoine",
-            desc: "Nutrition et hydratation profonde naturelle avec du miel local.",
-            longDesc: "Combinant les propriétés cicatrisantes du miel d'abeilles local et l'action apaisante de l'avoine entière. Crée une mousse crémeuse idéale pour les peaux sensibles, rugueuses ou sujettes aux irritations.",
-            aromaProfile: "Doux de Miel, Amande, Apaisant"
-        }
-    },
-    {
-        id: "soap-gallery-3",
-        price: 5.90,
-        image: "assets/soap_gallery_3.jpg",
-        pt: {
-            name: "Sabonete Alfazema do Campo",
-            desc: "Calmante natural para a pele e mente com óleo essencial de lavanda.",
-            longDesc: "Enriquecido com óleo essencial de lavanda puro. Um verdadeiro relaxante natural que acalma pequenas irritações da pele enquanto o aroma suave ajuda a relaxar a mente durante o banho.",
-            aromaProfile: "Fresco, Floral, Herbal, Relaxante"
-        },
-        es: {
-            name: "Jabón de Lavanda Silvestre",
-            desc: "Calmante natural para la piel y mente con aceite esencial de lavanda.",
-            longDesc: "Enriquecido con aceite esencial de lavanda puro. Un verdadero relajante natural que calma pequeñas irritaciones de la piel mientras el aroma suave ayuda a relajar la mente durante el baño.",
-            aromaProfile: "Fresco, Floral, Herbal, Relajante"
-        },
-        en: {
-            name: "Wild Lavender Soap",
-            desc: "Natural soothing for skin and mind with lavender essential oil.",
-            longDesc: "Enriched with pure lavender essential oil. A true natural relaxant that soothes minor skin irritations while the gentle scent helps to relax the mind during your bath.",
-            aromaProfile: "Fresh, Floral, Herbal, Relaxing"
-        },
-        fr: {
-            name: "Savon Lavande Sauvage",
-            desc: "Apaisement naturel pour peau et esprit avec de l'huile essentielle de lavande.",
-            longDesc: "Enrichi en huile essentielle de lavande pure. Un véritable relaxant naturel qui apaise les petites irritations de la peau tandis que le parfum doux aide à détendre l'esprit pendant le bain.",
-            aromaProfile: "Frais, Floral, Herbal, Relaxant"
-        }
-    },
-    {
-        id: "soap-gallery-4",
-        price: 5.90,
-        image: "assets/soap_gallery_4.jpg",
-        pt: {
-            name: "Sabonete Laranja & Canela",
-            desc: "Fragrância cítrica quente, revigorante e esfoliante suave.",
-            longDesc: "Uma combinação clássica que estimula a circulação e renova a pele. O óleo essencial de laranja doce traz frescura cítrica, enquanto a canela moída oferece uma esfoliação média para remover células mortas.",
-            aromaProfile: "Cítrico Quente, Especiado, Revigorante"
-        },
-        es: {
-            name: "Jabón de Naranja & Canela",
-            desc: "Fragancia cítrica cálida, vigorizante y exfoliación suave.",
-            longDesc: "Una combinación clásica que estimula la circulación y renueva la piel. El aceite esencial de naranja dulce aporta frescura cítrica, mientras que la canela molida ofrece una exfoliación media para eliminar células muertas.",
-            aromaProfile: "Cítrico Cálido, Especiado, Vigorizante"
-        },
-        en: {
-            name: "Orange & Cinnamon Soap",
-            desc: "Warm citrus fragrance, invigorating, and gentle exfoliation.",
-            longDesc: "A classic combination that stimulates circulation and renews the skin. Sweet orange essential oil brings citrus freshness, while ground cinnamon offers medium exfoliation to remove dead skin cells.",
-            aromaProfile: "Warm Citrus, Spiced, Invigorating"
-        },
-        fr: {
-            name: "Savon Orange & Cannelle",
-            desc: "Fragrance hespéridée chaude, vivifiante et exfoliation douce.",
-            longDesc: "Une combinaison classique que stimule la circulation et renouvelle la peau. L'huile essentielle d'orange douce apporte une fraîcheur hespéridée, tandis que la cannelle moulue offre une exfoliation moyenne pour éliminer les cellules mortes.",
-            aromaProfile: "Agrume Chaud, Épicé, Vivifiant"
-        }
-    },
-    {
-        id: "soap-gallery-5",
-        price: 5.90,
-        image: "assets/soap_gallery_5.jpg",
-        pt: {
-            name: "Sabonete Alecrim & Menta",
-            desc: "Frescura refrescante e ação antisséptica suave para o corpo.",
-            longDesc: "Infundido com óleo essencial de alecrim e hortelã-pimenta. Deixa uma sensação fresca e revigorante na pele, sendo ideal para o banho matinal. O alecrim limpa e tonifica de forma natural.",
-            aromaProfile: "Herbal Fresco, Canforado, Estimulante"
-        },
-        es: {
-            name: "Jabón de Romero & Menta",
-            desc: "Frescura refrescante y acción antiséptica suave para el cuerpo.",
-            longDesc: "Infundido con aceites esenciales de romero y menta piperita. Deja una sensación fresca y vigorizante en la piel, ideal para el baño matutino. El romero limpia y tonifica de forma natural.",
-            aromaProfile: "Herbal Fresco, Alcanforado, Estimulante"
-        },
-        en: {
-            name: "Rosemary & Mint Soap",
-            desc: "Refreshing freshness and mild antiseptic action for the body.",
-            longDesc: "Infused with rosemary and peppermint essential oils. Leaves a fresh, invigorating sensation on the skin, making it perfect for your morning shower. Rosemary cleanses and tones naturally.",
-            aromaProfile: "Fresh Herbal, Camphorous, Stimulating"
-        },
-        fr: {
-            name: "Savon Romarin & Menthe",
-            desc: "Fraîcheur tonifiante et action antiseptique douce pour le corps.",
-            longDesc: "Infusé d'huiles essentielles de romarin et de menthe poivrée. Laisse une sensation fraîche et vivifiante sur la peau, idéale pour la douche du matin. Le romarin nettoie et tonifie naturellement.",
-            aromaProfile: "Herbal Frais, Camphré, Stimulant"
-        }
-    },
-    {
-        id: "soap-gallery-6",
-        price: 5.90,
-        image: "assets/soap_gallery_6.jpg",
-        pt: {
-            name: "Sabonete Carvão Ativado",
-            desc: "Limpeza profunda e desintoxicação dos poros para peles oleosas.",
-            longDesc: "Formulado com carvão vegetal ativado de coco, atua como um íman para retirar o excesso de sebo e impurezas dos poros. Recomendado para o rosto e zonas propensas a oleosidade excessiva.",
-            aromaProfile: "Fresco, Purificante, Neutro"
-        },
-        es: {
-            name: "Jabón de Carbón Activado",
-            desc: "Limpieza profunda y desintoxicación de poros para pieles grasas.",
-            longDesc: "Formulado con carbón vegetal activado de coco, actúa como un imán para eliminar el exceso de sebo e impurezas de los poros. Recomendado para el rostro y zonas propensas a oleosidad excesiva.",
-            aromaProfile: "Fresco, Purificante, Neutro"
-        },
-        en: {
-            name: "Activated Charcoal Soap",
-            desc: "Deep pore cleansing and detoxification for oily skins.",
-            longDesc: "Formulated with active coconut charcoal, it acts like a magnet to draw out excess sebum and impurities from pores. Recommended for face and oily-prone skin areas.",
-            aromaProfile: "Fresh, Purifying, Neutral"
-        },
-        fr: {
-            name: "Savon Charbon Actif",
-            desc: "Nettoyage profond et détoxification des pores pour peaux grasses.",
-            longDesc: "Formulé avec du charbon actif de coco, il agit comme un aimant pour éliminer l'excès de sébum et les impuretés des pores. Recommandé pour le visage et les zones sujettes à l'excès de sébum.",
-            aromaProfile: "Frais, Purifiant, Neutre"
-        }
-    },
-    {
-        id: "soap-gallery-7",
-        price: 5.90,
-        image: "assets/soap_gallery_7.jpg",
-        pt: {
-            name: "Sabonete Calêndula & Óleos",
-            desc: "Nutrição rica e suavidade extra para peles muito secas ou sensíveis.",
-            longDesc: "Contém extrato oleoso de calêndula, manteiga de karité e óleo de amêndoas. Acalma a pele sensível, reduz vermelhidões e acelera a regeneração de pequenas descamações.",
-            aromaProfile: "Delicado, Amendoado, Calmante"
-        },
-        es: {
-            name: "Jabón de Caléndula & Aceites",
-            desc: "Nutrición rica y suavidad extra para pieles muy secas o sensibles.",
-            longDesc: "Contiene extracto oleoso de caléndula, manteca de karité y aceite de almendras. Calma la piel fusible, reduce rojeces y acelera la regeneración de pequeñas descamaciones.",
-            aromaProfile: "Delicado, Almendrado, Calmante"
-        },
-        en: {
-            name: "Calendula & Oils Soap",
-            desc: "Rich nourishment and extra mildness for dry or sensitive skins.",
-            longDesc: "Contains calendula oil extract, shea butter, and almond oil. Soothes sensitive skin, reduces redness, and speeds up the regeneration of minor dry patches.",
-            aromaProfile: "Delicate, Nutty, Soothing"
-        },
-        fr: {
-            name: "Savon Souci & Huiles",
-            desc: "Nutrition riche et douceur extra pour peaux très sèches ou sensibles.",
-            longDesc: "Contient de l'extrait d'huile de souci, du beurre de karité et de l'huile d'amande. Apaise les peaux sensibles, réduit les rougeurs et accélère la régénération des petites desquamations.",
-            aromaProfile: "Délicat, Amande, Apaisant"
-        }
-    },
-    {
-        id: "soap-gallery-8",
-        price: 5.90,
-        image: "assets/soap_gallery_8.jpg",
-        pt: {
-            name: "Coleção Flores & Detalhes",
-            desc: "Variedade de sabonetes com relevos artísticos e florais refinados.",
-            longDesc: "Um conjunto requintado que reúne formatos florais, relevos clássicos e formas ovais trabalhadas. Ideal para criar um presente personalizado ou para adicionar um toque de elegância escultural à sua casa de banho.",
-            aromaProfile: "Floral, Delicado, Nobre"
-        },
-        es: {
-            name: "Colección Flores & Detalles",
-            desc: "Variedad de jabones con relieves artísticos y florales refinados.",
-            longDesc: "Un conjunto exquisito que reúne formas florales, relieves clásicos y moldes ovalados trabajados. Ideal para crear un regalo personalizado o añadir un toque de elegancia escultural a su cuarto de baño.",
-            aromaProfile: "Floral, Delicado, Noble"
-        },
-        en: {
-            name: "Flowers & Details Collection",
-            desc: "Variety of soaps with artistic and refined floral reliefs.",
-            longDesc: "An exquisite set featuring floral shapes, classic reliefs, and crafted oval forms. Ideal for creating a customized gift or adding a touch of sculptural elegance to your bathroom.",
-            aromaProfile: "Floral, Delicate, Noble"
-        },
-        fr: {
-            name: "Collection Fleurs & Détails",
-            desc: "Variété de savons avec des reliefs artistiques et floraux raffinés.",
-            longDesc: "Un coffret exquis réunissant des formes florales, des reliefs classiques et des moules ovales travaillés. Idéal pour composer un cadeau personnalisé ou ajouter une touche d'élégance sculpturale à votre salle de bain.",
-            aromaProfile: "Floral, Délicat, Noble"
-        }
-    },
-    {
-        id: "soap-gallery-9",
-        price: 5.90,
-        image: "assets/soap_gallery_9.jpg",
-        pt: {
-            name: "Renda de Argila Negra",
-            desc: "Padrão de renda decorativa infundido com argila preta purificante.",
-            longDesc: "A fusão perfeita entre estética e funcionalidade. Com um desenho de renda de alta precisão impresso sobre a superfície, este sabonete liberta minerais purificantes de argila preta ao entrar em contacto com a água.",
-            aromaProfile: "Suave, Purificador, Herbal"
-        },
-        es: {
-            name: "Encaje de Arcilla Negra",
-            desc: "Patrón de encaje decorativo infundido con arcilla negra purificante.",
-            longDesc: "La fusión perfecta entre estética y funcionalidad. Con un diseño de encaje de alta precisión grabado en la superficie, este jabón libera minerales purificantes de arcilla negra al entrar en contacto con el agua.",
-            aromaProfile: "Suave, Purificante, Herbal"
-        },
-        en: {
-            name: "Black Clay Lace Soap",
-            desc: "Decorative lace pattern infused with purifying black clay.",
-            longDesc: "The perfect fusion of aesthetics and functionality. Featuring a high-precision lace design embossed on the surface, this soap releases purifying black clay minerals upon contact with water.",
-            aromaProfile: "Gentle, Purifying, Herbal"
-        },
-        fr: {
-            name: "Dentelle d'Argile Noire",
-            desc: "Motif dentelle décoratif infusé d'argile noire purifiante.",
-            longDesc: "La fusion parfaite entre esthétique et fonctionnalité. Avec un motif de dentelle de haute précision gravé sur la surface, ce savon libère des minéraux purifiants d'argile noire au contact de l'eau.",
-            aromaProfile: "Doux, Purifiant, Herbal"
-        }
-    },
-    {
-        id: "soap-gallery-10",
-        price: 5.90,
-        image: "assets/soap_gallery_10.jpg",
-        pt: {
-            name: "Lótus & Argila Branca",
-            desc: "Fórmula de argila branca ultra-suave com padrão floral de lótus.",
-            longDesc: "Ideal para peles baças ou cansadas. A argila branca purifica suavemente as camadas da pele, enquanto o desenho em relevo da flor de lótus proporciona uma experiência visualmente encantadora e calmante.",
-            aromaProfile: "Fresco, Atalcado, Delicado"
-        },
-        es: {
-            name: "Loto & Arcilla Blanca",
-            desc: "Fórmula de arcilla blanca ultra suave con patrón floral de loto.",
-            longDesc: "Ideal para pieles apagadas o cansadas. La arcilla blanca purifica suavemente las capas de la piel, mientras que el relieve de la flor de loto proporciona una experiencia visualmente encantadora y calmante.",
-            aromaProfile: "Fresco, Atalcado, Delicado"
-        },
-        en: {
-            name: "Lotus & White Clay Soap",
-            desc: "Ultra-gentle white clay formula with lotus floral pattern.",
-            longDesc: "Ideal for dull or tired skins. White clay gently purifies the skin layers, while the embossed design of the lotus flower provides a visually enchanting and soothing experience.",
-            aromaProfile: "Fresh, Powdery, Delicate"
-        },
-        fr: {
-            name: "Lotus & Argile Blanche",
-            desc: "Formule d'argile blanche ultra-douce avec motif floral de lotus.",
-            longDesc: "Idéal pour les peaux ternes ou fatiguées. L'argile blanche purifie en douceur les couches de la peau, tandis que le relief de la fleur de lotus procure une expérience visuellement charmante et apaisante.",
-            aromaProfile: "Frais, Poudré, Délicat"
-        }
-    },
-    {
-        id: "soap-gallery-11",
-        price: 5.90,
-        image: "assets/soap_gallery_11.jpg",
-        pt: {
-            name: "Anis Estrelado & Mel",
-            desc: "Base translúcida de glicerina natural com anis estrelado autêntico.",
-            longDesc: "Uma barra artesanal que brilha contra a luz, contendo anis estrelado real no seu interior. O anis tem propriedades estimulantes e o mel acrescenta uma suavidade nutritiva incomparável à espuma.",
-            aromaProfile: "Quente Anisado, Doce, Aromático"
-        },
-        es: {
-            name: "Anís Estrellado & Miel",
-            desc: "Base translúcida de glicerina natural con anís estrellado auténtico.",
-            longDesc: "Una barra artesanal que brilla contra la luz, conteniendo anís estrellado real en su interior. El anís tiene propiedades estimulantes y la miel añade una suavidad nutritiva incomparable a la espuma.",
-            aromaProfile: "Cálido Anisado, Dulce, Aromático"
+            name: "Jabón de Anís Estrellado & Miel",
+            desc: "Estimula el colágeno, la renovación celular y la firmeza de la piel.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, agua, miel, anís estrellado y canela en polvo, esencia de miel y canela. Beneficios estéticos: Estimula la producción de colágeno, renovación celular, ayuda a dejar la piel más firme. Ayuda con el acné, la dermatitis y los eczemas. Hidrata profundamente, combate el acné, previene el envejecimiento prematuro y promueve la cicatrización de pequeñas irritaciones en la piel. Espiritualmente: El anís ayuda en la apertura de la mediumnidad. La miel ayuda a la armonía y la atracción de energías positivas.",
+            aromaProfile: "Apertura, Armonía, Energías Positivas"
         },
         en: {
             name: "Star Anise & Honey Soap",
-            desc: "Translucent natural glycerin base with authentic star anise.",
-            longDesc: "A handcrafted bar that shines against the light, containing real star anise inside. Anise has stimulating properties, and honey adds an incomparable nourishing softness to the lather.",
-            aromaProfile: "Warm Anise, Sweet, Aromatic"
+            desc: "Stimulates collagen, cell renewal, and skin firmness.",
+            longDesc: "Ingredients: 100% vegetable glycerin, water, honey, star anise, cinnamon powder, and honey & cinnamon fragrance. Aesthetic benefits: Stimulates collagen production, cell renewal, and helps make the skin firmer. Helps with acne, dermatitis, and eczema. Deeply hydrates, fights acne, prevents premature aging, and promotes healing of minor skin irritations. Spiritually: Star anise helps open mediumship. Honey helps with harmony and attracting positive energies.",
+            aromaProfile: "Opening, Harmony, Positive Energies"
         },
         fr: {
-            name: "Anis Étoilé & Miel",
-            desc: "Base translucide de glycérine naturelle avec de l'anis étoilé authentique.",
-            longDesc: "Un pain de savon artisanal qui brille à la lumière, contenant de l'anis étoilé véritable. L'anis possède des propriétés stimulantes, et le miel apporte une douceur nutritive incomparable à la mousse.",
-            aromaProfile: "Anisé Chaud, Doux, Aromatique"
+            name: "Savon Anis Étoilé & Miel",
+            desc: "Stimule le collagène, le renouvellement cellulaire et la fermeté.",
+            longDesc: "Ingrédients: Glycérine 100% végétale, eau, miel, anis étoilé, cannelle en poudre, essence de miel et cannelle. Bienfaits esthétiques: Stimule la production de collagène, le renouvellement cellulaire et aide à rendre la peau plus ferme. Aide contre l'acné, la dermatite et l'eczéma. Hydrate en profondeur, combat l'acné, prévient le vieillissement prématuré et favorise la guérison des petites irritations cutanées. Spirituellement: L'anis étoilé aide à l'ouverture de la médiumnité. Le miel favorise l'harmonie et l'attraction d'énergies positives.",
+            aromaProfile: "Ouverture, Harmonie, Énergies Positives"
         }
     },
     {
-        id: "soap-gallery-12",
-        price: 5.90,
-        image: "assets/soap_gallery_12.jpg",
+        id: "soap-camomila",
+        price: 5.50,
+        image: "assets/soap_camomila.jpeg",
         pt: {
-            name: "Flor de Calêndula & Camomila",
-            desc: "Design de girassol em relevo dourado sobre glicerina calmante.",
-            longDesc: "Desenhado com um deslumbrante girassol em relevo no centro. Combina as propriedades calmantes da calêndula e da camomila com uma base hidratante de glicerina para um banho suave e aromático.",
-            aromaProfile: "Fresco, Herbal, Adocicado"
+            name: "Sabonete de Camomila & Flor de Laranjeira",
+            desc: "Acalma a pele irritada e ajuda na renovação cutânea.",
+            longDesc: "Ingredientes: Água, glicerina 100% vegetal, camomila e essência 100% vegetal de camomila e flor de laranjeira. Benefícios estéticos: Acalma a pele irritada, ajuda em problemas de eczema ou acne. Renovação da pele. Espiritualmente: Ajuda a ficar mais tranquilo e equilibrado. Ajuda nas tomadas de decisões e a restaurar forças.",
+            aromaProfile: "Tranquilidade, Equilíbrio, Restauração"
         },
         es: {
-            name: "Flor de Caléndula & Manzanilla",
-            desc: "Diseño de girasol en relieve dorado sobre glicerina calmante.",
-            longDesc: "Diseñado con un deslumbrante girasol en relieve en el centro. Combina las propiedades calmantes de la caléndula y la manzanilla con una base hidratante de glicerina para un baño suave y aromático.",
-            aromaProfile: "Fresco, Herbal, Dulce"
+            name: "Jabón de Manzanilla & Azahar",
+            desc: "Calma la piel irritada y ayuda a la renovación cutánea.",
+            longDesc: "Ingredientes: Agua, glicerina 100% vegetal, manzanilla y esencia 100% vegetal de manzanilla y flor de azahar. Beneficios estéticos: Calma la piel irritada, ayuda en problemas de eczema o acné. Renovación de la piel. Espiritualmente: Ayuda a estar más tranquilo y equilibrado. Ayuda en la toma de decisiones y a restaurar fuerzas.",
+            aromaProfile: "Tranquilidad, Equilibrio, Restauración"
         },
         en: {
-            name: "Calendula & Chamomile Flower Soap",
-            desc: "Golden embossed sunflower design on soothing glycerin base.",
-            longDesc: "Designed with a stunning embossed sunflower in the center. Combines the soothing properties of calendula and chamomile with a moisturizing glycerin base for a gentle and aromatic bath.",
-            aromaProfile: "Fresh, Herbal, Sweet"
+            name: "Chamomile & Orange Blossom Soap",
+            desc: "Soothes irritated skin and helps with skin renewal.",
+            longDesc: "Ingredients: Water, 100% vegetable glycerin, chamomile, and 100% vegetable chamomile and orange blossom fragrance. Aesthetic benefits: Soothes irritated skin, helps with eczema or acne. Skin renewal. Spiritually: Helps to stay calm and balanced. Helps in decision-making and restoring strength.",
+            aromaProfile: "Tranquility, Balance, Restoration"
         },
         fr: {
-            name: "Fleur de Souci & Camomille",
-            desc: "Design de tournesol en relief doré sur base de glycérine apaisante.",
-            longDesc: "Dessiné avec un superbe tournesol en relief au centre. Combine les propriétés apaisantes du souci et de la camomille avec une base hydratante de glycérine pour un bain doux et aromatique.",
-            aromaProfile: "Frais, Herbal, Doux"
+            name: "Savon Camomille & Fleur d'Oranger",
+            desc: "Apaise la peau irritée et aide au renouvellement cutané.",
+            longDesc: "Ingrédients: Eau, glycérine 100% végétale, camomille et essence 100% végétale de camomille et fleur d'oranger. Bienfaits esthétiques: Apaise la peau irritée, aide en cas d'eczéma ou d'acné. Renouvellement de la peau. Spirituellement: Aide à rester plus tranquille et équilibré. Aide à la prise de décision et à restaurer les forces.",
+            aromaProfile: "Tranquillité, Équilibre, Restauration"
         }
     },
     {
-        id: "soap-gallery-13",
-        price: 5.90,
-        image: "assets/soap_gallery_13.jpg",
+        id: "soap-carvao",
+        price: 6.90,
+        image: "assets/soap_carvao.jpeg",
         pt: {
-            name: "Carvão Ativado & Borboleta",
-            desc: "Design de borboleta em relevo sobre sabonete purificante de carvão vegetal.",
-            longDesc: "Um trabalho de arte em sabão. O relevo de borboleta de alta definição destaca-se sobre uma barra de carvão vegetal ativado, combinando purificação facial profunda e beleza ornamental superior.",
-            aromaProfile: "Purificante, Fresco, Amadeirado"
+            name: "Sabonete de Carbão Ativo & Limão",
+            desc: "Controla a oleosidade e limpa profundamente os poros.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, carvão ativo, água e sumo de limão. Benefícios estéticos: Controla a oleosidade da pele, limpeza dos poros, clareador de manchas. Espiritualmente: Ajuda a eliminar energias negativas.",
+            aromaProfile: "Purificação, Limpeza, Proteção Energética"
         },
         es: {
-            name: "Carbón Activado & Mariposa",
-            desc: "Diseño de mariposa en relieve sobre jabón purificante de carbón vegetal.",
-            longDesc: "Una obra de arte en jabón. El relieve de mariposa en alta definición destaca sobre una barra de carbón vegetal activado, combinando una purificación facial profunda y una belleza ornamental superior.",
-            aromaProfile: "Purificante, Fresco, Amaderado"
+            name: "Jabón de Carbón Activo & Limón",
+            desc: "Controla la grasa y limpia profundamente los poros.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, carbón activo, agua y zumo de limón. Beneficios estéticos: Controla la grasa de la piel, limpieza de los poros, aclara manchas. Espiritualmente: Ayuda a eliminar energías negativas.",
+            aromaProfile: "Purificación, Limpieza, Protección Energética"
         },
         en: {
-            name: "Activated Charcoal & Butterfly Soap",
-            desc: "Embossed butterfly design on purifying charcoal soap base.",
-            longDesc: "A work of art in soap. The high-definition butterfly relief stands out on a bar of active charcoal, combining deep facial purification with superior ornamental beauty.",
-            aromaProfile: "Purifying, Fresh, Woody"
+            name: "Activated Charcoal & Lemon Soap",
+            desc: "Controls oiliness and deeply cleanses the pores.",
+            longDesc: "Ingredients: 100% vegetable glycerin, activated charcoal, water, and lemon juice. Aesthetic benefits: Controls skin oiliness, cleanses pores, and lightens dark spots. Spiritually: Helps eliminate negative energies.",
+            aromaProfile: "Purification, Cleansing, Energy Protection"
         },
         fr: {
-            name: "Charbon Actif & Papillon",
-            desc: "Design de papillon en relief sur base de savon purifiant au charbon.",
-            longDesc: "Une œuvre d'art en savon. Le relief de papillon en haute definição se détache sur un pain de charbon végétal actif, combinant une purification faciale profonde et une beauté ornementale supérieure.",
-            aromaProfile: "Purifiant, Frais, Boisé"
+            name: "Savon au Charbon Actif & Citron",
+            desc: "Contrôle l'excès de sébum et nettoie les pores en profondeur.",
+            longDesc: "Ingrédients: Glycérine 100% végétale, charbon actif, eau et jus de citron. Bienfaits esthétiques: Contrôle l'excès de sébum de la peau, nettoie les pores, éclaircit les taches. Spirituellement: Aide à éliminer les énergies négatives.",
+            aromaProfile: "Purification, Nettoyage, Protection Énergétique"
+        }
+    },
+    {
+        id: "soap-alecrim",
+        price: 5.90,
+        image: "assets/soap_alecrim.jpeg",
+        pt: {
+            name: "Sabonete de Alecrim",
+            desc: "Ajuda na cicatrização e firmeza da pele.",
+            longDesc: "Ingredientes: Alecrim, água, glicerina 100% vegetal e essência vegetal de alecrim. Benefícios estéticos: Ajuda na cicatrização. O alecrim ajuda no aumento do fluxo sanguíneo e produção de colagénio impedindo que a pele fique flácida. Espiritualmente: Proporciona motivação, confiança e mais energia.",
+            aromaProfile: "Motivação, Confiança, Energia"
+        },
+        es: {
+            name: "Jabón de Romero",
+            desc: "Ayuda a la cicatrización y firmeza de la piel.",
+            longDesc: "Ingredientes: Romero, agua, glicerina 100% vegetal y esencia vegetal de romero. Beneficios estéticos: Ayuda a la cicatrización. El romero ayuda a aumentar el flujo sanguíneo y la producción de colágeno, evitando la flacidez de la piel. Espiritualmente: Proporciona motivación, confianza y más energía.",
+            aromaProfile: "Motivación, Confianza, Energía"
+        },
+        en: {
+            name: "Rosemary Soap",
+            desc: "Helps with healing and skin firmness.",
+            longDesc: "Ingredients: Rosemary, water, 100% vegetable glycerin, and rosemary essential oil. Aesthetic benefits: Helps with healing. Rosemary helps increase blood flow and collagen production, preventing sagging skin. Spiritually: Provides motivation, confidence, and more energy.",
+            aromaProfile: "Motivation, Confidence, Energy"
+        },
+        fr: {
+            name: "Savon au Romarin",
+            desc: "Aide à la cicatrisation et à la fermeté de la peau.",
+            longDesc: "Ingrédients: Romarin, eau, glycérine 100% végétale et essence végétale de romarin. Bienfaits esthétiques: Aide à la cicatrisation. Le romarin aide à augmenter le flux sanguin et la production de collagène, empêchant le relâchement cutané. Spirituellement: Apporte de la motivation, de la confiance et plus d'énergie.",
+            aromaProfile: "Motivation, Confiance, Énergie"
+        }
+    },
+    {
+        id: "soap-coco",
+        price: 5.90,
+        image: "assets/soap_coco.jpeg",
+        pt: {
+            name: "Sabonete de Coco & Óleo de Coco",
+            desc: "Hidratante facial e corporal, ideal para aliviar queimaduras solares.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, água, coco ralado, óleo de coco e essência natural de coco. Benefícios estéticos: Hidratante facial e corporal. Limpa impurezas. Calmante e excelente para aliviar queimaduras provocadas pela exposição solar. Espiritualmente: O coco simboliza fertilidade e prosperidade.",
+            aromaProfile: "Fertilidade, Prosperidade, Alívio"
+        },
+        es: {
+            name: "Jabón de Coco & Aceite de Coco",
+            desc: "Hidratante facial y corporal, ideal para aliviar quemaduras solares.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, agua, coco rallado, aceite de coco y esencia natural de coco. Beneficios estéticos: Hidratante facial y corporal. Limpia impurezas. Calmante y excelente para aliviar quemaduras provocadas por la exposición solar. Espiritualmente: El coco simboliza fertilidad y prosperidad.",
+            aromaProfile: "Fertilidad, Prosperidad, Alivio"
+        },
+        en: {
+            name: "Coconut & Coconut Oil Soap",
+            desc: "Facial and body moisturizer, ideal for soothing sunburns.",
+            longDesc: "Ingredients: 100% vegetable glycerin, water, grated coconut, coconut oil, and natural coconut fragrance. Aesthetic benefits: Facial and body moisturizer. Cleanses impurities. Soothing and excellent for relieving sunburns caused by sun exposure. Spiritually: Coconut symbolizes fertility and prosperity.",
+            aromaProfile: "Fertility, Prosperity, Relief"
+        },
+        fr: {
+            name: "Savon Noix de Coco & Huile de Coco",
+            desc: "Hydratant visage et corps, idéal pour apaiser les coups de soleil.",
+            longDesc: "Ingrédients: Glycérine 100% végétale, eau, noix de coco râpée, huile de coco et essence naturelle de noix de coco. Bienfaits esthétiques: Hydratant visage et corps. Nettoie les impuretés. Apaisant et excellent pour soulager les brûlures causées par l'exposition solaire. Spirituellement: La noix de coco symbolise la fertilité et la prospérité.",
+            aromaProfile: "Fertilité, Prospérité, Soulagement"
+        }
+    },
+    {
+        id: "soap-jasmim",
+        price: 6.50,
+        image: "assets/soap_jasmim.jpeg",
+        pt: {
+            name: "Sabonete de Jasmim",
+            desc: "Ajuda na produção de colagénio e reduz acne e rugas.",
+            longDesc: "Ingredientes: Jasmim, água, glicerina 100% vegetal e essência natural de jasmim. Benefícios estéticos: Ajuda na produção de colagénio e elasticidade da pele. Reduz acne e rugas. Espiritualmente: O jasmim simboliza amor próprio, pureza, espiritualidade e beleza. Boas energias e conexão.",
+            aromaProfile: "Amor Próprio, Pureza, Beleza"
+        },
+        es: {
+            name: "Jabón de Jazmín",
+            desc: "Ayuda a la producción de colágeno y reduce acné y arrugas.",
+            longDesc: "Ingredientes: Jazmín, agua, glicerina 100% vegetal y esencia natural de jazmín. Beneficios estéticos: Ayuda a la producción de colágeno y elasticidad de la piel. Reduce el acné y las arrugas. Espiritualmente: El jazmín simboliza amor propio, pureza, espiritualidad y belleza. Buenas energías y conexión.",
+            aromaProfile: "Amor Propio, Pureza, Belleza"
+        },
+        en: {
+            name: "Jasmine Soap",
+            desc: "Helps with collagen production and reduces acne and wrinkles.",
+            longDesc: "Ingredients: Jasmine, water, 100% vegetable glycerin, and natural jasmine fragrance. Aesthetic benefits: Helps with collagen production and skin elasticity. Reduces acne and wrinkles. Spiritually: Jasmine symbolizes self-love, purity, spirituality, and beauty. Good energies and connection.",
+            aromaProfile: "Self-Love, Purity, Beauty"
+        },
+        fr: {
+            name: "Savon au Jasmin",
+            desc: "Aide à la production de collagène et réduit l'acné et les rides.",
+            longDesc: "Ingrédients: Jasmin, eau, glycérine 100% végétale et essence naturelle de jasmin. Bienfaits esthétiques: Aide à la production de collagène et à l'élasticité de la peau. Réduit l'acné et les rides. Spirituellement: Le jasmin symbolise l'amour-propre, la pureté, la spiritualité et la beauté. Bonnes énergies et connexion.",
+            aromaProfile: "Amour-Propre, Pureté, Beauté"
+        }
+    },
+    {
+        id: "soap-lavanda",
+        price: 5.90,
+        image: "assets/soap_lavanda.jpeg",
+        pt: {
+            name: "Sabonete de Lavanda",
+            desc: "Anti-inflamatório, reduz acne, rosácea e eczemas.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, água, essência natural e lavanda. Benefícios estéticos: Anti-inflamatório, reduz acne, rosácea e eczemas. Ajuda no tratamento de peles oleosas. Espiritualmente: Calmante, ajuda na ansiedade e stress. Ajuda a nos conectar com a nossa intuição e sabedoria.",
+            aromaProfile: "Calmante, Intuição, Conexão"
+        },
+        es: {
+            name: "Jabón de Lavanda",
+            desc: "Antiinflamatorio, reduce acné, rosácea y eczemas.",
+            longDesc: "Ingredientes: Glicerina 100% vegetal, agua, esencia natural y lavanda. Beneficios estéticos: Antiinflamatorio, reduce el acné, la rosácea y los eczemas. Ayuda en el tratamiento de pieles grasas. Espiritualmente: Calmante, ayuda con la ansiedad y el estrés. Nos ayuda a conectar con nuestra intuición y sabiduría.",
+            aromaProfile: "Calmante, Intuición, Conexión"
+        },
+        en: {
+            name: "Lavender Soap",
+            desc: "Anti-inflammatory, reduces acne, rosacea, and eczema.",
+            longDesc: "Ingredients: 100% vegetable glycerin, water, natural fragrance, and lavender. Aesthetic benefits: Anti-inflammatory, reduces acne, rosacea, and eczema. Helps treat oily skin. Spiritually: Soothing, helps with anxiety and stress. Helps connect with our intuition and wisdom.",
+            aromaProfile: "Calming, Intuition, Connection"
+        },
+        fr: {
+            name: "Savon à la Lavande",
+            desc: "Anti-inflammatoire, réduit l'acné, la rosacée et l'eczéma.",
+            longDesc: "Ingrédients: Glycérine 100% végétale, eau, essence naturelle et lavande. Bienfaits esthétiques: Anti-inflammatoire, réduit l'acné, la rosacée et l'eczéma. Aide au traitement des peaux grasses. Spirituellement: Apaisant, aide en cas d'anxiété et de stress. Aide à nous connecter à notre intuition et à notre sagesse.",
+            aromaProfile: "Apaisant, Intuition, Connexion"
+        }
+    },
+    {
+        id: "soap-maca-canela",
+        price: 5.90,
+        image: "assets/soap_maca_canela.jpeg",
+        pt: {
+            name: "Sabonete de Maçã & Canela",
+            desc: "Renovação celular e suavização de rugas de expressão.",
+            longDesc: "Ingredientes: Maçã, canela, água, glicerina 100% vegetal e óleo essencial de maçã e canela. Benefícios estéticos: Anti-inflamatório e ajuda na diminuição da acne. Suaviza rugas de expressão, renovação de células e ajuda na aparência cansada e sem brilho. Espiritualmente: Fertilidade, beleza, juventude, prosperidade, abundância de caminhos e abertura.",
+            aromaProfile: "Abundância, Beleza, Prosperidade"
+        },
+        es: {
+            name: "Jabón de Manzana & Canela",
+            desc: "Renovación celular y suavizado de arrugas de expresión.",
+            longDesc: "Ingredientes: Manzana, canela, agua, glicerina 100% vegetal y aceite esencial de manzana y canela. Beneficios estéticos: Antiinflamatorio y ayuda en la disminución del acné. Suaviza arrugas de expresión, renovación celular y ayuda con la apariencia cansada y sin brillo. Espiritualmente: Fertilidad, belleza, juventud, prosperidad, abundancia y apertura de caminos.",
+            aromaProfile: "Abundancia, Belleza, Prosperidad"
+        },
+        en: {
+            name: "Apple & Cinnamon Soap",
+            desc: "Cell renewal and smoothing of expression lines.",
+            longDesc: "Ingredients: Apple, cinnamon, water, 100% vegetable glycerin, and apple & cinnamon essential oil. Aesthetic benefits: Anti-inflammatory and helps reduce acne. Smooths expression wrinkles, promotes cell renewal, and helps with tired, dull skin. Spiritually: Fertility, beauty, youth, prosperity, abundance, and path opening.",
+            aromaProfile: "Abundance, Beauty, Prosperity"
+        },
+        fr: {
+            name: "Savon Pomme & Cannelle",
+            desc: "Renouvellement cellulaire et lissage des rides d'expression.",
+            longDesc: "Ingrédients: Pomme, cannelle, eau, glycérine 100% végétale et huile essentielle de pomme et cannelle. Bienfaits esthétiques: Anti-inflammatoire et aide à réduire l'acné. Lisse les rides d'expression, favorise le renouvellement cellulaire et aide à revitaliser les peaux ternes et fatiguées. Spirituellement: Fertilité, beauté, jeunesse, prospérité, abondance et ouverture de chemins.",
+            aromaProfile: "Abondance, Beauté, Prospérité"
+        }
+    },
+    {
+        id: "soap-mel",
+        price: 5.50,
+        image: "assets/soap_mel.jpeg",
+        pt: {
+            name: "Sabonete de Mel",
+            desc: "Ação hidratante, cicatrizante, anti-inflamatória e antioxidante.",
+            longDesc: "Ingredientes: Água, glicerina 100% vegetal, mel e essência natural de mel. Benefícios estéticos: Hidratante e ação cicatrizante. Efeito anti-inflamatório e antioxidante. Espiritualmente: Prosperidade e cura. Conexão connosco mesmos.",
+            aromaProfile: "Prosperidade, Cura, Conexão"
+        },
+        es: {
+            name: "Jabón de Miel",
+            desc: "Acción hidratante, cicatrizante, antiinflamatoria y antioxidante.",
+            longDesc: "Ingredientes: Agua, glicerina 100% vegetal, miel y esencia natural de miel. Beneficios estéticos: Hidratante y acción cicatrizante. Efecto antiinflamatorio y antioxidante. Espiritualmente: Prosperidad y curación. Conexión con nosotros mismos.",
+            aromaProfile: "Prosperidad, Curación, Conexión"
+        },
+        en: {
+            name: "Honey Soap",
+            desc: "Moisturizing, healing, anti-inflammatory, and antioxidant action.",
+            longDesc: "Ingredients: Water, 100% vegetable glycerin, honey, and natural honey fragrance. Aesthetic benefits: Moisturizing and healing action. Anti-inflammatory and antioxidant effect. Spiritually: Prosperity and healing. Connection with ourselves.",
+            aromaProfile: "Prosperity, Healing, Connection"
+        },
+        fr: {
+            name: "Savon au Miel",
+            desc: "Action hydratante, cicatrisante, anti-inflammatoire et antioxydante.",
+            longDesc: "Ingrédients: Eau, glycérine 100% végétale, miel et essence naturelle de miel. Bienfaits esthétiques: Hydratant et cicatrisant. Effet anti-inflammatoire et antioxydant. Spirituellement: Prospérité et guérison. Connexion avec soi-même.",
+            aromaProfile: "Prospérité, Guérison, Connexion"
+        }
+    },
+    {
+        id: "soap-rosa",
+        price: 6.50,
+        image: "assets/soap_rosa.jpeg",
+        pt: {
+            name: "Sabonete de Rosas",
+            desc: "Equilibra o PH da pele e previne o envelhecimento.",
+            longDesc: "Ingredientes: Água, glicerina 100% vegetal, essência aromática de rosas e pétalas de rosa. Benefícios estéticos: Equilibra o PH da pele, combate o acne, antissético e previne o envelhecimento. Espiritualmente: Capaz de trazer envolvimento espiritual, atração amorosa e calmante.",
+            aromaProfile: "Atração, Calma, Envolvimento Espiritual"
+        },
+        es: {
+            name: "Jabón de Rosas",
+            desc: "Equilibra el PH de la piel y previene el envejecimiento.",
+            longDesc: "Ingredientes: Agua, glicerina 100% vegetal, esencia aromática de rosas y pétalos de rosa. Beneficios estéticos: Equilibra el PH de la piel, combate el acné, antiséptico y previene el envejecimiento. Espiritualmente: Capaz de traer conexión espiritual, atracción amorosa y calma.",
+            aromaProfile: "Atracción, Calma, Conexión Espiritual"
+        },
+        en: {
+            name: "Rose Soap",
+            desc: "Balances skin PH and prevents aging.",
+            longDesc: "Ingredients: Water, 100% vegetable glycerin, aromatic rose fragrance, and rose petals. Aesthetic benefits: Balances skin PH, fights acne, antiseptic, and prevents aging. Spiritually: Capable of bringing spiritual connection, romantic attraction, and calming vibes.",
+            aromaProfile: "Attraction, Calming, Spiritual Connection"
+        },
+        fr: {
+            name: "Savon aux Roses",
+            desc: "Équilibre le PH de la peau et prévient le vieillissement.",
+            longDesc: "Ingrédients: Eau, glycérine 100% végétale, essence aromatique de roses et pétales de rose. Bienfaits esthétiques: Équilibre le PH de la peau, combat l'acné, antiseptique et prévient le vieillissement. Spirituellement: Capable d'apporter connexion spirituelle, attraction amoureuse et calme.",
+            aromaProfile: "Attraction, Calme, Connexion Spirituelle"
+        }
+    },
+    {
+        id: "soap-sal-grosso-arruda",
+        price: 6.50,
+        image: "assets/soap_sal_grosso_arruda.jpeg",
+        pt: {
+            name: "Sabonete de Sal Grosso & Arruda",
+            desc: "Efeito esfoliante, antibacteriano e purificação espiritual.",
+            longDesc: "Ingredientes: Arruda, sal grosso, água, glicerina 100% vegetal e essência de arruda. Benefícios estéticos: Efeito esfoliante com propriedades antibacterianas. Combate a acne e elimina o excesso de oleosidade na pele. Espiritualmente: Elimina as más energias, invejas e mau olhado.",
+            aromaProfile: "Purificação, Limpeza Energética, Proteção"
+        },
+        es: {
+            name: "Jabón de Sal Gorda & Ruda",
+            desc: "Efecto exfoliante, antibacteriano y purificación espiritual.",
+            longDesc: "Ingredientes: Ruda, sal gorda, agua, glicerina 100% vegetal y esencia de ruda. Beneficios estéticos: Efecto exfoliante con propiedades antibacterianas. Combate el acné y elimina el exceso de grasa en la piel. Espiritualmente: Elimina las malas energías, envidias y mal de ojo.",
+            aromaProfile: "Purificación, Limpieza Energética, Protección"
+        },
+        en: {
+            name: "Coarse Salt & Rue Soap",
+            desc: "Exfoliating effect, antibacterial, and spiritual purification.",
+            longDesc: "Ingredients: Rue, coarse salt, water, 100% vegetable glycerin, and rue fragrance. Aesthetic benefits: Exfoliating effect with antibacterial properties. Fights acne and eliminates excess skin oiliness. Spiritually: Eliminates bad energies, envy, and the evil eye.",
+            aromaProfile: "Purification, Energy Cleansing, Protection"
+        },
+        fr: {
+            name: "Savon Gros Sel & Rue",
+            desc: "Effet exfoliant, antibactérien et purification spirituelle.",
+            longDesc: "Ingrédients: Rue, gros sel, eau, glycérine 100% végétale et essence de rue. Bienfaits esthétiques: Effet exfoliant aux propriétés antibactériennes. Combat l'acné et élimine l'excès de sébum de la peau. Spirituellement: Élimine les mauvaises énergies, la jalousie et le mauvais œil.",
+            aromaProfile: "Purification, Nettoyage Énergétique, Protection"
         }
     }
 ];
+/* ==========================================================================
+   DYNAMIC PRODUCT ADDITIONS (Bouquets, Summer Collection, Souvenirs & Melts)
+   ========================================================================== */
+const BOUQUET_NAMES = [
+    { pt: "Buquê de Sabonetes Florais Premium", es: "Ramo de Jabones Florales Premium", en: "Premium Floral Soap Bouquet", fr: "Bouquet de Savons Floraux Premium", basePrice: 24.90 },
+    { pt: "Cesta de Sabonetes Rosas de Amor", es: "Cesta de Jabones Rosas de Amor", en: "Rose of Love Soap Basket", fr: "Panier de Savons Roses d'Amour", basePrice: 26.90 },
+    { pt: "Arranjo Floral de Sabonete Rústico", es: "Arreglo Floral de Jabón Rústico", en: "Rustic Soap Floral Arrangement", fr: "Arrangement Floral de Savon Rustique", basePrice: 19.90 },
+    { pt: "Buquê de Sabonetes Elegance", es: "Ramo de Jabones Elegance", en: "Elegance Soap Bouquet", fr: "Bouquet de Savons Élégance", basePrice: 22.90 },
+    { pt: "Cesta de Sabonetes Lavanda Real", es: "Cesta de Jabones Lavanda Real", en: "Royal Lavender Soap Basket", fr: "Panier de Savons Lavande Royale", basePrice: 25.90 },
+    { pt: "Arranjo de Sabonetes Silvestres", es: "Arreglo de Jabones Silvestres", en: "Wild Flower Soap Arrangement", fr: "Arrangement de Savons Sauvages", basePrice: 21.90 },
+    { pt: "Buquê de Sabonetes Doce Carinho", es: "Ramo de Jabones Dulce Cariño", en: "Sweet Affection Soap Bouquet", fr: "Bouquet de Savons Doux Câlin", basePrice: 23.90 },
+    { pt: "Cesta de Presente Flores do Campo", es: "Cesta de Regalo Flores del Campo", en: "Wildflowers Gift Basket", fr: "Panier Cadeau Fleurs des Champs", basePrice: 28.90 },
+    { pt: "Arranjo de Sabonetes Peónias de Luxo", es: "Arreglo de Jabones Peonías de Lujo", en: "Luxury Peonies Soap Arrangement", fr: "Arrangement de Savons Pivoines de Luxe", basePrice: 27.90 },
+    { pt: "Buquê de Sabonetes Amor Eterno", es: "Ramo de Jabones Amor Eterno", en: "Eternal Love Soap Bouquet", fr: "Bouquet de Savons Amour Éternel", basePrice: 29.90 }
+];
+
+for (let i = 1; i <= 10; i++) {
+    const bouquet = BOUQUET_NAMES[i - 1];
+    PRODUCTS.push({
+        id: `buque-${i}`,
+        category: "set",
+        price: bouquet.basePrice,
+        image: `assets/buque_${i}.jpeg`,
+        qty: 1,
+        pt: {
+            name: bouquet.pt,
+            categoryLabel: "Set de Oferta / Buquê",
+            aromaBrief: "Arranjo floral artístico feito inteiramente de sabonetes artesanais perfumados.",
+            description: `Um maravilhoso arranjo feito à mão com sabonetes em forma de flores realistas. Ideal para oferecer como um presente único e sofisticado, ou para decorar e perfumar qualquer ambiente com elegância. Apresentado com embrulho decorativo premium.`,
+            aromaProfile: "Floral Premium, Elegante, Festivo"
+        },
+        es: {
+            name: bouquet.es,
+            categoryLabel: "Set de Regalo / Ramo",
+            aromaBrief: "Arreglo floral artístico hecho completamente de jabones artesanales aromáticos.",
+            description: `Un maravilloso arreglo hecho a mano con jabones en forma de flores realistas. Ideal para ofrecer como un regalo único y sofisticado, o para decorar y perfumar cualquier ambiente con elegancia. Presentado con envoltorio decorativo premium.`,
+            aromaProfile: "Floral Premium, Elegante, Festivo"
+        },
+        en: {
+            name: bouquet.en,
+            categoryLabel: "Gift Set / Bouquet",
+            aromaBrief: "Artistic floral arrangement made entirely of scented handcrafted soaps.",
+            description: `A wonderful handcrafted arrangement featuring realistic flower-shaped soaps. Perfect as a unique and sophisticated gift, or to elegantly decorate and scent any space. Presented in premium decorative packaging.`,
+            aromaProfile: "Premium Floral, Elegant, Festive"
+        },
+        fr: {
+            name: bouquet.fr,
+            categoryLabel: "Coffret Cadeau / Bouquet",
+            aromaBrief: "Arrangement floral artistique entièrement composé de savons artisanaux parfumés.",
+            description: `Un magnifique arrangement fait main avec des savons en forme de fleurs réalistes. Idéal à offrir comme cadeau unique et sophistiqué, ou pour décorer et parfumer n'importe quel espace avec élégance. Présenté dans un emballage décoratif de qualité supérieure.`,
+            aromaProfile: "Floral Premium, Élégant, Festif"
+        }
+    });
+}
+
+const VERAO_ITEMS = [
+    { pt: "Vela Aromática Brisa do Mar", es: "Vela Aromática Brisa del Mar", en: "Sailing Breeze Scented Candle", fr: "Bougie Parfumée Brise Marine", category: "vela", price: 14.90, descPt: "Frescura marinha com notas de sal e brisa costeira.", descEs: "Frescura marina con notas de sal y brisa costera.", descEn: "Ocean freshness with notes of sea salt and coastal breeze.", descFr: "Fraîcheur océanique avec des notes de sel marin et de brise côtière." },
+    { pt: "Sabonete de Coco & Lima de Verão", es: "Jabón de Coco & Lima de Verano", en: "Summer Coconut & Lime Soap", fr: "Savon Coco & Limette d'Été", category: "sabonete", price: 5.90, descPt: "Fórmula hidratante com aroma tropical de coco e raspa de lima.", descEs: "Fórmula hidratante con aroma tropical a coco y ralladura de lima.", descEn: "Moisturizing formula with a tropical scent of coconut and lime zest.", descFr: "Formule hydratante au parfum tropical de noix de coco et zeste de lime." },
+    { pt: "Vela Aromática Sol de Verão", es: "Vela Aromática Sol de Verano", en: "Summer Sun Scented Candle", fr: "Bougie Parfumée Soleil d'Été", category: "vela", price: 13.90, descPt: "Notas cítricas brilhantes de tangerina e tangerina de verão.", descEs: "Notas cítricas brillantes de mandarina y mandarina de verano.", descEn: "Bright citrus notes of summer mandarin and tangerine.", descFr: "Notes d'agrumes éclatantes de mandarine et tangerine d'été." },
+    { pt: "Sabonete Esfoliante de Sal e Citrinos", es: "Jabón Exfoliante de Sal y Cítricos", en: "Citrus & Salt Exfoliating Soap", fr: "Savon Exfoliant Sel & Agrumes", category: "sabonete", price: 6.50, descPt: "Esfoliação revigorante com sal marinho e óleos cítricos.", descEs: "Exfoliación revitalizante con sal marina y aceites cítricos.", descEn: "Invigorating exfoliation with sea salt and citrus essential oils.", descFr: "Exfoliation tonifiante au sel de mer et huiles essentielles d'agrumes." },
+    { pt: "Vela Aromática Margaridas do Campo", es: "Vela Aromática Margaritas del Campo", en: "Wild Daisy Scented Candle", fr: "Bougie Parfumée Marguerites des Champs", category: "vela", price: 14.50, descPt: "Notas florais alegres e frescas que trazem a natureza para dentro de casa.", descEs: "Notas florales alegres y frescas que traen la naturaleza al hogar.", descEn: "Cheerful and fresh floral notes that bring nature indoors.", descFr: "Notes florales fraîches et joyeuses qui font entrer la nature chez vous." },
+    { pt: "Sabonete de Hortelã e Limão Refrescante", es: "Jabón de Menta y Limón Refrescante", en: "Refreshing Mint & Lemon Soap", fr: "Savon Rafraîchissant Menthe & Citron", category: "sabonete", price: 5.90, descPt: "Efeito refrescante e estimulante para o banho nos dias quentes.", descEs: "Efecto refrescante y estimulante para el baño en días calurosos.", descEn: "Cooling and stimulating effect for bath time on warm days.", descFr: "Effet rafraîchissant et stimulant pour le bain lors des journées chaudes." },
+    { pt: "Vela Aromática Pôr do Sol", es: "Vela Aromática Atardecer de Verano", en: "Sunset Scented Candle", fr: "Bougie Parfumée Coucher de Soleil", category: "vela", price: 14.90, descPt: "Uma fragrância quente e aveludada de pêssego e baunilha.", descEs: "Una fragancia cálida y azerciopelada de melocotón y vainilla.", descEn: "A warm and velvety fragrance of summer peach and vanilla.", descFr: "Un parfum chaud et velouté de pêche d'été et de vanille." },
+    { pt: "Sabonete Hidratante Aloe de Verão", es: "Jabón Hidratante Aloe de Verano", en: "Summer Aloe Moisturizing Soap", fr: "Savon Hydratant Aloe d'Été", category: "sabonete", price: 5.90, descPt: "Hidratação calmante pós-sol com extrato natural de aloe vera.", descEs: "Hidratación calmante para después del sol con extracto de aloe vera.", descEn: "Calming post-sun hydration with natural aloe vera extract.", descFr: "Hydratation apaisante après-soleil à l'extrait naturel d'aloe vera." },
+    { pt: "Vela Aromática Frutas Tropicais", es: "Vela Aromática Frutas Tropicales", en: "Tropical Fruits Scented Candle", fr: "Bougie Parfumée Fruits Tropicaux", category: "vela", price: 13.90, descPt: "Fragrância doce e exótica de manga, maracujá e papaia.", descEs: "Fragancia dulce y exótica de mango, maracuyá y papaya.", descEn: "Sweet and exotic fragrance of mango, passionfruit, and papaya.", descFr: "Parfum doux et exotique de mangue, fruit de la passion et papaye." },
+    { pt: "Sabonete Suave de Manga & Papaia", es: "Jabón Suave de Mango & Papaya", en: "Mango & Papaya Soft Soap", fr: "Savon Doux Mangue & Papaye", category: "sabonete", price: 5.90, descPt: "Nutrição tropical com espuma cremosa e aroma frutado doce.", descEs: "Nutrición tropical con espuma cremosa y aroma frutado dulce.", descEn: "Tropical nourishment with creamy lather and sweet fruity scent.", descFr: "Nutrition tropicale avec une mousse crémeuse et un parfum fruité doux." },
+    { pt: "Vela Aromática Noites de Verão", es: "Vela Aromática Noches de Verano", en: "Summer Nights Scented Candle", fr: "Bougie Parfumée Nuits d'Été", category: "vela", price: 14.90, descPt: "Sedução noturna com jasmim da meia-noite e sândalo quente.", descEs: "Seducción nocturna con jazmín de medianoche y sándalo cálido.", descEn: "Night seduction with midnight jasmine and warm sandalwood.", descFr: "Séduction nocturne avec du jasmin de minuit et du bois de santal chaud." },
+    { pt: "Sabonete de Lavanda de Verão", es: "Jabón de Lavanda de Verano", en: "Summer Lavender Soap", fr: "Savon Lavande d'Été", category: "sabonete", price: 5.90, descPt: "Relaxamento fresco de lavanda colhida no pico do verão.", descEs: "Relajación fresca de lavanda cosechada en el pico del verano.", descEn: "Fresh relaxation of lavender harvested at peak summer.", descFr: "Relaxation fraîche de lavande récoltée au cœur de l'été." }
+];
+
+for (let i = 1; i <= 12; i++) {
+    const item = VERAO_ITEMS[i - 1];
+    const itemData = {
+        id: `verao-${i}`,
+        category: item.category,
+        price: item.price,
+        image: `assets/verao_${i}.jpeg`,
+        qty: 1,
+        pt: {
+            name: item.pt,
+            categoryLabel: item.category === "vela" ? "Vela Aromática (Verão)" : "Sabonete de Verão",
+            aromaBrief: item.descPt,
+            description: `${item.pt} da nossa coleção exclusiva de Verão. Feito à mão com ingredientes naturais e selecionados para trazer o frescor da estação.`,
+            aromaProfile: "Verão, Frescor, Edição Limitada"
+        },
+        es: {
+            name: item.es,
+            categoryLabel: item.category === "vela" ? "Vela Aromática (Verano)" : "Jabón de Verano",
+            aromaBrief: item.descEs,
+            description: `${item.es} de nuestra colección exclusiva de Verano. Hecho a mano con ingredientes naturales y seleccionados para traer la frescura de la estación.`,
+            aromaProfile: "Verano, Frescura, Edición Limitada"
+        },
+        en: {
+            name: item.en,
+            categoryLabel: item.category === "vela" ? "Scented Candle (Summer)" : "Summer Soap",
+            aromaBrief: item.descEn,
+            description: `${item.en} from our exclusive Summer Collection. Handcrafted with natural ingredients chosen to bring the seasonal freshness.`,
+            aromaProfile: "Summer, Freshness, Limited Edition"
+        },
+        fr: {
+            name: item.fr,
+            categoryLabel: item.category === "vela" ? "Bougie Parfumée (Été)" : "Savon d'Été",
+            aromaBrief: item.descFr,
+            description: `${item.fr} de notre collection exclusive d'Été. Fait main avec des ingrédients naturels pour apporter la fraîcheur de la saison.`,
+            aromaProfile: "Été, Fraîcheur, Édition Limitée"
+        }
+    };
+    
+    if (item.category === "sabonete") {
+        SOAP_GALLERY.push(itemData);
+    } else {
+        PRODUCTS.push(itemData);
+    }
+}
+
+const RECORDACAO_NAMES = [
+    { pt: "Recordação de Casamento Personalizada", es: "Recuerdo de Boda Personalizado", en: "Personalized Wedding Favor", fr: "Souvenir de Mariage Personnalisé", price: 3.50 },
+    { pt: "Recordação de Batizado Anjinho", es: "Recuerdo de Bautizo Angelito", en: "Little Angel Baptism Favor", fr: "Souvenir de Baptême Petit Ange", price: 3.20 },
+    { pt: "Recordação de Comunhão Rústica", es: "Recuerdo de Comunión Rústico", en: "Rustic Communion Favor", fr: "Souvenir de Communion Rustique", price: 3.50 },
+    { pt: "Recordação de Aniversário Especial", es: "Recuerdo de Cumpleaños Especial", en: "Special Birthday Favor", fr: "Souvenir d'Anniversaire Spécial", price: 3.00 },
+    { pt: "Recordação de Evento Corporativo", es: "Recuerdo de Evento Corporativo", en: "Corporate Event Favor", fr: "Souvenir d'Événement D'Entreprise", price: 4.50 },
+    { pt: "Recordação de Maternidade Pés de Bebé", es: "Recuerdo de Maternidad Pies de Bebé", en: "Baby Feet Maternity Favor", fr: "Souvenir de Maternité Pieds de Bébé", price: 2.80 }
+];
+
+for (let i = 1; i <= 6; i++) {
+    const rec = RECORDACAO_NAMES[i - 1];
+    PRODUCTS.push({
+        id: `recordacao-${i}`,
+        category: "decorativa",
+        price: rec.price,
+        image: `assets/recordacao_${i}.jpeg`,
+        qty: 1,
+        pt: {
+            name: rec.pt,
+            categoryLabel: "Recordação / Lembrancinha",
+            aromaBrief: "Lembrança artesanal personalizada para tornar o seu evento inesquecível.",
+            description: `Recordação artesanal feita sob encomenda em Portugal. Criada com materiais premium para celebrar datas especiais como casamentos, batizados, comunhões ou eventos corporativos. Personalizável sob consulta.`,
+            aromaProfile: "Personalizado, Eventos, Artesanato"
+        },
+        es: {
+            name: rec.es,
+            categoryLabel: "Recuerdo / Detalle de Evento",
+            aromaBrief: "Detalle artesanal personalizado para hacer tu evento inolvidable.",
+            description: `Recuerdo artesanal hecho bajo pedido en Portugal. Creado con materiales premium para celebrar fechas especiales como bodas, bautizos, comuniones o eventos corporativos. Personalizable bajo consulta.`,
+            aromaProfile: "Personalizado, Eventos, Artesanía"
+        },
+        en: {
+            name: rec.en,
+            categoryLabel: "Event Favor / Souvenir",
+            aromaBrief: "Handcrafted personalized favor to make your event unforgettable.",
+            description: `Handcrafted event favor made to order in Portugal. Created with premium materials to celebrate special dates like weddings, baptisms, communions, or corporate events. Custom options available.`,
+            aromaProfile: "Personalized, Events, Handcrafted"
+        },
+        fr: {
+            name: rec.fr,
+            categoryLabel: "Souvenir / Cadeau d'Invité",
+            aromaBrief: "Cadeau d'invité artisanal personnalisé pour rendre votre événement inoubliable.",
+            description: `Souvenir artisanal fabriqué sur commande au Portugal. Créé avec des matériaux de qualité pour célébrer des occasions spéciales (mariages, baptêmes, communions, événements). Personnalisable.`,
+            aromaProfile: "Personnalisé, Événements, Artisanal"
+        }
+    });
+}
+
+PRODUCTS.push({
+    id: "wax-melt-1",
+    category: "vela",
+    price: 4.50,
+    image: "assets/wax_melt_1.jpeg",
+    qty: 1,
+    pt: {
+        name: "Wax Melts de Soja Aromáticos",
+        categoryLabel: "Cera de Soja / Ambientador",
+        aromaBrief: "Wax melts de soja natural e óleos essenciais para queimadores.",
+        description: "Fundidos à mão com cera de soja natural e óleos essenciais premium. Perfeitos para libertar fragrâncias intensas e contínuas quando derretidos num queimador de essências. Uma alternativa ecológica e prática para perfumar a sua casa.",
+        aromaProfile: "Fragrância Intensa, Cera de Soja, Prático"
+    },
+    es: {
+        name: "Wax Melts de Soja Aromáticos",
+        categoryLabel: "Cera de Soja / Ambientador",
+        aromaBrief: "Wax melts de soja natural y aceites esenciales para quemadores.",
+        description: "Fundidos a mano con cera de soja natural y aceites esenciales premium. Perfectos para liberar fragancias intensas y continuas cuando se derriten en un quemador de esencias. Una alternativa ecológica y práctica para perfumar tu hogar.",
+        aromaProfile: "Fragancia Intensa, Cera de Soja, Práctico"
+    },
+    en: {
+        name: "Aromatic Soy Wax Melts",
+        categoryLabel: "Soy Wax / Home Fragrance",
+        aromaBrief: "Natural soy wax melts and essential oils for burners.",
+        description: "Hand-poured with natural soy wax and premium essential oils. Perfect for releasing intense, continuous scents when melted in a fragrance burner. An eco-friendly and practical alternative to scent your home.",
+        aromaProfile: "Intense Scent, Soy Wax, Practical"
+    },
+    fr: {
+        name: "Fondants de Cire de Soja Parfumés",
+        categoryLabel: "Cire de Soja / Parfum de Maison",
+        aromaBrief: "Fondants de cire de soja naturelle et huiles essentielles pour brûleurs.",
+        description: "Fabriqués à la main avec de la cire de soja naturelle et des huiles essentielles de qualité. Parfaits pour diffuser des parfums intenses et continus une fois fondus dans un brûle-parfum. Une alternative écologique et pratique.",
+        aromaProfile: "Parfum Intense, Cire de Soja, Pratique"
+    }
+});
+
+PRODUCTS.push({
+    id: "candle-special-1",
+    category: "vela",
+    price: 15.90,
+    image: "assets/candle_special_1.jpeg",
+    qty: 1,
+    pt: {
+        name: "Vela Aromática Edição Especial",
+        categoryLabel: "Vela Aromática",
+        aromaBrief: "Vela aromática premium em vaso de vidro com decoração floral exclusiva.",
+        description: "Vela decorativa premium de edição limitada, fundida à mão com cera de soja natural em vaso de vidro elegante. Adornada delicadamente no topo com flores secas botânicas. Proporciona uma queima limpa e perfumada, ideal para criar momentos únicos.",
+        aromaProfile: "Cítrico Floral, Edição Especial, Sofisticado"
+    },
+    es: {
+        name: "Vela Aromática Edición Especial",
+        categoryLabel: "Vela Aromática",
+        aromaBrief: "Vela aromática premium en vaso de vidrio con decoración floral exclusiva.",
+        description: "Vela decorativa premium de edición limitada, fundida a mano con cera de soja natural en un elegante vaso de vidrio. Adornada delicadamente en la parte superior con flores secas botánicas. Proporciona una quema limpia y perfumada.",
+        aromaProfile: "Cítrico Floral, Edición Especial, Sofisticado"
+    },
+    en: {
+        name: "Special Edition Scented Candle",
+        categoryLabel: "Scented Candle",
+        aromaBrief: "Premium scented candle in glass jar with exclusive floral decoration.",
+        description: "Premium limited-edition decorative candle, hand-poured with natural soy wax in an elegant glass jar. Delicately adorned on top with dried botanical flowers. Provides a clean, scented burn, perfect for creating unique moments.",
+        aromaProfile: "Floral Citrus, Special Edition, Sophisticated"
+    },
+    fr: {
+        name: "Bougie Parfumée Édition Spéciale",
+        categoryLabel: "Bougie Parfumée",
+        aromaBrief: "Bougie parfumée premium en pot de verre avec décoration florale exclusive.",
+        description: "Bougie décorative de qualité supérieure en édition limitée, coulée à la main avec de la cire de soja naturelle dans un pot de verre élégant. Délicatement ornée de fleurs séchées sur le dessus. Offre une combustion propre et parfumée.",
+        aromaProfile: "Floral Citronné, Édition Spéciale, Sophistiqué"
+    }
+});
+
 
 // WhatsApp Contact Configuration
 const WHATSAPP_NUMBER = "351939636842";
@@ -1461,6 +1637,12 @@ const productsPerPage = 3;
    GLOBAL DICTIONARY OF TRANSLATIONS (PT, ES, EN, FR)
    ========================================================================== */
 const TRANSLATIONS = {
+    "page-title": {
+        pt: "Com Cheiro de Amor | Velas, Sabonetes e Peças Decorativas",
+        es: "Com Cheiro de Amor | Velas, Jabones y Piezas Decorativas",
+        en: "Com Cheiro de Amor | Candles, Soaps and Decorative Pieces",
+        fr: "Com Cheiro de Amor | Bougies, Savons et Pièces Décoratives"
+    },
     // Navigation
     "logo-sub": {
         pt: "Velas & Sabonetes",
@@ -1876,6 +2058,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const navLinks = document.querySelector(".nav-links");
     const langSelect = document.getElementById("lang-select");
     
+    // Theme toggle elements & initialization
+    const themeToggleBtn = document.getElementById("btn-theme-toggle");
+
+    const initTheme = () => {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        
+        if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+            document.body.classList.add("dark-theme");
+        } else {
+            document.body.classList.remove("dark-theme");
+        }
+    };
+
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener("click", () => {
+            document.body.classList.toggle("dark-theme");
+            const isDark = document.body.classList.contains("dark-theme");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+        });
+    }
+
+    initTheme();
+    
     // Cart elements
     const cartToggleBtn = document.querySelector(".cart-toggle");
     const cartDrawer = document.querySelector(".cart-drawer");
@@ -2006,6 +2212,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.add("lang-fade-active");
 
         setTimeout(() => {
+            // Translate the page title
+            if (TRANSLATIONS["page-title"] && TRANSLATIONS["page-title"][lang]) {
+                document.title = TRANSLATIONS["page-title"][lang];
+            }
+
             // Translate static elements
             for (const [id, translations] of Object.entries(TRANSLATIONS)) {
                 const el = document.getElementById(id);
