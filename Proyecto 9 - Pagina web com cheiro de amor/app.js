@@ -422,39 +422,39 @@ const PRODUCTS = [
             aromaProfile: "Élégance, Harmonie, Doux, Sérénité"
         }
     },
-    {
+        {
         id: "candle-olho_grego-1",
         category: "vela",
-        price: 12.90,
+        price: 8.90,
         image: "assets/candle_olho_grego_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Olho Grego Protetor",
+            name: "Olho Grego de Proteção",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela inspirada no olho grego contra más energias com aroma de sal marinho.",
-            description: "Vela decorativa inspirada no tradicional amuleto do olho grego, perfumada com essência fresca de sal marinho e sálvia. Um amuleto para purificar o seu espaço.",
-            aromaProfile: "Sal Marinho, Sálvia, Proteção, Purificador"
+            aromaBrief: "Vela inspirada na proteção e observação para afastar as más energias.",
+            description: "Uma vela inspirada na proteção e observação. O olho grego é conhecido pela proteção contra invejas e mau olhado, com a filosofia de que afasta as más energias do seu ambiente.",
+            aromaProfile: "Proteção, Purificação, Místico, Sal Marinho"
         },
         es: {
-            name: "Vela Ojo Turco Protector",
+            name: "Ojo Turco de Protección",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela inspirada en el ojo turco contra malas energías con aroma a sal marina.",
-            description: "Vela decorativa inspirada en el tradicional amuleto del ojo turco, perfumada con esencia fresca de sal marina y salvia. Un amuleto para purificar tu espacio.",
-            aromaProfile: "Sal Marina, Salvia, Protección, Purificador"
+            aromaBrief: "Vela inspirada en la protección y observación para alejar las malas energías.",
+            description: "Una vela inspirada en la protección y observación. El ojo turco es conocido por la protección contra envidias y mal de ojo, con la filosofía de alejar las malas energías de tu hogar.",
+            aromaProfile: "Protección, Purificación, Místico, Sal Marina"
         },
         en: {
-            name: "Greek Evil Eye Protective Candle",
+            name: "Protection Evil Eye Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Greek evil eye inspired candle against negative energies with sea salt scent.",
-            description: "Decorative candle inspired by the traditional Greek evil eye amulet, scented with a fresh sea salt and sage fragrance. An amulet to purify your space.",
-            aromaProfile: "Sea Salt, Sage, Protection, Purifier"
+            aromaBrief: "Candle inspired by protection and observation to ward off negative energies.",
+            description: "A candle inspired by protection and observation. The evil eye is known for protection against envy and the evil eye, with the philosophy of warding off negative energies from your space.",
+            aromaProfile: "Protection, Purification, Mystical, Sea Salt"
         },
         fr: {
-            name: "Bougie Œil Grec Protecteur",
+            name: "Bougie Œil Grec de Protection",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Bougie inspirée de l'œil grec contre les mauvaises énergies au parfum de sel marin.",
-            description: "Bougie décorative inspirée de la traditionnelle amulette de l'œil grec, parfumée d'une essence fraîche de sel marin et de sauge. Une amulette pour purifier votre espace.",
-            aromaProfile: "Sel Marin, Sauge, Protection, Purificateur"
+            aromaBrief: "Bougie inspirée de la protection et de l'observation pour éloigner les mauvaises énergies.",
+            description: "Une bougie inspirée de la protection et de l'observation. L'œil grec est connu pour protéger contre la jalousie et le mauvais œil, avec pour philosophie d'éloigner les mauvaises énergies de votre intérieur.",
+            aromaProfile: "Protection, Purification, Mystique, Sel Marin"
         }
     },
     {
