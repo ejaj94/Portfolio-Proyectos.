@@ -177,38 +177,38 @@ const PRODUCTS = [
             aromaProfile: "Doux, Enveloppant, Romantique"
         }
     },
-    {
+        {
         id: "candle-flora-1",
         category: "vela",
         price: 10.90,
         image: "assets/candle_flora_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Escultural Flora Clássica",
+            name: "Vela Flora",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Flor clássica em relevo geométrico de cera de soja e flor de laranjeira.",
-            description: "Esfera de flores em relevo geométrico, uma peça escultural linda e aromática que traz o frescor cítrico da flor de laranjeira para o seu ambiente.",
+            aromaBrief: "Vela decorativa aromática com aroma leve e suave em recipiente de gesso cerâmico alfa.",
+            description: "Vela decorativa aromática com um aroma leve e suave. Recipiente feito em gesso cerâmico alfa, uma peça simples e elegante que traz o frescor cítrico da flor de laranjeira para o seu ambiente.",
             aromaProfile: "Flor de Laranjeira, Cítrico, Fresco"
         },
         es: {
-            name: "Vela Escultural Flora Clásica",
+            name: "Vela Flora",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Flor clásica en relieve geométrico de cera de soja y flor de azahar.",
-            description: "Esfera de flores en relieve geométrico, una hermosa pieza escultórica y aromática que aporta el frescor cítrico del azahar a tu hogar.",
+            aromaBrief: "Vela decorativa aromática con aroma ligero y suave en recipiente de yeso cerámico alfa.",
+            description: "Vela decorativa aromática con un aroma ligero y suave. Recipiente hecho en yeso cerámico alfa, una pieza simple y elegante que aporta el frescor cítrico de la flor de azahar a tu hogar.",
             aromaProfile: "Flor de Azahar, Cítrico, Fresco"
         },
         en: {
-            name: "Classic Flora Sculptural Candle",
+            name: "Flora Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Classic flower in geometric relief with orange blossom scent.",
-            description: "Flower sphere in geometric relief, a beautiful and aromatic sculptural piece that brings the citrus freshness of orange blossom to your space.",
+            aromaBrief: "Decorative scented candle with a light and soft aroma in an alpha ceramic plaster vessel.",
+            description: "Decorative scented candle with a light and soft aroma. Crafted in an alpha ceramic plaster vessel, a simple and elegant piece that brings the citrus freshness of orange blossom to your space.",
             aromaProfile: "Orange Blossom, Citrus, Fresh"
         },
         fr: {
-            name: "Bougie Sculpturale Flora Classique",
+            name: "Bougie Flora",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Fleur classique en relief géométrique et fleur d'oranger.",
-            description: "Sphère florale en relief géométrique, une superbe pièce sculpturale et aromatique qui apporte la fraîcheur hespéridée de la fleur d'oranger dans votre intérieur.",
+            aromaBrief: "Bougie décorative parfumée au parfum léger et doux dans un récipient en plâtre céramique alpha.",
+            description: "Bougie décorative parfumée au parfum léger et doux. Récipient fabriqué en plâtre céramique alpha, une pièce simple et élégante qui apporte la fraîcheur hespéridée de la fleur d'oranger dans votre intérieur.",
             aromaProfile: "Fleur d'Oranger, Agrume, Frais"
         }
     },
