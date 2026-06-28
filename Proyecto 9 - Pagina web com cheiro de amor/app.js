@@ -72,38 +72,38 @@ const PRODUCTS = [
             aromaProfile: "Chaleureux, Vanille, Caramel, Doux"
         }
     },
-    {
+        {
         id: "candle-big_heart-1",
         category: "vela",
-        price: 12.90,
+        price: 14.90,
         image: "assets/candle_big_heart_1.jpeg",
         qty: 1,
         pt: {
             name: "Vela Big Heart",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Design moderno de coração lapidado em cera de soja com perfume romântico.",
-            description: "Vela escultural de coração com desenho geométrico lapidado, fundida com essência romântica de frutas vermelhas. Perfeita para presentear quem mais ama.",
+            aromaBrief: "Vela decorativa aromática em recipiente de gesso com detalhes.",
+            description: "Vela decorativa aromática em recipiente de gesso com detalhes elegantes, feita à mão com cera de soja natural e essência romântica para perfumar e transformar o seu espaço.",
             aromaProfile: "Romântico, Frutas Vermelhas, Amor"
         },
         es: {
             name: "Vela Big Heart",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Diseño moderno de corazón facetado en cera de soja con fragancia romántica.",
-            description: "Vela de corazón escultórica con diseño geométrico facetado, fundida con aroma romántico de frutos rojos. Perfecta para regalar a quien más amas.",
+            aromaBrief: "Vela decorativa aromática en recipiente de yeso con detalles.",
+            description: "Vela decorativa aromática en recipiente de yeso con detalles elegantes, hecha a mano con cera de soja natural y esencia romántica para perfumar y transformar tu hogar.",
             aromaProfile: "Romántico, Frutos Rojos, Amor"
         },
         en: {
-            name: "Vela Big Heart",
+            name: "Big Heart Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Modern faceted heart design in soy wax with a romantic scent.",
-            description: "Sculptural heart candle with a faceted geometric design, infused with a romantic red berries essence. Perfect for gifting to your loved ones.",
+            aromaBrief: "Decorative scented candle in a plaster vessel with details.",
+            description: "Decorative scented candle in an elegant plaster vessel with fine details, handcrafted from natural soy wax and romantic fragrance to scent and transform your space.",
             aromaProfile: "Romantic, Red Berries, Love"
         },
         fr: {
-            name: "Vela Big Heart",
+            name: "Bougie Big Heart",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Design moderne de cœur facetté en cire de soja avec parfum romantique.",
-            description: "Bougie cœur sculpturale au design géométrique facetté, infusée d'une essence romantique de fruits rouges. Idéale à offrir à ceux que vous aimez.",
+            aromaBrief: "Bougie décorative parfumée dans un récipient en plâtre avec détails.",
+            description: "Bougie décorative parfumée dans un récipient en plâtre aux détails élégants, fabriquée à la main avec de la cire de soja naturelle et un parfum romantique pour illuminer votre intérieur.",
             aromaProfile: "Romantique, Fruits Rouges, Amour"
         }
     },
