@@ -492,39 +492,39 @@ const PRODUCTS = [
             aromaProfile: "Pivoine, Élégance, Luxueux, Unique"
         }
     },
-    {
+        {
         id: "candle-rosa_bella-1",
         category: "vela",
-        price: 10.90,
+        price: 6.90,
         image: "assets/candle_rosa_bella_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Flor Rosa Bella",
+            name: "Vela Rosa Bella",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Rosa em botão esculpida à mão com perfume de rosas vermelhas e jasmim.",
-            description: "Vela esculpida à mão simulando o desabrochar de uma rosa vermelha com notas intensas e sofisticadas de rosas vermelhas e um toque de jasmim.",
-            aromaProfile: "Rosa Vermelha, Jasmim, Intenso"
+            aromaBrief: "Vela pensada para um ambiente de elegância, harmonia e tranquilidade.",
+            description: "Uma vela pensada para um ambiente de elegância e tranquilidade. Com a Rosa Bella terá uma sensação de harmonia e tranquilidade.",
+            aromaProfile: "Rosa Bella, Elegância, Harmonia, Tranquilidade"
         },
         es: {
-            name: "Vela Flor Rosa Bella",
+            name: "Vela Rosa Bella",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Rosa en botón esculpida a mano con aroma de rosas rojas y jazmín.",
-            description: "Vela esculpida a mano simulando el florecer de una rosa roja con notas intensas y sofisticadas de rosas rojas y un toque de jazmín.",
-            aromaProfile: "Rosa Roja, Jazmín, Intenso"
+            aromaBrief: "Vela pensada para un ambiente de elegancia, armonía y tranquilidad.",
+            description: "Una vela pensada para un ambiente de elegancia y tranquilidad. Con la Rosa Bella tendrás una sensación de armonía y tranquilidad.",
+            aromaProfile: "Rosa Bella, Elegancia, Armonía, Tranquilidad"
         },
         en: {
-            name: "Rosa Bella Flower Candle",
+            name: "Rosa Bella Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Hand-sculpted rose bud with red roses and jasmine scent.",
-            description: "Hand-sculpted candle simulating the blooming of a red rose, featuring intense and sophisticated notes of red roses with a touch of jasmine.",
-            aromaProfile: "Red Rose, Jasmine, Intense"
+            aromaBrief: "A candle designed for an atmosphere of elegance, harmony, and tranquility.",
+            description: "A candle designed for an environment of elegance and tranquility. With the Rosa Bella you will experience a sense of harmony and peace.",
+            aromaProfile: "Rosa Bella, Elegance, Harmony, Tranquility"
         },
         fr: {
-            name: "Bougie Fleur Rose Bella",
+            name: "Bougie Rosa Bella",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Bouton de rose sculpté à la main au parfum de roses rouges et jasmin.",
-            description: "Bougie sculptée à la main simulant l'éclosion d'une rose rouge avec des notes intenses et sophistiquées de roses rouges et une touche de jasmin.",
-            aromaProfile: "Rose Rouge, Jasmin, Intense"
+            aromaBrief: "Une bougie conçue pour une atmosphère d'élégance, d'harmonie et de sérénité.",
+            description: "Une bougie conçue pour un environnement d'élégance et de tranquillité. Avec la Rosa Bella, vous ressentirez une sensation d'harmonie et de sérénité.",
+            aromaProfile: "Rosa Bella, Élégance, Harmonie, Sérénité"
         }
     },
     {
