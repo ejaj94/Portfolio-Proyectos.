@@ -841,6 +841,251 @@ const PRODUCTS = [
             description: "Prenez soin de vous avec ce coffret conçu pour une relaxation profonde. Contient : 1x Bougie Parfumée à la Lavande (taille normale), 1x Savon aux Roses, 1x Serviette en Coton Doux et 1x Sel de Bain Aromatique aux herbes naturelles dans un plateau en bambou réutilisable.",
             aromaProfile: "Herbal, Calme, Aromathérapie Complète"
         }
+    },
+    {
+        id: "candle-new-1",
+        category: "vela",
+        price: 12.90,
+        image: "assets/new_prod_1.jpeg",
+        qty: 1,
+        pt: {
+            name: "Vela Aromática Bouquet Rose",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa inspirada num requintado bouquet floral com essência de rosas.",
+            description: "Vela decorativa inspirada num requintado bouquet floral com essência suave de rosas e peónias para criar um ambiente romântico e acolhedor.",
+            aromaProfile: "Rosa, Peónia, Romântico, Floral"
+        },
+        es: {
+            name: "Vela Aromática Bouquet Rose",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa inspirada en un refinado ramo floral con esencia de rosas.",
+            description: "Vela decorativa inspirada en un refinado ramo floral con suave esencia de rosas y peonías para crear un ambiente romántico y acogedor.",
+            aromaProfile: "Rosa, Peonía, Romántico, Floral"
+        },
+        en: {
+            name: "Bouquet Rose Scented Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Decorative candle inspired by a refined floral bouquet with rose essence.",
+            description: "Decorative candle inspired by a refined floral bouquet with soft rose and peony essence to create a romantic and cozy atmosphere.",
+            aromaProfile: "Rose, Peony, Romantic, Floral"
+        },
+        fr: {
+            name: "Bougie Parfumée Bouquet Rose",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie décorative inspirée d'un bouquet floral raffiné au parfum de roses.",
+            description: "Bougie décorative inspirée d'un bouquet floral raffiné aux doux parfums de roses et de pivoines pour créer une atmosphère romantique et chaleureuse.",
+            aromaProfile: "Rose, Pivoine, Romantique, Floral"
+        }
+    },
+    {
+        id: "candle-new-2",
+        category: "vela",
+        price: 11.90,
+        image: "assets/new_prod_2.jpeg",
+        qty: 1,
+        pt: {
+            name: "Vela Aromática Jardim Botânico",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Infusão fresca e floral de alfazema e jasmim para o seu lar.",
+            description: "Vela decorativa em recipiente natural infundida com notas frescas e florais de alfazema e jasmim, perfeita para trazer a serenidade da natureza ao seu lar.",
+            aromaProfile: "Alfazema, Jasmim, Fresco, Botânico"
+        },
+        es: {
+            name: "Vela Aromática Jardín Botánico",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Infusión fresca y floral de lavanda y jazmín para tu hogar.",
+            description: "Vela decorativa en recipiente natural infundida con notas frescas y florales de lavanda y jazmín, perfecta para aportar la serenidad de la naturaleza a tu hogar.",
+            aromaProfile: "Lavanda, Jazmín, Fresco, Botánico"
+        },
+        en: {
+            name: "Botanical Garden Scented Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Fresh and floral infusion of lavender and jasmine for your home.",
+            description: "Decorative candle in a natural container infused with fresh, floral notes of lavender and jasmine, perfect for bringing nature's serenity into your home.",
+            aromaProfile: "Lavender, Jasmine, Fresh, Botanical"
+        },
+        fr: {
+            name: "Bougie Parfumée Jardin Botanique",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Infusion fraîche et florale de lavande et jasmin pour votre intérieur.",
+            description: "Bougie décorative dans un récipient naturel infusée de notes fraîches et florales de lavande et jasmin, parfaite pour apporter la sérénité de la nature chez vous.",
+            aromaProfile: "Lavande, Jasmin, Frais, Botanique"
+        }
+    },
+    {
+        id: "gift-new-3",
+        category: "set",
+        price: 28.90,
+        image: "assets/new_prod_3.jpeg",
+        qty: 1,
+        pt: {
+            name: "Buquê & Kit Aroma Encantado",
+            categoryLabel: "Kit Presente",
+            aromaBrief: "Exclusivo conjunto presente composto por buquê artesanal e velas aromáticas.",
+            description: "Exclusivo conjunto presente composto por buquê artesanal e velas aromáticas selecionadas, concebido para celebrar momentos especiais com elegância e perfume duradouro.",
+            aromaProfile: "Sofisticado, Flores, Presente, Elegante"
+        },
+        es: {
+            name: "Ramo & Kit Aroma Encantado",
+            categoryLabel: "Kit de Regalo",
+            aromaBrief: "Exclusivo conjunto de regalo con ramo artesanal y velas aromáticas.",
+            description: "Exclusivo conjunto de regalo compuesto por ramo artesanal y velas aromáticas seleccionadas, diseñado para celebrar momentos especiales con elegancia y perfume duradero.",
+            aromaProfile: "Sofisticado, Flores, Regalo, Elegante"
+        },
+        en: {
+            name: "Enchanted Bouquet & Scent Gift Set",
+            categoryLabel: "Gift Set",
+            aromaBrief: "Exclusive gift set featuring handcrafted bouquet and scented candles.",
+            description: "Exclusive gift set comprising a handcrafted bouquet and selected scented candles, designed to celebrate special moments with elegance and long-lasting perfume.",
+            aromaProfile: "Sophisticated, Flowers, Gift, Elegant"
+        },
+        fr: {
+            name: "Coffret Bouquet & Arôme Enchanté",
+            categoryLabel: "Coffret Cadeau",
+            aromaBrief: "Coffret cadeau exclusif comprenant un bouquet artisanal et des bougies parfumées.",
+            description: "Coffret cadeau exclusif composé d'un bouquet artisanal et de bougies parfumées sélectionnées, conçu pour célébrer des moments spéciaux avec élégance et un parfum durable.",
+            aromaProfile: "Sophistiqué, Fleurs, Cadeau, Élégant"
+        }
+    },
+    {
+        id: "candle-new-4",
+        category: "vela",
+        price: 9.90,
+        image: "assets/new_prod_4.jpeg",
+        qty: 1,
+        pt: {
+            name: "Vela Flora Amor Vermelho",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Tom vermelho vibrante com aroma envolvente de frutos vermelhos e baunilha.",
+            description: "Vela decorativa em tom vermelho vibrante com detalhes florais esculpidos à mão, exalando um aroma envolvente de frutos vermelhos e baunilha.",
+            aromaProfile: "Frutos Vermelhos, Baunilha, Doce, Vibrante"
+        },
+        es: {
+            name: "Vela Flora Amor Rojo",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Tono rojo vibrante con aroma envolvente a frutos rojos y vainilla.",
+            description: "Vela decorativa en tono rojo vibrante con detalles florales esculpidos a mano, que exhala un aroma envolvente a frutos rojos y vainilla.",
+            aromaProfile: "Frutos Rojos, Vainilla, Dulce, Vibrante"
+        },
+        en: {
+            name: "Red Love Flora Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Vibrant red tone with enfolding red berries and vanilla aroma.",
+            description: "Decorative candle in a vibrant red tone with hand-sculpted floral details, exuding an enfolding aroma of red berries and vanilla.",
+            aromaProfile: "Red Berries, Vanilla, Sweet, Vibrant"
+        },
+        fr: {
+            name: "Bougie Flora Amour Rouge",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Ton rouge vibrant au parfum enveloppant de fruits rouges et vanille.",
+            description: "Bougie décorative d'un rouge vibrant aux détails floraux sculptés à la main, exhalant un parfum enveloppant de fruits rouges et de vanille.",
+            aromaProfile: "Fruits Rouges, Vanille, Doux, Vibrant"
+        }
+    },
+    {
+        id: "candle-new-5",
+        category: "vela",
+        price: 10.90,
+        image: "assets/new_prod_5.jpeg",
+        qty: 1,
+        pt: {
+            name: "Vela Aromática Mel & Âmbar",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Fragrança quente de mel silvestre e âmbar dourado para o seu espaço.",
+            description: "Uma criação acolhedora com fragrância quente de mel silvestre e âmbar dourado, ideal para iluminar o seu espaço com conforto e elegância.",
+            aromaProfile: "Mel, Âmbar, Acolhedor, Quente"
+        },
+        es: {
+            name: "Vela Aromática Miel & Ámbar",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Fragancia cálida de miel silvestre y ámbar dorado para tu espacio.",
+            description: "Una creación acogedora con fragancia cálida de miel silvestre y ámbar dorado, ideal para iluminar tu espacio con confort y elegancia.",
+            aromaProfile: "Miel, Ámbar, Acogedor, Cálido"
+        },
+        en: {
+            name: "Honey & Amber Scented Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Warm fragrance of wild honey and golden amber for your space.",
+            description: "A cozy creation with a warm fragrance of wild honey and golden amber, ideal for illuminating your space with comfort and elegance.",
+            aromaProfile: "Honey, Amber, Cozy, Warm"
+        },
+        fr: {
+            name: "Bougie Parfumée Miel & Ambre",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Fragrance chaleureuse de miel sauvage et ambre doré pour votre intérieur.",
+            description: "Une création chaleureuse à la fragrance douce de miel sauvage et d'ambre doré, idéale pour illuminer votre espace avec confort et élégance.",
+            aromaProfile: "Miel, Ambre, Chaleureux, Doux"
+        }
+    },
+    {
+        id: "candle-new-6",
+        category: "vela",
+        price: 8.90,
+        image: "assets/new_prod_6.jpeg",
+        qty: 1,
+        pt: {
+            name: "Vela Flor de Algodão & Lavanda",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Notas relaxantes de flor de algodão e alfazema para pura tranquilidade.",
+            description: "Vela aromática em tom suave com notas relaxantes de flor de algodão e alfazema, proporcionando uma sensação de limpeza e pura tranquilidade.",
+            aromaProfile: "Algodão, Alfazema, Limpo, Relaxante"
+        },
+        es: {
+            name: "Vela Flor de Algodón & Lavanda",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Notas relajantes de flor de algodón y lavanda para pura tranquilidad.",
+            description: "Vela aromática en tono suave con notas relajantes de flor de algodón y lavanda, proporcionando una sensación de limpieza y pura tranquilidad.",
+            aromaProfile: "Algodón, Lavanda, Limpio, Relajante"
+        },
+        en: {
+            name: "Cotton Flower & Lavender Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Relaxing notes of cotton flower and lavender for pure tranquility.",
+            description: "Scented candle in a soft tone with relaxing notes of cotton flower and lavender, providing a feeling of cleanliness and pure tranquility.",
+            aromaProfile: "Cotton, Lavender, Clean, Relaxing"
+        },
+        fr: {
+            name: "Bougie Fleur de Coton & Lavande",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Notes relaxantes de fleur de coton et lavande pour une pure sérénité.",
+            description: "Bougie parfumée aux tons doux avec des notes relaxantes de fleur de coton et de lavande, apportant une sensation de propreté et de pure sérénité.",
+            aromaProfile: "Coton, Lavande, Propre, Relaxant"
+        }
+    },
+    {
+        id: "candle-new-7",
+        category: "vela",
+        price: 13.90,
+        image: "assets/new_prod_7.jpeg",
+        qty: 1,
+        pt: {
+            name: "Vela Esculpida Pedra Natural",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Peça artesanal exclusiva com acabamento orgânico e óleos botânicos.",
+            description: "Peça artesanal exclusiva com acabamento orgânico em tons neutros, infundida com óleos essenciais botânicos para harmonizar qualquer divisão do seu lar.",
+            aromaProfile: "Orgânico, Botânico, Harmonioso, Neutro"
+        },
+        es: {
+            name: "Vela Esculpida Piedra Natural",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Pieza artesanal exclusiva con acabado orgánico y aceites botánicos.",
+            description: "Pieza artesanal exclusiva con acabado orgánico en tonos neutros, infundida con aceites esenciales botánicos para armonizar cualquier estancia de tu hogar.",
+            aromaProfile: "Orgánico, Botánico, Armonioso, Neutro"
+        },
+        en: {
+            name: "Natural Stone Sculpted Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Exclusive handcrafted piece with organic finish and botanical oils.",
+            description: "Exclusive handcrafted piece with an organic finish in neutral tones, infused with botanical essential oils to harmonize any room in your home.",
+            aromaProfile: "Organic, Botanical, Harmonious, Neutral"
+        },
+        fr: {
+            name: "Bougie Sculptée Pierre Naturelle",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Pièce artisanale exclusive à la finition biologique et huiles botaniques.",
+            description: "Pièce artisanale exclusive à la finition biologique aux tons neutres, infusée d'huiles essentielles botaniques pour harmoniser n'importe quelle pièce de votre maison.",
+            aromaProfile: "Biologique, Botanique, Harmonieux, Neutre"
+        }
     }
 ];
 
@@ -1590,11 +1835,11 @@ const TRANSLATIONS = {
         en: "Handcrafted & Natural",
         fr: "Artisanal & Naturel"
     },
-    "hero-title": {
-        pt: "Feito à mão, <br><span>com cheiro de amor</span>",
-        es: "Hecho a mano, <br><span>con aroma de amor</span>",
-        en: "Handcrafted, <br><span>with a scent of love</span>",
-        fr: "Fait main, <br><span>avec un parfum d'amour</span>"
+        "hero-title": {
+        pt: "Bem-vindo à Com Cheiro de Amor, <br><span>onde não é apenas artesanato, mas sim a paixão e entrega do detalhe</span>",
+        es: "Bienvenido a Com Cheiro de Amor, <br><span>donde no es solo artesanía, sino la pasión y entrega por el detalle</span>",
+        en: "Welcome to Com Cheiro de Amor, <br><span>where it is not just craft, but the passion and dedication to detail</span>",
+        fr: "Bienvenue chez Com Cheiro de Amor, <br><span>où ce n'est pas seulement de l'artisanat, mais la passion et le souci du détail</span>"
     },
     "hero-desc": {
         pt: "Não procuramos a perfeição, procuramos a entrega. Transforme o seu lar com a luz das nossas velas e aromas, onde cada peça se transforma num detalhe e cada sabonete oferece uma experiência única. Criados com alma, cuidado e carinho.",
@@ -2014,7 +2259,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalQtyNum = document.querySelector(".modal-qty-selector .qty-num");
     const modalMinusBtn = document.querySelector(".modal-qty-selector .qty-btn:first-child");
     const modalPlusBtn = document.querySelector(".modal-qty-selector .qty-btn:last-child");
-    const modalAddToCartBtn = document.querySelector(".modal-info-panel .btn-primary");
+    const modalAddToCartBtn = document.getElementById("btn-modal-add-to-cart") || document.querySelector(".modal-wrapper .btn-primary");
 
     // Dynamic state variables for modal
     let activeModalProductId = null;
@@ -2529,6 +2774,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         updateCartCount();
+        renderCart();
     };
 
     const removeFromCart = (productId) => {
