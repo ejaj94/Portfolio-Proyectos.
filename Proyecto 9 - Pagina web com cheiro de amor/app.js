@@ -352,39 +352,39 @@ const PRODUCTS = [
             aromaProfile: "Rose, Intense, Unique, Mystique"
         }
     },
-    {
+        {
         id: "candle-margarida-1",
         category: "vela",
-        price: 8.90,
+        price: 6.90,
         image: "assets/candle_margarida_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Flor Margarida Delicada",
+            name: "Vela Margarida",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela em formato de margarida com pétalas detalhadas e mel de camomila.",
-            description: "Flor de margarida moldada à mão em cera de soja natural. Perfumada com notas doces de mel de flores e camomila, traz aconchego e calma.",
-            aromaProfile: "Margarida, Camomila, Mel de Flores"
+            aromaBrief: "Vela decorativa com aroma de camomila e flor de laranjeira.",
+            description: "Vela decorativa com aroma de camomila e flor de laranjeira, que dá um aroma único e especial ao seu lar.",
+            aromaProfile: "Camomila, Flor de Laranjeira, Único, Especial"
         },
         es: {
-            name: "Vela Flor Margarita Delicada",
+            name: "Vela Margarita",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela con forma de margarita con pétalos detallados y miel de manzanilla.",
-            description: "Flor de margarita moldeada a mano en cera de soja natural. Perfumada con notas dulces de miel de flores y manzanilla, aporta calidez y calma.",
-            aromaProfile: "Margarita, Manzanilla, Miel de Flores"
+            aromaBrief: "Vela decorativa con aroma de manzanilla y flor de azahar.",
+            description: "Vela decorativa con aroma de manzanilla y flor de azahar, que aporta un aroma único y especial a tu hogar.",
+            aromaProfile: "Manzanilla, Flor de Azahar, Único, Especial"
         },
         en: {
-            name: "Delicate Daisy Flower Candle",
+            name: "Daisy Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Daisy-shaped candle with detailed petals and chamomile honey scent.",
-            description: "Hand-molded daisy flower made of natural soy wax. Scented with sweet notes of flower honey and chamomile, bringing warmth and calm.",
-            aromaProfile: "Daisy, Chamomile, Flower Honey"
+            aromaBrief: "Decorative candle with chamomile and orange blossom fragrance.",
+            description: "Decorative candle with chamomile and orange blossom fragrance, bringing a unique and special aroma to your home.",
+            aromaProfile: "Chamomile, Orange Blossom, Unique, Special"
         },
         fr: {
-            name: "Bougie Fleur de Marguerite Délicate",
+            name: "Bougie Marguerite",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Bougie en forme de marguerite aux pétales détaillés et miel de camomille.",
-            description: "Fleur de marguerite moulée à la main en cire de soja naturelle. Parfumée de notes douces de miel de fleurs et de camomille, elle apporte réconfort et calme.",
-            aromaProfile: "Marguerite, Camomille, Miel de Fleurs"
+            aromaBrief: "Bougie décorative au parfum de camomille et fleur d'oranger.",
+            description: "Bougie décorative au parfum de camomille et fleur d'oranger, apportant une senteur unique et spéciale à votre intérieur.",
+            aromaProfile: "Camomille, Fleur d'Oranger, Unique, Spécial"
         }
     },
     {
