@@ -247,39 +247,39 @@ const PRODUCTS = [
             aromaProfile: "Jasmin, Lys, Perles, Printemps"
         }
     },
-    {
+        {
         id: "candle-flora-3",
         category: "vela",
-        price: 11.90,
+        price: 8.90,
         image: "assets/candle_flora_3.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Escultural Flora Colunar",
+            name: "Vela Aromática Elegance",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Coluna de flores esculpida à mão com aroma envolvente de lavanda.",
-            description: "Coluna de rosas entrelaçadas esculpida à mão em cera vegetal, perfeita como centro de mesa para jantares ou decoração clássica com aroma calmante de lavanda.",
-            aromaProfile: "Lavanda, Herbal, Relaxante"
+            aromaBrief: "Vela decorativa aromática em recipiente de vidro refinado.",
+            description: "Vela decorativa aromática com um aroma leve e suave em recipiente de vidro que oferece luxo e elegância para uma maior e melhor experiência olfativa.",
+            aromaProfile: "Sofisticado, Vidro Refinado, Elegante"
         },
         es: {
-            name: "Vela Escultural Flora Columnar",
+            name: "Vela Aromática Elegance",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Columna de flores esculpida a mano con aroma envolvente a lavanda.",
-            description: "Columna de rosas entrelazadas esculpida a mano en cera vegetal, perfecta como centro de mesa para cenas o decoración clásica con aroma calmante de lavanda.",
-            aromaProfile: "Lavanda, Herbal, Relajante"
+            aromaBrief: "Vela decorativa aromática en recipiente de vidrio refinado.",
+            description: "Vela decorativa aromática con un aroma ligero y suave en recipiente de vidrio que ofrece lujo y elegancia para una mayor y mejor experiencia olfativa.",
+            aromaProfile: "Sofisticado, Vidrio Refinado, Elegante"
         },
         en: {
-            name: "Columnar Flora Sculptural Candle",
+            name: "Elegance Scented Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Hand-sculpted flower column with wrapping lavender scent.",
-            description: "Column of intertwined roses hand-sculpted in vegetable wax, perfect as a table centerpiece for dinners or classic decor with a soothing lavender scent.",
-            aromaProfile: "Lavender, Herbal, Relaxing"
+            aromaBrief: "Decorative scented candle in a refined glass container.",
+            description: "Decorative scented candle with a light and soft aroma in a glass container that offers luxury and elegance for a greater and better olfactory experience.",
+            aromaProfile: "Sophisticated, Refined Glass, Elegant"
         },
         fr: {
-            name: "Bougie Sculpturale Flora Colonne",
+            name: "Bougie Parfumée Elegance",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Colonne de fleurs sculptée à la main au parfum enveloppant de lavande.",
-            description: "Colonne de roses entrelacées sculptée à la main en cire végétale, parfaite comme centre de table pour les dîners ou décor classique au parfum apaisant de lavande.",
-            aromaProfile: "Lavande, Herbal, Relaxant"
+            aromaBrief: "Bougie décorative parfumée dans un récipient en verre raffiné.",
+            description: "Bougie décorative parfumée au parfum léger et doux dans un récipient en verre qui offre luxe et élégance pour une expérience olfactive inégalée.",
+            aromaProfile: "Sophistiqué, Verre Raffiné, Élégant"
         }
     },
     {
