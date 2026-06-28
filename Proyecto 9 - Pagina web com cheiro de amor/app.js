@@ -317,39 +317,39 @@ const PRODUCTS = [
             aromaProfile: "Fleurs, Paillettes, Doux, Enchanteur"
         }
     },
-    {
+        {
         id: "candle-luna-1",
         category: "vela",
-        price: 12.90,
+        price: 5.90,
         image: "assets/candle_luna_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Escultura Luna (Meia-Lua)",
+            name: "Vela Luna",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Silhueta mística de lua crescente em cera de soja com aroma sedutor.",
-            description: "Vela esculpida representando a lua com feições clássicas e calmas. Perfeita para noites de tranquilidade, leitura e meditação.",
-            aromaProfile: "Almíscar, Baunilha, Místico"
+            aromaBrief: "Vela aromática com pétalas de rosa para um aroma intenso e único.",
+            description: "Vela aromática com pétalas de rosa que dá um aroma intenso e único ao ambiente do seu lar.",
+            aromaProfile: "Rosa, Intenso, Único, Místico"
         },
         es: {
-            name: "Vela Escultura Luna (Media Luna)",
+            name: "Vela Luna",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Silueta mística de luna creciente en cera de soja con aroma seductor.",
-            description: "Vela escultórica que representa la luna con rasgos clásicos y calmados. Perfecta para noches de tranquilidad, lectura y meditación.",
-            aromaProfile: "Almizcle, Vainilla, Místico"
+            aromaBrief: "Vela aromática con pétalos de rosa para un aroma intenso y único.",
+            description: "Vela aromática con pétalos de rosa que aporta un aroma intenso y único al ambiente de tu hogar.",
+            aromaProfile: "Rosa, Intenso, Único, Místico"
         },
         en: {
-            name: "Luna Moon Sculptural Candle",
+            name: "Luna Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Mystical crescent moon silhouette in soy wax with a seductive scent.",
-            description: "Sculpted candle representing the moon with classic, calm features. Perfect for nights of tranquility, reading, and meditation.",
-            aromaProfile: "Musk, Vanilla, Mystical"
+            aromaBrief: "Scented candle with rose petals for an intense and unique aroma.",
+            description: "Scented candle with rose petals that brings an intense and unique aroma to your home environment.",
+            aromaProfile: "Rose, Intense, Unique, Mystical"
         },
         fr: {
-            name: "Bougie Sculpturale Luna (Demi-Lune)",
+            name: "Bougie Luna",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Silhouette mystique de croissant de lune au parfum séduisant.",
-            description: "Bougie sculptée représentant la lune aux traits classiques et calmes. Parfaite pour les nuits de tranquillité, de lecture et de méditation.",
-            aromaProfile: "Musc, Vanille, Mystique"
+            aromaBrief: "Bougie parfumée aux pétales de rose pour un parfum intense et unique.",
+            description: "Bougie parfumée aux pétales de rose qui apporte un parfum intense et unique à votre intérieur.",
+            aromaProfile: "Rose, Intense, Unique, Mystique"
         }
     },
     {
