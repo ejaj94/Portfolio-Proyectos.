@@ -387,39 +387,39 @@ const PRODUCTS = [
             aromaProfile: "Camomille, Fleur d'Oranger, Unique, Spécial"
         }
     },
-    {
+        {
         id: "candle-mira-1",
         category: "vela",
-        price: 13.90,
+        price: 4.90,
         image: "assets/candle_mira_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Busto Escultural Mira",
+            name: "Vela Mira",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Busto escultural clássico com essência limpa e suave de talco.",
-            description: "Vela escultural de busto clássico em cera de soja premium, aroma limpo a flores de algodão e talco que evoca limpeza e serenidade no lar.",
-            aromaProfile: "Suave, Talco, Algodão, Limpo"
+            aromaBrief: "Vela decorativa aromática que conjuga harmonia e elegância para o seu ambiente.",
+            description: "A nossa vela Mira é um toque de elegância que conjuga harmonia e aroma que sintoniza o seu ambiente.",
+            aromaProfile: "Elegância, Harmonia, Suave, Sereno"
         },
         es: {
-            name: "Vela Busto Escultural Mira",
+            name: "Vela Mira",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Busto escultural clásico con esencia limpia y suave a talco.",
-            description: "Vela escultórica de busto clásico de cera de soja premium, aroma limpio a flores de algodón y talco que evoca limpieza y serenidad en el hogar.",
-            aromaProfile: "Suave, Talco, Algodón, Limpio"
+            aromaBrief: "Vela decorativa aromática que conjuga armonía y elegancia para tu hogar.",
+            description: "Nuestra vela Mira es un toque de elegancia que conjuga armonía y aroma que sintoniza tu espacio.",
+            aromaProfile: "Elegancia, Armonía, Suave, Sereno"
         },
         en: {
-            name: "Mira Sculptural Bust Candle",
+            name: "Mira Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Classic sculptural bust with a clean, soft talc scent.",
-            description: "Sculptural candle of a classic bust in premium soy wax, featuring a clean cotton and talc scent that evokes cleanliness and serenity at home.",
-            aromaProfile: "Soft, Talcum, Cotton, Clean"
+            aromaBrief: "Decorative scented candle blending harmony and elegance for your space.",
+            description: "Our Mira candle is a touch of elegance that combines harmony and scent to tune your environment.",
+            aromaProfile: "Elegance, Harmony, Soft, Serene"
         },
         fr: {
-            name: "Bougie Buste Sculptural Mira",
+            name: "Bougie Mira",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Buste sculptural classique à l'essence propre et douce de talc.",
-            description: "Bougie sculptée en buste classique en cire de soja haut de gamme, au parfum propre de fleurs de coton et de talc qui évoque la propreté et la sérénité dans la maison.",
-            aromaProfile: "Doux, Talc, Coton, Propre"
+            aromaBrief: "Bougie décorative parfumée alliant harmonie et élégance pour votre intérieur.",
+            description: "Notre bougie Mira est une touche d'élégance qui allie harmonie et parfum pour harmoniser votre intérieur.",
+            aromaProfile: "Élégance, Harmonie, Doux, Sérénité"
         }
     },
     {
