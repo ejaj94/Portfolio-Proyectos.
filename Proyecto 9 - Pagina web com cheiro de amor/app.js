@@ -37,39 +37,39 @@ const PRODUCTS = [
             aromaProfile: "Rose, Marbré, Floral, Élégant"
         }
     },
-    {
+        {
         id: "candle-big_bear-1",
         category: "vela",
-        price: 15.90,
+        price: 12.90,
         image: "assets/candle_big_bear_1.jpeg",
         qty: 1,
         pt: {
             name: "Vela Urso Gigante",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Lindo urso esculpido em cera de soja, traz calor e doçura ao ambiente.",
-            description: "Ursinho fofo esculpido em cera de soja biodegradável, perfeito para decorar quartos de crianças ou criar uma atmosfera acolhedora e divertida.",
-            aromaProfile: "Doce Caramelo, Mel, Baunilha"
+            aromaBrief: "Vela decorativa aromática de urso, tamanho grande.",
+            description: "Vela decorativa aromática de urso em tamanho grande, feita à mão com cera de soja e aromas suaves para trazer calor e doçura ao ambiente.",
+            aromaProfile: "Achegado, Baunilha, Caramelo, Doce"
         },
         es: {
             name: "Vela Oso Gigante",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Lindo oso esculpido en cera de soja, trae calidez y dulzura al hogar.",
-            description: "Lindo osito esculpido en cera de soja biodegradable, perfecto para decorar habitaciones infantiles o crear una atmósfera acogedora y divertida.",
-            aromaProfile: "Dulce Caramelo, Miel, Vainilla"
+            aromaBrief: "Vela decorativa aromática de oso, tamaño grande.",
+            description: "Vela decorativa aromática de oso en tamaño grande, hecha a mano con cera de soja y aromas suaves para aportar calidez y dulzura a tu hogar.",
+            aromaProfile: "Acogedor, Vainilla, Caramelo, Dulce"
         },
         en: {
             name: "Big Bear Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Cute bear sculpted in soy wax, bringing warmth and sweetness.",
-            description: "Cute little bear sculpted from biodegradable soy wax, perfect for decorating children's rooms or creating a cozy, fun atmosphere.",
-            aromaProfile: "Sweet Caramel, Honey, Vanilla"
+            aromaBrief: "Decorative scented bear candle, large size.",
+            description: "Decorative scented bear candle in a large size, handcrafted from soy wax with soft fragrances to bring warmth and sweetness to your space.",
+            aromaProfile: "Cozy, Vanilla, Caramel, Sweet"
         },
         fr: {
             name: "Bougie Gros Ourson",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Joli ourson sculpté en cire de soja, apportant chaleur et douceur.",
-            description: "Joli petit ourson sculpté en cire de soja biodégradable, parfait pour décorer les chambres d'enfants ou créer une ambiance chaleureuse et ludique.",
-            aromaProfile: "Caramel Doux, Miel, Vanille"
+            aromaBrief: "Bougie décorative parfumée ourson, grand format.",
+            description: "Bougie décorative parfumée en forme d'ourson grand format, fabriquée à la main avec de la cire de soja et des senteurs douces pour apporter de la chaleur à votre intérieur.",
+            aromaProfile: "Chaleureux, Vanille, Caramel, Doux"
         }
     },
     {
