@@ -212,39 +212,39 @@ const PRODUCTS = [
             aromaProfile: "Fleur d'Oranger, Agrume, Frais"
         }
     },
-    {
+        {
         id: "candle-flora-2",
         category: "vela",
-        price: 10.90,
+        price: 11.90,
         image: "assets/candle_flora_2.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Escultural Flora Esférica",
+            name: "Vela Flora Peónia Azul",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Esfera de peónias esculpidas com fragrância primaveril de jasmim.",
-            description: "Vela esférica de flores de cera vegetal com fragrância primaveril suave e relaxante, decorada com peónias em relevo de alta fidelidade.",
-            aromaProfile: "Jasmim, Lírio, Primavera"
+            aromaBrief: "Vela decorativa aromática com pérolas e tom azul céu em recipiente de gesso cerâmico alfa.",
+            description: "Vela decorativa aromática com um aroma leve e suave. Recipiente feito em gesso cerâmico alfa, uma peça simples e elegante com pérolas que dão detalhe e um tom azul céu incrível.",
+            aromaProfile: "Jasmim, Lírio, Pérolas, Primavera"
         },
         es: {
-            name: "Vela Escultural Flora Esférica",
+            name: "Vela Flora Peonía Azul",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Esfera de peonías esculpidas con fragancia primaveral de jazmín.",
-            description: "Vela esférica de flores de cera vegetal con fragancia primaveral suave y relajante, decorada con peonías en relieve de alta definición.",
-            aromaProfile: "Jazmín, Lirio, Primavera"
+            aromaBrief: "Vela decorativa aromática con perlas y tono azul cielo en recipiente de yeso cerámico alfa.",
+            description: "Vela decorativa aromática con un aroma ligero y suave. Recipiente hecho en yeso cerámico alfa, una pieza simple y elegante con perlas que aportan detalle y un tono azul cielo increíble.",
+            aromaProfile: "Jazmín, Lirio, Perlas, Primavera"
         },
         en: {
-            name: "Spherical Flora Sculptural Candle",
+            name: "Blue Peony Flora Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Spherical peony flowers with spring jasmine fragrance.",
-            description: "Vegetable wax spherical candle decorated with high-fidelity embossed peonies, featuring a soft and relaxing spring jasmine fragrance.",
-            aromaProfile: "Jasmine, Lily, Springtime"
+            aromaBrief: "Decorative scented candle with pearls and sky blue tone in an alpha ceramic plaster vessel.",
+            description: "Decorative scented candle with a light and soft aroma. Crafted in an alpha ceramic plaster vessel, a simple and elegant piece adorned with pearls for detail and an incredible sky blue tone.",
+            aromaProfile: "Jasmine, Lily, Pearls, Springtime"
         },
         fr: {
-            name: "Bougie Sculpturale Flora Sphérique",
+            name: "Bougie Flora Pivoine Bleue",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Sphère de pivoines sculptées au parfum printanier de jasmin.",
-            description: "Bougie sphérique florale en cire végétale au parfum printanier doux et relaxant, ornée de pivoines en relief haute définition.",
-            aromaProfile: "Jasmin, Lys, Printemps"
+            aromaBrief: "Bougie décorative parfumée aux perles et ton bleu ciel dans un récipient en plâtre céramique alpha.",
+            description: "Bougie décorative parfumée au parfum léger et doux. Récipient fabriqué en plâtre céramique alpha, une pièce simple et élégante ornée de perles et d'une incroyable nuance bleu ciel.",
+            aromaProfile: "Jasmin, Lys, Perles, Printemps"
         }
     },
     {
@@ -2445,7 +2445,7 @@ document.addEventListener("DOMContentLoaded", () => {
         modalTitle.textContent = translation.name;
         modalPrice.textContent = `€${product.price.toFixed(2)}`;
         modalDescription.textContent = translation.description;
-        aromaNotes.textContent = translation.aromaProfile;
+        if (aromaNotes) aromaNotes.textContent = translation.aromaProfile;
         
         modalQtyNum.textContent = activeModalQty;
 
@@ -2474,7 +2474,7 @@ document.addEventListener("DOMContentLoaded", () => {
         modalTitle.textContent = translation.name;
         modalPrice.textContent = `€${soap.price.toFixed(2)}`;
         modalDescription.textContent = translation.longDesc || translation.desc;
-        aromaNotes.textContent = translation.aromaProfile || "Natural, Hidratante, Botânico";
+        if (aromaNotes) aromaNotes.textContent = translation.aromaProfile || "Natural, Hidratante, Botânico";
         
         modalQtyNum.textContent = activeModalQty;
 

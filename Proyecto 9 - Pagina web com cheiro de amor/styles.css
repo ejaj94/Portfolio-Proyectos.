@@ -1105,6 +1105,7 @@ img {
 }
 
 .modal-aroma-profile {
+  display: none !important;
   margin-bottom: 2rem;
   background-color: var(--color-bg-secondary);
   padding: 1rem 1.25rem;
