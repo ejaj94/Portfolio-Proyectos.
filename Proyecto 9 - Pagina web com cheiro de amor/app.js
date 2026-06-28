@@ -2,145 +2,39 @@
    PRODUCT DATABASE (Artisanal Scented Candles, Bath Soaps, & Gift Sets)
    ========================================================================== */
 const PRODUCTS = [
-    {
-        id: "candle-lavender",
-        category: "vela",
-        price: 14.90,
-        image: "assets/candle_lavender.png",
-        qty: 1,
-        pt: {
-            name: "Vela de Alfazema & Camomila",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Notas florais puras de alfazema francesa combinadas com a suavidade calmante da camomila.",
-            description: "Feita à mão com cera de soja 100% natural, pavio de algodão orgânico e infundida com óleos essenciais terapêuticos de alfazema e camomila. Decorada com pétalas secas de lavanda cultivada localmente. Ideal para acalmar a mente antes de dormir ou criar um ambiente relaxante no final do dia.",
-            aromaProfile: "Fresco, Floral, Relaxante, Herbal"
-        },
-        es: {
-            name: "Vela de Lavanda & Manzanilla",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Notas florales puras de lavanda francesa combinadas con la suavidad calmante de la manzanilla.",
-            description: "Hecha a mano con cera de soja 100% natural, mecha de algodón orgánico e infundida con aceites esenciales terapéuticos de lavanda y manzanilla. Decorada con pétalos secas de lavanda cultivada localmente. Ideal para calmar la mente antes de dormir o crear un ambiente relajante al final del día.",
-            aromaProfile: "Fresco, Floral, Relajante, Herbal"
-        },
-        en: {
-            name: "Lavender & Chamomile Candle",
-            categoryLabel: "Scented Candle",
-            aromaBrief: "Pure floral notes of French lavender combined with the soothing softness of chamomile.",
-            description: "Handcrafted with 100% natural soy wax, organic cotton wick, and infused with therapeutic lavender and chamomile essential oils. Decorated with dried petals of locally grown lavender. Ideal for calming the mind before sleep or creating a relaxing atmosphere at the end of the day.",
-            aromaProfile: "Fresh, Floral, Relaxing, Herbal"
-        },
-        fr: {
-            name: "Bougie Lavande & Camomille",
-            categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Notes florales pures de lavande française combinées à la douceur apaisante de la camomille.",
-            description: "Fabriquée à la main avec de la cire de soja 100% naturelle, une mèche en coton biologique et infusée d'huiles essentielles thérapeutiques de lavande et de camomille. Décorée de pétales séchés de lavande cultivée localement. Idéale pour calmer l'esprit avant de dormir ou créer une ambiance relaxante en fin de journée.",
-            aromaProfile: "Frais, Floral, Relaxant, Herbal"
-        }
-    },
-    {
-        id: "gift-love",
-        category: "set",
-        price: 26.90,
-        image: "assets/gift_set.png",
-        qty: 1,
-        pt: {
-            name: "Kit Amor Eterno",
-            categoryLabel: "Set de Oferta",
-            aromaBrief: "O presente perfeito para celebrar o amor. Uma vela e um sabonete artesanal em caixa de luxo.",
-            description: "Este conjunto exclusivo reúne o melhor de dois mundos para criar um ritual de carinho completo. Inclui: 1x Vela Aromática Premium de Cera de Soja e 1x Sabonete Artesanal Botânico. Apresentado numa caixa branca elegante com laço de cetim e flores secas decorativas.",
-            aromaProfile: "Doce Floral, Sofisticado, Romântico"
-        },
-        es: {
-            name: "Kit Amor Eterno",
-            categoryLabel: "Set de Regalo",
-            aromaBrief: "El regalo perfecto para celebrar el amor. Una vela y un jabón artesanal en una caja de lujo.",
-            description: "Este exclusivo conjunto reúne lo mejor de dos mundos para crear un ritual de cariño completo. Incluye: 1x Vela Aromática Premium de Cera de Soja y 1x Jabón Artesanal Botánico. Presentado en una elegante caja blanca con lazo de satén y flores secas decorativas.",
-            aromaProfile: "Dulce Floral, Sofisticado, Romántico"
-        },
-        en: {
-            name: "Eternal Love Gift Set",
-            categoryLabel: "Gift Set",
-            aromaBrief: "The perfect gift to celebrate love. A candle and handcrafted soap in a luxury box.",
-            description: "This exclusive set gathers the best of both worlds to create a complete self-care ritual. Includes: 1x Premium Soy Wax Scented Candle and 1x Botanical Handcrafted Soap. Presented in an elegant white box with a satin bow and decorative dried flowers.",
-            aromaProfile: "Sweet Floral, Sophisticated, Romantic"
-        },
-        fr: {
-            name: "Coffret Amour Éternel",
-            categoryLabel: "Coffret Cadeau",
-            aromaBrief: "Le cadeau parfait pour célébrer l'amour. Une bougie et un savon artisanal dans une boîte de luxe.",
-            description: "Ce coffret exclusif réunit le meilleur des deux mondes pour créer un rituel de bien-être complet. Comprend : 1x Bougie Parfumée Premium en Cire de Soja et 1x Savon Artisanal Botanique. Présenté dans une élégante boîte blanche avec un ruban en satin et des fleurs séchées décoratives.",
-            aromaProfile: "Doux Floral, Sophistiqué, Romantique"
-        }
-    },
-    {
-        id: "candle-orange",
-        category: "vela",
-        price: 14.90,
-        image: "assets/candle_orange.png",
-        qty: 1,
-        pt: {
-            name: "Vela de Laranja & Canela",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Notas vibrantes de casca de laranja combinadas com o calor exótico e reconfortante da canela.",
-            description: "Uma experiência acolhedora que evoca noites aconchegantes junto à lareira. Formulada com cera de soja premium, cascas de laranja desidratadas e paus de canela no topo da vela. Uma fragrância cítrica e especiada que enche a casa de calor, energia positiva e alegria.",
-            aromaProfile: "Cítrico Quente, Especiado, Aconchegante, Festivo"
-        },
-        es: {
-            name: "Vela de Naranja & Canela",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Notas vibrantes de cáscara de naranja combinadas con el calor exótico y reconfortante de la canela.",
-            description: "Una experiencia acogedora que evoca noches reconfortantes junto a la chimenea. Formulada con cera de soja premium, cáscaras de naranja deshidratadas y ramitas de canela en la parte superior de la vela. Una fragrancia cítrica y especiada que llena el hogar de calor, energía positiva y alegría.",
-            aromaProfile: "Cítrico Cálido, Especiado, Acogedor, Festivo"
-        },
-        en: {
-            name: "Orange & Cinnamon Candle",
-            categoryLabel: "Scented Candle",
-            aromaBrief: "Vibrant notes of orange peel combined with the exotic and comforting warmth of cinnamon.",
-            description: "A welcoming experience evoking cozy nights by the fireplace. Formulated with premium soy wax, dehydrated orange peels, and cinnamon sticks on top. A citrus and spiced fragrance that fills the home with warmth, positive energy, and joy.",
-            aromaProfile: "Warm Citrus, Spiced, Cozy, Festive"
-        },
-        fr: {
-            name: "Bougie Orange & Cannelle",
-            categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Notes vibrantes d\'écorce d\'orange combinées à la chaleur exotique et réconfortante de la cannelle.",
-            description: "Une expérience chaleureuse qui évoque des nuits douillettes au coin du feu. Formulée avec de la cire de soja de qualité supérieure, des écorces d\'orange déshydratées et des bâtons de cannelle sur le dessus. Une fragrance hespérisée et épicée qui réchauffe l\'atmosphère, apportant de l\'énergie positive et de la joie.",
-            aromaProfile: "Agrume Chaud, Épicé, Chaleureux, Festif"
-        }
-    },
-
-    {
+        {
         id: "candle-benedita-1",
         category: "vela",
         price: 12.90,
         image: "assets/candle_benedita_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Escultural Benedita",
+            name: "Vela Benedita",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Silhueta clássica e artística com um aroma suave e reconfortante.",
-            description: "Busto feminino clássico esculpido à mão em cera de soja eco-friendly. Um toque de arte e sofisticação para decorar e perfumar a sua casa.",
-            aromaProfile: "Floral Suave, Baunilha, Delicado"
+            aromaBrief: "Vela decorativa aromática com rosa e detalhe marmorizado.",
+            description: "Vela decorativa aromática com rosa e detalhe marmorizado, feita à mão com cera de soja natural e essências selecionadas para decorar e perfumar o seu lar.",
+            aromaProfile: "Rosa, Marmorizado, Floral, Elegante"
         },
         es: {
-            name: "Vela Escultural Benedita",
+            name: "Vela Benedita",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Silueta clásica y artística con un aroma suave y reconfortante.",
-            description: "Busto femenino clásico esculpido a mano en cera de soja ecológica. Un toque de arte y sofisticación para decorar y perfumar tu hogar.",
-            aromaProfile: "Floral Suave, Vainilla, Delicado"
+            aromaBrief: "Vela decorativa aromática con rosa y detalle marmolado.",
+            description: "Vela decorativa aromática con rosa y detalle marmolado, hecha a mano con cera de soja natural y esencias seleccionadas para decorar y perfumar tu hogar.",
+            aromaProfile: "Rosa, Marmolado, Floral, Elegante"
         },
         en: {
-            name: "Benedita Sculptural Candle",
+            name: "Benedita Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Classic and artistic silhouette with a soft, comforting scent.",
-            description: "Classic female bust handcrafted from eco-friendly soy wax. A touch of art and sophistication to decorate and scent your home.",
-            aromaProfile: "Soft Floral, Vanilla, Delicate"
+            aromaBrief: "Decorative scented candle with rose and marbled detail.",
+            description: "Decorative scented candle with rose and marbled detail, handcrafted from natural soy wax and selected fragrances to decorate and scent your home.",
+            aromaProfile: "Rose, Marbled, Floral, Elegant"
         },
         fr: {
-            name: "Bougie Sculpturale Benedita",
+            name: "Bougie Benedita",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Silhouette classique et artistique au parfum doux et réconfortant.",
-            description: "Buste féminin classique sculpté à la main en cire de soja écologique. Une touche d'art et de sophistication pour décorer et parfumer votre maison.",
-            aromaProfile: "Floral Doux, Vanille, Délicat"
+            aromaBrief: "Bougie décorative parfumée à la rose et détail marbré.",
+            description: "Bougie décorative parfumée à la rose et détail marbré, fabriquée à la main avec de la cire de soja naturelle et des essences sélectionnées pour décorer et parfumer votre maison.",
+            aromaProfile: "Rose, Marbré, Floral, Élégant"
         }
     },
     {
@@ -150,28 +44,28 @@ const PRODUCTS = [
         image: "assets/candle_big_bear_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Escultural Urso Gigante",
+            name: "Vela Urso Gigante",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Lindo urso esculpido em cera de soja, traz calor e doçura ao ambiente.",
             description: "Ursinho fofo esculpido em cera de soja biodegradável, perfeito para decorar quartos de crianças ou criar uma atmosfera acolhedora e divertida.",
             aromaProfile: "Doce Caramelo, Mel, Baunilha"
         },
         es: {
-            name: "Vela Escultural Oso Gigante",
+            name: "Vela Oso Gigante",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Lindo oso esculpido en cera de soja, trae calidez y dulzura al hogar.",
             description: "Lindo osito esculpido en cera de soja biodegradable, perfecto para decorar habitaciones infantiles o crear una atmósfera acogedora y divertida.",
             aromaProfile: "Dulce Caramelo, Miel, Vainilla"
         },
         en: {
-            name: "Big Bear Sculptural Candle",
+            name: "Big Bear Candle",
             categoryLabel: "Scented Candle",
             aromaBrief: "Cute bear sculpted in soy wax, bringing warmth and sweetness.",
             description: "Cute little bear sculpted from biodegradable soy wax, perfect for decorating children's rooms or creating a cozy, fun atmosphere.",
             aromaProfile: "Sweet Caramel, Honey, Vanilla"
         },
         fr: {
-            name: "Bougie Sculpturale Gros Ourson",
+            name: "Bougie Gros Ourson",
             categoryLabel: "Bougie Parfumée",
             aromaBrief: "Joli ourson sculpté en cire de soja, apportant chaleur et douceur.",
             description: "Joli petit ourson sculpté en cire de soja biodégradable, parfait pour décorer les chambres d'enfants ou créer une ambiance chaleureuse et ludique.",
@@ -185,28 +79,28 @@ const PRODUCTS = [
         image: "assets/candle_big_heart_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Coração Geométrico (Big Heart)",
+            name: "Vela Big Heart",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Design moderno de coração lapidado em cera de soja com perfume romântico.",
             description: "Vela escultural de coração com desenho geométrico lapidado, fundida com essência romântica de frutas vermelhas. Perfeita para presentear quem mais ama.",
             aromaProfile: "Romântico, Frutas Vermelhas, Amor"
         },
         es: {
-            name: "Vela Corazón Geométrico",
+            name: "Vela Big Heart",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Diseño moderno de corazón facetado en cera de soja con fragancia romántica.",
             description: "Vela de corazón escultórica con diseño geométrico facetado, fundida con aroma romántico de frutos rojos. Perfecta para regalar a quien más amas.",
             aromaProfile: "Romántico, Frutos Rojos, Amor"
         },
         en: {
-            name: "Geometric Big Heart Candle",
+            name: "Vela Big Heart",
             categoryLabel: "Scented Candle",
             aromaBrief: "Modern faceted heart design in soy wax with a romantic scent.",
             description: "Sculptural heart candle with a faceted geometric design, infused with a romantic red berries essence. Perfect for gifting to your loved ones.",
             aromaProfile: "Romantic, Red Berries, Love"
         },
         fr: {
-            name: "Bougie Cœur Géométrique",
+            name: "Vela Big Heart",
             categoryLabel: "Bougie Parfumée",
             aromaBrief: "Design moderne de cœur facetté en cire de soja avec parfum romantique.",
             description: "Bougie cœur sculpturale au design géométrique facetté, infusée d'une essence romantique de fruits rouges. Idéale à offrir à ceux que vous aimez.",
@@ -1703,10 +1597,10 @@ const TRANSLATIONS = {
         fr: "Fait main, <br><span>avec un parfum d'amour</span>"
     },
     "hero-desc": {
-        pt: "Transforme a atmosfera do seu lar com a nossa coleção exclusiva de velas de cera de soja natural e sabonetes de banho aromáticos. Criados com alma, cuidado e carinho.",
-        es: "Transforma la atmósfera de tu hogar con nuestra colección exclusiva de velas de cera de soja natural y jabones de baño aromáticos. Creados con alma, cuidado y cariño.",
-        en: "Transform your home's atmosphere with our exclusive collection of natural soy wax candles and aromatic bath soaps. Crafted with soul, care, and love.",
-        fr: "Transformez l'atmosphère de votre foyer avec notre collection exclusive de bougies en cire de soja naturelle et de savons de bain aromatiques. Créés avec âme, soin et tendresse."
+        pt: "Não procuramos a perfeição, procuramos a entrega. Transforme o seu lar com a luz das nossas velas e aromas, onde cada peça se transforma num detalhe e cada sabonete oferece uma experiência única. Criados com alma, cuidado e carinho.",
+        es: "No buscamos la perfección, buscamos la entrega. Transforma tu hogar con la luz de nuestras velas y aromas, donde cada pieza se convierte en un detalle y cada jabón ofrece una experiencia única. Creados con alma, cuidado y cariño.",
+        en: "We don't seek perfection, we seek dedication. Transform your home with the light of our candles and scents, where each piece becomes a detail and every soap offers a unique experience. Crafted with soul, care, and devotion.",
+        fr: "Nous ne cherchons pas la perfection, nous cherchons le dévouement. Transformez votre foyer avec la lumière de nos bougies et de nos parfums, où chaque pièce devient un détail et chaque savon offre une expérience unique. Créés avec âme, soin et tendresse."
     },
     "btn-hero-shop": {
         pt: 'Explorar Catálogo <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>',
