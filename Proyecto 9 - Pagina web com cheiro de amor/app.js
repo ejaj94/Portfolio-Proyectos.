@@ -282,39 +282,39 @@ const PRODUCTS = [
             aromaProfile: "Sophistiqué, Verre Raffiné, Élégant"
         }
     },
-    {
+        {
         id: "candle-flowers-1",
         category: "vela",
-        price: 14.90,
+        price: 4.90,
         image: "assets/candle_flowers_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Aromática Garden (Flores Secas)",
+            name: "Shining Flowers",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Copo decorado com flores botânicas desidratadas e aroma campestre fresco.",
-            description: "Vela aromática em copo de vidro decorada no topo com flores e ervas silvestres desidratadas. Exala uma fragrância fresca e herbal que lembra um jardim inglês.",
-            aromaProfile: "Flores Silvestres, Alecrim, Fresco"
+            aromaBrief: "Vela decorativa aromática em recipiente de vidro com glitters brilhantes.",
+            description: "Vela decorativa aromática com um aroma leve e suave em recipiente de vidro e com glitters para dar um brilho especial ao seu ambiente.",
+            aromaProfile: "Flores, Brilho, Suave, Encantador"
         },
         es: {
-            name: "Vela Aromática Garden (Flores Secas)",
+            name: "Shining Flowers",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Copa decorada con flores botánicas deshidratadas y aroma campestre fresco.",
-            description: "Vela aromática en copa de vidrio decorada en la parte superior con flores y hierbas silvestres deshidratadas. Exhala una fragancia fresca y herbal que recuerda a un jardín inglés.",
-            aromaProfile: "Flores Silvestres, Romero, Fresco"
+            aromaBrief: "Vela decorativa aromática en recipiente de vidrio con purpurina brillante.",
+            description: "Vela decorativa aromática con un aroma ligero y suave en recipiente de vidrio y con purpurina para aportar un brillo especial a tu hogar.",
+            aromaProfile: "Flores, Brillo, Suave, Encantador"
         },
         en: {
-            name: "Garden Scented Candle (Dried Flowers)",
+            name: "Shining Flowers",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Glass jar decorated with dried botanical flowers and fresh country scent.",
-            description: "Aromatic glass jar candle decorated on top with dried wild flowers and herbs. It exudes a fresh and herbal fragrance reminding of an English garden.",
-            aromaProfile: "Wild Flowers, Rosemary, Fresh"
+            aromaBrief: "Decorative scented candle in a glass container with sparkling glitters.",
+            description: "Decorative scented candle with a light and soft aroma in a glass container featuring glitters to bring a special shine to your space.",
+            aromaProfile: "Flowers, Sparkle, Soft, Enchanting"
         },
         fr: {
-            name: "Bougie Parfumée Garden (Fleurs Séchées)",
+            name: "Shining Flowers",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Pot en verre décoré de fleurs séchées et parfum de campagne.",
-            description: "Bougie parfumée en pot de verre décorée sur le dessus de fleurs sauvages et d'herbes séchées. Elle exhale une fragrance fraîche et herbacée rappelant un jardin anglais.",
-            aromaProfile: "Fleurs Sauvages, Romarin, Frais"
+            aromaBrief: "Bougie décorative parfumée dans un récipient en verre avec paillettes brillantes.",
+            description: "Bougie décorative parfumée au parfum léger et doux dans un récipient en verre agrémenté de paillettes pour apporter une brillance spéciale à votre intérieur.",
+            aromaProfile: "Fleurs, Paillettes, Doux, Enchanteur"
         }
     },
     {
