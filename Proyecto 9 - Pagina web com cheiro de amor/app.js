@@ -457,39 +457,39 @@ const PRODUCTS = [
             aromaProfile: "Protection, Purification, Mystique, Sel Marin"
         }
     },
-    {
+        {
         id: "candle-peonia-1",
         category: "vela",
-        price: 9.90,
+        price: 14.90,
         image: "assets/candle_peonia_1.jpeg",
         qty: 1,
         pt: {
             name: "Vela Flor Peónia Premium",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Pétalas de peónia em relevo com aroma floral romântico de rosas.",
-            description: "Vela em formato de peónia aberta com pétalas realistas esculpidas. Traz elegância, charme e frescor floral luxuoso a qualquer divisão da casa.",
-            aromaProfile: "Peónia, Rosas, Romântico, Luxuoso"
+            aromaBrief: "Vela aromática peónia grande de 19 cm para marcar presença no seu lar.",
+            description: "Vela aromática peónia grande. Elegância e aroma combinados numa só vela para marcar presença no seu lar, com um diâmetro de 19 cm que fará ressaltar esta incrível peça única.",
+            aromaProfile: "Peónia, Elegância, Luxuoso, Único"
         },
         es: {
             name: "Vela Flor Peonía Premium",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Pétalos de peonía en relieve con aroma floral romántico de rosas.",
-            description: "Vela con forma de peonía abierta con pétalos realistas esculpidos. Aporta elegancia, encanto y frescor floral lujoso a cualquier estancia del hogar.",
-            aromaProfile: "Peonía, Rosas, Romántico, Lujoso"
+            aromaBrief: "Vela aromática peonía grande de 19 cm para marcar presencia en tu hogar.",
+            description: "Vela aromática peonía grande. Elegancia y aroma combinados en una sola vela para marcar presencia en tu hogar, con un diámetro de 19 cm que hará resaltar esta increíble pieza única.",
+            aromaProfile: "Peonía, Elegancia, Lujoso, Único"
         },
         en: {
             name: "Premium Peony Flower Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Peony petals in relief with a romantic floral rose scent.",
-            description: "Open peony flower shaped candle with realistic sculpted petals. It brings elegance, charm, and a luxurious floral freshness to any room.",
-            aromaProfile: "Peony, Roses, Romantic, Luxurious"
+            aromaBrief: "Large 19 cm peony scented candle to make a bold statement in your home.",
+            description: "Large peony scented candle. Elegance and aroma combined in a single candle to make a statement in your home, with a 19 cm diameter that will highlight this incredible unique piece.",
+            aromaProfile: "Peony, Elegance, Luxurious, Unique"
         },
         fr: {
             name: "Bougie Fleur de Pivoine Premium",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Pétales de pivoine en relief au parfum floral romantique de roses.",
-            description: "Bougie en forme de pivoine ouverte aux pétales réalistes sculptés. Elle apporte de l'élégance, du charme et une fraîcheur florale luxueuse à n'importe quelle pièce.",
-            aromaProfile: "Pivoine, Roses, Romantique, Luxueux"
+            aromaBrief: "Grande bougie parfumée pivoine de 19 cm pour faire sensation dans votre intérieur.",
+            description: "Grande bougie parfumée pivoine. Élégance et parfum combinés dans une seule bougie pour marquer les esprits dans votre intérieur, avec un diamètre de 19 cm qui fera ressortir cette incroyable pièce unique.",
+            aromaProfile: "Pivoine, Élégance, Luxueux, Unique"
         }
     },
     {
