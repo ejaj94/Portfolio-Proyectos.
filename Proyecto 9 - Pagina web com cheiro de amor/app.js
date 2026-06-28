@@ -142,39 +142,39 @@ const PRODUCTS = [
             aromaProfile: "Bois de Santal, Relaxation, Méditation"
         }
     },
-    {
+        {
         id: "candle-coracoes-1",
         category: "vela",
-        price: 7.90,
+        price: 4.90,
         image: "assets/candle_coracoes_1.jpeg",
         qty: 1,
         pt: {
-            name: "Mini Velas Corações de Amor",
+            name: "Corações de Amor",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Pack de mini corações decorativos para momentos românticos e especiais.",
-            description: "Conjunto de pequenas velas em formato de coração ideais para jantares românticos, decoração de mesas ou lembranças de casamento personalizadas. Aroma suave de baunilha.",
-            aromaProfile: "Baunilha Doce, Jasmim, Romântico"
+            aromaBrief: "Vela em formato de coração ideal para momentos românticos e especiais.",
+            description: "Vela em formato de coração ideal para jantares românticos, decoração de mesas ou lembranças de casamento personalizadas. Aroma suave e envolvente. Ideal para ambientalizar.",
+            aromaProfile: "Suave, Envolvente, Romântico"
         },
         es: {
-            name: "Mini Velas Corazones de Amor",
+            name: "Corazones de Amor",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Pack de mini corazones decorativos para momentos románticos y especiales.",
-            description: "Conjunto de pequeñas velas con forma de corazón ideales para cenas románticas, decoración de mesas o detalles de boda personalizados. Aroma suave a vainilla.",
-            aromaProfile: "Vainilla Dulce, Jazmín, Romántico"
+            aromaBrief: "Vela en forma de corazón ideal para momentos románticos y especiales.",
+            description: "Vela en forma de corazón ideal para cenas románticas, decoración de mesas o recuerdos de boda personalizados. Aroma suave y envolvente. Ideal para crear ambiente.",
+            aromaProfile: "Suave, Envolvente, Romántico"
         },
         en: {
-            name: "Mini Love Hearts Candle Set",
+            name: "Love Hearts Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Pack of mini decorative hearts for romantic and special moments.",
-            description: "Set of small heart-shaped candles ideal for romantic dinners, table decorations, or personalized wedding favors. Sweet vanilla scent.",
-            aromaProfile: "Sweet Vanilla, Jasmine, Romantic"
+            aromaBrief: "Heart-shaped candle ideal for romantic and special moments.",
+            description: "Heart-shaped candle ideal for romantic dinners, table decorations, or personalized wedding favors. Soft and enveloping scent. Ideal for setting the mood.",
+            aromaProfile: "Soft, Enveloping, Romantic"
         },
         fr: {
-            name: "Mini Bougies Cœurs d'Amour",
+            name: "Cœurs d'Amour",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Lot de mini cœurs décoratifs pour moments romantiques et spéciaux.",
-            description: "Ensemble de petites bougies en forme de cœur idéales pour les dîners romantiques, la décoration de table ou les cadeaux de mariage personnalisés. Parfum doux de vanille.",
-            aromaProfile: "Vanille Douce, Jasmin, Romantique"
+            aromaBrief: "Bougie en forme de cœur idéale pour les moments romantiques et spéciaux.",
+            description: "Bougie en forme de cœur idéale pour les dîners romantiques, la décoration de table ou les cadeaux de mariage personnalisés. Parfum doux et enveloppant. Idéale pour créer une ambiance.",
+            aromaProfile: "Doux, Enveloppant, Romantique"
         }
     },
     {
