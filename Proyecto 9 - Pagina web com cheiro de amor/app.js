@@ -107,38 +107,38 @@ const PRODUCTS = [
             aromaProfile: "Romantique, Fruits Rouges, Amour"
         }
     },
-    {
+        {
         id: "candle-conjunto_budas-1",
         category: "vela",
-        price: 19.90,
+        price: 9.90,
         image: "assets/candle_conjunto_budas_1.jpeg",
         qty: 1,
         pt: {
-            name: "Conjunto Três Budas da Paz",
+            name: "Conjunto de Budas",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Trio de pequenos budas representativos em cera com essência de sândalo.",
-            description: "Três velas esculpidas em formato de budas da paz (não fale, não ouça, não veja o mal) com fragrância relaxante de sândalo, trazendo harmonia e paz ao lar.",
+            aromaBrief: "Conjunto de velas de 4 budas: não fale, não ouça, não veja o mal, oração contínua.",
+            description: "Conjunto de velas de 4 budas (não fale, não ouça, não veja o mal, oração contínua) feitas em cera de soja natural com fragrância relaxante de sândalo para trazer harmonia e paz ao lar.",
             aromaProfile: "Sândalo, Relaxamento, Meditação"
         },
         es: {
-            name: "Conjunto de Velas Budas de la Paz",
+            name: "Conjunto de Budas",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Trío de pequeños budas representativos en cera con aroma a sándalo.",
-            description: "Tres velas escultóricas con forma de budas de la paz (no hables, no oigas, no veas el mal) con aroma relajante a sándalo, aportando armonía y paz al hogar.",
+            aromaBrief: "Conjunto de velas de 4 budas: no hables, no oigas, no veas el mal, oración continua.",
+            description: "Conjunto de velas de 4 budas (no hables, no oigas, no veas el mal, oración continua) hechas en cera de soja natural con aroma relajante a sándalo para aportar armonía y paz al hogar.",
             aromaProfile: "Sándalo, Relajación, Meditación"
         },
         en: {
-            name: "Peace Buddhas Candle Set",
+            name: "Buddhas Candle Set",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Trio of small representative buddhas in soy wax with sandalwood scent.",
-            description: "Three candles sculpted in the shape of peace buddhas (speak no evil, hear no evil, see no evil) with a relaxing sandalwood fragrance, bringing harmony and peace home.",
+            aromaBrief: "Set of 4 buddha candles: speak no evil, hear no evil, see no evil, continuous prayer.",
+            description: "Set of 4 buddha candles (speak no evil, hear no evil, see no evil, continuous prayer) crafted from natural soy wax with a relaxing sandalwood fragrance.",
             aromaProfile: "Sandalwood, Relaxation, Meditation"
         },
         fr: {
-            name: "Coffret Bougies Bouddhas de la Paix",
+            name: "Coffret de Bouddhas",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Trio de petits bouddhas représentatifs en cire au parfum de santal.",
-            description: "Trois bougies sculptées en forme de bouddhas de la paix (ne rien dire, ne rien entendre, ne rien voir de mal) au parfum relaxant de bois de santal, apportant harmonie et paix à la maison.",
+            aromaBrief: "Ensemble de 4 bougies bouddhas : ne rien dire, ne rien entendre, ne rien voir, prière continue.",
+            description: "Ensemble de 4 bougies bouddhas (ne rien dire, ne rien entendre, ne rien voir de mal, prière continue) en cire de soja naturelle avec un parfum relaxant de bois de santal.",
             aromaProfile: "Bois de Santal, Relaxation, Méditation"
         }
     },
