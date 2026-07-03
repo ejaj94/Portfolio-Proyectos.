@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Com Cheiro de Amor | Workshop Pamphlet Studio</title>
+    
+    <!-- Meta SEO -->
+    <meta name="description" content="Design Studio interactivo para o panfleto do workshop da marca Com Cheiro de Amor. Personalize, visualize 10 estilos e exporte.">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Studio Header -->
+    <header class="studio-header">
+        <div class="header-logo-section">
+            <img src="assets/logo.jpg" alt="Logo" class="studio-brand-logo">
+            <div>
+                <h1>Com Cheiro de Amor</h1>
+                <p class="studio-subtitle">Workshop Pamphlet Design Studio</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="toggle-group">
+                <span class="toggle-label">Idioma do Panfleto / Pamphlet Language:</span>
+                <button class="toggle-btn active" id="btn-lang-pt" onclick="setLanguage('pt')">Português</button>
+                <button class="toggle-btn" id="btn-lang-en" onclick="setLanguage('en')">English</button>
+            </div>
+            <button class="btn-print" onclick="window.print()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                </svg>
+                Imprimir / PDF
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="studio-container">
+        
+        <!-- Left Sidebar: Controls & Customization -->
+        <aside class="studio-sidebar">
+            
+            <!-- Section 1: Style Selector (10 Examples) -->
+            <div class="sidebar-section">
+                <h3 class="section-heading">
+                    <span class="icon">🎨</span> 10 Estilos / 10 Styles
+                </h3>
+                <p class="section-desc">Escolha um dos 10 designs exclusivos criados com carinho:</p>
+                
+                <div class="style-grid" id="style-selector-grid">
+                    <button class="style-card active" data-style="rustic" onclick="selectStyle('rustic')">
+                        <div class="color-preview" style="background: linear-gradient(135deg, #FCF9F5, #C08A7C);"></div>
+                        <span class="style-name">1. Rustic Botanical</span>
+                    </button>
+                    <button class="style-card" data-style="luxury" onclick="selectStyle('luxury')">
+                        <div class="color-preview" style="background: linear-gradient(135deg, #FFFFFF, #C5A059);"></div>
+                        <span class="style-name">2. Minimalist Luxury</span>
+                    </button>
+                    <button class="style-card" data-style="mediterranean" onclick="selectStyle('mediterranean')">
+                        <div class="color-preview" style="background: linear-gradient(135deg, #F6F0EC, #3B5998);"></div>
+                        <span class="style-name">3. Mediterranean Algarve</span>
+                    </button>
+                    <button class="style-card" data-style="zen" onclick="selectStyle('zen')">
+                        <div class="color-preview" style="background: linear-gradient(135deg, #E6E6FA, #4B0082);"></div>
+                        <span class="style-name">4. Holistic Zen</span>
+                    </button>
+                    <button class="style-card" data-style="apothecary" onclick="selectStyle('apothecary')">
+                        <div class="color-preview" style="background: linear-gradient(135deg, #F5F2EB, #2E2522);"></div>
+                        <span class="style-name">5. Vintage Apothecary</span>
+                    </button>
+                    <button class="style-card" data-style="sage" onclick="selectStyle('sage')">
+                        <div class="color-preview" style="background: linear-gradient(135deg, #F4F7F4, #708238);"></div>
+                        <span class="style-name">6. Eco Sage</span>
+                    </button>
+                    <button class="style-card" data-style="rose" onclick="selectStyle('rose')">
+                        <div class="color-preview" style="background: linear-gradient(135deg, #FFF0F0, #DDA0DD);"></div>
+                        <span class="style-name">7. Blush Rose</span>
+                    </button>
+                    <button class="style-card" data-style="arch" onclick="selectStyle('arch')">
+                        <div class="color-preview" style="background: linear-gradient(135deg, #F6F0EC, #C08A7C);"></div>
+                        <span class="style-name">8. Modern Arch</span>
+                    </button>
+                    <button class="style-card" data-style="citrus" onclick="selectStyle('citrus')">
+                        <div class="color-preview" style="background: linear-gradient(135deg, #FFF8ED, #FF8C00);"></div>
+                        <span class="style-name">9. Citrus Blossom</span>
+                    </button>
+                    <button class="style-card" data-style="velvet" onclick="selectStyle('velvet')">
+                        <div class="color-preview" style="background: linear-gradient(135deg, #FFFFFF, #D4AF37);"></div>
+                        <span class="style-name">10. Gold & White Velvet</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section 2: Interactive Editor -->
+            <div class="sidebar-section">
+                <h3 class="section-heading">
+                    <span class="icon">✏️</span> Personalizar Texto / Edit Content
+                </h3>
+                <p class="section-desc">Edite o conteúdo em tempo real para os panfletos:</p>
+                
+                <div class="editor-accordion">
+                    <!-- Front Cover -->
+                    <details open>
+                        <summary>Capa / Cover</summary>
+                        <div class="editor-fields">
+                            <label>Título Principal / Main Title</label>
+                            <input type="text" id="edit-cover-title" oninput="updateText('cover-title', this.value)">
+                            
+                            <label>Subtítulo / Subtitle</label>
+                            <input type="text" id="edit-cover-subtitle" oninput="updateText('cover-subtitle', this.value)">
+                            
+                            <label>Slogan / Footer Slogan</label>
+                            <input type="text" id="edit-cover-slogan" oninput="updateText('cover-slogan', this.value)">
+                        </div>
+                    </details>
+
+                    <!-- Story -->
+                    <details>
+                        <summary>A Nossa História / Our Story</summary>
+                        <div class="editor-fields">
+                            <label>Título da Secção / Section Title</label>
+                            <input type="text" id="edit-story-title" oninput="updateText('story-title', this.value)">
+                            
+                            <label>Conteúdo / Content</label>
+                            <textarea id="edit-story-body" rows="6" oninput="updateText('story-body', this.value)"></textarea>
+                            
+                            <label>Citação Destaque / Highlight Quote</label>
+                            <input type="text" id="edit-story-quote" oninput="updateText('story-quote', this.value)">
+                        </div>
+                    </details>
+
+                    <!-- The Workshop -->
+                    <details>
+                        <summary>O Workshop / The Workshop</summary>
+                        <div class="editor-fields">
+                            <label>Título da Secção / Section Title</label>
+                            <input type="text" id="edit-workshop-title" oninput="updateText('workshop-title', this.value)">
+                            
+                            <label>Conteúdo / Content</label>
+                            <textarea id="edit-workshop-body" rows="6" oninput="updateText('workshop-body', this.value)"></textarea>
+                        </div>
+                    </details>
+
+                    <!-- Materials -->
+                    <details>
+                        <summary>O que é necessário / Materials Needed</summary>
+                        <div class="editor-fields">
+                            <label>Título da Secção / Section Title</label>
+                            <input type="text" id="edit-materials-title" oninput="updateText('materials-title', this.value)">
+                            
+                            <label>Materiais (Separados por vírgula ou linha) / Materials</label>
+                            <textarea id="edit-materials-body" rows="6" oninput="updateMaterialsList(this.value)"></textarea>
+                        </div>
+                    </details>
+
+                    <!-- Notes Section -->
+                    <details>
+                        <summary>Secção de Notas / Notes Section</summary>
+                        <div class="editor-fields">
+                            <label>Título da Secção / Section Title</label>
+                            <input type="text" id="edit-notes-title" oninput="updateText('notes-title', this.value)">
+                            
+                            <label>Texto Auxiliar / Subtitle</label>
+                            <input type="text" id="edit-notes-subtitle" oninput="updateText('notes-subtitle', this.value)">
+                        </div>
+                    </details>
+
+                    <!-- Advertising & Back Cover -->
+                    <details>
+                        <summary>Publicidade & Contacto / Shop & Contacts</summary>
+                        <div class="editor-fields">
+                            <label>Título de Publicidade / Promo Title</label>
+                            <input type="text" id="edit-promo-title" oninput="updateText('promo-title', this.value)">
+                            
+                            <label>Texto de Publicidade / Promo Body</label>
+                            <textarea id="edit-promo-body" rows="4" oninput="updateText('promo-body', this.value)"></textarea>
+                            
+                            <label>Contacto de Encomendas / Contact Text</label>
+                            <input type="text" id="edit-contact-text" oninput="updateText('contact-text', this.value)">
+                        </div>
+                    </details>
+                </div>
+            </div>
+            
+        </aside>
+
+        <!-- Right Side: Brochure Canvas & Face Toggle -->
+        <section class="studio-canvas-panel">
+            
+            <!-- Face Toggle Toolbar -->
+            <div class="canvas-toolbar">
+                <div class="tab-group">
+                    <button class="tab-btn active" id="btn-face-inside" onclick="toggleFace('inside')">
+                        📖 Lado Interior (Conteúdo) / Inside View
+                    </button>
+                    <button class="tab-btn" id="btn-face-outside" onclick="toggleFace('outside')">
+                        📁 Lado Exterior (Capas) / Outside View
+                    </button>
+                </div>
+                <div class="help-tooltip">
+                    <span>💡 <i>Dica: Este panfleto foi desenhado para ser dobrado em 3 partes (Tríptico / Tri-fold).</i></span>
+                </div>
+            </div>
+
+            <!-- Virtual 3-Fold Brochure Container -->
+            <div class="brochure-viewport">
+                
+                <!-- The Brochure Sheet (Landscape) -->
+                <div class="brochure-sheet style-rustic" id="pamphlet-sheet">
+                    
+                    <!-- FACE 1: INSIDE SPREAD (When opened completely) -->
+                    <div class="brochure-face" id="face-inside">
+                        <!-- Column 1: A Nossa História / Our Story -->
+                        <div class="brochure-panel panel-story">
+                            <div class="panel-header-design"></div>
+                            <div class="panel-content">
+                                <span class="panel-tag">Com Cheiro de Amor</span>
+                                <h2 class="panel-title" id="text-story-title">A Nossa História</h2>
+                                <div class="title-divider"></div>
+                                <p class="panel-text" id="text-story-body">
+                                    A <i>Com Cheiro de Amor</i> nasceu do desejo de trazer mais luz, harmonia e bem-estar para a sua vida. Cada peça decorativa, sabonete artesanal é criado de forma única no Algarve (Faro), com dedicação e alma.<br><br>
+                                    Cada sabonete é pensado para oferecer a melhor experiência para a sua pele.
+                                </p>
+                                <div class="highlight-quote">
+                                    <span class="quote-mark">“</span>
+                                    <p id="text-story-quote">Tudo o que é feito com o coração torna-se arte.</p>
+                                    <span class="quote-mark" style="text-align: right; display: block; margin-top: -10px;">”</span>
+                                </div>
+                            </div>
+                            <div class="panel-footer-design"></div>
+                        </div>
+
+                        <!-- Column 2: O Workshop / The Workshop -->
+                        <div class="brochure-panel panel-workshop">
+                            <div class="panel-header-design"></div>
+                            <div class="panel-content">
+                                <span class="panel-tag">Aprendizagem</span>
+                                <h2 class="panel-title" id="text-workshop-title">O que vamos aprender?</h2>
+                                <div class="title-divider"></div>
+                                <p class="panel-text" id="text-workshop-body">
+                                    Iremos fabricar sabonetes veganos e artesanais. Vamos explorar os benefícios terapêuticos e estéticos de cada ingrediente, e compreender a energia espiritual por trás de cada aroma e essência natural. Cada aroma é único e com propriedades individuais. Também aprenderemos a conservar e embalar de forma higiénica.
+                                </p>
+                                <div class="workshop-badges">
+                                    <div class="badge-item">🌱 100% Vegan</div>
+                                    <div class="badge-item">✨ Espiritual</div>
+                                    <div class="badge-item">🧼 Artesanal</div>
+                                </div>
+                            </div>
+                            <div class="panel-footer-design"></div>
+                        </div>
+
+                        <!-- Column 3: O que é necessário / Materials Needed -->
+                        <div class="brochure-panel panel-materials">
+                            <div class="panel-header-design"></div>
+                            <div class="panel-content">
+                                <span class="panel-tag">Materiais</span>
+                                <h2 class="panel-title" id="text-materials-title">O que é necessário?</h2>
+                                <div class="title-divider"></div>
+                                <ul class="materials-list" id="text-materials-list">
+                                    <!-- Populated by JavaScript -->
+                                </ul>
+                            </div>
+                            <div class="panel-footer-design"></div>
+                        </div>
+                    </div>
+
+                    <!-- FACE 2: OUTSIDE SPREAD (Covers, fold flaps, notes) -->
+                    <div class="brochure-face hidden" id="face-outside">
+                        <div class="brochure-panel panel-notes">
+                            <div class="panel-header-design"></div>
+                            <div class="panel-content">
+
+                                <!-- BENEFÍCIOS ESTÉTICOS -->
+                                <span class="panel-tag" id="text-benefits-tag">Sabonetes Artesanais</span>
+                                <h2 class="panel-title" id="text-aesthetic-title" style="font-size:1.1rem; margin-bottom:0.3rem;">Benefícios Estéticos</h2>
+                                <div class="title-divider"></div>
+
+                                <div class="benefits-list" style="margin-bottom: 0.9rem;">
+
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">🌸</span>
+                                        <div>
+                                            <strong id="text-benefit-wrinkle-title">Anti-Rugas</strong>
+                                            <p id="text-benefit-wrinkle-desc">Estimula a produção de colagénio e suaviza as linhas de expressão. A pele fica mais firme, lisa e jovem com o uso regular.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">✨</span>
+                                        <div>
+                                            <strong id="text-benefit-acne-title">Pele com Acne</strong>
+                                            <p id="text-benefit-acne-desc">Os ingredientes naturais têm propriedades antibacterianas que combatem a bactéria causadora do acne, limpando os poros em profundidade.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">💧</span>
+                                        <div>
+                                            <strong id="text-benefit-oily-title">Pele Oleosa</strong>
+                                            <p id="text-benefit-oily-desc">Regula a produção de sebo sem ressecar a pele, eliminando o brilho excessivo e mantendo o equilíbrio natural.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">🌿</span>
+                                        <div>
+                                            <strong id="text-benefit-hydrate-title">Hidratação Profunda</strong>
+                                            <p id="text-benefit-hydrate-desc">A glicerina vegetal penetra nas camadas mais profundas da pele, proporcionando uma hidratação duradoura e uma textura aveludada.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- BENEFÍCIOS ESPIRITUAIS -->
+                                <h2 class="panel-title" id="text-spiritual-title" style="font-size:1.1rem; margin-bottom:0.3rem;">Benefícios Espirituais</h2>
+                                <div class="title-divider"></div>
+
+                                <div class="benefits-list" style="margin-bottom: 0.9rem;">
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">🕊️</span>
+                                        <div>
+                                            <strong id="text-benefit-peace-title">Paz Interior</strong>
+                                            <p id="text-benefit-peace-desc">Os aromas naturais como lavanda e coco acalmam a mente, reduzindo o stress e promovendo serenidade.</p>
+                                        </div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">🔮</span>
+                                        <div>
+                                            <strong id="text-benefit-energy-title">Purificação da Energia</strong>
+                                            <p id="text-benefit-energy-desc">Ingredientes como sal grosso e arruda, carvão ativo que limpam a aura e renovam as energias do corpo e do espaço ao seu redor.</p>
+                                        </div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <span class="benefit-icon">💛</span>
+                                        <div>
+                                            <strong id="text-benefit-love-title">Amor Próprio</strong>
+                                            <p id="text-benefit-love-desc">O ritual de cuidar da pele com produtos naturais é um acto de amor e gratidão pelo seu corpo, elevando a autoestima.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Conservation tip box — KEPT -->
+                                <div class="conservation-box">
+                                    <h4 id="text-conservation-title">🧼 Dica de Conservação:</h4>
+                                    <p id="text-conservation-body">Guarde os sabonetes em local fresco e seco. Embale com película aderente bem esticada para proteger da humidade do ar e reter o aroma.</p>
+                                </div>
+                            </div>
+                            <div class="panel-footer-design"></div>
+                        </div>
+
+                        <!-- Column 2: Centro / Back Cover (Advertising & Contact) -->
+                        <div class="brochure-panel panel-back-cover">
+                            <div class="panel-header-design"></div>
+                            <div class="panel-content">
+                                <span class="panel-tag">Artesanato do Algarve</span>
+                                <h2 class="panel-title" id="text-promo-title">Leve o Amor Consigo</h2>
+                                <div class="title-divider"></div>
+                                <p class="panel-text" id="text-promo-body" style="font-size: 0.8rem; line-height: 1.6; margin-bottom: 1rem;">
+                                    Durante este workshop criaremos uma gama especial de sabonetes artesanais e vegan, disponíveis para venda direta hoje com ofertas especiais. Mime e viva um momento especial com a sua pele.
+                                </p>
+                                
+                                <div class="promo-box" id="text-promo-badge">
+                                    ✨ <strong id="text-promo-badge-title">Feito à Mão com Amor</strong><br>
+                                    <span id="text-promo-badge-subtitle">100% Natural & Amigo do Ambiente</span>
+                                </div>
+
+                                <div class="contact-details">
+                                    <p id="text-contact-text"><strong>Encomende no Instagram ou WhatsApp:</strong></p>
+                                    <div class="contact-item">
+                                        <span class="icon">📸</span> <strong>@com_cheiro_de_amor</strong>
+                                    </div>
+                                    <div class="contact-item">
+                                        <span class="icon">💬</span> <strong>+351 939 636 842</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer-design"></div>
+                        </div>
+
+                        <!-- Column 3: Lado Direito / Front Cover (First impression) -->
+                        <div class="brochure-panel panel-front-cover">
+                            <div class="panel-header-design"></div>
+                            <div class="panel-content flex-center">
+                                <img src="assets/logo.jpg" alt="Logo Com Cheiro de Amor" class="brochure-logo">
+                                <span class="brand-name-header">COM CHEIRO DE AMOR</span>
+                                <div class="cover-separator"></div>
+                                <h2 class="cover-main-title" id="text-cover-title">Workshop de Sabonetes</h2>
+                                <p class="cover-subtitle" id="text-cover-subtitle">Manual do Participante e Aprendizagem</p>
+                                <div class="cover-separator" style="margin-top: 1rem;"></div>
+                                <p class="cover-slogan" id="text-cover-slogan">Artesanato feito com alma, carinho e aromas únicos. Algarve, Portugal.</p>
+                            </div>
+                            <div class="panel-footer-design"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Image Mockups Showcase Section -->
+            <div class="mockup-showcase-section">
+                <h3>💡 Galeria de Modelos HD (Renderizados por IA)</h3>
+                <p>Aqui estão as representações realistas dos panfletos geradas para si. Pode escolher a que mais lhe agradar:</p>
+                <div class="mockup-carousel">
+                    <div class="mockup-card">
+                        <img src="assets/rustic_botanical_mockup.png" alt="Rustic Botanical Mockup" class="mockup-img" onclick="openLightbox(this.src)">
+                        <h4>1. Rustic Botanical</h4>
+                        <p>Terracota e eucalipto, aspeto rústico e natural.</p>
+                    </div>
+                    <div class="mockup-card">
+                        <img src="assets/minimalist_luxury_mockup.png" alt="Minimalist Luxury Mockup" class="mockup-img" onclick="openLightbox(this.src)">
+                        <h4>2. Minimalist Luxury</h4>
+                        <p>Creme e detalhes dourados, elegância minimalista.</p>
+                    </div>
+                    <div class="mockup-card">
+                        <img src="assets/algarve_mediterranean_mockup.png" alt="Algarve Mediterranean Mockup" class="mockup-img" onclick="openLightbox(this.src)">
+                        <h4>3. Mediterranean Algarve</h4>
+                        <p>Azulejos portugueses e ramos de oliveira, quente e local.</p>
+                    </div>
+                    <div class="mockup-card">
+                        <img src="assets/vintage_apothecary_mockup.png" alt="Vintage Apothecary Mockup" class="mockup-img" onclick="openLightbox(this.src)">
+                        <h4>5. Vintage Apothecary</h4>
+                        <p>Papel envelhecido e ilustrações botânicas clássicas.</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Lightbox for viewing mockups in full screen -->
+    <div class="lightbox" id="studio-lightbox" onclick="closeLightbox()">
+        <span class="close-lightbox">&times;</span>
+        <img src="" alt="Full Screen Mockup" id="lightbox-img">
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>

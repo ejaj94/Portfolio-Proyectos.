@@ -1,0 +1,123 @@
+/* Configuración Base */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;700&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Pinyon+Script&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background-color: #333; font-family: 'Montserrat', sans-serif; color: #4a3e35; display: flex; flex-direction: column; align-items: center; padding: 2rem; gap: 3rem; }
+.controls { text-align: center; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; width: 80%; max-width: 800px; }
+.certificate { width: 297mm; height: 210mm; background-color: #fff; box-shadow: 0 15px 40px rgba(0,0,0,0.4); position: relative; overflow: hidden; page-break-after: always; display: flex; }
+
+@media print {
+    body { background-color: transparent; padding: 0; gap: 0; }
+    .hide-on-print { display: none !important; }
+    .certificate { box-shadow: none; width: 100%; height: 100vh; }
+    @page { size: A4 landscape; margin: 0; }
+}
+
+/* Typography Helpers */
+.nipc { font-size: 11px; color: #8c7c70; text-transform: uppercase; letter-spacing: 1px; }
+
+/* MODELO 1: Premium Curvo */
+.model-1 { background-color: #fdfbf7; padding: 12mm; }
+.model-1 .bg-curve { position: absolute; width: 150px; height: 150px; }
+.curve-top-left { top: 0; left: 0; width: 250px !important; height: 250px !important; }
+.curve-bottom-right { bottom: 0; right: 0; width: 300px !important; height: 300px !important; }
+.curve-top-right { top: 15px; right: 15px; width: 100px !important; height: 100px !important; }
+.curve-bottom-left { bottom: 15px; left: 15px; width: 100px !important; height: 100px !important; }
+
+.cert-border-gold { border: 2px solid #d4af37; height: 100%; position: relative; z-index: 10; display: flex; flex-direction: column; justify-content: space-between; padding: 20mm; background: rgba(255,255,255,0.7); }
+.model-1 .cert-header { text-align: center; }
+.model-1 .cert-logo-big { width: 110px; height: 110px; border-radius: 50%; border: 3px solid #d4af37; padding: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.model-1 .cert-body { text-align: center; }
+.model-1 .cert-title-cinzel { font-family: 'Cinzel Decorative', serif; font-size: 44px; color: #4a3e35; margin: 10px 0; }
+.model-1 .cert-subtitle { font-family: 'Playfair Display', serif; font-style: italic; font-size: 20px; color: #8c7c70; }
+.model-1 .cert-name-elegant { font-family: 'Great Vibes', cursive; font-size: 65px; color: #2e2620; margin: 15px 0; border-bottom: 2px solid #d4af37; display: inline-block; padding: 0 60px; }
+.model-1 .cert-text { font-size: 15px; line-height: 1.6; color: #5c5249; max-width: 700px; margin: 0 auto; }
+.model-1 .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; }
+.model-1 .footer-column { text-align: center; width: 220px; }
+.model-1 .signature-line { border-bottom: 1px solid #4a3e35; margin-bottom: 8px; }
+.model-1 .signature-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #8c7c70; }
+.model-1 .date-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 16px; margin-bottom: 15px; }
+.model-1 .cert-seal { width: 60px; height: 60px; border-radius: 50%; opacity: 0.8; margin-bottom: 5px; }
+
+/* MODELO 2: Botânico Ornato */
+.model-2 { background-color: #fff; padding: 15mm; }
+.model-2 .ornate-border { border: 4px double #e0c8b8; height: 100%; position: relative; padding: 15mm; }
+.model-2 .corner { position: absolute; width: 40px; height: 40px; border: 3px solid #e0c8b8; }
+.model-2 .top-left { top: -4px; left: -4px; border-right: none; border-bottom: none; }
+.model-2 .top-right { top: -4px; right: -4px; border-left: none; border-bottom: none; }
+.model-2 .bottom-left { bottom: -4px; left: -4px; border-right: none; border-top: none; }
+.model-2 .bottom-right { bottom: -4px; right: -4px; border-left: none; border-top: none; }
+.model-2 .cert-content-2 { text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
+.model-2 .cert-logo-framed { width: 100px; height: 100px; border-radius: 50%; box-shadow: 0 0 0 4px #fff, 0 0 0 6px #e0c8b8; margin-bottom: 10px; }
+.model-2 .cert-title-cursive { font-family: 'Pinyon Script', cursive; font-size: 60px; color: #3b3129; }
+.model-2 .cert-presents { font-family: 'Montserrat', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 3px; color: #8c7c70; margin: 15px 0; }
+.model-2 .cert-name-serif { font-family: 'Playfair Display', serif; font-size: 45px; font-weight: 700; color: #2e2620; letter-spacing: 2px; }
+.model-2 .separator-leaf { font-size: 30px; color: #e0c8b8; margin: -10px 0 10px 0; }
+.model-2 .cert-desc-2 { font-size: 15px; font-family: 'Playfair Display', serif; font-style: italic; max-width: 650px; line-height: 1.7; color: #5c5249; }
+.model-2 .signatures-row { display: flex; justify-content: space-between; width: 100%; align-items: flex-end; padding: 0 40px; }
+.model-2 .sig-box { text-align: center; width: 180px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #8c7c70; }
+.model-2 .sig-line { border-bottom: 1px solid #3b3129; margin: 10px 0 5px 0; }
+.model-2 .date-font, .model-2 .sig-font { font-family: 'Playfair Display', serif; font-size: 18px; color: #2e2620; text-transform: none; font-style: italic; }
+.model-2 .gold-seal { width: 80px; height: 80px; background-color: #e0c8b8; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Cinzel', serif; font-weight: bold; text-align: center; border: 2px dashed #fff; outline: 3px solid #e0c8b8; }
+
+/* MODELO 3: Ondas de Aroma */
+.model-3 { background-color: #faf5f0; }
+.model-3 .wave-bg { position: absolute; left: 0; right: 0; width: 100%; }
+.model-3 .top-wave { top: 0; transform: rotate(180deg); }
+.model-3 .bottom-wave { bottom: 0; }
+.model-3 .content-3 { position: relative; z-index: 10; padding: 15mm 30mm; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center; }
+.model-3 .logo-circle { width: 180px; height: 180px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 30px; margin-top: 10px; overflow: hidden; }
+.model-3 .logo-circle img { width: 90%; height: 90%; border-radius: 50%; object-fit: contain; }
+.model-3 .main-text-group { display: flex; flex-direction: column; justify-content: center; align-items: center; flex-grow: 1; }
+.model-3 .title-3 { font-family: 'Cinzel', serif; font-size: 55px; letter-spacing: 6px; color: #4a3e35; margin-bottom: 15px; }
+.model-3 .intro-3 { font-size: 20px; color: #8c7c70; text-transform: uppercase; letter-spacing: 3px; }
+.model-3 .name-3 { font-family: 'Great Vibes', cursive; font-size: 90px; color: #2b241e; margin: 35px 0; min-height: 80px; width: 75%; max-width: 800px; border-bottom: 1px solid #d4c4b7; }
+.model-3 .desc-3 { font-family: 'Playfair Display', serif; font-size: 24px; font-style: italic; max-width: 800px; line-height: 1.6; }
+.model-3 .footer-3 { display: flex; justify-content: space-between; width: 100%; padding-top: 20px; align-items: flex-end; }
+.model-3 .footer-col-3 { width: 220px; text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #665b52; }
+.model-3 .line-3 { border-bottom: 2px solid #e0c8b8; margin-bottom: 10px; }
+.model-3 .brand-3 { color: #4a3e35; }
+.model-3 .brand-3 strong { font-size: 16px; font-family: 'Playfair Display', serif; text-transform: none; }
+.model-3 .date-3 { font-family: 'Playfair Display', serif; font-size: 18px; font-style: italic; text-transform: none; margin-bottom: 10px; color: #2b241e; }
+
+
+/* MODELO 4: Clássico Moldura Dourada */
+.model-4 { background-color: #fff; padding: 12mm; }
+.model-4 .gold-frame { border: 8px solid #e0c8b8; height: 100%; padding: 4px; width: 100%; }
+.model-4 .gold-inner { border: 2px solid #e0c8b8; height: 100%; padding: 20mm; display: flex; flex-direction: column; justify-content: space-between; }
+.model-4 .m4-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #f4efe9; padding-bottom: 20px; }
+.model-4 .m4-logo { width: 85px; height: 85px; border-radius: 50%; }
+.model-4 .m4-brand { text-align: right; }
+.model-4 .m4-brand h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: #4a3e35; }
+.model-4 .m4-brand p { font-size: 12px; color: #8c7c70; text-transform: uppercase; letter-spacing: 1px; }
+.model-4 .m4-title { text-align: center; font-family: 'Cinzel Decorative', serif; font-size: 40px; color: #3b3129; margin-top: 20px; }
+.model-4 .m4-body { text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+.model-4 .m4-certifies { font-size: 16px; font-style: italic; color: #665b52; margin-bottom: 15px; }
+.model-4 .m4-name { font-family: 'Montserrat', sans-serif; font-size: 42px; font-weight: 700; letter-spacing: 3px; color: #2e2620; margin-bottom: 20px; }
+.model-4 .m4-desc { font-family: 'Playfair Display', serif; font-size: 18px; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+.model-4 .m4-footer { display: flex; justify-content: space-between; align-items: flex-end; }
+.model-4 .m4-sig { text-align: center; width: 220px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #8c7c70; }
+.model-4 .m4-sig span { font-family: 'Playfair Display', serif; font-size: 18px; text-transform: none; color: #4a3e35; display: block; margin-bottom: 10px; font-style: italic; }
+.model-4 .m4-line { border-bottom: 1px solid #4a3e35; margin-bottom: 8px; }
+.model-4 .m4-seal-img { width: 70px; height: 70px; border-radius: 50%; filter: grayscale(20%) sepia(30%); }
+
+/* MODELO 5: Minimalista Curvas Assimétricas */
+.model-5 { background-color: #fff; width: 100%; }
+.model-5 .bg-shape { position: absolute; z-index: 1; }
+.model-5 .shape-left { top: -50px; left: -50px; width: 400px; height: 400px; }
+.model-5 .shape-right { bottom: -50px; right: -50px; width: 450px; height: 450px; }
+.model-5 .m5-content { position: relative; z-index: 10; padding: 25mm 40mm; height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+.model-5 .m5-header { display: flex; align-items: center; gap: 20px; }
+.model-5 .m5-logo { width: 90px; height: 90px; border-radius: 50%; box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+.model-5 .m5-brand-info h2 { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 600; letter-spacing: 2px; color: #4a3e35; }
+.model-5 .m5-brand-info p { font-size: 12px; color: #8c7c70; text-transform: uppercase; letter-spacing: 1px; }
+.model-5 .m5-body { align-self: flex-end; text-align: right; max-width: 650px; margin-top: 40px; }
+.model-5 .m5-title { font-family: 'Cinzel', serif; font-size: 55px; color: #3b3129; letter-spacing: 5px; line-height: 1; }
+.model-5 .m5-subtitle { font-family: 'Montserrat', sans-serif; font-size: 16px; letter-spacing: 4px; color: #e0c8b8; font-weight: 600; margin-top: 5px; margin-bottom: 30px; }
+.model-5 .m5-intro { font-family: 'Playfair Display', serif; font-size: 18px; font-style: italic; color: #665b52; }
+.model-5 .m5-name { font-family: 'Great Vibes', cursive; font-size: 65px; color: #2e2620; margin: 10px 0; }
+.model-5 .m5-desc { font-size: 15px; line-height: 1.7; color: #5c5249; }
+.model-5 .m5-footer { margin-top: auto; align-self: flex-start; }
+.model-5 .m5-sig-box { width: 250px; text-align: left; }
+.model-5 .m5-line { border-bottom: 2px solid #4a3e35; margin-bottom: 10px; }
+.model-5 .m5-sig-box p { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #8c7c70; }

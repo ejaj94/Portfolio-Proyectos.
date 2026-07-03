@@ -1,0 +1,3 @@
+# Este proyecto utiliza Node.js
+# Dependencias principales de Node.js:
+puppeteer==22.12.0

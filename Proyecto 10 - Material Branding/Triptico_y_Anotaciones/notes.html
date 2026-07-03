@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Com Cheiro de Amor | Folha de Notas / Notes Sheet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&family=Sacramento&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           SCREEN: PREVIEW SELECTOR (Hidden on Print)
+        ============================================================ */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #1a1615;
+            font-family: 'Montserrat', sans-serif;
+            color: #eae3df;
+        }
+
+        .screen-ui {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .screen-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #3d3431;
+        }
+
+        .screen-header img {
+            height: 70px;
+            width: auto;
+            margin-bottom: 1rem;
+        }
+
+        .screen-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 0.3rem;
+        }
+
+        .screen-header p {
+            font-size: 0.85rem;
+            color: #a69894;
+            letter-spacing: 0.05em;
+        }
+
+        .design-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .design-btn {
+            background: #2b2422;
+            border: 2px solid #3d3431;
+            color: #eae3df;
+            padding: 0.7rem 1.3rem;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .design-btn:hover, .design-btn.active {
+            border-color: #C08A7C;
+            background: rgba(192, 138, 124, 0.15);
+            color: #C08A7C;
+        }
+
+        .print-btn {
+            background: #C08A7C;
+            color: #fff;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 auto 2rem auto;
+            transition: all 0.3s ease;
+        }
+
+        .print-btn:hover { background: #d59e91; transform: translateY(-2px); }
+
+        .hint {
+            text-align: center;
+            font-size: 0.78rem;
+            color: #695E5B;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        /* ============================================================
+           THE A4 PAGE PREVIEW WRAPPER
+        ============================================================ */
+        .a4-preview-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Each design is a full A4 page */
+        .notes-page {
+            display: none; /* Hidden by default */
+            width: 210mm;
+            min-height: 297mm;
+            background: #fff;
+            position: relative;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+        }
+
+        .notes-page.active {
+            display: block;
+        }
+
+        /* ============================================================
+           DESIGN 1: ELEGANT MINIMAL (Cream + Gold)
+        ============================================================ */
+        #design-1 {
+            background: #FDFAF7;
+            border: 1px solid #e8ddd7;
+        }
+
+        #design-1 .page-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12mm 15mm 8mm 15mm;
+            border-bottom: 2px solid #C5A059;
+        }
+
+        #design-1 .logo { width: 80px; height: auto; margin-bottom: 5mm; }
+
+        #design-1 .brand-name {
+            font-family: 'Cinzel', serif;
+            font-size: 14pt;
+            color: #C5A059;
+            letter-spacing: 0.3em;
+            margin-bottom: 3mm;
+        }
+
+        #design-1 .page-title-pt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22pt;
+            color: #2E2522;
+            font-weight: 400;
+            margin-bottom: 1mm;
+            text-align: center;
+        }
+
+        #design-1 .page-title-en {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 8pt;
+            color: #C5A059;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            text-align: center;
+        }
+
+        #design-1 .sections {
+            padding: 8mm 15mm 10mm 15mm;
+            display: flex;
+            flex-direction: column;
+            gap: 6mm;
+        }
+
+        #design-1 .section-label {
+            display: flex;
+            align-items: center;
+            gap: 5mm;
+            margin-bottom: 3mm;
+        }
+
+        #design-1 .section-label span {
+            font-family: 'Cinzel', serif;
+            font-size: 8pt;
+            color: #C5A059;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        #design-1 .section-label .divider-line {
+            flex: 1;
+            height: 1px;
+            background: #C5A059;
+            opacity: 0.4;
+        }
+
+        #design-1 .write-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 8mm;
+        }
+
+        #design-1 .write-line {
+            width: 100%;
+            height: 0;
+            border-bottom: 1px solid #d4c5be;
+        }
+
+        #design-1 .page-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 5mm 15mm;
+            border-top: 1px solid #e8ddd7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #design-1 .footer-text {
+            font-size: 7pt;
+            color: #a69894;
+            font-style: italic;
+        }
+
+        #design-1 .footer-contacts {
+            font-size: 7pt;
+            color: #a69894;
+            text-align: right;
+            line-height: 1.5;
+        }
+
+        /* ============================================================
+           DESIGN 2: RUSTIC BOTANICAL (Terracotta + Cream)
+        ============================================================ */
+        #design-2 {
+            background: #FCF9F5;
+        }
+
+        #design-2 .corner-ornament {
+            position: absolute;
+            width: 35mm;
+            height: 35mm;
+            opacity: 0.12;
+        }
+
+        #design-2 .corner-ornament.tl { top: 0; left: 0; }
+        #design-2 .corner-ornament.tr { top: 0; right: 0; transform: scaleX(-1); }
+        #design-2 .corner-ornament.bl { bottom: 0; left: 0; transform: scaleY(-1); }
+        #design-2 .corner-ornament.br { bottom: 0; right: 0; transform: scale(-1); }
+
+        #design-2 .page-header {
+            text-align: center;
+            padding: 12mm 20mm 6mm 20mm;
+            position: relative;
+        }
+
+        #design-2 .logo { width: 85px; height: auto; margin-bottom: 4mm; }
+
+        #design-2 .brand-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 10pt;
+            color: #C08A7C;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            margin-bottom: 4mm;
+        }
+
+        #design-2 .title-block {
+            background: #C08A7C;
+            color: #fff;
+            padding: 4mm 20mm;
+            margin: 0 -20mm;
+        }
+
+        #design-2 .title-block .page-title-pt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20pt;
+            font-weight: 400;
+            margin-bottom: 1mm;
+        }
+
+        #design-2 .title-block .page-title-en {
+            font-size: 8pt;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.85;
+        }
+
+        #design-2 .sections {
+            padding: 8mm 20mm 30mm 20mm;
+            display: flex;
+            flex-direction: column;
+            gap: 7mm;
+        }
+
+        #design-2 .section-heading {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 13pt;
+            color: #C08A7C;
+            font-style: italic;
+            margin-bottom: 4mm;
+            border-bottom: 1px dashed #E8D6D0;
+            padding-bottom: 1mm;
+        }
+
+        #design-2 .section-sub {
+            font-size: 7pt;
+            color: #a69894;
+            margin-bottom: 3mm;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        #design-2 .write-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 8.5mm;
+        }
+
+        #design-2 .write-line {
+            width: 100%;
+            height: 0;
+            border-bottom: 1px solid #E8D6D0;
+        }
+
+        #design-2 .page-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #C08A7C;
+            padding: 4mm 20mm;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #design-2 .footer-text {
+            font-size: 7pt;
+            color: rgba(255,255,255,0.85);
+            font-style: italic;
+        }
+
+        #design-2 .footer-contacts {
+            font-size: 7pt;
+            color: rgba(255,255,255,0.85);
+            text-align: right;
+            line-height: 1.6;
+        }
+
+        /* ============================================================
+           DESIGN 3: GOLD FRAME LUXURY
+        ============================================================ */
+        #design-3 {
+            background: #FFFFFF;
+            padding: 8mm;
+        }
+
+        #design-3 .inner-frame {
+            border: 1.5px solid #C5A059;
+            width: 100%;
+            min-height: calc(297mm - 16mm);
+            padding: 8mm 10mm;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #design-3 .inner-frame::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 0.5px solid #C5A059;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        #design-3 .page-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 6mm;
+            border-bottom: 1px solid #C5A059;
+            margin-bottom: 6mm;
+        }
+
+        #design-3 .logo { width: 75px; height: auto; margin-bottom: 4mm; }
+
+        #design-3 .brand-name {
+            font-family: 'Cinzel', serif;
+            font-size: 11pt;
+            color: #C5A059;
+            letter-spacing: 0.4em;
+            margin-bottom: 5mm;
+        }
+
+        #design-3 .page-title-pt {
+            font-family: 'Playfair Display', serif;
+            font-size: 24pt;
+            color: #1a1615;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 1.5mm;
+        }
+
+        #design-3 .page-title-en {
+            font-size: 8.5pt;
+            color: #C5A059;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        #design-3 .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8mm;
+            flex: 1;
+        }
+
+        #design-3 .col-label {
+            font-family: 'Cinzel', serif;
+            font-size: 8pt;
+            color: #C5A059;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 4mm;
+            padding-bottom: 1.5mm;
+            border-bottom: 1px solid #C5A059;
+        }
+
+        #design-3 .col-sub {
+            font-size: 7pt;
+            color: #a69894;
+            margin-bottom: 4mm;
+            font-style: italic;
+        }
+
+        #design-3 .write-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 7.5mm;
+        }
+
+        #design-3 .write-line {
+            border-bottom: 0.5px solid #e8ddd7;
+            height: 0;
+        }
+
+        #design-3 .bottom-section {
+            margin-top: 6mm;
+            padding-top: 4mm;
+            border-top: 1px solid #C5A059;
+        }
+
+        #design-3 .bottom-label {
+            font-family: 'Cinzel', serif;
+            font-size: 8pt;
+            color: #C5A059;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 3mm;
+        }
+
+        #design-3 .bottom-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 7mm;
+        }
+
+        #design-3 .page-footer {
+            text-align: center;
+            margin-top: 5mm;
+            padding-top: 3mm;
+            border-top: 1px solid rgba(197,160,89,0.3);
+        }
+
+        #design-3 .footer-text {
+            font-size: 7pt;
+            color: #C5A059;
+            letter-spacing: 0.1em;
+        }
+
+        /* ============================================================
+           DESIGN 4: MODERN ARCH (Matching the pamphlet style)
+        ============================================================ */
+        #design-4 {
+            background: #F6F0EC;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #design-4 .arch-header {
+            background: #fff;
+            border-radius: 0 0 120px 120px;
+            margin: 0 20mm;
+            padding: 10mm 15mm 8mm 15mm;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        #design-4 .logo { width: 80px; height: auto; margin-bottom: 4mm; }
+
+        #design-4 .brand-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 8pt;
+            color: #C08A7C;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            margin-bottom: 4mm;
+            font-weight: 600;
+        }
+
+        #design-4 .page-title-pt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 21pt;
+            color: #2E2522;
+            font-weight: 400;
+            margin-bottom: 1mm;
+        }
+
+        #design-4 .page-title-en {
+            font-size: 8pt;
+            color: #C08A7C;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        #design-4 .sections {
+            padding: 8mm 20mm 12mm 20mm;
+            display: flex;
+            flex-direction: column;
+            gap: 6mm;
+            flex: 1;
+        }
+
+        #design-4 .section-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 5mm 6mm;
+        }
+
+        #design-4 .section-card-label {
+            font-size: 8pt;
+            font-weight: 700;
+            color: #C08A7C;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1mm;
+        }
+
+        #design-4 .section-card-sub {
+            font-size: 7pt;
+            color: #a69894;
+            margin-bottom: 3mm;
+            font-style: italic;
+        }
+
+        #design-4 .write-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 8mm;
+        }
+
+        #design-4 .write-line {
+            border-bottom: 1px solid #E8D6D0;
+            height: 0;
+        }
+
+        #design-4 .arch-footer {
+            background: #C08A7C;
+            border-radius: 120px 120px 0 0;
+            margin: 0 20mm;
+            padding: 5mm 15mm;
+            text-align: center;
+        }
+
+        #design-4 .arch-footer .footer-text {
+            font-size: 7.5pt;
+            color: rgba(255,255,255,0.9);
+            font-style: italic;
+            margin-bottom: 1mm;
+        }
+
+        #design-4 .arch-footer .footer-contacts {
+            font-size: 7pt;
+            color: rgba(255,255,255,0.75);
+        }
+
+        /* ============================================================
+           DESIGN 5: ROMANTIC BLUSH (Rose + Cream)
+        ============================================================ */
+        #design-5 {
+            background: #FFF8F8;
+        }
+
+        #design-5 .page-header {
+            text-align: center;
+            padding: 10mm 15mm 5mm 15mm;
+            border-bottom: 1px solid #F5CACA;
+            position: relative;
+        }
+
+        #design-5 .logo { width: 80px; height: auto; margin-bottom: 3mm; }
+
+        #design-5 .brand-name {
+            font-family: 'Sacramento', cursive;
+            font-size: 24pt;
+            color: #C08A7C;
+            margin-bottom: 3mm;
+        }
+
+        #design-5 .page-title-pt {
+            font-family: 'Playfair Display', serif;
+            font-size: 20pt;
+            color: #4A3535;
+            font-weight: 400;
+            margin-bottom: 1mm;
+        }
+
+        #design-5 .page-title-en {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 8pt;
+            color: #C08A7C;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        #design-5 .petal-divider {
+            color: #DDA0DD;
+            font-size: 12pt;
+            letter-spacing: 5mm;
+            margin: 3mm 0;
+        }
+
+        #design-5 .sections {
+            padding: 6mm 15mm 28mm 15mm;
+            display: flex;
+            flex-direction: column;
+            gap: 6mm;
+        }
+
+        #design-5 .section-label {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 14pt;
+            color: #C08A7C;
+            margin-bottom: 2mm;
+        }
+
+        #design-5 .section-sub {
+            font-size: 7pt;
+            color: #a69894;
+            margin-bottom: 3mm;
+            letter-spacing: 0.05em;
+        }
+
+        #design-5 .write-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 8.5mm;
+        }
+
+        #design-5 .write-line {
+            border-bottom: 1px dashed #F5CACA;
+            height: 0;
+        }
+
+        #design-5 .checkbox-row {
+            display: flex;
+            gap: 6mm;
+            margin-top: 3mm;
+            flex-wrap: wrap;
+        }
+
+        #design-5 .check-item {
+            display: flex;
+            align-items: center;
+            gap: 2mm;
+            font-size: 7.5pt;
+            color: #7D6363;
+        }
+
+        #design-5 .check-box {
+            width: 4mm;
+            height: 4mm;
+            border: 1px solid #DDA0DD;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        #design-5 .page-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 4mm 15mm;
+            background: linear-gradient(135deg, #FFF0F0, #FFE4E1);
+            border-top: 1px solid #F5CACA;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #design-5 .footer-text {
+            font-size: 7pt;
+            color: #C08A7C;
+            font-style: italic;
+        }
+
+        #design-5 .footer-contacts {
+            font-size: 7pt;
+            color: #7D6363;
+            text-align: right;
+            line-height: 1.6;
+        }
+
+        /* ============================================================
+           PRINT STYLES — Only print the active design
+        ============================================================ */
+        @media print {
+            body { background: #fff; }
+            .screen-ui > .screen-header,
+            .screen-ui > .design-selector,
+            .screen-ui > .print-btn,
+            .screen-ui > .hint { display: none !important; }
+
+            .notes-page { display: none !important; }
+            .notes-page.active {
+                display: block !important;
+                width: 100%;
+                min-height: 297mm;
+                box-shadow: none;
+                border: none;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="screen-ui">
+
+        <!-- Screen Header -->
+        <div class="screen-header">
+            <img src="assets/logo.jpg" alt="Com Cheiro de Amor Logo">
+            <h1>Folha de Notas / Notes Sheet</h1>
+            <p>Escolha um dos 5 designs abaixo e clique em Imprimir &nbsp;|&nbsp; Choose a design below and click Print</p>
+        </div>
+
+        <!-- Design Selector Buttons -->
+        <div class="design-selector">
+            <button class="design-btn active" onclick="showDesign(1, this)">1. Elegant Minimal</button>
+            <button class="design-btn" onclick="showDesign(2, this)">2. Rustic Botanical</button>
+            <button class="design-btn" onclick="showDesign(3, this)">3. Gold Frame Luxury</button>
+            <button class="design-btn" onclick="showDesign(4, this)">4. Modern Arch</button>
+            <button class="design-btn" onclick="showDesign(5, this)">5. Romantic Blush</button>
+        </div>
+
+        <!-- Print Button -->
+        <button class="print-btn" onclick="window.print()">
+            🖨️ Imprimir / Print (A4 Portrait)
+        </button>
+
+        <p class="hint">💡 Dica: Utilize Ctrl+P para abrir o diálogo de impressão. Desligue as margens do browser para melhor resultado.<br>
+        Tip: Press Ctrl+P to open the print dialog. Turn off browser margins for best results.</p>
+
+        <!-- A4 Page Previews -->
+        <div class="a4-preview-wrapper">
+
+            <!-- ======================== DESIGN 1 ======================== -->
+            <div class="notes-page active" id="design-1">
+                <div class="page-header">
+                    <img src="assets/logo.jpg" alt="Logo" class="logo">
+                    <div class="brand-name">COM CHEIRO DE AMOR</div>
+                    <div class="page-title-pt">Perguntas, Dúvidas & Inquietações</div>
+                    <div class="page-title-en">Questions, Doubts & Concerns</div>
+                </div>
+
+                <div class="sections">
+                    <!-- Section 1: Notes -->
+                    <div>
+                        <div class="section-label">
+                            <span>📝 Notas e Apontamentos / Notes</span>
+                            <div class="divider-line"></div>
+                        </div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Questions -->
+                    <div>
+                        <div class="section-label">
+                            <span>❓ Perguntas / Questions</span>
+                            <div class="divider-line"></div>
+                        </div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Doubts -->
+                    <div>
+                        <div class="section-label">
+                            <span>💬 Dúvidas & Inquietações / Doubts & Concerns</span>
+                            <div class="divider-line"></div>
+                        </div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: What I learned -->
+                    <div>
+                        <div class="section-label">
+                            <span>✨ O que aprendi hoje / What I learned today</span>
+                            <div class="divider-line"></div>
+                        </div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-footer">
+                    <div class="footer-text">Feito com amor, no Algarve · Made with love, in Algarve, Portugal.</div>
+                    <div class="footer-contacts">📸 @com_cheiro_de_amor &nbsp;·&nbsp; 💬 +351 939 636 842</div>
+                </div>
+            </div>
+
+            <!-- ======================== DESIGN 2 ======================== -->
+            <div class="notes-page" id="design-2">
+
+                <!-- Corner botanical ornaments using SVG lines -->
+                <svg class="corner-ornament tl" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 95 Q5 5 95 5" stroke="#C08A7C" stroke-width="2" fill="none"/>
+                    <circle cx="5" cy="95" r="4" fill="#C08A7C"/>
+                    <circle cx="95" cy="5" r="4" fill="#C08A7C"/>
+                </svg>
+                <svg class="corner-ornament tr" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 95 Q5 5 95 5" stroke="#C08A7C" stroke-width="2" fill="none"/>
+                    <circle cx="5" cy="95" r="4" fill="#C08A7C"/>
+                    <circle cx="95" cy="5" r="4" fill="#C08A7C"/>
+                </svg>
+                <svg class="corner-ornament bl" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 95 Q5 5 95 5" stroke="#C08A7C" stroke-width="2" fill="none"/>
+                    <circle cx="5" cy="95" r="4" fill="#C08A7C"/>
+                    <circle cx="95" cy="5" r="4" fill="#C08A7C"/>
+                </svg>
+                <svg class="corner-ornament br" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 95 Q5 5 95 5" stroke="#C08A7C" stroke-width="2" fill="none"/>
+                    <circle cx="5" cy="95" r="4" fill="#C08A7C"/>
+                    <circle cx="95" cy="5" r="4" fill="#C08A7C"/>
+                </svg>
+
+                <div class="page-header">
+                    <img src="assets/logo.jpg" alt="Logo" class="logo">
+                    <div class="brand-name">COM CHEIRO DE AMOR</div>
+                    <div class="title-block">
+                        <div class="page-title-pt">Perguntas, Dúvidas & Inquietações</div>
+                        <div class="page-title-en">Questions, Doubts & Concerns</div>
+                    </div>
+                </div>
+
+                <div class="sections">
+                    <div>
+                        <div class="section-heading">📝 Notas e Apontamentos</div>
+                        <div class="section-sub">Notes & Takeaways from today's workshop</div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="section-heading">❓ Perguntas e Dúvidas</div>
+                        <div class="section-sub">Questions & Doubts to clarify</div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="section-heading">💬 Inquietações & Reflexões</div>
+                        <div class="section-sub">Concerns, reflections & thoughts</div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="section-heading">✨ O que aprendi hoje / What I learned today</div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-footer">
+                    <div class="footer-text">Artesanato do Algarve, feito com alma · Handmade in Algarve, Portugal, with soul.</div>
+                    <div class="footer-contacts">📸 @com_cheiro_de_amor<br>💬 +351 939 636 842</div>
+                </div>
+            </div>
+
+            <!-- ======================== DESIGN 3 ======================== -->
+            <div class="notes-page" id="design-3">
+                <div class="inner-frame">
+                    <div class="page-header">
+                        <img src="assets/logo.jpg" alt="Logo" class="logo">
+                        <div class="brand-name">COM CHEIRO DE AMOR</div>
+                        <div class="page-title-pt">Perguntas, Dúvidas & Inquietações</div>
+                        <div class="page-title-en">Questions, Doubts & Concerns</div>
+                    </div>
+
+                    <div class="two-col">
+                        <div>
+                            <div class="col-label">📝 Notas / Notes</div>
+                            <div class="col-sub">O que aprendi no workshop · Workshop takeaways</div>
+                            <div class="write-lines">
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-label">❓ Perguntas / Questions</div>
+                            <div class="col-sub">Questões para esclarecer · To clarify later</div>
+                            <div class="write-lines">
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                                <div class="write-line"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-section">
+                        <div class="bottom-label">💬 Dúvidas, Inquietações & Reflexões / Doubts, Concerns & Reflections</div>
+                        <div class="bottom-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="page-footer">
+                        <div class="footer-text">Com Cheiro de Amor · 📸 @com_cheiro_de_amor · 💬 +351 939 636 842 · Feito com amor no Algarve, Portugal · Made with love in Algarve, Portugal</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================== DESIGN 4 ======================== -->
+            <div class="notes-page" id="design-4">
+                <div style="padding: 8mm 0 4mm 0;">
+                    <div class="arch-header">
+                        <img src="assets/logo.jpg" alt="Logo" class="logo">
+                        <div class="brand-name">COM CHEIRO DE AMOR</div>
+                        <div class="page-title-pt">Perguntas, Dúvidas & Inquietações</div>
+                        <div class="page-title-en">Questions, Doubts & Concerns</div>
+                    </div>
+                </div>
+
+                <div class="sections">
+                    <div class="section-card">
+                        <div class="section-card-label">📝 Notas e Apontamentos / Notes & Takeaways</div>
+                        <div class="section-card-sub">O que aprendi no workshop de hoje · What I learned in today's workshop</div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <div class="section-card-label">❓ Perguntas / Questions</div>
+                        <div class="section-card-sub">Questões para esclarecer com a formadora · Questions to clarify with the instructor</div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <div class="section-card-label">💬 Dúvidas & Inquietações / Doubts & Concerns</div>
+                        <div class="section-card-sub">Esclarecimentos necessários · Clarifications needed</div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <div class="section-card-label">✨ O que aprendi / What I learned</div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 0 0 8mm 0;">
+                    <div class="arch-footer">
+                        <div class="footer-text">Artesanato feito com alma e carinho · Handmade with soul and care · Algarve, Portugal</div>
+                        <div class="footer-contacts">📸 @com_cheiro_de_amor &nbsp;|&nbsp; 💬 +351 939 636 842</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================== DESIGN 5 ======================== -->
+            <div class="notes-page" id="design-5">
+                <div class="page-header">
+                    <img src="assets/logo.jpg" alt="Logo" class="logo">
+                    <div class="brand-name">Com Cheiro de Amor</div>
+                    <div class="petal-divider">✿ ✿ ✿</div>
+                    <div class="page-title-pt">Perguntas, Dúvidas & Inquietações</div>
+                    <div class="page-title-en">Questions, Doubts & Concerns</div>
+                    <div class="petal-divider" style="font-size: 9pt; margin: 2mm 0 0 0;">· · ·</div>
+                </div>
+
+                <div class="sections">
+                    <div>
+                        <div class="section-label">📝 Notas e Apontamentos</div>
+                        <div class="section-sub">Notes &amp; Takeaways · O que aprendi hoje no workshop</div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="section-label">❓ Perguntas e Dúvidas</div>
+                        <div class="section-sub">Questions &amp; Doubts · Questões para esclarecer</div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="section-label">💬 Inquietações & Reflexões</div>
+                        <div class="section-sub">Concerns &amp; Reflections · Pensamentos e sentimentos</div>
+                        <div class="write-lines">
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                            <div class="write-line"></div>
+                        </div>
+                    </div>
+
+                    <!-- Mood rating -->
+                    <div>
+                        <div class="section-label" style="font-size: 11pt;">⭐ O meu workshop em 3 palavras / My workshop in 3 words:</div>
+                        <div class="checkbox-row">
+                            <div class="check-item"><div class="check-box"></div><span>Inspirador / Inspiring</span></div>
+                            <div class="check-item"><div class="check-box"></div><span>Criativo / Creative</span></div>
+                            <div class="check-item"><div class="check-box"></div><span>Relaxante / Relaxing</span></div>
+                            <div class="check-item"><div class="check-box"></div><span>Divertido / Fun</span></div>
+                            <div class="check-item"><div class="check-box"></div><span>Informativo / Informative</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-footer">
+                    <div class="footer-text">Feito com amor no Algarve, Portugal · Made with love in Algarve, Portugal</div>
+                    <div class="footer-contacts">📸 @com_cheiro_de_amor<br>💬 +351 939 636 842</div>
+                </div>
+            </div>
+
+        </div><!-- end a4-preview-wrapper -->
+
+    </div><!-- end screen-ui -->
+
+    <script>
+        function showDesign(num, btn) {
+            // Hide all pages
+            document.querySelectorAll('.notes-page').forEach(p => p.classList.remove('active'));
+            // Remove active from all buttons
+            document.querySelectorAll('.design-btn').forEach(b => b.classList.remove('active'));
+            // Show selected
+            document.getElementById('design-' + num).classList.add('active');
+            btn.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>

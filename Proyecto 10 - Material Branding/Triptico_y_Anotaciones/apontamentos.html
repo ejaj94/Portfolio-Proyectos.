@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Com Cheiro de Amor | Apontamentos / Notes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&family=Sacramento&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ── DARK UI WRAPPER (screen only) ── */
+        body {
+            background: #1a1615;
+            font-family: 'Montserrat', sans-serif;
+            color: #eae3df;
+        }
+
+        .ui {
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .ui-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #3d3431;
+        }
+
+        .ui-header img { height: 64px; width: auto; margin-bottom: 0.8rem; }
+
+        .ui-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 0.3rem;
+        }
+
+        .ui-header p { font-size: 0.8rem; color: #7a6f6c; letter-spacing: 0.04em; }
+
+        .btn-row {
+            display: flex;
+            gap: 0.7rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+        }
+
+        .sel-btn {
+            background: #2b2422;
+            border: 2px solid #3d3431;
+            color: #b8aeab;
+            padding: 0.55rem 1.1rem;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .sel-btn:hover, .sel-btn.active {
+            border-color: #C08A7C;
+            background: rgba(192,138,124,0.12);
+            color: #C08A7C;
+        }
+
+        .print-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 auto 1rem auto;
+            background: #C08A7C;
+            color: #fff;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .print-btn:hover { background: #d59e91; transform: translateY(-2px); }
+
+        .hint {
+            text-align: center;
+            font-size: 0.73rem;
+            color: #5a504d;
+            margin-bottom: 1.8rem;
+            font-style: italic;
+        }
+
+        /* ── A4 PREVIEW ── */
+        .preview-wrap { display: flex; justify-content: center; }
+
+        .sheet {
+            display: none;
+            width: 210mm;
+            min-height: 297mm;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sheet.active { display: flex; flex-direction: column; }
+
+        /* ────────────────────────────────────────────────
+           DESIGN 1 — ELEGANT MINIMAL
+           Cream background, gold divider line, classic serif
+        ──────────────────────────────────────────────── */
+        #d1 { background: #FDFAF7; }
+
+        #d1 .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 14mm 18mm 8mm;
+        }
+
+        #d1 .logo { width: 90px; height: auto; margin-bottom: 5mm; }
+
+        #d1 .brand {
+            font-family: 'Cinzel', serif;
+            font-size: 9pt;
+            letter-spacing: 0.4em;
+            color: #C5A059;
+            margin-bottom: 6mm;
+        }
+
+        #d1 .title-pt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36pt;
+            font-weight: 300;
+            color: #2E2522;
+            line-height: 1;
+            margin-bottom: 2mm;
+        }
+
+        #d1 .title-en {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 8.5pt;
+            font-weight: 400;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #C5A059;
+        }
+
+        #d1 .gold-rule {
+            width: 60mm;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #C5A059, transparent);
+            margin: 7mm auto 0;
+        }
+
+        #d1 .lines-area {
+            flex: 1;
+            padding: 4mm 18mm 28mm;
+            display: flex;
+            flex-direction: column;
+            gap: 10mm;
+        }
+
+        #d1 .line { border-bottom: 0.8px solid #DED5CF; height: 0; }
+
+        #d1 .footer {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 4.5mm 18mm;
+            border-top: 1px solid #EDE5DF;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #d1 .footer span {
+            font-size: 6.5pt;
+            color: #b8a8a1;
+            font-style: italic;
+        }
+
+        /* ────────────────────────────────────────────────
+           DESIGN 2 — TERRACOTTA BAND
+           White page, bold terracotta top band, large open serif
+        ──────────────────────────────────────────────── */
+        #d2 { background: #fff; }
+
+        #d2 .header {
+            background: #C08A7C;
+            padding: 10mm 18mm;
+            display: flex;
+            align-items: center;
+            gap: 8mm;
+        }
+
+        #d2 .logo { width: 75px; height: auto; border-radius: 50%; background: #fff; padding: 2mm; }
+
+        #d2 .header-text {}
+
+        #d2 .brand {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 7pt;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 2mm;
+        }
+
+        #d2 .title-pt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 34pt;
+            font-weight: 400;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 1mm;
+        }
+
+        #d2 .title-en {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 7.5pt;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+        }
+
+        #d2 .lines-area {
+            flex: 1;
+            padding: 8mm 18mm 28mm;
+            display: flex;
+            flex-direction: column;
+            gap: 10mm;
+        }
+
+        #d2 .line { border-bottom: 0.8px solid #EDE5DF; height: 0; }
+
+        #d2 .footer {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 4mm 18mm;
+            background: #C08A7C;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #d2 .footer span {
+            font-size: 6.5pt;
+            color: rgba(255,255,255,0.8);
+            font-style: italic;
+        }
+
+        /* ────────────────────────────────────────────────
+           DESIGN 3 — GOLD DOUBLE FRAME
+           Pure white, double gold rectangular border, Cinzel title
+        ──────────────────────────────────────────────── */
+        #d3 { background: #fff; padding: 7mm; }
+
+        #d3 .frame {
+            border: 1.5px solid #C5A059;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 6mm 10mm;
+        }
+
+        #d3 .frame::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 0.5px solid rgba(197,160,89,0.35);
+            pointer-events: none;
+        }
+
+        #d3 .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 6mm;
+            border-bottom: 1px solid #C5A059;
+            margin-bottom: 6mm;
+        }
+
+        #d3 .logo { width: 80px; height: auto; margin-bottom: 4mm; }
+
+        #d3 .brand {
+            font-family: 'Cinzel', serif;
+            font-size: 8pt;
+            letter-spacing: 0.45em;
+            color: #C5A059;
+            margin-bottom: 5mm;
+        }
+
+        #d3 .title-pt {
+            font-family: 'Cinzel', serif;
+            font-size: 26pt;
+            font-weight: 600;
+            color: #1a1615;
+            letter-spacing: 0.08em;
+            margin-bottom: 2mm;
+        }
+
+        #d3 .title-en {
+            font-family: 'Cinzel', serif;
+            font-size: 10pt;
+            font-weight: 400;
+            letter-spacing: 0.25em;
+            color: #C5A059;
+        }
+
+        #d3 .lines-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 9.5mm;
+            padding-bottom: 20mm;
+        }
+
+        #d3 .line { border-bottom: 0.6px solid #EDE5DF; height: 0; }
+
+        #d3 .frame-footer {
+            position: absolute;
+            bottom: 6mm; left: 10mm; right: 10mm;
+            padding-top: 3mm;
+            border-top: 1px solid rgba(197,160,89,0.4);
+            text-align: center;
+        }
+
+        #d3 .frame-footer span {
+            font-size: 6.5pt;
+            color: #C5A059;
+            letter-spacing: 0.1em;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* ────────────────────────────────────────────────
+           DESIGN 4 — SOFT ARCH (matches the pamphlet)
+           Beige background, white arch header, terracotta arch footer
+        ──────────────────────────────────────────────── */
+        #d4 { background: #F6F0EC; }
+
+        #d4 .arch-top {
+            background: #fff;
+            border-radius: 0 0 100px 100px;
+            margin: 0 18mm;
+            padding: 10mm 14mm 9mm;
+            text-align: center;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+        }
+
+        #d4 .logo { width: 82px; height: auto; margin-bottom: 4mm; }
+
+        #d4 .brand {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 7pt;
+            font-weight: 700;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: #C08A7C;
+            margin-bottom: 5mm;
+        }
+
+        #d4 .title-pt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 34pt;
+            font-weight: 400;
+            color: #2E2522;
+            line-height: 1;
+            margin-bottom: 2mm;
+        }
+
+        #d4 .title-en {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 8pt;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #C08A7C;
+        }
+
+        #d4 .lines-area {
+            flex: 1;
+            padding: 10mm 22mm 12mm;
+            display: flex;
+            flex-direction: column;
+            gap: 10mm;
+        }
+
+        #d4 .line { border-bottom: 1px solid rgba(192,138,124,0.25); height: 0; }
+
+        #d4 .arch-bottom {
+            background: #C08A7C;
+            border-radius: 80px 80px 0 0;
+            margin: 0 18mm;
+            padding: 5mm 14mm;
+            text-align: center;
+        }
+
+        #d4 .arch-bottom span {
+            font-size: 7pt;
+            color: rgba(255,255,255,0.85);
+            font-style: italic;
+        }
+
+        /* ────────────────────────────────────────────────
+           DESIGN 5 — ROMANTIC SCRIPT
+           Blush background, Sacramento cursive title, dashed lines
+        ──────────────────────────────────────────────── */
+        #d5 { background: #FFF8F7; }
+
+        #d5 .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12mm 18mm 7mm;
+            border-bottom: 1px solid #F5CACA;
+        }
+
+        #d5 .logo { width: 85px; height: auto; margin-bottom: 4mm; }
+
+        #d5 .brand {
+            font-family: 'Sacramento', cursive;
+            font-size: 20pt;
+            color: #C08A7C;
+            margin-bottom: 4mm;
+        }
+
+        #d5 .divider { color: #DDA0A0; font-size: 11pt; letter-spacing: 4mm; margin-bottom: 4mm; }
+
+        #d5 .title-pt {
+            font-family: 'Sacramento', cursive;
+            font-size: 52pt;
+            color: #C08A7C;
+            line-height: 1;
+            margin-bottom: 1mm;
+        }
+
+        #d5 .title-en {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 8pt;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #b89898;
+        }
+
+        #d5 .lines-area {
+            flex: 1;
+            padding: 8mm 18mm 28mm;
+            display: flex;
+            flex-direction: column;
+            gap: 10mm;
+        }
+
+        #d5 .line { border-bottom: 1px dashed #F5CACA; height: 0; }
+
+        #d5 .footer {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 4.5mm 18mm;
+            background: linear-gradient(135deg, #FFF0F0, #FFE8E8);
+            border-top: 1px solid #F5CACA;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #d5 .footer span {
+            font-size: 6.5pt;
+            color: #C08A7C;
+            font-style: italic;
+        }
+
+        /* ── PRINT ── */
+        @media print {
+            body { background: #fff; }
+            .ui > .ui-header,
+            .ui > .btn-row,
+            .ui > .print-btn,
+            .ui > .hint { display: none !important; }
+            .sheet { display: none !important; }
+            .sheet.active {
+                display: flex !important;
+                width: 100%;
+                min-height: 297mm;
+                box-shadow: none;
+            }
+            @page { size: A4 portrait; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ui">
+
+    <div class="ui-header">
+        <img src="assets/logo.jpg" alt="Logo Com Cheiro de Amor">
+        <h1>Apontamentos / Notes</h1>
+        <p>5 designs — escolha e imprima em A4 &nbsp;|&nbsp; Choose a design and print on A4</p>
+    </div>
+
+    <div class="btn-row">
+        <button class="sel-btn active"  onclick="show(1,this)">1 · Elegant Minimal</button>
+        <button class="sel-btn"         onclick="show(2,this)">2 · Terracotta Band</button>
+        <button class="sel-btn"         onclick="show(3,this)">3 · Gold Frame</button>
+        <button class="sel-btn"         onclick="show(4,this)">4 · Soft Arch</button>
+        <button class="sel-btn"         onclick="show(5,this)">5 · Romantic Script</button>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">🖨️ &nbsp;Imprimir / Print — A4</button>
+    <p class="hint">Ctrl + P · Desativar margens do browser para melhor resultado / Turn off browser margins for best result</p>
+
+    <div class="preview-wrap">
+
+        <!-- ── DESIGN 1 · ELEGANT MINIMAL ── -->
+        <div class="sheet active" id="d1">
+            <div class="header">
+                <img src="assets/logo.jpg" alt="Logo" class="logo">
+                <div class="brand">COM CHEIRO DE AMOR</div>
+                <div class="title-pt">Apontamentos</div>
+                <div class="title-en">Notes</div>
+                <div class="gold-rule"></div>
+            </div>
+            <div class="lines-area">
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div>
+            </div>
+            <div class="footer">
+                <span>Feito com amor · Made with love · Algarve, Portugal</span>
+                <span>📸 @com_cheiro_de_amor &nbsp;·&nbsp; 💬 +351 939 636 842</span>
+            </div>
+        </div>
+
+        <!-- ── DESIGN 2 · TERRACOTTA BAND ── -->
+        <div class="sheet" id="d2">
+            <div class="header">
+                <img src="assets/logo.jpg" alt="Logo" class="logo">
+                <div class="header-text">
+                    <div class="brand">COM CHEIRO DE AMOR</div>
+                    <div class="title-pt">Apontamentos</div>
+                    <div class="title-en">Notes</div>
+                </div>
+            </div>
+            <div class="lines-area">
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div>
+            </div>
+            <div class="footer">
+                <span>Artesanato do Algarve, feito com alma · Handmade in Algarve with soul</span>
+                <span>📸 @com_cheiro_de_amor · 💬 +351 939 636 842</span>
+            </div>
+        </div>
+
+        <!-- ── DESIGN 3 · GOLD FRAME ── -->
+        <div class="sheet" id="d3">
+            <div class="frame">
+                <div class="header">
+                    <img src="assets/logo.jpg" alt="Logo" class="logo">
+                    <div class="brand">COM CHEIRO DE AMOR</div>
+                    <div class="title-pt">Apontamentos</div>
+                    <div class="title-en">Notes</div>
+                </div>
+                <div class="lines-area">
+                    <div class="line"></div><div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div><div class="line"></div>
+                    <div class="line"></div>
+                </div>
+                <div class="frame-footer">
+                    <span>COM CHEIRO DE AMOR &nbsp;·&nbsp; @com_cheiro_de_amor &nbsp;·&nbsp; +351 939 636 842 &nbsp;·&nbsp; Algarve, Portugal</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── DESIGN 4 · SOFT ARCH ── -->
+        <div class="sheet" id="d4">
+            <div style="padding-top: 8mm;">
+                <div class="arch-top">
+                    <img src="assets/logo.jpg" alt="Logo" class="logo">
+                    <div class="brand">COM CHEIRO DE AMOR</div>
+                    <div class="title-pt">Apontamentos</div>
+                    <div class="title-en">Notes</div>
+                </div>
+            </div>
+            <div class="lines-area">
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div>
+            </div>
+            <div style="padding-bottom: 8mm;">
+                <div class="arch-bottom">
+                    <span>Feito com amor no Algarve, Portugal &nbsp;·&nbsp; 📸 @com_cheiro_de_amor &nbsp;·&nbsp; 💬 +351 939 636 842</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── DESIGN 5 · ROMANTIC SCRIPT ── -->
+        <div class="sheet" id="d5">
+            <div class="header">
+                <img src="assets/logo.jpg" alt="Logo" class="logo">
+                <div class="brand">Com Cheiro de Amor</div>
+                <div class="divider">✿ ✿ ✿</div>
+                <div class="title-pt">Apontamentos</div>
+                <div class="title-en">Notes</div>
+            </div>
+            <div class="lines-area">
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div><div class="line"></div><div class="line"></div>
+                <div class="line"></div>
+            </div>
+            <div class="footer">
+                <span>Feito com amor e carinho · Made with love and care</span>
+                <span>📸 @com_cheiro_de_amor &nbsp;·&nbsp; 💬 +351 939 636 842</span>
+            </div>
+        </div>
+
+    </div><!-- end preview-wrap -->
+</div><!-- end ui -->
+
+<script>
+    function show(n, btn) {
+        document.querySelectorAll('.sheet').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.sel-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('d' + n).classList.add('active');
+        btn.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
