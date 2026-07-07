@@ -1,128 +1,94 @@
 """
-photo_picker.py — Photo Picker & Preview Widget  (SRP)
-=======================================================
-Encapsulates all photo-picking logic: file dialog, image loading,
-thumbnail generation and preview rendering.  The rest of the UI
-only calls get_photo_path() to retrieve the selected file.
+photo_picker.py — Profile Photo Widget (SRP)
+==============================================
+Uses CustomTkinter for rounded buttons and modern UI.
 """
 from __future__ import annotations
 
+import os
 import tkinter as tk
-from tkinter import filedialog, ttk
+from tkinter import filedialog
 from typing import Optional
+
+import customtkinter as ctk
 
 try:
     from PIL import Image, ImageTk, ImageDraw
-    PIL_AVAILABLE = True
+    HAS_PIL = True
 except ImportError:
-    PIL_AVAILABLE = False
+    HAS_PIL = False
 
-from gui.theme import Palette, Fonts, Spacing
+from gui.theme import Palette, Fonts
 
 
-class PhotoPicker(tk.Frame):
-    """
-    Self-contained widget that shows a circular avatar preview and
-    a button to pick a new photo from the filesystem.
-    """
+class PhotoPicker(ctk.CTkFrame):
 
-    THUMB_SIZE = (110, 110)
-
-    def __init__(self, parent: tk.Widget, pick_label: str = "📷  Choose Photo",
-                 no_photo_label: str = "No photo selected") -> None:
-        super().__init__(parent, bg=Palette.SURFACE)
-
+    def __init__(self, parent: ctk.CTkFrame, pick_label: str, no_photo_label: str) -> None:
+        super().__init__(parent, fg_color=Palette.SURFACE)
         self._photo_path: Optional[str] = None
-        self._tk_image: Optional[ImageTk.PhotoImage] = None  # type: ignore[name-defined]
-        self._pick_label = pick_label
-        self._no_photo_label = no_photo_label
+        self._photo_img: Optional[ImageTk.PhotoImage] = None
 
-        self._build()
+        # Build UI
+        self._preview_lbl = ctk.CTkLabel(
+            self,
+            text=no_photo_label if HAS_PIL else "Pillow no instalado",
+            width=120, height=120,
+            corner_radius=60,
+            fg_color=Palette.ENTRY_BG,
+            text_color=Palette.TEXT_MUTED,
+            font=Fonts.label()
+        )
+        self._preview_lbl.pack(pady=(0, 10))
 
-    # ── Layout ────────────────────────────────────────────────────────────────
-    def _build(self) -> None:
-        # Canvas for circular avatar
-        self._canvas = tk.Canvas(self, width=self.THUMB_SIZE[0] + 10,
-                                 height=self.THUMB_SIZE[1] + 10,
-                                 bg=Palette.SURFACE, highlightthickness=0)
-        self._canvas.pack(pady=(0, Spacing.PAD_SM))
-        self._draw_placeholder()
+        self._btn = ctk.CTkButton(
+            self,
+            text=pick_label,
+            font=Fonts.button(),
+            fg_color=Palette.ACCENT,
+            hover_color=Palette.ACCENT_HOVER,
+            command=self._on_pick
+        )
+        self._btn.pack(fill="x")
 
-        # Status label
-        self._status_lbl = tk.Label(self, text=self._no_photo_label,
-                                    font=Fonts.LABEL, bg=Palette.SURFACE,
-                                    fg=Palette.TEXT_MUTED,
-                                    wraplength=160, justify="center")
-        self._status_lbl.pack()
+    def update_labels(self, pick_label: str, no_photo_label: str) -> None:
+        self._btn.configure(text=pick_label)
+        if not self._photo_path:
+            self._preview_lbl.configure(
+                text=no_photo_label if HAS_PIL else "Pillow no instalado"
+            )
 
-        # Pick button
-        self._btn = ttk.Button(self, text=self._pick_label,
-                               style="Secondary.TButton",
-                               command=self._pick_photo)
-        self._btn.pack(pady=(Spacing.PAD_SM, 0))
+    def get_photo_path(self) -> Optional[str]:
+        return self._photo_path
 
-    # ── Private helpers ───────────────────────────────────────────────────────
-    def _draw_placeholder(self) -> None:
-        cx = cy = self.THUMB_SIZE[0] // 2 + 5
-        r = self.THUMB_SIZE[0] // 2
-        self._canvas.delete("all")
-        self._canvas.create_oval(cx - r, cy - r, cx + r, cy + r,
-                                 fill=Palette.SURFACE2,
-                                 outline=Palette.ACCENT, width=2)
-        self._canvas.create_text(cx, cy, text="👤",
-                                 font=(Fonts.FAMILY, 30),
-                                 fill=Palette.TEXT_DIM)
+    def _on_pick(self) -> None:
+        path = filedialog.askopenfilename(
+            title="Seleccionar Foto",
+            filetypes=[("Image Files", "*.png *.jpg *.jpeg")]
+        )
+        if path:
+            self._photo_path = path
+            self._update_preview(path)
 
-    def _render_photo(self, path: str) -> None:
-        if not PIL_AVAILABLE:
-            self._status_lbl.configure(
-                text="Install Pillow for photo preview.\npip install pillow",
-                fg=Palette.WARNING)
+    def _update_preview(self, path: str) -> None:
+        if not HAS_PIL:
+            self._preview_lbl.configure(text=os.path.basename(path))
             return
 
         try:
             img = Image.open(path).convert("RGBA")
-            img.thumbnail(self.THUMB_SIZE, Image.LANCZOS)
-
-            # Create circular mask
-            mask = Image.new("L", img.size, 0)
+            # Create a circular mask for preview
+            size = min(img.size)
+            img = img.crop((0, 0, size, size)).resize((120, 120), Image.Resampling.LANCZOS)
+            
+            mask = Image.new("L", (120, 120), 0)
             draw = ImageDraw.Draw(mask)
-            draw.ellipse((0, 0, *img.size), fill=255)
-
-            circular = Image.new("RGBA", img.size, (0, 0, 0, 0))
-            circular.paste(img, mask=mask)
-
-            self._tk_image = ImageTk.PhotoImage(circular)
-            cx = cy = self.THUMB_SIZE[0] // 2 + 5
-            r = self.THUMB_SIZE[0] // 2
-            self._canvas.delete("all")
-            self._canvas.create_oval(cx - r, cy - r, cx + r, cy + r,
-                                     fill=Palette.SURFACE2,
-                                     outline=Palette.ACCENT, width=2)
-            self._canvas.create_image(cx, cy, image=self._tk_image)
-        except Exception as exc:
-            self._status_lbl.configure(
-                text=f"Preview error: {exc}", fg=Palette.ERROR)
-
-    def _pick_photo(self) -> None:
-        path = filedialog.askopenfilename(
-            title="Select profile photo",
-            filetypes=[("Images", "*.jpg *.jpeg *.png *.bmp *.gif"),
-                       ("All files", "*.*")]
-        )
-        if path:
-            self._photo_path = path
-            short = path.split("/")[-1].split("\\")[-1]
-            self._status_lbl.configure(text=short, fg=Palette.SUCCESS)
-            self._render_photo(path)
-
-    # ── Public API ────────────────────────────────────────────────────────────
-    def get_photo_path(self) -> Optional[str]:
-        return self._photo_path
-
-    def update_labels(self, pick_label: str, no_photo_label: str) -> None:
-        self._pick_label = pick_label
-        self._no_photo_label = no_photo_label
-        self._btn.configure(text=pick_label)
-        if not self._photo_path:
-            self._status_lbl.configure(text=no_photo_label)
+            draw.ellipse((0, 0, 120, 120), fill=255)
+            
+            circular_img = Image.new("RGBA", (120, 120), (0, 0, 0, 0))
+            circular_img.paste(img, (0, 0), mask)
+            
+            ctk_img = ctk.CTkImage(light_image=circular_img, dark_image=circular_img, size=(120, 120))
+            self._preview_lbl.configure(image=ctk_img, text="")
+            self._photo_img = ctk_img # Keep reference
+        except Exception:
+            self._preview_lbl.configure(text="Error loading")

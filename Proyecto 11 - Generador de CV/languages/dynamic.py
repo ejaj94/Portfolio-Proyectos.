@@ -87,7 +87,7 @@ class DynamicCVContent(CVContentProvider):
             "title":    p.get("title",    ""),
             "phone":    p.get("phone",    ""),
             "email":    p.get("email",    ""),
-            "address":  p.get("address",  ""),
+            "address":  p.get("location", ""),
             "github":   p.get("github",   ""),
             "linkedin": p.get("linkedin", ""),
         }
@@ -96,13 +96,21 @@ class DynamicCVContent(CVContentProvider):
         return self._get("profile_title")
 
     def get_profile_text(self) -> str:
-        return self._get("profile_text")
+        return self._data.get("profile", "")
 
     def get_experience_section_title(self) -> str:
         return self._get("experience_title")
 
     def get_experience(self) -> List[Dict[str, Any]]:
-        return self._data.get("experience", [])
+        raw = self._data.get("experience", [])
+        return [
+            {
+                "title": r.get("title", ""),
+                "subtitle": r.get("company", ""),
+                "date": r.get("date", ""),
+                "bullets": r.get("description", [])
+            } for r in raw
+        ]
 
     def get_skills_section_title(self) -> str:
         return self._get("skills_title")
@@ -114,19 +122,83 @@ class DynamicCVContent(CVContentProvider):
         return self._get("education_title")
 
     def get_education(self) -> List[Dict[str, Any]]:
-        return self._data.get("education", [])
+        edu_data = self._data.get("education", {})
+        raw = edu_data.get("degrees", []) if isinstance(edu_data, dict) else edu_data
+        return [
+            {
+                "title": r.get("degree", ""),
+                "subtitle": r.get("school", ""),
+                "date": r.get("date", ""),
+                "bullets": []
+            } for r in raw
+        ]
 
     def get_certificates_subtitle(self) -> str:
         return self._get("certificates_subtitle")
 
     def get_certificates(self) -> List[str]:
+        edu_data = self._data.get("education", {})
+        if isinstance(edu_data, dict):
+            return edu_data.get("certificates", [])
         return self._data.get("certificates", [])
 
     def get_languages_section_title(self) -> str:
         return self._get("languages_title")
 
     def get_languages(self) -> List[Tuple[str, str]]:
-        return self._data.get("languages", [])
+        raw = self._data.get("languages", [])
+        target = self._data.get("output_lang", "en").lower()
+        
+        lang_map = {
+            "inglés": {"en": "English", "es": "Inglés", "pt": "Inglês"},
+            "english": {"en": "English", "es": "Inglés", "pt": "Inglês"},
+            "inglês": {"en": "English", "es": "Inglés", "pt": "Inglês"},
+            "español": {"en": "Spanish", "es": "Español", "pt": "Espanhol"},
+            "spanish": {"en": "Spanish", "es": "Español", "pt": "Espanhol"},
+            "espanhol": {"en": "Spanish", "es": "Español", "pt": "Espanhol"},
+            "francés": {"en": "French", "es": "Francés", "pt": "Francês"},
+            "french": {"en": "French", "es": "Francés", "pt": "Francês"},
+            "francês": {"en": "French", "es": "Francés", "pt": "Francês"},
+            "alemán": {"en": "German", "es": "Alemán", "pt": "Alemão"},
+            "german": {"en": "German", "es": "Alemán", "pt": "Alemão"},
+            "alemão": {"en": "German", "es": "Alemán", "pt": "Alemão"},
+            "portugués": {"en": "Portuguese", "es": "Portugués", "pt": "Português"},
+            "portuguese": {"en": "Portuguese", "es": "Portugués", "pt": "Português"},
+            "português": {"en": "Portuguese", "es": "Portugués", "pt": "Português"},
+            "italiano": {"en": "Italian", "es": "Italiano", "pt": "Italiano"},
+            "italian": {"en": "Italian", "es": "Italiano", "pt": "Italiano"},
+            "chino": {"en": "Chinese", "es": "Chino", "pt": "Chinês"},
+            "chinese": {"en": "Chinese", "es": "Chino", "pt": "Chinês"},
+            "chinês": {"en": "Chinese", "es": "Chino", "pt": "Chinês"},
+            "japonés": {"en": "Japanese", "es": "Japonés", "pt": "Japonês"},
+            "japanese": {"en": "Japanese", "es": "Japonés", "pt": "Japonês"},
+            "japonês": {"en": "Japanese", "es": "Japonés", "pt": "Japonês"},
+            "ruso": {"en": "Russian", "es": "Ruso", "pt": "Russo"},
+            "russian": {"en": "Russian", "es": "Ruso", "pt": "Russo"},
+            "russo": {"en": "Russian", "es": "Ruso", "pt": "Russo"},
+        }
+        
+        level_map = {
+            "básico": {"en": "Basic", "es": "Básico", "pt": "Básico"},
+            "basic": {"en": "Basic", "es": "Básico", "pt": "Básico"},
+            "intermedio": {"en": "Intermediate", "es": "Intermedio", "pt": "Intermediário"},
+            "intermediate": {"en": "Intermediate", "es": "Intermedio", "pt": "Intermediário"},
+            "intermediário": {"en": "Intermediate", "es": "Intermedio", "pt": "Intermediário"},
+            "avanzado": {"en": "Advanced", "es": "Avanzado", "pt": "Avançado"},
+            "advanced": {"en": "Advanced", "es": "Avanzado", "pt": "Avançado"},
+            "avançado": {"en": "Advanced", "es": "Avanzado", "pt": "Avançado"},
+            "profesional/nativo": {"en": "Native/Bilingual", "es": "Profesional/Nativo", "pt": "Nativo/Bilingue"},
+            "native/bilingual": {"en": "Native/Bilingual", "es": "Profesional/Nativo", "pt": "Nativo/Bilingue"},
+            "nativo/bilingue": {"en": "Native/Bilingual", "es": "Profesional/Nativo", "pt": "Nativo/Bilingue"},
+        }
+        
+        translated_langs = []
+        for l, lev in raw:
+            tl = lang_map.get(l.lower(), {}).get(target, l)
+            tlev = level_map.get(lev.lower(), {}).get(target, lev)
+            translated_langs.append((tl, tlev))
+            
+        return translated_langs
 
     def get_filename_suffix(self) -> str:
         lang = self._data.get("output_lang", "en").upper()

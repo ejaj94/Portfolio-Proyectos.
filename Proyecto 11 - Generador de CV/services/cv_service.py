@@ -85,6 +85,22 @@ class CVGenerationService:
             success = PDFWriter.compile_pdf(output_path, story)
 
             if success:
+                # Merge certificates if any
+                certs = provider.get_certificates()
+                if certs:
+                    self._log("Anexando certificados...")
+                    try:
+                        from pypdf import PdfWriter as PyPdfWriter, PdfReader
+                        merger = PyPdfWriter()
+                        merger.append(output_path)
+                        for cert in certs:
+                            if os.path.exists(cert) and cert.lower().endswith(".pdf"):
+                                merger.append(cert)
+                        merger.write(output_path)
+                        merger.close()
+                    except Exception as e:
+                        self._log(f"[WARN] No se pudieron anexar los certificados: {e}")
+
                 self._log(f"Done! Saved to: {output_path}")
                 return GenerationResult(
                     success=True,

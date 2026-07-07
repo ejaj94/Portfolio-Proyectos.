@@ -101,10 +101,16 @@ class CVStoryBuilder:
         
         skills_data = []
         for group, items in content.get_skills():
-            skills_data.append([
-                Paragraph(f"<b>{group}:</b>", styles['body']),
-                Paragraph(items, styles['body'])
-            ])
+            if group:
+                skills_data.append([
+                    Paragraph(f"<b>{group}:</b>", styles['body']),
+                    Paragraph(items, styles['body'])
+                ])
+            else:
+                skills_data.append([
+                    Paragraph(items, styles['body']),
+                    ""
+                ])
             
         skills_table = Table(skills_data, colWidths=[130, 390])
         skills_table.setStyle(TableStyle([
@@ -141,34 +147,15 @@ class CVStoryBuilder:
                 story.append(Paragraph(f"&bull; {bullet}", styles['bullet']))
             story.append(Spacer(1, 4))
             
-        # Certificados
-        certs = content.get_certificates()
-        if certs:
-            story.append(Paragraph(f"<b>{content.get_certificates_subtitle()}:</b>", styles['body']))
-            for cert in certs:
-                story.append(Paragraph(f"&bull; {cert}", styles['bullet']))
-            story.append(Spacer(1, 6))
+        # Certificados se anexarán como PDFs al final, no se renderizan aquí.
             
         # 6. IDIOMAS
         story.append(Paragraph(content.get_languages_section_title(), styles['section']))
         story.append(HRFlowable(width="100%", thickness=0.5, color=C_SECONDARY, spaceAfter=4, spaceBefore=2))
         
-        lang_data = []
         for lang, level in content.get_languages():
-            lang_data.append(Paragraph(f"&bull; <b>{lang}:</b> {level}", styles['body']))
-            
-        # Tabla de 1 fila y 3 columnas para los idiomas
-        if len(lang_data) >= 3:
-            lang_table = Table([lang_data[:3]], colWidths=[120, 220, 180])
-        else:
-            lang_table = Table([lang_data], colWidths=[150] * len(lang_data))
-            
-        lang_table.setStyle(TableStyle([
-            ('VALIGN', (0,0), (-1,-1), 'TOP'),
-            ('LEFTPADDING', (0,0), (-1,-1), 0),
-            ('RIGHTPADDING', (0,0), (-1,-1), 0),
-        ]))
-        story.append(lang_table)
+            story.append(Paragraph(f"&bull; <b>{lang}:</b> {level}", styles['bullet']))
+            story.append(Spacer(1, 2))
         
         return story
 

@@ -1,336 +1,255 @@
 """
-main_window.py — Application Orchestrator  (SRP / DIP / OCP)
+main_window.py — Application Orchestrator for CustomTkinter
 =============================================================
 Builds the top-level window, wires all components together and
 delegates each concern to the appropriate service / widget.
-
-Dependency graph (all arrows point inward → DIP satisfied):
-  MainWindow ──► I18nService
-              ──► CVGenerationService
-              ──► PersonalTab, ProfileTab, ExperienceTab,
-                  SkillsTab, EducationTab, LanguagesTab
-              ──► PhotoPicker
 """
 from __future__ import annotations
 
 import os
 import threading
-import tkinter as tk
-from tkinter import filedialog, messagebox, ttk
-from typing import Optional
+from typing import Dict, Any, Type
 
-from gui.components.photo_picker import PhotoPicker
-from gui.tabs.education_tab import EducationTab
-from gui.tabs.experience_tab import ExperienceTab
-from gui.tabs.languages_tab import LanguagesTab
-from gui.tabs.personal_tab import PersonalTab
-from gui.tabs.profile_tab import ProfileTab
-from gui.tabs.skills_tab import SkillsTab
-from gui.theme import Fonts, Palette, Spacing, apply_theme
+import customtkinter as ctk
+
+from core.models import CVContentProvider
+from services.i18n import I18nService
 from services.cv_service import CVGenerationService
 from services.i18n import I18nService
+from languages.dynamic import DynamicCVContent
+
+# UI Components
+from gui.theme import apply_theme, Palette, Fonts
+from gui.tabs.personal_tab import PersonalTab
+from gui.tabs.profile_tab import ProfileTab
+from gui.tabs.experience_tab import ExperienceTab
+from gui.tabs.skills_tab import SkillsTab
+from gui.tabs.education_tab import EducationTab
+from gui.tabs.languages_tab import LanguagesTab
 
 
-class MainWindow:
-    """Root application window."""
+class MainWindow(ctk.CTk):
+    """
+    Main Application Window.
+    Follows DIP: Depends on abstractions (I18nProvider, CVContentProvider)
+    rather than concretions where possible.
+    """
 
-    _WIN_W  = 1100
-    _WIN_H  = 760
-    _MIN_W  = 900
-    _MIN_H  = 640
+    def __init__(self, i18n_svc: I18nService, cv_svc: CVGenerationService) -> None:
+        super().__init__()
 
-    _PDF_LANG_OPTIONS = [
-        ("English",    "en"),
-        ("Español",    "es"),
-        ("Português",  "pt"),
-    ]
+        self._i18n = i18n_svc
+        self._cv_svc = cv_svc
+        self._tabs: Dict[str, ctk.CTkFrame] = {}
+        self._current_tab: str = "personal"
 
-    def __init__(self) -> None:
-        self._i18n = I18nService("en")
+        # Window Setup
+        self.title(self._i18n.t("window_title"))
+        self.geometry("1100x700")
+        self.minsize(900, 600)
+        apply_theme()
 
-        self._root = tk.Tk()
-        self._root.title(self._i18n.t("app_title"))
-        self._root.geometry(f"{self._WIN_W}x{self._WIN_H}")
-        self._root.minsize(self._MIN_W, self._MIN_H)
+        # Grid Layout: Sidebar (0) | Main Content (1)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
 
-        apply_theme(self._root)
+        self._build_sidebar()
+        self._build_main_area()
+        
+        # Select first tab
+        self._select_tab("personal")
 
-        self._output_dir: str = os.path.join(os.path.expanduser("~"), "Desktop")
-        self._pdf_lang_var  = tk.StringVar(value="en")
-        self._ui_lang_var   = tk.StringVar(value="en")
+    def _build_sidebar(self) -> None:
+        """Creates the left navigation sidebar."""
+        self.sidebar_frame = ctk.CTkFrame(self, fg_color=Palette.SURFACE, width=220, corner_radius=0)
+        self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
+        self.sidebar_frame.grid_rowconfigure(8, weight=1) # Spacer
 
-        self._build_layout()
+        # Logo / Title
+        self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="CV Maker", font=Fonts.title(), text_color=Palette.ACCENT)
+        self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 30))
 
-    # ── Layout builders ───────────────────────────────────────────────────────
-    def _build_layout(self) -> None:
-        """Assemble the full window in three vertical sections."""
-        self._build_header()
-
-        # Central pane: left (form) + right (sidebar)
-        center = tk.Frame(self._root, bg=Palette.BG)
-        center.pack(fill="both", expand=True,
-                    padx=Spacing.PAD_LG, pady=(0, Spacing.PAD_MD))
-
-        self._build_form(center)
-        self._build_sidebar(center)
-
-        self._build_log_bar()
-
-    def _build_header(self) -> None:
-        hdr = tk.Frame(self._root, bg=Palette.SURFACE2)
-        hdr.pack(fill="x")
-
-        inner = tk.Frame(hdr, bg=Palette.SURFACE2)
-        inner.pack(padx=Spacing.PAD_LG, pady=Spacing.PAD_MD)
-
-        # Accent stripe
-        stripe = tk.Frame(self._root, bg=Palette.ACCENT, height=3)
-        stripe.pack(fill="x")
-
-        self._title_lbl = tk.Label(inner,
-                                   text=self._i18n.t("app_title"),
-                                   font=Fonts.TITLE,
-                                   bg=Palette.SURFACE2, fg=Palette.TEXT)
-        self._title_lbl.pack(side="left")
-
-        self._subtitle_lbl = tk.Label(inner,
-                                      text=self._i18n.t("app_subtitle"),
-                                      font=Fonts.SUBTITLE,
-                                      bg=Palette.SURFACE2,
-                                      fg=Palette.TEXT_MUTED)
-        self._subtitle_lbl.pack(side="left", padx=(Spacing.PAD_MD, 0))
-
-        # UI language selector (top-right)
-        lang_frame = tk.Frame(inner, bg=Palette.SURFACE2)
-        lang_frame.pack(side="right")
-
-        self._ui_lang_lbl = tk.Label(lang_frame,
-                                     text=self._i18n.t("lbl_ui_lang"),
-                                     font=Fonts.LABEL,
-                                     bg=Palette.SURFACE2, fg=Palette.TEXT_MUTED)
-        self._ui_lang_lbl.pack(side="left", padx=(0, Spacing.PAD_SM))
-
-        ui_combo = ttk.Combobox(lang_frame, textvariable=self._ui_lang_var,
-                                values=["en", "es", "pt"],
-                                state="readonly", width=5)
-        ui_combo.pack(side="left")
-        ui_combo.bind("<<ComboboxSelected>>", self._on_ui_lang_change)
-
-    def _build_form(self, parent: tk.Widget) -> None:
-        """Left pane: tabbed form."""
-        form_frame = tk.Frame(parent, bg=Palette.SURFACE,
-                              highlightbackground=Palette.BORDER,
-                              highlightthickness=1)
-        form_frame.pack(side="left", fill="both", expand=True,
-                        padx=(0, Spacing.PAD_MD))
-
-        self._notebook = ttk.Notebook(form_frame)
-        self._notebook.pack(fill="both", expand=True,
-                            padx=Spacing.PAD_SM, pady=Spacing.PAD_SM)
-
-        # Instantiate tabs
-        self._tab_personal   = PersonalTab(self._notebook,  self._i18n)
-        self._tab_profile    = ProfileTab(self._notebook,   self._i18n)
-        self._tab_experience = ExperienceTab(self._notebook, self._i18n)
-        self._tab_skills     = SkillsTab(self._notebook,    self._i18n)
-        self._tab_education  = EducationTab(self._notebook, self._i18n)
-        self._tab_languages  = LanguagesTab(self._notebook, self._i18n)
-
-        self._tabs = [
-            (self._tab_personal,   "tab_personal"),
-            (self._tab_profile,    "tab_profile"),
-            (self._tab_experience, "tab_experience"),
-            (self._tab_skills,     "tab_skills"),
-            (self._tab_education,  "tab_education"),
-            (self._tab_languages,  "tab_languages"),
+        # Navigation Buttons
+        self.nav_buttons = {}
+        nav_items = [
+            ("personal", "tab_personal"),
+            ("profile", "tab_profile"),
+            ("experience", "tab_experience"),
+            ("skills", "tab_skills"),
+            ("education", "tab_education"),
+            ("languages", "tab_languages")
         ]
 
-        for widget, i18n_key in self._tabs:
-            self._notebook.add(widget, text=f"  {self._i18n.t(i18n_key)}  ")
+        for i, (key, lang_key) in enumerate(nav_items):
+            btn = ctk.CTkButton(
+                self.sidebar_frame, 
+                text=self._i18n.t(lang_key),
+                font=Fonts.sidebar_btn(),
+                fg_color="transparent",
+                text_color=Palette.TEXT_MUTED,
+                hover_color=Palette.SURFACE2,
+                anchor="w",
+                command=lambda k=key: self._select_tab(k)
+            )
+            btn.grid(row=i+1, column=0, padx=10, pady=5, sticky="ew")
+            self.nav_buttons[key] = btn
 
-    def _build_sidebar(self, parent: tk.Widget) -> None:
-        """Right sidebar: photo, options, generate button."""
-        sidebar = tk.Frame(parent, bg=Palette.SURFACE,
-                           width=230,
-                           highlightbackground=Palette.BORDER,
-                           highlightthickness=1)
-        sidebar.pack(side="right", fill="y")
-        sidebar.pack_propagate(False)
-
-        inner = tk.Frame(sidebar, bg=Palette.SURFACE)
-        inner.pack(fill="both", expand=True,
-                   padx=Spacing.PAD_MD, pady=Spacing.PAD_MD)
-
-        # Photo picker
-        self._photo_picker = PhotoPicker(
-            inner,
-            pick_label=self._i18n.t("btn_photo"),
-            no_photo_label=self._i18n.t("lbl_no_photo"),
+        # Language switcher
+        self.lang_var = ctk.StringVar(value=self._i18n.language.upper())
+        self.lang_menu = ctk.CTkOptionMenu(
+            self.sidebar_frame, 
+            values=["ES", "EN", "PT"],
+            command=self._on_language_change,
+            font=Fonts.label_bold(),
+            fg_color=Palette.ENTRY_BG,
+            button_color=Palette.ACCENT,
+            button_hover_color=Palette.ACCENT_HOVER
         )
-        self._photo_picker.pack(fill="x", pady=(0, Spacing.PAD_MD))
+        self.lang_menu.set(self.lang_var.get())
+        self.lang_menu.grid(row=9, column=0, padx=20, pady=(10, 10), sticky="ew")
 
-        ttk.Separator(inner, orient="horizontal").pack(fill="x",
-                                                       pady=Spacing.PAD_SM)
-
-        # PDF language selector
-        self._pdf_lang_lbl = tk.Label(inner,
-                                      text=self._i18n.t("lbl_pdf_lang"),
-                                      font=Fonts.LABEL_BOLD,
-                                      bg=Palette.SURFACE, fg=Palette.ACCENT_LIGHT)
-        self._pdf_lang_lbl.pack(anchor="w")
-
-        pdf_combo = ttk.Combobox(inner, textvariable=self._pdf_lang_var,
-                                 values=["en", "es", "pt"],
-                                 state="readonly", width=10)
-        pdf_combo.pack(fill="x", pady=(Spacing.PAD_XS, Spacing.PAD_MD))
-
-        # Output folder selector
-        self._out_lbl = tk.Label(inner,
-                                 text=self._i18n.t("lbl_output_dir"),
-                                 font=Fonts.LABEL_BOLD,
-                                 bg=Palette.SURFACE, fg=Palette.ACCENT_LIGHT)
-        self._out_lbl.pack(anchor="w")
-
-        self._out_dir_lbl = tk.Label(inner,
-                                     text=self._output_dir,
-                                     font=(Fonts.FAMILY, 8),
-                                     bg=Palette.SURFACE, fg=Palette.TEXT_MUTED,
-                                     wraplength=200, justify="left")
-        self._out_dir_lbl.pack(anchor="w")
-
-        ttk.Button(inner,
-                   text=self._i18n.t("btn_output"),
-                   style="Secondary.TButton",
-                   command=self._pick_output_dir).pack(
-                       fill="x", pady=(Spacing.PAD_XS, Spacing.PAD_MD))
-
-        ttk.Separator(inner, orient="horizontal").pack(fill="x",
-                                                       pady=Spacing.PAD_SM)
-
-        # Generate button (hero CTA)
-        self._gen_btn = ttk.Button(inner,
-                                   text=self._i18n.t("btn_generate"),
-                                   style="Primary.TButton",
-                                   command=self._on_generate)
-        self._gen_btn.pack(fill="x", ipady=6, pady=(Spacing.PAD_MD, 0))
-
-    def _build_log_bar(self) -> None:
-        """Bottom status bar with scrollable log."""
-        bar = tk.Frame(self._root, bg=Palette.SURFACE2, height=80)
-        bar.pack(fill="x", side="bottom")
-        bar.pack_propagate(False)
-
-        self._log_text = tk.Text(
-            bar,
-            bg=Palette.SURFACE2, fg=Palette.TEXT_MUTED,
-            font=Fonts.LOG,
-            height=4, relief="flat",
-            state="disabled",
-            padx=Spacing.PAD_MD, pady=Spacing.PAD_SM,
-            wrap="word", highlightthickness=0,
+        # Generate Button
+        self.btn_generate = ctk.CTkButton(
+            self.sidebar_frame,
+            text=self._i18n.t("btn_generate"),
+            font=Fonts.button(),
+            fg_color=Palette.ACCENT,
+            hover_color=Palette.ACCENT_HOVER,
+            command=self._on_generate
         )
-        self._log_text.pack(fill="both", expand=True)
-        self._log(self._i18n.t("log_ready"))
+        self.btn_generate.grid(row=10, column=0, padx=20, pady=(10, 20), sticky="ew")
 
-    # ── Event handlers ────────────────────────────────────────────────────────
-    def _on_ui_lang_change(self, _event: tk.Event) -> None:
-        lang = self._ui_lang_var.get()
-        self._i18n.set_language(lang)
-        self._refresh_all_labels()
+    def _build_main_area(self) -> None:
+        """Creates the central content area with a log bar at the bottom."""
+        self.main_frame = ctk.CTkFrame(self, fg_color=Palette.BG, corner_radius=0)
+        self.main_frame.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
+        
+        self.main_frame.grid_rowconfigure(0, weight=1)
+        self.main_frame.grid_columnconfigure(0, weight=1)
 
-    def _refresh_all_labels(self) -> None:
-        """Push new translations to every widget without rebuilding the UI."""
-        t = self._i18n.t
-        self._root.title(t("app_title"))
-        self._title_lbl.configure(text=t("app_title"))
-        self._subtitle_lbl.configure(text=t("app_subtitle"))
-        self._ui_lang_lbl.configure(text=t("lbl_ui_lang"))
-        self._pdf_lang_lbl.configure(text=t("lbl_pdf_lang"))
-        self._out_lbl.configure(text=t("lbl_output_dir"))
-        self._gen_btn.configure(text=t("btn_generate"))
-        self._photo_picker.update_labels(t("btn_photo"), t("lbl_no_photo"))
+        # Tab Container
+        self.tab_container = ctk.CTkFrame(self.main_frame, fg_color="transparent")
+        self.tab_container.grid(row=0, column=0, sticky="nsew")
+        self.tab_container.grid_rowconfigure(0, weight=1)
+        self.tab_container.grid_columnconfigure(0, weight=1)
 
-        # Refresh tab titles
-        for i, (_, i18n_key) in enumerate(self._tabs):
-            self._notebook.tab(i, text=f"  {t(i18n_key)}  ")
+        # Initialize all tabs
+        self._tabs["personal"] = PersonalTab(self.tab_container, self._i18n)
+        self._tabs["profile"] = ProfileTab(self.tab_container, self._i18n)
+        self._tabs["experience"] = ExperienceTab(self.tab_container, self._i18n)
+        self._tabs["skills"] = SkillsTab(self.tab_container, self._i18n)
+        self._tabs["education"] = EducationTab(self.tab_container, self._i18n)
+        self._tabs["languages"] = LanguagesTab(self.tab_container, self._i18n)
 
-        # Refresh tab internals
-        for widget, _ in self._tabs:
-            if hasattr(widget, "refresh_labels"):
-                widget.refresh_labels()
+        # Log Bar
+        self.log_lbl = ctk.CTkLabel(
+            self.main_frame, 
+            text="Listo.", 
+            font=Fonts.label(), 
+            text_color=Palette.TEXT_MUTED,
+            anchor="w"
+        )
+        self.log_lbl.grid(row=1, column=0, sticky="ew", pady=(10, 0))
 
-        self._log(t("log_ready"))
+    def _select_tab(self, tab_key: str) -> None:
+        """Switches the visible tab and updates button styles."""
+        # Hide current
+        if self._current_tab in self._tabs:
+            self._tabs[self._current_tab].grid_forget()
+            self.nav_buttons[self._current_tab].configure(fg_color="transparent", text_color=Palette.TEXT_MUTED)
+        
+        # Show new
+        self._current_tab = tab_key
+        self._tabs[tab_key].grid(row=0, column=0, sticky="nsew")
+        self.nav_buttons[tab_key].configure(fg_color=Palette.ACCENT, text_color=Palette.TEXT)
 
-    def _pick_output_dir(self) -> None:
-        path = filedialog.askdirectory(title="Select output folder",
-                                       initialdir=self._output_dir)
-        if path:
-            self._output_dir = path
-            self._out_dir_lbl.configure(text=path)
+    def _on_language_change(self, code: str) -> None:
+        self._i18n.set_language(code.lower())
+        self._update_all_labels()
+        self._log(f"Language changed to {code}", level="success")
+
+    def _update_all_labels(self) -> None:
+        self.title(self._i18n.t("app_title"))
+        self.btn_generate.configure(text=self._i18n.t("btn_generate"))
+        
+        nav_keys = ["tab_personal", "tab_profile", "tab_experience", "tab_skills", "tab_education", "tab_languages"]
+        for key, lang_key in zip(self.nav_buttons.keys(), nav_keys):
+            self.nav_buttons[key].configure(text=self._i18n.t(lang_key))
+
+        for tab in self._tabs.values():
+            if hasattr(tab, "update_labels"):
+                tab.update_labels()
+
+    def _log(self, message: str, level: str = "info") -> None:
+        color = Palette.TEXT_MUTED
+        if level == "error": color = Palette.ERROR
+        elif level == "success": color = Palette.SUCCESS
+        self.log_lbl.configure(text=message, text_color=color)
 
     def _on_generate(self) -> None:
-        """Validate, collect data and run generation in a background thread."""
-        data = self._collect_form_data()
-        errors = self._validate(data)
-        if errors:
-            messagebox.showerror("Validation", "\n".join(errors))
-            return
-
-        self._gen_btn.configure(state="disabled")
-        self._log(self._i18n.t("log_generating"))
-
-        def _worker() -> None:
-            service = CVGenerationService(progress_callback=self._log)
-            result = service.generate(
-                data=data,
-                photo_path=self._photo_picker.get_photo_path(),
-                output_dir=self._output_dir,
-            )
-            self._root.after(0, lambda: self._on_generation_done(result))
-
-        threading.Thread(target=_worker, daemon=True).start()
-
-    def _on_generation_done(self, result) -> None:
-        self._gen_btn.configure(state="normal")
-        if result.success:
-            self._log(self._i18n.t("log_success"))
-            if messagebox.askyesno(
-                self._i18n.t("app_title"),
-                f"{result.message}\n\n{self._i18n.t('log_open_folder')}?",
-            ):
-                os.startfile(os.path.dirname(result.output_path))
-        else:
-            self._log(self._i18n.t("log_error", msg=result.message))
-            messagebox.showerror("Error", result.message)
-
-    # ── Data collection & validation ──────────────────────────────────────────
-    def _collect_form_data(self) -> dict:
-        return {
-            "personal":    self._tab_personal.get_data(),
-            "profile_text": self._tab_profile.get_data(),
-            "experience":  self._tab_experience.get_data(),
-            "skills":      self._tab_skills.get_data(),
-            "education":   self._tab_education.get_education_data(),
-            "certificates": self._tab_education.get_certificates(),
-            "languages":   self._tab_languages.get_data(),
-            "output_lang": self._pdf_lang_var.get(),
+        # 1. Collect Data
+        raw_data = {
+            "personal": self._tabs["personal"].get_data(),
+            "profile": self._tabs["profile"].get_data(),
+            "experience": self._tabs["experience"].get_data(),
+            "skills": self._tabs["skills"].get_data(),
+            "education": self._tabs["education"].get_data(),
+            "languages": self._tabs["languages"].get_data(),
+            "output_lang": self.lang_var.get().lower()
         }
 
-    def _validate(self, data: dict) -> list[str]:
-        errors = []
-        if not data["personal"].get("name"):
-            errors.append(self._i18n.t("val_name_required"))
-        if not data["profile_text"]:
-            errors.append(self._i18n.t("val_profile_required"))
-        return errors
+        # 2. Validation: All fields must be filled
+        personal = raw_data["personal"]
+        for key, val in personal.items():
+            if key != "photo" and not val:
+                self._log("Todos los campos de Información Personal son obligatorios", "error")
+                return
+                
+        if not raw_data["profile"]:
+            self._log("El Perfil Profesional es obligatorio", "error")
+            return
+            
+        for exp in raw_data["experience"]:
+            if not exp.get("title") or not exp.get("company") or not exp.get("date"):
+                self._log("Completa todos los campos en cada Experiencia", "error")
+                return
+                
+        for edu in raw_data["education"].get("degrees", []):
+            if not edu.get("degree") or not edu.get("school") or not edu.get("date"):
+                self._log("Completa todos los campos en cada Educación", "error")
+                return
+                
+        for skill in raw_data["skills"]:
+            if not skill[1]:
+                self._log("No dejes habilidades vacías", "error")
+                return
 
-    # ── Log helper ────────────────────────────────────────────────────────────
-    def _log(self, message: str) -> None:
-        self._log_text.configure(state="normal")
-        self._log_text.insert("end", f"{message}\n")
-        self._log_text.see("end")
-        self._log_text.configure(state="disabled")
+        # 3. Create Provider
+        provider: CVContentProvider = DynamicCVContent(raw_data)
 
-    # ── Entry point ───────────────────────────────────────────────────────────
-    def run(self) -> None:
-        self._root.mainloop()
+        # 4. Generate Async
+        self.btn_generate.configure(state="disabled")
+        self._log("Generando PDF...", "info")
+
+        def worker() -> None:
+            try:
+                out_dir = os.path.join(os.path.expanduser("~"), "Desktop")
+                photo_path = raw_data["personal"].get("photo")
+                
+                result = self._cv_svc.generate(raw_data, photo_path, out_dir)
+                if result.success:
+                    self.after(0, lambda: self._on_generation_success(result.output_path))
+                else:
+                    self.after(0, lambda: self._on_generation_error(Exception(result.message)))
+            except Exception as e:
+                self.after(0, lambda err=e: self._on_generation_error(err))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _on_generation_success(self, path: str) -> None:
+        self.btn_generate.configure(state="normal")
+        self._log(f"✅ ¡CV generado exitosamente! -> {path}", "success")
+
+    def _on_generation_error(self, err: Exception) -> None:
+        self.btn_generate.configure(state="normal")
+        self._log(f"Error: {err}", "error")
