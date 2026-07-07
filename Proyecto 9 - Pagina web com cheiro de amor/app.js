@@ -527,39 +527,39 @@ const PRODUCTS = [
             aromaProfile: "Rosa Bella, Élégance, Harmonie, Sérénité"
         }
     },
-    {
+        {
         id: "candle-rose-1",
         category: "vela",
-        price: 9.90,
+        price: 10.90,
         image: "assets/candle_rose_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Flor de Rosa Clássica",
+            name: "Vela Rose",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Silhueta clássica de rosa com aroma fresco de jardim na primavera.",
-            description: "Uma rosa clássica esculpida com perfume fresco e suave de pétalas de rosas, perfeita para relaxamento e decorações românticas.",
-            aromaProfile: "Floral, Jardim de Rosas, Suave"
+            aromaBrief: "Vela aromática com botões de rosa e flores secas.",
+            description: "Vela aromática com botões de rosa e flores secas.",
+            aromaProfile: "Botões de Rosa, Flores Secas, Aroma Suave"
         },
         es: {
-            name: "Vela Flor de Rosa Clásica",
+            name: "Vela Rose",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Silueta clásica de rosa con aroma fresco de jardín en primavera.",
-            description: "Una rosa clásica esculpida con perfume fresco y suave de pétalos de rosas, perfecta para relajación y decoraciones románticas.",
-            aromaProfile: "Floral, Jardín de Rosas, Suave"
+            aromaBrief: "Vela aromática con capullos de rosa y flores secas.",
+            description: "Vela aromática con capullos de rosa y flores secas.",
+            aromaProfile: "Capullos de Rosa, Flores Secas, Aroma Suave"
         },
         en: {
-            name: "Classic Rose Flower Candle",
+            name: "Vela Rose",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Classic rose silhouette with a fresh spring garden scent.",
-            description: "A classic sculpted rose with a fresh and soft scent of rose petals, perfect for relaxation and romantic decorations.",
-            aromaProfile: "Floral, Rose Garden, Soft"
+            aromaBrief: "Scented candle with rosebuds and dried flowers.",
+            description: "Scented candle with rosebuds and dried flowers.",
+            aromaProfile: "Rosebuds, Dried Flowers, Soft Scent"
         },
         fr: {
-            name: "Bougie Rose Classique",
+            name: "Vela Rose",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Silhouette de rose classique au parfum frais de jardin au printemps.",
-            description: "Une rose classique sculptée au parfum frais et doux de pétales de roses, idéale pour la relaxation et les décorations romantiques.",
-            aromaProfile: "Floral, Jardin de Roses, Doux"
+            aromaBrief: "Bougie parfumée aux boutons de rose et fleurs séchées.",
+            description: "Bougie parfumée aux boutons de rose et fleurs séchées.",
+            aromaProfile: "Boutons de Rose, Fleurs Séchées, Parfum Doux"
         }
     },
     {
