@@ -597,7 +597,7 @@ const PRODUCTS = [
             aromaProfile: "Rose, Paillettes, Parfumée, Décorative"
         }
     },
-        {
+            {
         id: "candle-vela_en_vaso-1",
         category: "vela",
         price: 17.90,
@@ -607,29 +607,29 @@ const PRODUCTS = [
             name: "Vela Floral em Vaso",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Vela aromática floral personalizável. Escolha a cor e a essência da sua preferência.",
-            description: "Vela aromática floral em vaso de vidro. Esta vela é totalmente personalizável: o cliente pode escolher o tom da cera e a essência aromática de sua preferência para uma experiência sob medida.",
-            aromaProfile: "Personalizável, Floral, Cores & Aromas Sob Medida"
+            description: "Vela aromática floral em vaso. Esta vela é totalmente personalizável: o cliente pode escolher o tom da cera e a essência aromática de sua preferência para uma experiência única e incrível.",
+            aromaProfile: "Personalizável, Floral, Experiência Única"
         },
         es: {
             name: "Vela Floral en Vaso",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Vela aromática floral personalizable. Elige el color y la esencia de tu preferencia.",
-            description: "Vela aromática floral en vaso de vidrio. Esta vela es totalmente personalizable: el cliente puede elegir el color de la cera y la esencia aromática de su preferencia para una experiencia a medida.",
-            aromaProfile: "Personalizable, Floral, Colores & Aromas a Medida"
+            description: "Vela aromática floral en vaso. Esta vela es totalmente personalizable: el cliente puede elegir el color de la cera y la esencia aromática de su preferencia para una experiencia única e increíble.",
+            aromaProfile: "Personalizable, Floral, Experiencia Única"
         },
         en: {
             name: "Floral Jar Candle",
             categoryLabel: "Scented Candle",
             aromaBrief: "Customizable floral scented jar candle. Choose your color and scent.",
-            description: "Floral scented candle in a glass jar. This candle is fully customizable: the customer can choose the wax color and the scent essence of their preference.",
-            aromaProfile: "Customizable, Floral, Tailored Scent & Color"
+            description: "Floral scented candle in a jar. This candle is fully customizable: the customer can choose the wax color and the scent essence of their preference for a unique and incredible experience.",
+            aromaProfile: "Customizable, Floral, Unique Experience"
         },
         fr: {
             name: "Bougie Florale en Pot",
             categoryLabel: "Bougie Parfumée",
             aromaBrief: "Bougie florale en pot personnalisable. Choisissez la couleur et le parfum de votre choix.",
-            description: "Bougie parfumée florale en pot de verre. Cette bougie est entièrement personnalisable : le client peut choisir la couleur de la cire et l'essence de parfum de son choix pour une expérience sur mesure.",
-            aromaProfile: "Personnalisable, Floral, Couleur & Parfum Sur Mesure"
+            description: "Bougie parfumée florale en pot. Cette bougie est entièrement personnalisable : le client peut choisir la couleur de la cire et l'essence de parfum de son choix pour une expérience unique et incroyable.",
+            aromaProfile: "Personnalisable, Floral, Expérience Unique"
         }
     },
     {
