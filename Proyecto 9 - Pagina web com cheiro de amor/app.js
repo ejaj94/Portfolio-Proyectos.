@@ -597,39 +597,39 @@ const PRODUCTS = [
             aromaProfile: "Rose, Paillettes, Parfumée, Décorative"
         }
     },
-    {
+        {
         id: "candle-vela_en_vaso-1",
         category: "vela",
-        price: 13.90,
+        price: 17.90,
         image: "assets/candle_vela_en_vaso_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela em Vaso Lavanda & Flores",
+            name: "Vela Floral em Vaso",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Vaso decorado com flores secas de lavanda e fragrância calmante.",
-            description: "Vela aromática em vaso de vidro decorada no topo com flores de lavanda e fragrância calmante, ideal para rituais de sono ou banho.",
-            aromaProfile: "Lavanda, Calmante, Floral"
+            aromaBrief: "Vela aromática floral personalizável. Escolha a cor e a essência da sua preferência.",
+            description: "Vela aromática floral em vaso de vidro. Esta vela é totalmente personalizável: o cliente pode escolher o tom da cera e a essência aromática de sua preferência para uma experiência sob medida.",
+            aromaProfile: "Personalizável, Floral, Cores & Aromas Sob Medida"
         },
         es: {
-            name: "Vela en Vaso Lavanda & Flores",
+            name: "Vela Floral en Vaso",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Vaso decorado con flores secas de lavanda y fragancia calmante.",
-            description: "Vela aromática en vaso de vidrio decorada en la parte superior con flores de lavanda y fragancia calmante, ideal para rituales de sueño o baño.",
-            aromaProfile: "Lavanda, Calmante, Floral"
+            aromaBrief: "Vela aromática floral personalizable. Elige el color y la esencia de tu preferencia.",
+            description: "Vela aromática floral en vaso de vidrio. Esta vela es totalmente personalizable: el cliente puede elegir el color de la cera y la esencia aromática de su preferencia para una experiencia a medida.",
+            aromaProfile: "Personalizable, Floral, Colores & Aromas a Medida"
         },
         en: {
-            name: "Lavender & Flowers Jar Candle",
+            name: "Floral Jar Candle",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Jar candle decorated with dried lavender flowers and soothing scent.",
-            description: "Aromatic glass jar candle decorated on top with dried lavender flowers and a soothing fragrance, ideal for sleep or bath rituals.",
-            aromaProfile: "Lavender, Soothing, Floral"
+            aromaBrief: "Customizable floral scented jar candle. Choose your color and scent.",
+            description: "Floral scented candle in a glass jar. This candle is fully customizable: the customer can choose the wax color and the scent essence of their preference.",
+            aromaProfile: "Customizable, Floral, Tailored Scent & Color"
         },
         fr: {
-            name: "Bougie en Pot Lavande & Fleurs",
+            name: "Bougie Florale en Pot",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Pot décoré de fleurs de lavande séchées et parfum apaisant.",
-            description: "Bougie parfumée en pot de verre décorée sur le dessus de fleurs de lavande et parfum apaisant, idéale pour les rituels de sommeil ou de bain.",
-            aromaProfile: "Lavande, Apaisant, Floral"
+            aromaBrief: "Bougie florale en pot personnalisable. Choisissez la couleur et le parfum de votre choix.",
+            description: "Bougie parfumée florale en pot de verre. Cette bougie est entièrement personnalisable : le client peut choisir la couleur de la cire et l'essence de parfum de son choix pour une expérience sur mesure.",
+            aromaProfile: "Personnalisable, Floral, Couleur & Parfum Sur Mesure"
         }
     },
     {
