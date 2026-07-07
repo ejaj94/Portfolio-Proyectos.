@@ -562,39 +562,39 @@ const PRODUCTS = [
             aromaProfile: "Boutons de Rose, Fleurs Séchées, Parfum Doux"
         }
     },
-    {
+        {
         id: "candle-shinny_light-1",
         category: "vela",
-        price: 11.90,
+        price: 12.90,
         image: "assets/candle_shinny_light_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Estrela de Luz (Shinny Light)",
+            name: "Shiny Light",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela geométrica facetada com fragrância refrescante cítrica de hortelã.",
-            description: "Vela em formato geométrico facetado de estrela ou gema que reflete a luz de forma linda e preenche a divisão com notas frescas de limão e hortelã.",
-            aromaProfile: "Limão, Hortelã, Cítrico Fresco"
+            aromaBrief: "Vela aromática decorativa com rosa e purpurinas.",
+            description: "Vela aromática decorativa com rosa e purpurinas.",
+            aromaProfile: "Rosa, Purpurinas, Aromática, Decorativa"
         },
         es: {
-            name: "Vela Estrella de Luz",
+            name: "Shiny Light",
             categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela geométrica facetada con fragancia refrescante cítrica de menta.",
-            description: "Vela con formato geométrico facetado de estrella o gema que refleja la luz de forma hermosa y llena la estancia con notas frescas de limón y menta.",
-            aromaProfile: "Limón, Menta, Cítrico Fresco"
+            aromaBrief: "Vela aromática decorativa con rosa y purpurinas.",
+            description: "Vela aromática decorativa con rosa y purpurinas.",
+            aromaProfile: "Rosa, Purpurinas, Aromática, Decorativa"
         },
         en: {
-            name: "Shinny Light Star Candle",
+            name: "Shiny Light",
             categoryLabel: "Scented Candle",
-            aromaBrief: "Geometric faceted star candle with a refreshing citrus mint scent.",
-            description: "Geometric faceted star or gem-shaped candle that beautifully reflects light and fills the room with fresh notes of lemon and mint.",
-            aromaProfile: "Lemon, Mint, Fresh Citrus"
+            aromaBrief: "Decorative scented candle with rose and glitter.",
+            description: "Decorative scented candle with rose and glitter.",
+            aromaProfile: "Rose, Glitter, Scented, Decorative"
         },
         fr: {
-            name: "Bougie Étoile de Lumière",
+            name: "Shiny Light",
             categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Bougie géométrique facettée au parfum rafraîchissant d'agrume et menthe.",
-            description: "Bougie au format géométrique facetté d'étoile ou de gemme qui reflète joliment la lumière et emplit la pièce de notes fraîches de citron et de menthe.",
-            aromaProfile: "Citron, Menthe, Agrume Frais"
+            aromaBrief: "Bougie parfumée décorative avec rose et paillettes.",
+            description: "Bougie parfumée décorative avec rose et paillettes.",
+            aromaProfile: "Rose, Paillettes, Parfumée, Décorative"
         }
     },
     {
