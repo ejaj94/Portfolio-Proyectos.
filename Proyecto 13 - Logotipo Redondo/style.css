@@ -1,0 +1,221 @@
+:root {
+    --primary: #C5A059;
+    --primary-dark: #A67C37;
+    --bg-cream: #FAFAF7;
+    --text-dark: #332B24;
+    --text-light: #73675C;
+    --glass-bg: rgba(250, 250, 247, 0.85);
+    --glass-border: rgba(197, 160, 89, 0.25);
+    --radius-lg: 24px;
+    --radius-md: 12px;
+    --shadow: 0 10px 30px rgba(51, 43, 36, 0.08);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+.glass-bg {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(197, 160, 89, 0.1) 0%, rgba(250, 250, 247, 0) 70%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.app-container {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    max-width: 1000px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 48px;
+    box-shadow: var(--shadow);
+    margin: 40px auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.brand-subtitle {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--primary);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 12px;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+}
+
+.intro-text {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.main-content {
+    margin-bottom: 40px;
+}
+
+.preview-card {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.4);
+}
+
+.image-wrapper {
+    width: 100%;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--glass-border);
+    background: #ffffff;
+    aspect-ratio: 210/297;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: var(--transition);
+}
+
+.image-wrapper img:hover {
+    transform: scale(1.03);
+}
+
+.card-details h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 24px;
+    color: var(--text-dark);
+}
+
+.specs-list {
+    list-style: none;
+    margin-bottom: 32px;
+}
+
+.specs-list li {
+    font-size: 1.05rem;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+    color: var(--text-dark);
+}
+
+.specs-list li strong {
+    color: var(--primary-dark);
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 28px;
+    border-radius: var(--radius-md);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(197, 160, 89, 0.35);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(197, 160, 89, 0.45);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-dark);
+    border: 1px solid var(--text-light);
+}
+
+.btn-secondary:hover {
+    background-color: rgba(197, 160, 89, 0.1);
+    border-color: var(--primary);
+    color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+footer {
+    text-align: center;
+    border-top: 1px solid rgba(197, 160, 89, 0.15);
+    padding-top: 24px;
+}
+
+footer p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .preview-card {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    
+    .app-container {
+        padding: 24px;
+    }
+    
+    h1 {
+        font-size: 2.2rem;
+    }
+}
