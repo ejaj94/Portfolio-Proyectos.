@@ -195,7 +195,7 @@ class MainWindow(ctk.CTk):
             "skills": self._tabs["skills"].get_data(),
             "education": self._tabs["education"].get_data(),
             "languages": self._tabs["languages"].get_data(),
-            "output_lang": self.lang_var.get().lower()
+            "output_lang": self.lang_menu.get().lower()
         }
 
         # 2. Validation: All fields must be filled
