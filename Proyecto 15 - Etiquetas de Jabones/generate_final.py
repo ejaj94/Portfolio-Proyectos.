@@ -52,15 +52,15 @@ def blend_multiply(bg, fg, box):
 
 try:
     logo = Image.open(logo_path)
-    logo.thumbnail((250, 250), Image.Resampling.LANCZOS)
+    logo.thumbnail((200, 200), Image.Resampling.LANCZOS)
     logo = prepare_for_multiply(logo, 230)
 except Exception as e:
     logo = None
 
 try:
-    font_title = ImageFont.truetype("georgiai.ttf", 100)
-    font_bold = ImageFont.truetype("segoeuib.ttf", 42)
-    font_body = ImageFont.truetype("segoeuib.ttf", 36)
+    font_title = ImageFont.truetype("georgiai.ttf", 85)
+    font_bold = ImageFont.truetype("segoeuib.ttf", 36)
+    font_body = ImageFont.truetype("segoeuib.ttf", 30)
 except:
     font_title = ImageFont.load_default()
     font_bold = ImageFont.load_default()
@@ -97,7 +97,7 @@ for i, item in enumerate(data):
     if logo:
         lx = (width - logo.width) // 2
         blend_multiply(img, logo, (lx, current_y))
-        current_y += logo.height + 20
+        current_y += logo.height + 12
         
     search_path = os.path.join(brain_dir, item["drawing"])
     matches = glob.glob(search_path)
@@ -109,7 +109,7 @@ for i, item in enumerate(data):
         drawing_path = matches[0]
         try:
             drawing_img = Image.open(drawing_path)
-            drawing_img.thumbnail((500, 500), Image.Resampling.LANCZOS)
+            drawing_img.thumbnail((380, 380), Image.Resampling.LANCZOS)
             
             # This acts like Photoshop's "Levels" adjustment.
             # Using 185 instead of 210 keeps more rich colors and prevents pale prints
@@ -129,14 +129,14 @@ for i, item in enumerate(data):
             ex = (width - drawing_img.width) // 2
             blend_multiply(img, drawing_img, (ex, current_y))
             
-            current_y += drawing_img.height + 18
+            current_y += drawing_img.height + 12
         except Exception as e:
             print(f"Error drawing {drawing_path}: {e}")
     else:
-        current_y += 35
+        current_y += 20
     
     current_y = draw_text_centered(draw, item["title"], current_y, font_title, gold_color, chars_per_line=30, line_spacing=15)
-    current_y += 18
+    current_y += 12
     
     sections = [
         ("Ingredientes:", item["ingredientes"]),
@@ -146,9 +146,9 @@ for i, item in enumerate(data):
     
     for title, content in sections:
         current_y = draw_text_centered(draw, title, current_y, font_bold, text_color, chars_per_line=46)
-        current_y += 5
+        current_y += 3
         current_y = draw_text_centered(draw, content, current_y, font_body, text_color, chars_per_line=46, line_spacing=8)
-        current_y += 18
+        current_y += 12
     
     out_path = os.path.join(output_dir, f"drawing_label_{i}.jpeg")
     img.save(out_path, "JPEG", quality=95)
