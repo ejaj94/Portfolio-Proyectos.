@@ -24,7 +24,7 @@ data = [
 
 logo_path = r"C:\Users\ANGEL RAFAEL\.gemini\antigravity\scratch\com-cheiro-de-amor-pamphlet-preview\assets\logo.jpg"
 width, height = 1080, 1600
-bg_color = "#FAFAF7"
+bg_color = "#FFFFFF"
 gold_color = (160, 120, 45)
 text_color = (0, 0, 0)
 
@@ -56,8 +56,8 @@ except Exception as e:
 
 try:
     font_title = ImageFont.truetype("georgiai.ttf", 100)
-    font_bold = ImageFont.truetype("segoeuib.ttf", 50)
-    font_body = ImageFont.truetype("segoeui.ttf", 44)
+    font_bold = ImageFont.truetype("segoeuib.ttf", 42)
+    font_body = ImageFont.truetype("segoeuib.ttf", 36)
 except:
     font_title = ImageFont.load_default()
     font_bold = ImageFont.load_default()
@@ -107,7 +107,8 @@ for i, item in enumerate(data):
             drawing_img.thumbnail((500, 500), Image.Resampling.LANCZOS)
             
             # This acts like Photoshop's "Levels" adjustment.
-            drawing_img = prepare_for_multiply(drawing_img, 210)
+            # Using 185 instead of 210 keeps more rich colors and prevents pale prints
+            drawing_img = prepare_for_multiply(drawing_img, 185)
             
             # Boost colors and contrast for rich, vibrant full-color printing
             from PIL import ImageEnhance
@@ -119,14 +120,14 @@ for i, item in enumerate(data):
             ex = (width - drawing_img.width) // 2
             blend_multiply(img, drawing_img, (ex, current_y))
             
-            current_y += drawing_img.height + 25
+            current_y += drawing_img.height + 18
         except Exception as e:
             print(f"Error drawing {drawing_path}: {e}")
     else:
-        current_y += 50
+        current_y += 35
     
     current_y = draw_text_centered(draw, item["title"], current_y, font_title, gold_color, chars_per_line=30, line_spacing=15)
-    current_y += 25
+    current_y += 18
     
     sections = [
         ("Ingredientes:", item["ingredientes"]),
@@ -135,10 +136,10 @@ for i, item in enumerate(data):
     ]
     
     for title, content in sections:
-        current_y = draw_text_centered(draw, title, current_y, font_bold, text_color, chars_per_line=38)
+        current_y = draw_text_centered(draw, title, current_y, font_bold, text_color, chars_per_line=46)
         current_y += 5
-        current_y = draw_text_centered(draw, content, current_y, font_body, text_color, chars_per_line=38, line_spacing=10)
-        current_y += 25
+        current_y = draw_text_centered(draw, content, current_y, font_body, text_color, chars_per_line=46, line_spacing=8)
+        current_y += 18
     
     out_path = os.path.join(output_dir, f"drawing_label_{i}.jpeg")
     img.save(out_path, "JPEG", quality=95)
