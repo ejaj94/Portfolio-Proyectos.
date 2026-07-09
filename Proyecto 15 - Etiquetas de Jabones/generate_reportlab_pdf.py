@@ -44,7 +44,7 @@ start_y = (A4_H - grid_h) / 2.0
 
 # Preparar las imágenes: rotarlas para formato horizontal y guardarlas como temporales de alta calidad
 temp_paths = []
-for i in range(12):
+for i in range(15):
     src = os.path.join(scratch_dir, f"drawing_label_{i}.jpeg")
     if os.path.exists(src):
         img = Image.open(src).convert("RGB")
