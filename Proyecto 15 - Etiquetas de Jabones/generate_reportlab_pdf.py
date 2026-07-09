@@ -7,19 +7,7 @@ from PIL import Image
 brain_dir = r"C:\Users\ANGEL RAFAEL\.gemini\antigravity\brain\ce4a2ece-d2d7-41c9-acca-716b5f94d19d"
 scratch_dir = os.path.join(brain_dir, "scratch")
 
-# Encontrar la ruta del escritorio de OneDrive dinámicamente
-onedrive_dir = r"C:\Users\ANGEL RAFAEL\OneDrive"
-desktop_folder_name = None
-for d in os.listdir(onedrive_dir):
-    full_path = os.path.join(onedrive_dir, d)
-    if os.path.isdir(full_path) and ("trabalho" in d.lower() or "desktop" in d.lower() or "escrit" in d.lower()):
-        desktop_folder_name = d
-        break
-        
-if desktop_folder_name:
-    desktop_dir = os.path.join(onedrive_dir, desktop_folder_name)
-else:
-    desktop_dir = r"C:\Users\ANGEL RAFAEL\Desktop"
+desktop_dir = r"C:\Users\ANGEL RAFAEL\Desktop"
 
 print(f"Escritorio detectado para ReportLab: {desktop_dir}")
 

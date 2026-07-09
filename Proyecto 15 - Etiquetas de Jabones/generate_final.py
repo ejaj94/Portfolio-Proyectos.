@@ -104,6 +104,8 @@ for i, item in enumerate(data):
     if "drawing_rosa_1*.png" in item["drawing"]:
         matches = [m for m in glob.glob(os.path.join(brain_dir, "drawing_rosa_*.png")) if "mosqueta" not in m]
     if matches:
+        # Sort by modification time to always pick the newest corrected drawing
+        matches.sort(key=os.path.getmtime, reverse=True)
         drawing_path = matches[0]
         try:
             drawing_img = Image.open(drawing_path)
