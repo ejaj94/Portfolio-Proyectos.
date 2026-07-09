@@ -111,7 +111,11 @@ for i, item in enumerate(data):
             drawing_img = prepare_for_multiply(drawing_img, 185)
             
             # Boost colors and contrast for rich, vibrant full-color printing
-            from PIL import ImageEnhance
+            from PIL import ImageEnhance, ImageFilter
+            
+            # Thicken the fine lines/outlines of the illustration (Photoshop Minimum filter effect)
+            drawing_img = drawing_img.filter(ImageFilter.MinFilter(3))
+            
             color_enhancer = ImageEnhance.Color(drawing_img)
             drawing_img = color_enhancer.enhance(1.8) # Boost saturation by 80%
             contrast_enhancer = ImageEnhance.Contrast(drawing_img)
