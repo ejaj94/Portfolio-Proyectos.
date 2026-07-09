@@ -106,9 +106,15 @@ for i, item in enumerate(data):
             drawing_img = Image.open(drawing_path)
             drawing_img.thumbnail((450, 450), Image.Resampling.LANCZOS)
             
-            # This is the MAGIC step: turn the light gray AI background into PURE white
-            # using white_point=210 means anything remotely light becomes transparent.
+            # This acts like Photoshop's "Levels" adjustment.
             drawing_img = prepare_for_multiply(drawing_img, 210)
+            
+            # Boost colors and contrast for rich, vibrant full-color printing
+            from PIL import ImageEnhance
+            color_enhancer = ImageEnhance.Color(drawing_img)
+            drawing_img = color_enhancer.enhance(1.8) # Boost saturation by 80%
+            contrast_enhancer = ImageEnhance.Contrast(drawing_img)
+            drawing_img = contrast_enhancer.enhance(1.25) # Boost contrast by 25%
             
             ex = (width - drawing_img.width) // 2
             blend_multiply(img, drawing_img, (ex, current_y))
