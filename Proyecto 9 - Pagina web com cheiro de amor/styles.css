@@ -193,7 +193,8 @@ img {
   font-size: 0.75rem;
   font-family: var(--font-body);
   font-weight: 400;
-  letter-spacing: 0.35em;
+  letter-spacing: 0.15em;
+  white-space: nowrap;
   text-transform: uppercase;
   color: var(--color-accent-terracotta);
   margin-top: 0.2rem;
@@ -201,7 +202,8 @@ img {
 
 .nav-links {
   display: flex;
-  gap: 2.5rem;
+  gap: 1.5rem;
+  white-space: nowrap;
   list-style: none;
 }
 
@@ -501,7 +503,8 @@ img {
 .products-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2.5rem;
+  gap: 1.5rem;
+  white-space: nowrap;
   animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
