@@ -10,8 +10,11 @@ from typing import List, Dict, Any
 
 from gui.components.entry_list import EntryList
 from gui.components.date_picker import DateRangeField
+from gui.components.autocomplete_entry import CTkAutocomplete
 from gui.theme import Palette, Fonts
 from services.i18n import I18nService
+
+COMMON_TITLES = ["Software Engineer", "Backend Developer", "Frontend Developer", "Full Stack Developer", "Data Scientist", "Project Manager", "DevOps Engineer", "UI/UX Designer", "Product Manager"]
 
 class ExperienceTab(ctk.CTkScrollableFrame):
     def __init__(self, parent: ctk.CTkFrame, i18n: I18nService) -> None:
@@ -42,6 +45,9 @@ class ExperienceTab(ctk.CTkScrollableFrame):
             
             if key == "dates":
                 entry = DateRangeField(frame, self._i18n)
+                entry.grid(row=idx*2+1, column=0, columnspan=2, sticky="ew", padx=15, pady=(0, 5))
+            elif key == "title":
+                entry = CTkAutocomplete(frame, suggestions=COMMON_TITLES, font=Fonts.label(), fg_color=Palette.ENTRY_BG, border_color=Palette.BORDER, height=36)
                 entry.grid(row=idx*2+1, column=0, columnspan=2, sticky="ew", padx=15, pady=(0, 5))
             else:
                 entry = ctk.CTkEntry(frame, font=Fonts.label(), fg_color=Palette.ENTRY_BG, border_color=Palette.BORDER, height=36)
@@ -86,3 +92,10 @@ class ExperienceTab(ctk.CTkScrollableFrame):
 
     def get_data(self) -> List[Dict[str, Any]]:
         return self.entry_list.get_data()
+
+    def validate(self) -> tuple[bool, str]:
+        data = self.get_data()
+        for exp in data:
+            if not exp.get("title") or not exp.get("company") or not exp.get("dates"):
+                return False, "Completa todos los campos obligatorios en cada Experiencia."
+        return True, ""

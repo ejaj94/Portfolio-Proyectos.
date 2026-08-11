@@ -813,7 +813,21 @@ const PRODUCTS = [
         price: 32.90,
         image: "assets/gift_relax.png",
         qty: 1,
-        pt: es: en: {
+        pt: {
+            name: "Relaxing Spa Ritual Set",
+            categoryLabel: "Gift Set",
+            aromaBrief: "A complete wellness experience to transform your home into a true luxury spa.",
+            description: "Pamper yourself with this kit designed for deep relaxation. Contains: 1x Lavender Scented Candle (regular size), 1x Rose Soap, 1x Soft Cotton Towel, and 1x Aromatic Bath Salt with natural herbs on a reusable bamboo tray.",
+            aromaProfile: "Herbal, Calm, Complete Aromatherapy"
+        },
+        es: {
+            name: "Relaxing Spa Ritual Set",
+            categoryLabel: "Gift Set",
+            aromaBrief: "A complete wellness experience to transform your home into a true luxury spa.",
+            description: "Pamper yourself with this kit designed for deep relaxation. Contains: 1x Lavender Scented Candle (regular size), 1x Rose Soap, 1x Soft Cotton Towel, and 1x Aromatic Bath Salt with natural herbs on a reusable bamboo tray.",
+            aromaProfile: "Herbal, Calm, Complete Aromatherapy"
+        },
+        en: {
             name: "Relaxing Spa Ritual Set",
             categoryLabel: "Gift Set",
             aromaBrief: "A complete wellness experience to transform your home into a true luxury spa.",
@@ -834,7 +848,21 @@ const PRODUCTS = [
         price: 12.90,
         image: "assets/new_prod_1.jpeg",
         qty: 1,
-        pt: es: en: {
+        pt: {
+            name: "Relaxing Spa Ritual Set",
+            categoryLabel: "Gift Set",
+            aromaBrief: "A complete wellness experience to transform your home into a true luxury spa.",
+            description: "Pamper yourself with this kit designed for deep relaxation. Contains: 1x Lavender Scented Candle (regular size), 1x Rose Soap, 1x Soft Cotton Towel, and 1x Aromatic Bath Salt with natural herbs on a reusable bamboo tray.",
+            aromaProfile: "Herbal, Calm, Complete Aromatherapy"
+        },
+        es: {
+            name: "Relaxing Spa Ritual Set",
+            categoryLabel: "Gift Set",
+            aromaBrief: "A complete wellness experience to transform your home into a true luxury spa.",
+            description: "Pamper yourself with this kit designed for deep relaxation. Contains: 1x Lavender Scented Candle (regular size), 1x Rose Soap, 1x Soft Cotton Towel, and 1x Aromatic Bath Salt with natural herbs on a reusable bamboo tray.",
+            aromaProfile: "Herbal, Calm, Complete Aromatherapy"
+        },
+        en: {
             name: "Bouquet Rose Scented Candle",
             categoryLabel: "Scented Candle",
             aromaBrief: "Decorative candle inspired by a refined floral bouquet with rose essence.",

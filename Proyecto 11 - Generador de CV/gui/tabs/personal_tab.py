@@ -9,8 +9,11 @@ import customtkinter as ctk
 from typing import Dict, Any
 
 from gui.components.photo_picker import PhotoPicker
+from gui.components.autocomplete_entry import CTkAutocomplete
 from gui.theme import Palette, Fonts
 from services.i18n import I18nService
+
+COMMON_TITLES = ["Software Engineer", "Backend Developer", "Frontend Developer", "Full Stack Developer", "Data Scientist", "Project Manager", "DevOps Engineer", "UI/UX Designer", "Product Manager"]
 
 
 class PersonalTab(ctk.CTkScrollableFrame):
@@ -52,14 +55,25 @@ class PersonalTab(ctk.CTkScrollableFrame):
             # Store label reference for dynamic updates
             setattr(self, f"lbl_{key}", lbl)
 
-            entry = ctk.CTkEntry(
-                self, 
-                font=Fonts.label(), 
-                fg_color=Palette.ENTRY_BG, 
-                border_color=Palette.BORDER,
-                height=36,
-                corner_radius=8
-            )
+            if key == "title":
+                entry = CTkAutocomplete(
+                    self, 
+                    suggestions=COMMON_TITLES,
+                    font=Fonts.label(), 
+                    fg_color=Palette.ENTRY_BG, 
+                    border_color=Palette.BORDER,
+                    height=36,
+                    corner_radius=8
+                )
+            else:
+                entry = ctk.CTkEntry(
+                    self, 
+                    font=Fonts.label(), 
+                    fg_color=Palette.ENTRY_BG, 
+                    border_color=Palette.BORDER,
+                    height=36,
+                    corner_radius=8
+                )
             entry.grid(row=row+1, column=col, sticky="ew", padx=10, pady=(5, 10))
             self._entries[key] = entry
 
@@ -81,3 +95,14 @@ class PersonalTab(ctk.CTkScrollableFrame):
         data = {k: v.get().strip() for k, v in self._entries.items()}
         data["photo"] = self.photo_picker.get_photo_path()
         return data
+
+    def validate(self) -> tuple[bool, str]:
+        for key, lang_key in self._fields:
+            if key == "photo": continue
+            entry = self._entries[key]
+            if not entry.get().strip():
+                entry.configure(border_color="#d32f2f") # Red
+                return False, f"El campo {self._i18n.t(lang_key)} es obligatorio."
+            else:
+                entry.configure(border_color=Palette.BORDER)
+        return True, ""
