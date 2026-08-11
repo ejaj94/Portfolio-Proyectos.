@@ -774,7 +774,7 @@ const PRODUCTS = [
     },
     {
         id: "candle-general-1",
-        category: "vela",
+        category: "vela-vaso",
         price: 12.800,
         image: "assets/candle_general_1.jpeg",
         qty: 1,
@@ -1734,7 +1734,7 @@ PRODUCTS.push({
 
 PRODUCTS.push({
     id: "candle-special-1",
-    category: "vela",
+    category: "vela-vaso",
     price: 15.90,
     image: "assets/candle_special_1.jpeg",
     qty: 1,
