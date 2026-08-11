@@ -1058,7 +1058,22 @@ const PRODUCTS = [
             description: "Pièce artisanale exclusive à la finition biologique aux tons neutres, infusée d'huiles essentielles botaniques pour harmoniser n'importe quelle pièce de votre maison.",
             aromaProfile: "Biologique, Botanique, Harmonieux, Neutre"
         }
+    },
+    {
+        id: "candle-buque-aquarium",
+        category: "vela",
+        price: 15.00,
+        image: "assets/candle-bouquet.jpg",
+        qty: 1,
+        pt: {
+            name: "Buquê Aquarium",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Buquê com flores de cera de soja e decoração de flores secas em recipiente de gesso.",
+            description: "Buquê com flores de cera de soja e decoração de flores secas em recipiente de gesso.",
+            aromaProfile: "Floral"
+        }
     }
+
 ];
 
 // Dynamically generate the 39 decorative pieces to keep codebase clean and modular
