@@ -779,17 +779,17 @@ const PRODUCTS = [
         image: "assets/candle_general_1.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Aromática Cera de Soja Premium",
+            name: "Vela Aromática Premium",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Copo de cera natural jateado com pavio de algodão e baunilha suave.",
-            description: "Vela aromática clássica em copo de vidro jateado, com cera de soja 100% pura e fragrância acolhedora de baunilha doce que acalma e conforta o ambiente.",
+            description: "Vela aromática com copo em cera de soja com pétalas de rosa que dão cor e charme em qualquer espaço.",
             aromaProfile: "Baunilha Doce, Suave, Acolhedor"
         },
         es: {
-            name: "Vela Aromática Cera de Soja Premium",
+            name: "Vela Aromática Premium",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Vaso de cera natural esmerilado con mecha de algodón y vainilla suave.",
-            description: "Vela aromática clásica en vaso de vidrio esmerilado, con cera de soja 100% pura y fragancia acogedora de vainilla dulce que calma y reconforta el hogar.",
+            description: "Vela aromática com copo em cera de soja com pétalas de rosa que dão cor e charme em qualquer espaço.",
             aromaProfile: "Vainilla Dulce, Suave, Acogedor"
         },
         en: {
@@ -834,21 +834,7 @@ const PRODUCTS = [
         price: 12.90,
         image: "assets/new_prod_1.jpeg",
         qty: 1,
-        pt: {
-            name: "Vela Aromática Bouquet Rose",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela decorativa inspirada num requintado bouquet floral com essência de rosas.",
-            description: "Vela decorativa inspirada num requintado bouquet floral com essência suave de rosas e peónias para criar um ambiente romântico e acolhedor.",
-            aromaProfile: "Rosa, Peónia, Romântico, Floral"
-        },
-        es: {
-            name: "Vela Aromática Bouquet Rose",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela decorativa inspirada en un refinado ramo floral con esencia de rosas.",
-            description: "Vela decorativa inspirada en un refinado ramo floral con suave esencia de rosas y peonías para crear un ambiente romántico y acogedor.",
-            aromaProfile: "Rosa, Peonía, Romántico, Floral"
-        },
-        en: {
+        pt: es: en: {
             name: "Bouquet Rose Scented Candle",
             categoryLabel: "Scented Candle",
             aromaBrief: "Decorative candle inspired by a refined floral bouquet with rose essence.",
