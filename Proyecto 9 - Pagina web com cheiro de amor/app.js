@@ -1072,6 +1072,20 @@ const PRODUCTS = [
             description: "Buquê com flores de cera de soja e decoração de flores secas em recipiente de gesso.",
             aromaProfile: "Floral"
         }
+    },
+    {
+        id: "candle-vela-mia",
+        category: "vela-vaso",
+        price: 24.00,
+        image: "assets/candle-mia.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Mia",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela em vaso com flor tamanho GRANDE e com detalhe emperolado. Aroma único e marcante para um momento especial.",
+            description: "Vela em vaso com flor tamanho GRANDE e com detalhe emperolado. Aroma único e marcante para um momento especial.",
+            aromaProfile: "Floral e Marcante"
+        }
     }
 
 ];
