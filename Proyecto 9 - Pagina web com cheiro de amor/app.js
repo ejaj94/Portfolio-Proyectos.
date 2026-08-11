@@ -530,7 +530,7 @@ const PRODUCTS = [
         {
         id: "candle-rose-1",
         category: "vela",
-        price: 10.90,
+        price: 10.800,
         image: "assets/candle_rose_1.jpeg",
         qty: 1,
         pt: {
@@ -600,7 +600,7 @@ const PRODUCTS = [
             {
         id: "candle-vela_en_vaso-1",
         category: "vela-vaso",
-        price: 17.90,
+        price: 17.800,
         image: "assets/candle_vela_en_vaso_1.jpeg",
         qty: 1,
         pt: {
@@ -775,7 +775,7 @@ const PRODUCTS = [
     {
         id: "candle-general-1",
         category: "vela",
-        price: 12.90,
+        price: 12.800,
         image: "assets/candle_general_1.jpeg",
         qty: 1,
         pt: {
@@ -852,7 +852,7 @@ const PRODUCTS = [
     {
         id: "candle-new-2",
         category: "vela",
-        price: 13.00,
+        price: 12.90,
         image: "assets/new_prod_2.jpeg",
         qty: 1,
         pt: {
@@ -957,14 +957,14 @@ const PRODUCTS = [
     {
         id: "candle-new-5",
         category: "vela",
-        price: 10.90,
+        price: 18.90,
         image: "assets/new_prod_5.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Aromática Mel & Âmbar",
+            name: "Vela Aromática Malmequeres",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Fragrança quente de mel silvestre e âmbar dourado para o seu espaço.",
-            description: "Uma criação acolhedora com fragrância quente de mel silvestre e âmbar dourado, ideal para iluminar o seu espaço com conforto e elegância.",
+            description: "Uma criação acolhedora, ideal para iluminar o seu espaço com conforto e elegância.",
             aromaProfile: "Mel, Âmbar, Acolhedor, Quente"
         },
         es: {
@@ -1062,7 +1062,7 @@ const PRODUCTS = [
     {
         id: "candle-buque-aquarium",
         category: "vela",
-        price: 15.00,
+        price: 14.90,
         image: "assets/candle-bouquet.jpg",
         qty: 1,
         pt: {
@@ -1076,7 +1076,7 @@ const PRODUCTS = [
     {
         id: "candle-vela-mia",
         category: "vela-vaso",
-        price: 24.00,
+        price: 23.90,
         image: "assets/candle-mia.jpg",
         qty: 1,
         pt: {
