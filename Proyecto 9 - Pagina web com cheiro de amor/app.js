@@ -1094,7 +1094,7 @@ const PRODUCTS = [
 const DECORATIVE_NAMES = [
     { pt: "Placa Decorativa com Dedicatória", es: "Placa Decorativa con Dedicatoria", en: "Decorative Plaque with Dedication", fr: "Plaque Décorative avec Dédicace", basePrice: 6.90 },
     { pt: "Conjunto Pureza", es: "Conjunto Pureza", en: "Purity Set", fr: "Ensemble Pureté", basePrice: 15.90 },
-    { pt: "Porta-Velas Canelado Premium", es: "Porta-velas Acanalado Premium", en: "Premium Ribbed Candle Holder", fr: "Porte-bougie Cannelé Premium", basePrice: 5.90 },
+    { pt: "Peça Decorativa com Íman", es: "Pieza Decorativa con Imán", en: "Decorative Piece with Magnet", fr: "Pièce Décorative avec Aimant", basePrice: 7.90 },
     { pt: "Saboneteira Ondas Minimalista", es: "Jabonera de Ondas Minimalista", en: "Waves Minimalist Soap Dish", fr: "Porte-savon Vagues Minimaliste", basePrice: 7.90 },
     { pt: "Prato de Joias Coração", es: "Plato de Joyas de Corazón", en: "Heart Jewelry Dish", fr: "Coupe à Bijoux Cœur", basePrice: 4.90 },
     { pt: "Bandeja Redonda Terrazzo", es: "Bandeja Redonda Terrazzo", en: "Round Terrazzo Tray", fr: "Plateau Rond Terrazzo", basePrice: 10.90 },
@@ -1116,10 +1116,10 @@ for (let i = 1; i <= 39; i++) {
         image: `assets/decor_${i}.jpg`,
         qty: 1,
         pt: {
-            name: nameTemplate.pt.includes("Placa Decorativa") || nameTemplate.pt.includes("Conjunto Pureza") ? nameTemplate.pt : `${nameTemplate.pt} #${i}`,
+            name: nameTemplate.pt.includes("Placa Decorativa") || nameTemplate.pt.includes("Conjunto Pureza") || nameTemplate.pt.includes("Peça Decorativa com Íman") ? nameTemplate.pt : `${nameTemplate.pt} #${i}`,
             categoryLabel: "Peça Decorativa",
             aromaBrief: "Design minimalista e elegante em gesso ecológico com acabamento impermeabilizado.",
-            description: nameTemplate.pt.includes("Placa Decorativa") ? "Placa com dedicatória com qualquer mensagem que deseje, pode escolher-se as cores e modelos ao gosto dessa pessoa especial que queira agradar esse dia." : nameTemplate.pt.includes("Conjunto Pureza") ? "Peças decorativas em jesmonite que oferecem elegância e simplicidade a qualquer espaço. Pode também alterar as cores, flores e decoração ao seu gosto." : "Uma peça decorativa exclusiva feita à mão em gesso ecológico premium, com acabamento impermeável acetinado. Perfeita para organizar joias, perfumes, sabonetes ou como base para as nossas velas aromáticas. Cada peça é única e moldada individualmente em Portugal.",
+            description: nameTemplate.pt.includes("Placa Decorativa") ? "Placa com dedicatória com qualquer mensagem que deseje, pode escolher-se as cores e modelos ao gosto dessa pessoa especial que queira agradar esse dia." : nameTemplate.pt.includes("Conjunto Pureza") ? "Peças decorativas em jesmonite que oferecem elegância e simplicidade a qualquer espaço. Pode também alterar as cores, flores e decoração ao seu gosto." : nameTemplate.pt.includes("Peça Decorativa com Íman") ? "Peça decorativa com adaptador para folhas para facilitar apontamentos, lista de compras, tarefas ou qualquer uso, isso fica à sua imaginação. Tem a opção de poder escolher o nome da pessoa que deseja oferecer ou para si." :  "Uma peça decorativa exclusiva feita à mão em gesso ecológico premium, com acabamento impermeável acetinado. Perfeita para organizar joias, perfumes, sabonetes ou como base para as nossas velas aromáticas. Cada peça é única e moldada individualmente em Portugal.",
             aromaProfile: "Eco-friendly, Design Exclusivo, Pintura Manual"
         },
         es: {
