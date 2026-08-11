@@ -813,21 +813,7 @@ const PRODUCTS = [
         price: 32.90,
         image: "assets/gift_relax.png",
         qty: 1,
-        pt: {
-            name: "Kit Ritual de Spa Relax",
-            categoryLabel: "Set de Oferta",
-            aromaBrief: "Uma experiência de bem-estar completa para transformar a sua casa num verdadeiro spa de luxo.",
-            description: "Mime-se com este kit projetado para relaxamento profundo. Contém: 1x Vela Aromática de Alfazema (tamanho regular), 1x Sabonete de Rosas, 1x Toalha de Algodão Macio e 1x Sal de Banho Aromático com ervas naturais numa bandeja de bambu reutilizável.",
-            aromaProfile: "Herbal, Calma, Aromaterapia Completa"
-        },
-        es: {
-            name: "Kit Ritual de Spa Relax",
-            categoryLabel: "Set de Regalo",
-            aromaBrief: "Una experiencia de bienestar completa para transformar tu hogar en un verdadero spa de lujo.",
-            description: "Mímate con este kit diseñado para una relajación profunda. Contiene: 1x Vela Aromática de Lavanda (tamaño regular), 1x Jabón de Rosas, 1x Toalla de Algodón Suave y 1x Sal de Baño Aromática con hierbas naturales en una bandeja de bambú reutilizable.",
-            aromaProfile: "Herbal, Calma, Aromaterapia Completa"
-        },
-        en: {
+        pt: es: en: {
             name: "Relaxing Spa Ritual Set",
             categoryLabel: "Gift Set",
             aromaBrief: "A complete wellness experience to transform your home into a true luxury spa.",
@@ -1092,7 +1078,7 @@ const PRODUCTS = [
 // Dynamically generate the 39 decorative pieces to keep codebase clean and modular
 const DECORATIVE_NAMES = [
     { pt: "Bandeja Oval em Gesso", es: "Bandeja Ovalada de Yeso", en: "Oval Plaster Tray", fr: "Plateau Oval en Plâtre", basePrice: 8.90 },
-    { pt: "Porta-Joias Concha do Mar", es: "Plato Joyero de Concha", en: "Seashell Jewelry Dish", fr: "Vide-poche Coquillage", basePrice: 6.90 },
+    { pt: "Conjunto Leveza", es: "Plato Joyero de Concha", en: "Seashell Jewelry Dish", fr: "Vide-poche Coquillage", basePrice: 6.90 },
     { pt: "Porta-Velas Canelado Premium", es: "Porta-velas Acanalado Premium", en: "Premium Ribbed Candle Holder", fr: "Porte-bougie Cannelé Premium", basePrice: 5.90 },
     { pt: "Saboneteira Ondas Minimalista", es: "Jabonera de Ondas Minimalista", en: "Waves Minimalist Soap Dish", fr: "Porte-savon Vagues Minimaliste", basePrice: 7.90 },
     { pt: "Prato de Joias Coração", es: "Plato de Joyas de Corazón", en: "Heart Jewelry Dish", fr: "Coupe à Bijoux Cœur", basePrice: 4.90 },
@@ -1118,7 +1104,7 @@ for (let i = 1; i <= 39; i++) {
             name: `${nameTemplate.pt} #${i}`,
             categoryLabel: "Peça Decorativa",
             aromaBrief: "Design minimalista e elegante em gesso ecológico com acabamento impermeabilizado.",
-            description: "Uma peça decorativa exclusiva feita à mão em gesso ecológico premium, com acabamento impermeável acetinado. Perfeita para organizar joias, perfumes, sabonetes ou como base para as nossas velas aromáticas. Cada peça é única e moldada individualmente em Portugal.",
+            description: nameTemplate.pt.includes("Conjunto Leveza") ? "Peça decorativa feita em jesmonite com um toque amoroso de dourado. Pode ser feita ao gosto de cada um, com diferentes cores e desenhos." : "Uma peça decorativa exclusiva feita à mão em gesso ecológico premium, com acabamento impermeável acetinado. Perfeita para organizar joias, perfumes, sabonetes ou como base para as nossas velas aromáticas. Cada peça é única e moldada individualmente em Portugal.",
             aromaProfile: "Eco-friendly, Design Exclusivo, Pintura Manual"
         },
         es: {
