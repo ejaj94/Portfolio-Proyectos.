@@ -12,8 +12,11 @@ from typing import Dict, Any, List
 
 from gui.components.entry_list import EntryList
 from gui.components.date_picker import DateRangeField
+from gui.components.autocomplete_entry import CTkAutocomplete
 from gui.theme import Palette, Fonts
 from services.i18n import I18nService
+
+COMMON_DEGREES = ["Bachelor of Science in Computer Science", "Master of Science in Software Engineering", "Full Stack Web Development Bootcamp", "Ingeniería en Sistemas", "Licenciatura en Informática", "Master en Ciencia de Datos", "Técnico Superior en Programación"]
 
 class EducationTab(ctk.CTkScrollableFrame):
     def __init__(self, parent: ctk.CTkFrame, i18n: I18nService) -> None:
@@ -61,7 +64,10 @@ class EducationTab(ctk.CTkScrollableFrame):
             lbls.append((lbl, lang_key))
             
             if key == "dates":
-                entry = DateRangeField(frame, self._i18n, current_label_key="date_current_edu")
+                entry = DateRangeField(frame, self._i18n)
+                entry.grid(row=idx*2+1, column=0, columnspan=2, sticky="ew", padx=15, pady=(0, 5))
+            elif key == "degree":
+                entry = CTkAutocomplete(frame, suggestions=COMMON_DEGREES, font=Fonts.label(), fg_color=Palette.ENTRY_BG, border_color=Palette.BORDER, height=36)
                 entry.grid(row=idx*2+1, column=0, columnspan=2, sticky="ew", padx=15, pady=(0, 5))
             else:
                 entry = ctk.CTkEntry(frame, font=Fonts.label(), fg_color=Palette.ENTRY_BG, border_color=Palette.BORDER, height=36)
@@ -115,3 +121,10 @@ class EducationTab(ctk.CTkScrollableFrame):
             "degrees": self.entry_list.get_data(),
             "certificates": self._cert_paths
         }
+
+    def validate(self) -> tuple[bool, str]:
+        data = self.entry_list.get_data()
+        for edu in data:
+            if not edu.get("degree") or not edu.get("school") or not edu.get("dates"):
+                return False, "Completa todos los campos obligatorios en cada Educación."
+        return True, ""

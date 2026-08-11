@@ -46,3 +46,10 @@ class ProfileTab(ctk.CTkFrame):
 
     def get_data(self) -> str:
         return self._text.get("1.0", "end-1c").strip()
+
+    def validate(self) -> tuple[bool, str]:
+        if not self.get_data():
+            self._text.configure(border_color="#d32f2f")
+            return False, "El Perfil Profesional es obligatorio."
+        self._text.configure(border_color=Palette.BORDER)
+        return True, ""

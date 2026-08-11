@@ -47,3 +47,10 @@ class SkillsTab(ctk.CTkScrollableFrame):
 
     def get_data(self) -> List[Tuple[str, str]]:
         return self.entry_list.get_data()
+
+    def validate(self) -> tuple[bool, str]:
+        data = self.get_data()
+        for group, skills in data:
+            if not skills:
+                return False, "Las habilidades no pueden quedar vacías."
+        return True, ""

@@ -49,3 +49,7 @@ class LanguagesTab(ctk.CTkScrollableFrame):
 
     def get_data(self) -> List[Tuple[str, str]]:
         return self.entry_list.get_data()
+
+    def validate(self) -> tuple[bool, str]:
+        # Language fields are option menus, so they are always filled with a valid option.
+        return True, ""

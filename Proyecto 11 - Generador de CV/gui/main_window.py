@@ -141,6 +141,18 @@ class MainWindow(ctk.CTk):
         self._tabs["education"] = EducationTab(self.tab_container, self._i18n)
         self._tabs["languages"] = LanguagesTab(self.tab_container, self._i18n)
 
+        # Nav Controls
+        self.nav_controls_frame = ctk.CTkFrame(self.main_frame, fg_color="transparent")
+        self.nav_controls_frame.grid(row=1, column=0, sticky="ew", pady=(10, 10))
+        self.nav_controls_frame.grid_columnconfigure(0, weight=1)
+        self.nav_controls_frame.grid_columnconfigure(1, weight=1)
+
+        self.btn_back = ctk.CTkButton(self.nav_controls_frame, text="<- Atrás", font=Fonts.button(), fg_color=Palette.SURFACE2, hover_color=Palette.BORDER, text_color=Palette.TEXT, command=self._on_back)
+        self.btn_back.grid(row=0, column=0, sticky="w")
+
+        self.btn_next = ctk.CTkButton(self.nav_controls_frame, text="Siguiente ->", font=Fonts.button(), fg_color=Palette.ACCENT, hover_color=Palette.ACCENT_HOVER, command=self._on_next)
+        self.btn_next.grid(row=0, column=1, sticky="e")
+
         # Log Bar
         self.log_lbl = ctk.CTkLabel(
             self.main_frame, 
@@ -149,10 +161,26 @@ class MainWindow(ctk.CTk):
             text_color=Palette.TEXT_MUTED,
             anchor="w"
         )
-        self.log_lbl.grid(row=1, column=0, sticky="ew", pady=(10, 0))
+        self.log_lbl.grid(row=2, column=0, sticky="ew", pady=(10, 0))
 
     def _select_tab(self, tab_key: str) -> None:
         """Switches the visible tab and updates button styles."""
+        tabs_order = ["personal", "profile", "experience", "skills", "education", "languages"]
+        
+        # Validation if moving forward or clicking sidebar
+        if self._current_tab in self._tabs and self._current_tab != tab_key:
+            curr_idx = tabs_order.index(self._current_tab)
+            target_idx = tabs_order.index(tab_key)
+            
+            # If moving forward, must validate current tab
+            if target_idx > curr_idx:
+                is_valid, msg = self._tabs[self._current_tab].validate()
+                if not is_valid:
+                    self._log(msg, "error")
+                    return
+        
+        self._log("Listo.", "info")
+
         # Hide current
         if self._current_tab in self._tabs:
             self._tabs[self._current_tab].grid_forget()
@@ -162,6 +190,30 @@ class MainWindow(ctk.CTk):
         self._current_tab = tab_key
         self._tabs[tab_key].grid(row=0, column=0, sticky="nsew")
         self.nav_buttons[tab_key].configure(fg_color=Palette.ACCENT, text_color=Palette.TEXT)
+        
+        # Update Nav Buttons State
+        idx = tabs_order.index(tab_key)
+        if idx == 0:
+            self.btn_back.configure(state="disabled", fg_color="transparent")
+        else:
+            self.btn_back.configure(state="normal", fg_color=Palette.SURFACE2)
+            
+        if idx == len(tabs_order) - 1:
+            self.btn_next.configure(state="disabled", fg_color="transparent")
+        else:
+            self.btn_next.configure(state="normal", fg_color=Palette.ACCENT)
+
+    def _on_next(self):
+        tabs_order = ["personal", "profile", "experience", "skills", "education", "languages"]
+        idx = tabs_order.index(self._current_tab)
+        if idx < len(tabs_order) - 1:
+            self._select_tab(tabs_order[idx + 1])
+
+    def _on_back(self):
+        tabs_order = ["personal", "profile", "experience", "skills", "education", "languages"]
+        idx = tabs_order.index(self._current_tab)
+        if idx > 0:
+            self._select_tab(tabs_order[idx - 1])
 
     def _on_language_change(self, code: str) -> None:
         self._i18n.set_language(code.lower())
@@ -198,30 +250,14 @@ class MainWindow(ctk.CTk):
             "output_lang": self.lang_menu.get().lower()
         }
 
-        # 2. Validation: All fields must be filled
-        personal = raw_data["personal"]
-        for key, val in personal.items():
-            if key != "photo" and not val:
-                self._log("Todos los campos de Información Personal son obligatorios", "error")
-                return
-                
-        if not raw_data["profile"]:
-            self._log("El Perfil Profesional es obligatorio", "error")
-            return
-            
-        for exp in raw_data["experience"]:
-            if not exp.get("title") or not exp.get("company") or not exp.get("date"):
-                self._log("Completa todos los campos en cada Experiencia", "error")
-                return
-                
-        for edu in raw_data["education"].get("degrees", []):
-            if not edu.get("degree") or not edu.get("school") or not edu.get("date"):
-                self._log("Completa todos los campos en cada Educación", "error")
-                return
-                
-        for skill in raw_data["skills"]:
-            if not skill[1]:
-                self._log("No dejes habilidades vacías", "error")
+        # 2. Validation: We only need to validate the final tab (Languages)
+        # because the user couldn't have reached here without validating the previous ones.
+        # But for safety, validate all tabs sequentially.
+        for tab_key in ["personal", "profile", "experience", "skills", "education", "languages"]:
+            is_valid, msg = self._tabs[tab_key].validate()
+            if not is_valid:
+                self._select_tab(tab_key) # Jump to the invalid tab
+                self._log(msg, "error")
                 return
 
         # 3. Create Provider
