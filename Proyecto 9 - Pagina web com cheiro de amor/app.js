@@ -852,7 +852,7 @@ const PRODUCTS = [
     {
         id: "candle-new-2",
         category: "vela",
-        price: 11.90,
+        price: 13.00,
         image: "assets/new_prod_2.jpeg",
         qty: 1,
         pt: {
