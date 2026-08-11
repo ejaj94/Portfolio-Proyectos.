@@ -1027,14 +1027,14 @@ const PRODUCTS = [
     {
         id: "candle-new-7",
         category: "vela",
-        price: 13.90,
+        price: 11.90,
         image: "assets/new_prod_7.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Esculpida Pedra Natural",
+            name: "Vela Havana",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Peça artesanal exclusiva com acabamento orgânico e óleos botânicos.",
-            description: "Peça artesanal exclusiva com acabamento orgânico em tons neutros, infundida com óleos essenciais botânicos para harmonizar qualquer divisão do seu lar.",
+            description: "Uma vela a pensar no verão e na praia.",
             aromaProfile: "Orgânico, Botânico, Harmonioso, Neutro"
         },
         es: {
