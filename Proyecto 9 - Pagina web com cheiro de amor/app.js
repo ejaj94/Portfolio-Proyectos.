@@ -1844,6 +1844,31 @@ const TRANSLATIONS = {
         en: "Our Story",
         fr: "Notre Histoire"
     },
+    
+    "nav-link-workshops": {
+        pt: "Workshops",
+        es: "Workshops",
+        en: "Workshops",
+        fr: "Ateliers"
+    },
+    "workshops-title": {
+        pt: "Workshops Online",
+        es: "Workshops Online",
+        en: "Online Workshops",
+        fr: "Ateliers en Ligne"
+    },
+    "workshops-desc": {
+        pt: "Se desejas aprender e ter uma experincia mais prxima desta arte de fazer sabonetes, velas artesanais e peas decorativas, convido-te a subscrever os meus workshops online.",
+        es: "Si deseas aprender y tener una experiencia ms cercana a este arte de la elaboracin de jabones, velas artesanales y piezas decorativas, te invito a suscribirte a mis workshops online.",
+        en: "If you want to learn and have a closer experience to this art of making soaps, handmade candles and decorative pieces, I invite you to subscribe to my online workshops.",
+        fr: "Si vous souhaitez apprendre et avoir une exprience plus proche de cet art de fabriquer des savons, des bougies artisanales et des pices dcoratives, je vous invite  vous inscrire  mes ateliers en ligne."
+    },
+    "workshops-btn": {
+        pt: "Subscrever Agora",
+        es: "Suscribirse Ahora",
+        en: "Subscribe Now",
+        fr: "S'abonner Maintenant"
+    },
     "nav-link-contacto": {
         pt: "Contacto",
         es: "Contacto",
