@@ -856,10 +856,10 @@ const PRODUCTS = [
         image: "assets/new_prod_2.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Aromática Jardim Botânico",
+            name: "Vela Aromática Lumière",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Infusão fresca e floral de alfazema e jasmim para o seu lar.",
-            description: "Vela decorativa em recipiente natural infundida com notas frescas e florais de alfazema e jasmim, perfeita para trazer a serenidade da natureza ao seu lar.",
+            description: "Vela aromática em recipiente de gesso com flor em cera de soja e flores secas. Uma vela pensada na elegância e requinte, mas também na simplicidade.",
             aromaProfile: "Alfazema, Jasmim, Fresco, Botânico"
         },
         es: {
