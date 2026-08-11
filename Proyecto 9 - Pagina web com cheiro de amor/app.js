@@ -992,14 +992,14 @@ const PRODUCTS = [
     {
         id: "candle-new-6",
         category: "vela",
-        price: 8.90,
+        price: 22.90,
         image: "assets/new_prod_6.jpeg",
         qty: 1,
         pt: {
-            name: "Vela Flor de Algodão & Lavanda",
+            name: "Buquê Mala",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Notas relaxantes de flor de algodão e alfazema para pura tranquilidade.",
-            description: "Vela aromática em tom suave com notas relaxantes de flor de algodão e alfazema, proporcionando uma sensação de limpeza e pura tranquilidade.",
+            description: "Buquê em cera de soja aromático em mala. É possível agradar a todos os gostos uma vez que as suas cores são vivas e marcantes.",
             aromaProfile: "Algodão, Alfazema, Limpo, Relaxante"
         },
         es: {
