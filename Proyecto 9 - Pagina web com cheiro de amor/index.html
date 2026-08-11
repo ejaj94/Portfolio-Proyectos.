@@ -80,18 +80,7 @@
 
         <!-- Actions (Cart toggle, Language selector & mobile menu) -->
         <div class="nav-actions">
-          <div class="lang-select-wrapper">
-            <select
-              class="lang-select"
-              id="lang-select"
-              aria-label="Select Language"
-            >
-              <option value="pt" selected>Português</option>
-              <option value="es">Español</option>
-              <option value="en">English</option>
-              <option value="fr">Français</option>
-            </select>
-          </div>
+          <div class="lang-select-wrapper" id="google_translate_element"></div>
 
           <button class="theme-toggle" id="btn-theme-toggle" title="Alternar Modo Escuro" aria-label="Alternar Modo Escuro">
             <!-- Moon icon (shows in light theme to switch to dark) -->
@@ -490,7 +479,7 @@
           <p id="workshops-desc" data-i18n="workshops-desc">
             Si deseas aprender y tener una experiencia más cercana a este arte de la elaboración de jabones, velas artesanales y piezas decorativas, te invito a suscribirte a mis workshops online.
           </p>
-          <a href="#contacto" class="btn btn-primary" id="workshops-btn" data-i18n="workshops-btn">Suscribirse Ahora</a>
+          <a href="registro.html" class="btn btn-primary" id="workshops-btn" data-i18n="workshops-btn">Suscribirse Ahora</a>
         </div>
         <div class="workshops-image">
           <img src="assets/workshop_banner.jpg" alt="Workshops Com Cheiro de Amor" />
@@ -663,6 +652,14 @@
       </div>
     </footer>
 
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({pageLanguage: 'pt', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+      }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
     <!-- Script -->
     <script src="app.js?v=1.1"></script>
   </body>

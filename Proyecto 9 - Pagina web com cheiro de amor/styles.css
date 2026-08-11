@@ -198,6 +198,8 @@ img {
   text-transform: uppercase;
   color: var(--color-accent-terracotta);
   margin-top: 0.2rem;
+  text-decoration: none !important;
+  border: none !important;
 }
 
 .nav-links {
@@ -1830,6 +1832,28 @@ body.dark-theme .theme-toggle .moon-icon {
 }
 
 
+
+/* MOBILE BRAND FIX */
+
+@media (max-width: 768px) {
+  .navbar-brand {
+    gap: 0.5rem;
+  }
+  .brand-logo-img {
+    height: 40px;
+    width: 40px;
+  }
+  .brand-title {
+    font-size: 1.2rem;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  .brand-subtitle {
+    font-size: 0.5rem;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+}
 
 /* WORKSHOPS SECTION */
 .workshops-section {
