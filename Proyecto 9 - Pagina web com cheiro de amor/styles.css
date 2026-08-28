@@ -2171,3 +2171,114 @@ body { top: 0 !important; }
   text-align: center;
   display: none;
 }
+
+
+/* SUBSCRIPTION & PAYMENT MODAL STYLES */
+.subscription-badge {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  background-color: rgba(212, 163, 148, 0.15);
+  color: #B88274;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 50px;
+  margin-bottom: 0.5rem;
+}
+
+.subscription-price-tag {
+  margin-top: 0.6rem;
+  color: var(--color-text-main, #2E2522);
+}
+
+.subscription-price-tag .currency {
+  font-size: 1.2rem;
+  font-weight: 600;
+  vertical-align: super;
+}
+
+.subscription-price-tag .price-val {
+  font-family: var(--font-heading);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #B88274;
+}
+
+.subscription-price-tag .period {
+  font-size: 0.95rem;
+  color: var(--color-text-muted, #776E6B);
+}
+
+.workshop-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.payment-section-box {
+  background-color: #FAF7F4;
+  border: 1.5px solid #EAE2D8;
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin: 1.2rem 0;
+}
+
+.payment-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.payment-header-row h4 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0;
+}
+
+.payment-card-icons {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.card-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  background-color: #ffffff;
+  border: 1px solid #DDD;
+  color: #333;
+}
+
+.card-tag.visa { color: #1A1F71; }
+.card-tag.mc { color: #EB001B; }
+.card-tag.mbway { color: #0088CC; }
+
+.card-input-wrapper {
+  position: relative;
+}
+
+.card-input-wrapper input {
+  padding-right: 2.5rem;
+}
+
+.card-input-wrapper .lock-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #A0958F;
+}
+
+.secure-guarantee-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.8rem;
+}

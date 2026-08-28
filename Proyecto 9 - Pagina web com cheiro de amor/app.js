@@ -4906,3 +4906,21 @@ async function handleWorkshopRegistration(event) {
         closeWorkshopModal();
     }, 2500);
 }
+
+
+
+/* CREDIT CARD FORMATTERS */
+function formatCreditCardNumber(input) {
+    let val = input.value.replace(/\D/g, '');
+    val = val.substring(0, 16);
+    let formatted = val.match(/.{1,4}/g)?.join(' ') || val;
+    input.value = formatted;
+}
+
+function formatCardExp(input) {
+    let val = input.value.replace(/\D/g, '');
+    if (val.length >= 2) {
+        val = val.substring(0, 2) + '/' + val.substring(2, 4);
+    }
+    input.value = val;
+}
