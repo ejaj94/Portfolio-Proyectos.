@@ -4,9 +4,17 @@ import webbrowser
 from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
-from flask import Flask, render_template_string, jsonify, request
+from flask import Flask, render_template_string, jsonify, request, make_response
 
 app = Flask(__name__)
+
+# Añadir cabeceras anti-caché a todas las respuestas de Flask
+@app.after_request
+def add_no_cache_headers(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 # Estado global del monitor
 monitor_state = {
@@ -31,7 +39,6 @@ def add_log(message):
     ahora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     entry = f"[{ahora}] {message}"
     monitor_state["logs"].append(entry)
-    # Conservar últimos 100 registros
     if len(monitor_state["logs"]) > 100:
         monitor_state["logs"].pop(0)
 
@@ -82,7 +89,7 @@ def ejecutar_scraping():
 
 
 def bucle_monitoreo():
-    add_log(f"[INICIO] Servicio de vigilancia iniciado en localhost (cada {monitor_state['interval']}s).")
+    add_log(f"[INICIO] Servicio de vigilancia iniciado en localhost:5050 (cada {monitor_state['interval']}s).")
     monitor_state["status_text"] = "Vigilando activo"
 
     while monitor_state["running"]:
@@ -102,6 +109,9 @@ HTML_TEMPLATE = """
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🕷️ Monitor de Precios Inteligente - Localhost Web GUI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -117,7 +127,7 @@ HTML_TEMPLATE = """
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-        .form-control, .form-select {
+        .form-control {
             background-color: #2b2b2b;
             border: 1px solid #444;
             color: #fff;
@@ -150,7 +160,7 @@ HTML_TEMPLATE = """
     <div class="container" style="max-width: 900px;">
         <div class="card p-4 mb-4 text-center">
             <h2 class="fw-bold mb-1">🕷️ Monitor de Precios Inteligente</h2>
-            <p class="text-secondary mb-0">Web Scraper Automático en Tiempo Real (http://localhost:5000)</p>
+            <p class="text-secondary mb-0">Web Scraper Automático en Tiempo Real (http://localhost:5050)</p>
         </div>
 
         <div class="card p-4 mb-4">
@@ -207,7 +217,7 @@ HTML_TEMPLATE = """
     <script>
         async function updateStatus() {
             try {
-                const res = await fetch('/api/status');
+                const res = await fetch('/api/status?t=' + new Date().getTime());
                 const data = await res.json();
 
                 const btnStart = document.getElementById('btnStart');
@@ -325,11 +335,11 @@ def api_scan():
 
 
 def open_browser():
-    time.sleep(1.5)
-    webbrowser.open("http://localhost:5000")
+    time.sleep(1.2)
+    webbrowser.open("http://localhost:5050")
 
 
 if __name__ == "__main__":
-    print("Iniciando Servidor Web en http://localhost:5000 ...")
+    print("Iniciando Servidor Web sin cache en http://localhost:5050 ...")
     threading.Thread(target=open_browser, daemon=True).start()
-    app.run(host="127.0.0.1", port=5000, debug=False)
+    app.run(host="127.0.0.1", port=5050, debug=False)
