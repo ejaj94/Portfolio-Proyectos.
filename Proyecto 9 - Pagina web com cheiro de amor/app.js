@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-ophelia-1",
+        category: "vela",
+        price: 12.90,
+        image: "assets/vela_ophelia.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Ophelia",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela em vaso de vidro com rosas esculpidas em relevo.",
+            description: "Elegante vela aromática em recipiente redondo de vidro, decorada com delicadas rosas de cera esculpidas em tons de rosa e bordô. Feita à mão com cera vegetal para perfumar e trazer um toque romântico e sofisticado ao seu espaço.",
+            aromaProfile: "Rosa Silvestre, Peónia, Floral, Romântico"
+        },
+        es: {
+            name: "Vela Ophelia",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela en recipiente de cristal con rosas esculpidas en relieve.",
+            description: "Elegante vela aromática en recipiente redondo de cristal, decorada con delicadas rosas de cera esculpidas en tonos rosa y burdeos. Hecha a mano con cera vegetal para perfumar y aportar un toque romántico y sofisticado a tu hogar.",
+            aromaProfile: "Rosa Silvestre, Peonía, Floral, Romántico"
+        },
+        en: {
+            name: "Ophelia Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Scented candle in a glass bowl with sculpted wax roses.",
+            description: "Elegant scented candle presented in a clear glass bowl, featuring handcrafted wax roses in soft pink and deep burgundy tones. Made with natural wax to infuse your space with romance and fragrance.",
+            aromaProfile: "Wild Rose, Peony, Floral, Romantic"
+        },
+        fr: {
+            name: "Bougie Ophelia",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie parfumée en bol de verre avec roses sculptées.",
+            description: "Élégante bougie parfumée dans un bol en verre transparent, ornée de délicates roses en cire faites à la main dans des teintes roses et bordeaux. Fabriquée avec de la cire naturelle pour une touche romantique et raffinée.",
+            aromaProfile: "Rose Sauvage, Pivoine, Floral, Romantique"
+        }
+    },
+    {
         id: "candle-abobora-1",
         category: "vela",
         price: 12.90,
