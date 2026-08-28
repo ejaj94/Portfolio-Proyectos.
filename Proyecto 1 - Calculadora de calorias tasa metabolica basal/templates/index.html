@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Calorías & TMB</title>
+    <title>TITAN GYM - Calculadora de Calorías & TMB</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <div class="icon">🔥</div>
+            <div class="gym-badge">
+                <span class="icon">🏋️‍♂️</span> TITAN GYM
+            </div>
             <h1>Calculadora Nutricional</h1>
-            <p>Calcula tu Tasa Metabólica Basal y requerimiento calórico diario</p>
+            <p>Calcula tu Tasa Metabólica Basal y objetivo calórico diario</p>
         </header>
 
         <div class="card">
             <form id="calc-form">
                 <div class="form-group">
-                    <label for="nombre">Nombre (Opcional)</label>
+                    <label for="nombre">Nombre del Atleta</label>
                     <input type="text" id="nombre" placeholder="Ej: Angel" autocomplete="off">
                 </div>
 
@@ -56,7 +58,7 @@
                         <option value="ligero">Ligero (Ejercicio 1-3 días/semana)</option>
                         <option value="moderado" selected>Moderado (Ejercicio 3-5 días/semana)</option>
                         <option value="activo">Activo (Ejercicio 6-7 días/semana)</option>
-                        <option value="muy activo">Muy Activo (Ejercicio intenso diario)</option>
+                        <option value="muy activo">Muy Activo (Entrenamiento intenso diario)</option>
                     </select>
                 </div>
 

@@ -2,8 +2,8 @@ import customtkinter as ctk
 from tkinter import messagebox
 from Calculos import calcular_tmb, calcular_calorias_totales
 
-# Configuración inicial de la apariencia
-ctk.set_appearance_mode("System")  # "System", "Dark", "Light"
+# Configuración inicial de la apariencia (Modo Claro)
+ctk.set_appearance_mode("Light")  # "Light", "Dark", "System"
 ctk.set_default_color_theme("blue")  # "blue", "green", "dark-blue"
 
 
@@ -12,21 +12,32 @@ class CalculadoraCaloriasGUI(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("Calculadora de Calorías y TMB")
+        self.title("TITAN GYM - Calculadora de Calorías y TMB")
         self.geometry("520x680")
         self.resizable(False, False)
 
         # Contenedor Principal
-        self.main_frame = ctk.CTkFrame(self, corner_radius=15)
+        self.main_frame = ctk.CTkFrame(
+            self, corner_radius=15, fg_color="#FFFFFF"
+        )
         self.main_frame.pack(padx=20, pady=20, fill="both", expand=True)
 
-        # Título
+        # Badge Gym & Título
+        self.badge_label = ctk.CTkLabel(
+            self.main_frame,
+            text="🏋️‍♂️ TITAN GYM",
+            font=ctk.CTkFont(size=14, weight="bold"),
+            text_color="#EA580C",
+        )
+        self.badge_label.pack(pady=(15, 2))
+
         self.title_label = ctk.CTkLabel(
             self.main_frame,
             text="Calculadora Nutricional & TMB",
-            font=ctk.CTkFont(size=22, weight="bold"),
+            font=ctk.CTkFont(size=20, weight="bold"),
+            text_color="#0F172A",
         )
-        self.title_label.pack(pady=(15, 10))
+        self.title_label.pack(pady=(0, 10))
 
         # Formulario de Entradas
         self.form_frame = ctk.CTkFrame(self.main_frame, fg_color="transparent")
@@ -34,7 +45,7 @@ class CalculadoraCaloriasGUI(ctk.CTk):
 
         # Nombre
         self.lbl_nombre = ctk.CTkLabel(
-            self.form_frame, text="Nombre:", anchor="w"
+            self.form_frame, text="Nombre del Atleta:", anchor="w"
         )
         self.lbl_nombre.pack(fill="x", pady=(5, 0))
         self.entry_nombre = ctk.CTkEntry(
@@ -112,19 +123,24 @@ class CalculadoraCaloriasGUI(ctk.CTk):
             self.main_frame,
             text="Calcular Calorías",
             font=ctk.CTkFont(size=15, weight="bold"),
+            fg_color="#EA580C",
+            hover_color="#C2410C",
             height=40,
             command=self.calcular,
         )
         self.btn_calcular.pack(padx=20, pady=15, fill="x")
 
         # Frame de Resultados
-        self.result_frame = ctk.CTkFrame(self.main_frame, corner_radius=10)
+        self.result_frame = ctk.CTkFrame(
+            self.main_frame, corner_radius=10, fg_color="#F8FAFC"
+        )
         self.result_frame.pack(padx=20, pady=(0, 15), fill="both", expand=True)
 
         self.lbl_res_header = ctk.CTkLabel(
             self.result_frame,
             text="Resultados",
             font=ctk.CTkFont(size=16, weight="bold"),
+            text_color="#0F172A",
         )
         self.lbl_res_header.pack(pady=(10, 5))
 
@@ -132,6 +148,7 @@ class CalculadoraCaloriasGUI(ctk.CTk):
             self.result_frame,
             text="TMB Base: -- Kcal",
             font=ctk.CTkFont(size=13),
+            text_color="#7E22CE",
         )
         self.lbl_tmb.pack(pady=2)
 
@@ -139,7 +156,7 @@ class CalculadoraCaloriasGUI(ctk.CTk):
             self.result_frame,
             text="Mantenimiento: -- Kcal",
             font=ctk.CTkFont(size=13, weight="bold"),
-            text_color="#1F6AA5",
+            text_color="#1D4ED8",
         )
         self.lbl_mantener.pack(pady=2)
 
@@ -147,7 +164,7 @@ class CalculadoraCaloriasGUI(ctk.CTk):
             self.result_frame,
             text="Superávit (+300 kcal): -- Kcal",
             font=ctk.CTkFont(size=13),
-            text_color="#2FA572",
+            text_color="#15803D",
         )
         self.lbl_superavit.pack(pady=2)
 
@@ -155,7 +172,7 @@ class CalculadoraCaloriasGUI(ctk.CTk):
             self.result_frame,
             text="Déficit (-300 kcal): -- Kcal",
             font=ctk.CTkFont(size=13),
-            text_color="#D32F2F",
+            text_color="#B91C1C",
         )
         self.lbl_deficit.pack(pady=2)
 
