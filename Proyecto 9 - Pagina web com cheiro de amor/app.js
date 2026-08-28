@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-coffee_cream-1",
+        category: "vela",
+        price: 10.90,
+        image: "assets/vela_coffee_cream.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Coffee Cream",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela aromática de café em vaso artesanal com pavio de madeira.",
+            description: "Irresistível vela aromática artesanal em recipiente circular de cerâmica marmorizada, decorada com grãos de café reais e pavio de madeira crepitante. O aroma rico de café torrado e creme traz aconchego imediato a qualquer espaço.",
+            aromaProfile: "Café Torrado, Creme de Baunilha, Caramelo, Envolvente"
+        },
+        es: {
+            name: "Vela Coffee Cream",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela aromática de café en vasija artesanal con mecha de madera.",
+            description: "Irresistible vela aromática artesanal en recipiente circular de cerámica marmolada, decorada con granos de café reales y mecha de madera crepitante. El rico aroma a café tostado y crema aporta calidez inmediata a cualquier espacio.",
+            aromaProfile: "Café Tostado, Crema de Vainilla, Caramelo, Envolvente"
+        },
+        en: {
+            name: "Coffee Cream Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Coffee scented candle in a handcrafted bowl with wooden wick.",
+            description: "Irresistible handcrafted scented candle in a marbled ceramic bowl, topped with genuine coffee beans and a crackling wooden wick. The rich aroma of roasted coffee and cream fills your room with cozy warmth.",
+            aromaProfile: "Roasted Coffee, Vanilla Cream, Caramel, Cozy"
+        },
+        fr: {
+            name: "Bougie Coffee Cream",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie parfumée au café dans un bol artisanal avec mèche en bois.",
+            description: "Irésistible bougie parfumée artisanale dans un bol en céramique marbrée, décorée de véritables grains de café et d'une mèche en bois crépitante. L'arôme riche de café torréfié et de crème apporte une chaleur enveloppante.",
+            aromaProfile: "Café Torréfié, Crème Vanille, Caramel, Enveloppant"
+        }
+    },
+    {
         id: "candle-ophelia-1",
         category: "vela",
         price: 12.90,
