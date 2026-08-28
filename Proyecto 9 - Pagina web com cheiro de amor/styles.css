@@ -524,23 +524,34 @@ img {
 .product-image-container {
   position: relative;
   width: 100%;
-  padding-bottom: 110%; /* Beautiful Portrait Ratio */
+  padding-bottom: 115%; /* Golden ratio vertical framing */
   overflow: hidden;
-  background-color: var(--color-bg-secondary);
+  background: linear-gradient(145deg, #FAF7F2 0%, #F3EBE1 100%);
+  border-top-left-radius: var(--border-radius-md);
+  border-top-right-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-img {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 94%;
+  max-height: 94%;
+  width: auto;
+  height: auto;
   object-fit: contain;
-  transition: var(--transition-smooth);
+  object-position: center;
+  filter: drop-shadow(0 8px 16px rgba(46, 37, 34, 0.08));
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), filter 0.4s ease;
 }
 
 .product-card:hover .product-img {
-  transform: scale(1.08);
+  transform: translate(-50%, -50%) scale(1.06);
+  filter: drop-shadow(0 14px 28px rgba(46, 37, 34, 0.15));
 }
 
 /* Dynamic Hover Overlay */
@@ -1051,18 +1062,28 @@ img {
 }
 
 .modal-image-panel {
-  background-color: var(--color-bg-secondary);
+  background: linear-gradient(145deg, #FAF7F2 0%, #F1E7DA 100%);
   position: relative;
-  padding-bottom: 120%; /* Portrait aspect */
+  min-height: 420px;
+  padding-bottom: 115%; /* Portrait aspect */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .modal-img {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 92%;
+  max-height: 92%;
+  width: auto;
+  height: auto;
   object-fit: contain;
+  filter: drop-shadow(0 12px 28px rgba(46, 37, 34, 0.12));
+  transition: transform 0.4s ease;
 }
 
 .modal-info-panel {
