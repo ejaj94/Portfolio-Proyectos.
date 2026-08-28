@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-cactus-1",
+        category: "vela",
+        price: 10.90,
+        image: "assets/vela_suculentas.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Cactus & Suculentas",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Jardim de cactos e suculentas em travessa oval artesanal.",
+            description: "Espetacular vela aromática em travessa oval de cerâmica branca, decorada com um jardim artesanal de cactos e suculentas esculpidos em cera vegetal em tons de verde e bege. Com múltiplos pavios para uma queima uniforme e um aroma fresco e herbal.",
+            aromaProfile: "Chá Verde, Aloé Vera, Ervas Frescas, Revigorante"
+        },
+        es: {
+            name: "Vela Cactus & Suculentas",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Jardín de cactus y suculentas en bandeja ovalada artesanal.",
+            description: "Espectacular vela aromática en bandeja ovalada de cerámica blanca, decorada con un jardín artesanal de cactus y suculentas esculpidos en cera vegetal en tonos verde y beige. Con múltiples mechas para una combustión uniforme y un aroma fresco y herbal.",
+            aromaProfile: "Té Verde, Aloe Vera, Hierbas Frescas, Revigorante"
+        },
+        en: {
+            name: "Cactus & Succulents Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Garden of wax cacti and succulents in an oval handcrafted dish.",
+            description: "Stunning scented candle set in an oval white ceramic dish, featuring a handcrafted garden of detailed wax cacti and succulents in green and beige tones. Includes multiple wicks for an even burn and a refreshing herbal scent.",
+            aromaProfile: "Green Tea, Aloe Vera, Fresh Herbs, Invigorating"
+        },
+        fr: {
+            name: "Bougie Cactus & Succulentes",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Jardin de cactus et succulentes en cire dans un plateau ovale.",
+            description: "Superbe bougie parfumée présentée dans un plateau ovale en céramique blanche, ornée d'un jardin artisanal de cactus et succulentes sculptés en cire. Dotée de plusieurs mèches pour une combustion uniforme et un parfum frais.",
+            aromaProfile: "Thé Vert, Aloe Vera, Herbes Fraîches, Vivifiant"
+        }
+    },
+    {
         id: "buque-menina-1",
         category: "buque",
         price: 14.90,
