@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-summer_musical-1",
+        category: "vela",
+        price: 10.90,
+        image: "assets/vela_summer_musical.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Summer Musical",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela em vaso estriado branco com notas musicais em cera e pavio de madeira.",
+            description: "Encantadora vela aromática em taça de cerâmica branca estriada, decorada com notas musicais e clave de sol esculpipas em cera rosa pastel e equipada com pavio de madeira crepitante. Uma harmonia perfeita entre fragrância, música e estética para aquecer os dias de verão.",
+            aromaProfile: "Pêssego, Melancia, Baunilha, Alegre e Harmonioso"
+        },
+        es: {
+            name: "Vela Summer Musical",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela en cuenco estriado blanco con notas musicales en cera y mecha de madera.",
+            description: "Encantadora vela aromática en cuenco de cerámica blanca estriada, decorada con notas musicales y clave de sol esculpidas en cera rosa pastel y equipada con mecha de madera crepitante. Una armonía perfecta entre fragancia, música y estética para iluminar los días de verano.",
+            aromaProfile: "Melocotón, Sandía, Vainilla, Alegre y Armonioso"
+        },
+        en: {
+            name: "Summer Musical Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Fluted white ceramic candle featuring wax musical notes & wooden wick.",
+            description: "Charming scented candle in a ribbed white ceramic vessel, adorned with handcrafted pastel pink wax musical notes and a crackling wooden wick. A melody of fragrance, music, and elegance designed to light up summer moments.",
+            aromaProfile: "Peach, Watermelon, Vanilla, Upbeat & Harmonious"
+        },
+        fr: {
+            name: "Bougie Summer Musical",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie en céramique striée avec notes de musique en cire et meche en bois.",
+            description: "Charmante bougie parfumée dans un récipient en céramique blanche striée, ornée de notes de musique sculptées en cire rose pastel et dotée d'une mèche en bois crépitante. Une belle mélodie aromatique pour l'été.",
+            aromaProfile: "Pêche, Pastèque, Vanille, Harmonieux"
+        }
+    },
+    {
         id: "candle-cactus-1",
         category: "vela",
         price: 10.90,
