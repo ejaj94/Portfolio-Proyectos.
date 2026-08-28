@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-cactus_premium-1",
+        category: "vela",
+        price: 12.90,
+        image: "assets/vela_cactus_premium.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Cactus Premium",
+            categoryLabel: "Vela Aromática Premium",
+            aromaBrief: "Jardim exuberante de cactos e suculentas em travessa oval grande com cacto saguaro.",
+            description: "Excepcional e luxuosa vela aromática apresentada numa travessa oval grande de cerâmica branca, ostentando um verdadeiro minijardim artesanal com um imponente cacto Saguaro 3D e várias suculentas esculpidas em cera vegetal. Com múltiplos pavios para proporcionar um perfume fresco e uma queima impecável.",
+            aromaProfile: "Chá Verde, Aloé Vera, Capim-Limão, Botânico Fresco"
+        },
+        es: {
+            name: "Vela Cactus Premium",
+            categoryLabel: "Vela Aromática Premium",
+            aromaBrief: "Jardín exuberante de cactus y suculentas en bandeja ovalada grande con cactus saguaro.",
+            description: "Excepcional y lujosa vela aromática presentada en una bandeja ovalada grande de cerámica blanca, albergando un verdadero minijardín artesanal con un imponente cactus Saguaro 3D y varias suculentas esculpidos en cera vegetal. Con múltiples mechas para proporcionar un perfume fresco y una combustión impecable.",
+            aromaProfile: "Té Verde, Aloe Vera, Hierba Limón, Botánico Fresco"
+        },
+        en: {
+            name: "Premium Cactus Candle",
+            categoryLabel: "Premium Scented Candle",
+            aromaBrief: "Lush garden of wax cacti & succulents featuring a 3D saguaro cactus in a large oval tray.",
+            description: "An exceptional luxury scented candle in a large white ceramic oval tray, showcasing a handcrafted desert garden featuring a prominent 3D Saguaro cactus and assorted succulents. Designed with multiple wicks for a clean burn and fresh botanical aroma.",
+            aromaProfile: "Green Tea, Aloe Vera, Lemongrass, Fresh Botanical"
+        },
+        fr: {
+            name: "Bougie Cactus Premium",
+            categoryLabel: "Bougie Parfumée Premium",
+            aromaBrief: "Jardin luxuriant de cactus et succulentes avec grand cactus Saguaro en 3D.",
+            description: "Exceptionnelle bougie parfumée haut de gamme présentée dans un grand plateau ovale en céramique blanche, abritant un véritable mini-jardin artisanal avec un majestueux cactus Saguaro 3D et des succulentes en cire.",
+            aromaProfile: "Thé Vert, Aloe Vera, Citronnelle, Vivifiant"
+        }
+    },
+    {
         id: "candle-mini_bear-1",
         category: "vela",
         price: 2.90,
