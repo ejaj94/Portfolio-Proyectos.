@@ -3,6 +3,7 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+
         id: "candle-laco-1",
         category: "vela",
         price: 10.90,
@@ -70,50 +71,6 @@ const PRODUCTS = [
             aromaBrief: "Ensemble de 2 bougies coquillages en teintes pastel.",
             description: "Charmant ensemble 'Leveza' composé de deux bougies parfumées en forme de coquillages aux couleurs pastel (rose délicat et bleu mer). (Ensemble à 9,90€, grande seule à 4,90€, petite seule à 3,90€).",
             aromaProfile: "Brise Marine, Fleur de Lotus, Frais, Doux"
-        }
-    },
-        es: {
-            name: "Vela Leveza Grande (Concha)",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela decorativa en forma de concha marina grande en tono rosa pastel.",
-            description: "Elegante vela aromática grande moldeada en forma de concha marina en un tono rosa pastel suave. Hecha a mano con cera vegetal. (Vendida individualmente por 4,90€ o en conjunto Leveza por 9,90€).",
-            aromaProfile: "Brisa Marina, Flor de Loto, Suave"
-        },
-        en: {
-            name: "Large Leveza Shell Candle",
-            categoryLabel: "Scented Candle",
-            aromaBrief: "Large sea shell decorative scented candle in soft pastel pink.",
-            description: "Elegant large sea shell scented candle in soft pastel pink. Handcrafted with natural wax. (Sold individually for €4.90 or in set for €9.90).",
-            aromaProfile: "Ocean Breeze, Lotus Flower, Soft"
-        },
-        fr: {
-            name: "Grande Bougie Coquillage Leveza",
-            categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Grande bougie coquillage en rose pastel.",
-            description: "Élégante grande bougie parfumée en forme de coquillage rose pastel. (Vendue individuellement à 4,90€ ou en ensemble à 9,90€).",
-            aromaProfile: "Brise Marine, Fleur de Lotus, Doux"
-        }
-    },
-        es: {
-            name: "Vela Leveza Pequeña (Concha)",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela decorativa en forma de concha marina pequeña en tono azul mar.",
-            description: "Coqueta vela aromática pequeña moldeada en forma de concha marina en tono azul mar suave. Hecha a mano con cera vegetal. (Vendida individualmente por 3,90€ o en conjunto Leveza por 9,90€).",
-            aromaProfile: "Brisa Marina, Sal de Mar, Fresco"
-        },
-        en: {
-            name: "Small Leveza Shell Candle",
-            categoryLabel: "Scented Candle",
-            aromaBrief: "Small sea shell decorative scented candle in ocean blue.",
-            description: "Charming small sea shell scented candle in soft ocean blue. Handcrafted with natural wax. (Sold individually for €3.90 or in set for €9.90).",
-            aromaProfile: "Ocean Breeze, Sea Salt, Fresh"
-        },
-        fr: {
-            name: "Petite Bougie Coquillage Leveza",
-            categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Petite bougie coquillage en bleu océan.",
-            description: "Charmante petite bougie parfumée en forme de coquillage bleu océan. (Vendue individuellement à 3,90€ ou en ensemble à 9,90€).",
-            aromaProfile: "Brise Marine, Sel de Mer, Frais"
         }
     },
     {
@@ -1411,6 +1368,7 @@ const PRODUCTS = [
             aromaProfile: "Biologique, Botanique, Harmonieux, Neutre"
         }
     }
+
 ];
 
 // Dynamically generate the 39 decorative pieces to keep codebase clean and modular
