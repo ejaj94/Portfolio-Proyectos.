@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "buque-menina-1",
+        category: "buque",
+        price: 14.90,
+        image: "assets/buque_menina.jpg",
+        qty: 1,
+        pt: {
+            name: "Menina Buquê",
+            categoryLabel: "Buquê",
+            aromaBrief: "Arranjo floral de cera em vaso de estatueta de menina com flores secas.",
+            description: "Encantador e poético arranjo 'Menina Buquê', combinando uma delicada estatueta de menina serena em vaso branco com uma coroa de flores esculpidas em cera (tulipa fúchsia, rosas brancas e turquesa) acompanhadas de botânicos e flores secas naturais. Uma peça de arte floral aromática inesquecível.",
+            aromaProfile: "Tulipa, Peónia, Flores Secas, Poético e Elegante"
+        },
+        es: {
+            name: "Menina Buquê",
+            categoryLabel: "Buquê",
+            aromaBrief: "Arreglo floral de cera en vasija estatuilla de niña con flores secas.",
+            description: "Encantador y poético arreglo 'Menina Buquê', combinando una delicada estatuilla de niña serena en vasija blanca con una corona de flores esculpidas en cera (tulipán fucsia, rosas blancas y turquesa) acompañadas de botánicos y flores secas naturales. Una pieza de arte floral aromática inolvidable.",
+            aromaProfile: "Tulipán, Peonía, Flores Secas, Poético y Elegante"
+        },
+        en: {
+            name: "Menina Bouquet",
+            categoryLabel: "Bouquet",
+            aromaBrief: "Floral wax arrangement in a serene girl bust vase with dried flowers.",
+            description: "Charming and poetic 'Menina Bouquet' combining a serene white girl bust vase with a crown of handcrafted wax flowers (fuchsia tulip, white and turquoise roses) arranged with real dried botanicals. An unforgettable piece of aromatic floral art.",
+            aromaProfile: "Tulip, Peony, Dried Flowers, Poetic & Elegant"
+        },
+        fr: {
+            name: "Bouquet Menina",
+            categoryLabel: "Bouquet",
+            aromaBrief: "Composition florale en cire dans un vase buste de jeune fille.",
+            description: "Ravissant et poétique bouquet 'Menina' associant un vase buste de jeune fille blanche sérénité à une couronne de fleurs en cire (tulipe fuchsia, roses blanches et turquoise) et fleurs séchées naturelles.",
+            aromaProfile: "Tulipe, Pivoine, Fleurs Séchées, Poétique et Élégant"
+        }
+    },
+    {
 
 
         id: "candle-laco-1",
