@@ -60,10 +60,10 @@ def api_calcular():
 
 
 def main(host="127.0.0.1", port=5000, debug=False):
-    print(f"\n🚀 Servidor Web iniciado en http://{host}:{port}")
-    print("Abre esa dirección en tu navegador para usar la aplicación.\n")
+    print(f"\n[OK] Servidor Web iniciado en http://{host}:{port}")
+    print("Abre esa direccion en tu navegador para usar la aplicacion.\n")
     app.run(host=host, port=port, debug=debug)
 
 
 if __name__ == "__main__":
-    main(debug=True)
+    main(debug=False)
