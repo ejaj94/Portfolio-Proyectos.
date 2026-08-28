@@ -2024,7 +2024,7 @@ body { top: 0 !important; }
   }
 }
 
-/* WORKSHOP REGISTRATION MODAL */
+/* WORKSHOP REGISTRATION & SUBSCRIPTION MODAL - PERFECT LAYOUT */
 .workshop-modal-overlay {
   position: fixed;
   top: 0;
@@ -2032,7 +2032,7 @@ body { top: 0 !important; }
   width: 100%;
   height: 100%;
   background: rgba(30, 24, 22, 0.65);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2040,7 +2040,7 @@ body { top: 0 !important; }
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .workshop-modal-overlay.active {
@@ -2051,15 +2051,16 @@ body { top: 0 !important; }
 .workshop-modal-card {
   background: #ffffff;
   border-radius: 24px;
-  max-width: 580px;
+  max-width: 680px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 92vh;
   overflow-y: auto;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
   padding: 2.5rem;
   position: relative;
   transform: translateY(20px);
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  box-sizing: border-box;
 }
 
 .workshop-modal-overlay.active .workshop-modal-card {
@@ -2071,20 +2072,60 @@ body { top: 0 !important; }
   text-align: center;
 }
 
+.subscription-badge {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  background-color: rgba(212, 163, 148, 0.15);
+  color: #B88274;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 50px;
+  margin-bottom: 0.5rem;
+}
+
 .workshop-modal-header h3 {
   font-family: var(--font-heading);
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: var(--color-text-main);
-  margin-bottom: 0.5rem;
+  margin: 0.4rem 0;
 }
 
 .workshop-modal-header p {
   font-size: 0.95rem;
   color: var(--color-text-muted);
+  margin: 0.4rem 0 0.8rem 0;
+}
+
+.subscription-price-tag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  margin-top: 0.4rem;
+}
+
+.subscription-price-tag .currency {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.subscription-price-tag .price-val {
+  font-family: var(--font-heading);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #B88274;
+}
+
+.subscription-price-tag .period {
+  font-size: 1rem;
+  color: var(--color-text-muted);
 }
 
 .workshop-form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .workshop-form-group label {
@@ -2092,13 +2133,14 @@ body { top: 0 !important; }
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--color-text-main);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.45rem;
 }
 
 .workshop-form-group input,
 .workshop-form-group select,
 .workshop-form-group textarea {
   width: 100%;
+  box-sizing: border-box;
   padding: 0.85rem 1.1rem;
   border: 1.5px solid #E8E0D8;
   border-radius: 12px;
@@ -2109,32 +2151,135 @@ body { top: 0 !important; }
   transition: border-color 0.25s ease, background-color 0.25s ease;
 }
 
-.workshop-form-group input:focus,
-.workshop-form-group select:focus,
-.workshop-form-group textarea:focus {
-  outline: none;
-  border-color: var(--color-accent-rose, #D4A394);
+.w-select-full {
+  width: 100% !important;
+  text-overflow: ellipsis;
+}
+
+.workshop-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Phone Group Layout */
+.phone-input-group {
+  display: flex;
+  gap: 0.6rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.country-code-select {
+  width: 145px !important;
+  flex-shrink: 0;
+  padding: 0.85rem 0.6rem !important;
+  font-size: 0.88rem !important;
+  border-radius: 12px !important;
+  background-color: #FAF7F4 !important;
+  cursor: pointer;
+}
+
+.phone-input-group input[type="tel"] {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Payment Box */
+.payment-section-box {
+  background-color: #FAF7F4;
+  border: 1.5px solid #EAE2D8;
+  border-radius: 18px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.payment-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.payment-header-row h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0;
+}
+
+.payment-card-icons {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.card-tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
   background-color: #ffffff;
+  border: 1px solid #E0D8D0;
+  color: #333;
+}
+
+.card-tag.visa { color: #1A1F71; }
+.card-tag.mc { color: #EB001B; }
+.card-tag.mbway { color: #0088CC; }
+
+.card-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.card-input-wrapper input {
+  padding-right: 2.5rem;
+}
+
+.card-input-wrapper .lock-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #A0958F;
 }
 
 .workshop-btn-submit {
   width: 100%;
-  padding: 1rem;
+  padding: 1.1rem;
   border: none;
   border-radius: 50px;
   background: linear-gradient(135deg, #D4A394 0%, #B88274 100%);
   color: #ffffff;
-  font-weight: 600;
-  font-size: 1.05rem;
+  font-weight: 700;
+  font-size: 1.1rem;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(212, 163, 148, 0.35);
+  box-shadow: 0 8px 25px rgba(212, 163, 148, 0.4);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-top: 0.8rem;
+  margin-top: 0.5rem;
+  box-sizing: border-box;
 }
 
 .workshop-btn-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(212, 163, 148, 0.45);
+  box-shadow: 0 12px 30px rgba(212, 163, 148, 0.5);
+}
+
+.secure-guarantee-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: #666;
+  margin-top: 0.9rem;
+  text-align: center;
 }
 
 .workshop-modal-close {
@@ -2153,6 +2298,7 @@ body { top: 0 !important; }
   align-items: center;
   justify-content: center;
   transition: background 0.2s ease;
+  z-index: 10;
 }
 
 .workshop-modal-close:hover {
@@ -2160,145 +2306,17 @@ body { top: 0 !important; }
   color: #111;
 }
 
-.registration-success-msg {
-  padding: 1.2rem;
-  background-color: #E8F5E9;
-  border: 1px solid #A5D6A7;
-  color: #2E7D32;
-  border-radius: 12px;
-  font-size: 0.95rem;
-  margin-top: 1rem;
-  text-align: center;
-  display: none;
-}
-
-
-/* SUBSCRIPTION & PAYMENT MODAL STYLES */
-.subscription-badge {
-  display: inline-block;
-  padding: 0.35rem 0.9rem;
-  background-color: rgba(212, 163, 148, 0.15);
-  color: #B88274;
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  border-radius: 50px;
-  margin-bottom: 0.5rem;
-}
-
-.subscription-price-tag {
-  margin-top: 0.6rem;
-  color: var(--color-text-main, #2E2522);
-}
-
-.subscription-price-tag .currency {
-  font-size: 1.2rem;
-  font-weight: 600;
-  vertical-align: super;
-}
-
-.subscription-price-tag .price-val {
-  font-family: var(--font-heading);
-  font-size: 2.6rem;
-  font-weight: 700;
-  color: #B88274;
-}
-
-.subscription-price-tag .period {
-  font-size: 0.95rem;
-  color: var(--color-text-muted, #776E6B);
-}
-
-.workshop-form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.payment-section-box {
-  background-color: #FAF7F4;
-  border: 1.5px solid #EAE2D8;
-  border-radius: 16px;
-  padding: 1.25rem;
-  margin: 1.2rem 0;
-}
-
-.payment-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.payment-header-row h4 {
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: var(--color-text-main);
-  margin: 0;
-}
-
-.payment-card-icons {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.card-tag {
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 0.2rem 0.45rem;
-  border-radius: 4px;
-  background-color: #ffffff;
-  border: 1px solid #DDD;
-  color: #333;
-}
-
-.card-tag.visa { color: #1A1F71; }
-.card-tag.mc { color: #EB001B; }
-.card-tag.mbway { color: #0088CC; }
-
-.card-input-wrapper {
-  position: relative;
-}
-
-.card-input-wrapper input {
-  padding-right: 2.5rem;
-}
-
-.card-input-wrapper .lock-icon {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #A0958F;
-}
-
-.secure-guarantee-text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  font-size: 0.8rem;
-  color: #666;
-  margin-top: 0.8rem;
-}
-
-
-/* PHONE COUNTRY CODE SELECTOR */
-.phone-input-group {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.country-code-select {
-  width: auto;
-  max-width: 170px;
-  padding: 0.85rem 0.5rem;
-  border: 1.5px solid #E8E0D8;
-  border-radius: 12px;
-  font-family: var(--font-body);
-  font-size: 0.88rem;
-  background-color: #FAF7F4;
-  color: var(--color-text-main);
-  cursor: pointer;
+@media (max-width: 640px) {
+  .workshop-modal-card {
+    padding: 1.5rem;
+  }
+  .workshop-form-row {
+    grid-template-columns: 1fr;
+  }
+  .phone-input-group {
+    flex-direction: column;
+  }
+  .country-code-select {
+    width: 100% !important;
+  }
 }
