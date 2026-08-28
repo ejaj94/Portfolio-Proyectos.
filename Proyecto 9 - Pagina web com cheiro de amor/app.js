@@ -3,6 +3,111 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-leveza_set-1",
+        category: "vela",
+        price: 9.90,
+        image: "assets/vela_conchas_pastel.jpg",
+        qty: 1,
+        pt: {
+            name: "Conjunto Leveza - Conchas do Mar",
+            categoryLabel: "Conjunto de Velas",
+            aromaBrief: "Conjunto de 2 velas aromáticas em formato de concha em tons pastel.",
+            description: "Encantador conjunto 'Leveza' composto por duas velas aromáticas moldadas em formato de conchas marinhas em tons pastel (rosa delicado e azul mar). Traz a brisa suave e a tranquilidade do oceano para a sua casa. (Conjunto por 9,90€, grande individual por 4,90€, pequena individual por 3,90€).",
+            aromaProfile: "Brisa Marinha, Sal de Maço, Flor de Lótus, Suave"
+        },
+        es: {
+            name: "Conjunto Leveza - Conchas de Mar",
+            categoryLabel: "Conjunto de Velas",
+            aromaBrief: "Conjunto de 2 velas aromáticas en forma de concha en tonos pastel.",
+            description: "Encantador conjunto 'Leveza' compuesto por dos velas aromáticas moldeadas en forma de conchas marinas en tonos pastel (rosa delicado y azul mar). Aporta la brisa suave y la tranquilidad del océano a tu hogar. (Conjunto por 9,90€, grande individual por 4,90€, pequeña individual por 3,90€).",
+            aromaProfile: "Brisa Marina, Flor de Loto, Fresco, Suave"
+        },
+        en: {
+            name: "Leveza Sea Shell Candle Set",
+            categoryLabel: "Candle Set",
+            aromaBrief: "Set of 2 pastel sea shell scented candles.",
+            description: "Charming 'Leveza' set featuring two handcrafted sea shell scented candles in soft pastel shades (delicate pink and ocean blue). Brings the serene ocean breeze into your home. (Set for €9.90, large individual for €4.90, small individual for €3.90).",
+            aromaProfile: "Ocean Breeze, Lotus Flower, Fresh, Gentle"
+        },
+        fr: {
+            name: "Ensemble Leveza - Coquillages",
+            categoryLabel: "Ensemble de Bougies",
+            aromaBrief: "Ensemble de 2 bougies coquillages en teintes pastel.",
+            description: "Charmant ensemble 'Leveza' composé de deux bougies parfumées en forme de coquillages aux couleurs pastel (rose délicat et bleu mer). (Ensemble à 9,90€, grande seule à 4,90€, petite seule à 3,90€).",
+            aromaProfile: "Brise Marine, Fleur de Lotus, Frais, Doux"
+        }
+    },
+    {
+        id: "candle-leveza_grande-1",
+        category: "vela",
+        price: 4.90,
+        image: "assets/vela_conchas_pastel.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Leveza Grande (Concha)",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa em formato de concha marinha grande em tom rosa pastel.",
+            description: "Elegante vela aromática grande moldada em formato de concha marinha num tom rosa pastel suave com toques cintilantes. Feita à mão com cera vegetal. (Vendida individualmente por 4,90€ ou no conjunto Leveza por 9,90€).",
+            aromaProfile: "Brisa Marinha, Flor de Lótus, Suave"
+        },
+        es: {
+            name: "Vela Leveza Grande (Concha)",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa en forma de concha marina grande en tono rosa pastel.",
+            description: "Elegante vela aromática grande moldeada en forma de concha marina en un tono rosa pastel suave. Hecha a mano con cera vegetal. (Vendida individualmente por 4,90€ o en conjunto Leveza por 9,90€).",
+            aromaProfile: "Brisa Marina, Flor de Loto, Suave"
+        },
+        en: {
+            name: "Large Leveza Shell Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Large sea shell decorative scented candle in soft pastel pink.",
+            description: "Elegant large sea shell scented candle in soft pastel pink. Handcrafted with natural wax. (Sold individually for €4.90 or in set for €9.90).",
+            aromaProfile: "Ocean Breeze, Lotus Flower, Soft"
+        },
+        fr: {
+            name: "Grande Bougie Coquillage Leveza",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Grande bougie coquillage en rose pastel.",
+            description: "Élégante grande bougie parfumée en forme de coquillage rose pastel. (Vendue individuellement à 4,90€ ou en ensemble à 9,90€).",
+            aromaProfile: "Brise Marine, Fleur de Lotus, Doux"
+        }
+    },
+    {
+        id: "candle-leveza_pequena-1",
+        category: "vela",
+        price: 3.90,
+        image: "assets/vela_conchas_pastel.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Leveza Pequena (Concha)",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa em formato de concha marinha pequena em tom azul mar.",
+            description: "Mimo de vela aromática pequena moldada em formato de concha marinha num tom azul mar suave. Feita à mão com cera vegetal. (Vendida individualmente por 3,90€ ou no conjunto Leveza por 9,90€).",
+            aromaProfile: "Brisa Marinha, Sal de Maço, Fresco"
+        },
+        es: {
+            name: "Vela Leveza Pequeña (Concha)",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa en forma de concha marina pequeña en tono azul mar.",
+            description: "Coqueta vela aromática pequeña moldeada en forma de concha marina en tono azul mar suave. Hecha a mano con cera vegetal. (Vendida individualmente por 3,90€ o en conjunto Leveza por 9,90€).",
+            aromaProfile: "Brisa Marina, Sal de Mar, Fresco"
+        },
+        en: {
+            name: "Small Leveza Shell Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Small sea shell decorative scented candle in ocean blue.",
+            description: "Charming small sea shell scented candle in soft ocean blue. Handcrafted with natural wax. (Sold individually for €3.90 or in set for €9.90).",
+            aromaProfile: "Ocean Breeze, Sea Salt, Fresh"
+        },
+        fr: {
+            name: "Petite Bougie Coquillage Leveza",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Petite bougie coquillage en bleu océan.",
+            description: "Charmante petite bougie parfumée en forme de coquillage bleu océan. (Vendue individuellement à 3,90€ ou en ensemble à 9,90€).",
+            aromaProfile: "Brise Marine, Sel de Mer, Frais"
+        }
+    },
+    {
         id: "candle-cao_gato_set-1",
         category: "vela",
         price: 9.90,
