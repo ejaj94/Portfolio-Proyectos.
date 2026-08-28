@@ -3,6 +3,111 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-cao_gato_set-1",
+        category: "vela",
+        price: 9.90,
+        image: "assets/vela_cao_gato.jpg",
+        qty: 1,
+        pt: {
+            name: "Conjunto Velas Cão & Gato",
+            categoryLabel: "Conjunto de Velas",
+            aromaBrief: "Conjunto de 2 velas decorativas aromáticas em formato de cão e gato.",
+            description: "Encantador conjunto de duas velas aromáticas artesanais esculpidas em formato de cão e gato. Feitas à mão com cera vegetal e aromas suaves, perfeitas para homenagear os animais de estimação e trazer doçura ao lar. (Disponível em conjunto por 9,90€ ou individualmente por 4,90€ cada).",
+            aromaProfile: "Baunilha, Caramelo, Doce, Aconchegante"
+        },
+        es: {
+            name: "Conjunto Velas Perro & Gato",
+            categoryLabel: "Conjunto de Velas",
+            aromaBrief: "Conjunto de 2 velas decorativas aromáticas en forma de perro y gato.",
+            description: "Encantador conjunto de dos velas aromáticas artesanales esculpidas en forma de perro y gato. Hechas a mano con cera vegetal y aromas suaves, perfectas para homenajear a las mascotas y aportar ternura al hogar. (Disponible en conjunto por 9,90€ o individualmente por 4,90€ cada una).",
+            aromaProfile: "Vainilla, Caramelo, Dulce, Acogedor"
+        },
+        en: {
+            name: "Dog & Cat Candle Set",
+            categoryLabel: "Candle Set",
+            aromaBrief: "Set of 2 decorative scented candles shaped as a dog and a cat.",
+            description: "Charming set of two handcrafted scented candles sculpted in the shape of a dog and a cat. Made from natural soy wax with sweet soothing aromas, ideal for pet lovers. (Available as a set for €9.90 or individually for €4.90 each).",
+            aromaProfile: "Vanilla, Caramel, Sweet, Cozy"
+        },
+        fr: {
+            name: "Ensemble Bougies Chien & Chat",
+            categoryLabel: "Ensemble de Bougies",
+            aromaBrief: "Ensemble de 2 bougies parfumées décoratives en forme de chien et chat.",
+            description: "Charmant ensemble de deux bougies parfumées artisanales sculptées en forme de chien et de chat. Fabriquées à la main avec de la cire naturelle et des senteurs douces. (Disponible en ensemble à 9,90€ ou individuellement à 4,90€ chacune).",
+            aromaProfile: "Vanille, Caramel, Doux, Chaleureux"
+        }
+    },
+    {
+        id: "candle-gato-1",
+        category: "vela",
+        price: 4.90,
+        image: "assets/vela_cao_gato.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Gato",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa aromática moldada em formato de gato.",
+            description: "Delicada e amorosa vela aromática esculpida em formato de gato sorridente. Feita à mão com cera vegetal e fragrância suave. (Vendida individualmente por 4,90€ ou no conjunto Cão & Gato por 9,90€).",
+            aromaProfile: "Baunilha, Doce, Delicado"
+        },
+        es: {
+            name: "Vela Gato",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa aromática moldeada en forma de gato.",
+            description: "Delicada y amorosa vela aromática esculpida en forma de gato sonriente. Hecha a mano con cera vegetal y fragancia suave. (Vendida individualmente por 4,90€ o en conjunto Perro & Gato por 9,90€).",
+            aromaProfile: "Vainilla, Dulce, Delicado"
+        },
+        en: {
+            name: "Cat Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Decorative scented candle sculpted in the shape of a cat.",
+            description: "Delicate handcrafted scented candle sculpted in a cute cat shape. Made with natural wax and soft sweet aromas. (Sold individually for €4.90 or in set for €9.90).",
+            aromaProfile: "Vanilla, Sweet, Gentle"
+        },
+        fr: {
+            name: "Bougie Chat",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie décorative parfumée en forme de chat.",
+            description: "Délicate bougie parfumée artisanale sculptée en forme de chat souriant. (Vendue individuellement à 4,90€ ou en ensemble à 9,90€).",
+            aromaProfile: "Vanille, Doux, Délicat"
+        }
+    },
+    {
+        id: "candle-cao-1",
+        category: "vela",
+        price: 4.90,
+        image: "assets/vela_cao_gato.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Cão",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa aromática moldada em formato de cão.",
+            description: "Encantadora vela aromática esculpida em formato de cãozinho de estimação. Feita à mão com cera vegetal e fragrância suave. (Vendida individualmente por 4,90€ ou no conjunto Cão & Gato por 9,90€).",
+            aromaProfile: "Baunilha, Caramelo, Aconchegante"
+        },
+        es: {
+            name: "Vela Perro",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa aromática moldeada en forma de perro.",
+            description: "Encantadora vela aromática esculpida en forma de perrito. Hecha a mano con cera vegetal y fragancia suave. (Vendida individualmente por 4,90€ o en conjunto Perro & Gato por 9,90€).",
+            aromaProfile: "Vainilla, Caramelo, Acogedor"
+        },
+        en: {
+            name: "Dog Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Decorative scented candle sculpted in the shape of a puppy.",
+            description: "Charming handcrafted scented candle sculpted in a puppy shape. Made with natural soy wax and soft cozy aromas. (Sold individually for €4.90 or in set for €9.90).",
+            aromaProfile: "Vanilla, Caramel, Cozy"
+        },
+        fr: {
+            name: "Bougie Chien",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie décorative parfumée en forme de chien.",
+            description: "Charmante bougie parfumée artisanale sculptée en forme de petit chien. (Vendue individuellement à 4,90€ ou en ensemble à 9,90€).",
+            aromaProfile: "Vanille, Caramel, Chaleureux"
+        }
+    },
+    {
         id: "candle-camera_preta-1",
         category: "vela",
         price: 6.90,
