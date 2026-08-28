@@ -4,11 +4,11 @@ import webbrowser
 from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
-from flask import Flask, render_template_string, jsonify, request, make_response
+from flask import Flask, render_template_string, jsonify, request
 
 app = Flask(__name__)
 
-# Añadir cabeceras anti-caché a todas las respuestas de Flask
+# Cabeceras anti-caché a todas las respuestas de Flask
 @app.after_request
 def add_no_cache_headers(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
@@ -117,99 +117,147 @@ HTML_TEMPLATE = """
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            color: #111827;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        .header-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
         .card {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .form-label {
+            color: #1f2937 !important;
+            font-weight: 700 !important;
         }
         .form-control {
-            background-color: #2b2b2b;
-            border: 1px solid #444;
-            color: #fff;
+            background-color: #ffffff;
+            border: 2px solid #d1d5db;
+            color: #111827;
+            font-weight: 500;
         }
         .form-control:focus {
-            background-color: #333;
-            color: #fff;
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            background-color: #ffffff;
+            color: #111827;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+        }
+        .stat-card {
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
         }
         .log-box {
-            background-color: #0a0a0a;
-            color: #00ff66;
+            background-color: #0f172a;
+            color: #38bdf8;
             font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             height: 320px;
             overflow-y: auto;
             border-radius: 8px;
             padding: 15px;
-            border: 1px solid #222;
+            border: 2px solid #1e293b;
         }
         .badge-status {
             font-size: 1.1rem;
-            padding: 8px 16px;
+            padding: 8px 18px;
             border-radius: 20px;
+            font-weight: 700;
+        }
+        .btn-custom-start {
+            background-color: #16a34a;
+            color: #ffffff;
+            border: none;
+        }
+        .btn-custom-start:hover {
+            background-color: #15803d;
+            color: #ffffff;
+        }
+        .btn-custom-stop {
+            background-color: #dc2626;
+            color: #ffffff;
+            border: none;
+        }
+        .btn-custom-stop:hover {
+            background-color: #b91c1c;
+            color: #ffffff;
+        }
+        .btn-custom-scan {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: none;
+        }
+        .btn-custom-scan:hover {
+            background-color: #1d4ed8;
+            color: #ffffff;
         }
     </style>
 </head>
 <body class="py-4">
-    <div class="container" style="max-width: 900px;">
-        <div class="card p-4 mb-4 text-center">
+    <div class="container" style="max-width: 920px;">
+        <!-- Encabezado claro y llamativo -->
+        <div class="header-box p-4 mb-4 text-center">
             <h2 class="fw-bold mb-1">🕷️ Monitor de Precios Inteligente</h2>
-            <p class="text-secondary mb-0">Web Scraper Automático en Tiempo Real (http://localhost:5050)</p>
+            <p class="mb-0 text-white-50 fs-6">Web Scraper Automático en Tiempo Real (http://localhost:5050)</p>
         </div>
 
+        <!-- Panel de Configuración -->
         <div class="card p-4 mb-4">
-            <h5 class="fw-bold mb-3">⚙️ Configuración del Rastreador</h5>
+            <h4 class="fw-bold mb-3 text-dark">⚙️ Configuración del Rastreador</h4>
             <div class="row g-3">
                 <div class="col-12">
-                    <label class="form-label text-secondary fw-semibold">URL del Producto:</label>
-                    <input type="url" id="inputUrl" class="form-control" value="{{ state.url }}">
+                    <label class="form-label">URL del Producto:</label>
+                    <input type="url" id="inputUrl" class="form-control form-control-lg" value="{{ state.url }}">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label text-secondary fw-semibold">Presupuesto Objetivo ($):</label>
-                    <input type="number" step="0.01" id="inputPrice" class="form-control" value="{{ state.target_price }}">
+                    <label class="form-label">Presupuesto Objetivo ($):</label>
+                    <input type="number" step="0.01" id="inputPrice" class="form-control form-control-lg" value="{{ state.target_price }}">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label text-secondary fw-semibold">Frecuencia de Revisión (segundos):</label>
-                    <input type="number" id="inputInterval" class="form-control" value="{{ state.interval }}">
+                    <label class="form-label">Frecuencia de Revisión (segundos):</label>
+                    <input type="number" id="inputInterval" class="form-control form-control-lg" value="{{ state.interval }}">
                 </div>
             </div>
 
-            <div class="d-flex flex-wrap gap-2 mt-4">
-                <button id="btnStart" onclick="startMonitor()" class="btn btn-success fw-bold px-4">▶ Iniciar Vigilancia</button>
-                <button id="btnStop" onclick="stopMonitor()" class="btn btn-danger fw-bold px-4" disabled>⏹ Detener</button>
-                <button id="btnScan" onclick="scanNow()" class="btn btn-info text-white fw-bold px-4">⚡ Escanear Ahora</button>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+                <button id="btnStart" onclick="startMonitor()" class="btn btn-custom-start btn-lg fw-bold px-4">▶ Iniciar Vigilancia</button>
+                <button id="btnStop" onclick="stopMonitor()" class="btn btn-custom-stop btn-lg fw-bold px-4" disabled>⏹ Detener</button>
+                <button id="btnScan" onclick="scanNow()" class="btn btn-custom-scan btn-lg fw-bold px-4">⚡ Escanear Ahora</button>
             </div>
         </div>
 
+        <!-- Panel de Estado -->
         <div class="card p-4 mb-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold mb-0">📊 Estado del Servicio</h5>
+                <h4 class="fw-bold mb-0 text-dark">📊 Estado del Servicio</h4>
                 <span id="badgeStatus" class="badge bg-secondary badge-status">Cargando...</span>
             </div>
             <div class="row text-center g-3">
                 <div class="col-md-6">
-                    <div class="p-3 border border-secondary rounded">
-                        <small class="text-secondary d-block">Último Precio Leído</small>
-                        <span id="textLastPrice" class="fs-3 fw-bold text-warning">--</span>
+                    <div class="p-3 stat-card">
+                        <small class="text-secondary d-block fw-bold mb-1">Último Precio Leído</small>
+                        <span id="textLastPrice" class="fs-2 fw-bold text-primary">--</span>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="p-3 border border-secondary rounded">
-                        <small class="text-secondary d-block">Última Revisión</small>
-                        <span id="textLastCheck" class="fs-5 fw-semibold text-info">--</span>
+                    <div class="p-3 stat-card">
+                        <small class="text-secondary d-block fw-bold mb-1">Última Revisión</small>
+                        <span id="textLastCheck" class="fs-4 fw-bold text-dark">--</span>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Historial de Logs -->
         <div class="card p-4">
-            <h5 class="fw-bold mb-3">📜 Historial de Registros (Logs)</h5>
+            <h4 class="fw-bold mb-3 text-dark">📜 Historial de Registros (Logs)</h4>
             <div id="logBox" class="log-box"></div>
         </div>
     </div>
@@ -340,6 +388,6 @@ def open_browser():
 
 
 if __name__ == "__main__":
-    print("Iniciando Servidor Web sin cache en http://localhost:5050 ...")
+    print("Iniciando Servidor Web Claro en http://localhost:5050 ...")
     threading.Thread(target=open_browser, daemon=True).start()
     app.run(host="127.0.0.1", port=5050, debug=False)

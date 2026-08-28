@@ -5,8 +5,8 @@ import requests
 from bs4 import BeautifulSoup
 import customtkinter as ctk
 
-# Configuración inicial de apariencia
-ctk.set_appearance_mode("Dark")
+# Configuración de apariencia: Modo Claro con colores limpios
+ctk.set_appearance_mode("Light")
 ctk.set_default_color_theme("blue")
 
 
@@ -40,39 +40,56 @@ class MonitorPreciosApp(ctk.CTk):
         self.titulo_label = ctk.CTkLabel(
             self,
             text="🕷️ Monitor de Precios Inteligente",
-            font=ctk.CTkFont(size=22, weight="bold")
+            font=ctk.CTkFont(size=22, weight="bold"),
+            text_color="#1e3a8a"
         )
         self.titulo_label.grid(row=0, column=0, padx=20, pady=(15, 5), sticky="ew")
 
         # --- FRAME DE CONFIGURACIÓN ---
-        self.frame_config = ctk.CTkFrame(self)
+        self.frame_config = ctk.CTkFrame(self, fg_color="#f8fafc", border_color="#cbd5e1", border_width=1)
         self.frame_config.grid(row=1, column=0, padx=20, pady=10, sticky="ew")
         self.frame_config.grid_columnconfigure(1, weight=1)
 
         # Campo: URL
-        self.label_url = ctk.CTkLabel(self.frame_config, text="URL del Producto:", font=ctk.CTkFont(weight="bold"))
+        self.label_url = ctk.CTkLabel(self.frame_config, text="URL del Producto:", font=ctk.CTkFont(weight="bold"), text_color="#0f172a")
         self.label_url.grid(row=0, column=0, padx=15, pady=(12, 5), sticky="w")
 
         self.entry_url = ctk.CTkEntry(
             self.frame_config,
-            placeholder_text="https://ejemplo.com/producto"
+            placeholder_text="https://ejemplo.com/producto",
+            fg_color="#ffffff",
+            text_color="#0f172a",
+            border_color="#94a3b8"
         )
         self.entry_url.grid(row=0, column=1, columnspan=2, padx=15, pady=(12, 5), sticky="ew")
         self.entry_url.insert(0, "https://www.trendyventa.com/products/smart-lock-fingerprint-padlock")
 
         # Campo: Presupuesto Objetivo
-        self.label_presupuesto = ctk.CTkLabel(self.frame_config, text="Presupuesto Objetivo ($):", font=ctk.CTkFont(weight="bold"))
+        self.label_presupuesto = ctk.CTkLabel(self.frame_config, text="Presupuesto Objetivo ($):", font=ctk.CTkFont(weight="bold"), text_color="#0f172a")
         self.label_presupuesto.grid(row=1, column=0, padx=15, pady=8, sticky="w")
 
-        self.entry_presupuesto = ctk.CTkEntry(self.frame_config, placeholder_text="10.00")
+        self.entry_presupuesto = ctk.CTkEntry(
+            self.frame_config,
+            placeholder_text="10.00",
+            fg_color="#ffffff",
+            text_color="#0f172a",
+            border_color="#94a3b8"
+        )
         self.entry_presupuesto.grid(row=1, column=1, padx=15, pady=8, sticky="ew")
         self.entry_presupuesto.insert(0, "10.00")
 
         # Campo: Frecuencia de revisión
-        self.label_intervalo = ctk.CTkLabel(self.frame_config, text="Intervalo (segundos):", font=ctk.CTkFont(weight="bold"))
+        self.label_intervalo = ctk.CTkLabel(self.frame_config, text="Intervalo (segundos):", font=ctk.CTkFont(weight="bold"), text_color="#0f172a")
         self.label_intervalo.grid(row=1, column=2, padx=(5, 5), pady=8, sticky="w")
 
-        self.entry_intervalo = ctk.CTkEntry(self.frame_config, width=80, placeholder_text="60")
+        self.entry_intervalo = ctk.CTkEntry(
+            self.frame_config,
+            width=80,
+            placeholder_text="60",
+            fg_color="#ffffff",
+            text_color="#0f172a",
+            border_color="#94a3b8"
+        )
         self.entry_intervalo.grid(row=1, column=3, padx=(0, 15), pady=8, sticky="w")
         self.entry_intervalo.insert(0, "60")
 
@@ -84,8 +101,8 @@ class MonitorPreciosApp(ctk.CTk):
         self.btn_iniciar = ctk.CTkButton(
             self.frame_botones,
             text="▶ Iniciar Vigilancia",
-            fg_color="#28a745",
-            hover_color="#218838",
+            fg_color="#16a34a",
+            hover_color="#15803d",
             font=ctk.CTkFont(weight="bold"),
             command=self.iniciar_monitoreo
         )
@@ -94,8 +111,8 @@ class MonitorPreciosApp(ctk.CTk):
         self.btn_detener = ctk.CTkButton(
             self.frame_botones,
             text="⏹ Detener Vigilancia",
-            fg_color="#dc3545",
-            hover_color="#c82333",
+            fg_color="#dc2626",
+            hover_color="#b91c1c",
             font=ctk.CTkFont(weight="bold"),
             state="disabled",
             command=self.detener_monitoreo
@@ -105,8 +122,8 @@ class MonitorPreciosApp(ctk.CTk):
         self.btn_escanear = ctk.CTkButton(
             self.frame_botones,
             text="⚡ Escanear Ahora",
-            fg_color="#17a2b8",
-            hover_color="#138496",
+            fg_color="#2563eb",
+            hover_color="#1d4ed8",
             font=ctk.CTkFont(weight="bold"),
             command=self.escanear_ahora
         )
@@ -117,15 +134,20 @@ class MonitorPreciosApp(ctk.CTk):
             self,
             text="Estado: 🔴 Detenido",
             font=ctk.CTkFont(size=14, weight="bold"),
-            text_color="#dc3545"
+            text_color="#dc2626"
         )
         self.label_estado.grid(row=3, column=0, padx=20, pady=5, sticky="w")
 
         # --- PANEL DE LOGS / REGISTROS ---
-        self.label_logs = ctk.CTkLabel(self, text="Historial de Monitoreo:", font=ctk.CTkFont(weight="bold"))
+        self.label_logs = ctk.CTkLabel(self, text="Historial de Monitoreo:", font=ctk.CTkFont(weight="bold"), text_color="#0f172a")
         self.label_logs.grid(row=4, column=0, padx=20, pady=(5, 0), sticky="w")
 
-        self.textbox_logs = ctk.CTkTextbox(self, font=ctk.CTkFont(family="Consolas", size=12))
+        self.textbox_logs = ctk.CTkTextbox(
+            self,
+            font=ctk.CTkFont(family="Consolas", size=12),
+            fg_color="#0f172a",
+            text_color="#38bdf8"
+        )
         self.textbox_logs.grid(row=5, column=0, padx=20, pady=(5, 15), sticky="nsew")
         self.grid_rowconfigure(5, weight=1)
 
@@ -181,11 +203,11 @@ class MonitorPreciosApp(ctk.CTk):
 
             if precio_final <= presupuesto:
                 self.agregar_log(f"🎉 ¡OFERTA DETECTADA! Precio: {precio_texto} (Objetivo: ${presupuesto:.2f})")
-                self.actualizar_estado("🔔 ¡OFERTA ENCONTRADA!", "#28a745")
+                self.actualizar_estado("🔔 ¡OFERTA ENCONTRADA!", "#16a34a")
             else:
                 self.agregar_log(f"🔎 Precio actual: {precio_texto} (Aún supera tu presupuesto de ${presupuesto:.2f})")
                 if self.ejecutando:
-                    self.actualizar_estado("🟢 Vigilando activo", "#28a745")
+                    self.actualizar_estado("🟢 Vigilando activo", "#16a34a")
 
         except requests.exceptions.RequestException as err:
             self.agregar_log(f"❌ Error de red o conexión: {err}")
@@ -209,17 +231,16 @@ class MonitorPreciosApp(ctk.CTk):
             intervalo = 60
 
         self.agregar_log(f"🚀 Vigilancia iniciada. Intervalo: cada {intervalo} segundos.")
-        self.actualizar_estado("🟢 Vigilando activo", "#28a745")
+        self.actualizar_estado("🟢 Vigilando activo", "#16a34a")
 
         while self.ejecutando:
             self.consultar_precio()
-            # Dormir en pequeñas fracciones para responder rápido al botón detener
             for _ in range(intervalo):
                 if not self.ejecutando:
                     break
                 time.sleep(1)
 
-        self.actualizar_estado("🔴 Detenido", "#dc3545")
+        self.actualizar_estado("🔴 Detenido", "#dc2626")
         self.agregar_log("⏹ Vigilancia detenida por el usuario.")
 
     def iniciar_monitoreo(self):
