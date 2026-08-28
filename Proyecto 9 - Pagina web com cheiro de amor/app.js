@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-laco-1",
+        category: "vela",
+        price: 10.90,
+        image: "assets/vela_laco.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Laço",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela em vaso transparente de vidro com laço tridimensional esculpido.",
+            description: "Encantadora vela aromática em recipiente transparente de vidro, apresentando no centro um delicado laço tridimensional em tom rosa veludo. Feita à mão com cera vegetal para proporcionar elegância e um perfume envolvente.",
+            aromaProfile: "Algodão Doce, Baunilha, Floral, Delicado"
+        },
+        es: {
+            name: "Vela Laço (Lazo)",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela en vaso transparente de cristal con lazo tridimensional esculpido.",
+            description: "Encantadora vela aromática en recipiente transparente de cristal, con un delicado lazo tridimensional esculpido en tono rosa terciopelo. Hecha a mano con cera vegetal para aportar elegancia y un perfume envolvente.",
+            aromaProfile: "Algodón de Azúcar, Vainilla, Floral, Delicado"
+        },
+        en: {
+            name: "Ribbon Bow Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Scented candle in a clear glass jar featuring a 3D sculpted ribbon bow.",
+            description: "Charming scented candle in a clear glass jar featuring a handcrafted 3D sculpted ribbon bow in soft velvet pink. Made with natural wax to bring elegance and fragrance to any room.",
+            aromaProfile: "Cotton Candy, Vanilla, Soft Floral, Delicate"
+        },
+        fr: {
+            name: "Bougie Ruban",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie en verre transparent avec nœud en ruban sculpté en 3D.",
+            description: "Charmante bougie parfumée dans un contenant en verre transparent, ornée d'un élégant nœud en ruban sculpté en 3D dans les tons rose velours. Fabriquée à la main pour une touche raffinée.",
+            aromaProfile: "Barbe à Papa, Vanille, Floral, Délicat"
+        }
+    },
+    {
         id: "candle-leveza_set-1",
         category: "vela",
         price: 9.90,
