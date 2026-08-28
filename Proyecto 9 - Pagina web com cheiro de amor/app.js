@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-oceanium-1",
+        category: "vela",
+        price: 19.90,
+        image: "assets/vela_oceanium.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Oceanium",
+            categoryLabel: "Vela Aromática Premium",
+            aromaBrief: "Vela artesanal em taça cerâmica inspirada nas ondas do oceano com conchas e folha de ouro.",
+            description: "Uma verdadeira obra de arte inspirada na imensidão do mar e no calor do verão. A vela 'Oceanium' é apresentada numa elegante taça de cerâmica branca, recriando as águas cristalinas do oceano com conchas marinhas naturais, pérolas reluzentes, folhas de ouro e pavios duplos de madeira crepitantes.",
+            aromaProfile: "Brisa Marinha, Sal de Maço, Flor de Lótus, Coco e Brisa de Verão"
+        },
+        es: {
+            name: "Vela Oceanium",
+            categoryLabel: "Vela Aromática Premium",
+            aromaBrief: "Vela artesanal en cuenco cerámico inspirada en las olas del océano con conchas y pan de oro.",
+            description: "Una verdadera obra de arte inspirada en la inmensidad del mar y el calor del verano. La vela 'Oceanium' se presenta en un elegante cuenco de cerámica blanca, recreando las aguas cristalinas del océano con conchas marinas naturales, perlas brillantes, pan de oro y mechas dobles de madera crepitante.",
+            aromaProfile: "Brisa Marina, Sal de Mar, Flor de Loto, Coco y Brisa de Verano"
+        },
+        en: {
+            name: "Oceanium Candle",
+            categoryLabel: "Premium Scented Candle",
+            aromaBrief: "Handcrafted ceramic candle inspired by ocean waves with shells & gold leaf.",
+            description: "A true piece of art inspired by the vast ocean and summer warmth. The 'Oceanium' candle features a large white ceramic bowl capturing crystal-blue ocean waters adorned with real seashells, lustrous pearls, gold leaf flakes, and dual crackling wooden wicks.",
+            aromaProfile: "Ocean Breeze, Sea Salt, Lotus Flower, Coconut & Summer Wind"
+        },
+        fr: {
+            name: "Bougie Oceanium",
+            categoryLabel: "Bougie Parfumée Premium",
+            aromaBrief: "Bougie artisanale inspirée des vagues de l'océan avec coquillages et feuille d'or.",
+            description: "Une véritable œuvre d'art inspirée par la beauté de l'océan et la chaleur de l'été. Présentée dans une grande coupe en céramique blanche, elle récrée des eaux bleu cristal avec de vrais coquillages, des perles, de la feuille d'or et deux mèches en bois crépitantes.",
+            aromaProfile: "Brise Marine, Sel de Mer, Fleur de Lotus, Noix de Coco"
+        }
+    },
+    {
         id: "candle-summer_musical-1",
         category: "vela",
         price: 10.90,
