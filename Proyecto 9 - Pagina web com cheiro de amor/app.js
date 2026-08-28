@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-orchidaceae-1",
+        category: "vela",
+        price: 8.90,
+        image: "assets/vela_orchidaceae.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Orchidaceae",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela em vaso estriado com flor de orquídea esculpida em tom rosa cintilante.",
+            description: "Elegante e sofisticada vela aromática em taça de cerâmica branca estriada, destacando no centro uma deslumbrante flor de orquídea esculpida à mão em cera vegetal rosa com acabamento cintilante. Transmite graciosidade, beleza refinada e um aroma floral encantador.",
+            aromaProfile: "Orquídea Selvagem, Jasmim, Baunilha Rosa, Elegante"
+        },
+        es: {
+            name: "Vela Orchidaceae",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela en cuenco estriado con flor de orquídea esculpida en tono rosa perlado.",
+            description: "Elegante y sofisticada vela aromática en cuenco de cerámica blanca estriada, destacando en el centro una deslumbrante flor de orquídea esculpida a mano en cera vegetal rosa con acabado perlado. Transmite gracia, belleza refinada y un aroma floral encantador.",
+            aromaProfile: "Orquídea Salvaje, Jazmín, Vainilla Rosa, Elegante"
+        },
+        en: {
+            name: "Orchidaceae Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "White ribbed ceramic candle with a sculpted shimmering pink orchid flower.",
+            description: "Elegant and sophisticated scented candle presented in a ribbed white ceramic dish, featuring a center handcrafted soy wax orchid flower in shimmering pearl pink. Exudes grace, refined beauty, and an enchanting floral aroma.",
+            aromaProfile: "Wild Orchid, Jasmine, Pink Vanilla, Sophisticated"
+        },
+        fr: {
+            name: "Bougie Orchidaceae",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie en céramique striée ornée d'une fleur d'orchidée rose nacré sculptée.",
+            description: "Superbe bougie parfumée dans une coupe en céramique blanche striée, ornée au centre d'une magnifique orchidée sculptée en cire rose nacré. Apporte élégance et douceur à votre intérieur.",
+            aromaProfile: "Orchidée Sauvage, Jasmin, Vanille Rose, Élégant"
+        }
+    },
+    {
         id: "candle-oceanium-1",
         category: "vela",
         price: 19.90,
