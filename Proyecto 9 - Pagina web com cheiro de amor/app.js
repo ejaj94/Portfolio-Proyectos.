@@ -4807,6 +4807,17 @@ PRODUCTS.forEach((p, idx) => {
     }
 });
 
+
+
+/* SUPABASE CLOUD DATABASE CONFIGURATION */
+// Cole as suas credenciais do Supabase aqui para ativar o envio automático na nuvem:
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+const supabase = (typeof window !== 'undefined' && window.supabase && SUPABASE_URL !== "YOUR_SUPABASE_URL") 
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) 
+    : null;
+
 /* WORKSHOP REGISTRATION & DATABASE HANDLERS */
 function openWorkshopModal() {
     const modal = document.getElementById('workshop-modal');
@@ -4851,7 +4862,20 @@ async function handleWorkshopRegistration(event) {
         console.warn('LocalStorage save failed:', e);
     }
     
-    // 2. Send to SQLite Database API
+    // 2. Insert into Supabase Cloud Database (if credentials configured)
+    if (supabase) {
+        try {
+            const { data, error } = await supabase
+                .from('workshop_registrations')
+                .insert([formData]);
+            if (error) console.error('Supabase cloud insert error:', error);
+            else console.log('Successfully saved to Supabase Cloud:', data);
+        } catch(err) {
+            console.warn('Supabase cloud connection error:', err);
+        }
+    }
+    
+    // 3. Send to Local SQLite Server Endpoint
     try {
         const response = await fetch('/api/workshop-register', {
             method: 'POST',
@@ -4859,19 +4883,19 @@ async function handleWorkshopRegistration(event) {
             body: JSON.stringify(formData)
         });
         const resData = await response.json();
-        console.log('Database registration response:', resData);
+        console.log('Local SQLite registration response:', resData);
     } catch(err) {
-        console.warn('Database server endpoint notice:', err);
+        console.warn('Local SQLite server endpoint notice:', err);
     }
     
-    // 3. Show Success Message
+    // 4. Show Success Message
     if (msg) {
         msg.style.display = 'block';
     }
     
     if (btn) btn.disabled = false;
     
-    // 4. Reset Form & Auto-close modal after 2.5 seconds
+    // 5. Reset Form & Auto-close modal after 2.5 seconds
     setTimeout(() => {
         document.getElementById('workshop-reg-form').reset();
         closeWorkshopModal();
