@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-camera_lilas-1",
+        category: "vela",
+        price: 6.90,
+        image: "assets/vela_camera_lilas.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Máquina Fotográfica Lilás",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa em formato de câmara fotográfica vintage lilás.",
+            description: "Encantadora vela aromática moldada em formato de máquina fotográfica vintage em tom lilás suave. Feita à mão com cera vegetal e fragrâncias delicadas de lavanda, perfeita para os amantes de fotografia e decoração criativa.",
+            aromaProfile: "Lavanda, Alfazema, Floral Suave, Criativo"
+        },
+        es: {
+            name: "Vela Cámara Fotográfica Lila",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa en forma de cámara fotográfica vintage lila.",
+            description: "Encantadora vela aromática moldeada en forma de cámara fotográfica vintage en tono lila suave. Hecha a mano con cera vegetal y delicadas fragancias de lavanda, perfecta para los amantes de la fotografía y la decoración creativa.",
+            aromaProfile: "Lavanda, Alucema, Floral Suave, Creativo"
+        },
+        en: {
+            name: "Lilac Camera Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Decorative vintage camera candle in soft lilac.",
+            description: "Charming scented candle sculpted into a vintage camera shape in soft lilac. Handcrafted with natural wax and gentle lavender fragrances, perfect for photography lovers and creative home decor.",
+            aromaProfile: "Lavender, Soft Floral, Relaxing, Creative"
+        },
+        fr: {
+            name: "Bougie Appareil Photo Lilas",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie décorative en forme d'appareil photo vintage lilas.",
+            description: "Charmante bougie parfumée en forme d'appareil photo vintage en lilas doux. Fabriquée à la main avec de la cire naturelle et des senteurs délicates de lavande, idéale pour les passionnés de photographie.",
+            aromaProfile: "Lavande, Floral Doux, Relaxant, Créatif"
+        }
+    },
+    {
         id: "candle-coffee_cream-1",
         category: "vela",
         price: 10.90,
