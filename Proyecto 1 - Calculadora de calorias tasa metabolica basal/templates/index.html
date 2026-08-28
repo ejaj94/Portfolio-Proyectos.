@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Calorías & TMB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="icon">🔥</div>
+            <h1>Calculadora Nutricional</h1>
+            <p>Calcula tu Tasa Metabólica Basal y requerimiento calórico diario</p>
+        </header>
+
+        <div class="card">
+            <form id="calc-form">
+                <div class="form-group">
+                    <label for="nombre">Nombre (Opcional)</label>
+                    <input type="text" id="nombre" placeholder="Ej: Angel" autocomplete="off">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="peso">Peso (kg)</label>
+                        <input type="number" step="0.1" id="peso" placeholder="70.5" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="altura">Altura (cm)</label>
+                        <input type="number" step="0.1" id="altura" placeholder="175" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edad">Edad (años)</label>
+                        <input type="number" id="edad" placeholder="25" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="genero">Género</label>
+                        <select id="genero">
+                            <option value="Hombre">Hombre</option>
+                            <option value="Mujer">Mujer</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="actividad">Nivel de Actividad Física</label>
+                    <select id="actividad">
+                        <option value="sedentario">Sedentario (Poco o ningún ejercicio)</option>
+                        <option value="ligero">Ligero (Ejercicio 1-3 días/semana)</option>
+                        <option value="moderado" selected>Moderado (Ejercicio 3-5 días/semana)</option>
+                        <option value="activo">Activo (Ejercicio 6-7 días/semana)</option>
+                        <option value="muy activo">Muy Activo (Ejercicio intenso diario)</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="btn-submit">
+                    <span>Calcular Calorías</span>
+                </button>
+            </form>
+
+            <div id="error-msg" class="error-box hidden"></div>
+
+            <div id="results" class="results-box hidden">
+                <h3 id="res-title">Resultados</h3>
+                
+                <div class="result-grid">
+                    <div class="result-card tmb-card">
+                        <span class="card-label">TMB Base</span>
+                        <span class="card-value" id="val-tmb">0</span>
+                        <span class="card-unit">kcal/día</span>
+                    </div>
+
+                    <div class="result-card mant-card">
+                        <span class="card-label">Mantenimiento</span>
+                        <span class="card-value" id="val-mant">0</span>
+                        <span class="card-unit">kcal/día</span>
+                    </div>
+
+                    <div class="result-card sup-card">
+                        <span class="card-label">Superávit (+300 kcal)</span>
+                        <span class="card-value" id="val-sup">0</span>
+                        <span class="card-unit">kcal/día</span>
+                    </div>
+
+                    <div class="result-card def-card">
+                        <span class="card-label">Déficit (-300 kcal)</span>
+                        <span class="card-value" id="val-def">0</span>
+                        <span class="card-unit">kcal/día</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calc-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const errorBox = document.getElementById('error-msg');
+            const resultsBox = document.getElementById('results');
+            
+            errorBox.classList.add('hidden');
+
+            const payload = {
+                nombre: document.getElementById('nombre').value,
+                peso: parseFloat(document.getElementById('peso').value),
+                altura: parseFloat(document.getElementById('altura').value),
+                edad: parseInt(document.getElementById('edad').value),
+                genero: document.getElementById('genero').value,
+                actividad: document.getElementById('actividad').value
+            };
+
+            try {
+                const response = await fetch('/api/calcular', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    errorBox.textContent = data.error || 'Ocurrió un error al procesar el cálculo.';
+                    errorBox.classList.remove('hidden');
+                    resultsBox.classList.add('hidden');
+                    return;
+                }
+
+                document.getElementById('res-title').textContent = `Resultados para ${data.nombre}`;
+                document.getElementById('val-tmb').textContent = data.tmb.toLocaleString();
+                document.getElementById('val-mant').textContent = data.mantenimiento.toLocaleString();
+                document.getElementById('val-sup').textContent = data.superavit.toLocaleString();
+                document.getElementById('val-def').textContent = data.deficit.toLocaleString();
+
+                resultsBox.classList.remove('hidden');
+            } catch (err) {
+                errorBox.textContent = 'No se pudo conectar con el servidor backend.';
+                errorBox.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
