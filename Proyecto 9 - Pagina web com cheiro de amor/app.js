@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-mini_bear-1",
+        category: "vela",
+        price: 2.90,
+        image: "assets/vela_mini_bear.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Mini Bear",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa moldada em formato de ursinho de rosas a segurar um coração.",
+            description: "Mimo adorável de vela aromática esculpida em formato de ursinho de rosas em tom rosa pastel a segurar um coração. Feita à mão com cera vegetal e fragrância suave, perfeita para lembrancinhas, presentes delicados e momentos cheios de ternura.",
+            aromaProfile: "Baunilha Doce, Talco de Bebé, Algodão Doce, Mimo"
+        },
+        es: {
+            name: "Vela Mini Bear (Osito)",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa moldeada en forma de osito de rosas sosteniendo un corazón.",
+            description: "Adorable detalle de vela aromática esculpida en forma de osito hecho de pétalos de rosa en tono rosa pastel sosteniendo un corazón. Hecha a mano con cera vegetal y fragancia suave, perfecta para recuerdos, regalos delicados y momentos llenos de ternura.",
+            aromaProfile: "Vainilla Dulce, Talco de Bebé, Algodón de Azúcar, Ternura"
+        },
+        en: {
+            name: "Mini Bear Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Cute rose-textured teddy bear candle holding a heart.",
+            description: "Adorable handcrafted scented candle sculpted as a rose-textured teddy bear in soft pastel pink holding a heart. Perfect for favors, gifts, or adding a cozy sweet touch to any space.",
+            aromaProfile: "Sweet Vanilla, Baby Powder, Cotton Candy, Gentle"
+        },
+        fr: {
+            name: "Bougie Mini Bear",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Mignonne bougie ours en texture de roses tenant un cœur.",
+            description: "Adorable bougie parfumée artisanale sculptée en forme de petit ours en roses rose pastel tenant un cœur. Idéale pour les cadeaux délicats et les petites attentions.",
+            aromaProfile: "Vanille Douce, Poudre de Bébé, Barbe à Papa"
+        }
+    },
+    {
         id: "candle-buque_tulipas-1",
         category: "vela",
         price: 9.90,
