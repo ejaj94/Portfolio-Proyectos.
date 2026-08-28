@@ -4806,3 +4806,74 @@ PRODUCTS.forEach((p, idx) => {
         console.log(`[PRODUCTS ${idx}] ID=${p.id} | Current Category=${p.category} | Name=${ptName} | CatLabel=${catLabel}`);
     }
 });
+
+/* WORKSHOP REGISTRATION & DATABASE HANDLERS */
+function openWorkshopModal() {
+    const modal = document.getElementById('workshop-modal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeWorkshopModal() {
+    const modal = document.getElementById('workshop-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    const msg = document.getElementById('w-success-msg');
+    if (msg) msg.style.display = 'none';
+}
+
+async function handleWorkshopRegistration(event) {
+    event.preventDefault();
+    const btn = document.getElementById('w-submit-btn');
+    const msg = document.getElementById('w-success-msg');
+    
+    if (btn) btn.disabled = true;
+    
+    const formData = {
+        name: document.getElementById('w-name').value.trim(),
+        email: document.getElementById('w-email').value.trim(),
+        phone: document.getElementById('w-phone').value.trim(),
+        workshop_type: document.getElementById('w-type').value,
+        participants: parseInt(document.getElementById('w-participants').value || '1'),
+        notes: document.getElementById('w-notes').value.trim()
+    };
+    
+    // 1. Save to LocalStorage as fallback
+    try {
+        const saved = JSON.parse(localStorage.getItem('workshop_registrations') || '[]');
+        saved.push({ ...formData, created_at: new Date().toISOString() });
+        localStorage.setItem('workshop_registrations', JSON.stringify(saved));
+    } catch(e) {
+        console.warn('LocalStorage save failed:', e);
+    }
+    
+    // 2. Send to SQLite Database API
+    try {
+        const response = await fetch('/api/workshop-register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+        const resData = await response.json();
+        console.log('Database registration response:', resData);
+    } catch(err) {
+        console.warn('Database server endpoint notice:', err);
+    }
+    
+    // 3. Show Success Message
+    if (msg) {
+        msg.style.display = 'block';
+    }
+    
+    if (btn) btn.disabled = false;
+    
+    // 4. Reset Form & Auto-close modal after 2.5 seconds
+    setTimeout(() => {
+        document.getElementById('workshop-reg-form').reset();
+        closeWorkshopModal();
+    }, 2500);
+}

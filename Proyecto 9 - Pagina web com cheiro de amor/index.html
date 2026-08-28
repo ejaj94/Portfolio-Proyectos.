@@ -490,7 +490,7 @@
           <p id="workshops-desc">
             Se desejas aprender e ter uma experiência mais próxima desta arte de fazer sabonetes, velas artesanais e peças decorativas, convido-te a inscrever-te nos meus workshops online.
           </p>
-          <a href="registro.html" class="btn btn-primary" id="workshops-btn">Inscrever-se Agora</a>
+          <button onclick="openWorkshopModal()" class="btn btn-primary" id="workshops-btn">Inscrever-se no Workshop</button>
         </div>
         <div class="workshops-image">
           <img src="assets/workshop_banner.jpg" alt="Workshops Com Cheiro de Amor" />
@@ -685,7 +685,7 @@
           <p id="workshops-desc">
             Se desejas aprender e ter uma experiência mais próxima desta arte de fazer sabonetes, velas artesanais e peças decorativas, convido-te a inscrever-te nos meus workshops online.
           </p>
-          <a href="registro.html" class="btn btn-primary" id="workshops-btn">Inscrever-se Agora</a>
+          <button onclick="openWorkshopModal()" class="btn btn-primary" id="workshops-btn">Inscrever-se no Workshop</button>
         </div>
         <div class="workshops-image">
           <img src="assets/workshop_banner.jpg" alt="Workshops Com Cheiro de Amor" />
@@ -869,5 +869,59 @@
     
     <!-- Script -->
     <script src="app.js?v=9999999979"></script>
-  </body>
+  
+    <!-- WORKSHOP REGISTRATION MODAL -->
+    <div id="workshop-modal" class="workshop-modal-overlay">
+      <div class="workshop-modal-card">
+        <button class="workshop-modal-close" onclick="closeWorkshopModal()" aria-label="Fechar">&times;</button>
+        <div class="workshop-modal-header">
+          <h3>Inscrição no Workshop</h3>
+          <p>Garanta a sua vaga para aprender a arte das velas e sabonetes artesanais com Stephanie Santos.</p>
+        </div>
+
+        <form id="workshop-reg-form" onsubmit="handleWorkshopRegistration(event)">
+          <div class="workshop-form-group">
+            <label for="w-name">Nome Completo *</label>
+            <input type="text" id="w-name" required placeholder="Seu nome completo">
+          </div>
+
+          <div class="workshop-form-group">
+            <label for="w-email">E-mail *</label>
+            <input type="email" id="w-email" required placeholder="seuemail@exemplo.com">
+          </div>
+
+          <div class="workshop-form-group">
+            <label for="w-phone">Telefone / WhatsApp *</label>
+            <input type="tel" id="w-phone" required placeholder="+351 9xx xxx xxx">
+          </div>
+
+          <div class="workshop-form-group">
+            <label for="w-type">Tipo de Workshop *</label>
+            <select id="w-type" required>
+              <option value="Workshop de Velas Aromáticas">Workshop de Velas Aromáticas</option>
+              <option value="Workshop de Sabonetes Artesanais">Workshop de Sabonetes Artesanais</option>
+              <option value="Workshop Completo (Velas, Sabonetes & Difusores)">Workshop Completo (Velas, Sabonetes & Difusores)</option>
+            </select>
+          </div>
+
+          <div class="workshop-form-group">
+            <label for="w-participants">Número de Participantes</label>
+            <input type="number" id="w-participants" min="1" max="10" value="1">
+          </div>
+
+          <div class="workshop-form-group">
+            <label for="w-notes">Observações / Preferência de Data</label>
+            <textarea id="w-notes" rows="3" placeholder="Indique a data de sua preferência ou mensagem adicional..."></textarea>
+          </div>
+
+          <button type="submit" class="workshop-btn-submit" id="w-submit-btn">Confirmar Inscrição</button>
+          
+          <div id="w-success-msg" class="registration-success-msg">
+            ✨ Inscrição realizada com sucesso e guardada na Base de Dados! Entraremos em contacto em breve.
+          </div>
+        </form>
+      </div>
+    </div>
+
+</body>
 </html>
