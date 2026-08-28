@@ -41,20 +41,20 @@ def ejecutar_scraping():
     presupuesto = monitor_state["target_price"]
 
     if not url:
-        add_log("❌ Error: La URL está vacía.")
+        add_log("[ERROR] La URL esta vacia.")
         return
 
     try:
         respuesta = requests.get(url, headers=headers, timeout=10)
         if respuesta.status_code != 200:
-            add_log(f"⚠️ Servidor respondió con código de estado HTTP: {respuesta.status_code}")
+            add_log(f"[WARN] Servidor respondio con codigo HTTP: {respuesta.status_code}")
             return
 
         sopa = BeautifulSoup(respuesta.content, "html.parser")
         precio_etiqueta = sopa.find("span", class_="price")
 
         if not precio_etiqueta:
-            add_log("⚠️ No se encontró el elemento de precio ('span.price') en el HTML de la página.")
+            add_log("[WARN] No se encontro el elemento 'span.price' en el HTML de la pagina.")
             return
 
         precio_texto = precio_etiqueta.text.strip()
@@ -67,22 +67,22 @@ def ejecutar_scraping():
 
         if precio_final <= presupuesto:
             monitor_state["is_offer"] = True
-            monitor_state["status_text"] = "¡OFERTA DETECTADA!"
-            add_log(f"🎉 ¡OFERTA ENCONTRADA! Precio: {precio_texto} (Presupuesto: ${presupuesto:.2f})")
+            monitor_state["status_text"] = "OFERTA DETECTADA!"
+            add_log(f"[OFERTA] Precio: {precio_texto} (Presupuesto: ${presupuesto:.2f})")
         else:
             monitor_state["is_offer"] = False
             if monitor_state["running"]:
                 monitor_state["status_text"] = "Vigilando activo"
-            add_log(f"🔎 Precio leído: {precio_texto} (Aún supera tu presupuesto de ${presupuesto:.2f})")
+            add_log(f"[INFO] Precio leido: {precio_texto} (Presupuesto: ${presupuesto:.2f})")
 
     except requests.exceptions.RequestException as err:
-        add_log(f"❌ Error de conexión HTTP: {err}")
+        add_log(f"[ERROR] Error de conexion HTTP: {err}")
     except Exception as ex:
-        add_log(f"❌ Error inesperado durante el scraping: {ex}")
+        add_log(f"[ERROR] Error inesperado durante el scraping: {ex}")
 
 
 def bucle_monitoreo():
-    add_log(f"🚀 Servicio de vigilancia iniciado en localhost (cada {monitor_state['interval']}s).")
+    add_log(f"[INICIO] Servicio de vigilancia iniciado en localhost (cada {monitor_state['interval']}s).")
     monitor_state["status_text"] = "Vigilando activo"
 
     while monitor_state["running"]:
@@ -94,7 +94,7 @@ def bucle_monitoreo():
             time.sleep(1)
 
     monitor_state["status_text"] = "Detenido"
-    add_log("⏹ Vigilancia detenida.")
+    add_log("[STOP] Vigilancia detenida.")
 
 
 HTML_TEMPLATE = """
@@ -319,7 +319,7 @@ def api_scan():
     if "target_price" in data:
         monitor_state["target_price"] = float(data["target_price"])
 
-    add_log("⚡ Iniciando escaneo instantáneo vía API Web...")
+    add_log("[SCAN] Iniciando escaneo instantaneo via API Web...")
     threading.Thread(target=ejecutar_scraping, daemon=True).start()
     return jsonify({"success": True})
 
@@ -330,6 +330,6 @@ def open_browser():
 
 
 if __name__ == "__main__":
-    print("🌐 Iniciando Servidor Web en http://localhost:5000 ...")
+    print("Iniciando Servidor Web en http://localhost:5000 ...")
     threading.Thread(target=open_browser, daemon=True).start()
     app.run(host="127.0.0.1", port=5000, debug=False)
