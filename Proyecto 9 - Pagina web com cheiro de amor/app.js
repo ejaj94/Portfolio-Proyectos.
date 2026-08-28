@@ -4924,3 +4924,15 @@ function formatCardExp(input) {
     }
     input.value = val;
 }
+
+
+function updateSubscriptionPrice(selectedVal) {
+    let price = "39.90";
+    if (selectedVal.includes("24.90")) {
+        price = "24.90";
+    }
+    const priceEl = document.querySelector('.subscription-price-tag .price-val');
+    if (priceEl) priceEl.textContent = price;
+    const btnEl = document.getElementById('w-submit-btn');
+    if (btnEl) btnEl.textContent = `🔒 Subscrever por €${price} / mês`;
+}

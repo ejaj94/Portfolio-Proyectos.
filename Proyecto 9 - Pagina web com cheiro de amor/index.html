@@ -906,9 +906,9 @@
 
           <div class="workshop-form-group">
             <label for="w-type">Modalidade de Workshop *</label>
-            <select id="w-type" required>
-              <option value="Subscrição VIP Velas Aromáticas (39.90€/mês)">Subscrição VIP Velas Aromáticas (39.90€/mês)</option>
-              <option value="Subscrição VIP Sabonetes Artesanais (39.90€/mês)">Subscrição VIP Sabonetes Artesanais (39.90€/mês)</option>
+            <select id="w-type" required onchange="updateSubscriptionPrice(this.value)">
+              <option value="Subscrição VIP Velas Aromáticas (24.90€/mês)">Subscrição VIP Velas Aromáticas (24.90€/mês)</option>
+              <option value="Subscrição VIP Sabonetes Artesanais (24.90€/mês)">Subscrição VIP Sabonetes Artesanais (24.90€/mês)</option>
               <option value="Subscrição Completa Velas & Sabonetes (39.90€/mês)" selected>Subscrição Completa Velas & Sabonetes (39.90€/mês)</option>
             </select>
           </div>
