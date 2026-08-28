@@ -43,7 +43,7 @@
     />
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=999999" />
+    <link rel="stylesheet" href="styles.css?v=9999999999" />
 
     <!-- Icons (Lucide Icons replacement using SVG) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -869,7 +869,7 @@
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     
     <!-- Script -->
-    <script src="app.js?v=9999999979"></script>
+    <script src="app.js?v=9999999999"></script>
   
     <!-- WORKSHOP REGISTRATION MODAL -->
     <!-- WORKSHOP REGISTRATION & SUBSCRIPTION MODAL -->
@@ -900,9 +900,74 @@
 
             <div class="workshop-form-group">
               <label for="w-phone">Telefone / WhatsApp *</label>
-              <input type="tel" id="w-phone" required placeholder="+351 9xx xxx xxx">
+              <div class="phone-input-group">
+                <select id="w-country-code" class="country-code-select">
+                  <optgroup label="Europa">
+                    <option value="+351" selected>🇵🇹 Portugal (+351)</option>
+                    <option value="+34">🇪🇸 España (+34)</option>
+                    <option value="+33">🇫🇷 France (+33)</option>
+                    <option value="+44">🇬🇧 UK (+44)</option>
+                    <option value="+49">🇩🇪 Deutschland (+49)</option>
+                    <option value="+41">🇨🇭 Suisse (+41)</option>
+                    <option value="+352">🇱🇺 Luxembourg (+352)</option>
+                    <option value="+32">🇧🇪 Belgique (+32)</option>
+                    <option value="+31">🇳🇱 Nederland (+31)</option>
+                    <option value="+39">🇮🇹 Italia (+39)</option>
+                    <option value="+353">🇮🇪 Ireland (+353)</option>
+                    <option value="+43">🇦🇹 Österreich (+43)</option>
+                    <option value="+46">🇸🇪 Sverige (+46)</option>
+                    <option value="+47">🇳🇴 Norge (+47)</option>
+                    <option value="+45">🇩🇰 Danmark (+45)</option>
+                    <option value="+358">🇫🇮 Suomi (+358)</option>
+                    <option value="+48">🇵🇱 Polska (+48)</option>
+                    <option value="+30">🇬🇷 Grecia (+30)</option>
+                    <option value="+420">🇨🇿 Česko (+420)</option>
+                    <option value="+40">🇷🇴 România (+40)</option>
+                  </optgroup>
+                  <optgroup label="Américas">
+                    <option value="+1">🇺🇸 EUA / Canada (+1)</option>
+                    <option value="+55">🇧🇷 Brasil (+55)</option>
+                    <option value="+52">🇲🇽 México (+52)</option>
+                    <option value="+54">🇦🇷 Argentina (+54)</option>
+                    <option value="+56">🇨🇱 Chile (+56)</option>
+                    <option value="+57">🇨🇴 Colombia (+57)</option>
+                    <option value="+51">🇵🇪 Perú (+51)</option>
+                    <option value="+58">🇻🇪 Venezuela (+58)</option>
+                    <option value="+593">🇪🇨 Ecuador (+593)</option>
+                    <option value="+598">🇺🇾 Uruguay (+598)</option>
+                    <option value="+595">🇵🇾 Paraguay (+595)</option>
+                    <option value="+591">🇧🇴 Bolivia (+591)</option>
+                    <option value="+1-809">🇩🇴 Rep. Dominicana (+1)</option>
+                    <option value="+1-787">🇵🇷 Puerto Rico (+1)</option>
+                    <option value="+506">🇨🇷 Costa Rica (+506)</option>
+                    <option value="+507">🇵🇦 Panamá (+507)</option>
+                  </optgroup>
+                  <optgroup label="Ásia & Oceania">
+                    <option value="+86">🇨🇳 China (+86)</option>
+                    <option value="+81">🇯🇵 Japão (+81)</option>
+                    <option value="+82">🇰🇷 Coreia do Sul (+82)</option>
+                    <option value="+91">🇮🇳 Índia (+91)</option>
+                    <option value="+61">🇦🇺 Austrália (+61)</option>
+                    <option value="+64">🇳ℤ Nova Zelândia (+64)</option>
+                    <option value="+65">🇸🇬 Cingapura (+65)</option>
+                    <option value="+971">🇦🇪 ETI / Dubai (+971)</option>
+                    <option value="+966">🇸🇦 Arábia Saudita (+966)</option>
+                    <option value="+972">🇮🇱 Israel (+972)</option>
+                    <option value="+90">🇹🇷 Turquia (+90)</option>
+                  </optgroup>
+                  <optgroup label="África">
+                    <option value="+244">🇦🇴 Angola (+244)</option>
+                    <option value="+258">🇲🇿 Moçambique (+258)</option>
+                    <option value="+238">🇨🇻 Cabo Verde (+238)</option>
+                    <option value="+212">🇲🇦 Marrocos (+212)</option>
+                    <option value="+27">🇿🇦 África do Sul (+27)</option>
+                    <option value="+234">🇳🇬 Nigéria (+234)</option>
+                    <option value="+20">🇪🇬 Egito (+20)</option>
+                  </optgroup>
+                </select>
+                <input type="tel" id="w-phone" required placeholder="9xx xxx xxx">
+              </div>
             </div>
-          </div>
 
           <div class="workshop-form-group">
             <label for="w-type">Modalidade de Workshop *</label>
