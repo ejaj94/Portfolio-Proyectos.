@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-buque_tulipas-1",
+        category: "vela",
+        price: 9.90,
+        image: "assets/vela_buque_tulipas.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Buquê Tulipas",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela em vaso transparente de vidro com buquê de tulipas esculpido em cera.",
+            description: "Encantadora vela aromática artesanal em recipiente de vidro transparente, apresentando no centro um exuberante buquê de tulipas em tons de roxo e rosa com delicados caules verdes esculpidos em cera vegetal. Um toque primaveril e elegante para perfumar e decorar.",
+            aromaProfile: "Tulipas Primaveris, Peónia, Maçã Verde, Fresco e Floral"
+        },
+        es: {
+            name: "Vela Buquê Tulipas (Ramo de Tulipanes)",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela en vaso transparente de cristal con ramo de tulipanes esculpido en cera.",
+            description: "Encantadora vela aromática artesanal en recipiente de cristal transparente, presentando en el centro un exuberante ramo de tulipanes en tonos púrpura y rosa con delicados tallos verdes esculpidos en cera vegetal. Un toque primaveral y elegante para perfumar y decorar.",
+            aromaProfile: "Tulipanes de Primavera, Peonía, Manzana Verde, Fresco y Floral"
+        },
+        en: {
+            name: "Tulip Bouquet Glass Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Clear glass candle featuring a 3D handcrafted wax tulip bouquet.",
+            description: "Charming handcrafted scented candle in a clear glass jar, showcasing a lush 3D bouquet of purple and pink wax tulips with green stems set upon a smooth white soy wax base. Brings a touch of springtime elegance and fresh floral fragrance.",
+            aromaProfile: "Spring Tulips, Peony, Green Apple, Fresh & Floral"
+        },
+        fr: {
+            name: "Bougie Bouquet de Tulipes",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie en verre transparent ornée d'un bouquet de tulipes en cire 3D.",
+            description: "Raffinée bougie parfumée artisanale dans un contenant en verre transparent, ornée au centre d'un magnifique bouquet de tulipes violettes et roses aux tiges vertes sculptées en cire végétale.",
+            aromaProfile: "Tulipes Printanières, Pivoine, Pomme Verte, Frais"
+        }
+    },
+    {
         id: "candle-calice_rosas-1",
         category: "vela",
         price: 9.90,
