@@ -72,19 +72,6 @@ const PRODUCTS = [
             aromaProfile: "Brise Marine, Fleur de Lotus, Frais, Doux"
         }
     },
-    {
-        id: "candle-leveza_grande-1",
-        category: "vela",
-        price: 4.90,
-        image: "assets/vela_conchas_pastel.jpg",
-        qty: 1,
-        pt: {
-            name: "Vela Leveza Grande (Concha)",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela decorativa em formato de concha marinha grande em tom rosa pastel.",
-            description: "Elegante vela aromática grande moldada em formato de concha marinha num tom rosa pastel suave com toques cintilantes. Feita à mão com cera vegetal. (Vendida individualmente por 4,90€ ou no conjunto Leveza por 9,90€).",
-            aromaProfile: "Brisa Marinha, Flor de Lótus, Suave"
-        },
         es: {
             name: "Vela Leveza Grande (Concha)",
             categoryLabel: "Vela Aromática",
@@ -107,19 +94,6 @@ const PRODUCTS = [
             aromaProfile: "Brise Marine, Fleur de Lotus, Doux"
         }
     },
-    {
-        id: "candle-leveza_pequena-1",
-        category: "vela",
-        price: 3.90,
-        image: "assets/vela_conchas_pastel.jpg",
-        qty: 1,
-        pt: {
-            name: "Vela Leveza Pequena (Concha)",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela decorativa em formato de concha marinha pequena em tom azul mar.",
-            description: "Mimo de vela aromática pequena moldada em formato de concha marinha num tom azul mar suave. Feita à mão com cera vegetal. (Vendida individualmente por 3,90€ ou no conjunto Leveza por 9,90€).",
-            aromaProfile: "Brisa Marinha, Sal de Maço, Fresco"
-        },
         es: {
             name: "Vela Leveza Pequeña (Concha)",
             categoryLabel: "Vela Aromática",
