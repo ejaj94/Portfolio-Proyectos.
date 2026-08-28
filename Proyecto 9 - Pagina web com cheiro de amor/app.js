@@ -4852,7 +4852,7 @@ async function handleWorkshopRegistration(event) {
     const formData = {
         name: document.getElementById('w-name').value.trim(),
         email: document.getElementById('w-email').value.trim(),
-        phone: document.getElementById('w-phone').value.trim(),
+        phone: (document.getElementById('w-country-code') ? document.getElementById('w-country-code').value : '+351') + ' ' + document.getElementById('w-phone').value.trim(),
         workshop_type: document.getElementById('w-type').value,
         participants: parseInt(document.getElementById('w-participants').value || '1'),
         notes: document.getElementById('w-notes').value.trim()
