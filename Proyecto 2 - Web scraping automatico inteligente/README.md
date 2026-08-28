@@ -1,24 +1,39 @@
 # Monitor de Precios Inteligente 🕷️💰
 
-Un script de Web Scraping en Python que vigila automáticamente el precio de un producto y te avisa cuando entra en tu presupuesto.
+Una aplicación de escritorio moderna con **Interfaz Gráfica (GUI)** en Python para vigilar automáticamente el precio de cualquier producto en tiendas web y avisarte en tiempo real cuando entra en tu presupuesto objetivo.
+
+---
 
 ## ✨ Características
 
-- **Extracción en tiempo real:** Utiliza `BeautifulSoup` y `Requests` para obtener datos de e-commerce.
-- **Monitoreo Automático:** Bucle inteligente con `time` para revisiones periódicas.
-- **Logs con Estampa de Tiempo:** Registro exacto de cada consulta usando `datetime`.
-- **Lógica de Decisión:** Compara el precio actual con un presupuesto predefinido.
+- **Interfaz Gráfica Moderna (GUI):** Diseñada con `CustomTkinter` en modo oscuro, con campos interactivos para configurar la URL, presupuesto e intervalo de revisión.
+- **Multihilo (`Threading`):** El motor de Web Scraping se ejecuta en segundo plano sin congelar ni bloquear la interfaz de usuario.
+- **Modos de Escaneo:**
+  - **▶ Vigilancia Continua:** Rastreo en bucle según la frecuencia definida (segundos).
+  - **⚡ Escaneo Instantáneo:** Consulta el precio de la web inmediatamente a demanda.
+- **Indicador de Estado Visual:** Badge en tiempo real que notifica el estado actual (🟢 *Vigilando*, 🔴 *Detenido*, 🔔 *¡Oferta Encontrada!*).
+- **Consola de Registros Integrada:** Registro con estampa de tiempo (`datetime`) de cada consulta y errores de conexión.
+
+---
 
 ## 🛠️ Tecnologías
 
 - **Python 3.x**
-- **BeautifulSoup4** (Parsing HTML)
-- **Requests** (Protocolo HTTP)
+- **CustomTkinter** (Interfaz gráfica moderna de escritorio)
+- **BeautifulSoup4** (Parsing y extracción del HTML)
+- **Requests** (Peticiones HTTP)
+- **Threading** (Concurrencia y tareas en segundo plano)
 
-## 🚀 Instalación
+---
 
-1. Clona el repositorio.
-2. Instala las dependencias:
+## 🚀 Instalación y Uso
+
+1. **Instalar dependencias:**
    ```bash
-   pip install requests beautifulsoup4
+   pip install -r requeriments.txt
+   ```
+
+2. **Ejecutar la aplicación:**
+   ```bash
+   python main.py
    ```
