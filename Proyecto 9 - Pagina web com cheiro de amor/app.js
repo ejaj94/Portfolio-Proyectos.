@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-calice_rosas-1",
+        category: "vela",
+        price: 9.90,
+        image: "assets/vela_calice_rosas.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Cálice de Rosas",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela em cálice de cerâmica com base dourada e rosas esculpidas.",
+            description: "Deslumbrante vela aromática apresentada num requintado cálice de cerâmica estriada branca com majestosa base dourada. No interior, três rosas delicadamente esculpidas à mão em cera nude descansam sobre pequenos detalhes em folha de ouro, libertando um perfume romântico e envolvente.",
+            aromaProfile: "Rosas Reais, Peónia, Baunilha Nude, Luxuoso"
+        },
+        es: {
+            name: "Vela Cálice de Rosas (Cáliz de Rosas)",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela en cáliz de cerámica con base dorada y rosas esculpidas.",
+            description: "Deslumbrante vela aromática presentada en un exquisito cáliz de cerámica blanca estriada con majestuosa base dorada. En su interior, tres rosas delicadamente esculpidas a mano en cera nude descansan sobre sutiles detalles de pan de oro, liberando un perfume romántico y envolvente.",
+            aromaProfile: "Rosas Reales, Peonía, Vainilla Nude, Lujoso"
+        },
+        en: {
+            name: "Rose Chalice Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "White ribbed ceramic chalice candle with a gold base & sculpted roses.",
+            description: "Stunning scented candle set in a majestic white ribbed ceramic chalice with an elegant gold pedestal. Inside, three handcrafted nude wax roses float gracefully surrounded by subtle gold leaf flakes, radiating a romantic and luxurious fragrance.",
+            aromaProfile: "Real Roses, Peony, Nude Vanilla, Luxurious"
+        },
+        fr: {
+            name: "Bougie Calice de Roses",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie en calice en céramique à base dorée avec roses sculptées.",
+            description: "Somptueuse bougie parfumée présentée dans un calice en céramique blanche striée avec un élégant piédestal doré. À l'intérieur, trois roses sculptées à la main en cire nude reposent parmi de fines paillettes d'or.",
+            aromaProfile: "Roses Nobles, Pivoine, Vanille Nude, Luxueux"
+        }
+    },
+    {
         id: "candle-orchidaceae-1",
         category: "vela",
         price: 8.90,
