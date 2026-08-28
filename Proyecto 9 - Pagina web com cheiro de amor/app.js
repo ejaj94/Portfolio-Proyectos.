@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-camera_preta-1",
+        category: "vela",
+        price: 6.90,
+        image: "assets/vela_camera_preta.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Máquina Fotográfica Preta",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa em formato de câmara fotográfica vintage preta.",
+            description: "Elegante e moderna vela aromática moldada em formato de máquina fotográfica vintage em tom preto fosco. Feita à mão com cera vegetal e fragrâncias marcantes de amadeirado e especiarias, ideal para amantes de arte e fotografia.",
+            aromaProfile: "Amadeirado, Café, Especiarias, Moderno"
+        },
+        es: {
+            name: "Vela Cámara Fotográfica Negra",
+            categoryLabel: "Vela Aromática",
+            aromaBrief: "Vela decorativa en forma de cámara fotográfica vintage negra.",
+            description: "Elegante y moderna vela aromática moldeada en forma de cámara fotográfica vintage en tono negro mate. Hecha a mano con cera vegetal y notas amaderadas y especiadas, ideal para amantes del arte y la fotografía.",
+            aromaProfile: "Amaderado, Café, Especias, Moderno"
+        },
+        en: {
+            name: "Black Camera Candle",
+            categoryLabel: "Scented Candle",
+            aromaBrief: "Decorative vintage camera candle in matte black.",
+            description: "Sleek and modern scented candle sculpted into a vintage camera shape in matte black. Handcrafted with plant-based wax and rich woody spice fragrances, perfect for art and photography enthusiasts.",
+            aromaProfile: "Woody, Coffee, Spice, Modern"
+        },
+        fr: {
+            name: "Bougie Appareil Photo Noir",
+            categoryLabel: "Bougie Parfumée",
+            aromaBrief: "Bougie décorative en forme d'appareil photo vintage noir.",
+            description: "Élégante bougie parfumée en forme d'appareil photo vintage en noir mat. Fabriquée à la main avec de la cire naturelle et des notes boisées et épicées, idéale pour les amateurs d'art et de photographie.",
+            aromaProfile: "Boisé, Café, Épices, Moderne"
+        }
+    },
+    {
         id: "candle-camera_lilas-1",
         category: "vela",
         price: 6.90,
