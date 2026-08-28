@@ -1,5 +1,6 @@
 import time
 import threading
+import re
 import webbrowser
 from datetime import datetime
 import requests
@@ -19,9 +20,10 @@ def add_no_cache_headers(response):
 # Estado global del monitor
 monitor_state = {
     "running": False,
-    "url": "https://www.trendyventa.com/products/smart-lock-fingerprint-padlock",
-    "target_price": 10.00,
+    "url": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+    "target_price": 60.00,
     "interval": 60,
+    "countdown": 60,
     "last_price": None,
     "last_check": None,
     "is_offer": False,
@@ -43,65 +45,120 @@ def add_log(message):
         monitor_state["logs"].pop(0)
 
 
+def extraer_precio_html(soup):
+    """Buscador inteligente de precios soportando múltiples tiendas web."""
+    # 1. Buscar en meta tags (OpenGraph / Microdata)
+    meta_price = soup.find("meta", property=re.compile(r"price|amount", re.I)) or soup.find("meta", itemprop="price")
+    if meta_price and meta_price.get("content"):
+        return meta_price["content"].strip()
+
+    # 2. Lista de selectores CSS comunes para e-commerce
+    selectores = [
+        "span.price", "div.price", ".price", ".product-price",
+        ".price_color", "span.amount", ".current-price",
+        "span.a-price-whole", "span[itemprop='price']"
+    ]
+
+    for sel in selectores:
+        elem = soup.select_one(sel)
+        if elem and elem.text.strip():
+            return elem.text.strip()
+
+    # 3. Búsqueda por Regex en texto que contenga $, € o £
+    texto_precio = soup.find(text=re.compile(r"[\$\€\£]\s*\d+[\.,]?\d*"))
+    if texto_precio:
+        return texto_precio.strip()
+
+    return None
+
+
 def ejecutar_scraping():
-    url = monitor_state["url"]
-    presupuesto = monitor_state["target_price"]
+    url = monitor_state["url"].strip()
+    ahora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    monitor_state["last_check"] = ahora
+
+    # Limpiar y convertir presupuesto aceptando comas o puntos (ej: 10,0 o 10.0)
+    try:
+        presupuesto_str = str(monitor_state["target_price"]).replace(",", ".")
+        presupuesto = float(presupuesto_str)
+    except ValueError:
+        add_log("[ERROR] El presupuesto debe ser un número válido.")
+        monitor_state["last_price"] = "Presupuesto inválido"
+        return
 
     if not url:
-        add_log("[ERROR] La URL esta vacia.")
+        add_log("[ERROR] La URL está vacía.")
+        monitor_state["last_price"] = "URL vacía"
         return
 
     try:
         respuesta = requests.get(url, headers=headers, timeout=10)
+        
         if respuesta.status_code != 200:
-            add_log(f"[WARN] Servidor respondio con codigo HTTP: {respuesta.status_code}")
+            msg_error = f"Error HTTP {respuesta.status_code}"
+            if respuesta.status_code == 402:
+                msg_error = "Error 402: Tienda no disponible / Suscripción requerida"
+            elif respuesta.status_code == 404:
+                msg_error = "Error 404: Producto o página no encontrada"
+
+            add_log(f"[WARN] {msg_error}")
+            monitor_state["last_price"] = msg_error
+            monitor_state["is_offer"] = False
             return
 
         sopa = BeautifulSoup(respuesta.content, "html.parser")
-        precio_etiqueta = sopa.find("span", class_="price")
+        precio_texto = extraer_precio_html(sopa)
 
-        if not precio_etiqueta:
-            add_log("[WARN] No se encontro el elemento 'span.price' en el HTML de la pagina.")
+        if not precio_texto:
+            add_log("[WARN] No se pudo localizar la etiqueta de precio en la página web.")
+            monitor_state["last_price"] = "Etiqueta no encontrada"
+            monitor_state["is_offer"] = False
             return
 
-        precio_texto = precio_etiqueta.text.strip()
-        precio_limpio = precio_texto.replace("$", "").replace(",", "")
+        # Limpiar texto del precio (quitar $, €, £, espacios)
+        precio_limpio = re.sub(r"[^\d\.,]", "", precio_texto).replace(",", ".")
         precio_final = float(precio_limpio)
 
-        ahora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        monitor_state["last_price"] = precio_texto
-        monitor_state["last_check"] = ahora
+        monitor_state["last_price"] = f"${precio_final:.2f}" if "$" not in precio_texto and "€" not in precio_texto else precio_texto
 
         if precio_final <= presupuesto:
             monitor_state["is_offer"] = True
             monitor_state["status_text"] = "OFERTA DETECTADA!"
-            add_log(f"[OFERTA] Precio: {precio_texto} (Presupuesto: ${presupuesto:.2f})")
+            add_log(f"[OFERTA] Precio encontrado: {precio_texto} (Presupuesto: ${presupuesto:.2f})")
         else:
             monitor_state["is_offer"] = False
             if monitor_state["running"]:
                 monitor_state["status_text"] = "Vigilando activo"
-            add_log(f"[INFO] Precio leido: {precio_texto} (Presupuesto: ${presupuesto:.2f})")
+            add_log(f"[INFO] Precio leído: {precio_texto} (Presupuesto: ${presupuesto:.2f})")
 
     except requests.exceptions.RequestException as err:
-        add_log(f"[ERROR] Error de conexion HTTP: {err}")
+        add_log(f"[ERROR] Error de conexión HTTP: {err}")
+        monitor_state["last_price"] = "Error de conexión"
+        monitor_state["is_offer"] = False
     except Exception as ex:
-        add_log(f"[ERROR] Error inesperado durante el scraping: {ex}")
+        add_log(f"[ERROR] Error inesperado: {ex}")
+        monitor_state["last_price"] = "Error inesperado"
+        monitor_state["is_offer"] = False
 
 
 def bucle_monitoreo():
-    add_log(f"[INICIO] Servicio de vigilancia iniciado en localhost:5050 (cada {monitor_state['interval']}s).")
+    add_log(f"[INICIO] Servicio de vigilancia iniciado (revisión cada {monitor_state['interval']}s).")
     monitor_state["status_text"] = "Vigilando activo"
 
     while monitor_state["running"]:
         ejecutar_scraping()
         intervalo = monitor_state.get("interval", 60)
-        for _ in range(max(1, intervalo)):
+        
+        # Conteo regresivo en tiempo real
+        for restante in range(max(1, intervalo), 0, -1):
             if not monitor_state["running"]:
                 break
+            monitor_state["countdown"] = restante
             time.sleep(1)
 
+    monitor_state["countdown"] = 0
     monitor_state["status_text"] = "Detenido"
-    add_log("[STOP] Vigilancia detenida.")
+    add_log("[STOP] Vigilancia detenida por el usuario.")
 
 
 HTML_TEMPLATE = """
@@ -131,7 +188,7 @@ HTML_TEMPLATE = """
             background-color: #ffffff;
             border: 1px solid #e5e7eb;
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
         .form-label {
             color: #1f2937 !important;
@@ -141,7 +198,7 @@ HTML_TEMPLATE = """
             background-color: #ffffff;
             border: 2px solid #d1d5db;
             color: #111827;
-            font-weight: 500;
+            font-weight: 600;
         }
         .form-control:focus {
             background-color: #ffffff;
@@ -198,11 +255,19 @@ HTML_TEMPLATE = """
             background-color: #1d4ed8;
             color: #ffffff;
         }
+        .timer-badge {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border: 2px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body class="py-4">
     <div class="container" style="max-width: 920px;">
-        <!-- Encabezado claro y llamativo -->
+        <!-- Encabezado -->
         <div class="header-box p-4 mb-4 text-center">
             <h2 class="fw-bold mb-1">🕷️ Monitor de Precios Inteligente</h2>
             <p class="mb-0 text-white-50 fs-6">Web Scraper Automático en Tiempo Real (http://localhost:5050)</p>
@@ -218,7 +283,7 @@ HTML_TEMPLATE = """
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Presupuesto Objetivo ($):</label>
-                    <input type="number" step="0.01" id="inputPrice" class="form-control form-control-lg" value="{{ state.target_price }}">
+                    <input type="text" id="inputPrice" class="form-control form-control-lg" value="{{ state.target_price }}">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Frecuencia de Revisión (segundos):</label>
@@ -237,13 +302,16 @@ HTML_TEMPLATE = """
         <div class="card p-4 mb-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="fw-bold mb-0 text-dark">📊 Estado del Servicio</h4>
-                <span id="badgeStatus" class="badge bg-secondary badge-status">Cargando...</span>
+                <div class="d-flex align-items-center gap-2">
+                    <span id="textTimer" class="timer-badge">⏱️ Próxima revisión: --</span>
+                    <span id="badgeStatus" class="badge bg-secondary badge-status">Cargando...</span>
+                </div>
             </div>
             <div class="row text-center g-3">
                 <div class="col-md-6">
                     <div class="p-3 stat-card">
                         <small class="text-secondary d-block fw-bold mb-1">Último Precio Leído</small>
-                        <span id="textLastPrice" class="fs-2 fw-bold text-primary">--</span>
+                        <span id="textLastPrice" class="fs-3 fw-bold text-primary">--</span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -273,6 +341,7 @@ HTML_TEMPLATE = """
                 const badgeStatus = document.getElementById('badgeStatus');
                 const textLastPrice = document.getElementById('textLastPrice');
                 const textLastCheck = document.getElementById('textLastCheck');
+                const textTimer = document.getElementById('textTimer');
                 const logBox = document.getElementById('logBox');
 
                 btnStart.disabled = data.running;
@@ -289,6 +358,12 @@ HTML_TEMPLATE = """
                     badgeStatus.innerText = '🔴 Detenido';
                 }
 
+                if (data.running) {
+                    textTimer.innerText = '⏱️ Próxima revisión en: ' + data.countdown + 's';
+                } else {
+                    textTimer.innerText = '⏱️ Próxima revisión: Inactivo';
+                }
+
                 textLastPrice.innerText = data.last_price || '--';
                 textLastCheck.innerText = data.last_check || '--';
 
@@ -301,7 +376,7 @@ HTML_TEMPLATE = """
 
         async function startMonitor() {
             const url = document.getElementById('inputUrl').value;
-            const price = parseFloat(document.getElementById('inputPrice').value);
+            const price = document.getElementById('inputPrice').value;
             const interval = parseInt(document.getElementById('inputInterval').value);
 
             await fetch('/api/start', {
@@ -319,7 +394,7 @@ HTML_TEMPLATE = """
 
         async function scanNow() {
             const url = document.getElementById('inputUrl').value;
-            const price = parseFloat(document.getElementById('inputPrice').value);
+            const price = document.getElementById('inputPrice').value;
 
             await fetch('/api/scan', {
                 method: 'POST',
@@ -329,7 +404,7 @@ HTML_TEMPLATE = """
             updateStatus();
         }
 
-        setInterval(updateStatus, 2000);
+        setInterval(updateStatus, 1000);
         updateStatus();
     </script>
 </body>
@@ -351,7 +426,13 @@ def status():
 def api_start():
     data = request.json or {}
     monitor_state["url"] = data.get("url", monitor_state["url"])
-    monitor_state["target_price"] = float(data.get("target_price", monitor_state["target_price"]))
+    
+    price_val = str(data.get("target_price", monitor_state["target_price"])).replace(",", ".")
+    try:
+        monitor_state["target_price"] = float(price_val)
+    except ValueError:
+        pass
+        
     monitor_state["interval"] = int(data.get("interval", monitor_state["interval"]))
 
     if not monitor_state["running"]:
@@ -375,7 +456,11 @@ def api_scan():
     if "url" in data:
         monitor_state["url"] = data["url"]
     if "target_price" in data:
-        monitor_state["target_price"] = float(data["target_price"])
+        price_val = str(data["target_price"]).replace(",", ".")
+        try:
+            monitor_state["target_price"] = float(price_val)
+        except ValueError:
+            pass
 
     add_log("[SCAN] Iniciando escaneo instantaneo via API Web...")
     threading.Thread(target=ejecutar_scraping, daemon=True).start()
@@ -388,6 +473,6 @@ def open_browser():
 
 
 if __name__ == "__main__":
-    print("Iniciando Servidor Web Claro en http://localhost:5050 ...")
+    print("Iniciando Servidor Web con Contador en http://localhost:5050 ...")
     threading.Thread(target=open_browser, daemon=True).start()
     app.run(host="127.0.0.1", port=5050, debug=False)

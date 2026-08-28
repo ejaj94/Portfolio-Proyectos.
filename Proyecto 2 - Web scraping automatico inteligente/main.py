@@ -1,5 +1,6 @@
 import time
 import threading
+import re
 from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
@@ -16,7 +17,7 @@ class MonitorPreciosApp(ctk.CTk):
 
         # Configuración de la ventana principal
         self.title("🕷️ Monitor de Precios Inteligente - Web Scraper GUI")
-        self.geometry("720x680")
+        self.geometry("740x700")
         self.minsize(640, 600)
 
         # Variables de control
@@ -32,7 +33,6 @@ class MonitorPreciosApp(ctk.CTk):
         self._crear_interfaz()
 
     def _crear_interfaz(self):
-        # Configurar rejilla principal
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(2, weight=1)
 
@@ -62,7 +62,7 @@ class MonitorPreciosApp(ctk.CTk):
             border_color="#94a3b8"
         )
         self.entry_url.grid(row=0, column=1, columnspan=2, padx=15, pady=(12, 5), sticky="ew")
-        self.entry_url.insert(0, "https://www.trendyventa.com/products/smart-lock-fingerprint-padlock")
+        self.entry_url.insert(0, "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html")
 
         # Campo: Presupuesto Objetivo
         self.label_presupuesto = ctk.CTkLabel(self.frame_config, text="Presupuesto Objetivo ($):", font=ctk.CTkFont(weight="bold"), text_color="#0f172a")
@@ -70,13 +70,13 @@ class MonitorPreciosApp(ctk.CTk):
 
         self.entry_presupuesto = ctk.CTkEntry(
             self.frame_config,
-            placeholder_text="10.00",
+            placeholder_text="60.00",
             fg_color="#ffffff",
             text_color="#0f172a",
             border_color="#94a3b8"
         )
         self.entry_presupuesto.grid(row=1, column=1, padx=15, pady=8, sticky="ew")
-        self.entry_presupuesto.insert(0, "10.00")
+        self.entry_presupuesto.insert(0, "60.00")
 
         # Campo: Frecuencia de revisión
         self.label_intervalo = ctk.CTkLabel(self.frame_config, text="Intervalo (segundos):", font=ctk.CTkFont(weight="bold"), text_color="#0f172a")
@@ -154,7 +154,6 @@ class MonitorPreciosApp(ctk.CTk):
         self.agregar_log("Sistema listo. Presiona '▶ Iniciar Vigilancia' o '⚡ Escanear Ahora'.")
 
     def agregar_log(self, mensaje):
-        """Agrega un mensaje con estampa de tiempo al cuadro de texto de logs de forma segura."""
         ahora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         linea = f"[{ahora}] {mensaje}\n"
 
@@ -165,19 +164,41 @@ class MonitorPreciosApp(ctk.CTk):
         self.after(0, _actualizar)
 
     def actualizar_estado(self, texto, color):
-        """Actualiza el texto y color del badge de estado en el hilo principal."""
         def _actualizar():
             self.label_estado.configure(text=f"Estado: {texto}", text_color=color)
 
         self.after(0, _actualizar)
 
+    def extraer_precio_html(self, soup):
+        meta_price = soup.find("meta", property=re.compile(r"price|amount", re.I)) or soup.find("meta", itemprop="price")
+        if meta_price and meta_price.get("content"):
+            return meta_price["content"].strip()
+
+        selectores = [
+            "span.price", "div.price", ".price", ".product-price",
+            ".price_color", "span.amount", ".current-price",
+            "span.a-price-whole", "span[itemprop='price']"
+        ]
+
+        for sel in selectores:
+            elem = soup.select_one(sel)
+            if elem and elem.text.strip():
+                return elem.text.strip()
+
+        texto_precio = soup.find(text=re.compile(r"[\$\€\£]\s*\d+[\.,]?\d*"))
+        if texto_precio:
+            return texto_precio.strip()
+
+        return None
+
     def consultar_precio(self):
-        """Realiza la petición HTTP y parsea el precio desde la web."""
         url = self.entry_url.get().strip()
+        presupuesto_raw = self.entry_presupuesto.get().strip().replace(",", ".")
+
         try:
-            presupuesto = float(self.entry_presupuesto.get().strip())
+            presupuesto = float(presupuesto_raw)
         except ValueError:
-            self.agregar_log("❌ Error: El presupuesto debe ser un número válido (ej. 10.00).")
+            self.agregar_log("❌ Error: El presupuesto debe ser un número válido (ej. 10.00 o 10,0).")
             return
 
         if not url:
@@ -187,25 +208,30 @@ class MonitorPreciosApp(ctk.CTk):
         try:
             respuesta = requests.get(url, headers=self.headers, timeout=10)
             if respuesta.status_code != 200:
-                self.agregar_log(f"⚠️ La web respondió con código de estado: {respuesta.status_code}")
+                msg_error = f"HTTP {respuesta.status_code}"
+                if respuesta.status_code == 402:
+                    msg_error = "Error 402: Tienda no disponible / Pago Requerido"
+                elif respuesta.status_code == 404:
+                    msg_error = "Error 404: Página o Producto no encontrado"
+
+                self.agregar_log(f"⚠️ La web respondió con error: {msg_error}")
                 return
 
             sopa = BeautifulSoup(respuesta.content, "html.parser")
-            precio_etiqueta = sopa.find("span", class_="price")
+            precio_texto = self.extraer_precio_html(sopa)
 
-            if not precio_etiqueta:
-                self.agregar_log("⚠️ No se encontró la etiqueta del precio ('span.price') en la página.")
+            if not precio_texto:
+                self.agregar_log("⚠️ No se encontró la etiqueta de precio en la página web.")
                 return
 
-            precio_texto = precio_etiqueta.text.strip()
-            precio_limpio = precio_texto.replace("$", "").replace(",", "")
+            precio_limpio = re.sub(r"[^\d\.,]", "", precio_texto).replace(",", ".")
             precio_final = float(precio_limpio)
 
             if precio_final <= presupuesto:
                 self.agregar_log(f"🎉 ¡OFERTA DETECTADA! Precio: {precio_texto} (Objetivo: ${presupuesto:.2f})")
                 self.actualizar_estado("🔔 ¡OFERTA ENCONTRADA!", "#16a34a")
             else:
-                self.agregar_log(f"🔎 Precio actual: {precio_texto} (Aún supera tu presupuesto de ${presupuesto:.2f})")
+                self.agregar_log(f"🔎 Precio actual: {precio_texto} (Presupuesto objetivo: ${presupuesto:.2f})")
                 if self.ejecutando:
                     self.actualizar_estado("🟢 Vigilando activo", "#16a34a")
 
@@ -217,12 +243,10 @@ class MonitorPreciosApp(ctk.CTk):
             self.agregar_log(f"❌ Error inesperado: {ex}")
 
     def escanear_ahora(self):
-        """Ejecuta una consulta única en un hilo secundario para no congelar la UI."""
         self.agregar_log("⚡ Iniciando escaneo instantáneo...")
         threading.Thread(target=self.consultar_precio, daemon=True).start()
 
     def _bucle_monitoreo(self):
-        """Bucle continuo ejecutado en segundo plano."""
         try:
             intervalo = int(self.entry_intervalo.get().strip())
             if intervalo < 5:
@@ -244,7 +268,6 @@ class MonitorPreciosApp(ctk.CTk):
         self.agregar_log("⏹ Vigilancia detenida por el usuario.")
 
     def iniciar_monitoreo(self):
-        """Inicia el hilo de monitoreo continuo."""
         if self.ejecutando:
             return
 
@@ -256,7 +279,6 @@ class MonitorPreciosApp(ctk.CTk):
         self.hilo_monitoreo.start()
 
     def detener_monitoreo(self):
-        """Detiene la ejecución del monitoreo continuo."""
         self.ejecutando = False
         self.btn_iniciar.configure(state="normal")
         self.btn_detener.configure(state="disabled")
