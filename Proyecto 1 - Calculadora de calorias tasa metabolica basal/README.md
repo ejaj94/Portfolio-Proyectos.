@@ -1,47 +1,45 @@
-# Proyecto 1: Calculadora de Calorías
+# Proyecto 1: Calculadora de Calorías y Tasa Metabólica Basal
 
-Este proyecto es una calculadora de calorías desarrollada en Python.
-
-## Configuración del Entorno
-
-1. El entorno virtual de Python 3.14.2 ya está creado y activado.
-2. Para activar el entorno en futuras sesiones:
-   ```
-   .\Scripts\Activate.ps1
-   ```
+Este proyecto es una calculadora de calorías desarrollada en Python con **Interfaz Gráfica de Usuario (GUI)** moderna y soporte para consola (CLI).
 
 ## Archivos del Proyecto
 
-- `App.py`: Archivo principal de la aplicación.
-- `Calculos.py`: Módulo para los cálculos de calorías.
+- `App.py`: Archivo principal de la aplicación. Ejecuta la Interfaz Gráfica por defecto.
+- `gui.py`: Módulo de la interfaz gráfica moderna (desarrollado con CustomTkinter).
+- `Calculos.py`: Módulo con las funciones matemáticas para el cálculo de TMB y calorías diarias según el nivel de actividad física.
+- `requirements.txt`: Lista de dependencias del proyecto.
 
 ## Cómo Ejecutar
 
-1. Asegúrate de que el entorno esté activado.
-2. Ejecuta el archivo principal:
-   ```
+1. Asegúrate de tener Python 3.11+ instalado.
+2. **Ejecutar la Interfaz Gráfica (GUI)** (Recomendado):
+   ```bash
    python App.py
    ```
+   o directamente:
+   ```bash
+   python gui.py
+   ```
 
-## Librerías Instaladas
+3. **Ejecutar en Modo Consola (CLI)**:
+   ```bash
+   python App.py --cli
+   ```
 
-Las siguientes librerías están instaladas y listas para usar:
+## Características de la Interfaz Gráfica (GUI)
 
-- **PySimpleGUI**: Para crear interfaces gráficas simples.
-- **NumPy**: Para operaciones matemáticas y cálculos numéricos.
-- **Pandas**: Para manipulación y análisis de datos.
-- **Matplotlib**: Para crear gráficos y visualizaciones.
-- **Requests**: Para hacer solicitudes HTTP a APIs externas (útil para obtener datos de alimentos).
-- **Black**: Formateador de código para mantener el estilo consistente.
+- **Diseño Moderno**: Interfaz adaptativa en modo claro/oscuro construida con CustomTkinter.
+- **Formulario Completo**: Entradas para Nombre, Peso (kg), Altura (cm), Edad (años), Género y Nivel de Actividad Física.
+- **Validación Instantánea**: Alertas para evitar errores en datos numéricos.
+- **Resultados Claros**: Muestra la TMB base, calorías de mantenimiento, calorías para superávit (+300 kcal) y déficit (-300 kcal).
+
+## Librerías Destacadas
+
+- **CustomTkinter**: Interfaz gráfica de usuario moderna y estilizada.
+- **NumPy / Pandas / Matplotlib**: Herramientas analíticas complementarias.
+- **Black**: Formateador de código.
 
 ## Configuración del Formateador
 
 - **Black** está configurado como el formateador predeterminado.
-- El código se formatea automáticamente al guardar (formatOnSave: true).
 - Longitud de línea: 88 caracteres.
-- Se organizan las importaciones automáticamente.
-
-## Notas
-
-- Los archivos están listos para desarrollo.
-- Instala dependencias adicionales con `pip install <paquete>` si es necesario.
