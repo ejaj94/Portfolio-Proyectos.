@@ -4814,9 +4814,14 @@ PRODUCTS.forEach((p, idx) => {
 const SUPABASE_URL = "YOUR_SUPABASE_URL";
 const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
 
-const supabase = (typeof window !== 'undefined' && window.supabase && SUPABASE_URL !== "YOUR_SUPABASE_URL") 
-    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) 
-    : null;
+let supabaseClient = null;
+try {
+    if (typeof window !== 'undefined' && window.supabase && SUPABASE_URL && SUPABASE_URL.startsWith('http')) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+} catch(err) {
+    console.warn('Supabase init skipped (add valid URL):', err);
+}
 
 /* WORKSHOP REGISTRATION & DATABASE HANDLERS */
 function openWorkshopModal() {
@@ -4863,9 +4868,9 @@ async function handleWorkshopRegistration(event) {
     }
     
     // 2. Insert into Supabase Cloud Database (if credentials configured)
-    if (supabase) {
+    if (supabaseClient) {
         try {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('workshop_registrations')
                 .insert([formData]);
             if (error) console.error('Supabase cloud insert error:', error);
