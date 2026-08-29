@@ -327,28 +327,28 @@ const PRODUCTS = [
             name: "Vela Cãozinho Fofinho Personalizado",
             categoryLabel: "Velas Aromáticas Decorativas",
             aromaBrief: "Adorável vela artesanal esculpida em formato de cãozinho de estimação.",
-            description: "Adorável vela aromática artesanal meticulosamente esculpida à mão em formato de um adorável cãozinho com roupinha e boina personalizadas. Elaborada com cera de soja vegetal 100% natural, pavio de algodão e essência suave. Perfeita para amantes de animais e como lembrança memorável de estimação.",
+            description: "Adorável vela aromática artesanal meticulosamente esculpida à mão em formato de um cãozinho de estimação fofinho. Elaborada com cera de soja vegetal 100% natural, pavio de algodão e essência suave. Perfeita para amantes de animais e como lembrança memorável de estimação.",
             aromaProfile: "Baunilha Aconchegante, Flor de Algodão, Almíscar Suave"
         },
         es: {
             name: "Vela Perrito Lindo Personalizado",
             categoryLabel: "Velas Aromáticas Decorativas",
             aromaBrief: "Adorable vela artesanal moldeada con la figura de un perrito con atuendo.",
-            description: "Encantadora vela aromática artesanal moldeada a mano con la figura de un adorable perrito con chaleco y gorrito personalizado. Elaborada con cera de soya vegetal 100% natural, mecha de algodón y fragancia delicada. Ideal para amantes de las mascotas y como recuerdo especial.",
+            description: "Encantadora vela aromática artesanal moldeada a mano con la figura de un adorable perrito. Elaborada con cera de soya vegetal 100% natural, mecha de algodón y fragancia delicada. Ideal para amantes de las mascotas y como recuerdo especial.",
             aromaProfile: "Vainilla Acogedora, Flor de Algodón, Almizcle Suave"
         },
         en: {
             name: "Custom Cute Puppy Candle",
             categoryLabel: "Decorative Aromatic Candles",
             aromaBrief: "Charming handcrafted candle sculpted in the shape of a dressed cute puppy.",
-            description: "Charming handcrafted aromatic candle meticulously sculpted in the shape of an adorable puppy wearing a custom vest and cap. Made with 100% natural soy wax, cotton wick, and delicate fragrance. Perfect for pet lovers and memorable decor.",
+            description: "Charming handcrafted aromatic candle meticulously sculpted in the shape of an adorable puppy. Made with 100% natural soy wax, cotton wick, and delicate fragrance. Perfect for pet lovers and memorable decor.",
             aromaProfile: "Cozy Vanilla, Cotton Flower, Soft Musk"
         },
         fr: {
             name: "Bougie Chiot Mignon Personnalisé",
             categoryLabel: "Bougies Aromatiques Décoratives",
             aromaBrief: "Adorable bougie artisanale sculptée en forme de petit chien habillé.",
-            description: "Superbe bougie aromatique artisanale sculptée à la main en forme d'un adorable petit chien portant un vêtement et un bonnet personnalisés. Fabriquée avec de la cire de soja 100% naturelle et mèche en coton. Parfait pour les amoureux des animaux.",
+            description: "Superbe bougie aromatique artisanale sculptée à la main en forme d'un adorable petit chien. Fabriquée avec de la cire de soja 100% naturelle et mèche en coton. Parfait pour les amoureux des animaux.",
             aromaProfile: "Vanille Douce, Fleur de Coton, Musc Doux"
         }
     },
