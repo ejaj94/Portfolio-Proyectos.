@@ -317,7 +317,42 @@ const PRODUCTS = [
             aromaProfile: "Tulipe, Pivoine, Fleurs Séchées, Poétique et Élégant"
         }
     },
-        {
+            {
+        id: "candle-coelhinho-1",
+        category: "vela",
+        price: 5.90,
+        image: "assets/vela_coelhinho.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Coelhinho Fofinho",
+            categoryLabel: "Velas Aromáticas Decorativas",
+            aromaBrief: "Encantadora vela artesanal esculpida em formato de coelhinho com orelhinhas rosa.",
+            description: "Adorável vela aromática artesanal em formato de coelhinho sentado com detalhes rosados nas orelhas e patinhas. Esculpida à mão com cera vegetal de soja 100% natural e essência delicada. Uma peça encantadora para decorar a casa ou presentear em ocasiões especiais.",
+            aromaProfile: "Morango Doce, Flor de Laranjeira, Baunilha"
+        },
+        es: {
+            name: "Vela Conejito Tiernos Detalles",
+            categoryLabel: "Velas Aromáticas Decorativas",
+            aromaBrief: "Encantadora vela artesanal moldeada con la figura de un tierno conejito.",
+            description: "Adorable vela aromática artesanal moldeada a mano con la figura de un conejito sentado con delicados detalles rosados en sus orejas y patitas. Elaborada con cera de soya vegetal 100% natural y mecha de algodón. Una pieza dulce y entrañable.",
+            aromaProfile: "Fresa Dulce, Flor de Azahar, Vainilla"
+        },
+        en: {
+            name: "Cute Bunny Candle",
+            categoryLabel: "Decorative Aromatic Candles",
+            aromaBrief: "Charming handcrafted candle sculpted in the shape of a cute bunny with pink ears.",
+            description: "Adorable handcrafted aromatic candle sculpted in the shape of a sitting bunny with pink ears and paw pads. Made with 100% natural soy wax, cotton wick, and sweet fragrance. A charming piece for home decor and gifting.",
+            aromaProfile: "Sweet Strawberry, Orange Blossom, Vanilla"
+        },
+        fr: {
+            name: "Bougie Petit Lapin Mignon",
+            categoryLabel: "Bougies Aromatiques Décoratives",
+            aromaBrief: "Adorable bougie artisanale en forme de petit lapin aux oreilles roses.",
+            description: "Adorable bougie aromatique artisanale sculptée à la main en forme de petit lapin assis avec de délicats détails rose pastel sur ses oreilles et pattes. Fabriquée avec de la cire de soja 100% naturelle.",
+            aromaProfile: "Fraise Douce, Fleur d'Oranger, Vanille"
+        }
+    },
+{
         id: "candle-cao_personalizado-1",
         category: "vela",
         price: 5.90,
