@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Archivos Pro 🚀</title>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-folder-tree"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Organizador de Archivos <span>PRO</span></h1>
+                    <p>Gestiona, clasifica y limpia tu almacenamiento local al instante</p>
+                </div>
+            </div>
+            <div class="header-badges">
+                <span class="status-badge live"><i class="fa-solid fa-circle-dot"></i> Localhost Active</span>
+            </div>
+        </header>
+
+        <!-- Main Content Layout -->
+        <main class="dashboard-grid">
+            <!-- Left Sidebar Controls -->
+            <section class="control-panel card">
+                <h2><i class="fa-solid fa-sliders"></i> Configuración de Escaneo</h2>
+                
+                <!-- Folder Path Selector -->
+                <div class="form-group">
+                    <label for="folderPath"><i class="fa-solid fa-folder-open"></i> Carpeta a Organizar</label>
+                    <div class="input-with-button">
+                        <input type="text" id="folderPath" placeholder="Ej: C:\Users\Nombre\Downloads" autocomplete="off">
+                        <button id="btnScan" class="btn btn-secondary" title="Escanear carpeta">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Shortcuts -->
+                <div class="shortcuts-section">
+                    <label><i class="fa-solid fa-bolt"></i> Accesos Rápido</label>
+                    <div id="shortcutsContainer" class="shortcuts-chips">
+                        <span class="chip-skeleton">Cargando carpetas...</span>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- Mode Selection -->
+                <div class="form-group">
+                    <label><i class="fa-solid fa-layer-group"></i> Criterio de Organización</label>
+                    <div class="mode-selector">
+                        <label class="mode-option active">
+                            <input type="radio" name="orgMode" value="category" checked>
+                            <div class="mode-card">
+                                <i class="fa-solid fa-tags"></i>
+                                <span>Por Categoría</span>
+                            </div>
+                        </label>
+
+                        <label class="mode-option">
+                            <input type="radio" name="orgMode" value="date">
+                            <div class="mode-card">
+                                <i class="fa-solid fa-calendar-days"></i>
+                                <span>Por Fecha</span>
+                            </div>
+                        </label>
+
+                        <label class="mode-option">
+                            <input type="radio" name="orgMode" value="size">
+                            <div class="mode-card">
+                                <i class="fa-solid fa-weight-hanging"></i>
+                                <span>Por Tamaño</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button id="btnDryRun" class="btn btn-outline glow">
+                        <i class="fa-solid fa-flask"></i> Simular (Dry-Run)
+                    </button>
+                    <button id="btnOrganize" class="btn btn-primary glow-primary">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Organizar Ahora
+                    </button>
+                    <button id="btnUndo" class="btn btn-danger">
+                        <i class="fa-solid fa-rotate-left"></i> Deshacer Cambio
+                    </button>
+                    <button id="btnDuplicates" class="btn btn-dark">
+                        <i class="fa-solid fa-copy"></i> Buscar Duplicados
+                    </button>
+                </div>
+            </section>
+
+            <!-- Main Viewer Area -->
+            <section class="results-panel">
+                <!-- Summary KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon icon-blue"><i class="fa-solid fa-file-lines"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Archivos Encontrados</span>
+                            <span id="kpiTotalFiles" class="kpi-value">0</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon icon-purple"><i class="fa-solid fa-hard-drive"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Tamaño Total</span>
+                            <span id="kpiTotalSize" class="kpi-value">0 B</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon icon-emerald"><i class="fa-solid fa-folder-tree"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-label">Carpetas Destino</span>
+                            <span id="kpiTotalCategories" class="kpi-value">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Breakdown Visual Progress Bars -->
+                <div id="breakdownSection" class="card breakdown-card hidden">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-chart-pie"></i> Desglose por Destino</h3>
+                    </div>
+                    <div id="breakdownBars" class="breakdown-bars"></div>
+                </div>
+
+                <!-- Table Preview Card -->
+                <div class="card table-card">
+                    <div class="card-header flex-between">
+                        <h3 id="tableTitle"><i class="fa-solid fa-list-check"></i> Vista Previa de Archivos</h3>
+                        <div class="table-actions">
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="tableSearch" placeholder="Buscar archivo o extensión...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Archivo</th>
+                                    <th>Extensión</th>
+                                    <th>Tamaño</th>
+                                    <th>Fecha Modificación</th>
+                                    <th>Carpeta Destino</th>
+                                </tr>
+                            </thead>
+                            <tbody id="filesTableBody">
+                                <tr>
+                                    <td colspan="5" class="empty-state">
+                                        <i class="fa-solid fa-folder-open"></i>
+                                        <p>Selecciona una carpeta o haz clic en un acceso rápido para comenzar.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
