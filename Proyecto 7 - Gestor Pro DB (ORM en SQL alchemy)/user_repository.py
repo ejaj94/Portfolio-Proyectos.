@@ -58,3 +58,18 @@ class UserRepository:
         self.db.commit()      # Guarda las modificaciones
         self.db.refresh(user) # Refresca el objeto para confirmar los cambios
         return user # IMPORTANTE: Retorna el objeto actualizado para el reporte
+
+    def search(self, query: str):
+        """Busca usuarios cuyo nombre, apellido o ID contengan la consulta de búsqueda"""
+        if not query or not query.strip():
+            return self.get_all()
+        q = f"%{query.strip().lower()}%"
+        # Búsqueda usando or_ para filtrar por id, name o last_name
+        from sqlalchemy import or_, cast, String
+        return self.db.query(User).filter(
+            or_(
+                User.name.ilike(q),
+                User.last_name.ilike(q),
+                cast(User.id, String).like(q)
+            )
+        ).all()

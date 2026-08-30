@@ -10,9 +10,42 @@ class UserActionService:
         # Inyección de dependencias: recibe la conexión de DB y levanta los servicios
         self.repo = UserRepository(db)
         self.mailer = EmailService()
-        self.admin_email = "enmanuelejaj@gmail.com" # Destinatario de los reportes
+        self.admin_email = "enmanuelejaj@gmail.com" # Destinatario por defecto
 
-    def ejecutar_y_notificar(self, accion, **kwargs):
+    def get_stats(self):
+        """Retorna estadísticas calculadas de la base de datos para las tarjetas del GUI"""
+        users = self.repo.get_all()
+        total = len(users)
+        if total > 0:
+            avg_age = round(sum(u.age for u in users if u.age) / total, 1)
+        else:
+            avg_age = 0.0
+        return {
+            "total_users": total,
+            "avg_age": avg_age,
+            "mailer_configured": bool(self.mailer.email_user and self.mailer.email_pass)
+        }
+
+    def search_users(self, query: str):
+        """Busca usuarios filtrando por término"""
+        return self.repo.search(query)
+
+    def generar_pdf_manual(self):
+        """Genera un PDF con el listado general actual y retorna la ruta"""
+        ahora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        lista_actual = self.repo.get_all()
+        str_lista = [f"ID: {u.id} | {u.name} {u.last_name} ({u.age} años)" for u in lista_actual]
+        lineas = [f"Fecha de consulta: {ahora}", f"Total usuarios: {len(lista_actual)}", "--- LISTADO DE USUARIOS ---"] + str_lista
+        return crear_pdf("REPORTE GENERAL DE USUARIOS", lineas)
+
+    def enviar_email_manual(self, destinatario=None, archivo_pdf=None):
+        """Envía el PDF especificado o uno nuevo generado al destinatario"""
+        target_email = destinatario or self.admin_email
+        pdf_path = archivo_pdf or self.generar_pdf_manual()
+        exito = self.mailer.enviar_reporte(target_email, pdf_path)
+        return exito, pdf_path
+
+    def ejecutar_y_notificar(self, accion, send_email=True, **kwargs):
         """
         Método principal que decide qué acción ejecutar en la DB 
         y qué información incluir en el reporte PDF.
@@ -73,24 +106,19 @@ class UserActionService:
                 ]
 
             # --- Generación de Notificaciones Automáticas ---
-
-            # Si la acción en DB fue exitosa, disparamos el PDF y el Email
-            if res:
-                # Para acciones de cambio (modificar/borrar), añadimos la lista final actualizada
+            if res and send_email:
                 if accion != "list" and accion != "add":
                     lista_final = self.repo.get_all()
                     str_final = [f"ID: {u.id} - {u.name} {u.last_name} ({u.age} años)" for u in lista_final]
                     lineas_reporte += ["", "--- LISTA ACTUALIZADA ---"] + str_final
                 
-                print(f"📊 Generando PDF y enviando reporte: {titulo}")
-                # El servicio pide crear el archivo y recibe la ruta donde se guardó
+                print(f"[PDF] Generando PDF y enviando reporte: {titulo}")
                 archivo = crear_pdf(titulo, lineas_reporte)
-                # Envía la ruta del archivo al Cartero (EmailService)
                 self.mailer.enviar_reporte(self.admin_email, archivo)
             
             return res
 
         except Exception as e:
-            # Captura cualquier error para que la App principal no se cierre inesperadamente
-            print(f"🔥 Error en el servicio: {e}")
+            print(f"[!] Error en el servicio: {e}")
             return None
+

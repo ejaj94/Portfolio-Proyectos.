@@ -86,31 +86,35 @@ def eliminar_ui(service):
 
 # Punto de entrada principal de la aplicación
 def main():
-    # Asegura que las tablas se creen en MySQL según el modelo definido
-    Base.metadata.create_all(bind=engine)
-    
-    # Creamos la sesión y el servicio coordinador
-    db = SessionLocal()
-    service = UserActionService(db)
+    import sys
+    # Si el usuario pasa la bandera --cli, ejecuta la interfaz de consola
+    if "--cli" in sys.argv:
+        Base.metadata.create_all(bind=engine)
+        db = SessionLocal()
+        service = UserActionService(db)
 
-    # Bucle principal de ejecución
-    while True:
-        op = mostrar_menu()
-        if op == "1": 
-            registrar_ui(service)
-        elif op == "2": 
-            listar_usuarios_ui(service)
-        elif op == "3": 
-            eliminar_ui(service)
-        elif op == "4": 
-            modificar_ui(service)
-        elif op == "5": 
-            print("Saliendo del sistema...")
-            break
-        else:
-            print("⚠️ Opción no válida.")
-            
-    db.close() # Cierre de conexión al salir del programa
+        while True:
+            op = mostrar_menu()
+            if op == "1": 
+                registrar_ui(service)
+            elif op == "2": 
+                listar_usuarios_ui(service)
+            elif op == "3": 
+                eliminar_ui(service)
+            elif op == "4": 
+                modificar_ui(service)
+            elif op == "5": 
+                print("Saliendo del sistema...")
+                break
+            else:
+                print("⚠️ Opción no válida.")
+                
+        db.close()
+    else:
+        # Por defecto, iniciamos la interfaz gráfica (GUI) en CustomTkinter
+        from gui_app import main as run_gui
+        run_gui()
 
 if __name__ == "__main__":
     main()
+
