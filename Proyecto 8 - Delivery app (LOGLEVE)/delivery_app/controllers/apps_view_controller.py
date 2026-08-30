@@ -683,3 +683,9 @@ def admin_couriers():
         couriers = courier_repo.list_all()
         
     return render_template("admin_couriers.html", is_authorized=is_authorized, couriers=couriers, error=error)
+
+
+@apps_view_blueprint.route("/showcase", methods=["GET"])
+def presentation_showcase_view():
+    """Simulador Interativo de Vídeo Showcase com 3 Telas ao Vivo"""
+    return render_template("presentation_showcase.html")

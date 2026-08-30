@@ -250,7 +250,32 @@
         <span>Iniciar Sessão</span>
         <i class="fas fa-arrow-right"></i>
       </button>
-    </form>
+    
+        <!-- ⚡ 1-CLICK DEMO LOGIN BUTTON FOR VIDEO RECORDING -->
+        <div style="margin-top: 15px; margin-bottom: 20px; text-align: center;">
+          <button type="button" id="btn1ClickDemo" class="btn-demo-quick" style="width: 100%; padding: 12px 18px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; border: none; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+            <i class="fa-solid fa-bolt" style="color: #fef08a;"></i> 1-Click Demo Login (Courier)
+          </button>
+        </div>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.getElementById('btn1ClickDemo');
+            if (btn) {
+              btn.addEventListener('click', function() {
+                var emailInput = document.querySelector('input[name="email"]') || document.querySelector('input[type="email"]');
+                var passInput = document.querySelector('input[name="password"]') || document.querySelector('input[type="password"]');
+                if (emailInput && passInput) {
+                  emailInput.value = 'entregador.demo@logleve.com';
+                  passInput.value = 'demo123';
+                  var form = btn.closest('form');
+                  if (form) form.submit();
+                }
+              });
+            }
+          });
+        </script>
+
+</form>
 
     <p class="footer-text">
       Não tem uma conta de entregador? <br>
