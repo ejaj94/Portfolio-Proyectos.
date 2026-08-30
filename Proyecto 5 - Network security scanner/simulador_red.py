@@ -2,7 +2,7 @@ import time
 import json
 from datetime import datetime
 
-# Dados estáticos de ativos de rede para demonstração de portfólio (pt-PT)
+# Dados estáticos de ativos de rede em Português de Portugal (pt-PT)
 DEVICES_MOCK = [
     {
         "ip": "192.168.1.1",
@@ -22,7 +22,7 @@ DEVICES_MOCK = [
         "status": "Ativo",
         "simulated_ports": [22, 80, 443, 445],
         "security_score": 82,
-        "recommendation": "Verificar permissões de pastas partilhadas SMB."
+        "recommendation": "Rever permissões de pastas partilhadas SMB."
     },
     {
         "ip": "192.168.1.25",
@@ -63,7 +63,7 @@ class NetworkSimulatorEngine:
 
     def run_simulated_scan(self, network_range="192.168.1.0/24"):
         """Gera dados de inventário para demonstração profissional em Português de Portugal."""
-        time.sleep(0.8)
+        time.sleep(0.5)
 
         total_devices = len(self.devices)
         active_devices = [d for d in self.devices if d["status"] == "Ativo"]

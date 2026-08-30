@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const range = netRangeInput.value.trim() || '192.168.1.0/24';
 
         btnRunSimulation.disabled = true;
-        btnRunSimulation.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> A analisar...';
+        btnRunSimulation.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> A analisar...';
 
         try {
             const res = await fetch('/api/simulate-scan', {
@@ -34,11 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('Não foi possível ligar ao servidor.', 'error');
         } finally {
             btnRunSimulation.disabled = false;
-            btnRunSimulation.innerHTML = '<i class="fa-solid fa-magnifying-glass-chart"></i> Analisar Rede';
+            btnRunSimulation.innerHTML = '<i class="fa-solid fa-bolt"></i> Analisar Rede';
         }
     });
 
-    // 2. Renderizar Resultados na UI
+    // 2. Renderizar Resultados na UI (com Badges Individuais para Portas)
     function renderSimulation(data) {
         kpiTotalDevs.textContent = data.summary.total_found;
         kpiActiveDevs.textContent = data.summary.active_found;
@@ -63,16 +63,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const tr = document.createElement('tr');
             const isActive = dev.status === 'Ativo';
             const statusClass = isActive ? 'active' : 'inactive';
-            const portsText = dev.simulated_ports.length > 0 ? dev.simulated_ports.join(', ') : 'Nenhum';
+            
+            let portsHtml = '<span class="no-ports">Nenhum</span>';
+            if (dev.simulated_ports && dev.simulated_ports.length > 0) {
+                portsHtml = `<div class="ports-flex">` + 
+                    dev.simulated_ports.map(p => `<span class="port-pill">${p}</span>`).join('') + 
+                    `</div>`;
+            }
 
             tr.innerHTML = `
-                <td><strong>${dev.hostname}</strong></td>
-                <td><code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #0f172a;">${dev.ip}</code></td>
-                <td><code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #475569;">${dev.mac}</code></td>
-                <td>${dev.type}</td>
-                <td><span class="badge-status ${statusClass}">${portsText}</span></td>
-                <td><strong>${dev.security_score} pts</strong></td>
-                <td style="font-size: 12px; color: #64748b;">${dev.recommendation}</td>
+                <td>
+                    <div class="dev-name-container">
+                        <i class="fa-solid fa-network-wired dev-icon"></i>
+                        <strong>${dev.hostname}</strong>
+                    </div>
+                </td>
+                <td><code class="code-badge ip-badge">${dev.ip}</code></td>
+                <td><code class="code-badge mac-badge">${dev.mac}</code></td>
+                <td><span class="type-pill">${dev.type}</span></td>
+                <td>${portsHtml}</td>
+                <td><span class="score-pill">${dev.security_score} pts</span></td>
+                <td class="rec-text">${dev.recommendation}</td>
             `;
             devicesTableBody.appendChild(tr);
         });
