@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Cripto & Divisas PRO 📈</title>
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Main Header -->
+        <header class="main-header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Crypto & Forex <span>MONITOR PRO</span></h1>
+                    <p>Cotizaciones financieras en tiempo real y análisis de tendencias</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="ticker-search">
+                    <input type="text" id="customSymbolInput" placeholder="Ej: LTC-USD, EURUSD=X..." autocomplete="off">
+                    <button id="btnAddCustomSymbol" class="btn btn-sm btn-primary">
+                        <i class="fa-solid fa-plus"></i> Agregar
+                    </button>
+                </div>
+                <span class="status-badge live">
+                    <i class="fa-solid fa-circle"></i> Live Feed
+                </span>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="tab-cryptos">
+                <i class="fa-solid fa-coins"></i> Criptomonedas
+            </button>
+            <button class="tab-btn" data-tab="tab-forex">
+                <i class="fa-solid fa-money-bill-transfer"></i> Mercado Forex
+            </button>
+            <button class="tab-btn" data-tab="tab-converter">
+                <i class="fa-solid fa-calculator"></i> Conversor Cripto
+            </button>
+            <button class="tab-btn" data-tab="tab-alerts">
+                <i class="fa-solid fa-bell"></i> Alertas (<span id="alertCountBadge">0</span>)
+            </button>
+        </nav>
+
+        <!-- Main Dashboard View -->
+        <main class="dashboard-content">
+            <!-- TAB 1: Cryptos -->
+            <section id="tab-cryptos" class="tab-pane active">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-fire-flame-curated"></i> Principales Criptomonedas</h2>
+                    <span class="auto-refresh-indicator"><i class="fa-solid fa-rotate"></i> Actualizado cada 4s</span>
+                </div>
+                <div id="cryptoGrid" class="cards-grid">
+                    <div class="skeleton-card">Cargando cotizaciones...</div>
+                </div>
+            </section>
+
+            <!-- TAB 2: Forex -->
+            <section id="tab-forex" class="tab-pane">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-globe"></i> Pares de Divisas Internacionales</h2>
+                    <span class="auto-refresh-indicator"><i class="fa-solid fa-rotate"></i> Actualizado cada 4s</span>
+                </div>
+                <div id="forexGrid" class="cards-grid">
+                    <div class="skeleton-card">Cargando divisas...</div>
+                </div>
+            </section>
+
+            <!-- TAB 3: Converter -->
+            <section id="tab-converter" class="tab-pane">
+                <div class="card converter-card">
+                    <h2><i class="fa-solid fa-calculator"></i> Calculadora de Conversión Cripto/USD</h2>
+                    <div class="converter-form">
+                        <div class="form-group">
+                            <label for="calcAmount">Cantidad</label>
+                            <input type="number" id="calcAmount" value="1" min="0.00001" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="calcSymbol">Activo Cripto</label>
+                            <select id="calcSymbol">
+                                <option value="BTC-USD">Bitcoin (BTC)</option>
+                                <option value="ETH-USD">Ethereum (ETH)</option>
+                                <option value="BNB-USD">BNB</option>
+                                <option value="SOL-USD">Solana (SOL)</option>
+                                <option value="XRP-USD">Ripple (XRP)</option>
+                            </select>
+                        </div>
+                        <div class="converter-result">
+                            <span class="calc-label">Total Estimado en USD:</span>
+                            <span id="calcResultDisplay" class="calc-value">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: Alerts -->
+            <section id="tab-alerts" class="tab-pane">
+                <div class="card alerts-card">
+                    <h2><i class="fa-solid fa-bell"></i> Configurar Alertas de Precio</h2>
+                    <div class="alert-form">
+                        <div class="form-group">
+                            <label for="alertSymbol">Activo</label>
+                            <select id="alertSymbol">
+                                <option value="BTC-USD">Bitcoin (BTC-USD)</option>
+                                <option value="ETH-USD">Ethereum (ETH-USD)</option>
+                                <option value="SOL-USD">Solana (SOL-USD)</option>
+                                <option value="EURUSD=X">EUR/USD (EURUSD=X)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="alertCondition">Condición</label>
+                            <select id="alertCondition">
+                                <option value="above">Precio Mayor que (>)</option>
+                                <option value="below">Precio Menor que (<)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="alertTargetPrice">Precio Objetivo ($)</label>
+                            <input type="number" id="alertTargetPrice" placeholder="Ej: 80000" step="any">
+                        </div>
+                        <button id="btnCreateAlert" class="btn btn-primary">
+                            <i class="fa-solid fa-plus"></i> Crear Alerta
+                        </button>
+                    </div>
+
+                    <div class="alerts-list-container">
+                        <h3>Alertas Activas</h3>
+                        <ul id="alertsList" class="alerts-list">
+                            <li class="empty-list">No hay alertas configuradas.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Chart Modal -->
+    <div id="chartModal" class="modal-overlay hidden">
+        <div class="modal-content card">
+            <div class="modal-header">
+                <h3 id="modalChartTitle"><i class="fa-solid fa-chart-area"></i> Gráfico de Tendencia</h3>
+                <button id="btnCloseModal" class="btn-close">&times;</button>
+            </div>
+            <div class="period-selector">
+                <button class="period-btn active" data-period="1d">1D</button>
+                <button class="period-btn" data-period="7d">7D</button>
+                <button class="period-btn" data-period="1mo">1M</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="priceChartCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -1,24 +1,48 @@
-# Crypto Monitor CLI 🚀
+# 📈 Monitor de Precios de Cripto & Divisas PRO (con Interfaz Web GUI)
 
-Monitor de criptomonedas de alto rendimiento para terminal. Este script permite vigilar el Top 5 del mercado en tiempo real, utilizando el motor de Yahoo Finance para garantizar la conexión incluso en redes con restricciones estrictas (firewalls).
+Plataforma financiera interactiva en tiempo real desarrollada en **Python**, **Flask** y **Chart.js** para el monitoreo contínuo de Criptomonedas y Pares de Divisas (Forex).
 
-## ✨ Características
+---
 
-- ⚡ **Live Updates**: Actualización continua de precios directamente en la consola.
-- 🕒 **Precisión**: Marca de tiempo (HH:MM:SS) para cada consulta exitosa.
-- 🛡️ **Anti-Block**: Diseñado para evitar errores HTTP 403/429 mediante el uso de `yfinance`.
-- 📊 **Visualización Limpia**: Limpieza automática de pantalla para una lectura cómoda.
+## ✨ Características Principales
 
-## 🛠️ Tecnologías utilizadas
+- 🚀 **Cotizaciones en Tiempo Real**: Refresco automático cada 4 segundos de activos principales (Bitcoin, Ethereum, Solana, BNB, EUR/USD, GBP/USD, etc.).
+- 📊 **Gráficos Interactivos (Chart.js)**: Gráficos de tendencias históricas de precios (1D, 7D, 1M) con área de degradado dinámico según ganancia/pérdida.
+- 🔍 **Búsqueda de Tickers Personalizados**: Agrega cualquier activo financiero soportado por Yahoo Finance (ej: `LTC-USD`, `USDMXN=X`).
+- 🔔 **Sistema de Alertas de Precio**: Configura límites objetivo máximos o mínimos y recibe notificaciones tipo Toast cuando se alcancen.
+- 🧮 **Calculadora Conversora Cripto/Fiat**: Conversión instantánea de valores según cotización live.
+- 💻 **Motor Híbrido CLI + Web GUI**: Funciona como aplicación web local (`app.py`) o como script directo en consola (`Cripto_chek.py`).
 
-- **Python 3.x**
-- **yfinance**: Extracción de datos financieros.
-- **os & time**: Gestión de interfaz de consola y temporizadores.
+---
 
-## 🚀 Instalación y Uso
+## 🛠️ Instalación
 
-1. **Clonar el repositorio:**
+1. Instalar las dependencias de Python:
    ```bash
-   git clone https://github.com
-   cd crypto-monitor-cli
+   pip install -r Requirements.txt
    ```
+
+---
+
+## 🚀 Cómo Iniciar la Aplicación Web
+
+1. Navega al directorio del proyecto:
+   ```bash
+   cd "Proyecto 4 - Monitor de Precios de Cripto o Divisas"
+   ```
+2. Inicia el servidor Flask:
+   ```bash
+   python app.py
+   ```
+3. Abre tu navegador en:
+   ```text
+   http://localhost:5004
+   ```
+
+---
+
+## 💻 Uso desde Consola (CLI Fallback)
+
+```bash
+python Cripto_chek.py
+```
