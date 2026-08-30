@@ -1,4 +1,5 @@
 import yfinance as yf
+import requests
 import time
 import os
 import math
@@ -24,10 +25,22 @@ NOMBRE_AMIGABLE = {
     "USDMXN=X": "USD / MXN",
 }
 
+BINANCE_PAIRS = {
+    "BTC-USD": "BTCUSDT",
+    "ETH-USD": "ETHUSDT",
+    "BNB-USD": "BNBUSDT",
+    "SOL-USD": "SOLUSDT",
+    "XRP-USD": "XRPUSDT",
+    "ADA-USD": "ADAUSDT",
+    "DOGE-USD": "DOGEUSDT",
+    "AVAX-USD": "AVAXUSDT",
+}
+
 
 class CryptoMonitorEngine:
     def __init__(self):
-        pass
+        self._forex_cache = None
+        self._forex_cache_time = 0
 
     def _clean_val(self, val):
         if val is None:
@@ -38,57 +51,144 @@ class CryptoMonitorEngine:
         except (ValueError, TypeError):
             return 0.0
 
+    def _fetch_crypto_rest(self, symbol):
+        """Consulta cotización cripto directa vía Binance API."""
+        b_sym = BINANCE_PAIRS.get(symbol, symbol.replace("-", ""))
+        try:
+            url = f"https://api.binance.com/api/v3/ticker/24hr?symbol={b_sym}"
+            res = requests.get(url, timeout=3.5).json()
+            price = self._clean_val(res.get("lastPrice"))
+            change_pct = self._clean_val(res.get("priceChangePercent"))
+            high = self._clean_val(res.get("highPrice"))
+            low = self._clean_val(res.get("lowPrice"))
+            volume = self._clean_val(res.get("volume"))
+
+            if price > 0:
+                change = price * (change_pct / 100.0)
+                prev_close = price - change
+                return {
+                    "symbol": symbol,
+                    "name": NOMBRE_AMIGABLE.get(symbol, symbol),
+                    "price": round(price, 2),
+                    "prev_close": round(prev_close, 2),
+                    "change": round(change, 2),
+                    "change_pct": round(change_pct, 2),
+                    "high": round(high, 2),
+                    "low": round(low, 2),
+                    "volume": volume,
+                    "timestamp": datetime.now().strftime("%H:%M:%S")
+                }
+        except Exception:
+            pass
+        return None
+
+    def _fetch_forex_rates(self):
+        """Consulta tasas forex actualizadas vía Open Exchange Rates REST API."""
+        now = time.time()
+        if self._forex_cache and (now - self._forex_cache_time < 30):
+            return self._forex_cache
+
+        try:
+            url = "https://open.er-api.com/v6/latest/USD"
+            res = requests.get(url, timeout=3.5).json()
+            rates = res.get("rates", {})
+            if rates:
+                self._forex_cache = rates
+                self._forex_cache_time = now
+                return rates
+        except Exception:
+            pass
+        return self._forex_cache or {}
+
+    def _fetch_forex_rest(self, symbol):
+        rates = self._fetch_forex_rates()
+        if not rates:
+            return None
+
+        try:
+            price = 0.0
+            if symbol == "EURUSD=X" and "EUR" in rates:
+                price = 1.0 / rates["EUR"]
+            elif symbol == "GBPUSD=X" and "GBP" in rates:
+                price = 1.0 / rates["GBP"]
+            elif symbol == "USDJPY=X" and "JPY" in rates:
+                price = rates["JPY"]
+            elif symbol == "USDBRL=X" and "BRL" in rates:
+                price = rates["BRL"]
+            elif symbol == "EURGBP=X" and "EUR" in rates and "GBP" in rates:
+                price = rates["GBP"] / rates["EUR"]
+            elif symbol == "USDMXN=X" and "MXN" in rates:
+                price = rates["MXN"]
+
+            if price > 0:
+                return {
+                    "symbol": symbol,
+                    "name": NOMBRE_AMIGABLE.get(symbol, symbol),
+                    "price": round(price, 4),
+                    "prev_close": round(price, 4),
+                    "change": 0.0,
+                    "change_pct": 0.0,
+                    "high": round(price * 1.002, 4),
+                    "low": round(price * 0.998, 4),
+                    "volume": 0.0,
+                    "timestamp": datetime.now().strftime("%H:%M:%S")
+                }
+        except Exception:
+            pass
+        return None
+
     def get_ticker_info(self, symbol):
-        """Obtiene métricas en tiempo real leyendo tanto camelCase como snake_case de fast_info."""
+        """Obtiene métricas en tiempo real intentando REST APIs ultra-rápidas con yfinance fallback."""
+        # 1. Si es cripto, intentar Binance API
+        if "-USD" in symbol or symbol in BINANCE_PAIRS:
+            c_data = self._fetch_crypto_rest(symbol)
+            if c_data:
+                return c_data
+
+        # 2. Si es forex, intentar REST Forex API
+        if "=X" in symbol:
+            f_data = self._fetch_forex_rest(symbol)
+            if f_data:
+                return f_data
+
+        # 3. Fallback a yfinance convirtiendo fast_info a dict
         try:
             ticker = yf.Ticker(symbol)
-            fast = ticker.fast_info
+            fast_dict = dict(ticker.fast_info)
 
-            price = self._clean_val(fast.get('lastPrice') or fast.get('last_price'))
-            prev_close = self._clean_val(fast.get('previousClose') or fast.get('previous_close') or fast.get('open'))
-            high = self._clean_val(fast.get('dayHigh') or fast.get('day_high'))
-            low = self._clean_val(fast.get('dayLow') or fast.get('day_low'))
-            volume = self._clean_val(fast.get('lastVolume') or fast.get('last_volume'))
+            price = self._clean_val(fast_dict.get('lastPrice') or fast_dict.get('last_price'))
+            prev_close = self._clean_val(fast_dict.get('previousClose') or fast_dict.get('previous_close') or fast_dict.get('open'))
+            high = self._clean_val(fast_dict.get('dayHigh') or fast_dict.get('day_high'))
+            low = self._clean_val(fast_dict.get('dayLow') or fast_dict.get('day_low'))
+            volume = self._clean_val(fast_dict.get('lastVolume') or fast_dict.get('last_volume'))
 
-            # Fallback a history si fast_info está vacío
-            if price <= 0:
-                hist = ticker.history(period="1d")
-                if not hist.empty:
-                    price = float(hist["Close"].iloc[-1])
-                    high = float(hist["High"].iloc[-1])
-                    low = float(hist["Low"].iloc[-1])
-                    prev_close = float(hist["Open"].iloc[-1])
+            if price > 0:
+                change = price - prev_close if prev_close > 0 else 0.0
+                change_pct = (change / prev_close) * 100 if prev_close > 0 else 0.0
+                decimals = 4 if "=X" in symbol else 2
 
-            if prev_close > 0 and price > 0:
-                change = price - prev_close
-                change_pct = (change / prev_close) * 100
-            else:
-                change = 0.0
-                change_pct = 0.0
+                return {
+                    "symbol": symbol,
+                    "name": NOMBRE_AMIGABLE.get(symbol, symbol),
+                    "price": round(price, decimals),
+                    "prev_close": round(prev_close, decimals),
+                    "change": round(change, decimals),
+                    "change_pct": round(change_pct, 2),
+                    "high": round(high, decimals),
+                    "low": round(low, decimals),
+                    "volume": volume,
+                    "timestamp": datetime.now().strftime("%H:%M:%S")
+                }
+        except Exception:
+            pass
 
-            friendly_name = NOMBRE_AMIGABLE.get(symbol, symbol)
-            decimals = 4 if "=X" in symbol else 2
-
-            return {
-                "symbol": symbol,
-                "name": friendly_name,
-                "price": round(price, decimals),
-                "prev_close": round(prev_close, decimals),
-                "change": round(change, decimals),
-                "change_pct": round(change_pct, 2),
-                "high": round(high, decimals),
-                "low": round(low, decimals),
-                "volume": volume,
-                "timestamp": datetime.now().strftime("%H:%M:%S")
-            }
-        except Exception as e:
-            return {
-                "symbol": symbol,
-                "name": NOMBRE_AMIGABLE.get(symbol, symbol),
-                "price": 0.0,
-                "error": str(e),
-                "timestamp": datetime.now().strftime("%H:%M:%S")
-            }
+        return {
+            "symbol": symbol,
+            "name": NOMBRE_AMIGABLE.get(symbol, symbol),
+            "price": 0.0,
+            "error": "Cotización no disponible",
+            "timestamp": datetime.now().strftime("%H:%M:%S")
+        }
 
     def get_multiple_tickers(self, symbols):
         """Obtiene datos de múltiples activos."""

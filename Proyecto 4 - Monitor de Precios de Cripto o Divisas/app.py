@@ -4,7 +4,6 @@ from Cripto_chek import CryptoMonitorEngine, DEFAULT_CRYPTOS, DEFAULT_FOREX
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-engine = CryptoMonitorEngine()
 
 
 @app.after_request
@@ -23,6 +22,7 @@ def index():
 @app.route("/api/prices", methods=["GET"])
 def get_prices():
     try:
+        engine = CryptoMonitorEngine()
         crypto_data = engine.get_multiple_tickers(DEFAULT_CRYPTOS)
         forex_data = engine.get_multiple_tickers(DEFAULT_FOREX)
         return jsonify({
@@ -31,6 +31,8 @@ def get_prices():
             "forex": forex_data
         })
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({"success": False, "message": str(e)}), 400
 
 
@@ -42,6 +44,7 @@ def get_custom_price():
         return jsonify({"success": False, "message": "Debes especificar un símbolo (ej: BTC-USD)."}), 400
 
     try:
+        engine = CryptoMonitorEngine()
         info = engine.get_ticker_info(symbol)
         if info.get("price", 0) <= 0:
             return jsonify({"success": False, "message": f"No se encontraron datos para el símbolo '{symbol}'."}), 404
@@ -56,6 +59,7 @@ def get_symbol_history(symbol):
     interval = "15m" if period == "1d" else "1h" if period == "7d" else "1d"
 
     try:
+        engine = CryptoMonitorEngine()
         hist = engine.get_history(symbol, period=period, interval=interval)
         return jsonify(hist)
     except Exception as e:
@@ -69,6 +73,7 @@ def convert_currency():
     amount = float(data.get("amount", 1.0))
 
     try:
+        engine = CryptoMonitorEngine()
         info = engine.get_ticker_info(from_sym)
         price = info.get("price", 0.0)
         total_usd = amount * price
