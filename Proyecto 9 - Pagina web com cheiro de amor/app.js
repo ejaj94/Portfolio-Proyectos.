@@ -2,7 +2,42 @@
    PRODUCT DATABASE (Artisanal Scented Candles, Bath Soaps, & Gift Sets)
    ========================================================================== */
 const PRODUCTS = [
-        {
+            {
+        id: "candle-cactus_suculentas_mini-1",
+        category: "vela",
+        price: 3.90,
+        image: "assets/vela_cactus_suculentas_mini.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Cactus & Suculentas Mini",
+            categoryLabel: "Velas Aromáticas Decorativas",
+            aromaBrief: "Mimoso vasinho de cerâmica com mini cactos e suculentas em cera vegetal e laço branco.",
+            description: "Encantadora mini vela aromática artesanal apresentada num delicado vasinho de barro decorado com um laço de cetim branco. Composta por um trio de mini cactos e suculentas minuciosamente esculpidos à mão em cera de soja vegetal 100% natural. Perfeita para lembranças de eventos, festas e decoração botânica.",
+            aromaProfile: "Jasmim Silvestre, Chá Verde, Erva-Cidreira"
+        },
+        es: {
+            name: "Vela Cactus & Suculentas Mini",
+            categoryLabel: "Velas Aromáticas Decorativas",
+            aromaBrief: "Encantadora mini vela con trío de mini suculentas en maceta con lazo blanco.",
+            description: "Adorable mini vela aromática artesanal presentada en una delicada macetita de barro decorada con un lazo de satén blanco. Compuesta por un trío de mini suculentas y cactus esculpidos a mano con cera de soya vegetal 100% natural. Una joya botánica especial.",
+            aromaProfile: "Jazmín Silvestre, Té Verde, Toronjil"
+        },
+        en: {
+            name: "Mini Cactus & Succulents Candle",
+            categoryLabel: "Decorative Aromatic Candles",
+            aromaBrief: "Charming mini candle with a trio of sculpted succulents in a clay pot with a white ribbon.",
+            description: "Charming handcrafted aromatic mini candle presented in a delicate terracotta pot wrapped with a graceful white satin ribbon. Featuring a meticulously hand-sculpted trio of mini succulents and cactus in 100% natural soy wax. Ideal for event favors and botanical decor.",
+            aromaProfile: "Wild Jasmine, Green Tea, Lemon Balm"
+        },
+        fr: {
+            name: "Mini Bougie Cactus & Succulentes",
+            categoryLabel: "Bougies Aromatiques Décoratives",
+            aromaBrief: "Mignonne mini bougie avec trio de succulentes dans un pot en terre cuite avec ruban blanc.",
+            description: "Adorable mini bougie aromatique artisanale composée d'un trio de mini succulentes sculptées à la main en cire de soja 100% naturelle, présentée dans un joli pot en terre cuite orné d'un ruban blanc.",
+            aromaProfile: "Jasmin Sauvage, Thé Vert, Mélisse"
+        }
+    },
+{
         id: "candle-cactus_mini-1",
         category: "vela",
         price: 3.90,
