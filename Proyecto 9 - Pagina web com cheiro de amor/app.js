@@ -2,7 +2,42 @@
    PRODUCT DATABASE (Artisanal Scented Candles, Bath Soaps, & Gift Sets)
    ========================================================================== */
 const PRODUCTS = [
-    {
+        {
+        id: "candle-cactus_mini-1",
+        category: "vela",
+        price: 3.90,
+        image: "assets/vela_cactus_mini.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Cactus Mini",
+            categoryLabel: "Velas Aromáticas Decorativas",
+            aromaBrief: "Delicada mini vela em formato de cacto verde num vasinho de cerâmica com laço azul.",
+            description: "Adorável mini vela aromática artesanal esculpida em formato de cacto esférico verde, apresentada num mimoso vasinho de barro decorado com um elegante laço de cetim azul. Feita à mão com cera vegetal de soja 100% natural, proporcionando um aroma botânico fresco e acolhedor.",
+            aromaProfile: "Aloé Vera, Chá Verde, Menta Fresca"
+        },
+        es: {
+            name: "Vela Cactus Mini",
+            categoryLabel: "Velas Aromáticas Decorativas",
+            aromaBrief: "Delicada mini vela en forma de cactus verde en maceta con lazo azul.",
+            description: "Encantadora mini vela aromática artesanal moldeada con la figura de un cactus verde, presentada en una linda macetita decorada con un elegante lazo de satén azul. Elaborada a mano con cera de soya vegetal 100% natural y mecha de algodón.",
+            aromaProfile: "Aloe Vera, Té Verde, Menta Fresca"
+        },
+        en: {
+            name: "Mini Cactus Candle",
+            categoryLabel: "Decorative Aromatic Candles",
+            aromaBrief: "Delicate mini green cactus candle in a terracotta pot with a blue ribbon bow.",
+            description: "Adorable handcrafted aromatic mini candle sculpted in the shape of a green spherical cactus, presented in a charming clay pot wrapped with an elegant blue satin ribbon. Made with 100% natural soy wax for a refreshing botanical scent.",
+            aromaProfile: "Aloe Vera, Green Tea, Fresh Mint"
+        },
+        fr: {
+            name: "Mini Bougie Cactus",
+            categoryLabel: "Bougies Aromatiques Décoratives",
+            aromaBrief: "Délicate mini bougie cactus vert dans un pot en céramique avec ruban bleu.",
+            description: "Superbe mini bougie aromatique artisanale sculptée en forme de cactus vert, présentée dans un joli petit pot en terre cuite orné d'un ruban bleu. Fabriquée à la main avec de la cire de soja 100% naturelle.",
+            aromaProfile: "Aloès, Thé Vert, Menthe Fraîche"
+        }
+    },
+{
         id: "candle-cactus_premium-1",
         category: "vela",
         price: 12.90,
