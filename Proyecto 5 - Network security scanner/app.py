@@ -44,13 +44,13 @@ def generate_pdf():
         c = canvas.Canvas(pdf_path, pagesize=letter)
         width, height = letter
 
-        # Encabezado del Informe
+        # Encabezado del Informe (pt-PT)
         c.setFont("Helvetica-Bold", 16)
-        c.drawString(50, height - 50, "Informe Didáctico de Inventario de Red (Simulado)")
+        c.drawString(50, height - 50, "Relatorio Didatico de Inventario de Rede (Simulado)")
 
         c.setFont("Helvetica", 10)
-        c.drawString(50, height - 70, f"Fecha de Simulación: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        c.drawString(50, height - 85, f"Rango Consultado: {scan_res['network_range']}")
+        c.drawString(50, height - 70, f"Data da Simulacao: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        c.drawString(50, height - 85, f"Gama de Rede Consultada: {scan_res['network_range']}")
         c.line(50, height - 95, 550, height - 95)
 
         y = height - 120
@@ -67,20 +67,20 @@ def generate_pdf():
             c.drawString(70, y, f"Tipo: {dev['type']} | MAC: {dev['mac']} | Estado: {dev['status']}")
             y -= 15
 
-            ports_str = ", ".join(map(str, dev['simulated_ports'])) if dev['simulated_ports'] else "Ninguno"
-            c.drawString(70, y, f"Puertos Simulados: {ports_str} | Puntaje Seguridad: {dev['security_score']}/100")
+            ports_str = ", ".join(map(str, dev['simulated_ports'])) if dev['simulated_ports'] else "Nenhum"
+            c.drawString(70, y, f"Portas Simuladas: {ports_str} | Pontuacao de Seguranca: {dev['security_score']}/100")
             y -= 15
 
-            c.drawString(70, y, f"Recomendación: {dev['recommendation']}")
+            c.drawString(70, y, f"Recomendacao: {dev['recommendation']}")
             y -= 25
 
         c.save()
 
-        return send_file(pdf_path, as_attachment=True, download_name="Reporte_Inventario_Red_Simulado.pdf")
+        return send_file(pdf_path, as_attachment=True, download_name="Relatorio_Inventario_Rede_Simulado.pdf")
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 400
 
 
 if __name__ == "__main__":
-    print("Iniciando Simulador Educativo de Inventario de Red en http://localhost:5005")
+    print("Iniciando Simulador Educativo de Inventário de Rede em http://localhost:5005")
     app.run(host="0.0.0.0", port=5005, debug=False)

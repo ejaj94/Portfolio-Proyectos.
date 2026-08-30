@@ -1,29 +1,29 @@
-# 🛡️ Simulador Educativo de Inventario de Red PRO
+# 🛡️ Simulador Educativo de Inventário de Rede PRO
 
-Aplicación web educativa interactiva desarrollada en **Python**, **Flask** y **ReportLab** para la simulación didáctica de inventario y postura de seguridad de red utilizando datos 100% de demostración ficticios (mock data).
-
----
-
-## ✨ Características Principales
-
-- 🧪 **Simulación Didáctica**: Demuestra conceptos de inventarios de activos de red mediante datos sintéticos estáticos sin interactuar con la red física.
-- 📊 **Dashboard Interactivo**: Visualiza topologías ficticias de prueba (routers, servidores NAS, estaciones de trabajo e impresoras).
-- 📄 **Generador de Reportes PDF de Muestra**: Exporta informes formateados en PDF basados en la simulación didáctica.
-- 🛡️ **Seguridad Garantizada**: Sin socket connections, sin envío de paquetes ni peticiones ARP.
+Aplicação web educativa interativa desenvolvida em **Python**, **Flask** e **ReportLab** para a simulação didática de inventário e postura de segurança de rede, utilizando exclusivamente dados de demonstração fictícios (mock data).
 
 ---
 
-## 🛠️ Instalación y Uso
+## ✨ Características Principais
 
-1. Instalar dependencias:
+- 🧪 **Simulação Didática**: Demonstra conceitos de inventário de ativos de rede através de dados sintéticos estáticos sem interagir com redes físicas.
+- 📊 **Painel Interativo**: Visualiza topologias fictícias de teste (routers, servidores NAS, estações de trabalho e impressoras).
+- 📄 **Gerador de Relatórios PDF de Amostra**: Exporta relatórios formatados em PDF com base na simulação didática.
+- 🛡️ **Segurança Garantida**: Sem ligações por socket, sem envio de pacotes nem pedidos ARP.
+
+---
+
+## 🛠️ Instalação e Utilização
+
+1. Instalar dependências:
    ```bash
    pip install -r requeriments.txt
    ```
-2. Ejecutar el servidor web local:
+2. Executar o servidor web local:
    ```bash
    python app.py
    ```
-3. Abrir en el navegador:
+3. Abrir no navegador:
    ```text
    http://localhost:5005
    ```

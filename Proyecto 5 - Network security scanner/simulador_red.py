@@ -1,59 +1,58 @@
 import time
 import json
-import random
 from datetime import datetime
 
-# Datos estáticos de demostración 100% ficticios
+# Dados estáticos de demonstração 100% fictícios (em Português de Portugal)
 DEVICES_MOCK = [
     {
         "ip": "192.168.1.1",
         "mac": "00:1A:2B:3C:4D:5E",
-        "hostname": "Router-Gateway-Demo",
+        "hostname": "Router-Gateway-Principal",
         "type": "Router / Firewall",
-        "status": "Activo",
+        "status": "Ativo",
         "simulated_ports": [80, 443],
         "security_score": 95,
-        "recommendation": "Firmware actualizado correctamente."
+        "recommendation": "Firmware atualizado com sucesso."
     },
     {
         "ip": "192.168.1.10",
         "mac": "00:1A:2B:99:88:77",
-        "hostname": "NAS-Servidor-Archivos",
-        "type": "Almacenamiento NAS",
-        "status": "Activo",
+        "hostname": "Servidor-NAS-Ficheiros",
+        "type": "Armazenamento NAS",
+        "status": "Ativo",
         "simulated_ports": [22, 80, 443, 445],
         "security_score": 82,
-        "recommendation": "Revisar permisos de carpetas compartidas SMB."
+        "recommendation": "Verificar permissões de pastas partilhadas SMB."
     },
     {
         "ip": "192.168.1.25",
         "mac": "00:1A:2B:11:22:33",
-        "hostname": "Impresora-HP-Oficina",
-        "type": "Impresora de Red",
-        "status": "Activo",
+        "hostname": "Impressora-HP-Escritorio",
+        "type": "Impressora de Rede",
+        "status": "Ativo",
         "simulated_ports": [9100, 631],
         "security_score": 75,
-        "recommendation": "Cambiar contraseña por defecto del panel web."
+        "recommendation": "Alterar palavra-passe por omissão do painel web."
     },
     {
         "ip": "192.168.1.50",
         "mac": "00:1A:2B:55:66:77",
-        "hostname": "PC-Desarrollo-Win11",
-        "type": "Estación de Trabajo",
-        "status": "Activo",
+        "hostname": "PC-Desenvolvimento-Win11",
+        "type": "Estação de Trabalho",
+        "status": "Ativo",
         "simulated_ports": [3389],
         "security_score": 90,
-        "recommendation": "Mantener RDP con autenticación a nivel de red (NLA)."
+        "recommendation": "Manter RDP com autenticação a nível de rede (NLA)."
     },
     {
         "ip": "192.168.1.100",
         "mac": "00:1A:2B:AA:BB:CC",
-        "hostname": "Camara-IP-Seguridad",
-        "type": "Cámara IoT",
-        "status": "Inactivo (Simulado)",
+        "hostname": "Camara-IP-Seguranca",
+        "type": "Câmara IoT",
+        "status": "Inativo (Simulado)",
         "simulated_ports": [],
         "security_score": 60,
-        "recommendation": "Dispositivo fuera de línea en la última simulación."
+        "recommendation": "Dispositivo fora de linha na última simulação."
     }
 ]
 
@@ -63,11 +62,11 @@ class NetworkSimulatorEngine:
         self.devices = DEVICES_MOCK
 
     def run_simulated_scan(self, network_range="192.168.1.0/24"):
-        """Simula una sesión de auditoría e inventario con retraso artificial didáctico."""
-        time.sleep(1.0) # Simula el tiempo de procesamiento
+        """Simula uma sessão de auditoria e inventário com dados fictícios em Português de Portugal."""
+        time.sleep(1.0)
 
         total_devices = len(self.devices)
-        active_devices = [d for d in self.devices if d["status"] == "Activo"]
+        active_devices = [d for d in self.devices if d["status"] == "Ativo"]
         avg_score = sum(d["security_score"] for d in active_devices) / max(len(active_devices), 1)
 
         return {
@@ -87,5 +86,5 @@ class NetworkSimulatorEngine:
 if __name__ == "__main__":
     engine = NetworkSimulatorEngine()
     result = engine.run_simulated_scan()
-    print("=== SIMULADOR DE INVENTARIO DE RED DE MUESTRA ===")
+    print("=== SIMULADOR DE INVENTÁRIO DE REDE (DEMONSTRAÇÃO PT-PT) ===")
     print(json.dumps(result, indent=2, ensure_ascii=False))

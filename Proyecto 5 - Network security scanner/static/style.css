@@ -1,15 +1,16 @@
 :root {
-    --bg-dark: #080c14;
-    --bg-card: rgba(15, 23, 42, 0.88);
-    --bg-card-border: rgba(56, 189, 248, 0.15);
-    --primary: #38bdf8;
-    --primary-glow: rgba(56, 189, 248, 0.35);
-    --accent-emerald: #34d399;
-    --accent-amber: #fbbf24;
-    --accent-rose: #f87171;
-    --text-main: #f8fafc;
+    --bg-dark: #050b0f;
+    --bg-card: rgba(13, 31, 45, 0.88);
+    --bg-card-border: rgba(0, 230, 118, 0.2);
+    --primary: #00e676;
+    --primary-glow: rgba(0, 230, 118, 0.4);
+    --accent-mint: #00f5a0;
+    --accent-emerald: #10b981;
+    --accent-amber: #ffb703;
+    --accent-rose: #ff2a5f;
+    --text-main: #ffffff;
     --text-muted: #94a3b8;
-    --radius-lg: 16px;
+    --radius-lg: 18px;
     --radius-md: 12px;
     --radius-sm: 8px;
     --transition: all 0.25s ease;
@@ -25,15 +26,15 @@ body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: var(--bg-dark);
     background-image: 
-        radial-gradient(at 10% 20%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
-        radial-gradient(at 90% 80%, rgba(52, 211, 153, 0.1) 0px, transparent 50%);
+        radial-gradient(at 15% 15%, rgba(0, 230, 118, 0.12) 0px, transparent 50%),
+        radial-gradient(at 85% 85%, rgba(0, 245, 160, 0.1) 0px, transparent 50%);
     color: var(--text-main);
     min-height: 100vh;
     padding: 24px;
 }
 
 .app-container {
-    max-width: 1400px;
+    max-width: 1440px;
     margin: 0 auto;
 }
 
@@ -48,25 +49,26 @@ body {
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-lg);
     margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .brand {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 18px;
 }
 
 .brand-icon {
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, var(--primary), var(--accent-emerald));
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--accent-mint), var(--primary));
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 22px;
-    color: #080c14;
-    box-shadow: 0 4px 15px var(--primary-glow);
+    color: #050b0f;
+    box-shadow: 0 0 20px var(--primary-glow);
 }
 
 .brand-text h1 {
@@ -77,6 +79,7 @@ body {
 
     span {
         color: var(--primary);
+        text-shadow: 0 0 10px var(--primary-glow);
     }
 }
 
@@ -89,19 +92,19 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(56, 189, 248, 0.15);
+    background: rgba(0, 230, 118, 0.12);
     color: var(--primary);
-    border: 1px solid rgba(56, 189, 248, 0.3);
+    border: 1px solid rgba(0, 230, 118, 0.35);
     padding: 8px 16px;
     border-radius: 20px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 /* Grid Layout */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 340px 1fr;
+    grid-template-columns: 350px 1fr;
     gap: 24px;
 }
 
@@ -118,6 +121,7 @@ body {
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-lg);
     padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .card h2, .card h3 {
@@ -145,7 +149,7 @@ body {
 
 input[type="text"] {
     width: 100%;
-    background: rgba(8, 12, 20, 0.8);
+    background: rgba(5, 11, 15, 0.9);
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-sm);
     padding: 10px 14px;
@@ -158,7 +162,7 @@ input[type="text"] {
 
 input[type="text"]:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px var(--primary-glow);
+    box-shadow: 0 0 12px var(--primary-glow);
 }
 
 .action-buttons {
@@ -176,7 +180,7 @@ input[type="text"]:focus {
     padding: 12px 18px;
     border-radius: var(--radius-sm);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     border: none;
     transition: var(--transition);
@@ -184,13 +188,13 @@ input[type="text"]:focus {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary), var(--accent-emerald));
-    color: #080c14;
-    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), var(--accent-mint));
+    color: #050b0f;
+    box-shadow: 0 4px 15px var(--primary-glow);
 }
 
 .btn-primary:hover {
-    box-shadow: 0 4px 20px var(--primary-glow);
+    box-shadow: 0 6px 20px rgba(0, 230, 118, 0.6);
     transform: translateY(-1px);
 }
 
@@ -201,7 +205,8 @@ input[type="text"]:focus {
 }
 
 .btn-outline:hover {
-    background: rgba(56, 189, 248, 0.15);
+    background: rgba(0, 230, 118, 0.15);
+    box-shadow: 0 0 12px rgba(0, 230, 118, 0.3);
 }
 
 .info-box {
@@ -250,9 +255,9 @@ input[type="text"]:focus {
     font-size: 20px;
 }
 
-.icon-blue { background: rgba(56, 189, 248, 0.15); color: var(--primary); }
-.icon-emerald { background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); }
-.icon-amber { background: rgba(251, 191, 36, 0.15); color: var(--accent-amber); }
+.icon-emerald { background: rgba(0, 230, 118, 0.15); color: var(--primary); }
+.icon-mint { background: rgba(0, 245, 160, 0.15); color: var(--accent-mint); }
+.icon-amber { background: rgba(255, 183, 3, 0.15); color: var(--accent-amber); }
 
 .kpi-info {
     display: flex;
@@ -296,7 +301,7 @@ input[type="text"]:focus {
 
 .custom-table th {
     padding: 12px 16px;
-    background: rgba(8, 12, 20, 0.9);
+    background: rgba(5, 11, 15, 0.95);
     color: var(--text-muted);
     font-weight: 600;
     border-bottom: 1px solid var(--bg-card-border);
@@ -307,28 +312,30 @@ input[type="text"]:focus {
 
 .custom-table td {
     padding: 12px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .custom-table tr:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(0, 230, 118, 0.04);
 }
 
 .badge-status {
     padding: 4px 10px;
     border-radius: 12px;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .badge-status.active {
-    background: rgba(52, 211, 153, 0.15);
-    color: var(--accent-emerald);
+    background: rgba(0, 230, 118, 0.15);
+    color: var(--primary);
+    border: 1px solid rgba(0, 230, 118, 0.3);
 }
 
 .badge-status.inactive {
-    background: rgba(248, 113, 113, 0.15);
+    background: rgba(255, 42, 95, 0.15);
     color: var(--accent-rose);
+    border: 1px solid rgba(255, 42, 95, 0.3);
 }
 
 .empty-state {
@@ -357,15 +364,16 @@ input[type="text"]:focus {
 .toast {
     padding: 14px 20px;
     border-radius: var(--radius-sm);
-    background: #0f172a;
+    background: #0d1f2d;
     color: #fff;
     font-size: 13px;
-    font-weight: 500;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
     display: flex;
     align-items: center;
     gap: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.toast-success { border-left: 4px solid var(--accent-emerald); }
-.toast-info { border-left: 4px solid var(--primary); }
+.toast-success { border-left: 4px solid var(--primary); }
+.toast-info { border-left: 4px solid var(--accent-mint); }

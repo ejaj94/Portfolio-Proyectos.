@@ -9,12 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const lastScanTime = document.getElementById('lastScanTime');
     const devicesTableBody = document.getElementById('devicesTableBody');
 
-    // 1. Ejecutar Simulación
+    // 1. Executar Simulação
     btnRunSimulation.addEventListener('click', async () => {
         const range = netRangeInput.value.trim() || '192.168.1.0/24';
 
         btnRunSimulation.disabled = true;
-        btnRunSimulation.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Simulando...';
+        btnRunSimulation.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> A simular...';
 
         try {
             const res = await fetch('/api/simulate-scan', {
@@ -26,24 +26,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             if (data.success) {
                 renderSimulation(data);
-                showToast('Simulación de inventario completada.', 'success');
+                showToast('Simulação de inventário concluída com sucesso.', 'success');
             } else {
-                showToast(data.message || 'Error en la simulación.', 'error');
+                showToast(data.message || 'Ocorreu um erro na simulação.', 'error');
             }
         } catch (err) {
-            showToast('No se pudo conectar con el servidor.', 'error');
+            showToast('Não foi possível ligar ao servidor.', 'error');
         } finally {
             btnRunSimulation.disabled = false;
-            btnRunSimulation.innerHTML = '<i class="fa-solid fa-play"></i> Ejecutar Simulación';
+            btnRunSimulation.innerHTML = '<i class="fa-solid fa-play"></i> Executar Simulação';
         }
     });
 
-    // 2. Renderizar Resultados Simulados en UI
+    // 2. Renderizar Resultados Simulados em UI
     function renderSimulation(data) {
         kpiTotalDevs.textContent = data.summary.total_found;
         kpiActiveDevs.textContent = data.summary.active_found;
         kpiAvgScore.textContent = `${data.summary.avg_security_score} / 100`;
-        lastScanTime.textContent = `Actualizado: ${data.timestamp}`;
+        lastScanTime.textContent = `Atualizado: ${data.timestamp}`;
 
         devicesTableBody.innerHTML = '';
 
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr>
                     <td colspan="7" class="empty-state">
                         <i class="fa-solid fa-shield-halved"></i>
-                        <p>No se encontraron datos simulados.</p>
+                        <p>Não foram encontrados dados simulados.</p>
                     </td>
                 </tr>
             `;
@@ -61,9 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         data.devices.forEach(dev => {
             const tr = document.createElement('tr');
-            const isActive = dev.status === 'Activo';
+            const isActive = dev.status === 'Ativo';
             const statusClass = isActive ? 'active' : 'inactive';
-            const portsText = dev.simulated_ports.length > 0 ? dev.simulated_ports.join(', ') : 'Ninguno';
+            const portsText = dev.simulated_ports.length > 0 ? dev.simulated_ports.join(', ') : 'Nenhum';
 
             tr.innerHTML = `
                 <td><strong>${dev.hostname}</strong></td>
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Descargar PDF Simulado
+    // 3. Transferir PDF Simulado
     btnDownloadPDF.addEventListener('click', async () => {
         try {
             const res = await fetch('/api/generate-pdf', { method: 'POST' });
@@ -87,16 +87,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'Reporte_Inventario_Red_Simulado.pdf';
+                a.download = 'Relatorio_Inventario_Rede_Simulado.pdf';
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
-                showToast('Reporte PDF descargado.', 'success');
+                showToast('Relatório PDF transferido com sucesso.', 'success');
             } else {
-                showToast('Error al generar PDF.', 'error');
+                showToast('Erro ao gerar relatório PDF.', 'error');
             }
         } catch (err) {
-            showToast('Error en la descarga.', 'error');
+            showToast('Erro ao transferir ficheiro.', 'error');
         }
     });
 

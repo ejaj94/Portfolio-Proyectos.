@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador Educativo de Inventario de Red 🛡️</title>
+    <title>Simulador Educativo de Inventário de Rede 🛡️</title>
     <!-- FontAwesome 6 CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=3">
 </head>
 <body>
     <div class="app-container">
@@ -22,13 +22,13 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div class="brand-text">
-                    <h1>Simulador de Inventario <span>NETWORK PRO</span></h1>
-                    <p>Herramienta educativa interactiva basada en datos de demostración simulados</p>
+                    <h1>Simulador de Inventário <span>NETWORK PRO</span></h1>
+                    <p>Ferramenta educativa interativa baseada em dados de demonstração simulados</p>
                 </div>
             </div>
             <div class="header-right">
                 <span class="status-badge demo">
-                    <i class="fa-solid fa-flask"></i> Modo Simulación Didáctica
+                    <i class="fa-solid fa-flask"></i> Modo Simulação Didática
                 </span>
             </div>
         </header>
@@ -37,25 +37,25 @@
         <main class="dashboard-grid">
             <!-- Sidebar Controls -->
             <section class="control-panel card">
-                <h2><i class="fa-solid fa-sliders"></i> Panel de Simulación</h2>
+                <h2><i class="fa-solid fa-sliders"></i> Painel de Simulação</h2>
                 
                 <div class="form-group">
-                    <label for="netRangeInput"><i class="fa-solid fa-network-wired"></i> Rango de Red Simulado</label>
-                    <input type="text" id="netRangeInput" value="192.168.1.0/24" placeholder="Ej: 192.168.1.0/24">
+                    <label for="netRangeInput"><i class="fa-solid fa-network-wired"></i> Gama de Rede Simulada</label>
+                    <input type="text" id="netRangeInput" value="192.168.1.0/24" placeholder="Ex: 192.168.1.0/24">
                 </div>
 
                 <div class="action-buttons">
                     <button id="btnRunSimulation" class="btn btn-primary glow">
-                        <i class="fa-solid fa-play"></i> Ejecutar Simulación
+                        <i class="fa-solid fa-play"></i> Executar Simulação
                     </button>
                     <button id="btnDownloadPDF" class="btn btn-outline">
-                        <i class="fa-solid fa-file-pdf"></i> Descargar Informe PDF (Demo)
+                        <i class="fa-solid fa-file-pdf"></i> Transferir Relatório PDF (Demo)
                     </button>
                 </div>
 
                 <div class="info-box">
                     <i class="fa-solid fa-circle-info"></i>
-                    <p>Esta aplicación funciona exclusivamente como un <strong>entorno didáctico</strong> con datos ficticios. No se realizan conexiones ni escaneos en la red real.</p>
+                    <p>Esta aplicação funciona exclusivamente como um <strong>ambiente didático</strong> com dados fictícios. Não são efetuadas ligações nem análises em redes reais.</p>
                 </div>
             </section>
 
@@ -64,7 +64,7 @@
                 <!-- KPI Summary Cards -->
                 <div class="kpi-grid">
                     <div class="kpi-card">
-                        <div class="kpi-icon icon-blue"><i class="fa-solid fa-desktop"></i></div>
+                        <div class="kpi-icon icon-emerald"><i class="fa-solid fa-desktop"></i></div>
                         <div class="kpi-info">
                             <span class="kpi-label">Dispositivos Simulados</span>
                             <span id="kpiTotalDevs" class="kpi-value">0</span>
@@ -72,9 +72,9 @@
                     </div>
 
                     <div class="kpi-card">
-                        <div class="kpi-icon icon-emerald"><i class="fa-solid fa-circle-check"></i></div>
+                        <div class="kpi-icon icon-mint"><i class="fa-solid fa-circle-check"></i></div>
                         <div class="kpi-info">
-                            <span class="kpi-label">Activos en Demo</span>
+                            <span class="kpi-label">Ativos em Demonstração</span>
                             <span id="kpiActiveDevs" class="kpi-value">0</span>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                     <div class="kpi-card">
                         <div class="kpi-icon icon-amber"><i class="fa-solid fa-shield-virus"></i></div>
                         <div class="kpi-info">
-                            <span class="kpi-label">Puntaje Seguridad Promedio</span>
+                            <span class="kpi-label">Pontuação Média de Segurança</span>
                             <span id="kpiAvgScore" class="kpi-value">0 / 100</span>
                         </div>
                     </div>
@@ -91,8 +91,8 @@
                 <!-- Table Card -->
                 <div class="card table-card">
                     <div class="card-header flex-between">
-                        <h3><i class="fa-solid fa-list-check"></i> Inventario de Red Simulado</h3>
-                        <span id="lastScanTime" class="timestamp-label">Listo para simular</span>
+                        <h3><i class="fa-solid fa-list-check"></i> Inventário de Rede Simulado</h3>
+                        <span id="lastScanTime" class="timestamp-label">Pronto para simular</span>
                     </div>
 
                     <div class="table-responsive">
@@ -100,19 +100,19 @@
                             <thead>
                                 <tr>
                                     <th>Dispositivo (Hostname)</th>
-                                    <th>Dirección IP</th>
-                                    <th>Dirección MAC</th>
+                                    <th>Endereço IP</th>
+                                    <th>Endereço MAC</th>
                                     <th>Tipo</th>
-                                    <th>Puertos Simulados</th>
-                                    <th>Puntaje</th>
-                                    <th>Recomendación</th>
+                                    <th>Portas Simuladas</th>
+                                    <th>Pontuação</th>
+                                    <th>Recomendação</th>
                                 </tr>
                             </thead>
                             <tbody id="devicesTableBody">
                                 <tr>
                                     <td colspan="7" class="empty-state">
                                         <i class="fa-solid fa-shield-halved"></i>
-                                        <p>Haz clic en "Ejecutar Simulación" para cargar la demostración de inventario.</p>
+                                        <p>Clique em "Executar Simulação" para carregar a demonstração de inventário.</p>
                                     </td>
                                 </tr>
                             </tbody>
@@ -127,6 +127,6 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <!-- JS -->
-    <script src="{{ url_for('static', filename='app.js') }}?v=1"></script>
+    <script src="{{ url_for('static', filename='app.js') }}?v=3"></script>
 </body>
 </html>
