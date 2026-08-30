@@ -3,7 +3,16 @@ from flask import Flask, render_template, request, jsonify
 from Cripto_chek import CryptoMonitorEngine, DEFAULT_CRYPTOS, DEFAULT_FOREX
 
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 engine = CryptoMonitorEngine()
+
+
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '-1'
+    return response
 
 
 @app.route("/")
