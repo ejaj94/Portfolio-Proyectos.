@@ -38,7 +38,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Renderizar Resultados na UI (com Badges Individuais para Portas)
+    // Função auxiliar para asignar clases de colores vivos a los puertos
+    function getPortColorClass(port) {
+        const p = parseInt(port, 10);
+        if (p === 80 || p === 443) return 'port-pill-blue';
+        if (p === 22) return 'port-pill-rose';
+        if (p === 445 || p === 3389) return 'port-pill-purple';
+        if (p === 9100 || p === 631) return 'port-pill-emerald';
+        return 'port-pill-amber';
+    }
+
+    // Função auxiliar para asignación de color al score
+    function getScoreClass(score) {
+        if (score >= 90) return 'score-pill-emerald';
+        if (score >= 80) return 'score-pill-purple';
+        return 'score-pill-amber';
+    }
+
+    // 2. Renderizar Resultados na UI (Portas estrictamente en 1 SOLA LÍNEA)
     function renderSimulation(data) {
         kpiTotalDevs.textContent = data.summary.total_found;
         kpiActiveDevs.textContent = data.summary.active_found;
@@ -61,15 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         data.devices.forEach(dev => {
             const tr = document.createElement('tr');
-            const isActive = dev.status === 'Ativo';
-            const statusClass = isActive ? 'active' : 'inactive';
             
             let portsHtml = '<span class="no-ports">Nenhum</span>';
             if (dev.simulated_ports && dev.simulated_ports.length > 0) {
                 portsHtml = `<div class="ports-flex">` + 
-                    dev.simulated_ports.map(p => `<span class="port-pill">${p}</span>`).join('') + 
+                    dev.simulated_ports.map(p => `<span class="port-pill ${getPortColorClass(p)}">${p}</span>`).join('') + 
                     `</div>`;
             }
+
+            const scoreClass = getScoreClass(dev.security_score);
 
             tr.innerHTML = `
                 <td>
@@ -81,8 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td><code class="code-badge ip-badge">${dev.ip}</code></td>
                 <td><code class="code-badge mac-badge">${dev.mac}</code></td>
                 <td><span class="type-pill">${dev.type}</span></td>
-                <td>${portsHtml}</td>
-                <td><span class="score-pill">${dev.security_score} pts</span></td>
+                <td class="ports-cell">${portsHtml}</td>
+                <td><span class="score-pill ${scoreClass}">${dev.security_score} pts</span></td>
                 <td class="rec-text">${dev.recommendation}</td>
             `;
             devicesTableBody.appendChild(tr);
