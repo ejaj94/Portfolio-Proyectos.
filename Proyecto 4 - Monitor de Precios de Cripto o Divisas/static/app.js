@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentChartInstance = null;
     let currentModalSymbol = 'BTC-USD';
     let currentModalPeriod = '1d';
+    let previousPricesMap = {};
     let latestPricesMap = {};
 
     // 1. Manejo de Pestañas
@@ -50,9 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderGrid(cryptoGrid, data.cryptos);
                 renderGrid(forexGrid, data.forex);
 
-                // Guardar mapa de precios para alertas y calculadora
+                // Guardar mapa de precios anteriores y actuales
                 data.cryptos.concat(data.forex).forEach(item => {
-                    latestPricesMap[item.symbol] = item.price;
+                    if (item.price > 0) {
+                        previousPricesMap[item.symbol] = latestPricesMap[item.symbol] || item.price;
+                        latestPricesMap[item.symbol] = item.price;
+                    }
                 });
 
                 evaluateAlerts();
@@ -65,11 +69,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderGrid(container, items) {
         if (!items || items.length === 0) return;
-        container.innerHTML = '';
 
         items.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'ticker-card';
+            if (!item.price || item.price <= 0) return;
+
+            const existingCard = container.querySelector(`[data-card-symbol="${item.symbol}"]`);
+            const prevPrice = previousPricesMap[item.symbol] || item.price;
+            let flashClass = '';
+
+            if (item.price > prevPrice) flashClass = 'flash-up';
+            else if (item.price < prevPrice) flashClass = 'flash-down';
 
             const isUp = item.change >= 0;
             const changeClass = isUp ? 'up' : 'down';
@@ -77,9 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const sign = isUp ? '+' : '';
 
             const isForex = item.symbol.includes('=X');
-            const formattedPrice = isForex ? `$${item.price.toFixed(4)}` : `$${item.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+            const formattedPrice = isForex ? `$${item.price.toFixed(4)}` : `$${item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-            card.innerHTML = `
+            const cardHTML = `
                 <div class="ticker-card-top">
                     <div class="symbol-name-box">
                         <span class="symbol-tag">${item.symbol}</span>
@@ -103,15 +112,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     </button>
                 </div>
             `;
-            container.appendChild(card);
+
+            if (existingCard) {
+                existingCard.className = `ticker-card ${flashClass}`;
+                existingCard.innerHTML = cardHTML;
+                setTimeout(() => existingCard.classList.remove('flash-up', 'flash-down'), 800);
+            } else {
+                const card = document.createElement('div');
+                card.className = `ticker-card ${flashClass}`;
+                card.setAttribute('data-card-symbol', item.symbol);
+                card.innerHTML = cardHTML;
+                container.appendChild(card);
+            }
         });
+
+        // Limpiar skeleton loader si existe
+        const skeleton = container.querySelector('.skeleton-card');
+        if (skeleton) skeleton.remove();
 
         // Event listeners para botones de gráfico
         container.querySelectorAll('.btn-view-chart').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.onclick = () => {
                 const sym = btn.getAttribute('data-symbol');
                 openChartModal(sym);
-            });
+            };
         });
     }
 
@@ -129,15 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const json = await res.json();
             if (json.success) {
-                showToast(`Activo ${symbol} agregado con éxito!`, 'success');
+                showToast(`Activo ${symbol} agregado!`, 'success');
                 customSymbolInput.value = '';
-
-                // Insertar en la grilla adecuada
-                const gridTarget = symbol.includes('=X') ? forexGrid : cryptoGrid;
-                const existing = gridTarget.querySelector(`.symbol-tag:contains('${symbol}')`);
-                if (!existing) {
-                    fetchLivePrices();
-                }
+                fetchLivePrices();
             } else {
                 showToast(json.message || 'Símbolo no encontrado.', 'error');
             }
@@ -174,9 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const isPositive = dataPrices.length > 1 && dataPrices[dataPrices.length - 1] >= dataPrices[0];
-        const lineColor = isPositive ? '#10b981' : '#f43f5e';
-        const bgGradient = ctx.createLinearGradient(0, 0, 0, 300);
-        bgGradient.addColorStop(0, isPositive ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)');
+        const lineColor = isPositive ? '#00ff66' : '#ff007f';
+        const bgGradient = ctx.createLinearGradient(0, 0, 0, 320);
+        bgGradient.addColorStop(0, isPositive ? 'rgba(0, 255, 102, 0.35)' : 'rgba(255, 0, 127, 0.35)');
         bgGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
         currentChartInstance = new Chart(ctx, {
@@ -187,12 +205,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     label: `Precio (${symbol})`,
                     data: dataPrices,
                     borderColor: lineColor,
-                    borderWidth: 2,
+                    borderWidth: 2.5,
                     fill: true,
                     backgroundColor: bgGradient,
-                    tension: 0.2,
+                    tension: 0.25,
                     pointRadius: 0,
-                    pointHoverRadius: 5
+                    pointHoverRadius: 6
                 }]
             },
             options: {
@@ -204,11 +222,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 scales: {
                     x: {
                         grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                        ticks: { color: '#94a3b8', font: { size: 10 } }
+                        ticks: { color: '#a0a5c0', font: { size: 10 } }
                     },
                     y: {
                         grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                        ticks: { color: '#94a3b8', font: { size: 10 } }
+                        ticks: { color: '#a0a5c0', font: { size: 10 } }
                     }
                 }
             }
@@ -260,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         activeAlerts.push(alertItem);
         renderAlertsList();
-        showToast(`Alerta creada para ${sym} (${cond === 'above' ? '>' : '<'} $${target})`, 'success');
+        showToast(`Alerta configurada para ${sym} (${cond === 'above' ? '>' : '<'} $${target})`, 'success');
         alertTargetPrice.value = '';
     });
 
@@ -276,11 +294,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const li = document.createElement('li');
             li.style.display = 'flex';
             li.style.justifyContent = 'space-between';
-            li.style.padding = '8px 12px';
-            li.style.borderBottom = '1px solid rgba(255, 255, 255, 0.05)';
+            li.style.padding = '10px 14px';
+            li.style.borderBottom = '1px solid rgba(255, 255, 255, 0.06)';
             li.innerHTML = `
                 <span><strong>${al.symbol}</strong> ${al.condition === 'above' ? '>' : '<'} $${al.targetPrice}</span>
-                <button class="btn btn-sm btn-outline btn-delete-alert" data-id="${al.id}" style="color: #f43f5e; border-color: #f43f5e;">
+                <button class="btn btn-sm btn-outline btn-delete-alert" data-id="${al.id}" style="color: #ff007f; border-color: #ff007f;">
                     <i class="fa-solid fa-trash"></i>
                 </button>
             `;
@@ -288,18 +306,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         alertsList.querySelectorAll('.btn-delete-alert').forEach(b => {
-            b.addEventListener('click', () => {
+            b.onclick = () => {
                 const id = parseInt(b.getAttribute('data-id'));
                 activeAlerts = activeAlerts.filter(a => a.id !== id);
                 renderAlertsList();
-            });
+            };
         });
     }
 
     function evaluateAlerts() {
         activeAlerts.forEach((al, index) => {
             const livePrice = latestPricesMap[al.symbol];
-            if (!livePrice) return;
+            if (!livePrice || livePrice <= 0) return;
 
             let triggered = false;
             if (al.condition === 'above' && livePrice >= al.targetPrice) triggered = true;
@@ -334,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 4000);
     }
 
-    // Loop Inicial
+    // Loop de Actualización Automática (3 segundos)
     fetchLivePrices();
-    setInterval(fetchLivePrices, 4000);
+    setInterval(fetchLivePrices, 3000);
 });
