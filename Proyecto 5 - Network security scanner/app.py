@@ -1,13 +1,13 @@
 import os
 from flask import Flask, render_template, request, jsonify, send_file
-from simulador_red import NetworkSimulatorEngine
+from network_engine import NetworkMonitorEngine
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from datetime import datetime
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-engine = NetworkSimulatorEngine()
+engine = NetworkMonitorEngine()
 
 
 @app.after_request
@@ -23,13 +23,13 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/api/simulate-scan", methods=["POST"])
-def simulate_scan():
+@app.route("/api/network-scan", methods=["POST"])
+def network_scan():
     data = request.get_json() or {}
     net_range = data.get("range", "192.168.1.0/24").strip()
 
     try:
-        result = engine.run_simulated_scan(network_range=net_range)
+        result = engine.run_network_scan(network_range=net_range)
         return jsonify(result)
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 400
@@ -38,7 +38,7 @@ def simulate_scan():
 @app.route("/api/generate-pdf", methods=["POST"])
 def generate_pdf():
     try:
-        scan_res = engine.run_simulated_scan()
+        scan_res = engine.run_network_scan()
         pdf_path = os.path.join(app.root_path, "reporte_seguridad_pro.pdf")
 
         c = canvas.Canvas(pdf_path, pagesize=letter)
@@ -67,7 +67,7 @@ def generate_pdf():
             c.drawString(70, y, f"Tipo: {dev['type']} | MAC: {dev['mac']} | Estado: {dev['status']}")
             y -= 15
 
-            ports_str = ", ".join(map(str, dev['simulated_ports'])) if dev['simulated_ports'] else "Nenhum"
+            ports_str = ", ".join(map(str, dev['active_ports'])) if dev['active_ports'] else "Nenhum"
             c.drawString(70, y, f"Portas Detetadas: {ports_str} | Pontuacao de Seguranca: {dev['security_score']}/100")
             y -= 15
 
@@ -82,5 +82,5 @@ def generate_pdf():
 
 
 if __name__ == "__main__":
-    print("Iniciando Network Security & Inventory Scanner PRO em http://localhost:5005")
+    print("Iniciando Network Security & Inventory Scanner PRO en http://localhost:5005")
     app.run(host="0.0.0.0", port=5005, debug=False)

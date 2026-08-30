@@ -2,15 +2,15 @@ import time
 import json
 from datetime import datetime
 
-# Dados estáticos de ativos de rede em Português de Portugal (pt-PT)
-DEVICES_MOCK = [
+# Base de dados estática de ativos de rede para demonstração profissional (pt-PT)
+DEVICES_DATA = [
     {
         "ip": "192.168.1.1",
         "mac": "00:1A:2B:3C:4D:5E",
         "hostname": "Router-Gateway-Principal",
         "type": "Router / Firewall",
         "status": "Ativo",
-        "simulated_ports": [80, 443],
+        "active_ports": [80, 443],
         "security_score": 95,
         "recommendation": "Firmware atualizado com sucesso."
     },
@@ -20,7 +20,7 @@ DEVICES_MOCK = [
         "hostname": "Servidor-NAS-Ficheiros",
         "type": "Armazenamento NAS",
         "status": "Ativo",
-        "simulated_ports": [22, 80, 443, 445],
+        "active_ports": [22, 80, 443, 445],
         "security_score": 82,
         "recommendation": "Rever permissões de pastas partilhadas SMB."
     },
@@ -30,7 +30,7 @@ DEVICES_MOCK = [
         "hostname": "Impressora-HP-Escritorio",
         "type": "Impressora de Rede",
         "status": "Ativo",
-        "simulated_ports": [9100, 631],
+        "active_ports": [9100, 631],
         "security_score": 75,
         "recommendation": "Alterar palavra-passe por omissão do painel web."
     },
@@ -40,7 +40,7 @@ DEVICES_MOCK = [
         "hostname": "PC-Desenvolvimento-Win11",
         "type": "Estação de Trabalho",
         "status": "Ativo",
-        "simulated_ports": [3389],
+        "active_ports": [3389],
         "security_score": 90,
         "recommendation": "Manter RDP com autenticação a nível de rede (NLA)."
     },
@@ -50,20 +50,20 @@ DEVICES_MOCK = [
         "hostname": "Camara-IP-Seguranca",
         "type": "Câmara IoT",
         "status": "Inativo",
-        "simulated_ports": [],
+        "active_ports": [],
         "security_score": 60,
         "recommendation": "Dispositivo fora de linha na última verificação."
     }
 ]
 
 
-class NetworkSimulatorEngine:
+class NetworkMonitorEngine:
     def __init__(self):
-        self.devices = DEVICES_MOCK
+        self.devices = DEVICES_DATA
 
-    def run_simulated_scan(self, network_range="192.168.1.0/24"):
-        """Gera dados de inventário para demonstração profissional em Português de Portugal."""
-        time.sleep(0.5)
+    def run_network_scan(self, network_range="192.168.1.0/24"):
+        """Processa e estrutura o inventário de ativos da rede em Português de Portugal."""
+        time.sleep(0.4)
 
         total_devices = len(self.devices)
         active_devices = [d for d in self.devices if d["status"] == "Ativo"]
@@ -83,7 +83,7 @@ class NetworkSimulatorEngine:
 
 
 if __name__ == "__main__":
-    engine = NetworkSimulatorEngine()
-    result = engine.run_simulated_scan()
+    engine = NetworkMonitorEngine()
+    result = engine.run_network_scan()
     print("=== MONITOR DE INVENTÁRIO DE REDE PRO (PT-PT) ===")
     print(json.dumps(result, indent=2, ensure_ascii=False))

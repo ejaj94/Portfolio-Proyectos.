@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const netRangeInput = document.getElementById('netRangeInput');
-    const btnRunSimulation = document.getElementById('btnRunSimulation');
+    const btnRunScan = document.getElementById('btnRunScan');
     const btnDownloadPDF = document.getElementById('btnDownloadPDF');
 
     const kpiTotalDevs = document.getElementById('kpiTotalDevs');
@@ -10,14 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const devicesTableBody = document.getElementById('devicesTableBody');
 
     // 1. Analisar Rede
-    btnRunSimulation.addEventListener('click', async () => {
+    btnRunScan.addEventListener('click', async () => {
         const range = netRangeInput.value.trim() || '192.168.1.0/24';
 
-        btnRunSimulation.disabled = true;
-        btnRunSimulation.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> A analisar...';
+        btnRunScan.disabled = true;
+        btnRunScan.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> A analisar...';
 
         try {
-            const res = await fetch('/api/simulate-scan', {
+            const res = await fetch('/api/network-scan', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ range: range })
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await res.json();
             if (data.success) {
-                renderSimulation(data);
+                renderNetworkData(data);
                 showToast('Análise de inventário concluída com sucesso.', 'success');
             } else {
                 showToast(data.message || 'Ocorreu um erro durante a análise.', 'error');
@@ -33,12 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             showToast('Não foi possível ligar ao servidor.', 'error');
         } finally {
-            btnRunSimulation.disabled = false;
-            btnRunSimulation.innerHTML = '<i class="fa-solid fa-bolt"></i> Analisar Rede';
+            btnRunScan.disabled = false;
+            btnRunScan.innerHTML = '<i class="fa-solid fa-bolt"></i> Analisar Rede';
         }
     });
 
-    // Função auxiliar para asignar clases de colores vivos a los puertos
     function getPortColorClass(port) {
         const p = parseInt(port, 10);
         if (p === 80 || p === 443) return 'port-pill-blue';
@@ -48,15 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'port-pill-amber';
     }
 
-    // Função auxiliar para asignación de color al score
     function getScoreClass(score) {
         if (score >= 90) return 'score-pill-emerald';
         if (score >= 80) return 'score-pill-purple';
         return 'score-pill-amber';
     }
 
-    // 2. Renderizar Resultados na UI (Portas estrictamente en 1 SOLA LÍNEA)
-    function renderSimulation(data) {
+    // 2. Renderizar Resultados na UI (Portas em 1 SOLA LÍNEA)
+    function renderNetworkData(data) {
         kpiTotalDevs.textContent = data.summary.total_found;
         kpiActiveDevs.textContent = data.summary.active_found;
         kpiAvgScore.textContent = `${data.summary.avg_security_score} / 100`;
@@ -80,9 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const tr = document.createElement('tr');
             
             let portsHtml = '<span class="no-ports">Nenhum</span>';
-            if (dev.simulated_ports && dev.simulated_ports.length > 0) {
+            if (dev.active_ports && dev.active_ports.length > 0) {
                 portsHtml = `<div class="ports-flex">` + 
-                    dev.simulated_ports.map(p => `<span class="port-pill ${getPortColorClass(p)}">${p}</span>`).join('') + 
+                    dev.active_ports.map(p => `<span class="port-pill ${getPortColorClass(p)}">${p}</span>`).join('') + 
                     `</div>`;
             }
 
