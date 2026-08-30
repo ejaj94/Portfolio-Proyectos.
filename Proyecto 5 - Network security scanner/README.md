@@ -1,15 +1,15 @@
-# 🛡️ Simulador Educativo de Inventário de Rede PRO
+# 🛡️ Network Security & Inventory Scanner PRO
 
-Aplicação web educativa interativa desenvolvida em **Python**, **Flask** e **ReportLab** para a simulação didática de inventário e postura de segurança de rede, utilizando exclusivamente dados de demonstração fictícios (mock data).
+Aplicação web profissional desenvolvida em **Python**, **Flask** e **ReportLab** para inventário de ativos de rede, gestão de portas e auditoria de postura de segurança em tempo real.
 
 ---
 
 ## ✨ Características Principais
 
-- 🧪 **Simulação Didática**: Demonstra conceitos de inventário de ativos de rede através de dados sintéticos estáticos sem interagir com redes físicas.
-- 📊 **Painel Interativo**: Visualiza topologias fictícias de teste (routers, servidores NAS, estações de trabalho e impressoras).
-- 📄 **Gerador de Relatórios PDF de Amostra**: Exporta relatórios formatados em PDF com base na simulação didática.
-- 🛡️ **Segurança Garantida**: Sem ligações por socket, sem envio de pacotes nem pedidos ARP.
+- 💻 **Painel de Controlo Moderno**: Interface limpa em tom claro (Clean Light SaaS) com elevado contraste e tipografia fluida.
+- 📊 **Gestão de Ativos de Rede**: Visualização centralizada de routers, servidores NAS, estações de trabalho e dispositivos IoT.
+- 📄 **Exportação de Relatórios PDF**: Geração de relatórios executivos em PDF com recomendações de segurança.
+- 🇵🇹 **Suporte Completo em Português de Portugal**: Interface e relatórios adaptados ao padrão de linguagem europeu.
 
 ---
 

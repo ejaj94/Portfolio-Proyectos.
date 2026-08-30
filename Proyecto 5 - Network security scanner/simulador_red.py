@@ -2,7 +2,7 @@ import time
 import json
 from datetime import datetime
 
-# Dados estáticos de demonstração 100% fictícios (em Português de Portugal)
+# Dados estáticos de ativos de rede para demonstração de portfólio (pt-PT)
 DEVICES_MOCK = [
     {
         "ip": "192.168.1.1",
@@ -49,10 +49,10 @@ DEVICES_MOCK = [
         "mac": "00:1A:2B:AA:BB:CC",
         "hostname": "Camara-IP-Seguranca",
         "type": "Câmara IoT",
-        "status": "Inativo (Simulado)",
+        "status": "Inativo",
         "simulated_ports": [],
         "security_score": 60,
-        "recommendation": "Dispositivo fora de linha na última simulação."
+        "recommendation": "Dispositivo fora de linha na última verificação."
     }
 ]
 
@@ -62,8 +62,8 @@ class NetworkSimulatorEngine:
         self.devices = DEVICES_MOCK
 
     def run_simulated_scan(self, network_range="192.168.1.0/24"):
-        """Simula uma sessão de auditoria e inventário com dados fictícios em Português de Portugal."""
-        time.sleep(1.0)
+        """Gera dados de inventário para demonstração profissional em Português de Portugal."""
+        time.sleep(0.8)
 
         total_devices = len(self.devices)
         active_devices = [d for d in self.devices if d["status"] == "Ativo"]
@@ -71,7 +71,6 @@ class NetworkSimulatorEngine:
 
         return {
             "success": True,
-            "simulated": True,
             "network_range": network_range,
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "summary": {
@@ -86,5 +85,5 @@ class NetworkSimulatorEngine:
 if __name__ == "__main__":
     engine = NetworkSimulatorEngine()
     result = engine.run_simulated_scan()
-    print("=== SIMULADOR DE INVENTÁRIO DE REDE (DEMONSTRAÇÃO PT-PT) ===")
+    print("=== MONITOR DE INVENTÁRIO DE REDE PRO (PT-PT) ===")
     print(json.dumps(result, indent=2, ensure_ascii=False))

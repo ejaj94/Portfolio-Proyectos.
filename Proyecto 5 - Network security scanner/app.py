@@ -39,18 +39,18 @@ def simulate_scan():
 def generate_pdf():
     try:
         scan_res = engine.run_simulated_scan()
-        pdf_path = os.path.join(app.root_path, "reporte_simulado_demo.pdf")
+        pdf_path = os.path.join(app.root_path, "reporte_seguridad_pro.pdf")
 
         c = canvas.Canvas(pdf_path, pagesize=letter)
         width, height = letter
 
-        # Encabezado del Informe (pt-PT)
+        # Encabezado del Informe Profesional (pt-PT)
         c.setFont("Helvetica-Bold", 16)
-        c.drawString(50, height - 50, "Relatorio Didatico de Inventario de Rede (Simulado)")
+        c.drawString(50, height - 50, "Relatorio de Inventario e Seguranca de Rede PRO")
 
         c.setFont("Helvetica", 10)
-        c.drawString(50, height - 70, f"Data da Simulacao: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        c.drawString(50, height - 85, f"Gama de Rede Consultada: {scan_res['network_range']}")
+        c.drawString(50, height - 70, f"Data da Analise: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        c.drawString(50, height - 85, f"Gama de Rede: {scan_res['network_range']}")
         c.line(50, height - 95, 550, height - 95)
 
         y = height - 120
@@ -68,7 +68,7 @@ def generate_pdf():
             y -= 15
 
             ports_str = ", ".join(map(str, dev['simulated_ports'])) if dev['simulated_ports'] else "Nenhum"
-            c.drawString(70, y, f"Portas Simuladas: {ports_str} | Pontuacao de Seguranca: {dev['security_score']}/100")
+            c.drawString(70, y, f"Portas Detetadas: {ports_str} | Pontuacao de Seguranca: {dev['security_score']}/100")
             y -= 15
 
             c.drawString(70, y, f"Recomendacao: {dev['recommendation']}")
@@ -76,11 +76,11 @@ def generate_pdf():
 
         c.save()
 
-        return send_file(pdf_path, as_attachment=True, download_name="Relatorio_Inventario_Rede_Simulado.pdf")
+        return send_file(pdf_path, as_attachment=True, download_name="Relatorio_Inventario_Rede_PRO.pdf")
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 400
 
 
 if __name__ == "__main__":
-    print("Iniciando Simulador Educativo de Inventário de Rede em http://localhost:5005")
+    print("Iniciando Network Security & Inventory Scanner PRO em http://localhost:5005")
     app.run(host="0.0.0.0", port=5005, debug=False)

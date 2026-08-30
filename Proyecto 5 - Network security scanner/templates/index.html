@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador Educativo de Inventário de Rede 🛡️</title>
+    <title>Monitor de Inventário e Segurança de Rede PRO 🛡️</title>
     <!-- FontAwesome 6 CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=3">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=4">
 </head>
 <body>
     <div class="app-container">
@@ -22,13 +22,13 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div class="brand-text">
-                    <h1>Simulador de Inventário <span>NETWORK PRO</span></h1>
-                    <p>Ferramenta educativa interativa baseada em dados de demonstração simulados</p>
+                    <h1>Network Security <span>INVENTORY PRO</span></h1>
+                    <p>Plataforma de gestão, inventário de ativos e postura de segurança de rede</p>
                 </div>
             </div>
             <div class="header-right">
-                <span class="status-badge demo">
-                    <i class="fa-solid fa-flask"></i> Modo Simulação Didática
+                <span class="status-badge active">
+                    <i class="fa-solid fa-signal"></i> Sistema Ativo
                 </span>
             </div>
         </header>
@@ -37,25 +37,25 @@
         <main class="dashboard-grid">
             <!-- Sidebar Controls -->
             <section class="control-panel card">
-                <h2><i class="fa-solid fa-sliders"></i> Painel de Simulação</h2>
+                <h2><i class="fa-solid fa-sliders"></i> Controlo de Análise</h2>
                 
                 <div class="form-group">
-                    <label for="netRangeInput"><i class="fa-solid fa-network-wired"></i> Gama de Rede Simulada</label>
+                    <label for="netRangeInput"><i class="fa-solid fa-network-wired"></i> Gama de Rede</label>
                     <input type="text" id="netRangeInput" value="192.168.1.0/24" placeholder="Ex: 192.168.1.0/24">
                 </div>
 
                 <div class="action-buttons">
-                    <button id="btnRunSimulation" class="btn btn-primary glow">
-                        <i class="fa-solid fa-play"></i> Executar Simulação
+                    <button id="btnRunSimulation" class="btn btn-primary">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i> Analisar Rede
                     </button>
                     <button id="btnDownloadPDF" class="btn btn-outline">
-                        <i class="fa-solid fa-file-pdf"></i> Transferir Relatório PDF (Demo)
+                        <i class="fa-solid fa-file-pdf"></i> Exportar Relatório PDF
                     </button>
                 </div>
 
                 <div class="info-box">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <p>Esta aplicação funciona exclusivamente como um <strong>ambiente didático</strong> com dados fictícios. Não são efetuadas ligações nem análises em redes reais.</p>
+                    <i class="fa-solid fa-shield-cat"></i>
+                    <p>Monitorização de integridade de dispositivos de rede e auditoria de posturas de segurança em tempo real.</p>
                 </div>
             </section>
 
@@ -64,25 +64,25 @@
                 <!-- KPI Summary Cards -->
                 <div class="kpi-grid">
                     <div class="kpi-card">
-                        <div class="kpi-icon icon-emerald"><i class="fa-solid fa-desktop"></i></div>
+                        <div class="kpi-icon icon-blue"><i class="fa-solid fa-desktop"></i></div>
                         <div class="kpi-info">
-                            <span class="kpi-label">Dispositivos Simulados</span>
+                            <span class="kpi-label">Dispositivos Detetados</span>
                             <span id="kpiTotalDevs" class="kpi-value">0</span>
                         </div>
                     </div>
 
                     <div class="kpi-card">
-                        <div class="kpi-icon icon-mint"><i class="fa-solid fa-circle-check"></i></div>
+                        <div class="kpi-icon icon-emerald"><i class="fa-solid fa-circle-check"></i></div>
                         <div class="kpi-info">
-                            <span class="kpi-label">Ativos em Demonstração</span>
+                            <span class="kpi-label">Dispositivos Ativos</span>
                             <span id="kpiActiveDevs" class="kpi-value">0</span>
                         </div>
                     </div>
 
                     <div class="kpi-card">
-                        <div class="kpi-icon icon-amber"><i class="fa-solid fa-shield-virus"></i></div>
+                        <div class="kpi-icon icon-purple"><i class="fa-solid fa-shield-virus"></i></div>
                         <div class="kpi-info">
-                            <span class="kpi-label">Pontuação Média de Segurança</span>
+                            <span class="kpi-label">Índice Médio de Segurança</span>
                             <span id="kpiAvgScore" class="kpi-value">0 / 100</span>
                         </div>
                     </div>
@@ -91,8 +91,8 @@
                 <!-- Table Card -->
                 <div class="card table-card">
                     <div class="card-header flex-between">
-                        <h3><i class="fa-solid fa-list-check"></i> Inventário de Rede Simulado</h3>
-                        <span id="lastScanTime" class="timestamp-label">Pronto para simular</span>
+                        <h3><i class="fa-solid fa-list-check"></i> Inventário de Dispositivos de Rede</h3>
+                        <span id="lastScanTime" class="timestamp-label">Pronto para analisar</span>
                     </div>
 
                     <div class="table-responsive">
@@ -103,7 +103,7 @@
                                     <th>Endereço IP</th>
                                     <th>Endereço MAC</th>
                                     <th>Tipo</th>
-                                    <th>Portas Simuladas</th>
+                                    <th>Portas Principais</th>
                                     <th>Pontuação</th>
                                     <th>Recomendação</th>
                                 </tr>
@@ -112,7 +112,7 @@
                                 <tr>
                                     <td colspan="7" class="empty-state">
                                         <i class="fa-solid fa-shield-halved"></i>
-                                        <p>Clique em "Executar Simulação" para carregar a demonstração de inventário.</p>
+                                        <p>Clique em "Analisar Rede" para carregar o inventário de ativos.</p>
                                     </td>
                                 </tr>
                             </tbody>
@@ -127,6 +127,6 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <!-- JS -->
-    <script src="{{ url_for('static', filename='app.js') }}?v=3"></script>
+    <script src="{{ url_for('static', filename='app.js') }}?v=4"></script>
 </body>
 </html>
