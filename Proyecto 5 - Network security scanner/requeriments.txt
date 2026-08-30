@@ -1,2 +1,2 @@
-scapy
-reportlab
+flask>=3.0.0
+reportlab>=4.0.0
