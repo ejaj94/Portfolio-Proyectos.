@@ -87,7 +87,6 @@ def eliminar_ui(service):
 # Punto de entrada principal de la aplicación
 def main():
     import sys
-    # Si el usuario pasa la bandera --cli, ejecuta la interfaz de consola
     if "--cli" in sys.argv:
         Base.metadata.create_all(bind=engine)
         db = SessionLocal()
@@ -110,11 +109,15 @@ def main():
                 print("⚠️ Opción no válida.")
                 
         db.close()
-    else:
-        # Por defecto, iniciamos la interfaz gráfica (GUI) en CustomTkinter
+    elif "--gui" in sys.argv:
         from gui_app import main as run_gui
         run_gui()
+    else:
+        # Por defecto, iniciamos la aplicación Web en Localhost (http://localhost:5000)
+        from web_app import main as run_web
+        run_web()
 
 if __name__ == "__main__":
     main()
+
 
