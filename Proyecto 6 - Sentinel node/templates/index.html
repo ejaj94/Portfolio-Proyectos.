@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel Node PRO - Dashboard Cyberpunk de Recursos</title>
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Orbitron & Share Tech Mono & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=1">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Neon Header -->
+        <header class="cyber-header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>SENTINEL<span>NODE</span> <small>PRO</small></h1>
+                    <p>Plataforma de Telemetria e Monitorização de Recursos do Sistema</p>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="pulse-box">
+                    <span class="pulse-dot"></span>
+                    <span class="pulse-text">TELEMETRIA EM DIRECTO</span>
+                </div>
+                <div class="uptime-box">
+                    <i class="fa-solid fa-clock"></i> Uptime: <span id="lblUptime">A carregar...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- KPI Grid Metrics -->
+        <section class="kpi-grid">
+            <!-- CPU Card -->
+            <div class="kpi-card cyan-glow">
+                <div class="kpi-top">
+                    <span class="kpi-title"><i class="fa-solid fa-cpu"></i> USO DE CPU</span>
+                    <span id="lblCpuPct" class="kpi-val cyan-text">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="barCpu" class="progress-bar-fill cyan-fill" style="width: 0%;"></div>
+                </div>
+                <div class="kpi-footer">
+                    <span>Núcleos: <strong id="lblCpuCores">-</strong></span>
+                    <span>Freq: <strong id="lblCpuFreq">- MHz</strong></span>
+                </div>
+            </div>
+
+            <!-- RAM Card -->
+            <div class="kpi-card magenta-glow">
+                <div class="kpi-top">
+                    <span class="kpi-title"><i class="fa-solid fa-memory"></i> MEMÓRIA RAM</span>
+                    <span id="lblRamPct" class="kpi-val magenta-text">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="barRam" class="progress-bar-fill magenta-fill" style="width: 0%;"></div>
+                </div>
+                <div class="kpi-footer">
+                    <span>Utilizado: <strong id="lblRamUsed">- GB</strong></span>
+                    <span>Total: <strong id="lblRamTotal">- GB</strong></span>
+                </div>
+            </div>
+
+            <!-- DISK Card -->
+            <div class="kpi-card emerald-glow">
+                <div class="kpi-top">
+                    <span class="kpi-title"><i class="fa-solid fa-hard-drive"></i> DISCO PRINCIPAL (C:)</span>
+                    <span id="lblDiskPct" class="kpi-val emerald-text">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="barDisk" class="progress-bar-fill emerald-fill" style="width: 0%;"></div>
+                </div>
+                <div class="kpi-footer">
+                    <span>Usado: <strong id="lblDiskUsed">- GB</strong></span>
+                    <span>Total: <strong id="lblDiskTotal">- GB</strong></span>
+                </div>
+            </div>
+
+            <!-- NETWORK Card -->
+            <div class="kpi-card purple-glow">
+                <div class="kpi-top">
+                    <span class="kpi-title"><i class="fa-solid fa-network-wired"></i> TRÁFEGO DE REDE</span>
+                    <span id="lblNetTotal" class="kpi-val purple-text">0 MB</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="barNet" class="progress-bar-fill purple-fill" style="width: 45%;"></div>
+                </div>
+                <div class="kpi-footer">
+                    <span>Enviado: <strong id="lblNetSent">- MB</strong></span>
+                    <span>Recebido: <strong id="lblNetRecv">- MB</strong></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Dashboard Split -->
+        <main class="dashboard-split">
+            <!-- Left: Realtime Chart & Console -->
+            <div class="left-col">
+                <!-- Trend Chart Box -->
+                <div class="cyber-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-chart-line"></i> HISTÓRICO DE DESEMPENHO EM TEMPO REAL</h2>
+                        <span class="live-tag">ATUALIZAÇÃO: 2s</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="systemChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Live Telemetry Terminal Console -->
+                <div class="cyber-card console-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-terminal"></i> CONSOLA DE TELEMETRIA SENTINEL</h2>
+                        <button id="btnClearLogs" class="btn-sm"><i class="fa-solid fa-trash"></i> Limpar</button>
+                    </div>
+                    <div id="consoleLogFeed" class="console-feed">
+                        <div class="log-line info">[>] Sentinel Node PRO inicializado com sucesso.</div>
+                        <div class="log-line info">[>] Conexão com o motor psutil ativa em tempo real.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Process Table Manager -->
+            <div class="right-col">
+                <div class="cyber-card process-card">
+                    <div class="card-header flex-between">
+                        <h2><i class="fa-solid fa-list-check"></i> MONITOR DE PROCESSOS ATIVOS</h2>
+                        <div class="table-actions">
+                            <input type="text" id="txtSearchProcess" placeholder="Pesquisar por nome ou PID..." class="cyber-input">
+                            <select id="selSortBy" class="cyber-select">
+                                <option value="memory">Ordenar por RAM</option>
+                                <option value="cpu">Ordenar por CPU</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="cyber-table">
+                            <thead>
+                                <tr>
+                                    <th>PID</th>
+                                    <th>Nome do Processo</th>
+                                    <th>Estado</th>
+                                    <th>Uso de CPU</th>
+                                    <th>Memória RAM</th>
+                                    <th>Utilizador</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblProcessesBody">
+                                <tr>
+                                    <td colspan="7" class="loading-row">
+                                        <i class="fa-solid fa-circle-notch fa-spin"></i> A ler processos do sistema...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Process Inspector Modal -->
+    <div id="modalInspector" class="cyber-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-circle-info"></i> DETALHES DO PROCESSO</h3>
+                <button id="btnCloseModal" class="btn-close">&times;</button>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <p>A carregar detalhes...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=1"></script>
+</body>
+</html>
