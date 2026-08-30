@@ -82,5 +82,5 @@ def generate_pdf():
 
 
 if __name__ == "__main__":
-    print("Iniciando Network Security & Inventory Scanner PRO en http://localhost:5005")
-    app.run(host="0.0.0.0", port=5005, debug=False)
+    print("Iniciando Network Security & Inventory Scanner PRO en http://localhost:5006")
+    app.run(host="0.0.0.0", port=5006, debug=False)
