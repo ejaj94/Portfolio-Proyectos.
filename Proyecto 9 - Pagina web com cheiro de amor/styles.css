@@ -2320,3 +2320,14 @@ body { top: 0 !important; }
     width: 100% !important;
   }
 }
+
+
+.workshops-video,
+.workshops-image video {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 0;
+}
