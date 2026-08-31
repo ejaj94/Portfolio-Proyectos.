@@ -88,5 +88,5 @@ def list_reservations():
 
 
 if __name__ == "__main__":
-    print("Iniciando Restaurante L'Étoile Gourmet em http://localhost:5029")
-    app.run(host="0.0.0.0", port=5029, debug=False)
+    print("Iniciando Restaurante L'Étoile Gourmet em http://localhost:5030")
+    app.run(host="0.0.0.0", port=5030, debug=False)
