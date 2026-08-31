@@ -1,6 +1,6 @@
-# 🚀 Ejaj94 Tech — Plataforma Web Oficial de Enmanuel Jimenez
+# 🚀 EJAJ TECH — Plataforma Web Oficial de Enmanuel Jimenez
 
-Plataforma e portfólio oficial de **Ejaj94 Tech (Enmanuel Jimenez)** — Engenheiro de Software e Arquiteto Full-Stack.
+Plataforma e portfólio oficial de **EJAJ TECH (Enmanuel Jimenez)** — Engenheiro de Software e Arquiteto Full-Stack.
 
 ---
 
@@ -18,7 +18,7 @@ Plataforma e portfólio oficial de **Ejaj94 Tech (Enmanuel Jimenez)** — Engenh
   - **Email**: Envio direto para `mailto:ejajtech26@gmail.com`.
 - 🌌 **Efeitos Visuais de Alta Gama**:
   - Fundo de partículas interativas em Canvas HTML5.
-  - Animação de contadores numéricos de estatísticas (Años de experiência, Projetos desenvolvidos).
+  - Animação de contadores numéricos de estatísticas (Anos de experiência, Projetos desenvolvidos).
   - Filtro dinâmico de projetos por categorias.
 
 ---
