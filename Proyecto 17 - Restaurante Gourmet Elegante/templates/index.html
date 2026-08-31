@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurante L'Étoile Gourmet — Chiado, Lisboa | Alta Gastronomia 🍷✨</title>
+    <meta name="description" content="Restaurante gourmet de alta gastronomia no Chiado, Lisboa. Menu de autor, carta de vinhos selecionada e reservas de mesas em tempo real.">
+    
+    <!-- Anti Cache Meta Tags -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=202608312010">
+</head>
+<body>
+
+    <!-- Gold Culinary Dust Canvas Particles Background -->
+    <canvas id="goldDustCanvas"></canvas>
+
+    <!-- Top Announcement Info Bar -->
+    <div class="top-info-bar">
+        <div class="container top-bar-flex">
+            <div class="top-info-left">
+                <span><i class="fa-solid fa-location-dot"></i> Rua Garrett, nº 88, Chiado, Lisboa</span>
+                <span><i class="fa-solid fa-clock"></i> Ter. a Dom.: 12:30 - 15:30 & 19:30 - 23:30</span>
+            </div>
+            <div class="top-info-right">
+                <a href="tel:+351934712850"><i class="fa-solid fa-phone"></i> +351 934 712 850</a>
+                <a href="mailto:reservas@letoilegourmet.pt"><i class="fa-solid fa-envelope"></i> reservas@letoilegourmet.pt</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="app-header">
+        <div class="container header-flex">
+            <a href="#" class="brand-logo">
+                <div class="logo-icon"><i class="fa-solid fa-utensils"></i></div>
+                <div class="logo-text">
+                    <span class="brand-main">L'ÉTOILE</span>
+                    <span class="brand-sub">RESTAURANTE GOURMET</span>
+                </div>
+            </a>
+
+            <!-- Desktop Links -->
+            <nav class="nav-menu">
+                <a href="#about">A Nossa Filosofia</a>
+                <a href="#menu">Menu Gastronómico</a>
+                <a href="#gallery">Galeria</a>
+                <a href="#chef">O Chef Executivo</a>
+                <a href="#booking" class="btn-nav-highlight">Reservar Mesa</a>
+                <a href="#location">Localização</a>
+            </nav>
+
+            <!-- Mobile Hamburger Toggle -->
+            <button id="mobileMenuToggle" class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileDrawer" class="mobile-drawer">
+            <a href="#about" class="mobile-link">A Nossa Filosofia</a>
+            <a href="#menu" class="mobile-link">Menu Gastronómico</a>
+            <a href="#gallery" class="mobile-link">Galeria</a>
+            <a href="#chef" class="mobile-link">O Chef Executivo</a>
+            <a href="#booking" class="mobile-link btn-drawer">Reservar Mesa</a>
+            <a href="#location" class="mobile-link">Localização</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <span class="hero-badge"><i class="fa-solid fa-star"></i> Alta Gastronomia & Cozinha de Autor em Lisboa</span>
+            <h1 class="hero-title">UMA EXPERIÊNCIA GASTRONÓMICA INESQUECÍVEL NO CHIADO</h1>
+            <p class="hero-subtitle">
+                Sabores autênticos da alta cozinha europeia com os melhores produtos locais frescos, harmonizados com uma seleção exclusiva de vinhos rarus.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#booking" class="btn btn-primary"><i class="fa-solid fa-wine-glass"></i> Reservar Mesa de Autor</a>
+                <a href="#menu" class="btn btn-outline-hero"><i class="fa-solid fa-book-open"></i> Explorar Menu Gastronómico</a>
+            </div>
+
+            <!-- Fast Stats Bar -->
+            <div class="hero-stats-grid">
+                <div class="stat-card">
+                    <span class="stat-num">3 ★</span>
+                    <span class="stat-txt">Estrelas Michelin</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num">+450</span>
+                    <span class="stat-txt">Rótulos de Vinho</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num">100%</span>
+                    <span class="stat-txt">Produtos Frescos do Dia</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy / About Section -->
+    <section id="about" class="section-padding">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image-box">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" alt="Prato Gourmet L'Étoile" class="about-img-main">
+                    <div class="about-experience-badge">
+                        <span class="exp-num">15</span>
+                        <span class="exp-txt">Anos de Tradição Gastronómica</span>
+                    </div>
+                </div>
+
+                <div class="about-text-box">
+                    <span class="section-tag"><i class="fa-solid fa-leaf"></i> ALTA COZINHA DE AUTOR</span>
+                    <h2 class="section-title">Harmonia Perfeita Entre Tradição e Inovação</h2>
+                    <p class="about-desc">
+                        No <strong>Restaurante L'Étoile Gourmet</strong>, cada prato é uma obra de arte confecionada com os melhores peixes da costa portuguesa, carnes selecionadas de pasto e vegetais orgânicos de produtores locais do Alentejo e Douro.
+                    </p>
+
+                    <div class="about-features-list">
+                        <div class="about-feature-item">
+                            <div class="af-icon"><i class="fa-solid fa-fish-fins"></i></div>
+                            <div>
+                                <h4>Peixe e Marisco Fresco do Dia</h4>
+                                <p>Comprados diariamente nas lotas de Peniche e Setúbal para garantir frescura absoluta.</p>
+                            </div>
+                        </div>
+
+                        <div class="about-feature-item">
+                            <div class="af-icon"><i class="fa-solid fa-wine-bottle"></i></div>
+                            <div>
+                                <h4>Harmonização Sommelier Personalizada</h4>
+                                <p>Carta de vinhos rara com mais de 450 referências nacionais e internacionais de topo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gourmet Menu Section with Interactive Filters -->
+    <section id="menu" class="section-padding bg-dark-glass">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag"><i class="fa-solid fa-utensils"></i> O NOSSO MENU GOURMET</span>
+                <h2 class="section-title text-gold">Carta Gastronómica de Autor</h2>
+                <p class="section-desc text-light">Pratos elaborados com rigor executivo e apresentação contemporânea.</p>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div class="menu-filter-tabs">
+                <button class="menu-tab-btn active" data-category="all">Todos os Pratos</button>
+                <button class="menu-tab-btn" data-category="starters">Entradas de Autor</button>
+                <button class="menu-tab-btn" data-category="fish">Peixes & Mar</button>
+                <button class="menu-tab-btn" data-category="meat">Carnes Executivas</button>
+                <button class="menu-tab-btn" data-category="desserts">Sobremesas Signature</button>
+                <button class="menu-tab-btn" data-category="wines">Vinhos & Cocktails</button>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="gourmet-menu-grid">
+                <!-- Item 1: Entradas -->
+                <div class="gourmet-card" data-category="starters">
+                    <div class="gourmet-card-img">
+                        <img src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=600&q=80" alt="Tártaro de Atum Roxo">
+                        <span class="gourmet-badge-tag">Chef Signature</span>
+                    </div>
+                    <div class="gourmet-card-body">
+                        <div class="gourmet-header">
+                            <h3>Tártaro de Atum Roxo com Caviar</h3>
+                            <span class="gourmet-price">24,00 €</span>
+                        </div>
+                        <p class="gourmet-desc">Atum fresco dos Açores picado à faca, abacate cremoso, emulsão de citrinos e pérolas de caviar imperial.</p>
+                        <div class="gourmet-footer">
+                            <span class="allergen-info"><i class="fa-solid fa-wheat-awn-circle-exclamation"></i> Sem Glúten</span>
+                            <a href="#booking" onclick="selectDish('Tártaro de Atum Roxo com Caviar')" class="btn-sm btn-gold-outline">Reservar Mesa</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2: Entradas -->
+                <div class="gourmet-card" data-category="starters">
+                    <div class="gourmet-card-img">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Carpaccio de Novilho">
+                    </div>
+                    <div class="gourmet-card-body">
+                        <div class="gourmet-header">
+                            <h3>Carpaccio de Novilho com Trufa Negra</h3>
+                            <span class="gourmet-price">22,00 €</span>
+                        </div>
+                        <p class="gourmet-desc">Fatias finíssimas de lombo maturado, lascas de Parmigiano Reggiano 36 meses e azeite perfumado com trufa branca.</p>
+                        <div class="gourmet-footer">
+                            <span class="allergen-info"><i class="fa-solid fa-cheese"></i> Laticínios</span>
+                            <a href="#booking" onclick="selectDish('Carpaccio de Novilho com Trufa Negra')" class="btn-sm btn-gold-outline">Reservar Mesa</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3: Peixe -->
+                <div class="gourmet-card" data-category="fish">
+                    <div class="gourmet-card-img">
+                        <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80" alt="Robalo Selvagem">
+                        <span class="gourmet-badge-tag">Recomendação Sommelier</span>
+                    </div>
+                    <div class="gourmet-card-body">
+                        <div class="gourmet-header">
+                            <h3>Robalo Selvagem em Crosta de Ervas</h3>
+                            <span class="gourmet-price">36,00 €</span>
+                        </div>
+                        <p class="gourmet-desc">Lombo de robalo da costa grelhado na perfeição, puré de ervilhas doces, espargos verdes e molho de açafrão puríssimo.</p>
+                        <div class="gourmet-footer">
+                            <span class="allergen-info"><i class="fa-solid fa-wine-glass"></i> Harmonização Douro Branco</span>
+                            <a href="#booking" onclick="selectDish('Robalo Selvagem em Crosta de Ervas')" class="btn-sm btn-gold-outline">Reservar Mesa</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4: Peixe -->
+                <div class="gourmet-card" data-category="fish">
+                    <div class="gourmet-card-img">
+                        <img src="https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?auto=format&fit=crop&w=600&q=80" alt="Bacalhau Confitado">
+                    </div>
+                    <div class="gourmet-card-body">
+                        <div class="gourmet-header">
+                            <h3>Bacalhau Confitado em Rolo de Ouro</h3>
+                            <span class="gourmet-price">34,00 €</span>
+                        </div>
+                        <p class="gourmet-desc">Lombo de bacalhau da Islândia confitado em azeite de amêndoa, batata fondante, emulsão de alho negro e broa de milho.</p>
+                        <div class="gourmet-footer">
+                            <span class="allergen-info"><i class="fa-solid fa-award"></i> Prato Tradição</span>
+                            <a href="#booking" onclick="selectDish('Bacalhau Confitado em Rolo de Ouro')" class="btn-sm btn-gold-outline">Reservar Mesa</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5: Carne -->
+                <div class="gourmet-card" data-category="meat">
+                    <div class="gourmet-card-img">
+                        <img src="https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=600&q=80" alt="Tornedó Rossini">
+                        <span class="gourmet-badge-tag">Estrela da Casa</span>
+                    </div>
+                    <div class="gourmet-card-body">
+                        <div class="gourmet-header">
+                            <h3>Tornedó Rossini com Foie Gras</h3>
+                            <span class="gourmet-price">42,00 €</span>
+                        </div>
+                        <p class="gourmet-desc">Lombo de novilho de raça Mirandesa, escalope de foie gras fresco selado, redução de Vinho do Porto Reserva e batata trufada.</p>
+                        <div class="gourmet-footer">
+                            <span class="allergen-info"><i class="fa-solid fa-wine-glass"></i> Harmonização Alentejo Tinto</span>
+                            <a href="#booking" onclick="selectDish('Tornedó Rossini com Foie Gras')" class="btn-sm btn-gold-outline">Reservar Mesa</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 6: Carne -->
+                <div class="gourmet-card" data-category="meat">
+                    <div class="gourmet-card-img">
+                        <img src="https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=600&q=80" alt="Carré de Borrego">
+                    </div>
+                    <div class="gourmet-card-body">
+                        <div class="gourmet-header">
+                            <h3>Carré de Borrego em Crosta de Pistácio</h3>
+                            <span class="gourmet-price">38,00 €</span>
+                        </div>
+                        <p class="gourmet-desc">Costeletas de borrego de leite assadas a baixa temperatura, crosta estaladiça de pistácio, gnocchi caseiros e molho de alecrim.</p>
+                        <div class="gourmet-footer">
+                            <span class="allergen-info"><i class="fa-solid fa-seedling"></i> Frutos Secos</span>
+                            <a href="#booking" onclick="selectDish('Carré de Borrego em Crosta de Pistácio')" class="btn-sm btn-gold-outline">Reservar Mesa</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 7: Sobremesa -->
+                <div class="gourmet-card" data-category="desserts">
+                    <div class="gourmet-card-img">
+                        <img src="https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=600&q=80" alt="Esfera de Chocolate Valrhona">
+                    </div>
+                    <div class="gourmet-card-body">
+                        <div class="gourmet-header">
+                            <h3>Esfera de Chocolate Valrhona Flambada</h3>
+                            <span class="gourmet-price">16,00 €</span>
+                        </div>
+                        <p class="gourmet-desc">Esfera de chocolate negro 70%, recheada com gelado de avelã torrada e derretida à mesa com molho quente de caramelo salgado.</p>
+                        <div class="gourmet-footer">
+                            <span class="allergen-info"><i class="fa-solid fa-fire"></i> Show à Mesa</span>
+                            <a href="#booking" onclick="selectDish('Esfera de Chocolate Valrhona Flambada')" class="btn-sm btn-gold-outline">Reservar Mesa</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 8: Vinhos & Cocktails -->
+                <div class="gourmet-card" data-category="wines">
+                    <div class="gourmet-card-img">
+                        <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=600&q=80" alt="Cocktail L'Étoile Gold">
+                    </div>
+                    <div class="gourmet-card-body">
+                        <div class="gourmet-header">
+                            <h3>Cocktail L'Étoile Gold Signature</h3>
+                            <span class="gourmet-price">18,00 €</span>
+                        </div>
+                        <p class="gourmet-desc">Gin premium infusionado com flor de sabugueiro, licor de champanhe, sumo de yuzu fresco e folhas de ouro comestível 24k.</p>
+                        <div class="gourmet-footer">
+                            <span class="allergen-info"><i class="fa-solid fa-martini-glass-citrus"></i> Cocktail de Autor</span>
+                            <a href="#booking" onclick="selectDish('Cocktail L\'Étoile Gold Signature')" class="btn-sm btn-gold-outline">Reservar Mesa</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section-padding">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag"><i class="fa-solid fa-camera"></i> GALERIA DE ATMOSFERA</span>
+                <h2 class="section-title">Ambiente & Apresentação Gastronómica</h2>
+                <p class="section-desc">Um olhar exclusivo sobre a nossa sala de refeições e a arte da nossa cozinha.</p>
+            </div>
+
+            <div class="gourmet-gallery-grid">
+                <div class="gg-item item-large">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=80" alt="Sala de Jantar L'Étoile">
+                    <div class="gg-caption">
+                        <h4>Salão Principal de Luxo</h4>
+                        <p>Iluminação ambiente quente e acústica desenhada para momentos inesquecíveis.</p>
+                    </div>
+                </div>
+                <div class="gg-item">
+                    <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=600&q=80" alt="Terraço Chiado">
+                    <div class="gg-caption">
+                        <h4>Terraço Gourmet Chiado</h4>
+                        <p>Vista deslumbrante sobre os telhados históricos de Lisboa.</p>
+                    </div>
+                </div>
+                <div class="gg-item">
+                    <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=600&q=80" alt="Garrafeira Reservas">
+                    <div class="gg-caption">
+                        <h4>Garrafeira de Seleção</h4>
+                        <p>Vinhos rarus armazenados em cave climatizada de alta precisão.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chef Section -->
+    <section id="chef" class="section-padding bg-dark-glass">
+        <div class="container">
+            <div class="chef-wrapper">
+                <div class="chef-img-box">
+                    <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=800&q=80" alt="Chef Executivo Alexandre D'Almeida">
+                    <div class="chef-michelin-badge">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                </div>
+
+                <div class="chef-text-box">
+                    <span class="section-tag"><i class="fa-solid fa-user-chef"></i> O NOSSO MAESTRO</span>
+                    <h2 class="section-title text-gold">Chef Executivo Alexandre D'Almeida</h2>
+                    <span class="chef-subtitle">3 Estrelas Michelin | 18 Anos de Paixão Gastronómica</span>
+                    
+                    <p class="chef-bio">
+                        "A cozinha de autor não é apenas sobre alimentar o corpo; é um diálogo entre a memória, a natureza e os sentidos. No L'Étoile Gourmet, cada ingrediente é tratado com o máximo respeito para revelar a sua essência mais pura."
+                    </p>
+
+                    <div class="chef-signature-box">
+                        <span class="chef-sig-txt">Alexandre D'Almeida</span>
+                        <a href="#booking" class="btn btn-primary"><i class="fa-solid fa-utensils"></i> Provar o Menu de Degustação</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Online Table Booking Engine -->
+    <section id="booking" class="section-padding">
+        <div class="container">
+            <div class="booking-wrapper card-gourmet-glass">
+                <div class="booking-header text-center">
+                    <span class="section-tag"><i class="fa-solid fa-calendar-check"></i> RESERVAS ONLINE</span>
+                    <h2 class="section-title text-gold">Garanta a Sua Mesa de Autor</h2>
+                    <p class="section-desc">Selecione o número de convidados, a área de refeição e o horário pretendido.</p>
+                </div>
+
+                <form id="restaurantBookingForm" class="booking-form" onsubmit="return false;">
+                    <div class="form-grid-2col">
+                        <!-- 1. Número de Pessoas -->
+                        <div class="form-group">
+                            <label for="selGuests"><i class="fa-solid fa-users"></i> Número de Pessoas *</label>
+                            <select id="selGuests" class="form-control" required>
+                                <option value="" disabled selected>Selecione a quantidade de convidados...</option>
+                                <option value="2 Pessoas">2 Pessoas (Mesa Romântica)</option>
+                                <option value="3 Pessoas">3 Pessoas</option>
+                                <option value="4 Pessoas">4 Pessoas (Mesa Familiar / Executiva)</option>
+                                <option value="6 Pessoas">6 Pessoas</option>
+                                <option value="8 Pessoas">8 Pessoas (Grupo Privado)</option>
+                                <option value="10 Pessoas">10 Pessoas (Mesa de Celebração)</option>
+                            </select>
+                        </div>
+
+                        <!-- 2. Área de Refeição -->
+                        <div class="form-group">
+                            <label for="selSeating"><i class="fa-solid fa-chair"></i> Área Pretendida</label>
+                            <select id="selSeating" class="form-control">
+                                <option value="Salão Principal de Luxo">Salão Principal de Luxo</option>
+                                <option value="Terraço Gourmet Chiado">Terraço Gourmet Chiado (Ao Ar Livre)</option>
+                                <option value="Mesa Privada do Chef">Mesa Privada do Chef (Experiência Exclusiva)</option>
+                            </select>
+                        </div>
+
+                        <!-- 3. Data -->
+                        <div class="form-group">
+                            <label for="inputResDate"><i class="fa-solid fa-calendar"></i> Data da Reserva *</label>
+                            <input type="date" id="inputResDate" class="form-control" required>
+                        </div>
+
+                        <!-- 4. Turno / Hora -->
+                        <div class="form-group">
+                            <label for="selResTime"><i class="fa-solid fa-clock"></i> Horário Disponível *</label>
+                            <select id="selResTime" class="form-control" required>
+                                <option value="" disabled selected>Selecione a hora...</option>
+                                <optgroup label="Almoço Gourmet">
+                                    <option value="12:30">12:30</option>
+                                    <option value="13:30">13:30</option>
+                                    <option value="14:15">14:15</option>
+                                </optgroup>
+                                <optgroup label="Jantar de Autor">
+                                    <option value="19:30">19:30</option>
+                                    <option value="20:30">20:30</option>
+                                    <option value="21:30">21:30</option>
+                                    <option value="22:15">22:15</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <!-- 5. Nome do Cliente -->
+                        <div class="form-group">
+                            <label for="inputClientName"><i class="fa-solid fa-user"></i> Nome Completo *</label>
+                            <input type="text" id="inputClientName" class="form-control" placeholder="Ex: Dr. Bernardo Coutinho" required>
+                        </div>
+
+                        <!-- 6. Telemóvel do Cliente -->
+                        <div class="form-group">
+                            <label for="inputClientPhone"><i class="fa-solid fa-mobile-screen"></i> Telemóvel / Telefone *</label>
+                            <input type="text" id="inputClientPhone" class="form-control" placeholder="Ex: +351 912 345 678" required>
+                        </div>
+                    </div>
+
+                    <!-- Email & Restrições Alimentares -->
+                    <div class="form-group margin-top-10">
+                        <label for="inputClientEmail"><i class="fa-solid fa-envelope"></i> Correio Eletrónico (Para confirmação por email)</label>
+                        <input type="email" id="inputClientEmail" class="form-control" placeholder="cliente@exemplo.pt">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputNotes"><i class="fa-solid fa-comment-medical"></i> Restrições Alimentares ou Pedidos Especiais (Opcional)</label>
+                        <textarea id="inputNotes" class="form-control" rows="2" placeholder="Ex: Alergia a marisco, preferência por mesa junto à janela, celebração de aniversário..."></textarea>
+                    </div>
+
+                    <button type="submit" id="btnSubmitReservation" class="btn btn-primary btn-block">
+                        <i class="fa-solid fa-circle-check"></i> Confirmar Reserva de Mesa Instantânea
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location & Google Maps Section -->
+    <section id="location" class="section-padding bg-dark-glass">
+        <div class="container">
+            <div class="location-grid">
+                <div class="location-info">
+                    <span class="section-tag"><i class="fa-solid fa-location-dot"></i> O NOSSO ESPAÇO</span>
+                    <h2 class="section-title text-gold">Localização Privilegiada no Chiado</h2>
+                    <p class="location-text text-light">
+                        Situado no prestigiado bairro do Chiado, o <strong>Restaurante L'Étoile Gourmet</strong> combina a arquitetura pombalina clássica com interiores vanguardistas de elegância incomparável.
+                    </p>
+
+                    <div class="contact-details-list">
+                        <div class="contact-detail-item">
+                            <div class="contact-icon"><i class="fa-solid fa-map-pin"></i></div>
+                            <div>
+                                <h4>Morada</h4>
+                                <p class="text-light">Rua Garrett, nº 88, Chiado, 1200-204 Lisboa</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail-item">
+                            <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+                            <div>
+                                <h4>Telemóvel / Reservas</h4>
+                                <p><a href="tel:+351934712850" class="text-gold">+351 934 712 850</a></p>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail-item">
+                            <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+                            <div>
+                                <h4>Correio Eletrónico</h4>
+                                <p><a href="mailto:reservas@letoilegourmet.pt" class="text-gold">reservas@letoilegourmet.pt</a></p>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail-item">
+                            <div class="contact-icon"><i class="fa-solid fa-clock"></i></div>
+                            <div>
+                                <h4>Horário de Funcionamento</h4>
+                                <p class="text-light">Terça a Domingo: 12:30 - 15:30 & 19:30 - 23:30 | Segunda: Encerrado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fully Clickable Restaurant Location Card (Image + Badge redirect to Google Maps) -->
+                <a href="https://maps.google.com/?q=Rua+Garrett+88+Chiado+Lisboa" target="_blank" class="map-card-link-wrapper" title="Clique para abrir a localização exata no Google Maps">
+                    <div class="map-card-box">
+                        <div class="map-image-container">
+                            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=80" alt="Restaurante L'Étoile Gourmet Chiado Lisboa" class="map-restaurant-img">
+                            <div class="map-overlay-shade"></div>
+                            
+                            <div class="map-pin-badge">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <div>
+                                    <strong>Restaurante L'Étoile Gourmet</strong>
+                                    <p>Rua Garrett nº 88, Chiado, Lisboa</p>
+                                    <span class="click-to-maps-tag"><i class="fa-solid fa-arrow-up-right-from-square"></i> Clique para abrir no Google Maps</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="map-card-footer">
+                            <span class="btn btn-outline-hero w-100">
+                                <i class="fa-solid fa-directions"></i> Ver Localização Exacta no Google Maps
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container footer-flex">
+            <div class="footer-brand">
+                <h3><i class="fa-solid fa-utensils"></i> L'ÉTOILE <span>GOURMET</span></h3>
+                <p>© 2026 Restaurante L'Étoile Gourmet. Todos os direitos reservados. Chiado, Lisboa, Portugal.</p>
+            </div>
+            <div class="footer-socials">
+                <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://wa.me/351934712850" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Direct Button (+351 934 712 850) -->
+    <a href="https://wa.me/351934712850?text=Ol%C3%A1%20L'%C3%89toile%20Gourmet,%20gostaria%20de%20consultar%20disponibilidade%20de%20mesa!" target="_blank" class="floating-whatsapp-btn" title="Contactar no WhatsApp (+351 934 712 850)">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Modal Receipt Confirmation -->
+    <div id="receiptModal" class="modal-backdrop">
+        <div class="modal-card">
+            <button id="btnCloseModal" class="modal-close-btn">&times;</button>
+            <div class="receipt-header">
+                <div class="receipt-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <h2>Reserva de Mesa Confirmada!</h2>
+                <p>O seu lugar no Restaurante L'Étoile Gourmet foi reservado com sucesso.</p>
+            </div>
+
+            <div class="receipt-body">
+                <div class="receipt-row">
+                    <span>Código da Reserva:</span>
+                    <strong id="rcId">LETOILE-201</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Cliente:</span>
+                    <strong id="rcClient">Dr. Bernardo Coutinho</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Convidados:</span>
+                    <strong id="rcGuests">2 Pessoas</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Área:</span>
+                    <strong id="rcSeating">Salão Principal de Luxo</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Data & Hora:</span>
+                    <strong id="rcDateTime">2026-09-03 às 20:30</strong>
+                </div>
+            </div>
+
+            <div class="receipt-actions">
+                <a id="btnModalWa" href="#" target="_blank" class="btn btn-whatsapp w-100">
+                    <i class="fa-brands fa-whatsapp"></i> Enviar Confirmação para o WhatsApp
+                </a>
+                <button id="btnFinishModal" class="btn btn-outline-hero w-100">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=202608312010"></script>
+</body>
+</html>
