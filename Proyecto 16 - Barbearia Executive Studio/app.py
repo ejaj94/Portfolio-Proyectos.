@@ -19,7 +19,7 @@ def add_header(response):
 
 @app.route("/")
 def index():
-    return render_template("index.html", t=datetime.now().timestamp())
+    return render_template("index.html")
 
 
 @app.route("/api/booking", methods=["POST"])
@@ -86,5 +86,5 @@ def list_bookings():
 
 
 if __name__ == "__main__":
-    print("Iniciando Barbearia Império & Tradição Web App em http://localhost:5017")
-    app.run(host="0.0.0.0", port=5017, debug=False)
+    print("Iniciando Barbearia Império & Tradição Web App em http://localhost:5018")
+    app.run(host="0.0.0.0", port=5018, debug=False)
