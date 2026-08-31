@@ -6,7 +6,6 @@ from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
-# In-memory bookings storage
 BOOKINGS_DB = []
 
 
@@ -62,7 +61,6 @@ def create_booking():
         BOOKINGS_DB.append(new_booking)
         print(f"[+] Nova Reserva Confirmada: {booking_id} | {client_name} | {service} | {booking_date} às {booking_time}")
 
-        # Formatted WhatsApp message string for instant client redirect
         wa_text = f"Olá Barbearia Império! Gostaria de confirmar a minha marcação:\n\n" \
                   f"📌 *Código*: {booking_id}\n" \
                   f"👤 *Nome*: {client_name}\n" \
@@ -76,7 +74,7 @@ def create_booking():
             "success": True,
             "message": "Marcação realizada com sucesso!",
             "booking": new_booking,
-            "whatsapp_url": f"https://wa.me/351925814730?text={request.headers.get('Origin', '') and wa_text}"
+            "whatsapp_url": f"https://wa.me/351123256789?text={request.headers.get('Origin', '') and wa_text}"
         })
 
     except Exception as e:

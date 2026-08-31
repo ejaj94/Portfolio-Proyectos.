@@ -655,7 +655,7 @@ h1, h2, h3, h4, .brand-main, .section-title {
     box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.12);
 }
 
-/* ─── Location Section ─── */
+/* ─── Location Section & Clickable Google Maps Card ─── */
 .location-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -711,53 +711,100 @@ h1, h2, h3, h4, .brand-main, .section-title {
     font-weight: 700;
 }
 
+/* Clickable Map Card Wrapper */
+.map-card-link-wrapper {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: var(--transition);
+}
+
+.map-card-link-wrapper:hover .map-card-box {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-amber);
+}
+
 .map-card-box {
     background: #ffffff;
     border: 1.5px solid var(--bg-card-border);
     border-radius: var(--radius-md);
     overflow: hidden;
     box-shadow: var(--shadow-md);
+    transition: var(--transition);
 }
 
-.map-placeholder {
-    height: 260px;
-    background: linear-gradient(135deg, #1c1917, #292524);
+.map-image-container {
+    height: 280px;
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
+    overflow: hidden;
 }
 
-.map-bg-icon {
-    font-size: 120px;
-    color: rgba(255, 255, 255, 0.05);
+.map-barber-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.map-card-link-wrapper:hover .map-barber-img {
+    transform: scale(1.08);
+}
+
+.map-overlay-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(28, 25, 23, 0.15) 0%, rgba(28, 25, 23, 0.85) 100%);
 }
 
 .map-pin-badge {
     position: absolute;
-    background: rgba(255, 255, 255, 0.95);
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
     color: var(--text-main);
-    padding: 12px 18px;
+    padding: 14px 18px;
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
-    gap: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    gap: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(217, 119, 6, 0.3);
 }
 
-.map-pin-badge i {
-    font-size: 20px;
+.map-pin-badge i.fa-location-dot {
+    font-size: 24px;
     color: var(--primary-amber-dark);
 }
 
+.map-pin-badge strong {
+    font-size: 14px;
+    display: block;
+    color: var(--text-main);
+}
+
 .map-pin-badge p {
-    font-size: 11px;
+    font-size: 11.5px;
     color: var(--text-muted);
+}
+
+.click-to-maps-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--primary-amber-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .map-card-footer {
     padding: 16px;
+    background: #ffffff;
 }
 
 /* ─── Footer ─── */

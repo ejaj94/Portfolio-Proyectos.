@@ -15,8 +15,9 @@ Plataforma Web Corporativa e aplicação móvel responsiva para a **Barbearia Im
   - Tratamento Capilar VIP & Spa Facial (25,00 €)
 - ✂️ **A Nossa Equipa de Barbeiros**: Perfis do Mestre Miguel Fonseca, Gonçalo Neves e Diogo Silva.
 - 📅 **Motor de Reservas em Tempo Real**: Seleção interativa de serviços, barbeiros, data e hora com recibo digital imediato.
-- 📱 **Integração Directa com WhatsApp**: Envio automático de marcações para `+351 925 814 730`.
+- 📱 **Integração Directa com WhatsApp**: Envio automático de marcações para `+351 123 256 789`.
 - 📍 **Localização & Contactos**: Avenida da Liberdade, nº 142, Lisboa (`contacto@barbeariaimperio.pt`).
+- 🗺️ **Mapa Interativo Google Maps**: Imagem e caixa de localização totalmente clicáveis para abrir o Google Maps num único clique.
 
 ---
 

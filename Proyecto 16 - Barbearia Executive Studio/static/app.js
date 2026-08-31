@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
     const mobileDrawer = document.getElementById('mobileDrawer');
     const bookingForm = document.getElementById('bookingForm');
@@ -123,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     rcBarber.textContent = b.barber;
                     rcDateTime.textContent = `${b.booking_date} às ${b.booking_time}`;
 
-                    // Set WhatsApp Direct Confirmation Link
                     const waText = `Olá Barbearia Império! Gostaria de confirmar a minha marcação:\n\n` +
                                   `📌 Código: ${b.id}\n` +
                                   `👤 Nome: ${b.client_name}\n` +
@@ -133,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                   `⏰ Hora: ${b.booking_time}\n` +
                                   `📞 Telemóvel: ${b.client_phone}`;
 
-                    btnModalWa.href = `https://wa.me/351925814730?text=${encodeURIComponent(waText)}`;
+                    btnModalWa.href = `https://wa.me/351123256789?text=${encodeURIComponent(waText)}`;
 
                     receiptModal.classList.add('open');
                     showToast('Marcação realizada com sucesso!', 'success');
