@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BURGER & CRUNCH — Fast Food & Street Gourmet Lisboa 🍔🍕🌭</title>
+    <meta name="description" content="O melhor fast food gourmet em Lisboa! Hambúrgueres Smash, Cachorros XL, Pizzas, Batatas Loaded, Snacks Crocantes e Milkshakes Cremosos. Pedidos online rápidos.">
+    
+    <!-- Anti Cache Meta Tags -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=202608312115">
+</head>
+<body>
+
+    <!-- Top Announcement Info Bar -->
+    <div class="top-info-bar">
+        <div class="container top-bar-flex">
+            <div class="top-info-left">
+                <span><i class="fa-solid fa-motorcycle"></i> Entregas Rápidas em 30 min</span>
+                <span><i class="fa-solid fa-location-dot"></i> Av. Almirante Reis, nº 104, Lisboa</span>
+            </div>
+            <div class="top-info-right">
+                <span><i class="fa-solid fa-clock"></i> Aberto Todos os Dias: 11:30 - 02:00</span>
+                <a href="tel:+351925814360"><i class="fa-solid fa-phone"></i> +351 925 814 360</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="app-header">
+        <div class="container header-flex">
+            <a href="#" class="brand-logo">
+                <div class="logo-icon"><i class="fa-solid fa-burger"></i></div>
+                <div class="logo-text">
+                    <span class="brand-main">BURGER <span class="text-orange">&</span> CRUNCH</span>
+                    <span class="brand-sub">STREET FAST FOOD GOURMET</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="nav-menu">
+                <a href="#menu">O Nosso Menu</a>
+                <a href="#combos">Combos Fast Food</a>
+                <a href="#location">Localização</a>
+                <a href="#contact">Contactos</a>
+            </nav>
+
+            <!-- Header Right Actions & Cart Trigger -->
+            <div class="header-actions">
+                <button id="btnOpenCart" class="btn-cart-header" title="Abrir Carrinho de Pedidos">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-label">O Meu Pedido</span>
+                    <span id="cartCountBadge" class="cart-badge">0</span>
+                </button>
+
+                <button id="mobileMenuToggle" class="mobile-menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileDrawer" class="mobile-drawer">
+            <a href="#menu" class="mobile-link">O Nosso Menu</a>
+            <a href="#combos" class="mobile-link">Combos Fast Food</a>
+            <a href="#location" class="mobile-link">Localização</a>
+            <a href="#contact" class="mobile-link">Contactos</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <span class="hero-badge"><i class="fa-solid fa-fire"></i> O FAST FOOD MAIS CROCANTE DE LISBOA</span>
+            <h1 class="hero-title">HAMBÚRGUERES SMASH, PIZZAS <span class="text-yellow">& SNACKS CROCANTES!</span></h1>
+            <p class="hero-subtitle">
+                Ingredientes 100% frescos, queijo cheddar derretido, batatas carregadas de bacon e milkshakes super cremosos entregues em sua casa!
+            </p>
+
+            <div class="hero-actions">
+                <a href="#menu" class="btn btn-primary"><i class="fa-solid fa-utensils"></i> Ver Menu & Pedir Já</a>
+                <button onclick="openCartDrawer()" class="btn btn-secondary"><i class="fa-solid fa-cart-shopping"></i> Ver Carrinho (<span id="heroCartTotal">0.00€</span>)</button>
+            </div>
+
+            <!-- Fast Features Bar -->
+            <div class="hero-features-grid">
+                <div class="feature-card">
+                    <i class="fa-solid fa-motorcycle icon-feature"></i>
+                    <div>
+                        <h4>Entrega Express 30m</h4>
+                        <p>Receba tudo quente e crocante.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-drumstick-bite icon-feature"></i>
+                    <div>
+                        <h4>Carne 100% Novilho</h4>
+                        <p>Smash burgers feitos na hora.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-cheese icon-feature"></i>
+                    <div>
+                        <h4>Queijo Cheddar Extra</h4>
+                        <p>Molhos artesanais da casa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Combos Section -->
+    <section id="combos" class="section-padding bg-dark-card">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag"><i class="fa-solid fa-bolt"></i> COMBOS EM PROMOÇÃO</span>
+                <h2 class="section-title text-orange">Os Combos Mais Vendidos</h2>
+                <p class="section-desc">Poupe com os nossos menus completos acompanhados de batatas crocantes e bebida gelada.</p>
+            </div>
+
+            <div class="combos-grid">
+                <!-- Combo 1 -->
+                <div class="combo-card">
+                    <div class="combo-badge">Combo 1</div>
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" alt="Combo Smash Burger Duplo">
+                    <div class="combo-body">
+                        <h3>Combo Smash Duplo XL</h3>
+                        <p>Smash Burger Duplo Cheddar + Batatas Loaded Bacon + Milkshake Cremoso Oreo 400ml.</p>
+                        <div class="combo-footer">
+                            <span class="combo-price">11,90 €</span>
+                            <button onclick="addToCart('Combo Smash Duplo XL', 11.90, 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-plus"></i> Adicionar Combo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Combo 2 -->
+                <div class="combo-card">
+                    <div class="combo-badge">Combo 2</div>
+                    <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80" alt="Combo Pizza Family">
+                    <div class="combo-body">
+                        <h3>Combo Pizza Pepperoni & Wings</h3>
+                        <p>Pizza Pepperoni XL + 8 Asinhas de Frango BBQ Crocantes + Coca-Cola 1.5L.</p>
+                        <div class="combo-footer">
+                            <span class="combo-price">16,50 €</span>
+                            <button onclick="addToCart('Combo Pizza Pepperoni & Wings', 16.50, 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-plus"></i> Adicionar Combo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Combo 3 -->
+                <div class="combo-card">
+                    <div class="combo-badge">Combo 3</div>
+                    <img src="https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=600&q=80" alt="Combo Cachorro Porto">
+                    <div class="combo-body">
+                        <h3>Combo Cachorro Monster</h3>
+                        <p>Cachorro Quente Monster Cheese Bacon + Batatas Fritas XL + Refrigerante 33cl.</p>
+                        <div class="combo-footer">
+                            <span class="combo-price">8,90 €</span>
+                            <button onclick="addToCart('Combo Cachorro Monster', 8.90, 'https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-plus"></i> Adicionar Combo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Fast Food Menu with Category Filters -->
+    <section id="menu" class="section-padding">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag"><i class="fa-solid fa-utensils"></i> O NOSSO MENU COMPLETO</span>
+                <h2 class="section-title">Escolha os Seus Favoritos</h2>
+                <p class="section-desc">Hambúrgueres, cachorros, pizzas, snacks fritos estaladiços e sobremesas deliciosas.</p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="menu-filter-tabs">
+                <button class="menu-tab-btn active" data-category="all">Todos os Produtos</button>
+                <button class="menu-tab-btn" data-category="burgers">🍔 Hambúrgueres</button>
+                <button class="menu-tab-btn" data-category="hotdogs">🌭 Cachorros XL</button>
+                <button class="menu-tab-btn" data-category="pizzas">🍕 Pizzas</button>
+                <button class="menu-tab-btn" data-category="fries">🍟 Fritos & Snacks</button>
+                <button class="menu-tab-btn" data-category="shakes">🥤 Milkshakes & Bebidas</button>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="fastfood-menu-grid">
+                <!-- Item 1: Burger -->
+                <div class="fastfood-card" data-category="burgers">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" alt="Smash Burger Duplo Bacon">
+                        <span class="ff-badge-top">Top Vendas</span>
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Smash Burger Duplo Bacon Cheddar</h3>
+                            <span class="ff-price">8,90 €</span>
+                        </div>
+                        <p class="ff-desc">2 Hambúrgueres smash de novilho 180g, duplo cheddar derretido, bacon crocante, cebola caramelizada e molho secreto Burger & Crunch.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-fire"></i> 100% Novilho</span>
+                            <button onclick="addToCart('Smash Burger Duplo Bacon Cheddar', 8.90, 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 8.90€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2: Burger -->
+                <div class="fastfood-card" data-category="burgers">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80" alt="Monster Burger 3 Steaks">
+                        <span class="ff-badge-top">Tamanho XL</span>
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Monster Burger 3 Steaks</h3>
+                            <span class="ff-price">11,50 €</span>
+                        </div>
+                        <p class="ff-desc">3 Hambúrgueres de novilho, triplo cheddar, ovo estrelado, bacon estaladiço, alface fresca, tomate e molho barbecue fumado.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-crown"></i> Especialidade</span>
+                            <button onclick="addToCart('Monster Burger 3 Steaks', 11.50, 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 11.50€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3: Burger -->
+                <div class="fastfood-card" data-category="burgers">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80" alt="Chicken Crunch Crispy Burger">
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Chicken Crunch Crispy Burger</h3>
+                            <span class="ff-price">7,90 €</span>
+                        </div>
+                        <p class="ff-desc">Peito de frango panado ultra crocante, queijo emmenthal, maionese de alho e ervas, alface americana e pickles.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-drumstick-bite"></i> Frango Crocante</span>
+                            <button onclick="addToCart('Chicken Crunch Crispy Burger', 7.90, 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 7.90€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4: Hot Dog -->
+                <div class="fastfood-card" data-category="hotdogs">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=600&q=80" alt="Cachorro Quente Especial Porto">
+                        <span class="ff-badge-top">À Moda do Porto</span>
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Cachorro Especial à Moda do Porto</h3>
+                            <span class="ff-price">5,90 €</span>
+                        </div>
+                        <p class="ff-desc">Pão prensado tostado, salsicha bockwurst, fiambre, queijo gratinado, batata palha estaladiça e molho especial picante de francesinha.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-pepper-hot"></i> Molho Picante</span>
+                            <button onclick="addToCart('Cachorro Especial à Moda do Porto', 5.90, 'https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 5.90€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5: Hot Dog -->
+                <div class="fastfood-card" data-category="hotdogs">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=600&q=80" alt="Cachorro Monster Cheese Bacon">
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Cachorro Monster Cheese Bacon</h3>
+                            <span class="ff-price">6,50 €</span>
+                        </div>
+                        <p class="ff-desc">Salsicha alemã de 22cm, banhada em cheddar líquido quente, pedaços de bacon estaladiço e cebola frita crocante.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-cheese"></i> Cheddar Quente</span>
+                            <button onclick="addToCart('Cachorro Monster Cheese Bacon', 6.50, 'https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 6.50€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 6: Pizza -->
+                <div class="fastfood-card" data-category="pizzas">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80" alt="Pizza Pepperoni Supreme XL">
+                        <span class="ff-badge-top">Fornalha de Pedra</span>
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Pizza Pepperoni Supreme XL (35cm)</h3>
+                            <span class="ff-price">12,90 €</span>
+                        </div>
+                        <p class="ff-desc">Massa alta estilo artesanal, molho de tomate italiano, queijo mozzarella puríssimo derretido e fatias generosas de pepperoni fumado.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-pizza-slice"></i> XL 35cm</span>
+                            <button onclick="addToCart('Pizza Pepperoni Supreme XL', 12.90, 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 12.90€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 7: Pizza -->
+                <div class="fastfood-card" data-category="pizzas">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80" alt="Pizza 4 Queijos Borda Recheada">
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Pizza 4 Queijos Borda Recheada</h3>
+                            <span class="ff-price">11,90 €</span>
+                        </div>
+                        <p class="ff-desc">Mozzarella, Gorgonzola cremoso, Parmigiano Reggiano e Edam com borda alta recheada de queijo catupiry cremoso.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-cheese"></i> Borda Recheada</span>
+                            <button onclick="addToCart('Pizza 4 Queijos Borda Recheada', 11.90, 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 11.90€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 8: Fritos & Snacks -->
+                <div class="fastfood-card" data-category="fries">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=600&q=80" alt="Batatas Loaded Bacon Cheddar">
+                        <span class="ff-badge-top">Super Acompanhamento</span>
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Batatas Loaded Bacon & Cheddar</h3>
+                            <span class="ff-price">4,50 €</span>
+                        </div>
+                        <p class="ff-desc">Dose XL de batatas fritas rústicas crocantes, cobertas com molho cheddar fundido cremoso e bacon estaladiço picado.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-stroopwafel"></i> Crocante</span>
+                            <button onclick="addToCart('Batatas Loaded Bacon & Cheddar', 4.50, 'https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 4.50€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 9: Fritos & Snacks -->
+                <div class="fastfood-card" data-category="fries">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=80" alt="Nuggets de Frango Crocante">
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Nuggets de Frango Crocante (10 Unidades)</h3>
+                            <span class="ff-price">5,20 €</span>
+                        </div>
+                        <p class="ff-desc">10 Nuggets de peito de frango dourados e crocantes acompanhados por 2 molhos à escolha (Barbecue, Mostarda e Mel, ou Maionese de Alho).</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-box-open"></i> 10 Unidades</span>
+                            <button onclick="addToCart('Nuggets de Frango Crocante (10 Unidades)', 5.20, 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 5.20€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 10: Fritos & Snacks -->
+                <div class="fastfood-card" data-category="fries">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80" alt="Hot Wings BBQ Crocantes">
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Asinhas Hot Wings BBQ (8 Unidades)</h3>
+                            <span class="ff-price">6,90 €</span>
+                        </div>
+                        <p class="ff-desc">Asas de frango picantes panadas e glaceadas em molho barbecue fumado caramelizado.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-fire-flame-curved"></i> Hot BBQ</span>
+                            <button onclick="addToCart('Asinhas Hot Wings BBQ (8 Unidades)', 6.90, 'https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 6.90€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 11: Milkshake -->
+                <div class="fastfood-card" data-category="shakes">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80" alt="Milkshake Oreo Nutella">
+                        <span class="ff-badge-top">Super Sobremesa</span>
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Milkshake Cremoso de Oreo & Nutella</h3>
+                            <span class="ff-price">4,50 €</span>
+                        </div>
+                        <p class="ff-desc">Gelado artesanal de baunilha batido com creme de Nutella puríssimo, bolachas Oreo trituradas e montanha de chantilly.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-ice-cream"></i> Oreo & Nutella</span>
+                            <button onclick="addToCart('Milkshake Cremoso de Oreo & Nutella', 4.50, 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 4.50€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 12: Milkshake -->
+                <div class="fastfood-card" data-category="shakes">
+                    <div class="fastfood-card-img">
+                        <img src="https://images.unsplash.com/photo-1553787499-6f9133860278?auto=format&fit=crop&w=600&q=80" alt="Milkshake Morango Chantilly">
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Milkshake de Morango & Chantilly</h3>
+                            <span class="ff-price">4,20 €</span>
+                        </div>
+                        <p class="ff-desc">Batido cremoso de morangos frescos com leite meio-gordo, xarope doce de morango e cobertura de chantilly.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-stroopwafel"></i> Fruta Fresca</span>
+                            <button onclick="addToCart('Milkshake de Morango & Chantilly', 4.20, 'https://images.unsplash.com/photo-1553787499-6f9133860278?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 4.20€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location & Delivery Section -->
+    <section id="location" class="section-padding bg-dark-card">
+        <div class="container">
+            <div class="location-grid">
+                <div class="location-info">
+                    <span class="section-tag"><i class="fa-solid fa-store"></i> A NOSSA LOJA EM LISBOA</span>
+                    <h2 class="section-title text-yellow">Venha Experimentar ou Pede Entrega</h2>
+                    <p class="location-text">
+                        Estamos localizados na movimentada <strong>Avenida Almirante Reis, nº 104 em Lisboa</strong>. Preparados para servir hambúrgueres e snacks estaladiços até às 02:00 da manhã!
+                    </p>
+
+                    <div class="contact-details-list">
+                        <div class="contact-detail-item">
+                            <div class="contact-icon"><i class="fa-solid fa-map-pin"></i></div>
+                            <div>
+                                <h4>Morada</h4>
+                                <p>Avenida Almirante Reis, nº 104, 1150-022 Lisboa</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail-item">
+                            <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+                            <div>
+                                <h4>Telemóvel / Pedidos WhatsApp</h4>
+                                <p><a href="tel:+351925814360" class="text-yellow">+351 925 814 360</a></p>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail-item">
+                            <div class="contact-icon"><i class="fa-solid fa-clock"></i></div>
+                            <div>
+                                <h4>Horário de Funcionamento</h4>
+                                <p>Segunda a Domingo: 11:30 - 02:00 (Ininterrupto)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clickable Google Maps Location Card -->
+                <a href="https://maps.google.com/?q=Avenida+Almirante+Reis+104+Lisboa" target="_blank" class="map-card-link-wrapper" title="Clique para abrir no Google Maps">
+                    <div class="map-card-box">
+                        <div class="map-image-container">
+                            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1000&q=80" alt="BURGER & CRUNCH Lisboa Almirante Reis" class="map-restaurant-img">
+                            <div class="map-overlay-shade"></div>
+                            
+                            <div class="map-pin-badge">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <div>
+                                    <strong>BURGER & CRUNCH Lisboa</strong>
+                                    <p>Av. Almirante Reis nº 104, Lisboa</p>
+                                    <span class="click-to-maps-tag"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir no Google Maps</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="map-card-footer">
+                            <span class="btn btn-secondary w-100">
+                                <i class="fa-solid fa-directions"></i> Ver Rota no Google Maps
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="app-footer">
+        <div class="container footer-flex">
+            <div class="footer-brand">
+                <h3><i class="fa-solid fa-burger"></i> BURGER <span class="text-orange">&</span> CRUNCH</h3>
+                <p>© 2026 BURGER & CRUNCH Fast Food & Street Gourmet. Todos os direitos reservados. Lisboa, Portugal.</p>
+            </div>
+            <div class="footer-socials">
+                <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://wa.me/351925814360" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Cart Badge Button & Floating WhatsApp -->
+    <button id="floatingCartBtn" onclick="openCartDrawer()" class="floating-cart-btn" title="Ver Carrinho de Compras">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span id="floatingCartBadge" class="floating-cart-badge">0</span>
+    </button>
+
+    <a href="https://wa.me/351925814360?text=Ol%C3%A1%20BURGER%20%26%20CRUNCH!%20Gostaria%20de%20fazer%20um%20pedido!" target="_blank" class="floating-whatsapp-btn" title="Contactar no WhatsApp (+351 925 814 360)">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- CART SIDE DRAWER / MODAL CHECKOUT -->
+    <div id="cartDrawerBackdrop" class="cart-drawer-backdrop">
+        <div class="cart-drawer-card">
+            <div class="cart-drawer-header">
+                <h2><i class="fa-solid fa-cart-shopping text-orange"></i> O Seu Pedido Fast Food</h2>
+                <button id="btnCloseCart" class="cart-close-btn">&times;</button>
+            </div>
+
+            <!-- Cart Items Container -->
+            <div id="cartItemsList" class="cart-items-body">
+                <div class="empty-cart-msg">
+                    <i class="fa-solid fa-burger text-muted"></i>
+                    <p>O seu carrinho está vazio. Adicione hambúrgueres e snacks do menu!</p>
+                </div>
+            </div>
+
+            <!-- Checkout Form & Totals -->
+            <div class="cart-drawer-footer">
+                <div class="cart-summary-box">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <strong id="cartSubtotalText">0.00 €</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Taxa de Entrega:</span>
+                        <strong id="cartDeliveryFeeText">1.50 €</strong>
+                    </div>
+                    <div class="summary-row total-row">
+                        <span>Total do Pedido:</span>
+                        <strong id="cartTotalText">1.50 €</strong>
+                    </div>
+                </div>
+
+                <!-- Customer Order Form -->
+                <form id="fastfoodCheckoutForm" class="checkout-form" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="selOrderType"><i class="fa-solid fa-motorcycle"></i> Modalidade *</label>
+                        <select id="selOrderType" class="form-control" onchange="toggleDeliveryAddress(this.value)" required>
+                            <option value="Delivery">Entrega ao Domicílio (Delivery +1.50€)</option>
+                            <option value="Takeaway">Levantamento na Loja (Takeaway Grátis)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputClientName"><i class="fa-solid fa-user"></i> Nome Completo *</label>
+                        <input type="text" id="inputClientName" class="form-control" placeholder="Ex: Rodrigo Santos" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputClientPhone"><i class="fa-solid fa-mobile-screen"></i> Telemóvel *</label>
+                        <input type="text" id="inputClientPhone" class="form-control" placeholder="Ex: +351 912 345 678" required>
+                    </div>
+
+                    <div id="groupDeliveryAddress" class="form-group">
+                        <label for="inputDeliveryAddress"><i class="fa-solid fa-house"></i> Morada de Entrega *</label>
+                        <input type="text" id="inputDeliveryAddress" class="form-control" placeholder="Rua, número de porta e andar em Lisboa...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="selPaymentMethod"><i class="fa-solid fa-credit-card"></i> Forma de Pagamento *</label>
+                        <select id="selPaymentMethod" class="form-control" required>
+                            <option value="MB WAY">MB WAY (Pagamento Instantâneo)</option>
+                            <option value="Multibanco na Entrega">Multibanco / TPA na Entrega</option>
+                            <option value="Dinheiro (Com Troco)">Dinheiro no Acto da Entrega</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputNotes"><i class="fa-solid fa-comment-dots"></i> Observações (Sem cebola, molho extra...)</label>
+                        <input type="text" id="inputNotes" class="form-control" placeholder="Ex: Retirar pickles do hambúrguer, troco para 20€...">
+                    </div>
+
+                    <button type="submit" id="btnSubmitOrder" class="btn btn-primary btn-block">
+                        <i class="fa-solid fa-paper-plane"></i> Finalizar Pedido via WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Receipt Modal -->
+    <div id="receiptModal" class="modal-backdrop">
+        <div class="modal-card text-center">
+            <button id="btnCloseReceipt" class="modal-close-btn">&times;</button>
+            <div class="receipt-icon"><i class="fa-solid fa-circle-check text-green"></i></div>
+            <h2>Pedido Confirmado!</h2>
+            <p>O seu pedido foi recebido pela cozinha do BURGER & CRUNCH.</p>
+
+            <div class="receipt-body text-left margin-top-20">
+                <div class="receipt-row">
+                    <span>Código do Pedido:</span>
+                    <strong id="rcId">CRUNCH-301</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Cliente:</span>
+                    <strong id="rcClient">Rodrigo Santos</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Modalidade:</span>
+                    <strong id="rcType">Delivery (Almirante Reis)</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Total a Pagar:</span>
+                    <strong id="rcTotal" class="text-orange">11.90 €</strong>
+                </div>
+            </div>
+
+            <div class="margin-top-20">
+                <a id="btnReceiptWa" href="#" target="_blank" class="btn btn-whatsapp w-100">
+                    <i class="fa-brands fa-whatsapp"></i> Acompanhar Pedido no WhatsApp
+                </a>
+                <button id="btnFinishReceipt" class="btn btn-secondary w-100 margin-top-10">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=202608312115"></script>
+</body>
+</html>
