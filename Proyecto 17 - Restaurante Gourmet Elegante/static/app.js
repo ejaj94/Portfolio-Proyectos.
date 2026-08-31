@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                   `⏰ Hora: ${r.res_time}\n` +
                                   `📞 Telemóvel: ${r.client_phone}`;
 
-                    btnModalWa.href = `https://wa.me/351911151993?text=${encodeURIComponent(waText)}`;
+                    btnModalWa.href = `https://wa.me/351123456789?text=${encodeURIComponent(waText)}`;
 
                     receiptModal.classList.add('open');
                     showToast('Reserva de mesa efetuada com sucesso!', 'success');

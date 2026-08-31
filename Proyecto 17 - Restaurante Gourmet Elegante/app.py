@@ -74,7 +74,7 @@ def create_reservation():
             "success": True,
             "message": "Reserva de mesa efetuada com sucesso!",
             "reservation": new_res,
-            "whatsapp_url": f"https://wa.me/351911151993?text={request.headers.get('Origin', '') and wa_text}"
+            "whatsapp_url": f"https://wa.me/351123456789?text={request.headers.get('Origin', '') and wa_text}"
         })
 
     except Exception as e:
@@ -88,5 +88,5 @@ def list_reservations():
 
 
 if __name__ == "__main__":
-    print("Iniciando Restaurante L'Étoile Gourmet (Lagos, Algarve) em http://localhost:5023")
-    app.run(host="0.0.0.0", port=5023, debug=False)
+    print("Iniciando Restaurante L'Étoile Gourmet em http://localhost:5024")
+    app.run(host="0.0.0.0", port=5024, debug=False)
