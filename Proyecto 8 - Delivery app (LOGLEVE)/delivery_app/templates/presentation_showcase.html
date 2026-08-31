@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Logleve - Premium Video Showcase Simulator</title>
+    <title>LOGLEVE - Ecossistema de 3 Aplicações em Tempo Real</title>
     
     <!-- FontAwesome & Google Fonts -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
@@ -13,10 +13,13 @@
       :root {
         --bg-space: radial-gradient(circle at 50% 50%, #0c152b 0%, #030712 100%);
         --brand-green: #10b981;
-        --brand-green-hover: #059669;
-        --brand-green-glow: rgba(16, 185, 129, 0.35);
-        --glass-bg: rgba(15, 23, 42, 0.65);
-        --glass-border: rgba(255, 255, 255, 0.08);
+        --brand-green-glow: rgba(16, 185, 129, 0.4);
+        --brand-blue: #0ea5e9;
+        --brand-blue-glow: rgba(14, 165, 233, 0.4);
+        --brand-purple: #8b5cf6;
+        --brand-purple-glow: rgba(139, 92, 246, 0.4);
+        --glass-bg: rgba(15, 23, 42, 0.75);
+        --glass-border: rgba(255, 255, 255, 0.1);
         --text-light: #f1f5f9;
         --text-muted: #94a3b8;
         --font-main: 'Inter', sans-serif;
@@ -43,7 +46,7 @@
         padding: 20px;
       }
 
-      /* 🌌 ORGANIC BLUR BLOBS FOR HIGH-END COSMIC LOOK */
+      /* 🌌 ORGANIC BACKGROUND BLOBS */
       .blob-bg {
         position: fixed;
         border-radius: 50%;
@@ -53,24 +56,24 @@
         pointer-events: none;
       }
       .blob-1 {
-        width: 400px;
-        height: 400px;
+        width: 500px;
+        height: 500px;
         background: #10b981;
         top: -100px;
         left: -100px;
         animation: floatBlob 20s infinite alternate;
       }
       .blob-2 {
-        width: 500px;
-        height: 500px;
+        width: 600px;
+        height: 600px;
         background: #0ea5e9;
         bottom: -150px;
         right: -100px;
         animation: floatBlob 25s infinite alternate-reverse;
       }
       .blob-3 {
-        width: 300px;
-        height: 300px;
+        width: 400px;
+        height: 400px;
         background: #8b5cf6;
         top: 40%;
         left: 50%;
@@ -86,17 +89,17 @@
       /* 📱 WRAPPER PRINCIPAL */
       .presentation-container {
         width: 100%;
-        max-width: 1080px;
+        max-width: 1440px;
         background: var(--glass-bg);
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
         border: 1px solid var(--glass-border);
         border-radius: 28px;
-        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
-        padding: 30px;
+        box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.8);
+        padding: 28px;
         display: flex;
         flex-direction: column;
-        gap: 24px;
+        gap: 22px;
         position: relative;
         z-index: 10;
         animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -112,35 +115,42 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 18px;
       }
 
       .logo-area {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
       }
 
       .logo-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #10b981, #0ea5e9);
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid var(--glass-border);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #030712;
-        font-size: 24px;
-        box-shadow: 0 0 20px var(--brand-green-glow);
+        padding: 4px;
+        box-shadow: 0 0 25px var(--brand-green-glow);
+        overflow: hidden;
+      }
+
+      .logo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
 
       .logo-text h1 {
         font-family: var(--font-title);
         font-weight: 900;
-        font-size: 22px;
+        font-size: 24px;
         letter-spacing: -0.5px;
-        background: linear-gradient(90deg, #f1f5f9, #2dd4bf);
+        background: linear-gradient(90deg, #f1f5f9, #2dd4bf, #38bdf8);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
@@ -153,196 +163,216 @@
         letter-spacing: 1px;
       }
 
-      .lang-switcher {
+      .header-controls {
         display: flex;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid var(--glass-border);
-        padding: 4px;
-        border-radius: 12px;
-        gap: 4px;
+        align-items: center;
+        gap: 12px;
       }
 
-      .lang-btn {
-        background: none;
-        border: none;
-        color: var(--text-muted);
-        padding: 6px 14px;
-        font-size: 12px;
-        font-weight: 600;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-
-      .lang-btn.active {
-        background: var(--brand-green);
-        color: #030712;
-        box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
-      }
-
-      /* 🎬 VIDEO SIMULATOR VIEWPORT */
-      .video-viewport {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        background: #030712;
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        overflow: hidden;
-        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9);
-      }
-
-            .slide-image-container {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        min-height: 500px;
-        background: #030712;
-        border-radius: 20px;
-        overflow: hidden;
-        perspective: 1200px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-      }
-
-      /* 🌟 ULTRA-PROFESSIONAL 3D MORPH & GLASS SHUTTER TRANSITION */
-      .slide-image-bg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0;
-        filter: blur(25px) brightness(0.3);
-        transform: scale(1.15);
-        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
-        z-index: 1;
-      }
-
-      .slide-image-bg.active {
-        opacity: 0.35;
-        filter: blur(15px) brightness(0.5);
-        transform: scale(1.05);
-      }
-
-      .slide-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        padding: 16px;
-        opacity: 0;
-        transform: perspective(1000px) scale(0.92) rotateY(6deg) translateY(15px);
-        filter: blur(6px) brightness(0.7);
-        transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease;
-        z-index: 2;
-        pointer-events: none;
-      }
-
-      .slide-image.active {
-        opacity: 1;
-        transform: perspective(1000px) scale(1) rotateY(0deg) translateY(0);
-        filter: blur(0px) brightness(1);
-        pointer-events: auto;
-        animation: kenBurnsSmooth 20s ease-in-out infinite alternate;
-      }
-
-      @keyframes kenBurnsSmooth {
-        0% { transform: perspective(1000px) scale(1) rotateY(0deg) translateY(0); }
-        100% { transform: perspective(1000px) scale(1.04) rotateY(-0.5deg) translateY(-5px); }
-      }
-
-      /* 💫 GLOSSY SHIMMER LIGHT SWEEP ON TRANSITION */
-      .slide-shimmer-sweep {
-        position: absolute;
-        top: -50%;
-        left: -100%;
-        width: 60%;
-        height: 200%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), rgba(16, 185, 129, 0.25), transparent);
-        transform: rotate(25deg);
-        pointer-events: none;
-        z-index: 8;
-        opacity: 0;
-      }
-
-      .slide-shimmer-sweep.trigger-sweep {
-        animation: shutterSweep 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-
-      @keyframes shutterSweep {
-        0% { left: -100%; opacity: 0; }
-        30% { opacity: 1; }
-        100% { left: 160%; opacity: 0; }
-      }
-
-      .slide-overlay-tag {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        background: rgba(16, 185, 129, 0.2);
-        backdrop-filter: blur(8px);
+      .voice-badge {
+        background: rgba(16, 185, 129, 0.15);
         border: 1px solid rgba(16, 185, 129, 0.3);
-        color: #2dd4bf;
-        padding: 8px 16px;
-        border-radius: 12px;
-        font-weight: 800;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        color: #34d399;
+        padding: 6px 14px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-family: var(--font-mono);
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      /* 📐 GRID DIVIDIDA EN 3 PANTALLAS SIMULTÁNEAS */
+      .apps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        width: 100%;
+      }
+
+      @media (max-width: 1024px) {
+        .apps-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* 📱 TARJETA DE CADA APLICACIÓN */
+      .app-panel {
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+      }
+
+      .app-panel:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-4px);
+      }
+
+      /* HIGHLIGHTS SEGÚN PASO ACTIVO */
+      .app-panel.active-step {
+        background: rgba(30, 41, 59, 0.85);
+        transform: scale(1.02) translateY(-4px);
+        z-index: 5;
+      }
+
+      .app-panel.client-theme.active-step {
+        border-color: var(--brand-blue);
+        box-shadow: 0 0 35px var(--brand-blue-glow), inset 0 0 15px rgba(14, 165, 233, 0.2);
+      }
+
+      .app-panel.restaurant-theme.active-step {
+        border-color: var(--brand-green);
+        box-shadow: 0 0 35px var(--brand-green-glow), inset 0 0 15px rgba(16, 185, 129, 0.2);
+      }
+
+      .app-panel.courier-theme.active-step {
+        border-color: var(--brand-purple);
+        box-shadow: 0 0 35px var(--brand-purple-glow), inset 0 0 15px rgba(139, 92, 246, 0.2);
+      }
+
+      /* HEADER DE LA PANTALLA */
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .panel-title {
         font-family: var(--font-title);
-        box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
+        font-size: 15px;
+        font-weight: 800;
         display: flex;
         align-items: center;
         gap: 8px;
-        z-index: 10;
-        animation: pulseTag 2s infinite;
       }
 
-      @keyframes pulseTag {
-        0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.25); }
-        50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.45); }
+      .client-theme .panel-title { color: #38bdf8; }
+      .restaurant-theme .panel-title { color: #34d399; }
+      .courier-theme .panel-title { color: #c084fc; }
+
+      .panel-badge {
+        font-size: 10px;
+        font-family: var(--font-mono);
+        padding: 4px 8px;
+        border-radius: 8px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
-      /* Neon visual alerts flashing on KDS and map transitions */
-      .neon-shutter {
-        position: absolute;
-        top: 0;
-        left: 0;
+      .client-theme .panel-badge { background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.3); }
+      .restaurant-theme .panel-badge { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+      .courier-theme .panel-badge { background: rgba(139, 92, 246, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }
+
+      /* MOCKUP / FRAME DE DISPOSITIVO - ASPECT RATIO 1:1 PERFECTO PARA IMÁGENES DE 1024x1024 */
+      .device-viewport {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1; /* AJUSTE EXACTO A LAS IMÁGENES DE 1024x1024 SIN CORTAR NADA */
+        background: #030712;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+      }
+
+      .device-image {
         width: 100%;
         height: 100%;
-        pointer-events: none;
-        box-shadow: inset 0 0 50px rgba(16, 185, 129, 0);
-        z-index: 9;
-        transition: box-shadow 0.3s;
-      }
-      .neon-shutter.flash-alert {
-        box-shadow: inset 0 0 60px rgba(16, 185, 129, 0.4);
-        animation: borderPulse 1s 2 alternate;
+        object-fit: contain; /* MOSTRAR TODO EL CONTENIDO 100% VISIBLE */
+        border-radius: 12px;
+        transition: transform 0.6s ease, filter 0.6s ease;
       }
 
-      @keyframes borderPulse {
-        from { box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1); }
-        to { box-shadow: inset 0 0 60px rgba(16, 185, 129, 0.4); }
+      .app-panel.active-step .device-image {
+        transform: scale(1.02);
+        filter: brightness(1.05);
       }
 
-      /* 🎙️ NARRATOR SPEAKER CARD */
+      /* TICKER Y STATUS EN VIVO */
+      .live-ticker {
+        position: relative;
+        width: 100%;
+        background: rgba(3, 7, 18, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 6px 12px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 10.5px;
+        font-family: var(--font-mono);
+        color: var(--text-light);
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--brand-green);
+        box-shadow: 0 0 8px var(--brand-green);
+        animation: pulseDot 1.5s infinite;
+      }
+
+      @keyframes pulseDot {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.8); }
+      }
+
+      /* DETALLES DE CARACTERÍSTICAS */
+      .feature-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .tag-item {
+        font-size: 11px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: var(--text-muted);
+        padding: 4px 10px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .app-panel.active-step .tag-item {
+        border-color: rgba(255, 255, 255, 0.15);
+        color: var(--text-light);
+      }
+
+      /* 🎙️ NARRADOR DE VOZ HD NEURAL */
       .speaker-card {
         background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 18px;
-        padding: 20px 24px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 18px 24px;
         display: flex;
         gap: 20px;
         align-items: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       }
 
       .speaker-avatar-box {
         position: relative;
-        width: 60px;
-        height: 60px;
+        width: 64px;
+        height: 64px;
         border-radius: 50%;
         background: rgba(16, 185, 129, 0.1);
         border: 2px solid var(--brand-green);
@@ -350,8 +380,9 @@
         align-items: center;
         justify-content: center;
         color: var(--brand-green);
-        font-size: 24px;
-        box-shadow: 0 0 15px var(--brand-green-glow);
+        font-size: 26px;
+        box-shadow: 0 0 20px var(--brand-green-glow);
+        flex-shrink: 0;
       }
 
       .audio-wave {
@@ -384,7 +415,7 @@
 
       @keyframes wavePulse {
         0% { height: 6px; }
-        100% { height: 18px; }
+        100% { height: 20px; }
       }
 
       .speaker-text-box {
@@ -399,43 +430,54 @@
         margin-bottom: 4px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
+      }
+
+      .tts-badge {
+        font-size: 10px;
+        background: rgba(16, 185, 129, 0.2);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #34d399;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: var(--font-mono);
+        font-weight: 800;
       }
 
       .speaker-narration {
         font-size: 14.5px;
         line-height: 1.6;
         color: var(--text-light);
-        min-height: 68px;
+        min-height: 52px;
         transition: opacity 0.3s;
       }
 
-      /* 🎮 VIDEO PLAYBACK CONTROLS */
+      /* 🎮 CONTROLES Y TIMELINE */
       .player-controls {
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        gap: 14px;
       }
 
       .progress-area {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
       }
 
       .time-display {
         font-family: var(--font-mono);
-        font-size: 12px;
+        font-size: 13px;
         color: var(--text-muted);
-        min-width: 80px;
+        min-width: 90px;
         text-align: center;
       }
 
       .progress-bar-container {
         flex: 1;
-        height: 6px;
+        height: 8px;
         background: rgba(255, 255, 255, 0.05);
-        border-radius: 3px;
+        border-radius: 4px;
         cursor: pointer;
         position: relative;
         overflow: hidden;
@@ -444,9 +486,9 @@
       .progress-fill {
         height: 100%;
         width: 0%;
-        background: linear-gradient(90deg, #10b981, #0ea5e9);
-        border-radius: 3px;
-        transition: width 0.1s linear;
+        background: linear-gradient(90deg, #10b981, #0ea5e9, #8b5cf6);
+        border-radius: 4px;
+        transition: width 0.3s ease;
       }
 
       .control-buttons-row {
@@ -462,7 +504,7 @@
       }
 
       .control-btn {
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(255, 255, 255, 0.04);
         border: 1px solid var(--glass-border);
         color: var(--text-light);
         width: 44px;
@@ -482,35 +524,23 @@
         transform: translateY(-2px);
       }
 
-      .control-btn:active {
-        transform: translateY(0);
-      }
-
       .control-btn.play-btn {
         background: #10b981;
         color: #030712;
-        width: 54px;
-        height: 54px;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
-        font-size: 20px;
-        box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        font-size: 22px;
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
         border: none;
       }
 
       .control-btn.play-btn:hover {
         background: #34d399;
-        transform: scale(1.05);
-        color: #030712;
-        box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+        transform: scale(1.06);
+        box-shadow: 0 0 30px rgba(16, 185, 129, 0.7);
       }
 
-      .secondary-controls {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      /* 📊 STORYBOARD SCENE LIST */
       .storyboard-timeline {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -528,14 +558,14 @@
       }
 
       .timeline-scene:hover {
-        background: rgba(255, 255, 255, 0.04);
-        border-color: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.12);
       }
 
       .timeline-scene.active {
-        background: rgba(16, 185, 129, 0.06);
+        background: rgba(16, 185, 129, 0.08);
         border-color: var(--brand-green);
-        box-shadow: inset 0 0 8px rgba(16, 185, 129, 0.15);
+        box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.2);
       }
 
       .scene-meta {
@@ -551,84 +581,143 @@
       .scene-title {
         font-family: var(--font-title);
         font-weight: 800;
-        font-size: 12.5px;
+        font-size: 13px;
         color: var(--text-light);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      .scene-duration {
-        color: var(--text-muted);
-        font-weight: normal;
+      /* LIGHT SWEEP */
+      .slide-shimmer-sweep {
+        position: absolute;
+        top: -50%;
+        left: -100%;
+        width: 60%;
+        height: 200%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+        transform: rotate(25deg);
+        pointer-events: none;
+        z-index: 8;
+        opacity: 0;
       }
 
-      /* Sound synthetic reading badge */
-      .tts-badge {
-        font-size: 10px;
-        background: rgba(14, 165, 233, 0.2);
-        border: 1px solid rgba(14, 165, 233, 0.3);
-        color: #38bdf8;
-        padding: 2px 6px;
-        border-radius: 6px;
-        font-family: var(--font-mono);
-        font-weight: 800;
-        letter-spacing: 0.5px;
-        box-shadow: 0 0 8px rgba(14, 165, 233, 0.2);
+      .slide-shimmer-sweep.trigger-sweep {
+        animation: shutterSweep 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes shutterSweep {
+        0% { left: -100%; opacity: 0; }
+        30% { opacity: 1; }
+        100% { left: 160%; opacity: 0; }
       }
     </style>
   </head>
   <body>
-    <!-- 🌌 BLUR EFFECT DECORATIONS -->
+    <!-- 🌌 ELEMENTOS DE FUNDO -->
     <div class="blob-bg blob-1"></div>
     <div class="blob-bg blob-2"></div>
     <div class="blob-bg blob-3"></div>
 
+    <!-- AUDIO PLAYER HIDDEN FOR PERFECT HD VOICE PLAYBACK -->
+    <audio id="audio-player"></audio>
+
     <div class="presentation-container">
-      <!-- HEADER -->
+      <!-- HEADER PRINCIPAL -->
       <div class="showcase-header">
         <div class="logo-area">
           <div class="logo-icon">
-            <i class="fas fa-play"></i>
+            <img src="{{ url_for('static', filename='logo.png') }}" onerror="this.src='logo.png'" alt="Logleve Logo" class="logo-img" />
           </div>
           <div class="logo-text">
             <h1>LOGLEVE</h1>
-            <p>Showcase Virtual em Vídeo Interactiva</p>
+            <p>Demonstração em Direto: 3 Aplicações Simultâneas</p>
           </div>
         </div>
         
-        <div class="lang-switcher">
-          <button class="lang-btn active" onclick="switchLanguage('pt')">PORTUGUÊS (PT)</button>
-          <button class="lang-btn" onclick="switchLanguage('es')">ESPAÑOL (ES)</button>
+        <div class="header-controls">
         </div>
       </div>
 
-      <!-- VIDEO VIEWPORT -->
-      <div class="video-viewport">
-        <div class="slide-overlay-tag" id="viewport-tag">
-          <i class="fas fa-mobile-alt"></i> Aplicación Cliente (Porto)
-        </div>
-        
-        <div class="neon-shutter" id="viewport-alert"></div>
-        
-        <div class="slide-image-container">
-            <div class="slide-shimmer-sweep" id="shimmer-sweep"></div>
-          <!-- Widescreen Blurred Backdrops -->
-          <img src="client_app_interface.png" class="slide-image-bg active" id="slide-bg-0" alt="" />
-          <img src="restaurant_kds_monitor.png" class="slide-image-bg" id="slide-bg-1" alt="" />
-          <img src="courier_live_tracking.png" class="slide-image-bg" id="slide-bg-2" alt="" />
-          <img src="client_app_interface.png" class="slide-image-bg" id="slide-bg-3" alt="" />
+      <!-- 📐 VISTA DIVIDIDA EM 3 APLICAÇÕES SIMULTÂNEAS (IMÁGENES 100% INTEGRAS Y SIN CORTES) -->
+      <div class="apps-grid">
+        <!-- ECRÃ 1: APP CLIENTE -->
+        <div class="app-panel client-theme active-step" id="panel-client">
+          <div class="slide-shimmer-sweep" id="shimmer-client"></div>
+          <div class="panel-header">
+            <div class="panel-title">
+              <i class="fas fa-mobile-alt"></i> App do Cliente
+            </div>
+            <div class="panel-badge" id="badge-client">PASSO 1: ENCOMENDA</div>
+          </div>
 
-          <!-- Crisp Centered Device Views -->
-          <img src="client_app_interface.png" class="slide-image active" id="slide-img-0" alt="App Cliente Logleve" />
-          <img src="restaurant_kds_monitor.png" class="slide-image" id="slide-img-1" alt="Monitor KDS Logleve" />
-          <img src="courier_live_tracking.png" class="slide-image" id="slide-img-2" alt="Rastreo y Slider Logleve" />
-          <!-- Re-use final view as a concluding slide -->
-          <img src="client_app_interface.png" class="slide-image" id="slide-img-3" alt="Final Logleve" style="filter: brightness(0.7) saturate(1.2);" />
+          <div class="device-viewport">
+            <img src="{{ url_for('static', filename='client_app_interface.png') }}" onerror="this.src='client_app_interface.png'" class="device-image" alt="App Cliente Logleve" />
+          </div>
+          <div class="live-ticker">
+            <div class="status-dot"></div>
+            <span id="ticker-client">A selecionar produtos no Porto</span>
+          </div>
+
+          <div class="feature-tags">
+            <div class="tag-item"><i class="fas fa-utensils"></i> Menu Dinâmico</div>
+            <div class="tag-item"><i class="fas fa-credit-card"></i> Stripe / MB WAY</div>
+            <div class="tag-item"><i class="fas fa-map-marker-alt"></i> Radar Satélite</div>
+          </div>
+        </div>
+
+        <!-- ECRÃ 2: MONITOR COZINHA KDS -->
+        <div class="app-panel restaurant-theme" id="panel-restaurant">
+          <div class="slide-shimmer-sweep" id="shimmer-restaurant"></div>
+          <div class="panel-header">
+            <div class="panel-title">
+              <i class="fas fa-fire"></i> Monitor KDS Cozinha
+            </div>
+            <div class="panel-badge" id="badge-restaurant">PASSO 2: COZINHA</div>
+          </div>
+
+          <div class="device-viewport">
+            <img src="{{ url_for('static', filename='restaurant_kds_monitor.png') }}" onerror="this.src='restaurant_kds_monitor.png'" class="device-image" alt="Monitor KDS Logleve" />
+          </div>
+          <div class="live-ticker">
+            <div class="status-dot"></div>
+            <span id="ticker-restaurant">Aguardando encomenda em direto</span>
+          </div>
+
+          <div class="feature-tags">
+            <div class="tag-item"><i class="fas fa-bell"></i> Alertas WebSocket</div>
+            <div class="tag-item"><i class="fas fa-tasks"></i> Tarefas de Cozinha</div>
+            <div class="tag-item"><i class="fas fa-clock"></i> Cronómetro KDS</div>
+          </div>
+        </div>
+
+        <!-- ECRÃ 3: APP ESTAFETA / REPARTIDOR -->
+        <div class="app-panel courier-theme" id="panel-courier">
+          <div class="slide-shimmer-sweep" id="shimmer-courier"></div>
+          <div class="panel-header">
+            <div class="panel-title">
+              <i class="fas fa-motorcycle"></i> App do Estafeta
+            </div>
+            <div class="panel-badge" id="badge-courier">PASSO 3: ENTREGA</div>
+          </div>
+
+          <div class="device-viewport">
+            <img src="{{ url_for('static', filename='courier_live_tracking.png') }}" onerror="this.src='courier_live_tracking.png'" class="device-image" alt="Radar Estafeta Logleve" />
+          </div>
+          <div class="live-ticker">
+            <div class="status-dot"></div>
+            <span id="ticker-courier">Rastreio GPS & Slider de Entrega</span>
+          </div>
+
+          <div class="feature-tags">
+            <div class="tag-item"><i class="fas fa-radar"></i> Radar de Comissões</div>
+            <div class="tag-item"><i class="fas fa-route"></i> Navegabilidade GPS</div>
+            <div class="tag-item"><i class="fas fa-sliders-h"></i> Deslizador de Entrega</div>
+          </div>
         </div>
       </div>
 
-      <!-- SPEAKER / NARRATOR SPEECH CARD -->
+      <!-- 🎙️ LOCUTOR DE VOZ INTERATIVO HD NEURAL (PORTUGAL) -->
       <div class="speaker-card" id="speaker-element">
         <div class="speaker-avatar-box">
           <i class="fas fa-microphone"></i>
@@ -640,43 +729,39 @@
           </div>
         </div>
         <div class="speaker-text-box">
-          <div class="speaker-title">
-            <span>🎙️ Locutor Antigravity AI</span>
-            <span class="tts-badge"><i class="fas fa-volume-up"></i> Áudio Sintetizado Activo</span>
-          </div>
           <div class="speaker-narration" id="speaker-text">
-            Olá! Bem-vindo à demonstração do ecossistema tecnológico Logleve. Desenvolvemos uma plataforma premium de entregas ultrarrápida, 100% unificada com SQLite e WebSockets em tempo real. Vamos ver como funciona o fluxo completo!
+            Olá! Bem-vindo à demonstração em direto da plataforma Logleve. No ecrã da esquerda, vemos a App do Cliente no Porto a realizar uma encomenda dinâmica com pagamento seguro por Stripe ou MB WAY. Observe como os três ecrãs funcionam em simultâneo!
           </div>
         </div>
       </div>
 
-      <!-- PLAYER PLAYBACK CONTROLS -->
+      <!-- 🎮 CONTROLES DE REPRODUÇÃO -->
       <div class="player-controls">
         <div class="progress-area">
-          <span class="time-display" id="time-indicator">00:00 / 02:00</span>
-          <div class="progress-bar-container" id="progress-container">
+          <span class="time-display" id="time-indicator">Passo 1 / 4</span>
+          <div class="progress-bar-container" id="progress-container" onclick="seekTimeline(event)">
             <div class="progress-fill" id="progress-fill"></div>
           </div>
         </div>
         
         <div class="control-buttons-row">
           <div class="main-controls">
-            <button class="control-btn" id="btn-prev" onclick="prevScene()" title="Cena Anterior">
+            <button class="control-btn" id="btn-prev" onclick="prevScene()" title="Passo Anterior">
               <i class="fas fa-backward"></i>
             </button>
             <button class="control-btn play-btn" id="btn-play" onclick="togglePlay()" title="Reproduzir / Pausar">
               <i class="fas fa-play" id="play-icon"></i>
             </button>
-            <button class="control-btn" id="btn-next" onclick="nextScene()" title="Próxima Cena">
+            <button class="control-btn" id="btn-next" onclick="nextScene()" title="Próximo Passo">
               <i class="fas fa-forward"></i>
             </button>
-            <button class="control-btn" id="btn-replay" onclick="replayShowcase()" title="Reiniciar Vídeo">
+            <button class="control-btn" id="btn-replay" onclick="replayShowcase()" title="Reiniciar">
               <i class="fas fa-redo"></i>
             </button>
           </div>
 
           <div class="secondary-controls">
-            <button class="control-btn" id="btn-sound" onclick="toggleSpeech()" title="Ativar/Desativar Voz Virtual" style="width: 50px;">
+            <button class="control-btn" id="btn-sound" onclick="toggleSpeech()" title="Ativar/Desativar Voz" style="width: 50px;">
               <i class="fas fa-volume-up" id="sound-icon"></i>
             </button>
             <button class="control-btn" onclick="toggleFullscreen()" title="Ecrã Inteiro">
@@ -686,220 +771,225 @@
         </div>
       </div>
 
-      <!-- STORYBOARD SCENES TIMELINE -->
+      <!-- 📊 STORYBOARD / TIMELINE DE PASSOS -->
       <div class="storyboard-timeline">
         <div class="timeline-scene active" id="scene-0" onclick="jumpToScene(0)">
           <div class="scene-meta">
-            <span>Cena 1</span>
-            <span class="scene-duration">30s</span>
+            <span>PASSO 1</span>
           </div>
-          <div class="scene-title">1. App do Cliente & Compra</div>
+          <div class="scene-title">📱 App Cliente: Encomenda</div>
         </div>
         <div class="timeline-scene" id="scene-1" onclick="jumpToScene(1)">
           <div class="scene-meta">
-            <span>Cena 2</span>
-            <span class="scene-duration">30s</span>
+            <span>PASSO 2</span>
           </div>
-          <div class="scene-title">2. KDS Monitor em Cozinha</div>
+          <div class="scene-title">🍳 KDS: Cozinha em Direto</div>
         </div>
         <div class="timeline-scene" id="scene-2" onclick="jumpToScene(2)">
           <div class="scene-meta">
-            <span>Cena 3</span>
-            <span class="scene-duration">30s</span>
+            <span>PASSO 3</span>
           </div>
-          <div class="scene-title">3. Chat em Vivo e Slider</div>
+          <div class="scene-title">🛵 Estafeta: Rastreio GPS</div>
         </div>
         <div class="timeline-scene" id="scene-3" onclick="jumpToScene(3)">
           <div class="scene-meta">
-            <span>Cena 4</span>
-            <span class="scene-duration">30s</span>
+            <span>PASSO 4</span>
           </div>
-          <div class="scene-title">4. Conclusão & SQLite</div>
+          <div class="scene-title">⚡ 3 Apps Sincronizadas</div>
         </div>
       </div>
     </div>
 
     <script>
-      let currentLanguage = 'pt';
       let currentScene = 0;
       let isPlaying = false;
-      let ttsEnabled = true;
-      let playbackInterval = null;
-      let totalDuration = 120; // 120 seconds = 2 minutes (30s per scene)
-      let elapsedSeconds = 0;
+      let soundEnabled = true;
 
-      // NARRATION SCRIPTS IN BOTH LANGUAGES
-      const narrationData = {
-        pt: [
-          "Olá! Bem-vindo à demonstração do ecossistema tecnológico Logleve. Desenvolvemos uma plataforma premium de entregas ultrarrápida, 100% unificada com SQLite e WebSockets em tempo real. Vamos ver como funciona o fluxo completo a começar pela App do Cliente!",
-          "Assim que o cliente faz a encomenda dinâmica de pizzas e hambúrgueres em Porto na App, o Monitor de Cozinha KDS recebe instantaneamente a comanda com um som de campainha. O chefe de cozinha pode tachar as tarefas, conferir notas e cronometrar tudo em tempo real!",
-          "Quando o prato está pronto, o estafeta no radar aceita a comissão de 3.50€ e a rota satélite atualiza-se no mapa do cliente em direto. O chat em tempo real permite a comunicação direta com tradução automática por IA para o português, e a entrega é confirmada com o novo deslizador!",
-          "E pronto! Vimos o fluxo total a trabalhar em direto. Com um painel de restauração da base de dados sem registos acumulados e segurança financeira Stripe e MB WAY de Portugal, a Logleve oferece a tecnologia mais premium do mercado para expandir as vossas entregas!"
-        ],
-        es: [
-          "¡Hola! Bienvenido a la demostración del ecosistema tecnológico Logleve. Desarrollamos una plataforma premium de entregas ultrarrápida, 100% unificada con SQLite y WebSockets en tiempo real. ¡Veamos cómo funciona el flujo completo comenzando por la App del Cliente!",
-          "Tan pronto como el cliente realiza el pedido dinámico de pizzas y hamburguesas en Porto en la App, el Monitor de Cocina KDS recibe instantáneamente la comanda con un timbre. ¡El jefe de cocina puede tachar las tareas, revisar notas y cronometrar todo en tiempo real!",
-          "Cuando el plato está listo, el repartidor en el radar acepta la comisión de 3.50€ y la ruta satélite se actualiza en el mapa del cliente en vivo. El chat en tiempo real permite la comunicación directa con traducción automática por IA al portugués, ¡y la entrega se confirma con el nuevo deslizador!",
-          "¡Y listo! Vimos el flujo total trabajando en directo. Con un panel de restauración de la base de datos libre de registros antiguos y seguridad financiera con Stripe y MB WAY de Portugal, ¡Logleve ofrece la tecnología más premium del mercado para expandir vuestras entregas!"
-        ]
-      };
+      // SCRIPTS DE NARRAÇÃO AUTÊNTICA EM PORTUGUÊS DE PORTUGAL (pt-PT)
+      const narrationData = [
+        "Olá! Bem-vindo à demonstração em direto da plataforma Logleve. No ecrã da esquerda, vemos a App do Cliente no Porto a realizar uma encomenda dinâmica com pagamento seguro por Stripe ou MB WAY. Observe como os três ecrãs funcionam em simultâneo!",
+        "Atenção! Assim que a encomenda é paga, o Monitor KDS da Cozinha, no ecrã central, recebe a notificação instantaneamente através de WebSockets. O chefe de cozinha ouve o aviso sonoro e gere a preparação em tempo real.",
+        "Prato pronto! No ecrã da direita, a App do Estafeta apresenta a encomenda no radar GPS. Ao aceitar a comissão, o mapa do cliente atualiza-se em direto e o estafeta confirma a entrega deslizando o botão tátil.",
+        "E aqui está! As três aplicações a trabalhar em simultâneo em tempo real sem qualquer atraso, com o suporte da base de dados SQLite e arquitetura SOLID. A Logleve é o ecossistema de entregas mais avançado de Portugal!"
+      ];
 
-      const tagsData = {
-        pt: [
-          "<i class='fas fa-mobile-alt'></i> 1. App Cliente (Porto)",
-          "<i class='fas fa-fire'></i> 2. Monitor KDS Cozinha",
-          "<i class='fas fa-comments'></i> 3. Chat IA & Slider",
-          "<i class='fas fa-check-double'></i> 4. Conclusão & SQLite"
-        ],
-        es: [
-          "<i class='fas fa-mobile-alt'></i> 1. App Cliente (Porto)",
-          "<i class='fas fa-fire'></i> 2. Monitor KDS Cocina",
-          "<i class='fas fa-comments'></i> 3. Chat IA y Deslizador",
-          "<i class='fas fa-check-double'></i> 4. Conclusión y SQLite"
-        ]
-      };
+      const audioFiles = [
+        "{{ url_for('static', filename='scene_0_pt.mp3') }}",
+        "{{ url_for('static', filename='scene_1_pt.mp3') }}",
+        "{{ url_for('static', filename='scene_2_pt.mp3') }}",
+        "{{ url_for('static', filename='scene_3_pt.mp3') }}"
+      ];
 
-      function switchLanguage(lang) {
-        currentLanguage = lang;
-        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-        if (lang === 'pt') {
-          document.querySelectorAll('.lang-btn')[0].classList.add('active');
-        } else {
-          document.querySelectorAll('.lang-btn')[1].classList.add('active');
-        }
-        updateSceneContent();
+      const tickerTexts = [
+        ["🟢 ONLINE - A selecionar produtos", "⏸ A AGUARDAR ENCOMENDA", "⏸ EM ESPERA"],
+        ["✅ ENCOMENDA ENVIADA À COZINHA", "🔥 A PREPARAR ENCOMENDA #1042", "📡 RADAR A BUSCAR ESTAFETA"],
+        ["📱 A RASTREAR ESTAFETA", "🍳 ENCOMENDA PRONTA PARA EMBARQUE", "📍 ENTREGA EM CURSO (3.50€)"],
+        ["✨ ENCOMENDA ENTREGUE COM SUCESSO", "✅ ENCOMENDA CONCLUÍDA", "💰 SALDO ADICIONADO À CARTEIRA"]
+      ];
+
+      const audioPlayer = document.getElementById('audio-player');
+
+      function playWebAudioChime() {
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) return;
+          const ctx = new AudioContext();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.15, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.3);
+        } catch (e) {}
       }
 
-      function updateSceneContent() {
+      function updateSceneVisuals(sceneIndex) {
+        currentScene = sceneIndex;
+
+        // Actualiza texto da narração
         const textElement = document.getElementById('speaker-text');
         textElement.style.opacity = 0;
         setTimeout(() => {
-          textElement.innerHTML = narrationData[currentLanguage][currentScene];
+          textElement.innerHTML = narrationData[sceneIndex];
           textElement.style.opacity = 1;
-        }, 150);
+        }, 120);
 
-        document.getElementById('viewport-tag').innerHTML = tagsData[currentLanguage][currentScene];
-        
-        // Handle images toggle
-        var sweep = document.getElementById('shimmer-sweep');
-        if (sweep) {
-          sweep.classList.remove('trigger-sweep');
-          void sweep.offsetWidth; // Force reflow
-          sweep.classList.add('trigger-sweep');
+        // Highlight activo dos 3 ecrãs
+        const clientPanel = document.getElementById('panel-client');
+        const restPanel = document.getElementById('panel-restaurant');
+        const courierPanel = document.getElementById('panel-courier');
+
+        clientPanel.classList.remove('active-step');
+        restPanel.classList.remove('active-step');
+        courierPanel.classList.remove('active-step');
+
+        if (sceneIndex === 0) {
+          clientPanel.classList.add('active-step');
+          triggerShimmer('shimmer-client');
+        } else if (sceneIndex === 1) {
+          restPanel.classList.add('active-step');
+          triggerShimmer('shimmer-restaurant');
+        } else if (sceneIndex === 2) {
+          courierPanel.classList.add('active-step');
+          triggerShimmer('shimmer-courier');
+        } else if (sceneIndex === 3) {
+          clientPanel.classList.add('active-step');
+          restPanel.classList.add('active-step');
+          courierPanel.classList.add('active-step');
+          triggerShimmer('shimmer-client');
+          triggerShimmer('shimmer-restaurant');
+          triggerShimmer('shimmer-courier');
         }
 
-        document.querySelectorAll('.slide-image').forEach((img, index) => {
-          img.classList.remove('active');
-          if (index === currentScene) {
-            img.classList.add('active');
-          }
-        });
+        // Tickers em direto
+        const currentTickers = tickerTexts[sceneIndex];
+        document.getElementById('ticker-client').textContent = currentTickers[0];
+        document.getElementById('ticker-restaurant').textContent = currentTickers[1];
+        document.getElementById('ticker-courier').textContent = currentTickers[2];
 
-        document.querySelectorAll('.slide-image-bg').forEach((bg, index) => {
-          bg.classList.remove('active');
-          if (index === currentScene) {
-            bg.classList.add('active');
-          }
-        });
-
-        // Toggle scene highlights in timeline
+        // Botões de timeline
         document.querySelectorAll('.timeline-scene').forEach((sc, index) => {
           sc.classList.remove('active');
-          if (index === currentScene) {
+          if (index === sceneIndex) {
             sc.classList.add('active');
           }
         });
 
-        // Trigger Shutter Flash alert on Scene transitions
-        const shutter = document.getElementById('viewport-alert');
-        shutter.classList.add('flash-alert');
-        setTimeout(() => shutter.classList.remove('flash-alert'), 800);
+        // Barra de progresso
+        const fill = document.getElementById('progress-fill');
+        const timeInd = document.getElementById('time-indicator');
+        fill.style.width = ((sceneIndex + 1) / 4 * 100) + '%';
+        timeInd.textContent = `Passo ${sceneIndex + 1} / 4`;
 
-        // Speech synthesis trigger if active
-        if (isPlaying && ttsEnabled) {
-          speakNarration(narrationData[currentLanguage][currentScene]);
+        playWebAudioChime();
+      }
+
+      function triggerShimmer(elementId) {
+        const sweep = document.getElementById(elementId);
+        if (sweep) {
+          sweep.classList.remove('trigger-sweep');
+          void sweep.offsetWidth;
+          sweep.classList.add('trigger-sweep');
         }
+      }
+
+      // EXECUÇÃO PERFEITA DE ÁUDIO NEURAL MP3 COM TRANSIÇÃO MILIMÉTRICA
+      function playSceneAudio(sceneIndex) {
+        currentScene = sceneIndex;
+        updateSceneVisuals(sceneIndex);
+
+        if (!isPlaying) return;
+
+        audioPlayer.pause();
+        audioPlayer.src = audioFiles[sceneIndex];
+        
+        if (soundEnabled) {
+          audioPlayer.play().then(() => {
+            document.getElementById('speaker-element').classList.add('playing');
+          }).catch(err => {
+            console.log("Autoplay caught:", err);
+          });
+        }
+
+        audioPlayer.onended = () => {
+          document.getElementById('speaker-element').classList.remove('playing');
+          if (isPlaying) {
+            setTimeout(() => {
+              if (isPlaying) {
+                if (currentScene < 3) {
+                  playSceneAudio(currentScene + 1);
+                } else {
+                  isPlaying = false;
+                  document.getElementById('play-icon').className = "fas fa-play";
+                }
+              }
+            }, 1000); // 1 segundo de pausa fluida entre passos
+          }
+        };
       }
 
       function togglePlay() {
         const icon = document.getElementById('play-icon');
-        const speaker = document.getElementById('speaker-element');
         
         if (isPlaying) {
-          // Pause
           isPlaying = false;
           icon.className = "fas fa-play";
-          speaker.classList.remove('playing');
-          clearInterval(playbackInterval);
-          window.speechSynthesis.cancel();
+          document.getElementById('speaker-element').classList.remove('playing');
+          audioPlayer.pause();
         } else {
-          // Play
           isPlaying = true;
           icon.className = "fas fa-pause";
-          speaker.classList.add('playing');
-          
-          playbackInterval = setInterval(() => {
-            elapsedSeconds++;
-            if (elapsedSeconds > totalDuration) {
-              elapsedSeconds = 0;
-              replayShowcase();
-              return;
-            }
-            updateProgressBar();
-            
-            // Auto switch scene every 30 seconds
-            if (elapsedSeconds % 30 === 0 && elapsedSeconds > 0) {
-              nextScene();
-            }
-          }, 1000);
-
-          speakNarration(narrationData[currentLanguage][currentScene]);
+          playSceneAudio(currentScene);
         }
-      }
-
-      function updateProgressBar() {
-        const fill = document.getElementById('progress-fill');
-        const timeInd = document.getElementById('time-indicator');
-        const percentage = (elapsedSeconds / totalDuration) * 100;
-        
-        fill.style.width = percentage + '%';
-        
-        const elapsedMins = Math.floor(elapsedSeconds / 60);
-        const elapsedSecs = elapsedSeconds % 60;
-        const totalMins = Math.floor(totalDuration / 60);
-        const totalSecs = totalDuration % 60;
-        
-        const pad = (num) => String(num).padStart(2, '0');
-        timeInd.textContent = `${pad(elapsedMins)}:${pad(elapsedSecs)} / ${pad(totalMins)}:${pad(totalSecs)}`;
       }
 
       function jumpToScene(sceneIndex) {
         currentScene = sceneIndex;
-        elapsedSeconds = sceneIndex * 30;
-        updateProgressBar();
-        updateSceneContent();
+        if (isPlaying) {
+          playSceneAudio(sceneIndex);
+        } else {
+          updateSceneVisuals(sceneIndex);
+        }
       }
 
       function nextScene() {
-        currentScene = (currentScene + 1) % 4;
-        elapsedSeconds = currentScene * 30;
-        updateProgressBar();
-        updateSceneContent();
+        jumpToScene((currentScene + 1) % 4);
       }
 
       function prevScene() {
-        currentScene = (currentScene - 1 + 4) % 4;
-        elapsedSeconds = currentScene * 30;
-        updateProgressBar();
-        updateSceneContent();
+        jumpToScene((currentScene - 1 + 4) % 4);
       }
 
       function replayShowcase() {
         currentScene = 0;
-        elapsedSeconds = 0;
-        updateProgressBar();
-        updateSceneContent();
-        if (!isPlaying) {
+        if (isPlaying) {
+          playSceneAudio(0);
+        } else {
           togglePlay();
         }
       }
@@ -908,51 +998,40 @@
         const icon = document.getElementById('sound-icon');
         const btn = document.getElementById('btn-sound');
         
-        if (ttsEnabled) {
-          ttsEnabled = false;
+        if (soundEnabled) {
+          soundEnabled = false;
           icon.className = "fas fa-volume-mute";
           btn.style.color = "var(--text-muted)";
-          window.speechSynthesis.cancel();
+          audioPlayer.pause();
+          document.getElementById('speaker-element').classList.remove('playing');
         } else {
-          ttsEnabled = true;
+          soundEnabled = true;
           icon.className = "fas fa-volume-up";
           btn.style.color = "var(--brand-green)";
           if (isPlaying) {
-            speakNarration(narrationData[currentLanguage][currentScene]);
+            playSceneAudio(currentScene);
           }
         }
-      }
-
-      function speakNarration(text) {
-        window.speechSynthesis.cancel(); // Stop current speech
-        
-        const utterance = new SpeechSynthesisUtterance(text);
-        // Detect and match correct language accent voice
-        utterance.lang = currentLanguage === 'pt' ? 'pt-PT' : 'es-ES';
-        utterance.rate = 1.05;
-        
-        // Listeners to animate waveform only during speech
-        utterance.onend = () => {
-          document.getElementById('speaker-element').classList.remove('playing');
-        };
-        utterance.onstart = () => {
-          if (isPlaying) {
-            document.getElementById('speaker-element').classList.add('playing');
-          }
-        };
-
-        window.speechSynthesis.speak(utterance);
       }
 
       function toggleFullscreen() {
         const elem = document.querySelector('.presentation-container');
         if (!document.fullscreenElement) {
           elem.requestFullscreen().catch(err => {
-            alert(`Erro ao tentar ativar ecrã inteiro: ${err.message}`);
+            alert(`Erro ao ativar ecrã inteiro: ${err.message}`);
           });
         } else {
           document.exitFullscreen();
         }
+      }
+
+      function seekTimeline(event) {
+        const container = document.getElementById('progress-container');
+        const rect = container.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const percentage = clickX / rect.width;
+        const targetScene = Math.min(3, Math.floor(percentage * 4));
+        jumpToScene(targetScene);
       }
     </script>
   </body>
