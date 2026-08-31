@@ -30,7 +30,7 @@ def create_reservation():
         client_phone = data.get("client_phone", "").strip()
         client_email = data.get("client_email", "").strip()
         guests = data.get("guests", "2 Pessoas").strip()
-        seating_area = data.get("seating_area", "Salão Principal").strip()
+        seating_area = data.get("seating_area", "Salão Principal de Luxo").strip()
         res_date = data.get("res_date", "").strip()
         res_time = data.get("res_time", "").strip()
         dietary_notes = data.get("notes", "").strip()
@@ -59,7 +59,7 @@ def create_reservation():
         }
 
         RESERVATIONS_DB.append(new_res)
-        print(f"[+] Nova Reserva Gourmet Confirmada: {res_id} | {client_name} | {guests} | {res_date} às {res_time}")
+        print(f"[+] Nova Reserva Gourmet Confirmada (Lagos): {res_id} | {client_name} | {guests} | {res_date} às {res_time}")
 
         wa_text = f"Olá L'Étoile Gourmet! Gostaria de confirmar a minha reserva de mesa:\n\n" \
                   f"📌 *Código*: {res_id}\n" \
@@ -74,7 +74,7 @@ def create_reservation():
             "success": True,
             "message": "Reserva de mesa efetuada com sucesso!",
             "reservation": new_res,
-            "whatsapp_url": f"https://wa.me/351934712850?text={request.headers.get('Origin', '') and wa_text}"
+            "whatsapp_url": f"https://wa.me/351911151993?text={request.headers.get('Origin', '') and wa_text}"
         })
 
     except Exception as e:
@@ -88,5 +88,5 @@ def list_reservations():
 
 
 if __name__ == "__main__":
-    print("Iniciando Restaurante L'Étoile Gourmet Web App em http://localhost:5022")
-    app.run(host="0.0.0.0", port=5022, debug=False)
+    print("Iniciando Restaurante L'Étoile Gourmet (Lagos, Algarve) em http://localhost:5023")
+    app.run(host="0.0.0.0", port=5023, debug=False)
