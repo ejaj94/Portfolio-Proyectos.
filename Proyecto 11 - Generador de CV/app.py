@@ -3,7 +3,7 @@ import sys
 import json
 import base64
 import tempfile
-from flask import Flask, render_template, request, jsonify, send_file, url_for
+from flask import Flask, render_template, request, jsonify, send_file
 from services.cv_service import CVGenerationService
 
 app = Flask(__name__)
@@ -27,16 +27,26 @@ def index():
 @app.route("/api/generate-pdf", methods=["POST", "GET"])
 def generate_pdf():
     try:
-        req_data = {}
+        req_data = None
+
         if request.is_json:
-            req_data = request.get_json() or {}
-        elif request.form.get("payload"):
+            req_data = request.get_json(silent=True)
+
+        if not req_data and request.form.get("payload"):
             try:
                 req_data = json.loads(request.form.get("payload"))
-            except Exception:
-                req_data = {}
-        else:
+            except Exception as e:
+                print(f"[!] Json parse form payload error: {e}")
+
+        if not req_data and request.data:
+            try:
+                req_data = json.loads(request.data.decode("utf-8", errors="ignore"))
+            except Exception as e:
+                print(f"[!] Json parse raw body error: {e}")
+
+        if not req_data:
             req_data = {
+                "lang": request.form.get("lang") or request.args.get("lang") or "pt",
                 "personal": {
                     "name": request.form.get("name") or request.args.get("name") or "Enmanuel Jimenez",
                     "title": request.form.get("title") or request.args.get("title") or "Engenheiro de Software",
@@ -46,7 +56,7 @@ def generate_pdf():
                     "website": request.form.get("website") or request.args.get("website") or "linkedin.com/in/enmanueljimenez",
                     "summary": request.form.get("summary") or request.args.get("summary") or "Resumo profissional..."
                 },
-                "skills": ["Python", "Flask", "JavaScript", "HTML5/CSS3", "Git"],
+                "skills": ["Python", "Flask", "JavaScript ES6+", "HTML5/CSS3", "Git"],
                 "languages": ["Português (Nativo)", "Inglês (Avançado)"]
             }
 
@@ -89,5 +99,5 @@ def generate_pdf():
 
 
 if __name__ == "__main__":
-    print("Iniciando CV Studio Builder PRO Web App em http://localhost:5009")
-    app.run(host="0.0.0.0", port=5009, debug=False)
+    print("Iniciando CV Studio Builder PRO Web App em http://localhost:5011")
+    app.run(host="0.0.0.0", port=5011, debug=False)

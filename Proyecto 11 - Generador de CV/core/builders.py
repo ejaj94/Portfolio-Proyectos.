@@ -15,7 +15,7 @@ class CVStoryBuilder:
         story = []
         
         # 1. ENCABEZADO CON O SIN FOTO
-        personal = content.get_personal_info()
+        personal = content.get_personal_info() or {}
         name_str = personal.get('name') or "Enmanuel Jimenez"
         title_str = personal.get('title') or "Engenheiro de Software"
         phone_str = personal.get('phone') or ""
@@ -111,9 +111,6 @@ class CVStoryBuilder:
         # 4. HABILIDADES TÉCNICAS
         skills = content.get_skills()
         if skills:
-            story.append(Paragraph(content.get_skills_section_title(), styles['section']))
-            story.append(HRFlowable(width="100%", thickness=0.5, color=C_SECONDARY, spaceAfter=6, spaceBefore=2))
-            
             skills_data = []
             for item in skills:
                 if isinstance(item, (tuple, list)) and len(item) >= 2:
@@ -126,13 +123,15 @@ class CVStoryBuilder:
                         Paragraph(f"<b>{group}:</b>", styles['body']),
                         Paragraph(str(items_str), styles['body'])
                     ])
-                else:
+                elif items_str:
                     skills_data.append([
                         Paragraph(str(items_str), styles['body']),
-                        ""
+                        Paragraph("", styles['body'])
                     ])
                 
             if skills_data:
+                story.append(Paragraph(content.get_skills_section_title(), styles['section']))
+                story.append(HRFlowable(width="100%", thickness=0.5, color=C_SECONDARY, spaceAfter=6, spaceBefore=2))
                 skills_table = Table(skills_data, colWidths=[130, 390])
                 skills_table.setStyle(TableStyle([
                     ('VALIGN', (0,0), (-1,-1), 'TOP'),
@@ -199,12 +198,12 @@ class LetterStoryBuilder:
         story = []
         if not content.has_cover_letter():
             return story
-        letter_data = content.get_cover_letter_content()
-        personal = content.get_personal_info()
+        letter_data = content.get_cover_letter_content() or {}
+        personal = content.get_personal_info() or {}
         
-        contact_info = f"{personal['address']}<br/>+351 911 151 993<br/>{personal['email']}"
+        contact_info = f"{personal.get('address', '')}<br/>+351 911 151 993<br/>{personal.get('email', '')}"
         header_table = Table([
-            [Paragraph(f"<b>{personal['name']}</b>", styles['letter_name']), Paragraph(contact_info, styles['letter_contact'])]
+            [Paragraph(f"<b>{personal.get('name', '')}</b>", styles['letter_name']), Paragraph(contact_info, styles['letter_contact'])]
         ], colWidths=[240, 240])
         
         header_table.setStyle(TableStyle([
@@ -213,7 +212,7 @@ class LetterStoryBuilder:
             ('RIGHTPADDING', (0,0), (-1,-1), 0),
         ]))
         story.append(header_table)
-        story.append(Paragraph(personal['title'], styles['letter_title']))
+        story.append(Paragraph(personal.get('title', ''), styles['letter_title']))
         story.append(HRFlowable(width="100%", thickness=1, color=C_PRIMARY, spaceAfter=20, spaceBefore=0))
         
         story.append(Paragraph(letter_data.get('date_location', ''), styles['letter_date']))
