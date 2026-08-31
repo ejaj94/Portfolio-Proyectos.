@@ -11,7 +11,7 @@ BOOKINGS_DB = []
 
 @app.after_request
 def add_header(response):
-    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0, post-check=0, pre-check=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
     return response
@@ -19,7 +19,7 @@ def add_header(response):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", t=datetime.now().timestamp())
 
 
 @app.route("/api/booking", methods=["POST"])
@@ -59,7 +59,6 @@ def create_booking():
         }
 
         BOOKINGS_DB.append(new_booking)
-        print(f"[+] Nova Reserva Confirmada: {booking_id} | {client_name} | {service} | {booking_date} às {booking_time}")
 
         wa_text = f"Olá Barbearia Império! Gostaria de confirmar a minha marcação:\n\n" \
                   f"📌 *Código*: {booking_id}\n" \
@@ -78,7 +77,6 @@ def create_booking():
         })
 
     except Exception as e:
-        print(f"[!] Erro no agendamento: {e}")
         return jsonify({"success": False, "message": str(e)}), 500
 
 
@@ -88,5 +86,5 @@ def list_bookings():
 
 
 if __name__ == "__main__":
-    print("Iniciando Barbearia Império & Tradição Web App em http://localhost:5016")
-    app.run(host="0.0.0.0", port=5016, debug=False)
+    print("Iniciando Barbearia Império & Tradição Web App em http://localhost:5017")
+    app.run(host="0.0.0.0", port=5017, debug=False)
