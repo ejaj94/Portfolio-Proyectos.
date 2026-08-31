@@ -66,5 +66,5 @@ def generate_pdf():
 
 
 if __name__ == "__main__":
-    print("Iniciando CV Studio Builder PRO Web App em http://localhost:5008")
-    app.run(host="0.0.0.0", port=5008, debug=False)
+    print("Iniciando CV Studio Builder PRO Web App em http://localhost:5009")
+    app.run(host="0.0.0.0", port=5009, debug=False)
