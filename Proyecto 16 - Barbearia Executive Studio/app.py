@@ -86,5 +86,5 @@ def list_bookings():
 
 
 if __name__ == "__main__":
-    print("Iniciando Barbearia Império & Tradição Web App em http://localhost:5019")
-    app.run(host="0.0.0.0", port=5019, debug=False)
+    print("Iniciando Barbearia Império & Tradição Web App em http://localhost:5020")
+    app.run(host="0.0.0.0", port=5020, debug=False)
