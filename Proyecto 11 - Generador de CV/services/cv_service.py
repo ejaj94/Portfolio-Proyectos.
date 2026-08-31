@@ -81,7 +81,7 @@ class CVGenerationService:
 
             os.makedirs(output_dir, exist_ok=True)
 
-            self._log(f"Writing PDF → {output_path}")
+            self._log(f"Writing PDF -> {output_path}")
             success = PDFWriter.compile_pdf(output_path, story)
 
             if success:

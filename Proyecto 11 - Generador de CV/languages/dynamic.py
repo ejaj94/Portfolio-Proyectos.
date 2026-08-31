@@ -1,54 +1,27 @@
 """
 dynamic.py — Dynamic CV Content Provider  (OCP / LSP / DIP)
 =============================================================
-Implements CVContentProvider using a plain dict received from the GUI.
-This decouples the presentation layer from the PDF generation engine:
-the GUI only needs to build a dict; this class handles the contract.
+Implements CVContentProvider using a plain dict received from the GUI/Web API.
+This decouples the presentation layer from the PDF generation engine.
 """
 from __future__ import annotations
 
 from typing import Any, Dict, List, Tuple
-
 from core.models import CVContentProvider
 
 
 class DynamicCVContent(CVContentProvider):
     """
     Concrete CVContentProvider that derives all content from a data dict.
-
-    Expected dict shape (all keys optional — sensible defaults applied):
-    {
-        "personal": {
-            "name": str, "title": str, "phone": str, "email": str,
-            "address": str, "github": str, "linkedin": str
-        },
-        "profile_title": str,
-        "profile_text":  str,
-        "experience_title": str,
-        "experience": [
-            {"title": str, "subtitle": str, "date": str, "bullets": [str, ...]}
-        ],
-        "skills_title": str,
-        "skills": [("Group label", "item1, item2, ..."), ...],
-        "education_title": str,
-        "education": [
-            {"title": str, "subtitle": str, "date": str, "bullets": [str, ...]}
-        ],
-        "certificates_subtitle": str,
-        "certificates": [str, ...],
-        "languages_title": str,
-        "languages": [("Language", "Level"), ...],
-        "output_lang": str,          # "es" | "en" | "pt"
-    }
+    Supports both legacy dict shapes and web app JSON payloads.
     """
 
-    # ── Default section labels per output language ───────────────────────────
     _DEFAULTS: Dict[str, Dict[str, str]] = {
         "en": {
             "profile_title":       "Professional Profile",
             "experience_title":    "Work Experience",
             "skills_title":        "Technical Skills",
-            "education_title":     "Education & Certifications",
+            "education_title":     "Education & Qualifications",
             "certificates_subtitle": "Training Certificates",
             "languages_title":     "Languages",
         },
@@ -56,7 +29,7 @@ class DynamicCVContent(CVContentProvider):
             "profile_title":       "Perfil Profesional",
             "experience_title":    "Experiencia Laboral",
             "skills_title":        "Habilidades Técnicas",
-            "education_title":     "Educación y Certificados",
+            "education_title":     "Educación y Titulaciones",
             "certificates_subtitle": "Certificados de Formación",
             "languages_title":     "Idiomas",
         },
@@ -64,7 +37,7 @@ class DynamicCVContent(CVContentProvider):
             "profile_title":       "Perfil Profissional",
             "experience_title":    "Experiência Profissional",
             "skills_title":        "Competências Técnicas",
-            "education_title":     "Formação e Certificados",
+            "education_title":     "Formação Académica",
             "certificates_subtitle": "Certificados de Formação",
             "languages_title":     "Idiomas",
         },
@@ -72,66 +45,98 @@ class DynamicCVContent(CVContentProvider):
 
     def __init__(self, data: Dict[str, Any]) -> None:
         self._data = data
-        lang = data.get("output_lang", "en")
-        self._defaults = self._DEFAULTS.get(lang, self._DEFAULTS["en"])
+        lang = data.get("lang") or data.get("output_lang") or "pt"
+        self._defaults = self._DEFAULTS.get(lang.lower(), self._DEFAULTS["pt"])
 
-    # ── Helpers ──────────────────────────────────────────────────────────────
     def _get(self, key: str, fallback: Any = "") -> Any:
         return self._data.get(key) or self._defaults.get(key, fallback)
 
-    # ── CVContentProvider contract ────────────────────────────────────────────
     def get_personal_info(self) -> Dict[str, str]:
         p = self._data.get("personal", {})
         return {
-            "name":     p.get("name",     ""),
-            "title":    p.get("title",    ""),
+            "name":     p.get("name",     "Enmanuel Jimenez"),
+            "title":    p.get("title",    "Engenheiro de Software"),
             "phone":    p.get("phone",    ""),
             "email":    p.get("email",    ""),
-            "address":  p.get("location", ""),
+            "address":  p.get("location", p.get("address", "")),
             "github":   p.get("github",   ""),
-            "linkedin": p.get("linkedin", ""),
+            "linkedin": p.get("website",  p.get("linkedin", "")),
         }
 
     def get_profile_title(self) -> str:
         return self._get("profile_title")
 
     def get_profile_text(self) -> str:
-        return self._data.get("profile", "")
+        p = self._data.get("personal", {})
+        return p.get("summary") or self._data.get("profile_text") or self._data.get("profile") or ""
 
     def get_experience_section_title(self) -> str:
         return self._get("experience_title")
 
     def get_experience(self) -> List[Dict[str, Any]]:
         raw = self._data.get("experience", [])
-        return [
-            {
-                "title": r.get("title", ""),
-                "subtitle": r.get("company", ""),
-                "date": r.get("date", ""),
-                "bullets": r.get("description", [])
-            } for r in raw
-        ]
+        result = []
+        for r in raw:
+            if isinstance(r, dict):
+                title = r.get("title", "")
+                subtitle = r.get("company") or r.get("subtitle", "")
+                date = r.get("dates") or r.get("date", "")
+                desc = r.get("desc") or r.get("bullets", [])
+                
+                bullets = [desc] if isinstance(desc, str) and desc.strip() else (desc if isinstance(desc, list) else [])
+                result.append({
+                    "title": title,
+                    "subtitle": subtitle,
+                    "date": date,
+                    "bullets": bullets
+                })
+        return result
 
     def get_skills_section_title(self) -> str:
         return self._get("skills_title")
 
     def get_skills(self) -> List[Tuple[str, str]]:
-        return self._data.get("skills", [])
+        raw = self._data.get("skills", [])
+        if not raw:
+            return []
+        
+        # If raw is a list of strings ["Python", "Flask", ...]
+        if isinstance(raw, list) and len(raw) > 0 and isinstance(raw[0], str):
+            skills_str = ", ".join(raw)
+            return [(self._get("skills_title"), skills_str)]
+        
+        # If raw is a list of tuples [("Group", "Items")]
+        result = []
+        for item in raw:
+            if isinstance(item, (tuple, list)) and len(item) >= 2:
+                result.append((str(item[0]), str(item[1])))
+            elif isinstance(item, str):
+                result.append((self._get("skills_title"), item))
+        return result
 
     def get_education_section_title(self) -> str:
         return self._get("education_title")
 
     def get_education(self) -> List[Dict[str, Any]]:
-        edu_data = self._data.get("education", {})
+        edu_data = self._data.get("education", [])
         raw = edu_data.get("degrees", []) if isinstance(edu_data, dict) else edu_data
-        return [
-            {
-                "title": r.get("degree", ""),
-                "subtitle": r.get("school", ""),
-                "date": r.get("date", ""),
-                "bullets": []
-            } for r in raw
-        ]
+        result = []
+        if isinstance(raw, list):
+            for r in raw:
+                if isinstance(r, dict):
+                    title = r.get("degree") or r.get("title", "")
+                    subtitle = r.get("institution") or r.get("school") or r.get("subtitle", "")
+                    date = r.get("dates") or r.get("date", "")
+                    bullets = r.get("bullets", [])
+                    if isinstance(bullets, str):
+                        bullets = [bullets]
+                    result.append({
+                        "title": title,
+                        "subtitle": subtitle,
+                        "date": date,
+                        "bullets": bullets
+                    })
+        return result
 
     def get_certificates_subtitle(self) -> str:
         return self._get("certificates_subtitle")
@@ -147,62 +152,24 @@ class DynamicCVContent(CVContentProvider):
 
     def get_languages(self) -> List[Tuple[str, str]]:
         raw = self._data.get("languages", [])
-        target = self._data.get("output_lang", "en").lower()
+        result = []
         
-        lang_map = {
-            "inglés": {"en": "English", "es": "Inglés", "pt": "Inglês"},
-            "english": {"en": "English", "es": "Inglés", "pt": "Inglês"},
-            "inglês": {"en": "English", "es": "Inglés", "pt": "Inglês"},
-            "español": {"en": "Spanish", "es": "Español", "pt": "Espanhol"},
-            "spanish": {"en": "Spanish", "es": "Español", "pt": "Espanhol"},
-            "espanhol": {"en": "Spanish", "es": "Español", "pt": "Espanhol"},
-            "francés": {"en": "French", "es": "Francés", "pt": "Francês"},
-            "french": {"en": "French", "es": "Francés", "pt": "Francês"},
-            "francês": {"en": "French", "es": "Francés", "pt": "Francês"},
-            "alemán": {"en": "German", "es": "Alemán", "pt": "Alemão"},
-            "german": {"en": "German", "es": "Alemán", "pt": "Alemão"},
-            "alemão": {"en": "German", "es": "Alemán", "pt": "Alemão"},
-            "portugués": {"en": "Portuguese", "es": "Portugués", "pt": "Português"},
-            "portuguese": {"en": "Portuguese", "es": "Portugués", "pt": "Português"},
-            "português": {"en": "Portuguese", "es": "Portugués", "pt": "Português"},
-            "italiano": {"en": "Italian", "es": "Italiano", "pt": "Italiano"},
-            "italian": {"en": "Italian", "es": "Italiano", "pt": "Italiano"},
-            "chino": {"en": "Chinese", "es": "Chino", "pt": "Chinês"},
-            "chinese": {"en": "Chinese", "es": "Chino", "pt": "Chinês"},
-            "chinês": {"en": "Chinese", "es": "Chino", "pt": "Chinês"},
-            "japonés": {"en": "Japanese", "es": "Japonés", "pt": "Japonês"},
-            "japanese": {"en": "Japanese", "es": "Japonés", "pt": "Japonês"},
-            "japonês": {"en": "Japanese", "es": "Japonés", "pt": "Japonês"},
-            "ruso": {"en": "Russian", "es": "Ruso", "pt": "Russo"},
-            "russian": {"en": "Russian", "es": "Ruso", "pt": "Russo"},
-            "russo": {"en": "Russian", "es": "Ruso", "pt": "Russo"},
-        }
-        
-        level_map = {
-            "básico": {"en": "Basic", "es": "Básico", "pt": "Básico"},
-            "basic": {"en": "Basic", "es": "Básico", "pt": "Básico"},
-            "intermedio": {"en": "Intermediate", "es": "Intermedio", "pt": "Intermediário"},
-            "intermediate": {"en": "Intermediate", "es": "Intermedio", "pt": "Intermediário"},
-            "intermediário": {"en": "Intermediate", "es": "Intermedio", "pt": "Intermediário"},
-            "avanzado": {"en": "Advanced", "es": "Avanzado", "pt": "Avançado"},
-            "advanced": {"en": "Advanced", "es": "Avanzado", "pt": "Avançado"},
-            "avançado": {"en": "Advanced", "es": "Avanzado", "pt": "Avançado"},
-            "profesional/nativo": {"en": "Native/Bilingual", "es": "Profesional/Nativo", "pt": "Nativo/Bilingue"},
-            "native/bilingual": {"en": "Native/Bilingual", "es": "Profesional/Nativo", "pt": "Nativo/Bilingue"},
-            "nativo/bilingue": {"en": "Native/Bilingual", "es": "Profesional/Nativo", "pt": "Nativo/Bilingue"},
-        }
-        
-        translated_langs = []
-        for l, lev in raw:
-            tl = lang_map.get(l.lower(), {}).get(target, l)
-            tlev = level_map.get(lev.lower(), {}).get(target, lev)
-            translated_langs.append((tl, tlev))
-            
-        return translated_langs
+        for item in raw:
+            if isinstance(item, (tuple, list)) and len(item) >= 2:
+                result.append((str(item[0]), str(item[1])))
+            elif isinstance(item, str):
+                if "(" in item and ")" in item:
+                    parts = item.split("(")
+                    lang_name = parts[0].strip()
+                    level = parts[1].replace(")", "").strip()
+                    result.append((lang_name, level))
+                else:
+                    result.append((item.strip(), "Fluente/Nativo"))
+        return result
 
     def get_filename_suffix(self) -> str:
-        lang = self._data.get("output_lang", "en").upper()
-        return f"_{lang}" if lang != "ES" else ""
+        lang = (self._data.get("lang") or self._data.get("output_lang") or "PT").upper()
+        return f"_{lang}"
 
     def has_cover_letter(self) -> bool:
         return False
