@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia Império & Tradição — Lisboa | Corte & Barba Executivo 💈</title>
+    <meta name="description" content="Barbearia executiva de prestígio na Avenida da Liberdade, Lisboa. Cortes clássicos, barbas com toalha quente e marcações online em tempo real.">
+    
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cinzel & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=1">
+</head>
+<body>
+
+    <!-- Top Announcement Info Bar -->
+    <div class="top-info-bar">
+        <div class="container top-bar-flex">
+            <div class="top-info-left">
+                <span><i class="fa-solid fa-location-dot"></i> Av. da Liberdade, nº 142, Lisboa</span>
+                <span><i class="fa-solid fa-clock"></i> Seg. a Sáb.: 09:00 - 20:00</span>
+            </div>
+            <div class="top-info-right">
+                <a href="tel:+351925814730"><i class="fa-solid fa-phone"></i> +351 925 814 730</a>
+                <a href="mailto:contacto@barbeariaimperio.pt"><i class="fa-solid fa-envelope"></i> contacto@barbeariaimperio.pt</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="app-header">
+        <div class="container header-flex">
+            <a href="#" class="brand-logo">
+                <div class="logo-icon"><i class="fa-solid fa-scissors"></i></div>
+                <div class="logo-text">
+                    <span class="brand-main">IMPÉRIO</span>
+                    <span class="brand-sub">BARBEARIA & TRADIÇÃO</span>
+                </div>
+            </a>
+
+            <!-- Desktop Links -->
+            <nav class="nav-menu">
+                <a href="#services">Serviços & Preços</a>
+                <a href="#gallery">Galeria</a>
+                <a href="#barbers">Barbeiros</a>
+                <a href="#booking" class="btn-nav-highlight">Marcação Online</a>
+                <a href="#location">Contacto</a>
+            </nav>
+
+            <!-- Mobile Hamburger Toggle -->
+            <button id="mobileMenuToggle" class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileDrawer" class="mobile-drawer">
+            <a href="#services" class="mobile-link">Serviços & Preços</a>
+            <a href="#gallery" class="mobile-link">Galeria</a>
+            <a href="#barbers" class="mobile-link">Barbeiros</a>
+            <a href="#booking" class="mobile-link btn-drawer">Marcação Online</a>
+            <a href="#location" class="mobile-link">Contacto</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <span class="hero-badge"><i class="fa-solid fa-crown"></i> Barbearia de Prestígio desde 2012</span>
+            <h1 class="hero-title">ESTILO, TRADIÇÃO & ELEGÂNCIA MASCULINA</h1>
+            <p class="hero-subtitle">
+                Experimente o ritual clássico do barbear com toalha quente e os melhores cortes modernos na Avenida da Liberdade.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#booking" class="btn btn-primary"><i class="fa-solid fa-calendar-check"></i> Reservar Marcação</a>
+                <a href="https://wa.me/351925814730?text=Ol%C3%A1%20Barbearia%20Imp%C3%A9rio,%20gostaria%20de%20consultar%20disponibilidade!" target="_blank" class="btn btn-whatsapp">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp Directo
+                </a>
+            </div>
+
+            <!-- Fast Stats Bar -->
+            <div class="hero-stats-grid">
+                <div class="stat-card">
+                    <span class="stat-num">+12.000</span>
+                    <span class="stat-txt">Clientes Atendidos</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num">4.9 ★</span>
+                    <span class="stat-txt">Classificação Média</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num">100%</span>
+                    <span class="stat-txt">Atendimento VIP</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services & Pricing Section -->
+    <section id="services" class="section-padding bg-porcelain">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag"><i class="fa-solid fa-scissors"></i> MENU DE SERVIÇOS</span>
+                <h2 class="section-title">Serviços & Tabela de Preços</h2>
+                <p class="section-desc">Cuidados masculinos de alta precisão executados por mestres barbeiros experientes.</p>
+            </div>
+
+            <div class="services-grid">
+                <!-- Service Card 1 -->
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-icon"><i class="fa-solid fa-scissors"></i></div>
+                        <span class="service-price">20,00 €</span>
+                    </div>
+                    <h3>Corte de Cabelo Clássico / Moderno</h3>
+                    <p>Corte personalizado com lavagem, aconselhamento de visagismo, acabamento a navalha e estilização com pomada premium.</p>
+                    <div class="service-footer">
+                        <span><i class="fa-solid fa-clock"></i> 40 min</span>
+                        <a href="#booking" onclick="selectService('Corte de Cabelo Clássico (20€)')" class="btn-sm btn-outline">Reservar</a>
+                    </div>
+                </div>
+
+                <!-- Service Card 2 -->
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-icon"><i class="fa-solid fa-razor-blade"></i></div>
+                        <span class="service-price">15,00 €</span>
+                    </div>
+                    <h3>Barba Tradicional & Ritual Toalha Quente</h3>
+                    <p>Design de barba a navalha com aplicação de óleos essenciais, tratamento de toalha quente a vapor e bálsamo hidratante.</p>
+                    <div class="service-footer">
+                        <span><i class="fa-solid fa-clock"></i> 30 min</span>
+                        <a href="#booking" onclick="selectService('Barba Tradicional com Toalha Quente (15€)')" class="btn-sm btn-outline">Reservar</a>
+                    </div>
+                </div>
+
+                <!-- Service Card 3 (Popular) -->
+                <div class="service-card featured">
+                    <span class="badge-featured">Mais Escolhido</span>
+                    <div class="service-card-header">
+                        <div class="service-icon"><i class="fa-solid fa-crown"></i></div>
+                        <span class="service-price">32,00 €</span>
+                    </div>
+                    <h3>Combo Executivo Império (Corte + Barba)</h3>
+                    <p>O ritual completo: Corte de cabelo à escolha + Ritual completo de barba com toalha quente + Bebida de boas-vindas VIP.</p>
+                    <div class="service-footer">
+                        <span><i class="fa-solid fa-clock"></i> 65 min</span>
+                        <a href="#booking" onclick="selectService('Combo Executivo Império (32€)')" class="btn-sm btn-primary">Reservar VIP</a>
+                    </div>
+                </div>
+
+                <!-- Service Card 4 -->
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <span class="service-price">18,00 €</span>
+                    </div>
+                    <h3>Camuflagem & Nuance de Grisalhos</h3>
+                    <p>Tratamento discreto e natural para amenizar os fios brancos da barba ou cabelo em apenas 15 minutos.</p>
+                    <div class="service-footer">
+                        <span><i class="fa-solid fa-clock"></i> 25 min</span>
+                        <a href="#booking" onclick="selectService('Camuflagem de Grisalhos (18€)')" class="btn-sm btn-outline">Reservar</a>
+                    </div>
+                </div>
+
+                <!-- Service Card 5 -->
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-icon"><i class="fa-solid fa-soap"></i></div>
+                        <span class="service-price">25,00 €</span>
+                    </div>
+                    <h3>Tratamento Capilar VIP & Spa Facial</h3>
+                    <p>Esfoliação facial purificante, máscara hidratante masculina e massagem capilar revitalizante para o couro cabeludo.</p>
+                    <div class="service-footer">
+                        <span><i class="fa-solid fa-clock"></i> 35 min</span>
+                        <a href="#booking" onclick="selectService('Tratamento Capilar VIP & Spa Facial (25€)')" class="btn-sm btn-outline">Reservar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section-padding">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag"><i class="fa-solid fa-camera"></i> GALERIA DE ESTILOS</span>
+                <h2 class="section-title">Trabalhos & Transformações</h2>
+                <p class="section-desc">Confira alguns dos cortes e acabamentos executivos realizados no nosso espaço.</p>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=600&q=80" alt="Corte Executivo">
+                    <div class="gallery-caption">
+                        <h4>Corte Executivo & Fade</h4>
+                        <p>Acabamento de precisão e graduação suave</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=600&q=80" alt="Barba Tradicional">
+                    <div class="gallery-caption">
+                        <h4>Ritual de Barba</h4>
+                        <p>Contornos definidos a navalha e toalha quente</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=600&q=80" alt="Corte Pompadour">
+                    <div class="gallery-caption">
+                        <h4>Pompadour Clássico</h4>
+                        <p>Textura clássica com brilho moderado</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=600&q=80" alt="Ambiente Barbearia">
+                    <div class="gallery-caption">
+                        <h4>Ambiente Premium</h4>
+                        <p>Cadeiras de couro vintage e bebidas de cortesia</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Barbers Section -->
+    <section id="barbers" class="section-padding bg-porcelain">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag"><i class="fa-solid fa-user-gear"></i> A NOSSA EQUIPA</span>
+                <h2 class="section-title">Mestres Barbeiros</h2>
+                <p class="section-desc">Profissionais apaixonados pela arte da barbearia tradicional e pelas últimas tendências.</p>
+            </div>
+
+            <div class="barbers-grid">
+                <!-- Barber 1 -->
+                <div class="barber-card">
+                    <div class="barber-img-box">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80" alt="Mestre Miguel Fonseca">
+                    </div>
+                    <div class="barber-info">
+                        <h3>Mestre Miguel Fonseca</h3>
+                        <span class="barber-role">Fundador & Mestre Barbeiro</span>
+                        <p>Mais de 12 anos de experiência na arte da navalha e cortes clássicos de alta gama.</p>
+                        <a href="#booking" onclick="selectBarber('Mestre Miguel Fonseca')" class="btn-sm btn-outline w-100">Reservar com Miguel</a>
+                    </div>
+                </div>
+
+                <!-- Barber 2 -->
+                <div class="barber-card">
+                    <div class="barber-img-box">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80" alt="Gonçalo Neves">
+                    </div>
+                    <div class="barber-info">
+                        <h3>Gonçalo Neves</h3>
+                        <span class="barber-role">Senior Barber Stylist</span>
+                        <p>Especialista em degradés modernos (Skin Fade), textura urbana e estilos arrojados.</p>
+                        <a href="#booking" onclick="selectBarber('Gonçalo Neves')" class="btn-sm btn-outline w-100">Reservar com Gonçalo</a>
+                    </div>
+                </div>
+
+                <!-- Barber 3 -->
+                <div class="barber-card">
+                    <div class="barber-img-box">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=80" alt="Diogo Silva">
+                    </div>
+                    <div class="barber-info">
+                        <h3>Diogo Silva</h3>
+                        <span class="barber-role">Beard Specialist</span>
+                        <p>Mestre no alinhamento de barbas compridas, tratamentos de pele e massagem capilar.</p>
+                        <a href="#booking" onclick="selectBarber('Diogo Silva')" class="btn-sm btn-outline w-100">Reservar com Diogo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Online Booking Section -->
+    <section id="booking" class="section-padding">
+        <div class="container">
+            <div class="booking-wrapper card-porcelain">
+                <div class="booking-header">
+                    <span class="section-tag"><i class="fa-solid fa-calendar-check"></i> MARCAÇÃO ONLINE</span>
+                    <h2>Agende a sua Visita em Tempo Real</h2>
+                    <p>Escolha o seu serviço, barbeiro preferido e o horário que melhor se adapta à sua agenda.</p>
+                </div>
+
+                <form id="bookingForm" class="booking-form" onsubmit="return false;">
+                    <div class="form-grid-2col">
+                        <!-- 1. Serviço -->
+                        <div class="form-group">
+                            <label for="selService"><i class="fa-solid fa-scissors"></i> Serviço Desejado *</label>
+                            <select id="selService" class="form-control" required>
+                                <option value="" disabled selected>Selecione um serviço...</option>
+                                <option value="Corte de Cabelo Clássico (20€)">Corte de Cabelo Clássico (20,00 €)</option>
+                                <option value="Barba Tradicional com Toalha Quente (15€)">Barba Tradicional com Toalha Quente (15,00 €)</option>
+                                <option value="Combo Executivo Império (32€)">Combo Executivo Império - Corte + Barba (32,00 €)</option>
+                                <option value="Camuflagem de Grisalhos (18€)">Camuflagem de Grisalhos (18,00 €)</option>
+                                <option value="Tratamento Capilar VIP & Spa Facial (25€)">Tratamento Capilar VIP & Spa Facial (25,00 €)</option>
+                            </select>
+                        </div>
+
+                        <!-- 2. Barbeiro -->
+                        <div class="form-group">
+                            <label for="selBarber"><i class="fa-solid fa-user-tie"></i> Barbeiro de Preferência</label>
+                            <select id="selBarber" class="form-control">
+                                <option value="Qualquer Barbeiro Disponível">Qualquer Barbeiro Disponível</option>
+                                <option value="Mestre Miguel Fonseca">Mestre Miguel Fonseca</option>
+                                <option value="Gonçalo Neves">Gonçalo Neves</option>
+                                <option value="Diogo Silva">Diogo Silva</option>
+                            </select>
+                        </div>
+
+                        <!-- 3. Data -->
+                        <div class="form-group">
+                            <label for="inputDate"><i class="fa-solid fa-calendar"></i> Data da Marcação *</label>
+                            <input type="date" id="inputDate" class="form-control" required>
+                        </div>
+
+                        <!-- 4. Hora -->
+                        <div class="form-group">
+                            <label for="selTime"><i class="fa-solid fa-clock"></i> Horário Disponível *</label>
+                            <select id="selTime" class="form-control" required>
+                                <option value="" disabled selected>Selecione a hora...</option>
+                                <option value="09:30">09:30</option>
+                                <option value="10:30">10:30</option>
+                                <option value="11:30">11:30</option>
+                                <option value="14:00">14:00</option>
+                                <option value="15:00">15:00</option>
+                                <option value="16:00">16:00</option>
+                                <option value="17:30">17:30</option>
+                                <option value="18:30">18:30</option>
+                                <option value="19:15">19:15</option>
+                            </select>
+                        </div>
+
+                        <!-- 5. Nome do Cliente -->
+                        <div class="form-group">
+                            <label for="inputClientName"><i class="fa-solid fa-user"></i> Nome Completo *</label>
+                            <input type="text" id="inputClientName" class="form-control" placeholder="Ex: Alexandre Santos" required>
+                        </div>
+
+                        <!-- 6. Telemóvel do Cliente -->
+                        <div class="form-group">
+                            <label for="inputClientPhone"><i class="fa-solid fa-mobile-screen"></i> Telemóvel / Telefone *</label>
+                            <input type="text" id="inputClientPhone" class="form-control" placeholder="Ex: +351 912 345 678" required>
+                        </div>
+                    </div>
+
+                    <!-- Email Opcional & Notas -->
+                    <div class="form-group margin-top-10">
+                        <label for="inputClientEmail"><i class="fa-solid fa-envelope"></i> Correio Eletrónico (Para confirmação por email)</label>
+                        <input type="email" id="inputClientEmail" class="form-control" placeholder="cliente@exemplo.pt">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputNotes"><i class="fa-solid fa-comment-pen"></i> Observações ou Preferências (Opcional)</label>
+                        <textarea id="inputNotes" class="form-control" rows="2" placeholder="Ex: Preferência por bebidas sem açúcar, corte degradê baixo..."></textarea>
+                    </div>
+
+                    <button type="submit" id="btnSubmitBooking" class="btn btn-primary btn-block">
+                        <i class="fa-solid fa-circle-check"></i> Confirmar Marcação Instantânea
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location & Contact Section -->
+    <section id="location" class="section-padding bg-porcelain">
+        <div class="container">
+            <div class="location-grid">
+                <div class="location-info">
+                    <span class="section-tag"><i class="fa-solid fa-location-dot"></i> O NOSSO ESPAÇO</span>
+                    <h2>Venha Visitar-nos em Lisboa</h2>
+                    <p class="location-text">
+                        Localizada no coração de Lisboa, a <strong>Barbearia Império & Tradição</strong> oferece um ambiente exclusivo com atendimento personalizado, música ambiente selecionada e serviço de bar de cortesia.
+                    </p>
+
+                    <div class="contact-details-list">
+                        <div class="contact-detail-item">
+                            <div class="contact-icon"><i class="fa-solid fa-map-pin"></i></div>
+                            <div>
+                                <h4>Morada</h4>
+                                <p>Avenida da Liberdade, nº 142, 1250-146 Lisboa</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail-item">
+                            <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+                            <div>
+                                <h4>Telemóvel / Reservas</h4>
+                                <p><a href="tel:+351925814730">+351 925 814 730</a></p>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail-item">
+                            <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+                            <div>
+                                <h4>Correio Eletrónico</h4>
+                                <p><a href="mailto:contacto@barbeariaimperio.pt">contacto@barbeariaimperio.pt</a></p>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail-item">
+                            <div class="contact-icon"><i class="fa-solid fa-clock"></i></div>
+                            <div>
+                                <h4>Horário de Funcionamento</h4>
+                                <p>Segunda a Sábado: 09:00 - 20:00 | Domingo: Encerrado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Map Simulation Card -->
+                <div class="map-card-box">
+                    <div class="map-placeholder">
+                        <i class="fa-solid fa-map-location-dot map-bg-icon"></i>
+                        <div class="map-pin-badge">
+                            <i class="fa-solid fa-scissors"></i>
+                            <div>
+                                <strong>Barbearia Império & Tradição</strong>
+                                <p>Av. da Liberdade nº 142, Lisboa</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="map-card-footer">
+                        <a href="https://maps.google.com/?q=Avenida+da+Liberdade+142+Lisboa" target="_blank" class="btn btn-outline w-100">
+                            <i class="fa-solid fa-directions"></i> Ver no Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container footer-flex">
+            <div class="footer-brand">
+                <h3><i class="fa-solid fa-scissors"></i> IMPÉRIO <span>BARBEARIA</span></h3>
+                <p>© 2026 Barbearia Império & Tradição. Todos os direitos reservados. Lisboa, Portugal.</p>
+            </div>
+            <div class="footer-socials">
+                <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://wa.me/351925814730" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Direct Button -->
+    <a href="https://wa.me/351925814730?text=Ol%C3%A1%20Barbearia%20Imp%C3%A9rio,%20gostaria%20de%20agendar%20um%20corte!" target="_blank" class="floating-whatsapp-btn" title="Contactar no WhatsApp (+351 925 814 730)">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Modal Receipt Confirmation -->
+    <div id="receiptModal" class="modal-backdrop">
+        <div class="modal-card">
+            <button id="btnCloseModal" class="modal-close-btn">&times;</button>
+            <div class="receipt-header">
+                <div class="receipt-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <h2>Marcação Confirmada!</h2>
+                <p>O seu agendamento foi registado com sucesso na Barbearia Império & Tradição.</p>
+            </div>
+
+            <div class="receipt-body">
+                <div class="receipt-row">
+                    <span>Código da Reserva:</span>
+                    <strong id="rcId">IMP-101</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Cliente:</span>
+                    <strong id="rcClient">Alexandre Santos</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Serviço:</span>
+                    <strong id="rcService">Combo Executivo Império</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Barbeiro:</span>
+                    <strong id="rcBarber">Mestre Miguel Fonseca</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Data & Hora:</span>
+                    <strong id="rcDateTime">2026-09-02 às 15:00</strong>
+                </div>
+            </div>
+
+            <div class="receipt-actions">
+                <a id="btnModalWa" href="#" target="_blank" class="btn btn-whatsapp w-100">
+                    <i class="fa-brands fa-whatsapp"></i> Enviar Confirmação para o WhatsApp
+                </a>
+                <button id="btnFinishModal" class="btn btn-outline w-100">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=1"></script>
+</body>
+</html>
