@@ -249,7 +249,7 @@ const PRODUCTS = [
     },
     {
         id: "candle-oceanium-1",
-        category: "vela",
+        category: "vaso",
         price: 19.90,
         image: "assets/vela_oceanium.jpg",
         qty: 1,
@@ -284,7 +284,7 @@ const PRODUCTS = [
     },
     {
         id: "candle-summer_musical-1",
-        category: "vela",
+        category: "vaso",
         price: 10.90,
         image: "assets/vela_summer_musical.jpg",
         qty: 1,
@@ -636,7 +636,7 @@ const PRODUCTS = [
     },
     {
         id: "candle-coffee_cream-1",
-        category: "vela",
+        category: "vaso",
         price: 10.90,
         image: "assets/vela_coffee_cream.jpg",
         qty: 1,
@@ -1336,7 +1336,7 @@ const PRODUCTS = [
     },
     {
         id: "candle-vela_en_vaso-1",
-        category: "vela",
+        category: "vaso",
         price: 13.90,
         image: "assets/candle_vela_en_vaso_1.jpeg",
         qty: 1,
@@ -1371,7 +1371,7 @@ const PRODUCTS = [
     },
     {
         id: "candle-vela_en_vaso-2",
-        category: "vela",
+        category: "vaso",
         price: 13.90,
         image: "assets/candle_vela_en_vaso_2.jpeg",
         qty: 1,
@@ -1406,7 +1406,7 @@ const PRODUCTS = [
     },
     {
         id: "candle-vela_en_vaso-3",
-        category: "vela",
+        category: "vaso",
         price: 13.90,
         image: "assets/candle_vela_en_vaso_3.jpeg",
         qty: 1,
@@ -1441,7 +1441,7 @@ const PRODUCTS = [
     },
     {
         id: "candle-vela_en_vaso-4",
-        category: "vela",
+        category: "vaso",
         price: 13.90,
         image: "assets/candle_vela_en_vaso_4.jpeg",
         qty: 1,
@@ -1476,7 +1476,7 @@ const PRODUCTS = [
     },
     {
         id: "candle-vela_en_vaso-5",
-        category: "vela",
+        category: "vaso",
         price: 13.90,
         image: "assets/candle_vela_en_vaso_5.jpeg",
         qty: 1,
