@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import base64
 import tempfile
 from flask import Flask, render_template, request, jsonify, send_file, url_for
@@ -23,13 +24,33 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/api/generate-pdf", methods=["POST"])
+@app.route("/api/generate-pdf", methods=["POST", "GET"])
 def generate_pdf():
     try:
-        req_data = request.get_json() or {}
-        personal = req_data.get("personal", {})
-        photo_b64 = req_data.get("photo_b64", "")
+        req_data = {}
+        if request.is_json:
+            req_data = request.get_json() or {}
+        elif request.form.get("payload"):
+            try:
+                req_data = json.loads(request.form.get("payload"))
+            except Exception:
+                req_data = {}
+        else:
+            req_data = {
+                "personal": {
+                    "name": request.form.get("name") or request.args.get("name") or "Enmanuel Jimenez",
+                    "title": request.form.get("title") or request.args.get("title") or "Engenheiro de Software",
+                    "email": request.form.get("email") or request.args.get("email") or "enmanuel.jimenez@exemplo.pt",
+                    "phone": request.form.get("phone") or request.args.get("phone") or "+351 912 345 678",
+                    "location": request.form.get("location") or request.args.get("location") or "Lisboa, Portugal",
+                    "website": request.form.get("website") or request.args.get("website") or "linkedin.com/in/enmanueljimenez",
+                    "summary": request.form.get("summary") or request.args.get("summary") or "Resumo profissional..."
+                },
+                "skills": ["Python", "Flask", "JavaScript", "HTML5/CSS3", "Git"],
+                "languages": ["Português (Nativo)", "Inglês (Avançado)"]
+            }
 
+        photo_b64 = req_data.get("photo_b64", "")
         photo_path = None
         if photo_b64 and "," in photo_b64:
             try:
@@ -40,7 +61,7 @@ def generate_pdf():
                 temp_img.close()
                 photo_path = temp_img.name
             except Exception as e:
-                print(f"[!] Erro ao descodificar foto: {e}")
+                print(f"[!] Erro foto: {e}")
 
         output_dir = os.path.join(app.root_path, "output_pdf")
         os.makedirs(output_dir, exist_ok=True)
@@ -56,12 +77,14 @@ def generate_pdf():
             return send_file(
                 result.output_path,
                 as_attachment=True,
-                download_name=filename
+                download_name=filename,
+                mimetype="application/pdf"
             )
         else:
             return jsonify({"success": False, "message": result.message}), 400
 
     except Exception as e:
+        print(f"[!] Erro inesperado ao gerar PDF: {e}")
         return jsonify({"success": False, "message": str(e)}), 500
 
 

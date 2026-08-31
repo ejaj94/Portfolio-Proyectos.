@@ -63,6 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const pvLanguagesText = document.getElementById('pvLanguagesText');
 
     const btnDownloadPDF = document.getElementById('btnDownloadPDF');
+    const hiddenPdfForm = document.getElementById('hiddenPdfForm');
+    const hiddenPayload = document.getElementById('hiddenPayload');
     const selCvLanguage = document.getElementById('selCvLanguage');
 
     // Mobile Tabs
@@ -116,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnRemovePhoto.addEventListener('click', () => {
         photoB64 = "";
-        const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(txtName.value || 'User')}&background=4f46e5&color=fff&size=128`;
+        const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(txtName.value || 'Enmanuel Jimenez')}&background=4f46e5&color=fff&size=128`;
         imgPhotoPreview.src = defaultAvatar;
         pvPhoto.src = defaultAvatar;
     });
@@ -182,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <input type="text" value="${edu.institution}" oninput="updateEdu(${index}, 'institution', this.value)">
                     </div>
                     <div class="form-group">
-                        <label>Curso / Gração</label>
+                        <label>Curso / Graduação</label>
                         <input type="text" value="${edu.degree}" oninput="updateEdu(${index}, 'degree', this.value)">
                     </div>
                     <div class="form-group">
@@ -213,12 +215,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 5. Update Live CV Preview
     function updateLivePreview() {
-        const nameVal = txtName.value.trim() || 'Seu Nome';
+        const nameVal = txtName.value.trim() || 'Enmanuel Jimenez';
         pvName.textContent = nameVal;
         pvTitle.textContent = txtTitle.value.trim() || 'Título Profissional';
-        pvEmail.innerHTML = `<i class="fa-solid fa-envelope"></i> ${txtEmail.value.trim() || 'email@exemplo.com'}`;
-        pvPhone.innerHTML = `<i class="fa-solid fa-phone"></i> ${txtPhone.value.trim() || '+351 000 000 000'}`;
-        pvLocation.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${txtLocation.value.trim() || 'Localização'}`;
+        pvEmail.innerHTML = `<i class="fa-solid fa-envelope"></i> ${txtEmail.value.trim() || 'enmanuel.jimenez@exemplo.pt'}`;
+        pvPhone.innerHTML = `<i class="fa-solid fa-phone"></i> ${txtPhone.value.trim() || '+351 912 345 678'}`;
+        pvLocation.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${txtLocation.value.trim() || 'Lisboa, Portugal'}`;
 
         const webVal = txtWebsite.value.trim();
         pvWebsite.innerHTML = webVal ? `<i class="fa-solid fa-globe"></i> ${webVal}` : '';
@@ -279,22 +281,19 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('input', updateLivePreview);
     });
 
-    // 6. Download PDF Endpoint Call
-    btnDownloadPDF.addEventListener('click', async () => {
-        btnDownloadPDF.disabled = true;
-        btnDownloadPDF.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> A gerar PDF...';
-
+    // 6. Direct Native PDF Download Handler
+    btnDownloadPDF.addEventListener('click', () => {
         const payload = {
             lang: selCvLanguage.value,
             photo_b64: photoB64,
             personal: {
-                name: txtName.value,
-                title: txtTitle.value,
-                email: txtEmail.value,
-                phone: txtPhone.value,
-                location: txtLocation.value,
-                website: txtWebsite.value,
-                summary: txtSummary.value
+                name: txtName.value.trim() || "Enmanuel Jimenez",
+                title: txtTitle.value.trim() || "Engenheiro de Software",
+                email: txtEmail.value.trim() || "enmanuel.jimenez@exemplo.pt",
+                phone: txtPhone.value.trim() || "+351 912 345 678",
+                location: txtLocation.value.trim() || "Lisboa, Portugal",
+                website: txtWebsite.value.trim() || "linkedin.com/in/enmanueljimenez",
+                summary: txtSummary.value.trim() || "Resumo profissional..."
             },
             experience: jobsData,
             education: eduData,
@@ -302,32 +301,9 @@ document.addEventListener('DOMContentLoaded', () => {
             languages: txtLanguages.value.split(',').map(s => s.trim()).filter(s => s)
         };
 
-        try {
-            const res = await fetch('/api/generate-pdf', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (res.ok) {
-                const blob = await res.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `CV_${txtName.value.replace(/\s+/g, '_')}_PRO.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                showToast('Currículo PDF transferido com sucesso!', 'success');
-            } else {
-                showToast('Erro ao gerar ficheiro PDF.', 'error');
-            }
-        } catch (err) {
-            showToast('Falha na ligação com o servidor.', 'error');
-        } finally {
-            btnDownloadPDF.disabled = false;
-            btnDownloadPDF.innerHTML = '<i class="fa-solid fa-file-pdf"></i> Descarregar PDF';
-        }
+        hiddenPayload.value = JSON.stringify(payload);
+        hiddenPdfForm.submit();
+        showToast('A transferir o currículo PDF...', 'success');
     });
 
     function showToast(msg, type = 'info') {

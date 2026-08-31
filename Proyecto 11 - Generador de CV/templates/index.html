@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=50">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=100">
 </head>
 <body>
     <div class="app-wrapper">
@@ -39,11 +39,16 @@
                     <option value="es">🇪🇸 Español</option>
                     <option value="en">🇬🇧 English</option>
                 </select>
-                <button id="btnDownloadPDF" class="btn btn-primary">
+                <button id="btnDownloadPDF" class="btn btn-primary" type="button">
                     <i class="fa-solid fa-file-pdf"></i> Descarregar PDF
                 </button>
             </div>
         </header>
+
+        <!-- Hidden Native Form for PDF Download -->
+        <form id="hiddenPdfForm" action="/api/generate-pdf" method="POST" target="_blank" style="display:none;">
+            <input type="hidden" name="payload" id="hiddenPayload">
+        </form>
 
         <!-- Main Split Workspace -->
         <main class="workspace-grid">
@@ -239,6 +244,6 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <!-- JS -->
-    <script src="{{ url_for('static', filename='app.js') }}?v=5"></script>
+    <script src="{{ url_for('static', filename='app.js') }}?v=100"></script>
 </body>
 </html>
