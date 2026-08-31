@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Studio Builder PRO - Criador de Currículos Executivos 📄✨</title>
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans & Merriweather -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=1">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Top App Bar -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-file-invoice"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>CV STUDIO <span>BUILDER PRO</span></h1>
+                    <p>Gerador de Currículos Profissionais Executivos (Smartphone & PC)</p>
+                </div>
+            </div>
+
+            <!-- Mobile Screen Navigation Tabs -->
+            <div class="mobile-nav-tabs">
+                <button id="tabForm" class="mobile-tab-btn active"><i class="fa-solid fa-pen-to-square"></i> Formulário</button>
+                <button id="tabPreview" class="mobile-tab-btn"><i class="fa-solid fa-eye"></i> Vista Prévia</button>
+            </div>
+
+            <div class="header-actions">
+                <select id="selCvLanguage" class="select-lang">
+                    <option value="pt">🇵🇹 Português (pt-PT)</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="en">🇬🇧 English</option>
+                </select>
+                <button id="btnDownloadPDF" class="btn btn-primary">
+                    <i class="fa-solid fa-file-pdf"></i> Descarregar PDF
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Split Workspace -->
+        <main class="workspace-grid">
+            <!-- Left Side: Form Editor -->
+            <section id="editorSection" class="editor-panel card-porcelain">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-sliders"></i> Dados do Currículo</h2>
+                    <span class="badge-status"><i class="fa-solid fa-mobile-screen"></i> Mobile & PC Ready</span>
+                </div>
+
+                <!-- Template Selector -->
+                <div class="template-selector-box">
+                    <label><i class="fa-solid fa-palette"></i> Estilo do Documento:</label>
+                    <div class="template-options">
+                        <label class="tpl-radio active">
+                            <input type="radio" name="themeChoice" value="indigo" checked>
+                            <span>Índigo Executivo</span>
+                        </label>
+                        <label class="tpl-radio">
+                            <input type="radio" name="themeChoice" value="minimal">
+                            <span>Nórdico Mínimo</span>
+                        </label>
+                        <label class="tpl-radio">
+                            <input type="radio" name="themeChoice" value="emerald">
+                            <span>Verde Esmeralda</span>
+                        </label>
+                    </div>
+                </div>
+
+                <form id="cvForm" class="form-container" onsubmit="return false;">
+                    <!-- 1. Foto e Dados Pessoais -->
+                    <div class="form-section">
+                        <h3><i class="fa-solid fa-user"></i> 1. Dados Pessoais</h3>
+                        <div class="photo-upload-container">
+                            <div class="photo-preview-box">
+                                <img id="imgPhotoPreview" src="https://ui-avatars.com/api/?name=Angel+Rafael&background=4f46e5&color=fff&size=128" alt="Foto de Perfil">
+                            </div>
+                            <div class="photo-controls">
+                                <label for="inputPhoto" class="btn-sm btn-outline"><i class="fa-solid fa-upload"></i> Carregar Foto</label>
+                                <input type="file" id="inputPhoto" accept="image/*" style="display:none;">
+                                <button type="button" id="btnRemovePhoto" class="btn-sm btn-light"><i class="fa-solid fa-trash"></i> Remover</button>
+                            </div>
+                        </div>
+
+                        <div class="input-grid">
+                            <div class="form-group">
+                                <label>Nome Completo *</label>
+                                <input type="text" id="txtName" value="Angel Rafael" placeholder="Ex: Maria Silva" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Título Profissional *</label>
+                                <input type="text" id="txtTitle" value="Engenheiro de Software & Desenvolvedor Full-Stack" placeholder="Ex: Engenheiro de Software" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Correio Eletrónico (Email) *</label>
+                                <input type="email" id="txtEmail" value="angel.rafael@exemplo.pt" placeholder="exemplo@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Telemóvel / Telefone *</label>
+                                <input type="text" id="txtPhone" value="+351 912 345 678" placeholder="+351 900 000 000" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Localização / Cidade *</label>
+                                <input type="text" id="txtLocation" value="Lisboa, Portugal" placeholder="Ex: Porto, Portugal">
+                            </div>
+                            <div class="form-group">
+                                <label>LinkedIn / GitHub / Website</label>
+                                <input type="text" id="txtWebsite" value="linkedin.com/in/angelrafael" placeholder="linkedin.com/in/perfil">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Perfil / Resumo Profissional -->
+                    <div class="form-section">
+                        <h3><i class="fa-solid fa-paragraph"></i> 2. Resumo Profissional</h3>
+                        <div class="form-group">
+                            <textarea id="txtSummary" rows="4" placeholder="Descreva brevemente a sua experiência, realizações e objetivos profissionais...">Engenheiro de Software apaixonado por criar soluções web inovadoras, aplicações móveis escaláveis e arquiteturas de alta eficiência. Mais de 5 anos de experiência no desenvolvimento de sistemas corporativos e otimização de infraestruturas.</textarea>
+                        </div>
+                    </div>
+
+                    <!-- 3. Experiência Profissional -->
+                    <div class="form-section">
+                        <div class="section-header-flex">
+                            <h3><i class="fa-solid fa-briefcase"></i> 3. Experiência Profissional</h3>
+                            <button type="button" id="btnAddJob" class="btn-sm btn-accent"><i class="fa-solid fa-plus"></i> Adicionar Cargo</button>
+                        </div>
+                        <div id="jobsListContainer" class="dynamic-list">
+                            <!-- Job items injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- 4. Formação Académica -->
+                    <div class="form-section">
+                        <div class="section-header-flex">
+                            <h3><i class="fa-solid fa-graduation-cap"></i> 4. Formação Académica</h3>
+                            <button type="button" id="btnAddEdu" class="btn-sm btn-accent"><i class="fa-solid fa-plus"></i> Adicionar Curso</button>
+                        </div>
+                        <div id="eduListContainer" class="dynamic-list">
+                            <!-- Education items injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- 5. Competências e Idiomas -->
+                    <div class="form-section">
+                        <h3><i class="fa-solid fa-screwdriver-wrench"></i> 5. Competências & Idiomas</h3>
+                        <div class="form-group">
+                            <label>Competências Técnicas (separadas por vírgula)</label>
+                            <input type="text" id="txtSkills" value="Python, Flask, JavaScript ES6+, HTML5/CSS3, Git, PostgreSQL, REST APIs, Docker, CI/CD" placeholder="Ex: Python, React, SQL, Liderança">
+                        </div>
+                        <div class="form-group">
+                            <label>Idiomas (separados por vírgula)</label>
+                            <input type="text" id="txtLanguages" value="Português (Nativo), Inglês (Avançado/Fluente), Espanhol (Intermédio)" placeholder="Ex: Português (Nativo), Inglês (Fluente)">
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Right Side: Real-Time CV Preview -->
+            <section id="previewSection" class="preview-panel card-porcelain">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-eye"></i> Vista Prévia em Tempo Real</h2>
+                    <span class="live-indicator"><span class="dot"></span> Atualização instantânea</span>
+                </div>
+
+                <!-- Printable Paper Container -->
+                <div class="paper-viewport">
+                    <div id="cvPaper" class="cv-paper theme-indigo">
+                        <!-- Header Column -->
+                        <div class="cv-header">
+                            <div class="cv-avatar">
+                                <img id="pvPhoto" src="https://ui-avatars.com/api/?name=Angel+Rafael&background=4f46e5&color=fff&size=128" alt="Avatar">
+                            </div>
+                            <div class="cv-title-box">
+                                <h1 id="pvName">Angel Rafael</h1>
+                                <p id="pvTitle" class="pv-job-title">Engenheiro de Software & Desenvolvedor Full-Stack</p>
+                                <div class="cv-contact-bar">
+                                    <span id="pvEmail"><i class="fa-solid fa-envelope"></i> angel.rafael@exemplo.pt</span>
+                                    <span id="pvPhone"><i class="fa-solid fa-phone"></i> +351 912 345 678</span>
+                                    <span id="pvLocation"><i class="fa-solid fa-location-dot"></i> Lisboa, Portugal</span>
+                                    <span id="pvWebsite"><i class="fa-solid fa-globe"></i> linkedin.com/in/angelrafael</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="cv-divider">
+
+                        <!-- Main CV Content -->
+                        <div class="cv-body">
+                            <!-- Resumo -->
+                            <div class="cv-block">
+                                <h3 class="cv-section-title"><i class="fa-solid fa-user-gear"></i> Perfil Profissional</h3>
+                                <p id="pvSummary" class="pv-summary-text">Resumo profissional aqui...</p>
+                            </div>
+
+                            <!-- Experiência -->
+                            <div class="cv-block">
+                                <h3 class="cv-section-title"><i class="fa-solid fa-briefcase"></i> Experiência Profissional</h3>
+                                <div id="pvJobsList" class="pv-entries-list">
+                                    <!-- Dynamic Jobs -->
+                                </div>
+                            </div>
+
+                            <!-- Formação -->
+                            <div class="cv-block">
+                                <h3 class="cv-section-title"><i class="fa-solid fa-graduation-cap"></i> Formação Académica</h3>
+                                <div id="pvEduList" class="pv-entries-list">
+                                    <!-- Dynamic Edu -->
+                                </div>
+                            </div>
+
+                            <!-- Grid 2 Colunas: Competências & Idiomas -->
+                            <div class="cv-grid-2col">
+                                <div class="cv-block">
+                                    <h3 class="cv-section-title"><i class="fa-solid fa-code"></i> Competências</h3>
+                                    <div id="pvSkillsBadges" class="badges-flex">
+                                        <!-- Badges -->
+                                    </div>
+                                </div>
+
+                                <div class="cv-block">
+                                    <h3 class="cv-section-title"><i class="fa-solid fa-language"></i> Idiomas</h3>
+                                    <p id="pvLanguagesText" class="pv-languages-text">Português, Inglês</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=1"></script>
+</body>
+</html>
