@@ -192,17 +192,19 @@
         box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9);
       }
 
-      .slide-image-container {
+            .slide-image-container {
+        position: relative;
         width: 100%;
         height: 100%;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        min-height: 500px;
         background: #030712;
+        border-radius: 20px;
+        overflow: hidden;
+        perspective: 1200px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
       }
 
-      /* 📺 BACKGROUND BLURRED COVERS FOR WIDESCREEN ASPECT FILL */
+      /* 🌟 ULTRA-PROFESSIONAL 3D MORPH & GLASS SHUTTER TRANSITION */
       .slide-image-bg {
         position: absolute;
         top: 0;
@@ -210,38 +212,72 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        filter: blur(25px) brightness(0.3);
         opacity: 0;
-        transition: opacity 0.8s ease-in-out;
+        filter: blur(25px) brightness(0.3);
+        transform: scale(1.15);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
         z-index: 1;
       }
 
       .slide-image-bg.active {
-        opacity: 0.65;
+        opacity: 0.35;
+        filter: blur(15px) brightness(0.5);
+        transform: scale(1.05);
       }
 
-      /* 📱 FOREGROUND CRISP CONTAINED MOBILE VIEWS */
       .slide-image {
         position: absolute;
         top: 0;
-        bottom: 0;
         left: 0;
-        right: 0;
-        margin: auto;
-        max-width: 100%;
-        max-height: 100%;
+        width: 100%;
+        height: 100%;
         object-fit: contain;
+        padding: 16px;
         opacity: 0;
-        transition: opacity 0.8s ease-in-out, transform 8s linear;
+        transform: perspective(1000px) scale(0.92) rotateY(6deg) translateY(15px);
+        filter: blur(6px) brightness(0.7);
+        transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease;
         z-index: 2;
+        pointer-events: none;
       }
 
       .slide-image.active {
         opacity: 1;
-        transform: scale(1.02);
+        transform: perspective(1000px) scale(1) rotateY(0deg) translateY(0);
+        filter: blur(0px) brightness(1);
+        pointer-events: auto;
+        animation: kenBurnsSmooth 20s ease-in-out infinite alternate;
       }
 
-      /* Animated UI overlay tag */
+      @keyframes kenBurnsSmooth {
+        0% { transform: perspective(1000px) scale(1) rotateY(0deg) translateY(0); }
+        100% { transform: perspective(1000px) scale(1.04) rotateY(-0.5deg) translateY(-5px); }
+      }
+
+      /* 💫 GLOSSY SHIMMER LIGHT SWEEP ON TRANSITION */
+      .slide-shimmer-sweep {
+        position: absolute;
+        top: -50%;
+        left: -100%;
+        width: 60%;
+        height: 200%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), rgba(16, 185, 129, 0.25), transparent);
+        transform: rotate(25deg);
+        pointer-events: none;
+        z-index: 8;
+        opacity: 0;
+      }
+
+      .slide-shimmer-sweep.trigger-sweep {
+        animation: shutterSweep 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes shutterSweep {
+        0% { left: -100%; opacity: 0; }
+        30% { opacity: 1; }
+        100% { left: 160%; opacity: 0; }
+      }
+
       .slide-overlay-tag {
         position: absolute;
         top: 20px;
@@ -576,6 +612,7 @@
         <div class="neon-shutter" id="viewport-alert"></div>
         
         <div class="slide-image-container">
+            <div class="slide-shimmer-sweep" id="shimmer-sweep"></div>
           <!-- Widescreen Blurred Backdrops -->
           <img src="client_app_interface.png" class="slide-image-bg active" id="slide-bg-0" alt="" />
           <img src="restaurant_kds_monitor.png" class="slide-image-bg" id="slide-bg-1" alt="" />
@@ -744,6 +781,13 @@
         document.getElementById('viewport-tag').innerHTML = tagsData[currentLanguage][currentScene];
         
         // Handle images toggle
+        var sweep = document.getElementById('shimmer-sweep');
+        if (sweep) {
+          sweep.classList.remove('trigger-sweep');
+          void sweep.offsetWidth; // Force reflow
+          sweep.classList.add('trigger-sweep');
+        }
+
         document.querySelectorAll('.slide-image').forEach((img, index) => {
           img.classList.remove('active');
           if (index === currentScene) {
