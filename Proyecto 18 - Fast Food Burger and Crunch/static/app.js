@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileDrawer();
     initCartEvents();
     initCheckoutForm();
+    initImageLightbox();
 });
 
 // Category Filter Tabs
@@ -301,4 +302,134 @@ function showToast(message, type = 'success') {
         toast.style.opacity = '0';
         setTimeout(() => toast.remove(), 300);
     }, 3000);
+}
+
+// Lightbox Modal for Full Product Image & Details
+let currentProductModalData = null;
+let currentModalQty = 1;
+
+function initImageLightbox() {
+    const productCards = document.querySelectorAll('.fastfood-card');
+    const comboCards = document.querySelectorAll('.combo-card');
+    const productModal = document.getElementById('productDetailModal');
+    const btnClose = document.getElementById('btnCloseProductModal');
+
+    if (!productModal) return;
+
+    // Fast food menu cards
+    productCards.forEach(card => {
+        const imgContainer = card.querySelector('.fastfood-card-img');
+        const img = card.querySelector('.fastfood-card-img img');
+        const title = card.querySelector('.ff-header h3');
+        const price = card.querySelector('.ff-price');
+        const desc = card.querySelector('.ff-desc');
+        const tag = card.querySelector('.ff-tag');
+        const badge = card.querySelector('.ff-badge-top');
+
+        if (imgContainer && title && price && desc) {
+            imgContainer.addEventListener('click', () => {
+                openProductLightbox({
+                    title: title.textContent.trim(),
+                    price: price.textContent.trim(),
+                    rawPrice: parseFloat(price.textContent.replace('€', '').replace(',', '.').trim()),
+                    desc: desc.textContent.trim(),
+                    img: img ? img.src : '',
+                    tag: tag ? tag.innerHTML : '<i class="fa-solid fa-star"></i> Produto Especial',
+                    badge: badge ? badge.textContent.trim() : ''
+                });
+            });
+        }
+    });
+
+    // Combo cards
+    comboCards.forEach(card => {
+        const img = card.querySelector('img');
+        const title = card.querySelector('.combo-body h3');
+        const price = card.querySelector('.combo-price');
+        const desc = card.querySelector('.combo-body p');
+        const badge = card.querySelector('.combo-badge');
+
+        if (img && title && price && desc) {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', () => {
+                openProductLightbox({
+                    title: title.textContent.trim(),
+                    price: price.textContent.trim(),
+                    rawPrice: parseFloat(price.textContent.replace('€', '').replace(',', '.').trim()),
+                    desc: desc.textContent.trim(),
+                    img: img.src,
+                    tag: '<i class="fa-solid fa-fire"></i> Combo Promocional',
+                    badge: badge ? badge.textContent.trim() : 'COMBO'
+                });
+            });
+        }
+    });
+
+    // Close handlers
+    if (btnClose) btnClose.onclick = closeProductLightbox;
+    productModal.addEventListener('click', (e) => {
+        if (e.target === productModal) closeProductLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeProductLightbox();
+            closeCartDrawer();
+        }
+    });
+}
+
+function openProductLightbox(data) {
+    currentProductModalData = data;
+    currentModalQty = 1;
+
+    const modal = document.getElementById('productDetailModal');
+    const pmImage = document.getElementById('pmImage');
+    const pmBadge = document.getElementById('pmBadge');
+    const pmTag = document.getElementById('pmTag');
+    const pmTitle = document.getElementById('pmTitle');
+    const pmPrice = document.getElementById('pmPrice');
+    const pmDesc = document.getElementById('pmDesc');
+    const pmQty = document.getElementById('pmQty');
+    const pmAddBtn = document.getElementById('pmAddBtn');
+
+    if (!modal) return;
+
+    if (pmImage) pmImage.src = data.img;
+    if (pmBadge) {
+        if (data.badge) {
+            pmBadge.textContent = data.badge;
+            pmBadge.style.display = 'block';
+        } else {
+            pmBadge.style.display = 'none';
+        }
+    }
+    if (pmTag) pmTag.innerHTML = data.tag;
+    if (pmTitle) pmTitle.textContent = data.title;
+    if (pmPrice) pmPrice.textContent = data.price;
+    if (pmDesc) pmDesc.textContent = data.desc;
+    if (pmQty) pmQty.textContent = currentModalQty;
+
+    if (pmAddBtn) {
+        pmAddBtn.onclick = () => {
+            for (let i = 0; i < currentModalQty; i++) {
+                addToCart(data.title, data.rawPrice, data.img);
+            }
+            closeProductLightbox();
+        };
+    }
+
+    modal.classList.add('active');
+}
+
+function changeModalQty(delta) {
+    currentModalQty += delta;
+    if (currentModalQty < 1) currentModalQty = 1;
+    const pmQty = document.getElementById('pmQty');
+    if (pmQty) pmQty.textContent = currentModalQty;
+}
+
+function closeProductLightbox() {
+    const modal = document.getElementById('productDetailModal');
+    if (modal) modal.classList.remove('active');
 }

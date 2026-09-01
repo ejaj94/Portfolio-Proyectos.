@@ -622,6 +622,36 @@
         </div>
     </div>
 
+    <!-- Product Detail Lightbox Modal -->
+    <div id="productDetailModal" class="modal-backdrop product-modal-backdrop">
+        <div class="product-modal-card">
+            <button id="btnCloseProductModal" class="modal-close-btn">&times;</button>
+            <div class="product-modal-grid">
+                <div class="product-modal-media">
+                    <img id="pmImage" src="" alt="Produto">
+                    <span id="pmBadge" class="pm-badge"></span>
+                </div>
+                <div class="product-modal-info">
+                    <span id="pmTag" class="pm-tag"><i class="fa-solid fa-fire"></i> Fast Food Gourmet</span>
+                    <h2 id="pmTitle">Nome do Produto</h2>
+                    <div id="pmPrice" class="pm-price">0,00 €</div>
+                    <div class="pm-divider"></div>
+                    <p id="pmDesc">Descrição detalhada do produto...</p>
+                    <div class="pm-actions">
+                        <div class="pm-qty-box">
+                            <button onclick="changeModalQty(-1)" class="btn-qty">-</button>
+                            <span id="pmQty">1</span>
+                            <button onclick="changeModalQty(1)" class="btn-qty">+</button>
+                        </div>
+                        <button id="pmAddBtn" class="btn btn-primary pm-add-btn">
+                            <i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Order Receipt Modal -->
     <div id="receiptModal" class="modal-backdrop">
         <div class="modal-card text-center">
