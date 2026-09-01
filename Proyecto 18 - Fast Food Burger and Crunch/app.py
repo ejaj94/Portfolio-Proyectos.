@@ -54,7 +54,7 @@ def create_order():
             "id": order_id,
             "client_name": client_name,
             "client_phone": client_phone,
-            "delivery_address": delivery_address if order_type == "Delivery" else "Levantamento em Loja (Takeaway)",
+            "delivery_address": delivery_address if order_type == "Delivery" else "Levantamento em Loja (Vilamoura)",
             "order_type": order_type,
             "payment_method": payment_method,
             "items": cart_items,
@@ -65,14 +65,14 @@ def create_order():
         }
 
         ORDERS_DB.append(new_order)
-        print(f"[+] Novo Pedido Fast Food: {order_id} | {client_name} | Total: {total_amount}€ | Tipo: {order_type}")
+        print(f"[+] Novo Pedido Fast Food (Vilamoura): {order_id} | {client_name} | Total: {total_amount}€ | Tipo: {order_type}")
 
-        wa_text = f"🍔 *NOVO PEDIDO BURGER & CRUNCH* 🚀\n\n" \
+        wa_text = f"🍔 *NOVO PEDIDO BURGER & CRUNCH VILAMOURA* 🚀\n\n" \
                   f"📌 *Código*: {order_id}\n" \
                   f"👤 *Cliente*: {client_name}\n" \
                   f"📞 *Telemóvel*: {client_phone}\n" \
                   f"🛵 *Modalidade*: {order_type}\n" \
-                  f"📍 *Morada*: {delivery_address if order_type == 'Delivery' else 'Levantamento no Restaurante'}\n" \
+                  f"📍 *Morada*: {delivery_address if order_type == 'Delivery' else 'Levantamento no Restaurante em Vilamoura'}\n" \
                   f"💳 *Pagamento*: {payment_method}\n\n" \
                   f"🛒 *ITENS DO PEDIDO*:\n{items_text}\n\n" \
                   f"💰 *TOTAL*: {total_amount:.2f}€\n" \
@@ -82,7 +82,7 @@ def create_order():
             "success": True,
             "message": "Pedido efetuado com sucesso!",
             "order": new_order,
-            "whatsapp_url": f"https://wa.me/351925814360?text={request.headers.get('Origin', '') and wa_text}"
+            "whatsapp_url": f"https://wa.me/351123456789?text={request.headers.get('Origin', '') and wa_text}"
         })
 
     except Exception as e:
@@ -96,5 +96,5 @@ def list_orders():
 
 
 if __name__ == "__main__":
-    print("Iniciando BURGER & CRUNCH Fast Food Web App em http://localhost:5034")
-    app.run(host="0.0.0.0", port=5034, debug=False)
+    print("Iniciando BURGER & CRUNCH Fast Food Web App (Vilamoura) em http://localhost:5035")
+    app.run(host="0.0.0.0", port=5035, debug=False)
