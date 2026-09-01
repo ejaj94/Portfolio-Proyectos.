@@ -306,6 +306,27 @@
                     </div>
                 </div>
 
+                <!-- Item 6: Hot Dog XXL Giant -->
+                <div class="fastfood-card" data-category="hotdogs">
+                    <div class="fastfood-card-img">
+                        <img src="{{ url_for('static', filename='images/cachorro_xxl_giant.jpg') }}?v=1" alt="Cachorro Quente XXL Giant Relish">
+                        <span class="ff-badge-top">Tamanho 30cm</span>
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Cachorro Quente XXL Giant Relish</h3>
+                            <span class="ff-price">9,90 €</span>
+                        </div>
+                        <p class="ff-desc">Salsicha gigante alemã de 30cm grelhada na brasa, pão brioche artesanal tostado, relish de pickles, cebola picada, mostarda dijon em grão e batatas fritas rústicas a acompanhar.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-hotdog"></i> Edição XXL 30cm</span>
+                            <button onclick="addToCart('Cachorro Quente XXL Giant Relish', 9.90, '{{ url_for('static', filename='images/cachorro_xxl_giant.jpg') }}?v=1')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 9.90€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Item 6: Pizza -->
                 <div class="fastfood-card" data-category="pizzas">
                     <div class="fastfood-card-img">
