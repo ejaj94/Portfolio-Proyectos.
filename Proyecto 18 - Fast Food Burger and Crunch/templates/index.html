@@ -289,7 +289,7 @@
                 <!-- Item 5: Hot Dog -->
                 <div class="fastfood-card" data-category="hotdogs">
                     <div class="fastfood-card-img">
-                        <img src="https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=600&q=80" alt="Cachorro Monster Cheese Bacon">
+                        <img src="{{ url_for('static', filename='images/cachorro_monster_cheese_bacon.jpg') }}?v=1" alt="Cachorro Monster Cheese Bacon">
                     </div>
                     <div class="fastfood-card-body">
                         <div class="ff-header">
@@ -298,8 +298,8 @@
                         </div>
                         <p class="ff-desc">Salsicha alemã de 22cm, banhada em cheddar líquido quente, pedaços de bacon estaladiço e cebola frita crocante.</p>
                         <div class="ff-footer">
-                            <span class="ff-tag"><i class="fa-solid fa-cheese"></i> Cheddar Quente</span>
-                            <button onclick="addToCart('Cachorro Monster Cheese Bacon', 6.50, 'https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <span class="ff-tag"><i class="fa-solid fa-cheese"></i> Cheddar Extra</span>
+                            <button onclick="addToCart('Cachorro Monster Cheese Bacon', 6.50, '{{ url_for('static', filename='images/cachorro_monster_cheese_bacon.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-cart-plus"></i> Pedir 6.50€
                             </button>
                         </div>
