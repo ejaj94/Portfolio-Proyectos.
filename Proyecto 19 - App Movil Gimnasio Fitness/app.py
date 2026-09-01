@@ -128,5 +128,5 @@ def book_class():
 
 
 if __name__ == "__main__":
-    print("Iniciando FITCLUB GYM Mobile Web App em http://localhost:5059")
-    app.run(host="0.0.0.0", port=5059, debug=False)
+    print("Iniciando FITCLUB GYM Mobile Web App em http://localhost:5060")
+    app.run(host="0.0.0.0", port=5060, debug=False)
