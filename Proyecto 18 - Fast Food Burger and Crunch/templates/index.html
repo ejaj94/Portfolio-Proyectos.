@@ -350,7 +350,7 @@
                 <!-- Item 8: Fritos & Snacks -->
                 <div class="fastfood-card" data-category="fries">
                     <div class="fastfood-card-img">
-                        <img src="https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=600&q=80" alt="Batatas Loaded Bacon Cheddar">
+                        <img src="{{ url_for('static', filename='images/batatas_loaded_bacon.jpg') }}?v=1" alt="Batatas Loaded Bacon Cheddar">
                         <span class="ff-badge-top">Super Acompanhamento</span>
                     </div>
                     <div class="fastfood-card-body">
@@ -361,7 +361,7 @@
                         <p class="ff-desc">Dose XL de batatas fritas rústicas crocantes, cobertas com molho cheddar fundido cremoso e bacon estaladiço picado.</p>
                         <div class="ff-footer">
                             <span class="ff-tag"><i class="fa-solid fa-stroopwafel"></i> Crocante</span>
-                            <button onclick="addToCart('Batatas Loaded Bacon & Cheddar', 4.50, 'https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Batatas Loaded Bacon & Cheddar', 4.50, '{{ url_for('static', filename='images/batatas_loaded_bacon.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-cart-plus"></i> Pedir 4.50€
                             </button>
                         </div>
