@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VALE DO LOBO — Real Estate de Lujo & Mansiones en Algarve</title>
+
+    <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom Luxury CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260901">
+</head>
+<body>
+
+    <!-- Header Navigation Bar -->
+    <header class="navbar-luxury">
+        <div class="brand-logo">
+            <span class="brand-title">VALE DO LOBO</span>
+            <span class="brand-sub">LUXURY REAL ESTATE</span>
+        </div>
+
+        <ul class="nav-menu-links">
+            <li><a href="#propertymarket" class="nav-link-item">Mansões Exclusivas</a></li>
+            <li><a href="#lifestyle" class="nav-link-item">Estilo de Vida</a></li>
+            <li><a href="#aboutvaledolobo" class="nav-link-item">O Algarve Elite</a></li>
+            <li><a href="javascript:void(0)" onclick="openVipModal('Consulta Geral Vale do Lobo')" class="nav-link-item">Atendimento Privado</a></li>
+        </ul>
+
+        <div class="nav-actions-right">
+            <select id="currencySelector" class="currency-select-box" onchange="changeCurrency(this.value)">
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="USD">USD ($)</option>
+            </select>
+            <button class="btn-vip-contact" onclick="openVipModal('Consulta Geral Vale do Lobo')">
+                <i class="fa-solid fa-crown text-gold"></i> Dossier VIP
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-badge"><i class="fa-solid fa-gem text-gold"></i> Residências Únicas no Algarve</span>
+            <h1>As Mais Desejadas <em>Mansões</em> de Vale do Lobo</h1>
+            <p>Arquitetura de prestígio internacional, vista panorâmica para o Atlântico e acesso direto aos campos de golfe mais exclusivos da Europa.</p>
+        </div>
+    </section>
+
+    <!-- Floating Filter Container -->
+    <div class="filter-container-wrapper" id="propertymarket">
+        <div class="filter-card-bar">
+            
+            <div class="filter-group">
+                <label><i class="fa-solid fa-building-user"></i> Tipo de Propriedade</label>
+                <select id="filterType" class="filter-select" onchange="applyPropertyFilters()">
+                    <option value="all">Todas as Mansões & Villas</option>
+                    <option value="oceanfront">Villa Frente ao Mar</option>
+                    <option value="golf">Mansão Golf Estate</option>
+                    <option value="palace">Palácio Ocean Resort</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label><i class="fa-solid fa-tag"></i> Faixa de Preço</label>
+                <select id="filterPrice" class="filter-select" onchange="applyPropertyFilters()">
+                    <option value="all">Qualquer Valor</option>
+                    <option value="5-8">5.000.000 € – 8.000.000 €</option>
+                    <option value="8-12">8.000.000 € – 12.000.000 €</option>
+                    <option value="12+">Acima de 12.000.000 €</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label><i class="fa-solid fa-bed"></i> Nº de Suites</label>
+                <select id="filterBeds" class="filter-select" onchange="applyPropertyFilters()">
+                    <option value="all">Qualquer NÚMERO</option>
+                    <option value="4">4 Suites VIP</option>
+                    <option value="5">5 Suites VIP</option>
+                    <option value="6+">6+ Suites Master</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label><i class="fa-solid fa-location-dot"></i> Localização</label>
+                <select id="filterLocation" class="filter-select" onchange="applyPropertyFilters()">
+                    <option value="all">Todo o Vale do Lobo</option>
+                    <option value="cliff">Ocean Cliff Edge</option>
+                    <option value="royalgolf">Royal Golf Resort</option>
+                    <option value="beach">Plage Direct Trail</option>
+                </select>
+            </div>
+
+            <button class="btn-filter-search" onclick="applyPropertyFilters()">
+                <i class="fa-solid fa-sliders"></i> Filtrar Coleção
+            </button>
+
+        </div>
+    </div>
+
+    <!-- Section Title -->
+    <div class="section-luxury-title">
+        <span class="subtitle">Coleção Privada de Imóveis</span>
+        <h2>Propriedades Disponíveis em Vale do Lobo</h2>
+        <p>Cada residência foi cuidadosamente selecionada pelos nossos consultores privados pelo seu valor arquitetónico e localização irrepetível.</p>
+    </div>
+
+    <!-- Properties Showcase Grid -->
+    <section class="properties-grid-container" id="propertiesGrid">
+        
+        <!-- Mansion 1 -->
+        <article class="property-card-luxury" data-type="oceanfront" data-price="14500000" data-beds="6" data-location="cliff">
+            <div class="property-img-wrapper">
+                <img src="{{ url_for('static', filename='images/villa_ocean_cliff.jpg') }}" alt="Villa Ocean Cliff Palace">
+                <span class="badge-location-tag"><i class="fa-solid fa-water"></i> Ocean Cliff Edge</span>
+                <span class="badge-feature-tag"><i class="fa-solid fa-crown text-gold"></i> Exclusivo</span>
+            </div>
+            <div class="property-details-body">
+                <div class="property-title-header">
+                    <h3>Villa Ocean Cliff Palace</h3>
+                    <div class="property-price-tag" data-eur="14500000">14.500.000 €</div>
+                </div>
+                <div class="property-location-sub">
+                    <i class="fa-solid fa-location-dot text-gold"></i> Vale do Lobo Ocean View, Algarve
+                </div>
+
+                <div class="specs-grid-row">
+                    <div class="spec-item">
+                        <span class="value">6 Suites</span>
+                        <span class="label">Quartos</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">1.200 m²</span>
+                        <span class="label">Área Útil</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">Infinity Pool</span>
+                        <span class="label">Piscina</span>
+                    </div>
+                </div>
+
+                <div class="card-actions-row">
+                    <button class="btn-card-gallery" onclick="openLightbox('villa_ocean_cliff')">
+                        <i class="fa-solid fa-images"></i> Galeria (8 Fotos)
+                    </button>
+                    <button class="btn-card-book" onclick="openVipModal('Villa Ocean Cliff Palace')">
+                        <i class="fa-solid fa-calendar-check"></i> Agendar Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <!-- Mansion 2 -->
+        <article class="property-card-luxury" data-type="golf" data-price="8900000" data-beds="5" data-location="royalgolf">
+            <div class="property-img-wrapper">
+                <img src="{{ url_for('static', filename='images/villa_royal_golf.jpg') }}" alt="Mansão Royal Golf Estate">
+                <span class="badge-location-tag"><i class="fa-solid fa-flag"></i> Royal Golf Resort</span>
+                <span class="badge-feature-tag">Vista Campo 18º</span>
+            </div>
+            <div class="property-details-body">
+                <div class="property-title-header">
+                    <h3>Mansão Royal Golf Estate</h3>
+                    <div class="property-price-tag" data-eur="8900000">8.900.000 €</div>
+                </div>
+                <div class="property-location-sub">
+                    <i class="fa-solid fa-location-dot text-gold"></i> Royal Golf Course, Vale do Lobo
+                </div>
+
+                <div class="specs-grid-row">
+                    <div class="spec-item">
+                        <span class="value">5 Suites</span>
+                        <span class="label">Quartos</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">950 m²</span>
+                        <span class="label">Área Útil</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">Cave Vinhos</span>
+                        <span class="label">Extra VIP</span>
+                    </div>
+                </div>
+
+                <div class="card-actions-row">
+                    <button class="btn-card-gallery" onclick="openLightbox('villa_royal_golf')">
+                        <i class="fa-solid fa-images"></i> Galeria (6 Fotos)
+                    </button>
+                    <button class="btn-card-book" onclick="openVipModal('Mansão Royal Golf Estate')">
+                        <i class="fa-solid fa-calendar-check"></i> Agendar Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <!-- Mansion 3 -->
+        <article class="property-card-luxury" data-type="palace" data-price="18200000" data-beds="6" data-location="beach">
+            <div class="property-img-wrapper">
+                <img src="{{ url_for('static', filename='images/palacio_atlantico.jpg') }}" alt="Palácio Atlântico Vale do Lobo">
+                <span class="badge-location-tag"><i class="fa-solid fa-umbrella-beach"></i> Plage Direct Trail</span>
+                <span class="badge-feature-tag"><i class="fa-solid fa-gem text-gold"></i> Obra-Prima</span>
+            </div>
+            <div class="property-details-body">
+                <div class="property-title-header">
+                    <h3>Palácio Atlântico Vale do Lobo</h3>
+                    <div class="property-price-tag" data-eur="18200000">18.200.000 €</div>
+                </div>
+                <div class="property-location-sub">
+                    <i class="fa-solid fa-location-dot text-gold"></i> Praia de Vale do Lobo, Algarve
+                </div>
+
+                <div class="specs-grid-row">
+                    <div class="spec-item">
+                        <span class="value">7 Suites</span>
+                        <span class="label">Quartos</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">1.600 m²</span>
+                        <span class="label">Área Útil</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">Heliporto</span>
+                        <span class="label">Privado</span>
+                    </div>
+                </div>
+
+                <div class="card-actions-row">
+                    <button class="btn-card-gallery" onclick="openLightbox('palacio_atlantico')">
+                        <i class="fa-solid fa-images"></i> Galeria (10 Fotos)
+                    </button>
+                    <button class="btn-card-book" onclick="openVipModal('Palácio Atlântico Vale do Lobo')">
+                        <i class="fa-solid fa-calendar-check"></i> Agendar Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <!-- Mansion 4 -->
+        <article class="property-card-luxury" data-type="oceanfront" data-price="6800000" data-beds="4" data-location="cliff">
+            <div class="property-img-wrapper">
+                <img src="{{ url_for('static', filename='images/villa_sunset_haven.jpg') }}" alt="Villa Sunset Haven">
+                <span class="badge-location-tag"><i class="fa-solid fa-sun"></i> Sunset Ocean Panorama</span>
+                <span class="badge-feature-tag">Design Moderno</span>
+            </div>
+            <div class="property-details-body">
+                <div class="property-title-header">
+                    <h3>Villa Sunset Haven</h3>
+                    <div class="property-price-tag" data-eur="6800000">6.800.000 €</div>
+                </div>
+                <div class="property-location-sub">
+                    <i class="fa-solid fa-location-dot text-gold"></i> Cliff Line, Vale do Lobo
+                </div>
+
+                <div class="specs-grid-row">
+                    <div class="spec-item">
+                        <span class="value">4 Suites</span>
+                        <span class="label">Quartos</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">780 m²</span>
+                        <span class="label">Área Útil</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">Spa Interior</span>
+                        <span class="label">Wellness</span>
+                    </div>
+                </div>
+
+                <div class="card-actions-row">
+                    <button class="btn-card-gallery" onclick="openLightbox('villa_sunset_haven')">
+                        <i class="fa-solid fa-images"></i> Galeria (6 Fotos)
+                    </button>
+                    <button class="btn-card-book" onclick="openVipModal('Villa Sunset Haven')">
+                        <i class="fa-solid fa-calendar-check"></i> Agendar Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <!-- Mansion 5 -->
+        <article class="property-card-luxury" data-type="golf" data-price="5400000" data-beds="4" data-location="royalgolf">
+            <div class="property-img-wrapper">
+                <img src="{{ url_for('static', filename='images/mansion_pine_crest.jpg') }}" alt="Mansão Pine Crest Golf">
+                <span class="badge-location-tag"><i class="fa-solid fa-tree"></i> Pine Grove Estate</span>
+                <span class="badge-feature-tag">Privacidade Absoluta</span>
+            </div>
+            <div class="property-details-body">
+                <div class="property-title-header">
+                    <h3>Mansão Pine Crest Golf</h3>
+                    <div class="property-price-tag" data-eur="5400000">5.400.000 €</div>
+                </div>
+                <div class="property-location-sub">
+                    <i class="fa-solid fa-location-dot text-gold"></i> Pine Cliffs Area, Vale do Lobo
+                </div>
+
+                <div class="specs-grid-row">
+                    <div class="spec-item">
+                        <span class="value">4 Suites</span>
+                        <span class="label">Quartos</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">650 m²</span>
+                        <span class="label">Área Útil</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">Ténis Privado</span>
+                        <span class="label">Desporto</span>
+                    </div>
+                </div>
+
+                <div class="card-actions-row">
+                    <button class="btn-card-gallery" onclick="openLightbox('mansion_pine_crest')">
+                        <i class="fa-solid fa-images"></i> Galeria (7 Fotos)
+                    </button>
+                    <button class="btn-card-book" onclick="openVipModal('Mansão Pine Crest Golf')">
+                        <i class="fa-solid fa-calendar-check"></i> Agendar Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <!-- Mansion 6 -->
+        <article class="property-card-luxury" data-type="palace" data-price="11200000" data-beds="5" data-location="cliff">
+            <div class="property-img-wrapper">
+                <img src="{{ url_for('static', filename='images/villa_infinity_cliff.jpg') }}" alt="Villa Infinity Cliff Resort">
+                <span class="badge-location-tag"><i class="fa-solid fa-water"></i> Dual Infinity Pool</span>
+                <span class="badge-feature-tag">Domótica 2026</span>
+            </div>
+            <div class="property-details-body">
+                <div class="property-title-header">
+                    <h3>Villa Infinity Cliff Resort</h3>
+                    <div class="property-price-tag" data-eur="11200000">11.200.000 €</div>
+                </div>
+                <div class="property-location-sub">
+                    <i class="fa-solid fa-location-dot text-gold"></i> Cliff Top, Vale do Lobo
+                </div>
+
+                <div class="specs-grid-row">
+                    <div class="spec-item">
+                        <span class="value">5 Suites</span>
+                        <span class="label">Quartos</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">1.100 m²</span>
+                        <span class="label">Área Útil</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="value">Cinema 4K</span>
+                        <span class="label">Lazer</span>
+                    </div>
+                </div>
+
+                <div class="card-actions-row">
+                    <button class="btn-card-gallery" onclick="openLightbox('villa_infinity_cliff')">
+                        <i class="fa-solid fa-images"></i> Galeria (9 Fotos)
+                    </button>
+                    <button class="btn-card-book" onclick="openVipModal('Villa Infinity Cliff Resort')">
+                        <i class="fa-solid fa-calendar-check"></i> Agendar Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- Luxury Lifestyle & Amenities Showcase Section -->
+    <section class="lifestyle-banner-section" id="lifestyle">
+        <div class="lifestyle-grid">
+            <div class="lifestyle-text-box">
+                <span class="subtitle">O Estilo de Vida Definitivo</span>
+                <h2>Viver em Vale do Lobo</h2>
+                <p>Com falésias avermelhadas icónicas, um clima soalheiro único na Europa e restaurantes premiados com estrelas Michelin, Vale do Lobo é o refúgio eleito por famílias aristocráticas e investidores globais.</p>
+                
+                <ul class="amenities-list-check">
+                    <li><i class="fa-solid fa-circle-check"></i> 2 Campos de Golfe de Campeonato 18 Buracos</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Segurança Privada Armada 24h / 365 Dias</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Acesso Privativo a Praias de Areia Dourada</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Academia de Ténis & Padel World Class</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Marina de Vilamoura a escassos minutos</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Atendimento Concierge e Gestão de Imóvel</li>
+                </ul>
+
+                <button class="btn-vip-contact" onclick="openVipModal('Solicitação Guia de Estilo de Vida Vale do Lobo')">
+                    <i class="fa-solid fa-book-open text-gold"></i> Descarregar Guia de Vida em Vale do Lobo
+                </button>
+            </div>
+
+            <div class="lifestyle-images-composition">
+                <img src="{{ url_for('static', filename='images/pool_sunset.jpg') }}" alt="Vale do Lobo Pool Sunset" class="composition-img-main">
+                <img src="{{ url_for('static', filename='images/interior_living.jpg') }}" alt="Vale do Lobo Living Interior" class="composition-img-sub">
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Fullscreen Photo Gallery Modal -->
+    <div id="lightboxModal" class="lightbox-modal">
+        <div class="lightbox-content-card">
+            <button class="btn-close-lightbox" onclick="closeLightbox()">&times;</button>
+            
+            <div class="lightbox-gallery-side">
+                <img id="lightboxMainImage" src="{{ url_for('static', filename='images/villa_ocean_cliff.jpg') }}" alt="Villa Gallery Main" class="lightbox-main-img">
+                <div class="lightbox-thumbs-row">
+                    <img src="{{ url_for('static', filename='images/villa_ocean_cliff.jpg') }}" class="lightbox-thumb active" onclick="switchLightboxImage(this.src)">
+                    <img src="{{ url_for('static', filename='images/interior_living.jpg') }}" class="lightbox-thumb" onclick="switchLightboxImage(this.src)">
+                    <img src="{{ url_for('static', filename='images/interior_suite.jpg') }}" class="lightbox-thumb" onclick="switchLightboxImage(this.src)">
+                    <img src="{{ url_for('static', filename='images/pool_sunset.jpg') }}" class="lightbox-thumb" onclick="switchLightboxImage(this.src)">
+                </div>
+            </div>
+
+            <div class="lightbox-info-side">
+                <span class="subtitle">Fotografias em Alta Resolução</span>
+                <h2 id="lightboxTitle">Villa Ocean Cliff Palace</h2>
+                <div class="modal-price" id="lightboxPrice">14.500.000 €</div>
+                <p class="desc" id="lightboxDesc">Esta deslumbrante mansão contemporânea ergue-se no topo das falésias de Vale do Lobo, oferecendo vistas ininterruptas de 180º sobre o Oceano Atlântico. Inclui piscina de bordo infinito aquecida, sauna em pedra natural e acabamentos em mármore de Carrara.</p>
+
+                <div class="features-chips-box">
+                    <span class="chip-tag"><i class="fa-solid fa-shield"></i> Segurança 24h</span>
+                    <span class="chip-tag"><i class="fa-solid fa-sun"></i> Orientação Sul</span>
+                    <span class="chip-tag"><i class="fa-solid fa-wine-glass"></i> Cave Climatizada</span>
+                    <span class="chip-tag"><i class="fa-solid fa-car"></i> Garagem 6 Carros</span>
+                </div>
+
+                <div class="margin-top-auto">
+                    <button class="btn-submit-vip" onclick="openVipModalFromLightbox()">
+                        <i class="fa-brands fa-whatsapp"></i> Solicitar Dossier Confidencial
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIP Contact Modal -->
+    <div id="vipContactModal" class="vip-modal-backdrop">
+        <div class="vip-form-card">
+            <button class="btn-close-lightbox" onclick="closeVipModal()">&times;</button>
+            <span class="subtitle"><i class="fa-solid fa-crown text-gold"></i> Atendimento Exclusivo</span>
+            <h2 class="text-wine">Solicitar Visita Privada</h2>
+            <p class="text-muted margin-bottom-20">Preencha os seus dados para receber o dossier completo da propriedade ou agendar uma visita presencial/virtual privada.</p>
+
+            <form id="vipInquiryForm" onsubmit="return false;">
+                <div class="form-group-luxury">
+                    <label>Propriedade de Interesse</label>
+                    <input type="text" id="vipTargetProperty" class="form-control-luxury" readonly value="Consulta Geral Vale do Lobo">
+                </div>
+
+                <div class="form-group-luxury">
+                    <label>Nome Completo *</label>
+                    <input type="text" id="vipFullName" class="form-control-luxury" placeholder="Ex: Dra. Helena Albuquerque" required>
+                </div>
+
+                <div class="form-group-luxury">
+                    <label>Telemóvel / WhatsApp *</label>
+                    <input type="tel" id="vipPhone" class="form-control-luxury" placeholder="Ex: +351 912 345 678" required>
+                </div>
+
+                <div class="form-group-luxury">
+                    <label>E-mail Pessoal ou Empresarial *</label>
+                    <input type="email" id="vipEmail" class="form-control-luxury" placeholder="Ex: helena@privateclient.pt" required>
+                </div>
+
+                <div class="form-group-luxury">
+                    <label>Data Preferencial de Visita (Opcional)</label>
+                    <input type="date" id="vipPreferredDate" class="form-control-luxury">
+                </div>
+
+                <div class="form-group-luxury">
+                    <label>Requisitos Especiais ou Notas</label>
+                    <textarea id="vipNotes" class="form-control-luxury" rows="2" placeholder="Ex: Pretendo visita ao fim de semana, compra investimento..."></textarea>
+                </div>
+
+                <button type="submit" id="btnSubmitVipForm" class="btn-submit-vip">
+                    <i class="fa-solid fa-paper-plane"></i> Solicitar Dossier via WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer-luxury" id="aboutvaledolobo">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <span class="brand-title">VALE DO LOBO</span>
+                <span class="brand-sub">LUXURY REAL ESTATE</span>
+                <p>Especialistas líderes na mediação de imóveis de luxo no Triângulo Dourado do Algarve. Discrição, integridade e excelência desde 1998.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navegação</h4>
+                <ul>
+                    <li><a href="#propertymarket">Mansões Exclusivas</a></li>
+                    <li><a href="#lifestyle">Estilo de Vida</a></li>
+                    <li><a href="#aboutvaledolobo">Sobre Vale do Lobo</a></li>
+                    <li><a href="javascript:void(0)" onclick="openVipModal('Consulta Geral Vale do Lobo')">Visita Privada</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Localizações</h4>
+                <ul>
+                    <li><a href="#propertymarket">Ocean Cliff Edge</a></li>
+                    <li><a href="#propertymarket">Royal Golf Estate</a></li>
+                    <li><a href="#propertymarket">Pine Cliffs Area</a></li>
+                    <li><a href="#propertymarket">Beachfront Villas</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contacto Privado</h4>
+                <ul>
+                    <li><i class="fa-solid fa-location-dot text-gold"></i> Av. do Mar, 8135-034 Vale do Lobo, Algarve</li>
+                    <li><i class="fa-solid fa-phone text-gold"></i> <a href="https://wa.me/351123456789" target="_blank">+351 123 456 789</a></li>
+                    <li><i class="fa-solid fa-envelope text-gold"></i> privatemarket@valedolobo-luxury.pt</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom-bar">
+            <span>&copy; 2026 VALE DO LOBO LUXURY REAL ESTATE. Todos os direitos reservados.</span>
+            <span>Desenvolvido com elegância por Enmanuel Jimenez (EJAJ TECH)</span>
+        </div>
+    </footer>
+
+    <!-- Custom JS Script -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260901"></script>
+</body>
+</html>
