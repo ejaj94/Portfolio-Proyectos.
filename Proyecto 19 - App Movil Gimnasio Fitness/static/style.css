@@ -13,9 +13,28 @@
     --text-white: #ffffff;
     --text-muted: #94a3b8;
     --border-card: #2a3045;
+    --header-blur-bg: rgba(20, 23, 33, 0.95);
     --shadow-app: 0 25px 60px rgba(0, 0, 0, 0.6);
-    --font-heading: 'Syne', sans-serif;
-    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Light Theme Variables */
+[data-theme="light"] {
+    --bg-main: #cbd5e1;
+    --bg-app-shell: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
+    --color-neon: #00b853;
+    --color-neon-hover: #009640;
+    --color-yellow: #d97706;
+    --color-red: #dc2626;
+    --color-purple: #7c3aed;
+    --text-white: #0f172a;
+    --text-muted: #64748b;
+    --border-card: #e2e8f0;
+    --header-blur-bg: rgba(248, 250, 252, 0.95);
+    --shadow-app: 0 20px 50px rgba(15, 23, 42, 0.18);
 }
 
 * {
@@ -24,6 +43,9 @@
     padding: 0;
     font-family: var(--font-body);
     -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 body {
@@ -35,6 +57,7 @@ body {
     align-items: center;
     padding: 20px 0;
     overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Outer Desktop Frame Container */
@@ -888,7 +911,7 @@ body {
     left: 0;
     right: 0;
     height: 64px;
-    background: rgba(20, 23, 33, 0.96);
+    background: var(--header-blur-bg);
     backdrop-filter: blur(15px);
     border-top: 1px solid var(--border-card);
     display: grid;

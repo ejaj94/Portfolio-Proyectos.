@@ -2,6 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     initLiveClock();
+    initThemeEngine();
     initEnrollForm();
     initClassBookingForm();
 });
@@ -271,4 +272,31 @@ function showAppToast(message, type = 'success') {
         toast.style.opacity = '0';
         setTimeout(() => toast.remove(), 300);
     }, 3000);
+}
+
+// Theme Toggle Engine (Dark / Light Mode)
+function initThemeEngine() {
+    const savedTheme = localStorage.getItem('fitclub_theme') || 'dark';
+    setAppTheme(savedTheme);
+}
+
+function toggleAppTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    setAppTheme(nextTheme);
+    showAppToast(`Tema ${nextTheme === 'dark' ? 'Escuro' : 'Claro'} ativado!`);
+}
+
+function setAppTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('fitclub_theme', theme);
+
+    const themeIcon = document.getElementById('themeIcon');
+    if (themeIcon) {
+        if (theme === 'light') {
+            themeIcon.className = 'fa-solid fa-moon text-purple';
+        } else {
+            themeIcon.className = 'fa-solid fa-sun text-yellow';
+        }
+    }
 }

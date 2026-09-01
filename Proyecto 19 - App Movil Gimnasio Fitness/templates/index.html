@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FITCLUB GYM — App Móvel de Fitness & Membresias</title>
 
-    <!-- Google Fonts: Syne & Plus Jakarta Sans -->
+    <!-- Google Fonts: Inter & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260901">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260901_2">
 </head>
 <body>
 
@@ -50,6 +50,10 @@
                         <span class="location-chip"><i class="fa-solid fa-location-dot"></i> Vilamoura</span>
                     </div>
                     <div class="header-right">
+                        <!-- Theme Toggle Button -->
+                        <button class="header-icon-btn theme-toggle-btn" onclick="toggleAppTheme()" title="Alternar Tema Claro / Escuro">
+                            <i id="themeIcon" class="fa-solid fa-sun text-yellow"></i>
+                        </button>
                         <button class="header-icon-btn" onclick="switchTab('tab-schedule')">
                             <i class="fa-solid fa-bell"></i>
                             <span class="badge-dot"></span>
