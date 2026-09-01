@@ -371,7 +371,7 @@
                 <!-- Item 9: Fritos & Snacks -->
                 <div class="fastfood-card" data-category="fries">
                     <div class="fastfood-card-img">
-                        <img src="https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=80" alt="Nuggets de Frango Crocante">
+                        <img src="{{ url_for('static', filename='images/nuggets_frango.jpg') }}?v=1" alt="Nuggets de Frango Crocante">
                     </div>
                     <div class="fastfood-card-body">
                         <div class="ff-header">
@@ -381,7 +381,7 @@
                         <p class="ff-desc">10 Nuggets de peito de frango dourados e crocantes acompanhados por 2 molhos à escolha (Barbecue, Mostarda e Mel, ou Maionese de Alho).</p>
                         <div class="ff-footer">
                             <span class="ff-tag"><i class="fa-solid fa-box-open"></i> 10 Unidades</span>
-                            <button onclick="addToCart('Nuggets de Frango Crocante (10 Unidades)', 5.20, 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Nuggets de Frango Crocante (10 Unidades)', 5.20, '{{ url_for('static', filename='images/nuggets_frango.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-cart-plus"></i> Pedir 5.20€
                             </button>
                         </div>

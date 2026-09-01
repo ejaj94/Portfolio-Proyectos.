@@ -96,5 +96,5 @@ def list_orders():
 
 
 if __name__ == "__main__":
-    print("Iniciando BURGER & CRUNCH Fast Food Web App (Vilamoura) em http://localhost:5047")
-    app.run(host="0.0.0.0", port=5047, debug=False)
+    print("Iniciando BURGER & CRUNCH Fast Food Web App (Vilamoura) em http://localhost:5048")
+    app.run(host="0.0.0.0", port=5048, debug=False)
