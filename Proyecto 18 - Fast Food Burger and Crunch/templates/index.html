@@ -206,7 +206,7 @@
                 <!-- Item 1: Burger -->
                 <div class="fastfood-card" data-category="burgers">
                     <div class="fastfood-card-img">
-                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" alt="Smash Burger Duplo Bacon">
+                        <img src="{{ url_for('static', filename='images/smash_bacon_cheddar.jpg') }}?v=1" alt="Smash Burger Duplo Bacon Cheddar">
                         <span class="ff-badge-top">Top Vendas</span>
                     </div>
                     <div class="fastfood-card-body">
@@ -217,7 +217,7 @@
                         <p class="ff-desc">2 Hambúrgueres smash de novilho 180g, duplo cheddar derretido, bacon crocante, cebola caramelizada e molho secreto Burger & Crunch.</p>
                         <div class="ff-footer">
                             <span class="ff-tag"><i class="fa-solid fa-fire"></i> 100% Novilho</span>
-                            <button onclick="addToCart('Smash Burger Duplo Bacon Cheddar', 8.90, 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Smash Burger Duplo Bacon Cheddar', 8.90, '{{ url_for('static', filename='images/smash_bacon_cheddar.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-cart-plus"></i> Pedir 8.90€
                             </button>
                         </div>
