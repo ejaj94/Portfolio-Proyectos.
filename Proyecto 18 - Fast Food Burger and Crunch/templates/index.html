@@ -391,7 +391,7 @@
                 <!-- Item 10: Fritos & Snacks -->
                 <div class="fastfood-card" data-category="fries">
                     <div class="fastfood-card-img">
-                        <img src="https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80" alt="Hot Wings BBQ Crocantes">
+                        <img src="{{ url_for('static', filename='images/hot_wings_bbq.jpg') }}?v=1" alt="Hot Wings BBQ Crocantes">
                     </div>
                     <div class="fastfood-card-body">
                         <div class="ff-header">
@@ -401,7 +401,7 @@
                         <p class="ff-desc">Asas de frango picantes panadas e glaceadas em molho barbecue fumado caramelizado.</p>
                         <div class="ff-footer">
                             <span class="ff-tag"><i class="fa-solid fa-fire-flame-curved"></i> Hot BBQ</span>
-                            <button onclick="addToCart('Asinhas Hot Wings BBQ (8 Unidades)', 6.90, 'https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Asinhas Hot Wings BBQ (8 Unidades)', 6.90, '{{ url_for('static', filename='images/hot_wings_bbq.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-cart-plus"></i> Pedir 6.90€
                             </button>
                         </div>
