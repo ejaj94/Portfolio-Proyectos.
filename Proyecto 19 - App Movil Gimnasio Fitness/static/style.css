@@ -663,44 +663,41 @@ body {
     text-decoration: line-through;
 }
 
-/* Schedule Tab Filters */
+/* Schedule Tab Filters (3x2 Grid for 100% Perfect Visibility) */
 .days-filter-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
-    overflow-x: auto;
-    margin-left: -16px;
-    margin-right: -16px;
-    margin-bottom: 16px;
-    padding: 6px 16px 14px 16px;
-    width: calc(100% + 32px);
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
+    margin-bottom: 18px;
+    width: 100%;
 }
-
-.days-filter-row::-webkit-scrollbar { display: none; }
 
 .day-chip {
     background: var(--bg-card);
     border: 1px solid var(--border-card);
     color: var(--text-muted);
-    padding: 8px 16px;
-    border-radius: 20px;
+    padding: 10px 4px;
+    border-radius: 14px;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
+    text-align: center;
     white-space: nowrap;
-    flex-shrink: 0;
     transition: all 0.2s ease;
+    width: 100%;
 }
 
-.day-chip:last-child {
-    margin-right: 16px;
+.day-chip:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-white);
+    border-color: var(--text-muted);
 }
 
 .day-chip.active {
     background: var(--color-neon);
-    color: #000;
+    color: #000000;
     border-color: var(--color-neon);
+    box-shadow: 0 4px 12px rgba(0, 255, 135, 0.25);
 }
 
 /* Classes List */
