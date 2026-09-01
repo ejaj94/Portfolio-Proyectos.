@@ -251,7 +251,18 @@ function bookTrainerSession(trainerName) {
 // Direct WhatsApp Contact
 function openWhatsAppContact() {
     const text = encodeURIComponent("Olá FITCLUB Gym Vilamoura! Gostaria de obter mais informações sobre as membresias e horários.");
-    window.open(`https://wa.me/351911151993?text=${text}`, '_blank');
+    window.open(`https://wa.me/351123456789?text=${text}`, '_blank');
+}
+
+// Help Center Modal Controls
+function openHelpModal() {
+    const modal = document.getElementById('helpCenterModal');
+    if (modal) modal.classList.add('active');
+}
+
+function closeHelpModal() {
+    const modal = document.getElementById('helpCenterModal');
+    if (modal) modal.classList.remove('active');
 }
 
 // App Toast Notifications

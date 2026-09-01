@@ -78,7 +78,7 @@ def enroll_member():
             "success": True,
             "message": "Matrícula realizada com sucesso!",
             "enrollment": new_enrollment,
-            "whatsapp_url": f"https://wa.me/351911151993?text={request.headers.get('Origin', '') and wa_text}"
+            "whatsapp_url": f"https://wa.me/351123456789?text={request.headers.get('Origin', '') and wa_text}"
         })
 
     except Exception as e:
@@ -121,12 +121,12 @@ def book_class():
             "success": True,
             "message": f"Lugar reservado com sucesso para {class_name}!",
             "booking": booking,
-            "whatsapp_url": f"https://wa.me/351911151993?text={wa_text}"
+            "whatsapp_url": f"https://wa.me/351123456789?text={wa_text}"
         })
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
 
 if __name__ == "__main__":
-    print("Iniciando FITCLUB GYM Mobile Web App em http://localhost:5056")
-    app.run(host="0.0.0.0", port=5056, debug=False)
+    print("Iniciando FITCLUB GYM Mobile Web App em http://localhost:5057")
+    app.run(host="0.0.0.0", port=5057, debug=False)

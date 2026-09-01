@@ -669,7 +669,9 @@ body {
     gap: 8px;
     overflow-x: auto;
     margin-bottom: 16px;
-    padding-bottom: 4px;
+    padding: 4px 14px 10px 4px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
 }
 
 .days-filter-row::-webkit-scrollbar { display: none; }
@@ -678,13 +680,14 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border-card);
     color: var(--text-muted);
-    padding: 8px 14px;
+    padding: 8px 16px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
     white-space: nowrap;
-    transition: var(--transition);
+    flex-shrink: 0;
+    transition: all 0.2s ease;
 }
 
 .day-chip.active {
