@@ -248,7 +248,7 @@
                 <!-- Item 3: Burger -->
                 <div class="fastfood-card" data-category="burgers">
                     <div class="fastfood-card-img">
-                        <img src="https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80" alt="Chicken Crunch Crispy Burger">
+                        <img src="{{ url_for('static', filename='images/chicken_crunch.jpg') }}?v=1" alt="Chicken Crunch Crispy Burger">
                     </div>
                     <div class="fastfood-card-body">
                         <div class="ff-header">
@@ -258,7 +258,7 @@
                         <p class="ff-desc">Peito de frango panado ultra crocante, queijo emmenthal, maionese de alho e ervas, alface americana e pickles.</p>
                         <div class="ff-footer">
                             <span class="ff-tag"><i class="fa-solid fa-drumstick-bite"></i> Frango Crocante</span>
-                            <button onclick="addToCart('Chicken Crunch Crispy Burger', 7.90, 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Chicken Crunch Crispy Burger', 7.90, '{{ url_for('static', filename='images/chicken_crunch.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-cart-plus"></i> Pedir 7.90€
                             </button>
                         </div>
