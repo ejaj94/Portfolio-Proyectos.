@@ -368,6 +368,27 @@
                     </div>
                 </div>
 
+                <!-- Item 8: Pizza Vegetariana -->
+                <div class="fastfood-card" data-category="pizzas">
+                    <div class="fastfood-card-img">
+                        <img src="{{ url_for('static', filename='images/pizza_vegetariana.jpg') }}?v=1" alt="Pizza Vegetariana Avocado & Tex-Mex">
+                        <span class="ff-badge-top">100% Veggie</span>
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Pizza Vegetariana Avocado & Tex-Mex (32cm)</h3>
+                            <span class="ff-price">10,90 €</span>
+                        </div>
+                        <p class="ff-desc">Massa artesanal estaladiça, base de guacamole cremoso, picado vegetal tex-mex, tomates cherry frescos, azeitonas pretas, jalapeños suculentos, coentros frescos e molho de natas vegetais.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-leaf"></i> 100% Vegetariano</span>
+                            <button onclick="addToCart('Pizza Vegetariana Avocado & Tex-Mex (32cm)', 10.90, '{{ url_for('static', filename='images/pizza_vegetariana.jpg') }}?v=1')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 10.90€
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Item 8: Fritos & Snacks -->
                 <div class="fastfood-card" data-category="fries">
                     <div class="fastfood-card-img">
