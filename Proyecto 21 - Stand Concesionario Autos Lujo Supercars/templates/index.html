@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELOCE LUXURY MOTORS — Stand de Supercarros & Hipercarros de Luxo</title>
+    <title>VELOCE LUXURY MOTORS — Stand de 80 Supercarros & Hipercarros de Luxo</title>
 
     <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Custom Luxury CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260901">
+    <link rel="stylesheet" href="{ url_for('static', filename='style.css') }?v=20260901_80">
 </head>
 <body>
 
@@ -29,8 +29,8 @@
         </div>
 
         <ul class="nav-menu-links">
-            <li><a href="#hypercars" class="nav-link-item">Coleção VIP</a></li>
-            <li><a href="#brands" class="nav-link-item">Supermarcas</a></li>
+            <li><a href="#hypercars" class="nav-link-item">Coleção (80 Carros)</a></li>
+            <li><a href="#brands" class="nav-link-item">8 Supermarcas</a></li>
             <li><a href="#faq" class="nav-link-item">Serviço Concierge</a></li>
             <li><a href="javascript:void(0)" onclick="openVipModal('Consulta Geral Veloce Motors')" class="nav-link-item">Atendimento Privado</a></li>
         </ul>
@@ -51,24 +51,61 @@
     <section class="hero-section">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <span class="hero-badge"><i class="fa-solid fa-fire text-red"></i> Stand de Supercarros & Hipercarros Elite</span>
-            <h1>Engenharia Brutal & <em>Edições Limitadas</em></h1>
-            <p>Rolls-Royce, Bugatti, Ferrari, Lamborghini, Aston Martin e Mercedes-AMG. Os automóveis mais rápidos e cobiçados do planeta prontos para entrega imediata.</p>
+            <span class="hero-badge"><i class="fa-solid fa-fire text-red"></i> 80 Automóveis Exclusivos • 8 Supermarcas Elite</span>
+            <h1>Engenharia Brutal & <em>Edições de Coleção</em></h1>
+            <p>Rolls-Royce, Ferrari, Lamborghini, Bugatti, Aston Martin, Mercedes-AMG, Maserati e BMW M. 10 modelos lendários por marca prontos para entrega imediata.</p>
 
             <div class="hero-metrics-row">
                 <div class="metric-pill">
-                    <span class="num">1.600 CV</span>
+                    <span class="num">80</span>
+                    <span class="lbl">Veículos no Stock</span>
+                </div>
+                <div class="metric-pill">
+                    <span class="num">1.800 CV</span>
                     <span class="lbl">Potência Máxima</span>
                 </div>
                 <div class="metric-pill">
-                    <span class="num">2,3s</span>
+                    <span class="num">2,0s</span>
                     <span class="lbl">0 a 100 km/h</span>
                 </div>
                 <div class="metric-pill">
-                    <span class="num">420 km/h</span>
+                    <span class="num">500 km/h</span>
                     <span class="lbl">Velocidade Máxima</span>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Brand Filter Pills Navigation -->
+    <section class="brands-tabs-wrapper" id="brands">
+        <div class="brand-tabs-container">
+            <button class="brand-tab-btn active" data-brand-tab="all" onclick="applyCarFilters('all')">
+                <i class="fa-solid fa-car"></i> Todos (80)
+            </button>
+            <button class="brand-tab-btn" data-brand-tab="rolls" onclick="applyCarFilters('rolls')">
+                <i class="fa-solid fa-crown text-gold"></i> Rolls-Royce (10)
+            </button>
+            <button class="brand-tab-btn" data-brand-tab="ferrari" onclick="applyCarFilters('ferrari')">
+                <i class="fa-solid fa-bolt text-red"></i> Ferrari (10)
+            </button>
+            <button class="brand-tab-btn" data-brand-tab="lamborghini" onclick="applyCarFilters('lamborghini')">
+                <i class="fa-solid fa-bullseye text-gold"></i> Lamborghini (10)
+            </button>
+            <button class="brand-tab-btn" data-brand-tab="bugatti" onclick="applyCarFilters('bugatti')">
+                <i class="fa-solid fa-gem text-gold"></i> Bugatti (10)
+            </button>
+            <button class="brand-tab-btn" data-brand-tab="aston" onclick="applyCarFilters('aston')">
+                <i class="fa-solid fa-shield text-gold"></i> Aston Martin (10)
+            </button>
+            <button class="brand-tab-btn" data-brand-tab="amg" onclick="applyCarFilters('amg')">
+                <i class="fa-solid fa-star text-gold"></i> Mercedes-AMG (10)
+            </button>
+            <button class="brand-tab-btn" data-brand-tab="maserati" onclick="applyCarFilters('maserati')">
+                <i class="fa-solid fa-trident text-gold"></i> Maserati (10)
+            </button>
+            <button class="brand-tab-btn" data-brand-tab="bmw" onclick="applyCarFilters('bmw')">
+                <i class="fa-solid fa-gauge text-gold"></i> BMW M (10)
+            </button>
         </div>
     </section>
 
@@ -79,15 +116,15 @@
             <div class="filter-group">
                 <label><i class="fa-solid fa-car-side"></i> Supermarca</label>
                 <select id="filterBrand" class="filter-select" onchange="applyCarFilters()">
-                    <option value="all">Todas as Marcas Elite</option>
-                    <option value="bugatti">Bugatti</option>
-                    <option value="ferrari">Ferrari</option>
-                    <option value="lamborghini">Lamborghini</option>
-                    <option value="rolls">Rolls-Royce</option>
-                    <option value="aston">Aston Martin</option>
-                    <option value="amg">Mercedes-AMG</option>
-                    <option value="maserati">Maserati</option>
-                    <option value="bmw">BMW M Performance</option>
+                    <option value="all">Todas as 8 Marcas</option>
+                    <option value="rolls">Rolls-Royce (10 Modelos)</option>
+                    <option value="ferrari">Ferrari (10 Modelos)</option>
+                    <option value="lamborghini">Lamborghini (10 Modelos)</option>
+                    <option value="bugatti">Bugatti (10 Modelos)</option>
+                    <option value="aston">Aston Martin (10 Modelos)</option>
+                    <option value="amg">Mercedes-AMG (10 Modelos)</option>
+                    <option value="maserati">Maserati (10 Modelos)</option>
+                    <option value="bmw">BMW M Performance (10 Modelos)</option>
                 </select>
             </div>
 
@@ -97,7 +134,8 @@
                     <option value="all">Qualquer Valor</option>
                     <option value="150-400">150.000 € – 400.000 €</option>
                     <option value="400-800">400.000 € – 800.000 €</option>
-                    <option value="800+">Acima de 800.000 € (Hypercars)</option>
+                    <option value="800-2000">800.000 € – 2.000.000 €</option>
+                    <option value="2000+">Acima de 2.000.000 € (Hipercarros)</option>
                 </select>
             </div>
 
@@ -109,6 +147,7 @@
                     <option value="supercar">Superdesportivo V12 / V8</option>
                     <option value="suv">SUV de Ultra Luxo</option>
                     <option value="gt">Gran Turismo Coupe</option>
+                    <option value="limousine">Limousine VIP</option>
                 </select>
             </div>
 
@@ -123,145 +162,77 @@
             </div>
 
             <button class="btn-filter-apply" onclick="applyCarFilters()">
-                <i class="fa-solid fa-sliders"></i> Filtrar Stock
+                <i class="fa-solid fa-sliders"></i> Aplicar Filtros
             </button>
 
         </div>
     </div>
 
-    <!-- Section Title -->
+    <!-- Section Title & Counter -->
     <div class="section-title-box">
-        <span class="subtitle">Catálogo de Máquinas Exóticas</span>
+        <span class="subtitle">Catálogo Completo por Marcas</span>
         <h2>Stock de Veículos de Ultra Luxo</h2>
-        <p>Cada viatura passa por rigorosa inspeção técnica de 150 pontos e conta com histórico de manutenção verificado na fábrica oficial.</p>
+        <p id="carsCountDisplay" class="count-badge-display">80 Veículos Encontrados</p>
     </div>
 
-    <!-- Cars Showcase Grid -->
+    <!-- Cars Showcase Grid (80 CARS) -->
     <section class="cars-grid-container" id="carsGrid">
         
-        <!-- Car 1: Bugatti Chiron -->
-        <article class="car-card-luxury" data-brand="bugatti" data-price="3900000" data-cat="hypercar" data-km="1200">
+        <!-- Car Card: Rolls-Royce Phantom VIII Extended -->
+        <article class="car-card-luxury" data-brand="rolls" data-price="680000" data-cat="limousine" data-km="0">
             <div class="car-img-wrapper">
-                <img src="{{ url_for('static', filename='images/bugatti_chiron.jpg') }}" alt="Bugatti Chiron Super Sport">
-                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Bugatti</span>
-                <span class="badge-hp-tag">1.600 CV W16</span>
+                <img src="/static/images/rolls_phantom.jpg" alt="Rolls-Royce Phantom VIII Extended">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Rolls-Royce</span>
+                <span class="badge-hp-tag">570 CV V12</span>
             </div>
             <div class="car-details-body">
                 <div class="car-header-row">
-                    <h3>Bugatti Chiron Super Sport</h3>
-                    <div class="car-price-tag" data-eur="3900000">3.900.000 €</div>
+                    <h3>Rolls-Royce Phantom VIII Extended</h3>
+                    <div class="car-price-tag" data-eur="680000">680.000 €</div>
                 </div>
                 <div class="car-subtitle-info">
-                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 1.200 km • Quad-Turbo W16
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Majestade Absoluta
                 </div>
 
                 <div class="car-specs-grid">
-                    <div class="car-spec-item"><span class="val">1.600 CV</span><span class="lbl">Potência</span></div>
-                    <div class="car-spec-item"><span class="val">2,4s</span><span class="lbl">0-100</span></div>
-                    <div class="car-spec-item"><span class="val">440 km/h</span><span class="lbl">V. Máx</span></div>
-                    <div class="car-spec-item"><span class="val">Carbono</span><span class="lbl">Chassi</span></div>
+                    <div class="car-spec-item"><span class="val">570 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">5,3s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">250 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
                 </div>
 
                 <div class="card-actions-grid">
-                    <button class="btn-card-spec" onclick="openLightbox('bugatti_chiron')">
+                    <button class="btn-card-spec" onclick="openLightbox('rolls_phantom')">
                         <i class="fa-solid fa-circle-info"></i> Ficha Técnica
                     </button>
-                    <button class="btn-card-inquire" onclick="openVipModal('Bugatti Chiron Super Sport')">
+                    <button class="btn-card-inquire" onclick="openVipModal('Rolls-Royce Phantom VIII Extended')">
                         <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
                     </button>
                 </div>
             </div>
         </article>
-
-        <!-- Car 2: Ferrari SF90 -->
-        <article class="car-card-luxury" data-brand="ferrari" data-price="980000" data-cat="hypercar" data-km="0">
-            <div class="car-img-wrapper">
-                <img src="{{ url_for('static', filename='images/ferrari_sf90.jpg') }}" alt="Ferrari SF90 XX Stradale">
-                <span class="badge-brand-tag"><i class="fa-solid fa-bolt text-red"></i> Ferrari</span>
-                <span class="badge-hp-tag">1.030 CV Hybrid</span>
-            </div>
-            <div class="car-details-body">
-                <div class="car-header-row">
-                    <h3>Ferrari SF90 XX Stradale</h3>
-                    <div class="car-price-tag" data-eur="980000">980.000 €</div>
-                </div>
-                <div class="car-subtitle-info">
-                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-sparkles text-gold"></i> 0 km (Novo) • V8 Twin-Turbo
-                </div>
-
-                <div class="car-specs-grid">
-                    <div class="car-spec-item"><span class="val">1.030 CV</span><span class="lbl">Potência</span></div>
-                    <div class="car-spec-item"><span class="val">2,3s</span><span class="lbl">0-100</span></div>
-                    <div class="car-spec-item"><span class="val">340 km/h</span><span class="lbl">V. Máx</span></div>
-                    <div class="car-spec-item"><span class="val">e-4WD</span><span class="lbl">Tração</span></div>
-                </div>
-
-                <div class="card-actions-grid">
-                    <button class="btn-card-spec" onclick="openLightbox('ferrari_sf90')">
-                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
-                    </button>
-                    <button class="btn-card-inquire" onclick="openVipModal('Ferrari SF90 XX Stradale')">
-                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
-                    </button>
-                </div>
-            </div>
-        </article>
-
-        <!-- Car 3: Lamborghini Revuelto -->
-        <article class="car-card-luxury" data-brand="lamborghini" data-price="740000" data-cat="supercar" data-km="0">
-            <div class="car-img-wrapper">
-                <img src="{{ url_for('static', filename='images/lambo_revuelto.jpg') }}" alt="Lamborghini Revuelto V12">
-                <span class="badge-brand-tag"><i class="fa-solid fa-bullseye text-gold"></i> Lamborghini</span>
-                <span class="badge-hp-tag">1.015 CV V12</span>
-            </div>
-            <div class="car-details-body">
-                <div class="car-header-row">
-                    <h3>Lamborghini Revuelto V12</h3>
-                    <div class="car-price-tag" data-eur="740000">740.000 €</div>
-                </div>
-                <div class="car-subtitle-info">
-                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-sparkles text-gold"></i> 0 km (Novo) • V12 Híbrido
-                </div>
-
-                <div class="car-specs-grid">
-                    <div class="car-spec-item"><span class="val">1.015 CV</span><span class="lbl">Potência</span></div>
-                    <div class="car-spec-item"><span class="val">2,5s</span><span class="lbl">0-100</span></div>
-                    <div class="car-spec-item"><span class="val">350 km/h</span><span class="lbl">V. Máx</span></div>
-                    <div class="car-spec-item"><span class="val">Monofusione</span><span class="lbl">Chassi</span></div>
-                </div>
-
-                <div class="card-actions-grid">
-                    <button class="btn-card-spec" onclick="openLightbox('lambo_revuelto')">
-                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
-                    </button>
-                    <button class="btn-card-inquire" onclick="openVipModal('Lamborghini Revuelto V12')">
-                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
-                    </button>
-                </div>
-            </div>
-        </article>
-
-        <!-- Car 4: Rolls-Royce Cullinan -->
+    
+        <!-- Car Card: Rolls-Royce Cullinan Black Badge -->
         <article class="car-card-luxury" data-brand="rolls" data-price="580000" data-cat="suv" data-km="3500">
             <div class="car-img-wrapper">
-                <img src="{{ url_for('static', filename='images/rolls_cullinan.jpg') }}" alt="Rolls-Royce Cullinan Black Badge">
-                <span class="badge-brand-tag"><i class="fa-solid fa-gem text-gold"></i> Rolls-Royce</span>
-                <span class="badge-hp-tag">Black Badge V12</span>
+                <img src="/static/images/rolls_cullinan.jpg" alt="Rolls-Royce Cullinan Black Badge">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Rolls-Royce</span>
+                <span class="badge-hp-tag">600 CV V12</span>
             </div>
             <div class="car-details-body">
                 <div class="car-header-row">
-                    <h3>Rolls-Royce Cullinan BB</h3>
+                    <h3>Rolls-Royce Cullinan Black Badge</h3>
                     <div class="car-price-tag" data-eur="580000">580.000 €</div>
                 </div>
                 <div class="car-subtitle-info">
-                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 3.500 km • 6.75L V12 Twin-Turbo
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 3.500 km • Black Badge Edition
                 </div>
 
                 <div class="car-specs-grid">
-                    <div class="car-spec-item"><span class="val">600 CV</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">600 CV V12</span><span class="lbl">Potência</span></div>
                     <div class="car-spec-item"><span class="val">4,9s</span><span class="lbl">0-100</span></div>
-                    <div class="car-spec-item"><span class="val">Starlight</span><span class="lbl">Teto</span></div>
-                    <div class="car-spec-item"><span class="val">AWD</span><span class="lbl">Tração</span></div>
+                    <div class="car-spec-item"><span class="val">250 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
                 </div>
 
                 <div class="card-actions-grid">
@@ -274,62 +245,1694 @@
                 </div>
             </div>
         </article>
-
-        <!-- Car 5: Aston Martin DBS -->
-        <article class="car-card-luxury" data-brand="aston" data-price="490000" data-cat="gt" data-km="1800">
+    
+        <!-- Car Card: Rolls-Royce Spectre Electric -->
+        <article class="car-card-luxury" data-brand="rolls" data-price="520000" data-cat="gt" data-km="0">
             <div class="car-img-wrapper">
-                <img src="{{ url_for('static', filename='images/aston_dbs.jpg') }}" alt="Aston Martin DBS 770 Ultimate">
-                <span class="badge-brand-tag"><i class="fa-solid fa-shield text-gold"></i> Aston Martin</span>
-                <span class="badge-hp-tag">770 CV V12</span>
+                <img src="/static/images/rolls_spectre.jpg" alt="Rolls-Royce Spectre Electric">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Rolls-Royce</span>
+                <span class="badge-hp-tag">584 CV EV</span>
             </div>
             <div class="car-details-body">
                 <div class="car-header-row">
-                    <h3>Aston Martin DBS 770</h3>
-                    <div class="car-price-tag" data-eur="490000">490.000 €</div>
+                    <h3>Rolls-Royce Spectre Electric</h3>
+                    <div class="car-price-tag" data-eur="520000">520.000 €</div>
                 </div>
                 <div class="car-subtitle-info">
-                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 1.800 km • 5.2L V12 Twin-Turbo
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • 100% Elétrico Ultra Luxo
                 </div>
 
                 <div class="car-specs-grid">
-                    <div class="car-spec-item"><span class="val">770 CV</span><span class="lbl">Potência</span></div>
-                    <div class="car-spec-item"><span class="val">3,2s</span><span class="lbl">0-100</span></div>
-                    <div class="car-spec-item"><span class="val">340 km/h</span><span class="lbl">V. Máx</span></div>
-                    <div class="car-spec-item"><span class="val">Edição 499</span><span class="lbl">Série</span></div>
+                    <div class="car-spec-item"><span class="val">584 CV EV</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">4,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">250 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
                 </div>
 
                 <div class="card-actions-grid">
-                    <button class="btn-card-spec" onclick="openLightbox('aston_dbs')">
+                    <button class="btn-card-spec" onclick="openLightbox('rolls_spectre')">
                         <i class="fa-solid fa-circle-info"></i> Ficha Técnica
                     </button>
-                    <button class="btn-card-inquire" onclick="openVipModal('Aston Martin DBS 770 Ultimate')">
+                    <button class="btn-card-inquire" onclick="openVipModal('Rolls-Royce Spectre Electric')">
                         <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
                     </button>
                 </div>
             </div>
         </article>
+    
+        <!-- Car Card: Rolls-Royce Ghost Extended Series II -->
+        <article class="car-card-luxury" data-brand="rolls" data-price="460000" data-cat="limousine" data-km="1200">
+            <div class="car-img-wrapper">
+                <img src="/static/images/rolls_ghost.jpg" alt="Rolls-Royce Ghost Extended Series II">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Rolls-Royce</span>
+                <span class="badge-hp-tag">571 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Rolls-Royce Ghost Extended Series II</h3>
+                    <div class="car-price-tag" data-eur="460000">460.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 1.200 km • Post Opulence
+                </div>
 
-        <!-- Car 6: Mercedes-AMG GT Black Series -->
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">571 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">4,8s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">250 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('rolls_ghost')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Rolls-Royce Ghost Extended Series II')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Rolls-Royce Dawn Black Badge -->
+        <article class="car-card-luxury" data-brand="rolls" data-price="430000" data-cat="gt" data-km="4800">
+            <div class="car-img-wrapper">
+                <img src="/static/images/rolls_dawn.jpg" alt="Rolls-Royce Dawn Black Badge">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Rolls-Royce</span>
+                <span class="badge-hp-tag">601 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Rolls-Royce Dawn Black Badge</h3>
+                    <div class="car-price-tag" data-eur="430000">430.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 4.800 km • Descapotável VIP
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">601 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">4,9s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">250 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2023</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('rolls_dawn')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Rolls-Royce Dawn Black Badge')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Rolls-Royce Wraith Landspeed -->
+        <article class="car-card-luxury" data-brand="rolls" data-price="410000" data-cat="gt" data-km="2900">
+            <div class="car-img-wrapper">
+                <img src="/static/images/rolls_spectre.jpg" alt="Rolls-Royce Wraith Landspeed">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Rolls-Royce</span>
+                <span class="badge-hp-tag">632 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Rolls-Royce Wraith Landspeed</h3>
+                    <div class="car-price-tag" data-eur="410000">410.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 2.900 km • Edição de Coleção
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">632 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">4,4s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">250 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2023</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('rolls_wraith')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Rolls-Royce Wraith Landspeed')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Rolls-Royce Cullinan Novitec Overdose -->
+        <article class="car-card-luxury" data-brand="rolls" data-price="640000" data-cat="suv" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/rolls_cullinan.jpg" alt="Rolls-Royce Cullinan Novitec Overdose">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Rolls-Royce</span>
+                <span class="badge-hp-tag">685 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Rolls-Royce Cullinan Novitec Overdose</h3>
+                    <div class="car-price-tag" data-eur="640000">640.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Preparação Novitec
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">685 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">4,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">280 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('rolls_cullinan_novitec')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Rolls-Royce Cullinan Novitec Overdose')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Rolls-Royce Silver Spectre Shooting Brake -->
+        <article class="car-card-luxury" data-brand="rolls" data-price="750000" data-cat="gt" data-km="1500">
+            <div class="car-img-wrapper">
+                <img src="/static/images/rolls_phantom.jpg" alt="Rolls-Royce Silver Spectre Shooting Brake">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Rolls-Royce</span>
+                <span class="badge-hp-tag">700 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Rolls-Royce Silver Spectre Shooting Brake</h3>
+                    <div class="car-price-tag" data-eur="750000">750.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 1.500 km • Shooting Brake 1 de 7
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">700 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">4,2s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">260 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('rolls_silver_spectre')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Rolls-Royce Silver Spectre Shooting Brake')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Rolls-Royce Sweptail Coachbuild -->
+        <article class="car-card-luxury" data-brand="rolls" data-price="2900000" data-cat="limousine" data-km="500">
+            <div class="car-img-wrapper">
+                <img src="/static/images/rolls_boat_tail.jpg" alt="Rolls-Royce Sweptail Coachbuild">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Rolls-Royce</span>
+                <span class="badge-hp-tag">460 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Rolls-Royce Sweptail Coachbuild</h3>
+                    <div class="car-price-tag" data-eur="2900000">2.900.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2022 • <i class="fa-solid fa-road text-gold"></i> 500 km • One-Off Exclusivo
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">460 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">5,6s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">240 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2022</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('rolls_sweptail')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Rolls-Royce Sweptail Coachbuild')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Rolls-Royce Boat Tail Series -->
+        <article class="car-card-luxury" data-brand="rolls" data-price="3500000" data-cat="gt" data-km="100">
+            <div class="car-img-wrapper">
+                <img src="/static/images/rolls_boat_tail.jpg" alt="Rolls-Royce Boat Tail Series">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Rolls-Royce</span>
+                <span class="badge-hp-tag">570 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Rolls-Royce Boat Tail Series</h3>
+                    <div class="car-price-tag" data-eur="3500000">3.500.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 100 km • O Carro Mais Caro da Europa
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">570 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">5,0s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">250 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('rolls_boat_tail')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Rolls-Royce Boat Tail Series')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Ferrari Daytona SP3 Icona V12 -->
+        <article class="car-card-luxury" data-brand="ferrari" data-price="2400000" data-cat="hypercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/ferrari_daytona.jpg" alt="Ferrari Daytona SP3 Icona V12">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Ferrari</span>
+                <span class="badge-hp-tag">840 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Ferrari Daytona SP3 Icona V12</h3>
+                    <div class="car-price-tag" data-eur="2400000">2.400.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Série Icona Limited
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">840 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,85s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">340 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('ferrari_daytona')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Ferrari Daytona SP3 Icona V12')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Ferrari LaFerrari Aperta Hybrid -->
+        <article class="car-card-luxury" data-brand="ferrari" data-price="3800000" data-cat="hypercar" data-km="1100">
+            <div class="car-img-wrapper">
+                <img src="/static/images/ferrari_laferrari.jpg" alt="Ferrari LaFerrari Aperta Hybrid">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Ferrari</span>
+                <span class="badge-hp-tag">963 CV Hybrid</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Ferrari LaFerrari Aperta Hybrid</h3>
+                    <div class="car-price-tag" data-eur="3800000">3.800.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2021 • <i class="fa-solid fa-road text-gold"></i> 1.100 km • Lenda HY-KERS
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">963 CV Hybrid</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,6s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">350 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2021</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('ferrari_laferrari')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Ferrari LaFerrari Aperta Hybrid')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Ferrari SF90 XX Stradale -->
+        <article class="car-card-luxury" data-brand="ferrari" data-price="980000" data-cat="hypercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/ferrari_sf90.jpg" alt="Ferrari SF90 XX Stradale">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Ferrari</span>
+                <span class="badge-hp-tag">1.030 CV Hybrid</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Ferrari SF90 XX Stradale</h3>
+                    <div class="car-price-tag" data-eur="980000">980.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • XX Homologado Estrada
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.030 CV Hybrid</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,3s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">340 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('ferrari_sf90')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Ferrari SF90 XX Stradale')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Ferrari 812 Competizione Aperta -->
+        <article class="car-card-luxury" data-brand="ferrari" data-price="1350000" data-cat="supercar" data-km="900">
+            <div class="car-img-wrapper">
+                <img src="/static/images/ferrari_812.jpg" alt="Ferrari 812 Competizione Aperta">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Ferrari</span>
+                <span class="badge-hp-tag">830 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Ferrari 812 Competizione Aperta</h3>
+                    <div class="car-price-tag" data-eur="1350000">1.350.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 900 km • V12 9.500 RPM
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">830 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,85s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">340 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('ferrari_812_comp')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Ferrari 812 Competizione Aperta')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Ferrari Purosangue V12 SUV -->
+        <article class="car-card-luxury" data-brand="ferrari" data-price="620000" data-cat="suv" data-km="1100">
+            <div class="car-img-wrapper">
+                <img src="/static/images/ferrari_purosangue.jpg" alt="Ferrari Purosangue V12 SUV">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Ferrari</span>
+                <span class="badge-hp-tag">725 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Ferrari Purosangue V12 SUV</h3>
+                    <div class="car-price-tag" data-eur="620000">620.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 1.100 km • Primeiro 4 Portas V12
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">725 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,3s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">310 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('ferrari_purosangue')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Ferrari Purosangue V12 SUV')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Ferrari 296 GTS Assetto Fiorano -->
+        <article class="car-card-luxury" data-brand="ferrari" data-price="410000" data-cat="supercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/ferrari_sf90.jpg" alt="Ferrari 296 GTS Assetto Fiorano">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Ferrari</span>
+                <span class="badge-hp-tag">830 CV Hybrid</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Ferrari 296 GTS Assetto Fiorano</h3>
+                    <div class="car-price-tag" data-eur="410000">410.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • V6 Turbo Híbrido
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">830 CV Hybrid</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,9s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">330 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('ferrari_296_gts')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Ferrari 296 GTS Assetto Fiorano')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Ferrari Monza SP2 Speedster -->
+        <article class="car-card-luxury" data-brand="ferrari" data-price="2100000" data-cat="hypercar" data-km="600">
+            <div class="car-img-wrapper">
+                <img src="/static/images/ferrari_monza.jpg" alt="Ferrari Monza SP2 Speedster">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Ferrari</span>
+                <span class="badge-hp-tag">810 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Ferrari Monza SP2 Speedster</h3>
+                    <div class="car-price-tag" data-eur="2100000">2.100.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2022 • <i class="fa-solid fa-road text-gold"></i> 600 km • Speedster Sem Para-brisas
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">810 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,9s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">300 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2022</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('ferrari_monza_sp2')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Ferrari Monza SP2 Speedster')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Ferrari F8 Tributo Novitec N-Largo -->
+        <article class="car-card-luxury" data-brand="ferrari" data-price="520000" data-cat="supercar" data-km="2200">
+            <div class="car-img-wrapper">
+                <img src="/static/images/ferrari_daytona.jpg" alt="Ferrari F8 Tributo Novitec N-Largo">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Ferrari</span>
+                <span class="badge-hp-tag">818 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Ferrari F8 Tributo Novitec N-Largo</h3>
+                    <div class="car-price-tag" data-eur="520000">520.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 2.200 km • Widebody 1 de 15
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">818 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,6s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">347 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2023</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('ferrari_f8_nlargo')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Ferrari F8 Tributo Novitec N-Largo')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Ferrari Roma Spider V8 -->
+        <article class="car-card-luxury" data-brand="ferrari" data-price="290000" data-cat="gt" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/ferrari_812.jpg" alt="Ferrari Roma Spider V8">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Ferrari</span>
+                <span class="badge-hp-tag">620 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Ferrari Roma Spider V8</h3>
+                    <div class="car-price-tag" data-eur="290000">290.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • La Nuova Dolce Vita
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">620 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,4s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">320 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('ferrari_roma_spider')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Ferrari Roma Spider V8')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Ferrari Enzo V12 Limited -->
+        <article class="car-card-luxury" data-brand="ferrari" data-price="3200000" data-cat="hypercar" data-km="3400">
+            <div class="car-img-wrapper">
+                <img src="/static/images/ferrari_laferrari.jpg" alt="Ferrari Enzo V12 Limited">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Ferrari</span>
+                <span class="badge-hp-tag">660 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Ferrari Enzo V12 Limited</h3>
+                    <div class="car-price-tag" data-eur="3200000">3.200.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2004 • <i class="fa-solid fa-road text-gold"></i> 3.400 km • Ícone de Coleção
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">660 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,3s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">355 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2004</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('ferrari_enzo')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Ferrari Enzo V12 Limited')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Lamborghini Veneno Roadster -->
+        <article class="car-card-luxury" data-brand="lamborghini" data-price="4500000" data-cat="hypercar" data-km="400">
+            <div class="car-img-wrapper">
+                <img src="/static/images/lambo_veneno.jpg" alt="Lamborghini Veneno Roadster">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Lamborghini</span>
+                <span class="badge-hp-tag">750 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Lamborghini Veneno Roadster</h3>
+                    <div class="car-price-tag" data-eur="4500000">4.500.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2020 • <i class="fa-solid fa-road text-gold"></i> 400 km • Hipercarro Exótico 1 de 9
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">750 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,9s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">355 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2020</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('lambo_veneno')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Lamborghini Veneno Roadster')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Lamborghini Sián FKP 37 -->
+        <article class="car-card-luxury" data-brand="lamborghini" data-price="3200000" data-cat="hypercar" data-km="500">
+            <div class="car-img-wrapper">
+                <img src="/static/images/lambo_revuelto.jpg" alt="Lamborghini Sián FKP 37">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Lamborghini</span>
+                <span class="badge-hp-tag">819 CV V12 Hybrid</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Lamborghini Sián FKP 37</h3>
+                    <div class="car-price-tag" data-eur="3200000">3.200.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2022 • <i class="fa-solid fa-road text-gold"></i> 500 km • Tecnologia Supercondensador
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">819 CV V12 Hybrid</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,8s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">355 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2022</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('lambo_sian')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Lamborghini Sián FKP 37')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Lamborghini Countach LPI 800-4 -->
+        <article class="car-card-luxury" data-brand="lamborghini" data-price="2300000" data-cat="hypercar" data-km="300">
+            <div class="car-img-wrapper">
+                <img src="/static/images/lambo_countach.jpg" alt="Lamborghini Countach LPI 800-4">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Lamborghini</span>
+                <span class="badge-hp-tag">814 CV V12 Hybrid</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Lamborghini Countach LPI 800-4</h3>
+                    <div class="car-price-tag" data-eur="2300000">2.300.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 300 km • Reinterpretação do Ícone
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">814 CV V12 Hybrid</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,8s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">355 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2023</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('lambo_countach')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Lamborghini Countach LPI 800-4')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Lamborghini Revuelto V12 HPEV -->
+        <article class="car-card-luxury" data-brand="lamborghini" data-price="740000" data-cat="supercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/lambo_revuelto.jpg" alt="Lamborghini Revuelto V12 HPEV">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Lamborghini</span>
+                <span class="badge-hp-tag">1.015 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Lamborghini Revuelto V12 HPEV</h3>
+                    <div class="car-price-tag" data-eur="740000">740.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • HPEV V12 de 1.015 CV
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.015 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">350 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('lambo_revuelto')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Lamborghini Revuelto V12 HPEV')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Lamborghini Aventador SVJ Roadster -->
+        <article class="car-card-luxury" data-brand="lamborghini" data-price="680000" data-cat="supercar" data-km="2100">
+            <div class="car-img-wrapper">
+                <img src="/static/images/lambo_veneno.jpg" alt="Lamborghini Aventador SVJ Roadster">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Lamborghini</span>
+                <span class="badge-hp-tag">770 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Lamborghini Aventador SVJ Roadster</h3>
+                    <div class="car-price-tag" data-eur="680000">680.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2022 • <i class="fa-solid fa-road text-gold"></i> 2.100 km • Aerodinâmica ALA 2.0
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">770 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,9s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">350 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2022</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('lambo_aventador_svj')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Lamborghini Aventador SVJ Roadster')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Lamborghini Urus Venatus Mansory -->
+        <article class="car-card-luxury" data-brand="lamborghini" data-price="490000" data-cat="suv" data-km="1500">
+            <div class="car-img-wrapper">
+                <img src="/static/images/lambo_urus.jpg" alt="Lamborghini Urus Venatus Mansory">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Lamborghini</span>
+                <span class="badge-hp-tag">800 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Lamborghini Urus Venatus Mansory</h3>
+                    <div class="car-price-tag" data-eur="490000">490.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 1.500 km • Mansory Venatus Carbon
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">800 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,1s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">320 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('lambo_urus_mansory')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Lamborghini Urus Venatus Mansory')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Lamborghini Huracán Sterrato -->
+        <article class="car-card-luxury" data-brand="lamborghini" data-price="380000" data-cat="supercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/lambo_countach.jpg" alt="Lamborghini Huracán Sterrato">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Lamborghini</span>
+                <span class="badge-hp-tag">610 CV V10</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Lamborghini Huracán Sterrato</h3>
+                    <div class="car-price-tag" data-eur="380000">380.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Superdesportivo Off-Road
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">610 CV V10</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,4s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">260 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('lambo_huracan_sterrato')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Lamborghini Huracán Sterrato')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Lamborghini Huracán STO Track -->
+        <article class="car-card-luxury" data-brand="lamborghini" data-price="420000" data-cat="supercar" data-km="1200">
+            <div class="car-img-wrapper">
+                <img src="/static/images/lambo_revuelto.jpg" alt="Lamborghini Huracán STO Track">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Lamborghini</span>
+                <span class="badge-hp-tag">640 CV V10</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Lamborghini Huracán STO Track</h3>
+                    <div class="car-price-tag" data-eur="420000">420.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 1.200 km • DNA Squadra Corse F1
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">640 CV V10</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,0s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">310 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('lambo_huracan_sto')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Lamborghini Huracán STO Track')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Lamborghini Centenario LP 770-4 -->
+        <article class="car-card-luxury" data-brand="lamborghini" data-price="2600000" data-cat="hypercar" data-km="800">
+            <div class="car-img-wrapper">
+                <img src="/static/images/lambo_veneno.jpg" alt="Lamborghini Centenario LP 770-4">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Lamborghini</span>
+                <span class="badge-hp-tag">770 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Lamborghini Centenario LP 770-4</h3>
+                    <div class="car-price-tag" data-eur="2600000">2.600.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2017 • <i class="fa-solid fa-road text-gold"></i> 800 km • Centenário Ferruccio 1 de 20
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">770 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,8s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">350 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2017</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('lambo_centenario')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Lamborghini Centenario LP 770-4')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Lamborghini Sesto Elemento Track -->
+        <article class="car-card-luxury" data-brand="lamborghini" data-price="2900000" data-cat="hypercar" data-km="100">
+            <div class="car-img-wrapper">
+                <img src="/static/images/lambo_countach.jpg" alt="Lamborghini Sesto Elemento Track">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Lamborghini</span>
+                <span class="badge-hp-tag">570 CV V10</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Lamborghini Sesto Elemento Track</h3>
+                    <div class="car-price-tag" data-eur="2900000">2.900.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2012 • <i class="fa-solid fa-road text-gold"></i> 100 km • Apenas 999 kg de Peso
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">570 CV V10</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">325 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2012</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('lambo_sesto_elemento')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Lamborghini Sesto Elemento Track')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Bugatti Tourbillon V16 Hybrid -->
+        <article class="car-card-luxury" data-brand="bugatti" data-price="4200000" data-cat="hypercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bugatti_tourbillon.jpg" alt="Bugatti Tourbillon V16 Hybrid">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Bugatti</span>
+                <span class="badge-hp-tag">1.800 CV V16</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Bugatti Tourbillon V16 Hybrid</h3>
+                    <div class="car-price-tag" data-eur="4200000">4.200.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2026 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Novo Hipercarro V16
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.800 CV V16</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,0s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">445 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2026</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bugatti_tourbillon')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Bugatti Tourbillon V16 Hybrid')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Bugatti Chiron Super Sport 300+ -->
+        <article class="car-card-luxury" data-brand="bugatti" data-price="3900000" data-cat="hypercar" data-km="1200">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bugatti_chiron.jpg" alt="Bugatti Chiron Super Sport 300+">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Bugatti</span>
+                <span class="badge-hp-tag">1.600 CV W16</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Bugatti Chiron Super Sport 300+</h3>
+                    <div class="car-price-tag" data-eur="3900000">3.900.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 1.200 km • Recordista Mágico 300 mph
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.600 CV W16</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,4s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">440 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bugatti_chiron')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Bugatti Chiron Super Sport 300+')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Bugatti Divo Track Edition -->
+        <article class="car-card-luxury" data-brand="bugatti" data-price="5200000" data-cat="hypercar" data-km="400">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bugatti_divo.jpg" alt="Bugatti Divo Track Edition">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Bugatti</span>
+                <span class="badge-hp-tag">1.500 CV W16</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Bugatti Divo Track Edition</h3>
+                    <div class="car-price-tag" data-eur="5200000">5.200.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2022 • <i class="fa-solid fa-road text-gold"></i> 400 km • Edição Curvas 1 de 40
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.500 CV W16</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,4s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">380 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2022</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bugatti_divo')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Bugatti Divo Track Edition')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Bugatti Centodieci EB110 Hommage -->
+        <article class="car-card-luxury" data-brand="bugatti" data-price="8500000" data-cat="hypercar" data-km="200">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bugatti_centodieci.jpg" alt="Bugatti Centodieci EB110 Hommage">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Bugatti</span>
+                <span class="badge-hp-tag">1.600 CV W16</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Bugatti Centodieci EB110 Hommage</h3>
+                    <div class="car-price-tag" data-eur="8500000">8.500.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 200 km • Tributo EB110 1 de 10
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.600 CV W16</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,4s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">380 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2023</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bugatti_centodieci')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Bugatti Centodieci EB110 Hommage')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Bugatti Chiron Pur Sport -->
+        <article class="car-card-luxury" data-brand="bugatti" data-price="3600000" data-cat="hypercar" data-km="800">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bugatti_chiron.jpg" alt="Bugatti Chiron Pur Sport">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Bugatti</span>
+                <span class="badge-hp-tag">1.500 CV W16</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Bugatti Chiron Pur Sport</h3>
+                    <div class="car-price-tag" data-eur="3600000">3.600.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 800 km • Agilidade Extrema
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.500 CV W16</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,3s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">350 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2023</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bugatti_pur_sport')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Bugatti Chiron Pur Sport')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Bugatti Bolide Track Hypercar -->
+        <article class="car-card-luxury" data-brand="bugatti" data-price="4000000" data-cat="hypercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bugatti_bolide.jpg" alt="Bugatti Bolide Track Hypercar">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Bugatti</span>
+                <span class="badge-hp-tag">1.850 CV W16</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Bugatti Bolide Track Hypercar</h3>
+                    <div class="car-price-tag" data-eur="4000000">4.000.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Extreme Track Only
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.850 CV W16</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,17s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">500 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bugatti_bolide')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Bugatti Bolide Track Hypercar')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Bugatti Veyron Grand Sport Vitesse -->
+        <article class="car-card-luxury" data-brand="bugatti" data-price="2400000" data-cat="hypercar" data-km="3200">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bugatti_tourbillon.jpg" alt="Bugatti Veyron Grand Sport Vitesse">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Bugatti</span>
+                <span class="badge-hp-tag">1.200 CV W16</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Bugatti Veyron Grand Sport Vitesse</h3>
+                    <div class="car-price-tag" data-eur="2400000">2.400.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2015 • <i class="fa-solid fa-road text-gold"></i> 3.200 km • Recordista Descapotável
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.200 CV W16</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,6s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">408 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2015</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bugatti_veyron_vitesse')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Bugatti Veyron Grand Sport Vitesse')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Bugatti La Voiture Noire -->
+        <article class="car-card-luxury" data-brand="bugatti" data-price="11000000" data-cat="hypercar" data-km="100">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bugatti_centodieci.jpg" alt="Bugatti La Voiture Noire">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Bugatti</span>
+                <span class="badge-hp-tag">1.500 CV W16</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Bugatti La Voiture Noire</h3>
+                    <div class="car-price-tag" data-eur="11000000">11.000.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2021 • <i class="fa-solid fa-road text-gold"></i> 100 km • Exemplar Único no Mundo
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.500 CV W16</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,4s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">420 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2021</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bugatti_la_voiture_noire')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Bugatti La Voiture Noire')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Bugatti Chiron Habillé par Hermès -->
+        <article class="car-card-luxury" data-brand="bugatti" data-price="4800000" data-cat="hypercar" data-km="300">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bugatti_chiron.jpg" alt="Bugatti Chiron Habillé par Hermès">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Bugatti</span>
+                <span class="badge-hp-tag">1.500 CV W16</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Bugatti Chiron Habillé par Hermès</h3>
+                    <div class="car-price-tag" data-eur="4800000">4.800.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2022 • <i class="fa-solid fa-road text-gold"></i> 300 km • Hermès One-of-One
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.500 CV W16</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,4s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">420 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2022</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bugatti_hermes')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Bugatti Chiron Habillé par Hermès')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Bugatti EB110 Super Sport GT -->
+        <article class="car-card-luxury" data-brand="bugatti" data-price="2900000" data-cat="hypercar" data-km="5400">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bugatti_divo.jpg" alt="Bugatti EB110 Super Sport GT">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Bugatti</span>
+                <span class="badge-hp-tag">612 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Bugatti EB110 Super Sport GT</h3>
+                    <div class="car-price-tag" data-eur="2900000">2.900.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 1994 • <i class="fa-solid fa-road text-gold"></i> 5.400 km • Ícone dos Anos 90
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">612 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,2s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">355 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">1994</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bugatti_eb110_ss')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Bugatti EB110 Super Sport GT')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Aston Martin Valkyrie AMR Pro F1 -->
+        <article class="car-card-luxury" data-brand="aston" data-price="3500000" data-cat="hypercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/aston_valkyrie.jpg" alt="Aston Martin Valkyrie AMR Pro F1">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Aston Martin</span>
+                <span class="badge-hp-tag">1.160 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Aston Martin Valkyrie AMR Pro F1</h3>
+                    <div class="car-price-tag" data-eur="3500000">3.500.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • F1 de Estrada Cosworth
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.160 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,2s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">400 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('aston_valkyrie')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Aston Martin Valkyrie AMR Pro F1')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Aston Martin Valhalla Hybrid V8 -->
+        <article class="car-card-luxury" data-brand="aston" data-price="950000" data-cat="hypercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/aston_valhalla.jpg" alt="Aston Martin Valhalla Hybrid V8">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Aston Martin</span>
+                <span class="badge-hp-tag">1.012 CV Hybrid</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Aston Martin Valhalla Hybrid V8</h3>
+                    <div class="car-price-tag" data-eur="950000">950.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Hipercarro V8 Híbrido
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.012 CV Hybrid</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">350 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('aston_valhalla')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Aston Martin Valhalla Hybrid V8')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Aston Martin One-77 Limited -->
+        <article class="car-card-luxury" data-brand="aston" data-price="1900000" data-cat="hypercar" data-km="1800">
+            <div class="car-img-wrapper">
+                <img src="/static/images/aston_vulcan.jpg" alt="Aston Martin One-77 Limited">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Aston Martin</span>
+                <span class="badge-hp-tag">760 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Aston Martin One-77 Limited</h3>
+                    <div class="car-price-tag" data-eur="1900000">1.900.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2012 • <i class="fa-solid fa-road text-gold"></i> 1.800 km • Obra de Arte 1 de 77
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">760 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">355 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2012</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('aston_one77')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Aston Martin One-77 Limited')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Aston Martin Victor One-Off -->
+        <article class="car-card-luxury" data-brand="aston" data-price="4100000" data-cat="hypercar" data-km="200">
+            <div class="car-img-wrapper">
+                <img src="/static/images/aston_valkyrie.jpg" alt="Aston Martin Victor One-Off">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Aston Martin</span>
+                <span class="badge-hp-tag">847 CV V12 Manual</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Aston Martin Victor One-Off</h3>
+                    <div class="car-price-tag" data-eur="4100000">4.100.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2021 • <i class="fa-solid fa-road text-gold"></i> 200 km • Manual V12 Mais Potente
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">847 CV V12 Manual</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,1s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">350 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2021</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('aston_victor')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Aston Martin Victor One-Off')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Aston Martin DBS 770 Ultimate Coupe -->
+        <article class="car-card-luxury" data-brand="aston" data-price="490000" data-cat="gt" data-km="1800">
+            <div class="car-img-wrapper">
+                <img src="/static/images/aston_dbs.jpg" alt="Aston Martin DBS 770 Ultimate Coupe">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Aston Martin</span>
+                <span class="badge-hp-tag">770 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Aston Martin DBS 770 Ultimate Coupe</h3>
+                    <div class="car-price-tag" data-eur="490000">490.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 1.800 km • Série Final 770
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">770 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,2s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">340 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('aston_dbs_coupe')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Aston Martin DBS 770 Ultimate Coupe')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Aston Martin DBS 770 Volante -->
+        <article class="car-card-luxury" data-brand="aston" data-price="530000" data-cat="gt" data-km="500">
+            <div class="car-img-wrapper">
+                <img src="/static/images/aston_db12.jpg" alt="Aston Martin DBS 770 Volante">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Aston Martin</span>
+                <span class="badge-hp-tag">770 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Aston Martin DBS 770 Volante</h3>
+                    <div class="car-price-tag" data-eur="530000">530.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 500 km • Descapotável V12 1 de 199
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">770 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,4s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">340 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('aston_dbs_volante')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Aston Martin DBS 770 Volante')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Aston Martin DBX707 Luxury SUV -->
+        <article class="car-card-luxury" data-brand="aston" data-price="290000" data-cat="suv" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/aston_dbx.jpg" alt="Aston Martin DBX707 Luxury SUV">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Aston Martin</span>
+                <span class="badge-hp-tag">707 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Aston Martin DBX707 Luxury SUV</h3>
+                    <div class="car-price-tag" data-eur="290000">290.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • O SUV Mais Potente
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">707 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,3s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">310 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('aston_dbx707')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Aston Martin DBX707 Luxury SUV')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Aston Martin DB12 Super Tourer -->
+        <article class="car-card-luxury" data-brand="aston" data-price="260000" data-cat="gt" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/aston_db12.jpg" alt="Aston Martin DB12 Super Tourer">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Aston Martin</span>
+                <span class="badge-hp-tag">680 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Aston Martin DB12 Super Tourer</h3>
+                    <div class="car-price-tag" data-eur="260000">260.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • O Primeiro Super Tourer
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">680 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,6s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">325 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('aston_db12')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Aston Martin DB12 Super Tourer')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Aston Martin Vantage F1 Edition -->
+        <article class="car-card-luxury" data-brand="aston" data-price="195000" data-cat="supercar" data-km="3200">
+            <div class="car-img-wrapper">
+                <img src="/static/images/aston_dbs.jpg" alt="Aston Martin Vantage F1 Edition">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Aston Martin</span>
+                <span class="badge-hp-tag">535 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Aston Martin Vantage F1 Edition</h3>
+                    <div class="car-price-tag" data-eur="195000">195.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 3.200 km • Safety Car da Fórmula 1
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">535 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,6s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">314 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2023</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('aston_vantage_f1')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Aston Martin Vantage F1 Edition')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Aston Martin Vulcan Track Only -->
+        <article class="car-card-luxury" data-brand="aston" data-price="2700000" data-cat="hypercar" data-km="200">
+            <div class="car-img-wrapper">
+                <img src="/static/images/aston_vulcan.jpg" alt="Aston Martin Vulcan Track Only">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Aston Martin</span>
+                <span class="badge-hp-tag">820 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Aston Martin Vulcan Track Only</h3>
+                    <div class="car-price-tag" data-eur="2700000">2.700.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2016 • <i class="fa-solid fa-road text-gold"></i> 200 km • Apenas Pista 1 de 24
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">820 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,9s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">360 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2016</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('aston_vulcan')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Aston Martin Vulcan Track Only')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Mercedes-AMG ONE F1 Engine -->
+        <article class="car-card-luxury" data-brand="amg" data-price="3100000" data-cat="hypercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/amg_one.jpg" alt="Mercedes-AMG ONE F1 Engine">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Mercedes-AMG</span>
+                <span class="badge-hp-tag">1.063 CV F1 V6</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Mercedes-AMG ONE F1 Engine</h3>
+                    <div class="car-price-tag" data-eur="3100000">3.100.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Motor F1 da Mercedes 11.000 RPM
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">1.063 CV F1 V6</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,9s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">352 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('amg_one')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Mercedes-AMG ONE F1 Engine')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Mercedes-AMG GT Black Series -->
         <article class="car-card-luxury" data-brand="amg" data-price="450000" data-cat="supercar" data-km="4200">
             <div class="car-img-wrapper">
-                <img src="{{ url_for('static', filename='images/amg_gt_black.jpg') }}" alt="Mercedes-AMG GT Black Series">
-                <span class="badge-brand-tag"><i class="fa-solid fa-star text-gold"></i> Mercedes-AMG</span>
+                <img src="/static/images/amg_gt_black.jpg" alt="Mercedes-AMG GT Black Series">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Mercedes-AMG</span>
                 <span class="badge-hp-tag">730 CV Flat-Plane</span>
             </div>
             <div class="car-details-body">
                 <div class="car-header-row">
-                    <h3>AMG GT Black Series</h3>
+                    <h3>Mercedes-AMG GT Black Series</h3>
                     <div class="car-price-tag" data-eur="450000">450.000 €</div>
                 </div>
                 <div class="car-subtitle-info">
-                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 4.200 km • V8 Flat-Plane Crank
+                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 4.200 km • Recordista de Nürburgring
                 </div>
 
                 <div class="car-specs-grid">
-                    <div class="car-spec-item"><span class="val">730 CV</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">730 CV Flat-Plane</span><span class="lbl">Potência</span></div>
                     <div class="car-spec-item"><span class="val">3,2s</span><span class="lbl">0-100</span></div>
                     <div class="car-spec-item"><span class="val">325 km/h</span><span class="lbl">V. Máx</span></div>
-                    <div class="car-spec-item"><span class="val">Aero Ativo</span><span class="lbl">Asa</span></div>
+                    <div class="car-spec-item"><span class="val">2023</span><span class="lbl">Ano</span></div>
                 </div>
 
                 <div class="card-actions-grid">
@@ -342,32 +1945,338 @@
                 </div>
             </div>
         </article>
-
-        <!-- Car 7: Maserati MC20 Cielo -->
-        <article class="car-card-luxury" data-brand="maserati" data-price="340000" data-cat="supercar" data-km="800">
+    
+        <!-- Car Card: Mercedes-Maybach G 650 Landaulet V12 -->
+        <article class="car-card-luxury" data-brand="amg" data-price="1200000" data-cat="suv" data-km="1900">
             <div class="car-img-wrapper">
-                <img src="{{ url_for('static', filename='images/maserati_mc20.jpg') }}" alt="Maserati MC20 Cielo Spyder">
-                <span class="badge-brand-tag"><i class="fa-solid fa-trident text-gold"></i> Maserati</span>
-                <span class="badge-hp-tag">630 CV Nettuno</span>
+                <img src="/static/images/amg_g63.jpg" alt="Mercedes-Maybach G 650 Landaulet V12">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Mercedes-AMG</span>
+                <span class="badge-hp-tag">630 CV V12</span>
             </div>
             <div class="car-details-body">
                 <div class="car-header-row">
-                    <h3>Maserati MC20 Cielo</h3>
-                    <div class="car-price-tag" data-eur="340000">340.000 €</div>
+                    <h3>Mercedes-Maybach G 650 Landaulet V12</h3>
+                    <div class="car-price-tag" data-eur="1200000">1.200.000 €</div>
                 </div>
                 <div class="car-subtitle-info">
-                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 800 km • V6 Nettuno F1 Tech
+                    <i class="fa-solid fa-calendar text-gold"></i> 2018 • <i class="fa-solid fa-road text-gold"></i> 1.900 km • Landaulet 1 de 99
                 </div>
 
                 <div class="car-specs-grid">
-                    <div class="car-spec-item"><span class="val">630 CV</span><span class="lbl">Potência</span></div>
-                    <div class="car-spec-item"><span class="val">2,9s</span><span class="lbl">0-100</span></div>
-                    <div class="car-spec-item"><span class="val">320 km/h</span><span class="lbl">V. Máx</span></div>
-                    <div class="car-spec-item"><span class="val">Teto Vidro</span><span class="lbl">Electroc.</span></div>
+                    <div class="car-spec-item"><span class="val">630 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">5,3s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">180 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2018</span><span class="lbl">Ano</span></div>
                 </div>
 
                 <div class="card-actions-grid">
-                    <button class="btn-card-spec" onclick="openLightbox('maserati_mc20')">
+                    <button class="btn-card-spec" onclick="openLightbox('maybach_g650')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Mercedes-Maybach G 650 Landaulet V12')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Mercedes-AMG G 63 Brabus 900 Rocket -->
+        <article class="car-card-luxury" data-brand="amg" data-price="580000" data-cat="suv" data-km="1000">
+            <div class="car-img-wrapper">
+                <img src="/static/images/amg_g63.jpg" alt="Mercedes-AMG G 63 Brabus 900 Rocket">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Mercedes-AMG</span>
+                <span class="badge-hp-tag">900 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Mercedes-AMG G 63 Brabus 900 Rocket</h3>
+                    <div class="car-price-tag" data-eur="580000">580.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 1.000 km • Brabus 900 Rocket Edition
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">900 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,7s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">280 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('amg_brabus900')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Mercedes-AMG G 63 Brabus 900 Rocket')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Mercedes-AMG GT 63 S E Performance -->
+        <article class="car-card-luxury" data-brand="amg" data-price="240000" data-cat="gt" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/amg_gt63.jpg" alt="Mercedes-AMG GT 63 S E Performance">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Mercedes-AMG</span>
+                <span class="badge-hp-tag">843 CV Hybrid</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Mercedes-AMG GT 63 S E Performance</h3>
+                    <div class="car-price-tag" data-eur="240000">240.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • PHEV F1 Technology
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">843 CV Hybrid</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,9s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">316 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('amg_gt63_eperformance')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Mercedes-AMG GT 63 S E Performance')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Mercedes-Benz SLR McLaren Stirling Moss -->
+        <article class="car-card-luxury" data-brand="amg" data-price="2800000" data-cat="hypercar" data-km="1400">
+            <div class="car-img-wrapper">
+                <img src="/static/images/amg_one.jpg" alt="Mercedes-Benz SLR McLaren Stirling Moss">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Mercedes-AMG</span>
+                <span class="badge-hp-tag">650 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Mercedes-Benz SLR McLaren Stirling Moss</h3>
+                    <div class="car-price-tag" data-eur="2800000">2.800.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2010 • <i class="fa-solid fa-road text-gold"></i> 1.400 km • Speedster 1 de 75
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">650 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">350 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2010</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('mercedes_slr_stirling')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Mercedes-Benz SLR McLaren Stirling Moss')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Mercedes-Maybach S 680 V12 Haute Voiture -->
+        <article class="car-card-luxury" data-brand="amg" data-price="340000" data-cat="limousine" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/maybach_s680.jpg" alt="Mercedes-Maybach S 680 V12 Haute Voiture">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Mercedes-AMG</span>
+                <span class="badge-hp-tag">612 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Mercedes-Maybach S 680 V12 Haute Voiture</h3>
+                    <div class="car-price-tag" data-eur="340000">340.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • V12 4MATIC Haute Voiture
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">612 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">4,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">250 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('maybach_s680')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Mercedes-Maybach S 680 V12 Haute Voiture')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Mercedes-AMG S 63 E Performance V8 -->
+        <article class="car-card-luxury" data-brand="amg" data-price="220000" data-cat="limousine" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/maybach_s680.jpg" alt="Mercedes-AMG S 63 E Performance V8">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Mercedes-AMG</span>
+                <span class="badge-hp-tag">802 CV Hybrid</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Mercedes-AMG S 63 E Performance V8</h3>
+                    <div class="car-price-tag" data-eur="220000">220.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Super Sedan 802 CV
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">802 CV Hybrid</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,3s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">290 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('amg_s63_eperformance')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Mercedes-AMG S 63 E Performance V8')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Mercedes-AMG SL 63 Roadster 4MATIC+ -->
+        <article class="car-card-luxury" data-brand="amg" data-price="2100000" data-cat="gt" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/amg_sl63.jpg" alt="Mercedes-AMG SL 63 Roadster 4MATIC+">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Mercedes-AMG</span>
+                <span class="badge-hp-tag">585 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Mercedes-AMG SL 63 Roadster 4MATIC+</h3>
+                    <div class="car-price-tag" data-eur="2100000">2.100.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Roadster 2+2 V8 Biturbo
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">585 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,6s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">315 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('amg_sl63')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Mercedes-AMG SL 63 Roadster 4MATIC+')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Mercedes-Benz CLK GTR AMG Supercar -->
+        <article class="car-card-luxury" data-brand="amg" data-price="9500000" data-cat="hypercar" data-km="1800">
+            <div class="car-img-wrapper">
+                <img src="/static/images/amg_one.jpg" alt="Mercedes-Benz CLK GTR AMG Supercar">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Mercedes-AMG</span>
+                <span class="badge-hp-tag">612 CV V12</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Mercedes-Benz CLK GTR AMG Supercar</h3>
+                    <div class="car-price-tag" data-eur="9500000">9.500.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 1999 • <i class="fa-solid fa-road text-gold"></i> 1.800 km • Lenda GT1 1 de 25
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">612 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,8s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">344 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">1999</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('mercedes_clk_gtr')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Mercedes-Benz CLK GTR AMG Supercar')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Maserati MC20 GT2 Stradale -->
+        <article class="car-card-luxury" data-brand="maserati" data-price="420000" data-cat="supercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/maserati_gt2.jpg" alt="Maserati MC20 GT2 Stradale">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Maserati</span>
+                <span class="badge-hp-tag">700 CV V6</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Maserati MC20 GT2 Stradale</h3>
+                    <div class="car-price-tag" data-eur="420000">420.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Edição Corrida GT2
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">700 CV V6</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,8s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">325 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('maserati_gt2_stradale')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Maserati MC20 GT2 Stradale')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Maserati MC20 Cielo Spyder -->
+        <article class="car-card-luxury" data-brand="maserati" data-price="340000" data-cat="supercar" data-km="800">
+            <div class="car-img-wrapper">
+                <img src="/static/images/maserati_mc20.jpg" alt="Maserati MC20 Cielo Spyder">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Maserati</span>
+                <span class="badge-hp-tag">630 CV V6</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Maserati MC20 Cielo Spyder</h3>
+                    <div class="car-price-tag" data-eur="340000">340.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 800 km • Teto Vidro Eletrocromático
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">630 CV V6</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,9s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">320 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('maserati_mc20_cielo')">
                         <i class="fa-solid fa-circle-info"></i> Ficha Técnica
                     </button>
                     <button class="btn-card-inquire" onclick="openVipModal('Maserati MC20 Cielo Spyder')">
@@ -376,32 +2285,372 @@
                 </div>
             </div>
         </article>
-
-        <!-- Car 8: BMW M8 Competition -->
-        <article class="car-card-luxury" data-brand="bmw" data-price="195000" data-cat="gt" data-km="0">
+    
+        <!-- Car Card: Maserati MC12 Stradale -->
+        <article class="car-card-luxury" data-brand="maserati" data-price="3800000" data-cat="hypercar" data-km="1900">
             <div class="car-img-wrapper">
-                <img src="{{ url_for('static', filename='images/bmw_m8.jpg') }}" alt="BMW M8 Competition Gran Coupé">
-                <span class="badge-brand-tag"><i class="fa-solid fa-gauge text-gold"></i> BMW M</span>
-                <span class="badge-hp-tag">625 CV xDrive</span>
+                <img src="/static/images/maserati_mc12.jpg" alt="Maserati MC12 Stradale">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Maserati</span>
+                <span class="badge-hp-tag">630 CV V12</span>
             </div>
             <div class="car-details-body">
                 <div class="car-header-row">
-                    <h3>BMW M8 Competition</h3>
-                    <div class="car-price-tag" data-eur="195000">195.000 €</div>
+                    <h3>Maserati MC12 Stradale</h3>
+                    <div class="car-price-tag" data-eur="3800000">3.800.000 €</div>
                 </div>
                 <div class="car-subtitle-info">
-                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-sparkles text-gold"></i> 0 km (Novo) • 4.4L V8 Twin-Turbo
+                    <i class="fa-solid fa-calendar text-gold"></i> 2005 • <i class="fa-solid fa-road text-gold"></i> 1.900 km • Ícone Homologação FIA 1 de 50
                 </div>
 
                 <div class="car-specs-grid">
-                    <div class="car-spec-item"><span class="val">625 CV</span><span class="lbl">Potência</span></div>
-                    <div class="car-spec-item"><span class="val">3,2s</span><span class="lbl">0-100</span></div>
-                    <div class="car-spec-item"><span class="val">305 km/h</span><span class="lbl">V. Máx</span></div>
-                    <div class="car-spec-item"><span class="val">M xDrive</span><span class="lbl">Tração</span></div>
+                    <div class="car-spec-item"><span class="val">630 CV V12</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,8s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">330 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2005</span><span class="lbl">Ano</span></div>
                 </div>
 
                 <div class="card-actions-grid">
-                    <button class="btn-card-spec" onclick="openLightbox('bmw_m8')">
+                    <button class="btn-card-spec" onclick="openLightbox('maserati_mc12')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Maserati MC12 Stradale')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Maserati GranTurismo Folgore -->
+        <article class="car-card-luxury" data-brand="maserati" data-price="220000" data-cat="gt" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/maserati_folgore.jpg" alt="Maserati GranTurismo Folgore">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Maserati</span>
+                <span class="badge-hp-tag">761 CV EV 3 Motors</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Maserati GranTurismo Folgore</h3>
+                    <div class="car-price-tag" data-eur="220000">220.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • 100% Elétrico 800V F1
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">761 CV EV 3 Motors</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,7s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">325 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('maserati_folgore')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Maserati GranTurismo Folgore')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Maserati GranTurismo Trofeo V6 -->
+        <article class="car-card-luxury" data-brand="maserati" data-price="195000" data-cat="gt" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/maserati_mc20.jpg" alt="Maserati GranTurismo Trofeo V6">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Maserati</span>
+                <span class="badge-hp-tag">550 CV V6</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Maserati GranTurismo Trofeo V6</h3>
+                    <div class="car-price-tag" data-eur="195000">195.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Nettuno V6 Twin-Turbo
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">550 CV V6</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">320 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('maserati_granturismo_trofeo')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Maserati GranTurismo Trofeo V6')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Maserati Grecale Trofeo SUV -->
+        <article class="car-card-luxury" data-brand="maserati" data-price="145000" data-cat="suv" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/maserati_grecale.jpg" alt="Maserati Grecale Trofeo SUV">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Maserati</span>
+                <span class="badge-hp-tag">530 CV V6</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Maserati Grecale Trofeo SUV</h3>
+                    <div class="car-price-tag" data-eur="145000">145.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • SUV Desportivo Nettuno
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">530 CV V6</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,8s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">285 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('maserati_grecale_trofeo')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Maserati Grecale Trofeo SUV')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Maserati Levante Trofeo V8 Ferrari -->
+        <article class="car-card-luxury" data-brand="maserati" data-price="160000" data-cat="suv" data-km="4500">
+            <div class="car-img-wrapper">
+                <img src="/static/images/maserati_grecale.jpg" alt="Maserati Levante Trofeo V8 Ferrari">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Maserati</span>
+                <span class="badge-hp-tag">580 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Maserati Levante Trofeo V8 Ferrari</h3>
+                    <div class="car-price-tag" data-eur="160000">160.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 4.500 km • Motor V8 Montado por Ferrari
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">580 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">4,1s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">302 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2023</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('maserati_levante_trofeo')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Maserati Levante Trofeo V8 Ferrari')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Maserati Quattroporte Trofeo V8 -->
+        <article class="car-card-luxury" data-brand="maserati" data-price="150000" data-cat="limousine" data-km="6000">
+            <div class="car-img-wrapper">
+                <img src="/static/images/maserati_gt2.jpg" alt="Maserati Quattroporte Trofeo V8">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Maserati</span>
+                <span class="badge-hp-tag">580 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Maserati Quattroporte Trofeo V8</h3>
+                    <div class="car-price-tag" data-eur="150000">150.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 6.000 km • Limousine V8 326 km/h
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">580 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">4,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">326 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2023</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('maserati_quattroporte_trofeo')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Maserati Quattroporte Trofeo V8')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Maserati GranCabrio Trofeo 2025 -->
+        <article class="car-card-luxury" data-brand="maserati" data-price="210000" data-cat="gt" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/maserati_mc20.jpg" alt="Maserati GranCabrio Trofeo 2025">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Maserati</span>
+                <span class="badge-hp-tag">550 CV V6</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Maserati GranCabrio Trofeo 2025</h3>
+                    <div class="car-price-tag" data-eur="210000">210.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Descapotável 4 Lugares Real
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">550 CV V6</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,6s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">316 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('maserati_grancabrio_trofeo')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Maserati GranCabrio Trofeo 2025')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: Maserati MCXtrema Track Car -->
+        <article class="car-card-luxury" data-brand="maserati" data-price="1800000" data-cat="hypercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/maserati_gt2.jpg" alt="Maserati MCXtrema Track Car">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> Maserati</span>
+                <span class="badge-hp-tag">740 CV V6</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>Maserati MCXtrema Track Car</h3>
+                    <div class="car-price-tag" data-eur="1800000">1.800.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Track Only 1 de 62
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">740 CV V6</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">2,6s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">335 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('maserati_mcxtrema')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('Maserati MCXtrema Track Car')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: BMW 3.0 CSL 50th Anniversary -->
+        <article class="car-card-luxury" data-brand="bmw" data-price="850000" data-cat="hypercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bmw_30csl.jpg" alt="BMW 3.0 CSL 50th Anniversary">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> BMW M</span>
+                <span class="badge-hp-tag">560 CV Manual</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>BMW 3.0 CSL 50th Anniversary</h3>
+                    <div class="car-price-tag" data-eur="850000">850.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Limitado a 50 Unidades
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">560 CV Manual</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">310 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bmw_30csl')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('BMW 3.0 CSL 50th Anniversary')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: BMW XM Label Red Hybrid SUV -->
+        <article class="car-card-luxury" data-brand="bmw" data-price="215000" data-cat="suv" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bmw_xm.jpg" alt="BMW XM Label Red Hybrid SUV">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> BMW M</span>
+                <span class="badge-hp-tag">748 CV Hybrid V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>BMW XM Label Red Hybrid SUV</h3>
+                    <div class="car-price-tag" data-eur="215000">215.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • O BMW M Mais Potente
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">748 CV Hybrid V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,8s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">290 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bmw_xm_label')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('BMW XM Label Red Hybrid SUV')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: BMW M8 Competition Gran Coupé -->
+        <article class="car-card-luxury" data-brand="bmw" data-price="195000" data-cat="gt" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bmw_m8.jpg" alt="BMW M8 Competition Gran Coupé">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> BMW M</span>
+                <span class="badge-hp-tag">625 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>BMW M8 Competition Gran Coupé</h3>
+                    <div class="car-price-tag" data-eur="195000">195.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • M xDrive 625 CV
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">625 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,2s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">305 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bmw_m8_gran_coupe')">
                         <i class="fa-solid fa-circle-info"></i> Ficha Técnica
                     </button>
                     <button class="btn-card-inquire" onclick="openVipModal('BMW M8 Competition Gran Coupé')">
@@ -410,7 +2659,245 @@
                 </div>
             </div>
         </article>
+    
+        <!-- Car Card: BMW M4 CSL Lightweight -->
+        <article class="car-card-luxury" data-brand="bmw" data-price="220000" data-cat="supercar" data-km="1200">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bmw_m4csl.jpg" alt="BMW M4 CSL Lightweight">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> BMW M</span>
+                <span class="badge-hp-tag">550 CV 6 em Linha</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>BMW M4 CSL Lightweight</h3>
+                    <div class="car-price-tag" data-eur="220000">220.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2023 • <i class="fa-solid fa-road text-gold"></i> 1.200 km • CSL 1 de 1.000 Unidades
+                </div>
 
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">550 CV 6 em Linha</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,7s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">307 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2023</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bmw_m4_csl')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('BMW M4 CSL Lightweight')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: BMW M3 CS xDrive Super Saloon -->
+        <article class="car-card-luxury" data-brand="bmw" data-price="175000" data-cat="supercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bmw_m3cs.jpg" alt="BMW M3 CS xDrive Super Saloon">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> BMW M</span>
+                <span class="badge-hp-tag">550 CV xDrive</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>BMW M3 CS xDrive Super Saloon</h3>
+                    <div class="car-price-tag" data-eur="175000">175.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Berlina de Pista
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">550 CV xDrive</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,4s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">302 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bmw_m3_cs')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('BMW M3 CS xDrive Super Saloon')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: BMW M5 Touring V8 Hybrid 2025 -->
+        <article class="car-card-luxury" data-brand="bmw" data-price="165000" data-cat="gt" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bmw_m5touring.jpg" alt="BMW M5 Touring V8 Hybrid 2025">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> BMW M</span>
+                <span class="badge-hp-tag">727 CV Hybrid V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>BMW M5 Touring V8 Hybrid 2025</h3>
+                    <div class="car-price-tag" data-eur="165000">165.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Carrinha V8 M HYBRID
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">727 CV Hybrid V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,5s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">305 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bmw_m5_touring')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('BMW M5 Touring V8 Hybrid 2025')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: BMW M2 Coupe Track Pack -->
+        <article class="car-card-luxury" data-brand="bmw" data-price="98000" data-cat="supercar" data-km="0">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bmw_30csl.jpg" alt="BMW M2 Coupe Track Pack">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> BMW M</span>
+                <span class="badge-hp-tag">460 CV 6 em Linha</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>BMW M2 Coupe Track Pack</h3>
+                    <div class="car-price-tag" data-eur="98000">98.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2025 • <i class="fa-solid fa-road text-gold"></i> 0 km (Novo) • Pura Tração Traseira
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">460 CV 6 em Linha</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">4,0s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">285 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2025</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bmw_m2_coupe')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('BMW M2 Coupe Track Pack')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: BMW M8 Competition Convertible -->
+        <article class="car-card-luxury" data-brand="bmw" data-price="205000" data-cat="gt" data-km="2500">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bmw_m8.jpg" alt="BMW M8 Competition Convertible">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> BMW M</span>
+                <span class="badge-hp-tag">625 CV V8</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>BMW M8 Competition Convertible</h3>
+                    <div class="car-price-tag" data-eur="205000">205.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2024 • <i class="fa-solid fa-road text-gold"></i> 2.500 km • Cabrio V8 625 CV
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">625 CV V8</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">3,3s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">305 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2024</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bmw_m8_convertible')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('BMW M8 Competition Convertible')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: BMW M1 Procar Heritage Edition -->
+        <article class="car-card-luxury" data-brand="bmw" data-price="650000" data-cat="hypercar" data-km="8900">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bmw_30csl.jpg" alt="BMW M1 Procar Heritage Edition">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> BMW M</span>
+                <span class="badge-hp-tag">470 CV 6 em Linha</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>BMW M1 Procar Heritage Edition</h3>
+                    <div class="car-price-tag" data-eur="650000">650.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 1981 • <i class="fa-solid fa-road text-gold"></i> 8.900 km • O Primeiro Carro M da História
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">470 CV 6 em Linha</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">4,3s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">310 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">1981</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bmw_m1_procar')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('BMW M1 Procar Heritage Edition')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
+        <!-- Car Card: BMW Z4 M Coupé E86 Collector -->
+        <article class="car-card-luxury" data-brand="bmw" data-price="85000" data-cat="gt" data-km="14000">
+            <div class="car-img-wrapper">
+                <img src="/static/images/bmw_m4csl.jpg" alt="BMW Z4 M Coupé E86 Collector">
+                <span class="badge-brand-tag"><i class="fa-solid fa-crown text-gold"></i> BMW M</span>
+                <span class="badge-hp-tag">343 CV S54</span>
+            </div>
+            <div class="car-details-body">
+                <div class="car-header-row">
+                    <h3>BMW Z4 M Coupé E86 Collector</h3>
+                    <div class="car-price-tag" data-eur="85000">85.000 €</div>
+                </div>
+                <div class="car-subtitle-info">
+                    <i class="fa-solid fa-calendar text-gold"></i> 2008 • <i class="fa-solid fa-road text-gold"></i> 14.000 km • Motor S54 M3 CSL
+                </div>
+
+                <div class="car-specs-grid">
+                    <div class="car-spec-item"><span class="val">343 CV S54</span><span class="lbl">Potência</span></div>
+                    <div class="car-spec-item"><span class="val">5,0s</span><span class="lbl">0-100</span></div>
+                    <div class="car-spec-item"><span class="val">250 km/h</span><span class="lbl">V. Máx</span></div>
+                    <div class="car-spec-item"><span class="val">2008</span><span class="lbl">Ano</span></div>
+                </div>
+
+                <div class="card-actions-grid">
+                    <button class="btn-card-spec" onclick="openLightbox('bmw_z4m_coupe')">
+                        <i class="fa-solid fa-circle-info"></i> Ficha Técnica
+                    </button>
+                    <button class="btn-card-inquire" onclick="openVipModal('BMW Z4 M Coupé E86 Collector')">
+                        <i class="fa-solid fa-calendar-check"></i> Reservar / Visita
+                    </button>
+                </div>
+            </div>
+        </article>
+    
     </section>
 
     <!-- FAQ Accordion Section -->
@@ -444,11 +2931,11 @@
             <button class="btn-close-lightbox" onclick="closeLightbox()">&times;</button>
             
             <div class="lightbox-gallery-side">
-                <img id="lightboxMainImage" src="{{ url_for('static', filename='images/bugatti_chiron.jpg') }}" alt="Supercar Spec Image" class="lightbox-main-img">
+                <img id="lightboxMainImage" src="{ url_for('static', filename='images/bugatti_chiron.jpg') }" alt="Supercar Spec Image" class="lightbox-main-img">
                 <div class="lightbox-thumbs-strip">
-                    <img src="{{ url_for('static', filename='images/bugatti_chiron.jpg') }}" class="lightbox-thumb active" onclick="switchLightboxImage(this.src)">
-                    <img src="{{ url_for('static', filename='images/interior_cockpit.jpg') }}" class="lightbox-thumb" onclick="switchLightboxImage(this.src)">
-                    <img src="{{ url_for('static', filename='images/engine_v12.jpg') }}" class="lightbox-thumb" onclick="switchLightboxImage(this.src)">
+                    <img src="{ url_for('static', filename='images/bugatti_chiron.jpg') }" class="lightbox-thumb active" onclick="switchLightboxImage(this.src)">
+                    <img src="{ url_for('static', filename='images/interior_cockpit.jpg') }" class="lightbox-thumb" onclick="switchLightboxImage(this.src)">
+                    <img src="{ url_for('static', filename='images/engine_v12.jpg') }" class="lightbox-thumb" onclick="switchLightboxImage(this.src)">
                 </div>
             </div>
 
@@ -462,7 +2949,7 @@
                     <div class="spec-list-item"><strong>Motorização</strong><span id="specMotor">8.0L W16 Quad-Turbo</span></div>
                     <div class="spec-list-item"><strong>Caixa de Velocidades</strong><span id="specGear">7-Velocidades Dupla Embraiagem</span></div>
                     <div class="spec-list-item"><strong>0-100 km/h</strong><span id="specAccel">2,4 Segundos</span></div>
-                    <div class="spec-list-item"><strong>Aceleração 0-200 km/h</strong><span id="spec0200">5,8 Segundos</span></div>
+                    <div class="spec-list-item"><strong>Aceleração / Desempenho</strong><span id="spec0200">5,8 Segundos (0-200 km/h)</span></div>
                 </div>
 
                 <div class="margin-top-auto">
@@ -540,8 +3027,8 @@
             <div class="footer-col">
                 <h4>Navegação</h4>
                 <ul>
-                    <li><a href="#hypercars">Stock de Hipercarros</a></li>
-                    <li><a href="#brands">Supermarcas</a></li>
+                    <li><a href="#hypercars">Stock de 80 Hipercarros</a></li>
+                    <li><a href="#brands">8 Supermarcas</a></li>
                     <li><a href="#faq">Perguntas Frequentes</a></li>
                     <li><a href="javascript:void(0)" onclick="openVipModal('Consulta Geral Veloce Motors')">Atendimento VIP</a></li>
                 </ul>
@@ -550,10 +3037,10 @@
             <div class="footer-col">
                 <h4>Supermarcas</h4>
                 <ul>
-                    <li><a href="#hypercars">Bugatti & Ferrari</a></li>
-                    <li><a href="#hypercars">Lamborghini V12</a></li>
-                    <li><a href="#hypercars">Rolls-Royce Black Badge</a></li>
-                    <li><a href="#hypercars">Aston Martin & AMG</a></li>
+                    <li><a href="javascript:void(0)" onclick="applyCarFilters('rolls')">Rolls-Royce (10)</a></li>
+                    <li><a href="javascript:void(0)" onclick="applyCarFilters('ferrari')">Ferrari (10)</a></li>
+                    <li><a href="javascript:void(0)" onclick="applyCarFilters('lamborghini')">Lamborghini (10)</a></li>
+                    <li><a href="javascript:void(0)" onclick="applyCarFilters('bugatti')">Bugatti (10)</a></li>
                 </ul>
             </div>
 
@@ -574,6 +3061,6 @@
     </footer>
 
     <!-- Custom JS Script -->
-    <script src="{{ url_for('static', filename='app.js') }}?v=20260901"></script>
+    <script src="{ url_for('static', filename='app.js') }?v=20260901_80"></script>
 </body>
 </html>

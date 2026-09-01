@@ -928,3 +928,65 @@ button, input, select, textarea {
     .filter-card-bar { grid-template-columns: 1fr; }
     .hero-metrics-row { flex-direction: column; gap: 15px; }
 }
+
+
+/* Additional CSS for Brand Tabs Navigation & 80 Vehicle Catalogue */
+.brands-tabs-wrapper {
+    max-width: 1400px;
+    margin: 40px auto 0 auto;
+    padding: 0 50px;
+}
+
+.brand-tabs-container {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 14px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-gold) var(--bg-card);
+}
+
+.brand-tab-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dark);
+    color: var(--color-silver-muted);
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.brand-tab-btn:hover {
+    border-color: var(--color-gold);
+    color: #ffffff;
+    background: var(--bg-card-hover);
+}
+
+.brand-tab-btn.active {
+    background: var(--color-gold);
+    color: var(--bg-obsidian);
+    border-color: var(--color-gold);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+}
+
+.count-badge-display {
+    display: inline-block;
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid var(--border-gold);
+    color: var(--color-gold);
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
