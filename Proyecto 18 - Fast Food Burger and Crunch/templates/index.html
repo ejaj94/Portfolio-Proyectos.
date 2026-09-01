@@ -490,6 +490,27 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Item 13: Milkshake Brownie -->
+                <div class="fastfood-card" data-category="shakes">
+                    <div class="fastfood-card-img">
+                        <img src="{{ url_for('static', filename='images/milkshake_brownie.jpg') }}?v=1" alt="Milkshake de Brownie & Chocolate Fudge">
+                        <span class="ff-badge-top">Especial Chocolate</span>
+                    </div>
+                    <div class="fastfood-card-body">
+                        <div class="ff-header">
+                            <h3>Milkshake de Brownie & Chocolate Fudge</h3>
+                            <span class="ff-price">4,80 €</span>
+                        </div>
+                        <p class="ff-desc">Gelado cremoso de chocolate belga batido com leite cremoso, calda de chocolate fudge a escorrer no copo, cobertura de chantilly e pedaços suculentos de brownie caseiro.</p>
+                        <div class="ff-footer">
+                            <span class="ff-tag"><i class="fa-solid fa-cookie"></i> Brownie Caseiro</span>
+                            <button onclick="addToCart('Milkshake de Brownie & Chocolate Fudge', 4.80, '{{ url_for('static', filename='images/milkshake_brownie.jpg') }}?v=1')" class="btn-sm btn-primary">
+                                <i class="fa-solid fa-cart-plus"></i> Pedir 4.80€
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
