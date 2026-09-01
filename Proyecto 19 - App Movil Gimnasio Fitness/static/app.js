@@ -250,7 +250,7 @@ function bookTrainerSession(trainerName) {
 
 // Direct WhatsApp Contact
 function openWhatsAppContact() {
-    const text = encodeURIComponent("Olá FITCLUB Gym Vilamoura! Gostaria de obter mais informações sobre as membresias e horários.");
+    const text = encodeURIComponent("Olá FITCLUB Gym Quarteira! Gostaria de obter mais informações sobre as membresias e horários.");
     window.open(`https://wa.me/351123456789?text=${text}`, '_blank');
 }
 

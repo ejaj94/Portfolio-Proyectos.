@@ -64,7 +64,7 @@ def enroll_member():
         ENROLLMENTS_DB.append(new_enrollment)
         print(f"[+] Nova Inscrição no Ginásio: {member_id} | {full_name} | Plano: {plan_name} ({monthly_price}€/mês)")
 
-        wa_text = f"🏋️ *NOVA INSCRIÇÃO FITCLUB GYM VILAMOURA* 💪\n\n" \
+        wa_text = f"🏋️ *NOVA INSCRIÇÃO FITCLUB GYM QUARTEIRA* 💪\n\n" \
                   f"📌 *Matrícula*: {member_id}\n" \
                   f"👤 *Atleta*: {full_name}\n" \
                   f"📞 *Telemóvel*: {phone}\n" \
@@ -128,5 +128,5 @@ def book_class():
 
 
 if __name__ == "__main__":
-    print("Iniciando FITCLUB GYM Mobile Web App em http://localhost:5057")
-    app.run(host="0.0.0.0", port=5057, debug=False)
+    print("Iniciando FITCLUB GYM Mobile Web App em http://localhost:5058")
+    app.run(host="0.0.0.0", port=5058, debug=False)
