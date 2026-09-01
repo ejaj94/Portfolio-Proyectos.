@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FITCLUB GYM — App Móvel de Fitness & Membresias</title>
+
+    <!-- Google Fonts: Syne & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260901">
+</head>
+<body>
+
+    <!-- Desktop Outer Shell Container -->
+    <div class="mobile-app-wrapper">
+        <div class="phone-mockup-frame">
+            
+            <!-- Mobile Phone Hardware Notch & Status Bar -->
+            <div class="phone-notch">
+                <div class="camera-lens"></div>
+                <div class="speaker-earpiece"></div>
+            </div>
+            
+            <div class="phone-status-bar">
+                <span class="status-time" id="liveAppTime">09:41</span>
+                <div class="status-icons">
+                    <i class="fa-solid fa-signal"></i>
+                    <i class="fa-solid fa-wifi"></i>
+                    <i class="fa-solid fa-battery-full"></i>
+                </div>
+            </div>
+
+            <!-- Main App Body Screen -->
+            <div class="app-screen-container">
+
+                <!-- Top App Header -->
+                <header class="app-header">
+                    <div class="header-left">
+                        <div class="app-brand-logo">
+                            <i class="fa-solid fa-dumbbell text-neon"></i>
+                            <span>FIT<strong>CLUB</strong></span>
+                        </div>
+                        <span class="location-chip"><i class="fa-solid fa-location-dot"></i> Vilamoura</span>
+                    </div>
+                    <div class="header-right">
+                        <button class="header-icon-btn" onclick="switchTab('tab-schedule')">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="badge-dot"></span>
+                        </button>
+                        <div class="user-avatar-chip" onclick="switchTab('tab-enroll')">
+                            <i class="fa-solid fa-user-ninja"></i>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Scrollable Tab Views Viewport -->
+                <main class="app-views-viewport">
+
+                    <!-- TAB 1: HOME DASHBOARD -->
+                    <section id="tab-home" class="app-view-tab active">
+                        <!-- Hero Banner -->
+                        <div class="hero-card-banner">
+                            <div class="hero-overlay"></div>
+                            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80" alt="Gym Motivation" class="hero-bg-img">
+                            <div class="hero-content">
+                                <span class="badge-neon"><i class="fa-solid fa-fire"></i> Novo Studio Vilamoura</span>
+                                <h2>SUPERAA OS TEUS LIMITES HOJE</h2>
+                                <p>Treino livre 24/7, aulas de grupo diárias e acompanhamento nutricional dedicado.</p>
+                                <button onclick="switchTab('tab-plans')" class="btn-app-neon">
+                                    <i class="fa-solid fa-bolt"></i> Ver Membresias a partir de 29.90€
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Stats Bar -->
+                        <div class="stats-grid-row">
+                            <div class="stat-mini-card">
+                                <i class="fa-solid fa-users text-neon"></i>
+                                <h3>1.400+</h3>
+                                <span>Membros Ativos</span>
+                            </div>
+                            <div class="stat-mini-card">
+                                <i class="fa-solid fa-award text-yellow"></i>
+                                <h3>12</h3>
+                                <span>Coaches Top</span>
+                            </div>
+                            <div class="stat-mini-card">
+                                <i class="fa-solid fa-clock text-neon"></i>
+                                <h3>24 / 7</h3>
+                                <span>Acesso Livre</span>
+                            </div>
+                        </div>
+
+                        <!-- Workout of the Day (WOD) Card -->
+                        <div class="section-block">
+                            <div class="block-header">
+                                <h3><i class="fa-solid fa-heart-pulse text-neon"></i> Treino do Dia (WOD)</h3>
+                                <span class="text-link" onclick="switchTab('tab-schedule')">Ver Aulas <i class="fa-solid fa-chevron-right"></i></span>
+                            </div>
+                            <div class="wod-card">
+                                <div class="wod-badge">Nível Intermédio / Avançado</div>
+                                <h4>CrossFit & High Intensity Cardio</h4>
+                                <p>4 Rondas: 500m Remo + 20 Kettlebell Swings + 15 Box Jumps + 10 Burpees.</p>
+                                <div class="wod-footer">
+                                    <span><i class="fa-regular fa-clock"></i> 45 Minutos</span>
+                                    <span><i class="fa-solid fa-fire-burner"></i> ~650 Kcal</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Shortcuts -->
+                        <div class="section-block">
+                            <div class="block-header">
+                                <h3><i class="fa-solid fa-bolt text-yellow"></i> Acesso Rápido</h3>
+                            </div>
+                            <div class="shortcuts-grid">
+                                <div class="shortcut-box" onclick="switchTab('tab-plans')">
+                                    <div class="sc-icon bg-green"><i class="fa-solid fa-id-card"></i></div>
+                                    <span>Planos & Membresias</span>
+                                </div>
+                                <div class="shortcut-box" onclick="switchTab('tab-schedule')">
+                                    <div class="sc-icon bg-yellow"><i class="fa-solid fa-calendar-days"></i></div>
+                                    <span>Horários de Aulas</span>
+                                </div>
+                                <div class="shortcut-box" onclick="switchTab('tab-trainers')">
+                                    <div class="sc-icon bg-purple"><i class="fa-solid fa-user-doctor"></i></div>
+                                    <span>Personal Trainers</span>
+                                </div>
+                                <div class="shortcut-box" onclick="openWhatsAppContact()">
+                                    <div class="sc-icon bg-wa"><i class="fa-brands fa-whatsapp"></i></div>
+                                    <span>Apoio via WhatsApp</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Studio Facilities Carousel -->
+                        <div class="section-block padding-bottom-20">
+                            <div class="block-header">
+                                <h3><i class="fa-solid fa-dumbbell text-neon"></i> Instalações do Studio</h3>
+                            </div>
+                            <div class="facilities-scroll-row">
+                                <div class="facility-card">
+                                    <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=400&q=80" alt="Zona de Pesos">
+                                    <span>Zona de Pesos Livres</span>
+                                </div>
+                                <div class="facility-card">
+                                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=400&q=80" alt="Estúdio de Aulas">
+                                    <span>Estúdio de Pilates & Yoga</span>
+                                </div>
+                                <div class="facility-card">
+                                    <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&w=400&q=80" alt="Cardio & Spinning">
+                                    <span>Salas de Cardio & Spinning</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- TAB 2: PLANOS & MEMBRESIAS (Básico -> Medium -> Premium) -->
+                    <section id="tab-plans" class="app-view-tab">
+                        <div class="tab-title-header">
+                            <span class="badge-neon">Planos Flexíveis</span>
+                            <h2>Escolha a Sua Membresia</h2>
+                            <p>Sem fidelização obrigatória. Cancele quando quiser diretamente na app.</p>
+                        </div>
+
+                        <!-- Plans Cards Vertical List -->
+                        <div class="plans-list-container">
+                            
+                            <!-- PLAN 1: BASIC -->
+                            <div class="plan-card-app">
+                                <div class="plan-badge-top">Económico</div>
+                                <div class="plan-header">
+                                    <h3>Plano Fit Básico</h3>
+                                    <div class="plan-price-tag">
+                                        <span class="price-val">29.90€</span>
+                                        <span class="price-period">/ mês</span>
+                                    </div>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> Acesso à Zona de Musculação & Pesos</li>
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> Acesso aos Balneários & Lockers</li>
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> App Móvel de Treino Incluída</li>
+                                    <li class="disabled"><i class="fa-solid fa-circle-xmark"></i> Aulas Coletivas ilimitadas</li>
+                                    <li class="disabled"><i class="fa-solid fa-circle-xmark"></i> Acesso Livre 24 horas por dia</li>
+                                </ul>
+                                <button onclick="selectPlanAndEnroll('Plano Fit Básico', 29.90)" class="btn-app-secondary">
+                                    Inscrever no Básico (29.90€)
+                                </button>
+                            </div>
+
+                            <!-- PLAN 2: MEDIUM -->
+                            <div class="plan-card-app popular-plan">
+                                <div class="plan-badge-top badge-popular"><i class="fa-solid fa-star"></i> Mais Escolhido</div>
+                                <div class="plan-header">
+                                    <h3>Plano Fit Medium</h3>
+                                    <div class="plan-price-tag">
+                                        <span class="price-val">39.90€</span>
+                                        <span class="price-period">/ mês</span>
+                                    </div>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> Acesso à Zona de Musculação & Pesos</li>
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> Aulas Coletivas Ilimitadas (Spinning, CrossFit, Yoga)</li>
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> Avaliação Física Mensal por Bioimpedância</li>
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> Acesso a todos os Studios FITCLUB</li>
+                                    <li class="disabled"><i class="fa-solid fa-circle-xmark"></i> Nutricionista Desportiva dedicada</li>
+                                </ul>
+                                <button onclick="selectPlanAndEnroll('Plano Fit Medium', 39.90)" class="btn-app-neon">
+                                    Inscrever no Medium (39.90€)
+                                </button>
+                            </div>
+
+                            <!-- PLAN 3: PREMIUM VIP -->
+                            <div class="plan-card-app vip-plan">
+                                <div class="plan-badge-top badge-vip"><i class="fa-solid fa-crown"></i> VIP All Access</div>
+                                <div class="plan-header">
+                                    <h3>Plano Premium VIP</h3>
+                                    <div class="plan-price-tag">
+                                        <span class="price-val">49.90€</span>
+                                        <span class="price-period">/ mês</span>
+                                    </div>
+                                </div>
+                                <ul class="plan-features-list">
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> Acesso Livre 24 Horas / 7 Dias por semana</li>
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> Aulas Coletivas VIP Ilimitadas</li>
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> Consulta de Nutrição Mensal Incluída</li>
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> Oferta de 2 Passaportes para Amigos / mês</li>
+                                    <li><i class="fa-solid fa-circle-check text-neon"></i> Oferta de Toalha & Batido de Proteína pós-treino</li>
+                                </ul>
+                                <button onclick="selectPlanAndEnroll('Plano Premium VIP', 49.90)" class="btn-app-gold">
+                                    <i class="fa-solid fa-crown"></i> Quero Ser VIP (49.90€)
+                                </button>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <!-- TAB 3: HORÁRIOS DE AULAS -->
+                    <section id="tab-schedule" class="app-view-tab">
+                        <div class="tab-title-header">
+                            <span class="badge-neon">Aulas Coletivas</span>
+                            <h2>Horário de Aulas</h2>
+                            <p>Selecione o dia e garanta o seu lugar na sala de treino.</p>
+                        </div>
+
+                        <!-- Days Horizontal Filter Scroll -->
+                        <div class="days-filter-row">
+                            <button class="day-chip active" onclick="filterClasses('segunda', this)">Segunda</button>
+                            <button class="day-chip" onclick="filterClasses('terca', this)">Terça</button>
+                            <button class="day-chip" onclick="filterClasses('quarta', this)">Quarta</button>
+                            <button class="day-chip" onclick="filterClasses('quinta', this)">Quinta</button>
+                            <button class="day-chip" onclick="filterClasses('sexta', this)">Sexta</button>
+                            <button class="day-chip" onclick="filterClasses('sabado', this)">Sábado</button>
+                        </div>
+
+                        <!-- Classes List -->
+                        <div id="classesListContainer" class="classes-list-container">
+                            
+                            <!-- Class Item 1 -->
+                            <div class="class-card-row" data-day="segunda">
+                                <div class="class-time-box">
+                                    <span class="time-start">08:30</span>
+                                    <span class="time-dur">45m</span>
+                                </div>
+                                <div class="class-info-box">
+                                    <h4>CrossFit Conditioning</h4>
+                                    <p><i class="fa-solid fa-user-ninja"></i> Coach Ricardo Neves • Studio A</p>
+                                    <span class="spots-left text-neon"><i class="fa-solid fa-users"></i> 4 Lugares Restantes</span>
+                                </div>
+                                <button class="btn-sm-reserve" onclick="openClassBookingModal('CrossFit Conditioning', 'Segunda - 08:30')">
+                                    Reservar
+                                </button>
+                            </div>
+
+                            <!-- Class Item 2 -->
+                            <div class="class-card-row" data-day="segunda">
+                                <div class="class-time-box">
+                                    <span class="time-start">10:00</span>
+                                    <span class="time-dur">50m</span>
+                                </div>
+                                <div class="class-info-box">
+                                    <h4>Yoga & Mind Balance</h4>
+                                    <p><i class="fa-solid fa-user-ninja"></i> Coach Sofia Mendes • Studio B</p>
+                                    <span class="spots-left text-neon"><i class="fa-solid fa-users"></i> 6 Lugares Restantes</span>
+                                </div>
+                                <button class="btn-sm-reserve" onclick="openClassBookingModal('Yoga & Mind Balance', 'Segunda - 10:00')">
+                                    Reservar
+                                </button>
+                            </div>
+
+                            <!-- Class Item 3 -->
+                            <div class="class-card-row" data-day="segunda">
+                                <div class="class-time-box">
+                                    <span class="time-start">18:30</span>
+                                    <span class="time-dur">45m</span>
+                                </div>
+                                <div class="class-info-box">
+                                    <h4>Spinning Extreme Cardio</h4>
+                                    <p><i class="fa-solid fa-user-ninja"></i> Coach Carlos Silva • Sala Bike</p>
+                                    <span class="spots-left text-yellow"><i class="fa-solid fa-fire"></i> Últimos 2 Lugares</span>
+                                </div>
+                                <button class="btn-sm-reserve" onclick="openClassBookingModal('Spinning Extreme Cardio', 'Segunda - 18:30')">
+                                    Reservar
+                                </button>
+                            </div>
+
+                            <!-- Class Item 4 (Terça) -->
+                            <div class="class-card-row" data-day="terca" style="display: none;">
+                                <div class="class-time-box">
+                                    <span class="time-start">09:00</span>
+                                    <span class="time-dur">50m</span>
+                                </div>
+                                <div class="class-info-box">
+                                    <h4>BodyPump Strength</h4>
+                                    <p><i class="fa-solid fa-user-ninja"></i> Coach Beatriz Lima • Studio A</p>
+                                    <span class="spots-left text-neon"><i class="fa-solid fa-users"></i> 8 Lugares Restantes</span>
+                                </div>
+                                <button class="btn-sm-reserve" onclick="openClassBookingModal('BodyPump Strength', 'Terça - 09:00')">
+                                    Reservar
+                                </button>
+                            </div>
+
+                            <!-- Class Item 5 (Terça) -->
+                            <div class="class-card-row" data-day="terca" style="display: none;">
+                                <div class="class-time-box">
+                                    <span class="time-start">19:15</span>
+                                    <span class="time-dur">45m</span>
+                                </div>
+                                <div class="class-info-box">
+                                    <h4>Pilates Core & Flex</h4>
+                                    <p><i class="fa-solid fa-user-ninja"></i> Coach Sofia Mendes • Studio B</p>
+                                    <span class="spots-left text-neon"><i class="fa-solid fa-users"></i> 5 Lugares Restantes</span>
+                                </div>
+                                <button class="btn-sm-reserve" onclick="openClassBookingModal('Pilates Core & Flex', 'Terça - 19:15')">
+                                    Reservar
+                                </button>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <!-- TAB 4: PERSONAL TRAINERS -->
+                    <section id="tab-trainers" class="app-view-tab">
+                        <div class="tab-title-header">
+                            <span class="badge-neon">Equipa Certificada</span>
+                            <h2>Personal Trainers</h2>
+                            <p>Acompanhamento personalizado para atingir os teus objetivos mais rápido.</p>
+                        </div>
+
+                        <!-- Trainers Cards Grid -->
+                        <div class="trainers-grid-list">
+                            
+                            <!-- Trainer 1 -->
+                            <div class="trainer-card">
+                                <div class="trainer-img-box">
+                                    <img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&w=600&q=80" alt="Coach Carlos Silva">
+                                    <span class="trainer-exp-badge">10 Anos Exp.</span>
+                                </div>
+                                <div class="trainer-body">
+                                    <h3>Coach Carlos Silva</h3>
+                                    <span class="trainer-spec"><i class="fa-solid fa-dumbbell"></i> Musculação & Hipertrofia</span>
+                                    <p>Especialista em ganho de massa muscular, preparação física e reabilitação postural.</p>
+                                    <button onclick="bookTrainerSession('Coach Carlos Silva')" class="btn-app-secondary btn-block">
+                                        <i class="fa-solid fa-calendar-check"></i> Agendar Treino Privado
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Trainer 2 -->
+                            <div class="trainer-card">
+                                <div class="trainer-img-box">
+                                    <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=600&q=80" alt="Coach Sofia Mendes">
+                                    <span class="trainer-exp-badge">7 Anos Exp.</span>
+                                </div>
+                                <div class="trainer-body">
+                                    <h3>Coach Sofia Mendes</h3>
+                                    <span class="trainer-spec"><i class="fa-solid fa-heart-pulse"></i> Perda de Peso & Yoga</span>
+                                    <p>Focada na tonificação corporal, flexibilidade, emagrecimento saudável e bem-estar mental.</p>
+                                    <button onclick="bookTrainerSession('Coach Sofia Mendes')" class="btn-app-secondary btn-block">
+                                        <i class="fa-solid fa-calendar-check"></i> Agendar Treino Privado
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Trainer 3 -->
+                            <div class="trainer-card">
+                                <div class="trainer-img-box">
+                                    <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=600&q=80" alt="Coach Ricardo Neves">
+                                    <span class="trainer-exp-badge">Master Coach</span>
+                                </div>
+                                <div class="trainer-body">
+                                    <h3>Coach Ricardo Neves</h3>
+                                    <span class="trainer-spec"><i class="fa-solid fa-bolt"></i> CrossFit & Condicionamento</span>
+                                    <p>Treinador elite de alta intensidade, endurance funcional e atletas de competição.</p>
+                                    <button onclick="bookTrainerSession('Coach Ricardo Neves')" class="btn-app-secondary btn-block">
+                                        <i class="fa-solid fa-calendar-check"></i> Agendar Treino Privado
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <!-- TAB 5: INSCRIÇÃO & CONTACTO -->
+                    <section id="tab-enroll" class="app-view-tab">
+                        <div class="tab-title-header">
+                            <span class="badge-neon">Inscrição Imediata</span>
+                            <h2>Matrícula Online</h2>
+                            <p>Preencha os seus dados para ativar a sua membresia instantaneamente.</p>
+                        </div>
+
+                        <!-- Enrollment Form Card -->
+                        <div class="enroll-form-card">
+                            <form id="fitclubEnrollForm" onsubmit="return false;">
+                                
+                                <div class="form-group-app">
+                                    <label><i class="fa-solid fa-id-card text-neon"></i> Plano Selecionado *</label>
+                                    <select id="selectPlanChoice" class="form-control-app" required>
+                                        <option value="Plano Fit Básico|29.90">Plano Fit Básico — 29.90€ / mês</option>
+                                        <option value="Plano Fit Medium|39.90" selected>Plano Fit Medium — 39.90€ / mês (Recomendado)</option>
+                                        <option value="Plano Premium VIP|49.90">Plano Premium VIP All Access — 49.90€ / mês</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group-app">
+                                    <label><i class="fa-solid fa-user text-neon"></i> Nome Completo *</label>
+                                    <input type="text" id="enrollFullName" class="form-control-app" placeholder="Ex: Gonçalo Oliveira" required>
+                                </div>
+
+                                <div class="form-group-app">
+                                    <label><i class="fa-solid fa-mobile-screen text-neon"></i> Telemóvel *</label>
+                                    <input type="tel" id="enrollPhone" class="form-control-app" placeholder="Ex: +351 912 345 678" required>
+                                </div>
+
+                                <div class="form-group-app">
+                                    <label><i class="fa-solid fa-envelope text-neon"></i> E-mail de Atleta *</label>
+                                    <input type="email" id="enrollEmail" class="form-control-app" placeholder="Ex: atleta@fitclub.pt" required>
+                                </div>
+
+                                <div class="form-group-app">
+                                    <label><i class="fa-solid fa-calendar-day text-neon"></i> Data Preferencial de Início</label>
+                                    <input type="date" id="enrollStartDate" class="form-control-app">
+                                </div>
+
+                                <!-- Addons Selection -->
+                                <div class="form-group-app">
+                                    <label><i class="fa-solid fa-plus-circle text-yellow"></i> Serviços Extras (Opcional)</label>
+                                    <div class="checkbox-addons-list">
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" name="addons" value="Consulta de Nutrição (+15€)">
+                                            <span>Consulta de Nutrição Desportiva (+15€)</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" name="addons" value="Treino Privado Mensal (+25€)">
+                                            <span>1 Sessão com Personal Trainer (+25€)</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" name="addons" value="Chave de Acesso 24h (+10€)">
+                                            <span>Chave Eletrónica de Acesso 24/7 (+10€)</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group-app">
+                                    <label><i class="fa-solid fa-comment-dots text-neon"></i> Observações ou Condições de Saúde</label>
+                                    <textarea id="enrollNotes" class="form-control-app" rows="2" placeholder="Ex: Lesão antiga no joelho, objetivo perda de peso..."></textarea>
+                                </div>
+
+                                <button type="submit" id="btnSubmitEnroll" class="btn-app-neon btn-block">
+                                    <i class="fa-solid fa-bolt"></i> Finalizar Inscrição via WhatsApp
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Studio Location Footer -->
+                        <div class="location-contact-box">
+                            <h4><i class="fa-solid fa-location-dot text-neon"></i> O Nosso Studio em Vilamoura</h4>
+                            <p>Avenida da Marina, nº 42, 8125-401 Vilamoura, Algarve</p>
+                            <p><i class="fa-solid fa-phone text-neon"></i> +351 911 151 993</p>
+                            <p><i class="fa-solid fa-envelope text-neon"></i> recepcao@fitclub.pt</p>
+                        </div>
+
+                    </section>
+
+                </main>
+
+                <!-- Fixed Bottom App Navigation Bar (5 Tabs) -->
+                <nav class="app-bottom-nav">
+                    <button class="nav-tab-item active" onclick="switchTab('tab-home', this)">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Início</span>
+                    </button>
+                    <button class="nav-tab-item" onclick="switchTab('tab-plans', this)">
+                        <i class="fa-solid fa-dumbbell"></i>
+                        <span>Planos</span>
+                    </button>
+                    <button class="nav-tab-item" onclick="switchTab('tab-schedule', this)">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span>Horários</span>
+                    </button>
+                    <button class="nav-tab-item" onclick="switchTab('tab-trainers', this)">
+                        <i class="fa-solid fa-user-ninja"></i>
+                        <span>Coaches</span>
+                    </button>
+                    <button class="nav-tab-item" onclick="switchTab('tab-enroll', this)">
+                        <i class="fa-solid fa-id-card"></i>
+                        <span>Inscrição</span>
+                    </button>
+                </nav>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Enrollment Digital Card Receipt Modal -->
+    <div id="enrollReceiptModal" class="modal-backdrop-app">
+        <div class="modal-card-app">
+            <button class="btn-close-modal" onclick="closeEnrollModal()">&times;</button>
+            <div class="receipt-icon-app"><i class="fa-solid fa-circle-check text-neon"></i></div>
+            <h2>Matrícula Confirmada!</h2>
+            <p>Seja bem-vindo à família FITCLUB GYM!</p>
+
+            <div class="receipt-details-box">
+                <div class="rc-line"><span>Matrícula:</span> <strong id="rcEnrollId" class="text-neon">FIT-801</strong></div>
+                <div class="rc-line"><span>Atleta:</span> <strong id="rcAthlete">Gonçalo Oliveira</strong></div>
+                <div class="rc-line"><span>Plano:</span> <strong id="rcPlan">Plano Fit Medium (39.90€)</strong></div>
+                <div class="rc-line"><span>Data de Início:</span> <strong id="rcStart">Imediato</strong></div>
+            </div>
+
+            <div class="margin-top-15">
+                <a id="btnWaReceiptLink" href="#" target="_blank" class="btn-app-wa">
+                    <i class="fa-brands fa-whatsapp"></i> Enviar Confirmação no WhatsApp
+                </a>
+                <button class="btn-app-secondary w-100 margin-top-10" onclick="closeEnrollModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Class Booking Modal -->
+    <div id="classBookingModal" class="modal-backdrop-app">
+        <div class="modal-card-app">
+            <button class="btn-close-modal" onclick="closeClassModal()">&times;</button>
+            <div class="receipt-icon-app"><i class="fa-solid fa-calendar-check text-neon"></i></div>
+            <h2 id="modalClassName">Reserva de Aula</h2>
+            <p id="modalClassTime">Segunda - 08:30</p>
+
+            <form id="classBookingForm" onsubmit="return false;" class="margin-top-15">
+                <div class="form-group-app text-left">
+                    <label>O Seu Nome *</label>
+                    <input type="text" id="bookingName" class="form-control-app" placeholder="Ex: Rodrigo Silva" required>
+                </div>
+                <div class="form-group-app text-left">
+                    <label>Telemóvel *</label>
+                    <input type="tel" id="bookingPhone" class="form-control-app" placeholder="Ex: +351 912 345 678" required>
+                </div>
+                <button type="submit" id="btnConfirmBooking" class="btn-app-neon w-100">
+                    Confirmar Lugar na Aula
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastAppContainer" class="toast-app-container"></div>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260901"></script>
+</body>
+</html>
