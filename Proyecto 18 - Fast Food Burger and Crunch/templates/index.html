@@ -166,13 +166,13 @@
                 <!-- Combo 3 -->
                 <div class="combo-card">
                     <div class="combo-badge">Combo 3</div>
-                    <img src="https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=600&q=80" alt="Combo Cachorro Porto">
+                    <img src="{{ url_for('static', filename='images/combo_cachorro_monster.jpg') }}?v=1" alt="Combo Cachorro Monster">
                     <div class="combo-body">
                         <h3>Combo Cachorro Monster</h3>
                         <p>Cachorro Quente Monster Cheese Bacon + Batatas Fritas XL + Refrigerante 33cl.</p>
                         <div class="combo-footer">
                             <span class="combo-price">8,90 €</span>
-                            <button onclick="addToCart('Combo Cachorro Monster', 8.90, 'https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Combo Cachorro Monster', 8.90, '{{ url_for('static', filename='images/combo_cachorro_monster.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-plus"></i> Adicionar Combo
                             </button>
                         </div>
