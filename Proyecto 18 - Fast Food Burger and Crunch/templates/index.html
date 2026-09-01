@@ -330,7 +330,7 @@
                 <!-- Item 7: Pizza -->
                 <div class="fastfood-card" data-category="pizzas">
                     <div class="fastfood-card-img">
-                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80" alt="Pizza 4 Queijos Borda Recheada">
+                        <img src="{{ url_for('static', filename='images/pizza_4_queijos.jpg') }}?v=1" alt="Pizza 4 Queijos Borda Recheada">
                     </div>
                     <div class="fastfood-card-body">
                         <div class="ff-header">
@@ -340,7 +340,7 @@
                         <p class="ff-desc">Mozzarella, Gorgonzola cremoso, Parmigiano Reggiano e Edam com borda alta recheada de queijo catupiry cremoso.</p>
                         <div class="ff-footer">
                             <span class="ff-tag"><i class="fa-solid fa-cheese"></i> Borda Recheada</span>
-                            <button onclick="addToCart('Pizza 4 Queijos Borda Recheada', 11.90, 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Pizza 4 Queijos Borda Recheada', 11.90, '{{ url_for('static', filename='images/pizza_4_queijos.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-cart-plus"></i> Pedir 11.90€
                             </button>
                         </div>
