@@ -150,13 +150,13 @@
                 <!-- Combo 2 -->
                 <div class="combo-card">
                     <div class="combo-badge">Combo 2</div>
-                    <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80" alt="Combo Pizza Family">
+                    <img src="{{ url_for('static', filename='images/combo_pizza_wings.jpg') }}?v=1" alt="Combo Pizza Pepperoni & Wings">
                     <div class="combo-body">
                         <h3>Combo Pizza Pepperoni & Wings</h3>
                         <p>Pizza Pepperoni XL + 8 Asinhas de Frango BBQ Crocantes + Coca-Cola 1.5L.</p>
                         <div class="combo-footer">
                             <span class="combo-price">16,50 €</span>
-                            <button onclick="addToCart('Combo Pizza Pepperoni & Wings', 16.50, 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Combo Pizza Pepperoni & Wings', 16.50, '{{ url_for('static', filename='images/combo_pizza_wings.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-plus"></i> Adicionar Combo
                             </button>
                         </div>
