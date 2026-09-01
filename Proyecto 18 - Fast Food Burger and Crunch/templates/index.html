@@ -309,8 +309,8 @@
                 <!-- Item 6: Pizza -->
                 <div class="fastfood-card" data-category="pizzas">
                     <div class="fastfood-card-img">
-                        <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80" alt="Pizza Pepperoni Supreme XL">
-                        <span class="ff-badge-top">Fornalha de Pedra</span>
+                        <img src="{{ url_for('static', filename='images/pizza_pepperoni_supreme.jpg') }}?v=1" alt="Pizza Pepperoni Supreme XL">
+                        <span class="ff-badge-top">Top Pizzas</span>
                     </div>
                     <div class="fastfood-card-body">
                         <div class="ff-header">
@@ -319,8 +319,8 @@
                         </div>
                         <p class="ff-desc">Massa alta estilo artesanal, molho de tomate italiano, queijo mozzarella puríssimo derretido e fatias generosas de pepperoni fumado.</p>
                         <div class="ff-footer">
-                            <span class="ff-tag"><i class="fa-solid fa-pizza-slice"></i> XL 35cm</span>
-                            <button onclick="addToCart('Pizza Pepperoni Supreme XL', 12.90, 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <span class="ff-tag"><i class="fa-solid fa-pizza-slice"></i> 35cm Artesanal</span>
+                            <button onclick="addToCart('Pizza Pepperoni Supreme XL (35cm)', 12.90, '{{ url_for('static', filename='images/pizza_pepperoni_supreme.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-cart-plus"></i> Pedir 12.90€
                             </button>
                         </div>
