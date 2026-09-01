@@ -227,7 +227,7 @@
                 <!-- Item 2: Burger -->
                 <div class="fastfood-card" data-category="burgers">
                     <div class="fastfood-card-img">
-                        <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80" alt="Monster Burger 3 Steaks">
+                        <img src="{{ url_for('static', filename='images/monster_burger.jpg') }}?v=1" alt="Monster Burger 3 Steaks">
                         <span class="ff-badge-top">Tamanho XL</span>
                     </div>
                     <div class="fastfood-card-body">
@@ -238,7 +238,7 @@
                         <p class="ff-desc">3 Hambúrgueres de novilho, triplo cheddar, ovo estrelado, bacon estaladiço, alface fresca, tomate e molho barbecue fumado.</p>
                         <div class="ff-footer">
                             <span class="ff-tag"><i class="fa-solid fa-crown"></i> Especialidade</span>
-                            <button onclick="addToCart('Monster Burger 3 Steaks', 11.50, 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Monster Burger 3 Steaks', 11.50, '{{ url_for('static', filename='images/monster_burger.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-cart-plus"></i> Pedir 11.50€
                             </button>
                         </div>
