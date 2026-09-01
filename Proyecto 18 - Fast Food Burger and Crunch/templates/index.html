@@ -268,7 +268,7 @@
                 <!-- Item 4: Hot Dog -->
                 <div class="fastfood-card" data-category="hotdogs">
                     <div class="fastfood-card-img">
-                        <img src="https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=600&q=80" alt="Cachorro Quente Especial Porto">
+                        <img src="{{ url_for('static', filename='images/cachorro_porto.jpg') }}?v=1" alt="Cachorro Quente Especial Porto">
                         <span class="ff-badge-top">À Moda do Porto</span>
                     </div>
                     <div class="fastfood-card-body">
@@ -279,7 +279,7 @@
                         <p class="ff-desc">Pão prensado tostado, salsicha bockwurst, fiambre, queijo gratinado, batata palha estaladiça e molho especial picante de francesinha.</p>
                         <div class="ff-footer">
                             <span class="ff-tag"><i class="fa-solid fa-pepper-hot"></i> Molho Picante</span>
-                            <button onclick="addToCart('Cachorro Especial à Moda do Porto', 5.90, 'https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Cachorro Especial à Moda do Porto', 5.90, '{{ url_for('static', filename='images/cachorro_porto.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-cart-plus"></i> Pedir 5.90€
                             </button>
                         </div>
