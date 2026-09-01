@@ -134,13 +134,13 @@
                 <!-- Combo 1 -->
                 <div class="combo-card">
                     <div class="combo-badge">Combo 1</div>
-                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" alt="Combo Smash Burger Duplo">
+                    <img src="{{ url_for('static', filename='images/combo_smash_duplo.jpg') }}?v=1" alt="Combo Smash Duplo XL">
                     <div class="combo-body">
                         <h3>Combo Smash Duplo XL</h3>
                         <p>Smash Burger Duplo Cheddar + Batatas Loaded Bacon + Milkshake Cremoso Oreo 400ml.</p>
                         <div class="combo-footer">
                             <span class="combo-price">11,90 €</span>
-                            <button onclick="addToCart('Combo Smash Duplo XL', 11.90, 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Combo Smash Duplo XL', 11.90, '{{ url_for('static', filename='images/combo_smash_duplo.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-plus"></i> Adicionar Combo
                             </button>
                         </div>
