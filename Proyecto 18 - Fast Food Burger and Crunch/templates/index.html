@@ -432,7 +432,7 @@
                 <!-- Item 12: Milkshake -->
                 <div class="fastfood-card" data-category="shakes">
                     <div class="fastfood-card-img">
-                        <img src="https://images.unsplash.com/photo-1553787499-6f9133860278?auto=format&fit=crop&w=600&q=80" alt="Milkshake Morango Chantilly">
+                        <img src="{{ url_for('static', filename='images/milkshake_morango.jpg') }}?v=1" alt="Milkshake Morango Chantilly">
                     </div>
                     <div class="fastfood-card-body">
                         <div class="ff-header">
@@ -442,7 +442,7 @@
                         <p class="ff-desc">Batido cremoso de morangos frescos com leite meio-gordo, xarope doce de morango e cobertura de chantilly.</p>
                         <div class="ff-footer">
                             <span class="ff-tag"><i class="fa-solid fa-stroopwafel"></i> Fruta Fresca</span>
-                            <button onclick="addToCart('Milkshake de Morango & Chantilly', 4.20, 'https://images.unsplash.com/photo-1553787499-6f9133860278?auto=format&fit=crop&w=600&q=80')" class="btn-sm btn-primary">
+                            <button onclick="addToCart('Milkshake de Morango & Chantilly', 4.20, '{{ url_for('static', filename='images/milkshake_morango.jpg') }}?v=1')" class="btn-sm btn-primary">
                                 <i class="fa-solid fa-cart-plus"></i> Pedir 4.20€
                             </button>
                         </div>
