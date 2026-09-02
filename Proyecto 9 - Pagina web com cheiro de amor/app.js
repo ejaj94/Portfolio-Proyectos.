@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-ourico_do_amor-1",
+        category: "vaso",
+        price: 11.90,
+        image: "assets/vela_ourico_do_amor.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Ouriço do Amor",
+            categoryLabel: "Velas Aromáticas Decorativas em Copo de Vidro",
+            aromaBrief: "Delicado ouriço-cacheiro rosa a segurar um coração brilhante com a palavra 'LOVE'.",
+            description: "Irresistível e apaixonante vela aromática artesanal vertida num elegante copo de vidro transparente. Apresenta um mimoso ouriço-cacheiro esculpido à mão em cera vegetal rosa suave, a abraçar carinhosamente um coração reluzente com a inscrição 'LOVE'. Uma peça repleta de doçura, ternura e amor, perfeita para presentear alguém especial ou encantar qualquer espaço.",
+            aromaProfile: "Morango Silvestre, Cereja Doce, Flor de Cerejeira, Baunilha Cremosa"
+        },
+        es: {
+            name: "Vela Erizo del Amor",
+            categoryLabel: "Velas Aromáticas Decorativas en Vaso de Cristal",
+            aromaBrief: "Delicado erizo rosa sosteniendo un corazón brillante con la palabra 'LOVE'.",
+            description: "Irresistible y apasionante vela aromática artesanal vertida en un elegante vaso de cristal transparente. Muestra un tierno erizo esculpido a mano en cera vegetal rosa suave, abrazando cariñosamente un corazón reluciente con la inscripción 'LOVE'. Una pieza repleta de dulzura y ternura, perfecta para regalar a alguien especial.",
+            aromaProfile: "Fresa Silvestre, Cereza Dulce, Flor de Cerezo, Vainilla Cremosa"
+        },
+        en: {
+            name: "Love Hedgehog Candle",
+            categoryLabel: "Decorative Glass Cup Scented Candle",
+            aromaBrief: "Delicate dusty pink hedgehog holding a metallic heart embossed with 'LOVE'.",
+            description: "An irresistible handcrafted scented candle poured into an elegant clear glass cup. Featuring a sweet dusty pink soy wax hedgehog lovingly hugging a shimmering heart embossed with the word 'LOVE'. A charming gift of sweetness and warmth for someone special.",
+            aromaProfile: "Wild Strawberry, Sweet Cherry, Cherry Blossom, Creamy Vanilla"
+        },
+        fr: {
+            name: "Bougie Hérisson d'Amour",
+            categoryLabel: "Bougie Aromatique Décorative en Verre",
+            aromaBrief: "Adorable petit hérisson rose tenant un cœur étincelant gravé du mot 'LOVE'.",
+            description: "Une irrésistible bougie aromatique artisanale coulée dans un élégant verre transparent. Elle présente un mignon petit hérisson rose sculpté à la main en cire de soja, serrant tendrement un cœur scintillant inscrit 'LOVE'. Un cadeau plein de douceur et de romance.",
+            aromaProfile: "Fraise Sauvage, Cerise Douce, Fleur de Cerisier, Vanille Onctueuse"
+        }
+    },
+    {
         id: "candle-urso_de_outono-1",
         category: "vaso",
         price: 12.90,
