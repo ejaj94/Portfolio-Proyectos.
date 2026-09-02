@@ -2,6 +2,41 @@
    PRODUCT DATABASE (Artisanal Scented Candles, Bath Soaps, & Gift Sets)
    ========================================================================== */
 const PRODUCTS = [
+    {
+        id: "candle-cerveja_artesanal-1",
+        category: "vaso",
+        price: 11.90,
+        image: "assets/vela_cerveja_artesanal.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Cerveja Artesanal",
+            categoryLabel: "Velas Aromáticas Criativas em Vaso & Vidro",
+            aromaBrief: "Vela artesanal em caneca de vidro reproduzindo uma cerveja dourada com espuma cremosa.",
+            description: "Espetacular e divertida vela aromática artesanal vertida numa verdadeira caneca de vidro para cerveja. Composta por cera vegetal de alta transparência no tom dourado âmbar com efeito de microbolhas, coroada por uma densa e aveludada espuma de cera de soja branca. Uma peça decorativa única, realista e um presente surpreendente com um envolvente aroma quente e aconchegante.",
+            aromaProfile: "Lúpulo Suave, Cevada Torrada, Baunilha Bourbon, Caramelo Ambarado"
+        },
+        es: {
+            name: "Vela Cerveza Artesanal",
+            categoryLabel: "Velas Aromáticas Creativas en Vaso & Cristal",
+            aromaBrief: "Original vela artesanal en jarra de cristal reproduciendo una cerveza dorada con espuma cremosa.",
+            description: "Espectacular y divertida vela aromática artesanal vertida en una auténtica jarra de cristal para cerveza. Compuesta por cera vegetal transparente en tono dorado ámbar con efecto de microburbujas, coronada por una densa y sedosa espuma de cera de soya blanca. Una pieza decorativa única y un regalo sorprendente con un aroma cálido y envolvente.",
+            aromaProfile: "Lúpulo Suave, Cebada Tostada, Vainilla Bourbon, Caramelo Ambarino"
+        },
+        en: {
+            name: "Craft Beer Candle",
+            categoryLabel: "Creative Glass Mug Scented Candle",
+            aromaBrief: "Original handcrafted candle in a glass beer mug with golden amber wax and fluffy white foam.",
+            description: "Spectacular and fun handcrafted scented candle poured into a genuine glass beer tankard. Featuring golden amber gel wax with micro-bubble effects, topped with rich, velvety white soy wax foam. A unique decorative piece and a surprising gift with a warm, cozy scent.",
+            aromaProfile: "Mild Hops, Toasted Barley, Bourbon Vanilla, Amber Caramel"
+        },
+        fr: {
+            name: "Bougie Bière Artisanale",
+            categoryLabel: "Bougie Aromatique Créative en Chope",
+            aromaBrief: "Superbe bougie artisanale dans une chope en verre reproduisant une bière dorée à la mousse onctueuse.",
+            description: "Spectaculaire bougie aromatique artisanale coulée dans une véritable chope à bière en verre. Composée de cire dorée ambrée avec effet microbulles, surmontée d'une mousse généreuse en cire de soja blanche. Une pièce décorative unique et un cadeau original.",
+            aromaProfile: "Houblon Doux, Orge Grillé, Vanille Bourbon, Caramel Ambré"
+        }
+    },
             {
         id: "candle-cactus_suculentas_mini-1",
         category: "vela",
