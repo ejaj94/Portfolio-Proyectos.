@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-ice_coffee-1",
+        category: "vaso",
+        price: 10.90,
+        image: "assets/vela_ice_coffee.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Ice Coffee",
+            categoryLabel: "Velas Aromáticas Gourmet em Copo de Vidro",
+            aromaBrief: "Deliciosa vela gourmet reproduzindo um café gelado cremoso com cubos de gelo em cera de gel.",
+            description: "Uma verdadeira tentação para os amantes de café! Esta vela aromática artesanal em copo de vidro curvo recria com um realismo impressionante um autêntico Ice Coffee. Composta por uma camada inferior de leite cremoso em cera de soja, encimada por um rico café aromático e cubos de gelo cristalinos esculpidos em cera de gel transparente. Espalha um perfume irresistível e revigorante de café recém-passado e baunilha.",
+            aromaProfile: "Grãos de Café Torrado, Leite de Amêndoa, Baunilha Bourbon, Caramelo Doce"
+        },
+        es: {
+            name: "Vela Ice Coffee",
+            categoryLabel: "Velas Aromáticas Gourmet en Vaso de Cristal",
+            aromaBrief: "Deliciosa vela gourmet reproduciendo un café helado cremoso con cubos de hielo en cera de gel.",
+            description: "¡Una verdadera tentación para los amantes del café! Esta vela aromática artesanal en vaso de cristal curvo recrea con un realismo impresionante un auténtico Ice Coffee. Compuesta por una capa inferior de leche cremosa en cera de soya, coronada por un rico café aromático y cubos de hielo cristalinos esculpidos en cera de gel transparente. Difunde un perfume irresistible de café recién hecho y vainilla.",
+            aromaProfile: "Granos de Café Tostado, Leche de Almendras, Vainilla Bourbon, Caramelo Dulce"
+        },
+        en: {
+            name: "Ice Coffee Candle",
+            categoryLabel: "Gourmet Glass Cup Scented Candle",
+            aromaBrief: "Realistic gourmet candle mimicking iced latte with clear gel wax ice cubes.",
+            description: "A true temptation for coffee lovers! This handcrafted gourmet scented candle in a curved glass cup realistically replicates an authentic Iced Coffee. Layered with creamy white soy wax milk at the bottom, rich aromatic coffee wax on top, and crystal-clear gel wax ice cubes. Fills your space with an irresistible energizing freshly brewed coffee scent.",
+            aromaProfile: "Roasted Coffee Beans, Almond Milk, Bourbon Vanilla, Sweet Caramel"
+        },
+        fr: {
+            name: "Bougie Ice Coffee",
+            categoryLabel: "Bougie Aromatique Gourmande en Verre",
+            aromaBrief: "Délicieuse bougie gourmande reproduisant un café glacé avec glaçons en cire gel.",
+            description: "Une véritable tentation pour les passionnés de café ! Cette bougie aromatique artisanale en verre reproduit avec un réalisme saisissant un délicieux café glacé. Composée d'une couche de lait crémeux en cire de soja, surmontée d'un café intense et de vrais glaçons transparents en cire gel.",
+            aromaProfile: "Grains de Café Torréfié, Lait d'Amande, Vanille Bourbon, Caramel Doux"
+        }
+    },
+    {
         id: "candle-ourico-1",
         category: "vaso",
         price: 11.90,
