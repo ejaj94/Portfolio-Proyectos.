@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-ourico-1",
+        category: "vaso",
+        price: 11.90,
+        image: "assets/vela_ourico.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Ouriço",
+            categoryLabel: "Velas Aromáticas Decorativas em Copo de Vidro",
+            aromaBrief: "Mimoso e sorridente ouriço-cacheiro esculpido em cera rosa num copo de vidro.",
+            description: "Encantadora e fofíssima vela aromática artesanal apresentada num copo de vidro transparente com cera vegetal rosa pastel. Destaque para a adorável figura 3D de um ouriço-cacheiro sorridente minuciosamente trabalhado à mão. Uma criação botânica cheia de carisma e ternura que espalha um aroma suave e relaxante pelo ambiente.",
+            aromaProfile: "Flor de Amêndoa, Mel Silvestre, Baunilha Suave, Algodão Doce"
+        },
+        es: {
+            name: "Vela Erizo",
+            categoryLabel: "Velas Aromáticas Decorativas en Vaso de Cristal",
+            aromaBrief: "Tierno y sonriente erizo esculpido en cera rosa en vaso de cristal.",
+            description: "Encantadora y tierna vela aromática artesanal presentada en un vaso de cristal transparente con cera vegetal rosa pastel. Destaca la adorable figura 3D de un erizo sonriente meticulosamente trabajado a mano. Una creación llena de carisma y ternura que esparce un aroma suave y relajante.",
+            aromaProfile: "Flor de Almendra, Miel Silvestre, Vainilla Suave, Algodón de Azúcar"
+        },
+        en: {
+            name: "Hedgehog Candle",
+            categoryLabel: "Decorative Glass Cup Scented Candle",
+            aromaBrief: "Cute and smiling sculpted soy wax hedgehog in a pastel pink glass cup.",
+            description: "Charming handcrafted scented candle presented in a clear glass cup filled with pastel pink soy wax. Featuring an adorable 3D smiling hedgehog sculpted by hand. A charismatic and cozy decorative piece that fills your room with a sweet, calming aroma.",
+            aromaProfile: "Almond Blossom, Wild Honey, Soft Vanilla, Sweet Cotton"
+        },
+        fr: {
+            name: "Bougie Hérisson",
+            categoryLabel: "Bougie Aromatique Décorative en Verre",
+            aromaBrief: "Mignon petit hérisson souriant sculpté en cire rose dans un verre transparent.",
+            description: "Adorable bougie aromatique artisanale coulée dans un verre transparent avec de la cire de soja rose pastel. Mettant en scène un mignon petit hérisson souriant sculpté à la main. Une création originale et chaleureuse qui diffuse un parfum délicat.",
+            aromaProfile: "Fleur d'Amande, Miel Sauvage, Vanille Douce, Barbapapa"
+        }
+    },
+    {
         id: "candle-ourico_do_amor-1",
         category: "vaso",
         price: 11.90,
