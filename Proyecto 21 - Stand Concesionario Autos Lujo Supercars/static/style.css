@@ -211,7 +211,7 @@ button, input, select, textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url('/static/images/hero_supercar.jpg') center/cover no-repeat;
+    background: url('/static/images/hero_supercar.jpg?v=20260902_v181') center/cover no-repeat;
 }
 
 .hero-overlay {
