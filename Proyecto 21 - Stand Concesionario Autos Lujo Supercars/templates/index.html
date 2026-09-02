@@ -2935,11 +2935,11 @@
             <button class="btn-close-lightbox" onclick="closeLightbox()">&times;</button>
             
             <div class="lightbox-gallery-side">
-                <img id="lightboxMainImage" src="{ url_for('static', filename='images/bugatti_chiron.jpg') }" alt="Supercar Spec Image" class="lightbox-main-img">
+                <img id="lightboxMainImage" src="{{url_for('static', filename='images/bugatti_chiron.jpg')}}" alt="Supercar Spec Image" class="lightbox-main-img">
                 <div class="lightbox-thumbs-strip">
-                    <img src="{ url_for('static', filename='images/bugatti_chiron.jpg') }" class="lightbox-thumb active" onclick="switchLightboxImage(this.src)">
-                    <img src="{ url_for('static', filename='images/interior_cockpit.jpg') }" class="lightbox-thumb" onclick="switchLightboxImage(this.src)">
-                    <img src="{ url_for('static', filename='images/engine_v12.jpg') }" class="lightbox-thumb" onclick="switchLightboxImage(this.src)">
+                    <img src="{{url_for('static', filename='images/bugatti_chiron.jpg')}}" class="lightbox-thumb active" onclick="switchLightboxImage(this.src)">
+                    <img src="{{url_for('static', filename='images/interior_cockpit.jpg')}}" class="lightbox-thumb" onclick="switchLightboxImage(this.src)">
+                    <img src="{{url_for('static', filename='images/engine_v12.jpg')}}" class="lightbox-thumb" onclick="switchLightboxImage(this.src)">
                 </div>
             </div>
 
