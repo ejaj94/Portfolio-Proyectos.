@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-urso_de_outono-1",
+        category: "vaso",
+        price: 12.90,
+        image: "assets/vela_urso_de_outono.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Urso de Outono",
+            categoryLabel: "Velas Aromáticas Decorativas em Vidro",
+            aromaBrief: "Mimoso ursinho com gorro tricotado e abóboras de outono em recipiente de vidro redondo.",
+            description: "Encantadora vela aromática artesanal apresentada num recipiente redondo de vidro transparente. Ostenta um adorável ursinho esculpido à mão em cera vegetal vestindo um gorro de lã aconchegante, a segurar uma abóbora dourada de outono, rodeado por um mini tronco de árvore e pequenas abóboras alaranjadas. Uma verdadeira obra-prima decorativa que traz a calidez e a magia das noites aconchegantes de outono.",
+            aromaProfile: "Baunilha Especiada, Canela Quente, Abóbora Doce, Madeira de Cedro"
+        },
+        es: {
+            name: "Vela Oso de Otoño",
+            categoryLabel: "Velas Aromáticas Decorativas en Cristal",
+            aromaBrief: "Encantador osito con gorro de lana y calabazas de otoño en recipiente de cristal redondo.",
+            description: "Adorable vela aromática artesanal presentada en un recipiente redondo de cristal transparente. Luciendo un tierno osito esculpido a mano en cera vegetal con gorrito de lana, sosteniendo una calabaza dorada de otoño, rodeado de un tronco de madera y mini calabazas anaranjadas. Una verdadera obra maestra decorativa que llena el hogar con la calidez y magia otoñal.",
+            aromaProfile: "Vainilla Especiada, Canela Cálida, Calabaza Dulce, Madera de Cedro"
+        },
+        en: {
+            name: "Autumn Bear Candle",
+            categoryLabel: "Decorative Glass Bowl Scented Candle",
+            aromaBrief: "Charming teddy bear wearing a knitted beanie with autumn pumpkins in a round glass bowl.",
+            description: "An adorable handcrafted scented candle presented in a clear round glass bowl. Featuring a meticulously hand-sculpted soy wax teddy bear wearing a cozy knitted beanie hat, holding a golden pumpkin, nestled alongside a wooden tree stump and mini orange pumpkins. A cozy autumn centerpiece that fills your home with warmth.",
+            aromaProfile: "Spiced Vanilla, Warm Cinnamon, Sweet Pumpkin, Cedarwood"
+        },
+        fr: {
+            name: "Bougie Ours d'Automne",
+            categoryLabel: "Bougie Aromatique Décorative en Verre",
+            aromaBrief: "Mignon petit ours avec bonnet en tricot et citrouilles d'automne dans une coupelle en verre.",
+            description: "Magnifique bougie aromatique artisanale présentée dans une coupelle en verre transparent. Sculptée à la main en cire de soja, elle met en scène un adorable petit ours portant un bonnet tricoté, tenant une citrouille dorée, entouré de petites citrouilles et d'une souche en bois. Une création automnale chaleureuse et réconfortante.",
+            aromaProfile: "Vanille Épicée, Cannelle Chaude, Citrouille Douce, Bois de Cèdre"
+        }
+    },
+    {
         id: "candle-cerveja_artesanal-1",
         category: "vaso",
         price: 11.90,
