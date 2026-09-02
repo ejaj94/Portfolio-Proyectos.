@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-theme="light">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUINTA DO LAGO LUXURY DENTAL CLINIC — Medicina Dentária de Alta Performance</title>
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom Luxury Dental CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260902_v4">
+</head>
+<body>
+
+    <!-- Header Navigation Bar -->
+    <header class="navbar-clinic">
+        <div class="brand-wrapper">
+            <div class="brand-icon">
+                <i class="fa-solid fa-tooth"></i>
+            </div>
+            <div class="brand-text">
+                <h1>QUINTA DO LAGO</h1>
+                <span data-i18n="brandTag">MEDICINA DENTÁRIA DE ALTA PERFORMANCE</span>
+            </div>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="#tratamentos" class="nav-link" data-i18n="navTreatments">Tratamentos</a></li>
+            <li><a href="#equipa" class="nav-link" data-i18n="navTeam">Equipa Médica</a></li>
+            <li><a href="#localizacao" class="nav-link" data-i18n="navLocation">Quinta do Lago</a></li>
+            <li><a href="#faq" class="nav-link" data-i18n="navFaq">Perguntas Frequentes</a></li>
+        </ul>
+
+        <div class="nav-right-actions">
+            <!-- Language Selector Pills (PT, EN, ES, FR) -->
+            <div class="lang-selector">
+                <button class="lang-btn active" data-lang="pt" onclick="setLanguage('pt')">PT</button>
+                <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+                <button class="lang-btn" data-lang="es" onclick="setLanguage('es')">ES</button>
+                <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')">FR</button>
+            </div>
+
+            <!-- Theme Toggle (Light / Dark) -->
+            <button class="btn-theme-toggle" onclick="toggleTheme()" title="Alternar Modo Claro / Escuro">
+                <i id="themeIcon" class="fa-solid fa-moon"></i>
+            </button>
+
+            <!-- Primary Booking Action -->
+            <button class="btn-booking-primary" onclick="openBookingModal()">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span data-i18n="btnBookNav">Agendar Diagnóstico</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content-wrapper">
+            <div class="hero-text-box">
+                <div class="hero-badge-tag">
+                    <i class="fa-solid fa-gem text-blue"></i>
+                    <span data-i18n="heroBadge">QUINTA DO LAGO • ALGARVE</span>
+                </div>
+                <h2 data-i18n="heroTitle">A Arte da <em>Estética Dentária</em></h2>
+                <p data-i18n="heroDesc">Reabilitação oral de alta performance, Facetas 3D em Porcelana e Alinhadores Invisíveis numa localização privada e exclusiva.</p>
+
+                <div class="hero-actions-group">
+                    <button class="btn-booking-primary" onclick="openBookingModal()">
+                        <i class="fa-solid fa-sparkles"></i>
+                        <span data-i18n="btnHeroBook">Reservar Consulta Privada</span>
+                    </button>
+                    <a href="#tratamentos" class="btn-secondary-glow" data-i18n="btnHeroTreatments">Ver Tratamentos</a>
+                </div>
+            </div>
+
+            <div class="hero-image-frame">
+                <img src="{{ url_for('static', filename='images/hero_clinic.jpg') }}" alt="Quinta do Lago Luxury Dental Clinic">
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Stats Bar -->
+    <section class="trust-stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="num" data-i18n="stat1Num">100%</span>
+                <span class="lbl" data-i18n="stat1Lbl">Personalização 3D</span>
+            </div>
+            <div class="stat-item">
+                <span class="num" data-i18n="stat2Num">+12</span>
+                <span class="lbl" data-i18n="stat2Lbl">Anos de Experiência</span>
+            </div>
+            <div class="stat-item">
+                <span class="num" data-i18n="stat3Num">0</span>
+                <span class="lbl" data-i18n="stat3Lbl">Dor / Procedimentos VIP</span>
+            </div>
+            <div class="stat-item">
+                <span class="num" data-i18n="stat4Num">Quinta do Lago</span>
+                <span class="lbl" data-i18n="stat4Lbl">Localização Privada</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Treatments Grid (The Hook: Treatment -> Direct Booking) -->
+    <section class="treatments-section" id="tratamentos">
+        <div class="section-header">
+            <span class="sub" data-i18n="sectionTreatmentsSub">TRATAMENTOS EXCLUSIVOS DE ALTA PERFORMANCE</span>
+            <h3 data-i18n="sectionTreatmentsTitle">Engenharia do Sorriso & Estética de Luxo</h3>
+            <p data-i18n="sectionTreatmentsDesc">Todos os planos de tratamento são desenhados à medida após uma consulta detalhada de Primeiro Diagnóstico & Avaliação Estética 3D.</p>
+        </div>
+
+        <div class="treatments-grid">
+            <!-- Treatment 1 -->
+            <div class="treatment-card">
+                <div class="treatment-img-box">
+                    <img src="{{ url_for('static', filename='images/facetas_porcelana.jpg') }}" alt="Facetas de Porcelana 3D">
+                    <span class="treatment-badge">ESTÉTICA DENTÁRIA</span>
+                </div>
+                <div class="treatment-body">
+                    <h4 data-i18n="t1Title">Facetas de Porcelana 3D</h4>
+                    <p data-i18n="t1Desc">Laminados cerâmicos ultrafinos desenhados digitalmente para transformar o alinhamento, cor e proporção dos seus dentes.</p>
+                    <div class="treatment-pricing-note">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span data-i18n="pricingNote">Orçamento atribuído após Consulta de Primeiro Diagnóstico</span>
+                    </div>
+                    <!-- THE HOOK: Treatment Click -> Direct Booking Modal prefilled -->
+                    <button class="btn-book-treatment" onclick="openBookingModal('Facetas de Porcelana 3D')">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        <span data-i18n="btnBookCard">Agendar Avaliação Privada</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Treatment 2 -->
+            <div class="treatment-card">
+                <div class="treatment-img-box">
+                    <img src="{{ url_for('static', filename='images/alinhadores_invisiveis.jpg') }}" alt="Ortodoncia Invisível">
+                    <span class="treatment-badge">ORTODONCIA VIP</span>
+                </div>
+                <div class="treatment-body">
+                    <h4 data-i18n="t2Title">Ortodoncia Invisível (Spark / Invisalign)</h4>
+                    <p data-i18n="t2Desc">Alinhadores transparentes de alta precisão que corrigem a posição dos seus dentes de forma estética e discreta.</p>
+                    <div class="treatment-pricing-note">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span data-i18n="pricingNote">Orçamento atribuído após Consulta de Primeiro Diagnóstico</span>
+                    </div>
+                    <button class="btn-book-treatment" onclick="openBookingModal('Ortodoncia Invisível (Spark / Invisalign)')">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        <span data-i18n="btnBookCard">Agendar Avaliação Privada</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Treatment 3 -->
+            <div class="treatment-card">
+                <div class="treatment-img-box">
+                    <img src="{{ url_for('static', filename='images/branqueamento_laser.jpg') }}" alt="Branqueamento a Laser">
+                    <span class="treatment-badge">ESTÉTICA AVANÇADA</span>
+                </div>
+                <div class="treatment-body">
+                    <h4 data-i18n="t3Title">Branqueamento a Laser</h4>
+                    <p data-i18n="t3Desc">Tecnologia de iluminação fria polimérica para obter um sorriso até 8 tons mais claro sem sensibilidade dentária.</p>
+                    <div class="treatment-pricing-note">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span data-i18n="pricingNote">Orçamento atribuído após Consulta de Primeiro Diagnóstico</span>
+                    </div>
+                    <button class="btn-book-treatment" onclick="openBookingModal('Branqueamento a Laser')">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        <span data-i18n="btnBookCard">Agendar Avaliação Privada</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Treatment 4 -->
+            <div class="treatment-card">
+                <div class="treatment-img-box">
+                    <img src="{{ url_for('static', filename='images/implantes_carga_imediata.jpg') }}" alt="Implantes de Carga Imediata">
+                    <span class="treatment-badge">IMPLANTOLOGIA</span>
+                </div>
+                <div class="treatment-body">
+                    <h4 data-i18n="t4Title">Implantes de Carga Imediata</h4>
+                    <p data-i18n="t4Desc">Reabilitação oral num único dia com implantes dentários de titânio de grau cirúrgico e prótese fixa imediata.</p>
+                    <div class="treatment-pricing-note">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span data-i18n="pricingNote">Orçamento atribuído após Consulta de Primeiro Diagnóstico</span>
+                    </div>
+                    <button class="btn-book-treatment" onclick="openBookingModal('Implantes de Carga Imediata')">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        <span data-i18n="btnBookCard">Agendar Avaliação Privada</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Treatment 5 -->
+            <div class="treatment-card">
+                <div class="treatment-img-box">
+                    <img src="{{ url_for('static', filename='images/digital_smile_design.jpg') }}" alt="Digital Smile Design">
+                    <span class="treatment-badge">TECNOLOGIA 3D</span>
+                </div>
+                <div class="treatment-body">
+                    <h4 data-i18n="t5Title">Digital Smile Design (DSD 3D)</h4>
+                    <p data-i18n="t5Desc">Simulação tridimensional em tempo real que permite visualizar o seu novo sorriso antes de iniciar qualquer procedimento.</p>
+                    <div class="treatment-pricing-note">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span data-i18n="pricingNote">Orçamento atribuído após Consulta de Primeiro Diagnóstico</span>
+                    </div>
+                    <button class="btn-book-treatment" onclick="openBookingModal('Digital Smile Design (DSD 3D)')">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        <span data-i18n="btnBookCard">Agendar Avaliação Privada</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Treatment 6 -->
+            <div class="treatment-card">
+                <div class="treatment-img-box">
+                    <img src="{{ url_for('static', filename='images/reabilitacao_estetica.jpg') }}" alt="Reabilitação Oral Total">
+                    <span class="treatment-badge">REABILITAÇÃO TOTAL</span>
+                </div>
+                <div class="treatment-body">
+                    <h4 data-i18n="t6Title">Reabilitação Oral Total</h4>
+                    <p data-i18n="t6Desc">Restauração integral estética e funcional da cavidade oral combinando cirurgia guiada por computador e cerâmica estéril.</p>
+                    <div class="treatment-pricing-note">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span data-i18n="pricingNote">Orçamento atribuído após Consulta de Primeiro Diagnóstico</span>
+                    </div>
+                    <button class="btn-book-treatment" onclick="openBookingModal('Reabilitação Oral Total')">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        <span data-i18n="btnBookCard">Agendar Avaliação Privada</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Medical Team Section -->
+    <section class="team-section" id="equipa">
+        <div class="section-header">
+            <span class="sub" data-i18n="sectionTeamSub">CORPO CIENTÍFICO DE EXCELÊNCIA</span>
+            <h3 data-i18n="sectionTeamTitle">Especialistas em Medicina Dentária</h3>
+            <p data-i18n="sectionTeamDesc">Médicos dentistas dedicados à estética avançada e reabilitação complexa com registo na Ordem dos Médicos Dentistas de Portugal.</p>
+        </div>
+
+        <div class="team-grid">
+            <!-- Doctor 1 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar-wrapper">
+                    <img src="{{ url_for('static', filename='images/dr_rodrigo_mendonca.jpg') }}" alt="Dr. Rodrigo Mendonça">
+                </div>
+                <h4>Dr. Rodrigo Mendonça</h4>
+                <span class="title" data-i18n="doc1Title">Director Clínico • Estética & Implantologia</span>
+                <p data-i18n="doc1Desc">Pioneiro em Digital Smile Design e cirurgia guiada na Europa com mais de 5.000 casos clínicos de sucesso.</p>
+            </div>
+
+            <!-- Doctor 2 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar-wrapper">
+                    <img src="{{ url_for('static', filename='images/dra_beatriz_vasconcelos.jpg') }}" alt="Dra. Beatriz Vasconcelos">
+                </div>
+                <h4>Dra. Beatriz Vasconcelos</h4>
+                <span class="title" data-i18n="doc2Title">Especialista em Ortodoncia Invisível</span>
+                <p data-i18n="doc2Desc">Doutorada em biomecânica de alinhadores transparentes e especialista no sistema Invisalign Diamond Provider.</p>
+            </div>
+
+            <!-- Doctor 3 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar-wrapper">
+                    <img src="{{ url_for('static', filename='images/dr_alexandre_fontes.jpg') }}" alt="Dr. Alexandre Fontes">
+                </div>
+                <h4>Dr. Alexandre Fontes</h4>
+                <span class="title" data-i18n="doc3Title">Cirurgião Oral & Carga Imediata</span>
+                <p data-i18n="doc3Desc">Mestre em cirurgia de reabilitação complexa e implantes dentários com pós-graduação internacional.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section (Quinta do Lago) -->
+    <section class="location-section" id="localizacao">
+        <div class="location-wrapper">
+            <div class="location-info">
+                <h4 data-i18n="locationTitle">Instalações Privadas na Quinta do Lago</h4>
+                <p data-i18n="locationDesc">Um refúgio de tranquilidade e saúde no coração do Algarve. Concebido para oferecer total privacidade, estacionamento reservado e o máximo conforto médico.</p>
+
+                <div class="contact-detail-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span data-i18n="locAddress">Av. Ayrton Senna, Edifício Quinta Shopping, Quinta do Lago, 8135-024 Almancil, Algarve</span>
+                </div>
+
+                <div class="contact-detail-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <a href="https://wa.me/351123456789" target="_blank" data-i18n="locPhone">+351 123 456 789 (Linha Directa)</a>
+                </div>
+
+                <div class="contact-detail-item">
+                    <i class="fa-solid fa-clock"></i>
+                    <span data-i18n="locHours">Segunda a Sábado: 09:00 - 19:00 (Atendimento por Marcação)</span>
+                </div>
+            </div>
+
+            <div class="location-media-box">
+                <img src="{{ url_for('static', filename='images/location_quinta_lago.jpg') }}" alt="Quinta do Lago Algarve Clinic Exterior">
+                <div class="location-badge-overlay">
+                    <i class="fa-solid fa-gem" style="font-size: 26px; margin-bottom: 6px; color: #0284c7;"></i>
+                    <h5>QUINTA DO LAGO LUXURY DENTAL</h5>
+                    <p>Almancil • Algarve • Portugal</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Accordion Section -->
+    <section class="faq-section" id="faq">
+        <div class="section-header">
+            <span class="sub" data-i18n="sectionFaqSub">ESCLARECIMENTO DE DÚVIDAS</span>
+            <h3 data-i18n="sectionFaqTitle">Perguntas Frequentes</h3>
+        </div>
+
+        <div class="faq-layout-grid">
+            <div class="faq-visual-card">
+                <img src="{{ url_for('static', filename='images/faq_dental_care.jpg') }}" alt="Tecnologia Dentária 3D">
+            </div>
+
+            <div class="faq-container">
+                <div class="faq-item active">
+                    <div class="faq-header" onclick="toggleFaq(this)">
+                        <span data-i18n="faq1Q">Como funciona a primeira consulta de diagnóstico?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-body" data-i18n="faq1A">
+                        A primeira consulta inclui um exame clínico minucioso, radiografia tridimensional CBCT e rastreio digital 3D. No final, é apresentado o plano estético personalizado sem qualquer compromisso.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaq(this)">
+                        <span data-i18n="faq2Q">Por que motivo a clínica não apresenta preços na página web?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-body" data-i18n="faq2A">
+                        Como clínica de alta performance, cada tratamento é 100% individualizado. Os valores finais dependem das necessidades biológicas, número de peças cerâmicas e tecnologia aplicada, sendo definidos na consulta de avaliação.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaq(this)">
+                        <span data-i18n="faq3Q">Os tratamentos estéticos e facetas são dolorosos?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-body" data-i18n="faq3A">
+                        Não. Utilizamos anestesia computadorizada de precisão e técnicas minimamente invasivas que garantem o máximo conforto durante e após a intervenção.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaq(this)">
+                        <span data-i18n="faq4Q">Disponibilizam apoio a clientes internacionais na Quinta do Lago?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-body" data-i18n="faq4A">
+                        Sim. A nossa equipa é fluente em Português, Inglês, Espanhol e Francês, disponibilizando serviço de concierge para estadias de tratamento intensivo.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIP Booking Modal -->
+    <div id="bookingModal" class="modal-backdrop">
+        <div class="modal-card">
+            <button class="btn-close-modal" onclick="closeBookingModal()">&times;</button>
+            <div class="hero-badge-tag margin-bottom-10">
+                <i class="fa-solid fa-user-doctor"></i>
+                <span data-i18n="modalSubtitle">MARCAÇÃO DE CONSULTA PRIVADA</span>
+            </div>
+            <h3 class="font-heading" data-i18n="modalTitle" style="font-size: 28px; margin-bottom: 8px;">Agendar Diagnóstico Estético</h3>
+            <p data-i18n="modalDesc" style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Preencha o formulário para ser contactado pela nossa assistente médica dedicada num prazo máximo de 2 horas.</p>
+
+            <form onsubmit="submitBookingForm(event)">
+                <div class="form-group">
+                    <label data-i18n="lblTreatment">Tratamento Escolhido</label>
+                    <input type="text" id="modalTargetTreatment" class="form-control" readonly value="Consulta de Primeiro Diagnóstico & Avaliação Estética 3D">
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblName">Nome Completo *</label>
+                    <input type="text" id="vipName" class="form-control" placeholder="Ex: Rodrigo Fontes" required>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblPhone">Telemóvel / WhatsApp *</label>
+                    <input type="tel" id="vipPhone" class="form-control" placeholder="Ex: +351 912 345 678" required>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblEmail">E-mail *</label>
+                    <input type="email" id="vipEmail" class="form-control" placeholder="Ex: paciente@domain.pt" required>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblDate">Data Preferencial de Marcação</label>
+                    <input type="date" id="vipDate" class="form-control">
+                </div>
+
+                <button type="submit" class="btn-booking-primary" style="width: 100%; justify-content: center; padding: 16px; margin-top: 10px;">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span data-i18n="btnSubmitModal">Enviar Solicitação no WhatsApp</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-clinic">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="brand-wrapper">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-tooth"></i>
+                    </div>
+                    <div class="brand-text">
+                        <h1>QUINTA DO LAGO</h1>
+                        <span>DENTAL CLINIC</span>
+                    </div>
+                </div>
+                <p>Referência internacional em odontologia estética e reabilitação oral de alta performance no Algarve.</p>
+            </div>
+
+            <div class="footer-col">
+                <h5>Navegação</h5>
+                <ul>
+                    <li><a href="#tratamentos">Tratamentos</a></li>
+                    <li><a href="#equipa">Equipa Médica</a></li>
+                    <li><a href="#localizacao">Quinta do Lago</a></li>
+                    <li><a href="#faq">Perguntas Frequentes</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h5>Idiomas</h5>
+                <ul>
+                    <li><a href="javascript:void(0)" onclick="setLanguage('pt')">Português</a></li>
+                    <li><a href="javascript:void(0)" onclick="setLanguage('en')">English</a></li>
+                    <li><a href="javascript:void(0)" onclick="setLanguage('es')">Español</a></li>
+                    <li><a href="javascript:void(0)" onclick="setLanguage('fr')">Français</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h5>Contactos VIP</h5>
+                <ul>
+                    <li><i class="fa-solid fa-location-dot text-blue"></i> Quinta do Lago, Algarve</li>
+                    <li><i class="fa-solid fa-phone text-blue"></i> <a href="https://wa.me/351123456789" target="_blank">+351 123 456 789</a></li>
+                    <li><i class="fa-solid fa-envelope text-blue"></i> vip@quintadolagodental.pt</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>&copy; 2026 QUINTA DO LAGO LUXURY DENTAL CLINIC. Todos os direitos reservados.</span>
+            <span>Desenvolvido com engenharia por Enmanuel Jimenez (EJAJ TECH)</span>
+        </div>
+    </footer>
+
+    <!-- Custom JS Engine -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260902_v1"></script>
+</body>
+</html>
