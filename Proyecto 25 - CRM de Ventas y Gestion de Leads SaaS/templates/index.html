@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-theme="light">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJAJ CRM — Funil de Ventas & Gestão de Leads SaaS</title>
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Enterprise CRM CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260902_v1">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="crm-sidebar">
+        <div class="brand-crm-header">
+            <div class="brand-crm-logo">
+                <i class="fa-solid fa-users-gear"></i>
+            </div>
+            <div class="brand-crm-title">
+                <h1>EJAJ CRM</h1>
+                <span>SALES SUITE</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item active"><a href="#"><i class="fa-solid fa-filter-circle-dollar"></i> <span data-i18n="titleCRM">Funil de Vendas</span></a></li>
+            <li class="sidebar-nav-item"><a href="#"><i class="fa-solid fa-address-book"></i> <span>Contactos & Leads</span></a></li>
+            <li class="sidebar-nav-item"><a href="#"><i class="fa-solid fa-handshake"></i> <span>Clientes Ganhos</span></a></li>
+            <li class="sidebar-nav-item"><a href="#"><i class="fa-solid fa-chart-line"></i> <span>Relatórios Comerciais</span></a></li>
+        </ul>
+
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-light);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-subtle); text-align: center;">
+                EJAJ TECH CRM v4.0<br>
+                Enmanuel Jimenez
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main CRM App Content -->
+    <main class="crm-main-content">
+        <!-- Topbar Header -->
+        <header class="crm-topbar">
+            <div class="topbar-title">
+                <h2 data-i18n="titleCRM">Funil de Vendas & CRM de Leads</h2>
+                <p data-i18n="subtitleCRM">Gestão completa do ciclo comercial: Lead → Contacto → Negociação → Cliente Ganho.</p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- Language Selector -->
+                <div style="display: flex; gap: 6px; background: var(--bg-card); padding: 4px; border-radius: 12px; border: 1px solid var(--border-light);">
+                    <button class="lang-btn active" data-lang="pt" onclick="setLanguage('pt')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">PT</button>
+                    <button class="lang-btn" data-lang="en" onclick="setLanguage('en')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">EN</button>
+                    <button class="lang-btn" data-lang="es" onclick="setLanguage('es')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">ES</button>
+                    <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">FR</button>
+                </div>
+
+                <button class="btn-violet-primary" onclick="openNewLeadModal()">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span data-i18n="btnNewLead">Nova Oportunidade</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Metrics Grid -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <label data-i18n="kpiPipeline">Valor em Pipeline</label>
+                <div class="kpi-value" id="kpiPipelineVal" style="color: var(--primary-violet);">0 €</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiWon">Receita Fechada (Ganhos)</label>
+                <div class="kpi-value" id="kpiWonVal" style="color: var(--stage-cliente);">0 €</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiDeals">Leads Totais</label>
+                <div class="kpi-value" id="kpiDealsVal">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiConversion">Taxa de Conversão</label>
+                <div class="kpi-value" id="kpiConversionVal">0%</div>
+            </div>
+        </section>
+
+        <!-- Kanban Board Funnel (4 Stages) -->
+        <div class="kanban-board-grid">
+            <!-- Stage 1: Lead -->
+            <div class="kanban-col">
+                <div class="kanban-col-header">
+                    <h4 style="color: var(--text-main);"><i class="fa-solid fa-bullseye" style="color: var(--stage-lead);"></i> <span data-i18n="colLead">Leads (Oportunidades)</span></h4>
+                    <span class="count-badge" id="countLead">0</span>
+                </div>
+                <div id="colLeadContainer"></div>
+            </div>
+
+            <!-- Stage 2: Contacto -->
+            <div class="kanban-col">
+                <div class="kanban-col-header">
+                    <h4 style="color: var(--text-main);"><i class="fa-solid fa-comments" style="color: var(--stage-contacto);"></i> <span data-i18n="colContact">Contactados</span></h4>
+                    <span class="count-badge" id="countContact">0</span>
+                </div>
+                <div id="colContactContainer"></div>
+            </div>
+
+            <!-- Stage 3: Negociação -->
+            <div class="kanban-col">
+                <div class="kanban-col-header">
+                    <h4 style="color: var(--text-main);"><i class="fa-solid fa-file-signature" style="color: var(--stage-negociacao);"></i> <span data-i18n="colNegotiation">Em Negociação</span></h4>
+                    <span class="count-badge" id="countNegotiation">0</span>
+                </div>
+                <div id="colNegotiationContainer"></div>
+            </div>
+
+            <!-- Stage 4: Cliente (Won) -->
+            <div class="kanban-col" style="border-color: var(--stage-cliente-bg);">
+                <div class="kanban-col-header">
+                    <h4 style="color: var(--stage-cliente);"><i class="fa-solid fa-trophy"></i> <span data-i18n="colWon">Clientes Fechados</span></h4>
+                    <span class="count-badge" id="countWon" style="background: var(--stage-cliente-bg); color: var(--stage-cliente);">0</span>
+                </div>
+                <div id="colWonContainer"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Form: New Lead -->
+    <div id="newLeadModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h3 data-i18n="modalTitle" style="font-size: 22px; font-weight: 900;">Criar Nova Oportunidade / Lead</h3>
+                    <p data-i18n="modalSubtitle" style="font-size: 13px; color: var(--text-subtle);">Registe os dados da empresa e valor estimado do negócio.</p>
+                </div>
+                <button onclick="closeNewLeadModal()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <form onsubmit="submitNewLeadForm(event)">
+                <div class="form-group">
+                    <label data-i18n="lblCompany">Nome da Empresa *</label>
+                    <input type="text" id="leadCompany" class="form-control" placeholder="Ex: Algarve Luxury Group" required>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblContactPerson">Pessoa de Contacto *</label>
+                        <input type="text" id="leadContact" class="form-control" placeholder="Ex: Pedro Alvo" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblPhone">Telemóvel *</label>
+                        <input type="tel" id="leadPhone" class="form-control" placeholder="+351 912 345 678" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblEmail">E-mail de Contacto *</label>
+                    <input type="email" id="leadEmail" class="form-control" placeholder="pedro@empresa.pt" required>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblValue">Valor Estimado (€) *</label>
+                        <input type="number" id="leadValue" class="form-control" value="15000" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblSource">Origem do Lead</label>
+                        <select id="leadSource" class="form-control">
+                            <option>Website Organic</option>
+                            <option>Google Ads</option>
+                            <option>Referência VIP</option>
+                            <option>LinkedIn B2B</option>
+                            <option>Evento Presencial</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-violet-primary" style="width: 100%; justify-content: center; padding: 14px; margin-top: 10px;">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span data-i18n="btnSubmitLead">Guardar no CRM</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notes & Activity Drawer -->
+    <div id="notesDrawerBackdrop" class="notes-drawer-backdrop" onclick="closeNotesDrawer()">
+        <div class="notes-drawer-panel" onclick="event.stopPropagation()">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--border-light);">
+                <div>
+                    <h3 id="drawerLeadTitle" style="font-size: 20px; font-weight: 900; color: var(--primary-violet);">Empresa</h3>
+                    <p id="drawerLeadContact" style="font-size: 13px; color: var(--text-subtle); font-weight: 700;">Contacto</p>
+                </div>
+                <button onclick="closeNotesDrawer()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <h4 data-i18n="drawerTitle" style="font-size: 14px; font-weight: 900; margin-top: 20px; color: var(--text-main);">Histórico & Notas de Acompanhamento</h4>
+
+            <div id="drawerNotesList" class="notes-list-wrapper">
+                <!-- Notes items rendered dynamically -->
+            </div>
+
+            <form onsubmit="submitNewNote(event)" style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border-light);">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <textarea id="newNoteInput" class="form-control" rows="3" placeholder="Escreva uma nota de reunião ou telefonema..." data-i18n="notePlaceholder" required></textarea>
+                </div>
+                <button type="submit" class="btn-violet-primary" style="width: 100%; justify-content: center; padding: 12px;">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span data-i18n="btnAddNote">Adicionar Nota</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom JS Engine -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260902_v1"></script>
+</body>
+</html>
