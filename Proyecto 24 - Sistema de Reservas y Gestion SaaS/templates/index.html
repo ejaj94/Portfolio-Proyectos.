@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-theme="light">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA DE RESERVAS & GESTÃO SAAS — Software Empresarial</title>
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Enterprise SaaS CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260902_v1">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+        <div class="brand-saas-header">
+            <div class="brand-saas-logo">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <div class="brand-saas-title">
+                <h1>BOOKING SAAS</h1>
+                <span>SOFTWARE SUITE</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item active"><a href="#"><i class="fa-solid fa-chart-pie"></i> <span data-i18n="titleDashboard">Painel Principal</span></a></li>
+            <li class="sidebar-nav-item"><a href="#agendamentos"><i class="fa-solid fa-calendar-days"></i> <span>Calendário & Slots</span></a></li>
+            <li class="sidebar-nav-item"><a href="#clientes"><i class="fa-solid fa-users"></i> <span>Directório de Clientes</span></a></li>
+            <li class="sidebar-nav-item"><a href="#relatorios"><i class="fa-solid fa-file-invoice-dollar"></i> <span>Faturação & Métricas</span></a></li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-subtle); text-align: center;">
+                EJAJ TECH SOFTWARE v3.4<br>
+                Enmanuel Jimenez
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content App -->
+    <main class="app-main-content">
+        <!-- Topbar Header -->
+        <header class="app-topbar">
+            <div class="topbar-title">
+                <h2 data-i18n="titleDashboard">Painel de Gestão de Reservas</h2>
+                <p data-i18n="subtitleDashboard">Plataforma SaaS empresarial para controlo de agendamentos e clientes em tempo real.</p>
+            </div>
+
+            <div class="topbar-actions">
+                <!-- Language Selector -->
+                <div class="filter-bar">
+                    <button class="filter-btn lang-btn active" data-lang="pt" onclick="setLanguage('pt')">PT</button>
+                    <button class="filter-btn lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+                    <button class="filter-btn lang-btn" data-lang="es" onclick="setLanguage('es')">ES</button>
+                    <button class="filter-btn lang-btn" data-lang="fr" onclick="setLanguage('fr')">FR</button>
+                </div>
+
+                <!-- New Booking Action Button -->
+                <button class="btn-indigo-primary" onclick="openNewBookingModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    <span data-i18n="btnNewBooking">Nova Reserva</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Dashboard Grid -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiTotal">Total de Reservas</label>
+                    <div class="kpi-icon indigo"><i class="fa-solid fa-calendar"></i></div>
+                </div>
+                <div class="kpi-value" id="kpiTotalVal">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiOccupancy">Taxa de Ocupação</label>
+                    <div class="kpi-icon emerald"><i class="fa-solid fa-chart-line"></i></div>
+                </div>
+                <div class="kpi-value" id="kpiOccupancyVal">0%</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiClients">Clientes Ativos</label>
+                    <div class="kpi-icon amber"><i class="fa-solid fa-user-group"></i></div>
+                </div>
+                <div class="kpi-value" id="kpiClientsVal">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiRevenue">Receita Estimada</label>
+                    <div class="kpi-icon coral"><i class="fa-solid fa-wallet"></i></div>
+                </div>
+                <div class="kpi-value" id="kpiRevenueVal">0 €</div>
+            </div>
+        </section>
+
+        <!-- Content Grid (Table + Client Widget) -->
+        <div class="content-grid">
+            <!-- Left Side: Interactive Reservations Table -->
+            <div class="panel-card">
+                <div class="panel-header">
+                    <h3 class="panel-title" data-i18n="tableHeaderTitle">Lista de Agendamentos & Reservas</h3>
+
+                    <!-- Status Filter Tabs -->
+                    <div class="filter-bar">
+                        <button class="filter-btn active" data-filter="all" onclick="setFilter('all')" data-i18n="filterAll">Todas</button>
+                        <button class="filter-btn" data-filter="confirmada" onclick="setFilter('confirmada')" data-i18n="filterConfirmed">Confirmadas</button>
+                        <button class="filter-btn" data-filter="pendente" onclick="setFilter('pendente')" data-i18n="filterPending">Pendentes</button>
+                        <button class="filter-btn" data-filter="cancelada" onclick="setFilter('cancelada')" data-i18n="filterCanceled">Canceladas</button>
+                    </div>
+                </div>
+
+                <!-- Search Input -->
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="searchBox" class="form-control" placeholder="Pesquisar por cliente, e-mail ou serviço..." onkeyup="renderReservasTable()" data-i18n="tableSearchPlaceholder">
+                </div>
+
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="thId">ID</th>
+                                <th data-i18n="thClient">Cliente</th>
+                                <th data-i18n="thService">Serviço</th>
+                                <th data-i18n="thDateTime">Data & Hora</th>
+                                <th data-i18n="thStatus">Estado</th>
+                                <th data-i18n="thPrice">Preço</th>
+                                <th data-i18n="thActions">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reservasTableBody">
+                            <!-- Dynamic Rows Rendered by app.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Side: Live Clients & Slots -->
+            <div class="right-column">
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Directório de Clientes VIP</h3>
+                    </div>
+                    <div id="clientesList">
+                        <!-- Dynamic Client List -->
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Slots Horários de Hoje</h3>
+                    </div>
+                    <div class="slots-day-grid">
+                        <div class="slot-card available"><div class="slot-time">09:00</div><div class="slot-status-text">Livre</div></div>
+                        <div class="slot-card booked"><div class="slot-time">10:00</div><div class="slot-status-text">Ocupado</div></div>
+                        <div class="slot-card booked"><div class="slot-time">11:30</div><div class="slot-status-text">Ocupado</div></div>
+                        <div class="slot-card available"><div class="slot-time">14:00</div><div class="slot-status-text">Livre</div></div>
+                        <div class="slot-card available"><div class="slot-time">16:00</div><div class="slot-status-text">Livre</div></div>
+                        <div class="slot-card available"><div class="slot-time">18:00</div><div class="slot-status-text">Livre</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Form: New Booking -->
+    <div id="newBookingModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h3 data-i18n="modalTitle" style="font-size: 22px; font-weight: 900;">Criar Nova Reserva de Software</h3>
+                    <p data-i18n="modalSubtitle" style="font-size: 13px; color: var(--text-subtle);">Preencha os dados do agendamento para atualizar o sistema.</p>
+                </div>
+                <button onclick="closeNewBookingModal()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <form onsubmit="submitNewBookingForm(event)">
+                <div class="form-group">
+                    <label data-i18n="lblClientName">Nome do Cliente *</label>
+                    <input type="text" id="bookingClient" class="form-control" placeholder="Ex: Carlos Vasconcelos" required>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblClientEmail">E-mail *</label>
+                        <input type="email" id="bookingEmail" class="form-control" placeholder="cliente@domain.pt" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblClientPhone">Telemóvel *</label>
+                        <input type="tel" id="bookingPhone" class="form-control" placeholder="+351 912 345 678" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblService">Serviço / Procedimento *</label>
+                    <select id="bookingService" class="form-control">
+                        <option>Consultoria de Software SaaS</option>
+                        <option>Sessão de Diagnóstico Clínico</option>
+                        <option>Reserva de Estadia Executive</option>
+                        <option>Avaliação VIP de Projeto</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblDate">Data *</label>
+                        <input type="date" id="bookingDate" class="form-control" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblTime">Horário *</label>
+                        <select id="bookingTime" class="form-control">
+                            <option>09:00</option>
+                            <option>10:30</option>
+                            <option>14:00</option>
+                            <option>16:30</option>
+                            <option>18:00</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label data-i18n="lblPrice">Preço (€) *</label>
+                        <input type="number" id="bookingPrice" class="form-control" value="150" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-indigo-primary" style="width: 100%; justify-content: center; padding: 14px; margin-top: 10px;">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span data-i18n="btnSubmit">Guardar Reserva no Sistema</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom JS Engine -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260902_v1"></script>
+</body>
+</html>
