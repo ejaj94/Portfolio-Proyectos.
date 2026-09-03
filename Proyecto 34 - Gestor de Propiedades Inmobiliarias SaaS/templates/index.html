@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-theme="light">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS REALTY — Gestor de Propriedades Imobiliárias SaaS</title>
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Property Management Lilac/Purple CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v1000">
+</head>
+<body>
+
+    <!-- Sidebar Navigation (Deep Purple Black) -->
+    <aside class="property-sidebar">
+        <div class="brand-property-header">
+            <div class="brand-property-logo">
+                <i class="fa-solid fa-building-user"></i>
+            </div>
+            <div class="brand-property-title">
+                <h1>NEXUS</h1>
+                <span>REALTY & HOMES</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item active"><a href="#propriedades"><i class="fa-solid fa-house"></i> <span data-i18n="secProperties">Propriedades</span></a></li>
+            <li class="sidebar-nav-item"><a href="javascript:void(0)" onclick="openNewPropertyModal()"><i class="fa-solid fa-plus-circle"></i> <span data-i18n="btnNewProperty">Registar Imóvel</span></a></li>
+            <li class="sidebar-nav-item"><a href="#inquilinos"><i class="fa-solid fa-users"></i> <span data-i18n="secTenants">Inquilinos</span></a></li>
+            <li class="sidebar-nav-item"><a href="#pagos"><i class="fa-solid fa-receipt"></i> <span data-i18n="secPayments">Pagamento Rendas</span></a></li>
+            <li class="sidebar-nav-item"><a href="#incidencias"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="secIncidents">Incidências</span></a></li>
+        </ul>
+
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(192, 132, 252, 0.2);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--lilac-soft); text-align: center;">
+                NEXUS REALTY v4.2<br>
+                Enmanuel Jimenez
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content App -->
+    <main class="property-main-content">
+        <!-- Topbar Header -->
+        <header class="property-topbar">
+            <div class="topbar-title">
+                <h2 data-i18n="titleProperty">Gestor de Propriedades Imobiliárias</h2>
+                <p data-i18n="subtitleProperty">Administração de imóveis residenciais, inquilinos, pagamento de rendas e incidências.</p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- Language Selector -->
+                <div style="display: flex; gap: 6px; background: var(--bg-card); padding: 4px; border-radius: 12px; border: 1.5px solid var(--border-light);">
+                    <button class="lang-btn active" data-lang="pt" onclick="setLanguage('pt')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">PT</button>
+                    <button class="lang-btn" data-lang="en" onclick="setLanguage('en')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">EN</button>
+                    <button class="lang-btn" data-lang="es" onclick="setLanguage('es')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">ES</button>
+                    <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">FR</button>
+                </div>
+
+                <button class="btn-purple-primary" onclick="openNewPropertyModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    <span data-i18n="btnNewProperty">Registar Imóvel</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Dashboard Grid -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <label data-i18n="kpiTotalProp">Total Propriedades</label>
+                <div class="kpi-value" id="kpiTotalPropVal" style="color: var(--purple-primary);">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiMonthlyRevenue">Renda Mensal Total</label>
+                <div class="kpi-value" id="kpiMonthlyRevVal">0.00 €</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiOccupancy">Taxa de Ocupação</label>
+                <div class="kpi-value" id="kpiOccupancyVal" style="color: var(--accent-green);">0%</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiIncidents">Incidências Abertas</label>
+                <div class="kpi-value" id="kpiIncidentsVal" style="color: var(--accent-amber);">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiTenants">Inquilinos Ativos</label>
+                <div class="kpi-value" id="kpiTenantsVal">0</div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: PROPERTIES DIRECTORY GRID -->
+        <section id="propriedades" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secProperties">Catálogo de Propriedades & Imóveis</h3>
+            </div>
+            <div id="propertiesGridContainer" class="properties-grid">
+                <!-- Dynamic Property Cards -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: TENANTS DIRECTORY GRID -->
+        <section id="inquilinos" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secTenants">Diretório de Inquilinos</h3>
+            </div>
+            <div id="tenantGridContainer" class="tenant-grid">
+                <!-- Dynamic Tenant Cards -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: RENT PAYMENTS LEDGER TABLE -->
+        <section id="pagos" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secPayments">Histórico de Pagamento de Rendas</h3>
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th data-i18n="thTenant">Inquilino</th>
+                            <th data-i18n="thUnit">Imóvel Alugado</th>
+                            <th data-i18n="thAmount">Valor Renda</th>
+                            <th data-i18n="thRefMonth">Mês Referência</th>
+                            <th data-i18n="thPayDate">Data de Pagamento</th>
+                            <th data-i18n="thMethod">Método</th>
+                            <th data-i18n="thStatus">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pagosTableBody">
+                        <!-- Dynamic Payment Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 4: MAINTENANCE INCIDENTS TABLE -->
+        <section id="incidencias" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secIncidents">Gestão de Incidências & Manutenção</h3>
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th data-i18n="thProperty">Propriedade</th>
+                            <th data-i18n="thTicket">Incidência / Avaria</th>
+                            <th data-i18n="thPriority">Prioridade</th>
+                            <th data-i18n="thOpenDate">Data Abertura</th>
+                            <th data-i18n="thCost">Custo Estimado</th>
+                            <th data-i18n="thStatus">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="incidenciasTableBody">
+                        <!-- Dynamic Incident Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- NEW PROPERTY REGISTRATION MODAL -->
+    <div id="newPropertyModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <div>
+                    <h3 data-i18n="modalTitle" style="font-size: 22px; font-weight: 900; color: var(--purple-dark);">Registar Nova Propriedade Residencial</h3>
+                    <p data-i18n="modalSubtitle" style="font-size: 13px; color: var(--text-subtle);">Introduza os detalhes do imóvel e do proprietário.</p>
+                </div>
+                <button onclick="closeNewPropertyModal()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <form onsubmit="submitNewPropertyForm(event)">
+                <div class="form-group">
+                    <label data-i18n="lblPropTitle">Título do Imóvel *</label>
+                    <input type="text" id="propTitleInput" class="form-control" placeholder="Ex: Apartamento Aconchegante T2" required>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblType">Tipo de Imóvel *</label>
+                        <select id="propTypeSelect" class="form-control">
+                            <option>Apartamento</option>
+                            <option>Moradia</option>
+                            <option>Estúdio</option>
+                            <option>Duplex</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label data-i18n="lblRentVal">Valor Renda (€/mês) *</label>
+                        <input type="number" id="propRentInput" class="form-control" placeholder="Ex: 850" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblAddress">Morada Completa *</label>
+                    <input type="text" id="propAddressInput" class="form-control" placeholder="Ex: Av. da Liberdade 120, 2º Esq, Lisboa" required>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblTypology">Tipologia *</label>
+                        <input type="text" id="propTypologyInput" class="form-control" placeholder="Ex: T2 • 1 WC • 85m²" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblOwner">Proprietário *</label>
+                        <input type="text" id="propOwnerInput" class="form-control" placeholder="Ex: Carlos Silva" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-purple-primary" style="width: 100%; justify-content: center; padding: 14px; margin-top: 10px;">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span data-i18n="btnSubmitProp">Guardar Imóvel</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom JS Engine -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v1000"></script>
+</body>
+</html>
