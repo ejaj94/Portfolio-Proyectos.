@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-theme="light">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMEN ACADEMY — Plataforma de Gestão Académica Enterprise</title>
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Chart.js Engine -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Executive Academy CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v1000">
+</head>
+<body>
+
+    <!-- Sidebar Navigation (Jet Black) -->
+    <aside class="academy-sidebar">
+        <div class="brand-academy-header">
+            <div class="brand-academy-logo">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div class="brand-academy-title">
+                <h1>LUMEN</h1>
+                <span>CAREER ACADEMY</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item active"><a href="#carreras"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="secCareers">Carreras & Graus</span></a></li>
+            <li class="sidebar-nav-item"><a href="#cursos"><i class="fa-solid fa-book-open"></i> <span data-i18n="secCourses">Catálogo Cursos</span></a></li>
+            <li class="sidebar-nav-item"><a href="#alunos"><i class="fa-solid fa-users"></i> <span data-i18n="secStudents">Alunos & Progresso</span></a></li>
+            <li class="sidebar-nav-item"><a href="#docentes"><i class="fa-solid fa-chalkboard-user"></i> <span data-i18n="secFaculty">Corpo Docente</span></a></li>
+            <li class="sidebar-nav-item"><a href="#examenes"><i class="fa-solid fa-file-pen"></i> <span data-i18n="secExams">Exames & Avaliações</span></a></li>
+        </ul>
+
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-dark);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--accent-silver); text-align: center;">
+                LUMEN ACADEMY v4.0<br>
+                Enmanuel Jimenez
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Executive Content -->
+    <main class="academy-main-content">
+        <!-- Topbar Header -->
+        <header class="academy-topbar">
+            <div class="topbar-title">
+                <h2 data-i18n="titleAcademy">Plataforma de Gestão Académica Enterprise</h2>
+                <p data-i18n="subtitleAcademy">Programas de licenciatura, cursos profissionais, acompanhamento de alunos, corpo docente e exames.</p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- Language Selector -->
+                <div style="display: flex; gap: 6px; background: var(--bg-card); padding: 4px; border-radius: 12px; border: 1.5px solid var(--slate-border);">
+                    <button class="lang-btn active" data-lang="pt" onclick="setLanguage('pt')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">PT</button>
+                    <button class="lang-btn" data-lang="en" onclick="setLanguage('en')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">EN</button>
+                    <button class="lang-btn" data-lang="es" onclick="setLanguage('es')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">ES</button>
+                    <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">FR</button>
+                </div>
+
+                <button class="btn-black-primary" onclick="openNewStudentModal()">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span data-i18n="btnNewStudent">Matricular Novo Aluno</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Dashboard Grid -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <label data-i18n="kpiTotalStudents">Alunos Matriculados</label>
+                <div class="kpi-value" id="kpiStudentsVal">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiTotalCourses">Cursos Ativos</label>
+                <div class="kpi-value" id="kpiCoursesVal">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiCompletion">Taxa de Conclusão</label>
+                <div class="kpi-value" id="kpiCompletionVal">0%</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiGpa">Média Geral (GPA)</label>
+                <div class="kpi-value" id="kpiGpaVal">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiFaculty">Corpo Docente</label>
+                <div class="kpi-value" id="kpiFacultyVal">0</div>
+            </div>
+        </section>
+
+        <!-- TELEMETRY CHART SECTION -->
+        <section class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title">Distribuição de Alunos por Carrera Profissional</h3>
+            </div>
+            <div style="height: 260px;">
+                <canvas id="carrerasEnrollmentChart"></canvas>
+            </div>
+        </section>
+
+        <!-- SECTION 1: CAREER PROGRAMS GRID -->
+        <section id="carreras" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secCareers">Graus Académicos & Carreras Profissionais</h3>
+            </div>
+            <div id="carrerasGridContainer" class="carreras-grid">
+                <!-- Dynamic Careers Cards -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: COURSES CATALOG GRID -->
+        <section id="cursos" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secCourses">Catálogo de Cursos & Módulos</h3>
+            </div>
+            <div id="cursosGridContainer" class="cursos-grid">
+                <!-- Dynamic Course Cards -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: STUDENTS DIRECTORY TABLE -->
+        <section id="alunos" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secStudents">Diretório de Alunos & Progresso</h3>
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="thStudent">Aluno</th>
+                            <th data-i18n="thMat">Matrícula</th>
+                            <th data-i18n="thCareer">Carrera Profissional</th>
+                            <th data-i18n="thProgress">Progresso Geral</th>
+                            <th data-i18n="thGpa">Média GPA</th>
+                            <th data-i18n="thStatus">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alunosTableBody">
+                        <!-- Dynamic Student Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 4: FACULTY GRID -->
+        <section id="docentes" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secFaculty">Corpo Docente & Professores</h3>
+            </div>
+            <div id="profesoresGridContainer" class="person-grid">
+                <!-- Dynamic Faculty Cards -->
+            </div>
+        </section>
+
+        <!-- SECTION 5: EXAMS SCHEDULE TABLE -->
+        <section id="examenes" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secExams">Calendário de Exames & Avaliações</h3>
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th data-i18n="thExam">Disciplina</th>
+                            <th data-i18n="thType">Tipo de Avaliação</th>
+                            <th data-i18n="thDate">Data do Exame</th>
+                            <th data-i18n="thDuration">Duração</th>
+                            <th data-i18n="thEnrolled">Inscritos</th>
+                            <th data-i18n="thStatus">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="examenesTableBody">
+                        <!-- Dynamic Exam Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- NEW STUDENT ENROLLMENT MODAL -->
+    <div id="newStudentModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <div>
+                    <h3 data-i18n="modalTitle" style="font-size: 22px; font-weight: 900; color: var(--jet-black);">Matricular Novo Aluno na Academia</h3>
+                    <p data-i18n="modalSubtitle" style="font-size: 13px; color: var(--text-subtle);">Introduza os dados do aluno e selecione a carrera profissional.</p>
+                </div>
+                <button onclick="closeNewStudentModal()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <form onsubmit="submitNewStudentForm(event)">
+                <div class="form-group">
+                    <label data-i18n="lblStudentName">Nome Completo do Aluno *</label>
+                    <input type="text" id="studentNameInput" class="form-control" placeholder="Ex: Rodrigo Mendonça" required>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblStudentEmail">Email Académico *</label>
+                    <input type="email" id="studentEmailInput" class="form-control" placeholder="Ex: rodrigo.mendonca@lumen.edu" required>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblCareerSelect">Carrera Profissional *</label>
+                    <select id="studentCareerSelect" class="form-control">
+                        <option>Engenharia de Software & IA</option>
+                        <option>Design de Experiência Digital</option>
+                        <option>Ciência de Dados & Big Data</option>
+                        <option>Cybersecurity & Cloud</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-black-primary" style="width: 100%; justify-content: center; padding: 14px; margin-top: 10px;">
+                    <i class="fa-solid fa-check"></i>
+                    <span data-i18n="btnSubmitStudent">Confirmar Matrícula</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom JS Engine -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v1000"></script>
+</body>
+</html>
