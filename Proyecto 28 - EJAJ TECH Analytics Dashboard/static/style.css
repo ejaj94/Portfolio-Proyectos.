@@ -1,0 +1,343 @@
+/* EJAJ TECH ANALYTICS DASHBOARD — OFFICIAL BRANDING STYLESHEET */
+/* Deep Cosmic Midnight, Glowing Neon Magenta, Violet Purple & Electric Cyan */
+
+:root {
+    --bg-cosmic-dark: #0b061a;
+    --bg-card-glass: rgba(19, 9, 43, 0.75);
+    --bg-hover-glass: rgba(35, 17, 77, 0.85);
+    
+    --neon-magenta: #d946ef;
+    --neon-magenta-glow: rgba(217, 70, 239, 0.45);
+    --violet-purple: #a855f7;
+    --electric-blue: #8b5cf6;
+    --electric-cyan: #06b6d4;
+    
+    --accent-emerald: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-coral: #ef4444;
+    
+    --text-white: #ffffff;
+    --text-muted: #cbd5e1;
+    --text-subtle: #94a3b8;
+    
+    --border-glass: rgba(217, 70, 239, 0.25);
+    --border-strong: rgba(168, 85, 247, 0.4);
+    
+    --shadow-glow: 0 0 25px rgba(217, 70, 239, 0.25);
+    --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.5);
+    
+    --font-heading: 'Outfit', -apple-system, sans-serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-cosmic-dark);
+    background-image: 
+        radial-gradient(circle at 15% 15%, rgba(217, 70, 239, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
+    background-attachment: fixed;
+    color: var(--text-white);
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Sidebar Navigation */
+.ejaj-sidebar {
+    width: 280px;
+    background: var(--bg-card-glass);
+    backdrop-filter: blur(16px);
+    border-right: 1px solid var(--border-glass);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 20px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.brand-ejaj-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 0 8px;
+}
+
+.brand-ejaj-logo-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--neon-magenta);
+    box-shadow: var(--shadow-glow);
+    margin-bottom: 12px;
+    transition: var(--transition);
+}
+
+.brand-ejaj-logo-img:hover {
+    transform: scale(1.05) rotate(5deg);
+}
+
+.brand-ejaj-title h1 {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--text-white);
+    text-shadow: 0 0 12px var(--neon-magenta);
+}
+
+.brand-ejaj-slogan {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--neon-magenta);
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.sidebar-nav-item a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-muted);
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.sidebar-nav-item.active a, .sidebar-nav-item a:hover {
+    background: linear-gradient(135deg, rgba(217, 70, 239, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+    color: var(--text-white);
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-glow);
+}
+
+/* Main Layout */
+.ejaj-main-content {
+    margin-left: 280px;
+    flex-grow: 1;
+    padding: 36px 44px;
+    max-width: 1700px;
+}
+
+.ejaj-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 36px;
+}
+
+.topbar-title h2 {
+    font-family: var(--font-heading);
+    font-size: 34px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--text-white);
+}
+
+.topbar-title p {
+    font-size: 14px;
+    color: var(--neon-magenta);
+    font-weight: 800;
+    margin-top: 4px;
+}
+
+.pulse-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--accent-emerald);
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-emerald);
+    box-shadow: 0 0 10px var(--accent-emerald);
+    animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.25); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* KPI Dashboard Cards Grid */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    margin-bottom: 36px;
+}
+
+.kpi-card {
+    background: var(--bg-card-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--neon-magenta);
+    box-shadow: var(--shadow-glow);
+}
+
+.kpi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.kpi-card label {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-subtle);
+}
+
+.badge-yoy {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--accent-emerald);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.kpi-value {
+    font-family: var(--font-heading);
+    font-size: 34px;
+    font-weight: 900;
+    color: var(--text-white);
+}
+
+/* Chart Canvas Panel Cards */
+.charts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 28px;
+    margin-bottom: 36px;
+}
+
+.panel-card {
+    background: var(--bg-card-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: var(--shadow-md);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.panel-title {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text-white);
+}
+
+/* Data Table */
+.data-table-wrapper {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.data-table th {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-subtle);
+    padding: 14px 18px;
+    border-bottom: 2px solid var(--border-glass);
+}
+
+.data-table td {
+    padding: 16px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-white);
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.data-table tbody tr:hover {
+    background-color: var(--bg-hover-glass);
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-magenta) 0%, var(--electric-cyan) 100%);
+    border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 1300px) {
+    .charts-grid { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .ejaj-sidebar { width: 80px; padding: 20px 10px; }
+    .brand-ejaj-slogan, .sidebar-nav-item span { display: none; }
+    .ejaj-main-content { margin-left: 80px; padding: 20px; }
+    .kpi-grid { grid-template-columns: 1fr; }
+}

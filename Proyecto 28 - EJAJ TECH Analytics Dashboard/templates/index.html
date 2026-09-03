@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-theme="dark">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJAJ TECH — Painel Analítico & Business Intelligence</title>
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Chart.js 4.4.1 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- EJAJ TECH Official Branding CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v1">
+</head>
+<body>
+
+    <!-- Sidebar Navigation with Official EJAJ TECH Branding -->
+    <aside class="ejaj-sidebar">
+        <div class="brand-ejaj-header">
+            <img src="{{ url_for('static', filename='images/logo_ejajtech.jpg') }}" alt="EJAJ TECH Logo" class="brand-ejaj-logo-img">
+            <div class="brand-ejaj-title">
+                <h1>EJAJ TECH</h1>
+                <div class="brand-ejaj-slogan">Building the new, repairing the existing</div>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item active"><a href="#"><i class="fa-solid fa-chart-line"></i> <span data-i18n="titleDashboard">Painel Analítico</span></a></li>
+            <li class="sidebar-nav-item"><a href="#graficos"><i class="fa-solid fa-chart-pie"></i> <span>Métricas & Gráficos</span></a></li>
+            <li class="sidebar-nav-item"><a href="#projetos"><i class="fa-solid fa-laptop-code"></i> <span data-i18n="tableHeaderTitle">Projetos Recentes</span></a></li>
+            <li class="sidebar-nav-item"><a href="#"><i class="fa-solid fa-brain"></i> <span>Software Solutions</span></a></li>
+        </ul>
+
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-glass);">
+            <div style="font-size: 10px; font-weight: 800; color: var(--text-subtle); text-align: center; letter-spacing: 0.5px;">
+                EJAJ TECH ANALYTICS v5.0<br>
+                Software • Web • Apps Development
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content App -->
+    <main class="ejaj-main-content">
+        <!-- Topbar Header -->
+        <header class="ejaj-topbar">
+            <div class="topbar-title">
+                <h2 data-i18n="titleDashboard">Painel Analítico de Desempenho</h2>
+                <p data-i18n="subtitleDashboard">Plataforma de inteligência empresarial EJAJ TECH — Software • Web • Apps Development</p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- Live Pulse Status -->
+                <div class="pulse-indicator">
+                    <span class="pulse-dot"></span>
+                    <span>SISTEMA EM DIRETO</span>
+                </div>
+
+                <!-- Language Selector -->
+                <div style="display: flex; gap: 6px; background: var(--bg-card-glass); padding: 4px; border-radius: 14px; border: 1px solid var(--border-glass);">
+                    <button class="lang-btn active" data-lang="pt" onclick="setLanguage('pt')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; color: var(--text-white); cursor: pointer;">PT</button>
+                    <button class="lang-btn" data-lang="en" onclick="setLanguage('en')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; color: var(--text-white); cursor: pointer;">EN</button>
+                    <button class="lang-btn" data-lang="es" onclick="setLanguage('es')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; color: var(--text-white); cursor: pointer;">ES</button>
+                    <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; color: var(--text-white); cursor: pointer;">FR</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- KPI Dashboard Grid with YoY / MoM Badges -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiRevenue">Faturação Total (YTD)</label>
+                    <span class="badge-yoy" id="badgeYoY">+34.2%</span>
+                </div>
+                <div class="kpi-value" id="kpiRevenueVal" style="color: var(--neon-magenta);">0 €</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiMrr">MRR (Receita Recorrente)</label>
+                    <span class="badge-yoy" id="badgeMoM">+14.8%</span>
+                </div>
+                <div class="kpi-value" id="kpiMrrVal" style="color: var(--electric-cyan);">0 €</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiProfit">Lucro Líquido Operacional</label>
+                    <span class="badge-yoy" style="background: rgba(168, 85, 247, 0.2); color: var(--violet-purple);">70% Margem</span>
+                </div>
+                <div class="kpi-value" id="kpiProfitVal" style="color: var(--accent-emerald);">0 €</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiClients">Clientes Ativos</label>
+                    <span class="badge-yoy" style="background: rgba(6, 182, 212, 0.2); color: var(--electric-cyan);">95.8% Retenção</span>
+                </div>
+                <div class="kpi-value" id="kpiClientsVal">0</div>
+            </div>
+        </section>
+
+        <!-- Animated Charts Section (Chart.js Canvas) -->
+        <section id="graficos" class="charts-grid">
+            <!-- Line Chart: Revenue vs Costs -->
+            <div class="panel-card">
+                <div class="panel-header">
+                    <h3 class="panel-title" data-i18n="chartRevenueTitle">Evolução Mensal de Faturação vs Custos</h3>
+                </div>
+                <div style="height: 320px; position: relative;">
+                    <canvas id="revenueLineChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Doughnut Chart: Business Unit Breakdown -->
+            <div class="panel-card">
+                <div class="panel-header">
+                    <h3 class="panel-title" data-i18n="chartBusinessTitle">Distribuição por Unidade de Negócio</h3>
+                </div>
+                <div style="height: 320px; position: relative;">
+                    <canvas id="businessDoughnutChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Second Row: Bar Chart & Recent Projects Table -->
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 28px; margin-bottom: 36px;">
+            <!-- Bar Chart: Leads vs Delivered Projects -->
+            <div class="panel-card">
+                <div class="panel-header">
+                    <h3 class="panel-title" data-i18n="chartLeadsTitle">Leads Convertidos vs Projetos Concluídos</h3>
+                </div>
+                <div style="height: 300px; position: relative;">
+                    <canvas id="leadsBarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Projects Table Panel -->
+            <div id="projetos" class="panel-card">
+                <div class="panel-header">
+                    <h3 class="panel-title" data-i18n="tableHeaderTitle">Projetos Tecnológicos Recentes & Estado</h3>
+                </div>
+
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="thProject">Projeto & Unidade</th>
+                                <th data-i18n="thClient">Cliente</th>
+                                <th data-i18n="thValue">Valor (€)</th>
+                                <th data-i18n="thProgress">Progresso</th>
+                                <th data-i18n="thStatus">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projetosTableBody">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Custom JS Engine -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v1"></script>
+</body>
+</html>
