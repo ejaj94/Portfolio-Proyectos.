@@ -1,0 +1,441 @@
+/* VETERINARY PET HOSPITAL & CLINIC — ENTERPRISE STYLESHEET */
+/* Warm Apricot Cream, Solar Orange, Golden Yellow & Slate Charcoal Black UI */
+
+:root {
+    --bg-main: #fffcf7;          /* Soft Apricot Cream */
+    --bg-sidebar: #ffffff;
+    --bg-card: #ffffff;
+    --bg-hover: #fff7ed;
+    
+    --solar-orange: #f97316;
+    --solar-orange-dark: #ea580c;
+    --solar-orange-light: #ffedd5;
+    
+    --golden-yellow: #f59e0b;
+    --golden-yellow-light: #fef3c7;
+    
+    --slate-black: #1e293b;
+    --slate-black-dark: #0f172a;
+    
+    --accent-emerald: #10b981;
+    --accent-emerald-light: #d1fae5;
+    
+    --accent-red: #ef4444;
+    --accent-red-light: #fee2e2;
+    
+    --text-dark: #0f172a;
+    --text-muted: #334155;
+    --text-subtle: #64748b;
+    
+    --border-light: #fed7aa;
+    --border-orange: rgba(249, 115, 22, 0.4);
+    
+    --shadow-orange: 0 4px 20px rgba(249, 115, 22, 0.25);
+    --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+    
+    --font-heading: 'Outfit', -apple-system, sans-serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Sidebar Navigation */
+.vet-sidebar {
+    width: 280px;
+    background: var(--bg-sidebar);
+    border-right: 1.5px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 20px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+}
+
+.brand-pet-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 36px;
+    padding: 0 8px;
+}
+
+.brand-pet-logo {
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, var(--solar-orange) 0%, var(--golden-yellow) 100%);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 22px;
+    box-shadow: var(--shadow-orange);
+}
+
+.brand-pet-title h1 {
+    font-family: var(--font-heading);
+    font-size: 19px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--slate-black-dark);
+}
+
+.brand-pet-title span {
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--solar-orange-dark);
+}
+
+.sidebar-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-grow: 1;
+}
+
+.sidebar-nav-item a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-muted);
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.sidebar-nav-item.active a, .sidebar-nav-item a:hover {
+    background: var(--solar-orange-light);
+    color: var(--solar-orange-dark);
+    border: 1px solid var(--border-orange);
+}
+
+/* Main Layout */
+.vet-main-content {
+    margin-left: 280px;
+    flex-grow: 1;
+    padding: 36px 44px;
+    max-width: 1700px;
+}
+
+.vet-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.topbar-title h2 {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--slate-black);
+}
+
+.topbar-title p {
+    font-size: 14px;
+    color: var(--solar-orange-dark);
+    font-weight: 800;
+    margin-top: 4px;
+}
+
+.btn-orange-primary {
+    background: linear-gradient(135deg, var(--solar-orange) 0%, var(--solar-orange-dark) 100%);
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-orange);
+}
+
+.btn-orange-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(249, 115, 22, 0.45);
+}
+
+/* KPI Cards Grid */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    margin-bottom: 36px;
+}
+
+.kpi-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-light);
+    border-radius: 22px;
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.kpi-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--solar-orange);
+    box-shadow: var(--shadow-md);
+}
+
+.kpi-card label {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-subtle);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.kpi-value {
+    font-family: var(--font-heading);
+    font-size: 34px;
+    font-weight: 900;
+    color: var(--slate-black);
+}
+
+/* Pet Patient Gallery Grid */
+.pet-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.pet-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-light);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.pet-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--solar-orange);
+}
+
+.pet-card-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.pet-card-body {
+    padding: 20px;
+}
+
+.pet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.pet-name {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--slate-black);
+}
+
+.species-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.species-cao { background: var(--solar-orange-light); color: var(--solar-orange-dark); }
+.species-gato { background: var(--golden-yellow-light); color: #b45309; }
+.species-exotico { background: var(--accent-emerald-light); color: var(--accent-emerald); }
+
+.pet-info {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.pet-tutor-box {
+    background: var(--bg-main);
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--slate-black);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Data Tables & Panels */
+.panel-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-light);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 36px;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.panel-title {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--slate-black);
+}
+
+.data-table-wrapper {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.data-table th {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-subtle);
+    padding: 14px 18px;
+    border-bottom: 2px solid var(--border-light);
+}
+
+.data-table td {
+    padding: 16px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--slate-black);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.data-table tbody tr:hover {
+    background-color: var(--bg-hover);
+}
+
+/* Form Modal */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-box {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-light);
+    border-radius: 24px;
+    width: 90%;
+    max-width: 580px;
+    padding: 36px;
+    box-shadow: var(--shadow-md);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-backdrop.active .modal-box {
+    transform: translateY(0);
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--solar-orange-dark);
+    margin-bottom: 6px;
+}
+
+.form-control {
+    width: 100%;
+    background: var(--bg-main);
+    border: 1.5px solid var(--border-light);
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--slate-black);
+    outline: none;
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    border-color: var(--solar-orange);
+    box-shadow: 0 0 0 3px var(--solar-orange-light);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .vet-sidebar { width: 80px; padding: 20px 10px; }
+    .brand-pet-title, .sidebar-nav-item span { display: none; }
+    .vet-main-content { margin-left: 80px; padding: 20px; }
+    .kpi-grid { grid-template-columns: 1fr; }
+}

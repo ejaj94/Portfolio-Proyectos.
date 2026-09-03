@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-theme="light">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VETCARE — Sistema de Gestão Clínica Veterinária</title>
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Veterinary Pet Hospital CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v100">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="vet-sidebar">
+        <div class="brand-pet-header">
+            <div class="brand-pet-logo">
+                <i class="fa-solid fa-shield-cat"></i>
+            </div>
+            <div class="brand-pet-title">
+                <h1>VETCARE PET</h1>
+                <span>HOSPITAL & CLÍNICA</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item active"><a href="#pacientes"><i class="fa-solid fa-paw"></i> <span data-i18n="secPets">Pacientes & Mascotas</span></a></li>
+            <li class="sidebar-nav-item"><a href="javascript:void(0)" onclick="openNewPetModal()"><i class="fa-solid fa-plus-circle"></i> <span data-i18n="btnNewPet">Registar Paciente</span></a></li>
+            <li class="sidebar-nav-item"><a href="#citas"><i class="fa-solid fa-calendar-check"></i> <span data-i18n="secAppointments">Agendamento Citas</span></a></li>
+            <li class="sidebar-nav-item"><a href="#vacunas"><i class="fa-solid fa-syringe"></i> <span data-i18n="secVaccines">Caderneta Vacunas</span></a></li>
+        </ul>
+
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-light);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-subtle); text-align: center;">
+                VETCARE HOSPITAL v3.5<br>
+                Enmanuel Jimenez
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content App -->
+    <main class="vet-main-content">
+        <!-- Topbar Header -->
+        <header class="vet-topbar">
+            <div class="topbar-title">
+                <h2 data-i18n="titleVet">Sistema de Gestão Clínica Veterinária</h2>
+                <p data-i18n="subtitleVet">Cuidados animais, agendamento de consultas, vacinação e cadastro de tutores.</p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- Language Selector -->
+                <div style="display: flex; gap: 6px; background: var(--bg-card); padding: 4px; border-radius: 12px; border: 1.5px solid var(--border-light);">
+                    <button class="lang-btn active" data-lang="pt" onclick="setLanguage('pt')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">PT</button>
+                    <button class="lang-btn" data-lang="en" onclick="setLanguage('en')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">EN</button>
+                    <button class="lang-btn" data-lang="es" onclick="setLanguage('es')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">ES</button>
+                    <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">FR</button>
+                </div>
+
+                <button class="btn-orange-primary" onclick="openNewPetModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    <span data-i18n="btnNewPet">Registar Paciente</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Dashboard Grid -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <label data-i18n="kpiTotalPets">Pacientes Registados</label>
+                <div class="kpi-value" id="kpiTotalPetsVal" style="color: var(--solar-orange-dark);">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiConsultations">Consultas Agendadas</label>
+                <div class="kpi-value" id="kpiConsultationsVal" style="color: var(--golden-yellow-dark);">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiVaccines">Vacinas Pendentes</label>
+                <div class="kpi-value" id="kpiVaccinesVal" style="color: var(--accent-red);">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiTutores">Tutores Ativos</label>
+                <div class="kpi-value" id="kpiTutoresVal" style="color: var(--accent-emerald);">0</div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: PET PATIENT GALLERY -->
+        <section id="pacientes" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secPets">Galeria de Pacientes & Mascotas</h3>
+
+                <!-- Species Filter Pills -->
+                <div style="display: flex; gap: 8px; background: var(--bg-main); padding: 5px; border-radius: 14px; border: 1.5px solid var(--border-light);">
+                    <button class="filter-btn active" data-filter="all" onclick="setSpeciesFilter('all')" data-i18n="filterAll" style="background: transparent; border: none; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;">Todos</button>
+                    <button class="filter-btn" data-filter="cao" onclick="setSpeciesFilter('cao')" data-i18n="filterDogs" style="background: transparent; border: none; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;">Cães 🐕</button>
+                    <button class="filter-btn" data-filter="gato" onclick="setSpeciesFilter('gato')" data-i18n="filterCats" style="background: transparent; border: none; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;">Gatos 🐈</button>
+                    <button class="filter-btn" data-filter="exotico" onclick="setSpeciesFilter('exotico')" data-i18n="filterExotics" style="background: transparent; border: none; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;">Exóticos 🦜</button>
+                </div>
+            </div>
+
+            <!-- Search Box -->
+            <div style="margin-bottom: 24px;">
+                <input type="text" id="petSearchBox" class="form-control" placeholder="Pesquisar por nome do animal, raça ou tutor..." onkeyup="renderPetGallery()">
+            </div>
+
+            <!-- Pet Cards Grid -->
+            <div id="petGalleryContainer" class="pet-gallery-grid">
+                <!-- Dynamic Pet Cards -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: APPOINTMENTS SCHEDULE TABLE -->
+        <section id="citas" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secAppointments">Agendamento de Consultas Médicas</h3>
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th data-i18n="thPet">Mascota</th>
+                            <th data-i18n="thTutor">Tutor</th>
+                            <th data-i18n="thVet">Veterinário</th>
+                            <th data-i18n="thReason">Motivo da Consulta</th>
+                            <th data-i18n="thDateTime">Data & Hora</th>
+                            <th data-i18n="thStatus">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="citasTableBody">
+                        <!-- Dynamic Citas Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 3: VACCINATION LEDGER -->
+        <section id="vacunas" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="secVaccines">Caderneta & Plano de Vacinação</h3>
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="thPet">Mascota</th>
+                            <th>Vacina / Imunização</th>
+                            <th>Data de Aplicação</th>
+                            <th>Próxima Dose / Reforço</th>
+                            <th data-i18n="thStatus">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vacunasTableBody">
+                        <!-- Dynamic Vacunas Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- NEW PET MODAL -->
+    <div id="newPetModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h3 data-i18n="modalTitle" style="font-size: 22px; font-weight: 900; color: var(--solar-orange-dark);">Registar Novo Paciente Animal</h3>
+                    <p data-i18n="modalSubtitle" style="font-size: 13px; color: var(--text-subtle);">Introduza os dados da mascota e do tutor responsável.</p>
+                </div>
+                <button onclick="closeNewPetModal()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <form onsubmit="submitNewPetForm(event)">
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblPetName">Nome do Animal *</label>
+                        <input type="text" id="petNameInput" class="form-control" placeholder="Ex: Bobby" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblSpecies">Espécie *</label>
+                        <select id="petSpeciesSelect" class="form-control">
+                            <option>Cão</option>
+                            <option>Gato</option>
+                            <option>Exótico</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblBreed">Raça *</label>
+                        <input type="text" id="petBreedInput" class="form-control" placeholder="Ex: Beagle" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblAge">Idade *</label>
+                        <input type="text" id="petAgeInput" class="form-control" placeholder="Ex: 2 anos" required>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblWeight">Peso (kg) *</label>
+                        <input type="text" id="petWeightInput" class="form-control" placeholder="Ex: 14.2" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblChip">Número de Microchip *</label>
+                        <input type="text" id="petChipInput" class="form-control" placeholder="Ex: 9410000998877" required>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblTutorName">Nome do Tutor *</label>
+                        <input type="text" id="tutorNameInput" class="form-control" placeholder="Ex: Mariana Costa" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblContact">Contacto Telefónico *</label>
+                        <input type="text" id="tutorContactInput" class="form-control" placeholder="Ex: +351 912 345 678" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-orange-primary" style="width: 100%; justify-content: center; padding: 14px; margin-top: 10px;">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span data-i18n="btnSubmitPet">Guardar Ficha do Paciente</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom JS Engine -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v100"></script>
+</body>
+</html>
