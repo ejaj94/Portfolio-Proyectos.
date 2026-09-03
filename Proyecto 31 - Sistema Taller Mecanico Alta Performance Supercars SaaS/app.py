@@ -14,14 +14,14 @@ def add_no_cache_headers(response):
 
 # Initial Supercar Workshop Mock Database
 veiculos_db = [
-    {"id": "VEH-901", "matricula": "99-ZZ-88", "vin": "ZFF83CFA00025419", "marca_modelo": "Ferrari F8 Tributo V8 Turbo", "potencia": "720 cv", "proprietario": "Carlos Vasconcelos", "contacto": "+351 912 887 766"},
-    {"id": "VEH-902", "matricula": "11-AA-99", "vin": "WP0ZZZ99ZLS29811", "marca_modelo": "Porsche 911 GT3 RS (992)", "potencia": "525 cv", "proprietario": "Gonçalo Mendonça", "contacto": "+351 965 112 233"},
-    {"id": "VEH-903", "matricula": "55-HH-44", "vin": "HW1123884992011", "marca_modelo": "Lamborghini Huracán EVO V10", "potencia": "640 cv", "proprietario": "Alexandre Fontes", "contacto": "+351 931 445 566"},
-    {"id": "VEH-904", "matricula": "77-XX-22", "vin": "SBM11AAR80019288", "marca_modelo": "McLaren 720S Spider Performance", "potencia": "720 cv", "proprietario": "Sofia Carvalhal", "contacto": "+351 918 776 554"},
-    {"id": "VEH-905", "matricula": "33-BB-11", "vin": "SCFBDCCW8MG001928", "marca_modelo": "Aston Martin DBS Superleggera V12", "potencia": "725 cv", "proprietario": "Dr. Fernando Siqueira", "contacto": "+351 922 889 900"},
-    {"id": "VEH-906", "matricula": "88-MM-55", "vin": "WBS83AY0005519283", "marca_modelo": "BMW M4 CSL Track Edition", "potencia": "550 cv", "proprietario": "Ricardo Santos", "contacto": "+351 912 345 678"},
-    {"id": "VEH-907", "matricula": "44-CC-66", "vin": "WDD1903791A009821", "marca_modelo": "Mercedes-AMG GT Black Series", "potencia": "730 cv", "proprietario": "Beatriz Vasconcelos", "contacto": "+351 965 432 109"},
-    {"id": "VEH-908", "matricula": "22-DD-11", "vin": "WAUZZZ4S0G0019281", "marca_modelo": "Audi R8 V10 Performance quattro", "potencia": "620 cv", "proprietario": "Tiago Carvalhal", "contacto": "+351 931 112 233"}
+    {"id": "VEH-901", "matricula": "99-ZZ-88", "vin": "ZFF83CFA00025419", "marca_modelo": "Ferrari F8 Tributo V8 Turbo", "potencia": "720 cv", "proprietario": "Carlos Vasconcelos", "contacto": "+351 912 887 766", "estado": "Em Oficina (Manutenção)"},
+    {"id": "VEH-902", "matricula": "11-AA-99", "vin": "WP0ZZZ99ZLS29811", "marca_modelo": "Porsche 911 GT3 RS (992)", "potencia": "525 cv", "proprietario": "Gonçalo Mendonça", "contacto": "+351 965 112 233", "estado": "Em Oficina (Bancada Dyno)"},
+    {"id": "VEH-903", "matricula": "55-HH-44", "vin": "HW1123884992011", "marca_modelo": "Lamborghini Huracán EVO V10", "potencia": "640 cv", "proprietario": "Alexandre Fontes", "contacto": "+351 931 445 566", "estado": "Pronto para Entrega"},
+    {"id": "VEH-904", "matricula": "77-XX-22", "vin": "SBM11AAR80019288", "marca_modelo": "McLaren 720S Spider Performance", "potencia": "720 cv", "proprietario": "Sofia Carvalhal", "contacto": "+351 918 776 554", "estado": "Em Oficina (Diagnóstico)"},
+    {"id": "VEH-905", "matricula": "33-BB-11", "vin": "SCFBDCCW8MG001928", "marca_modelo": "Aston Martin DBS Superleggera V12", "potencia": "725 cv", "proprietario": "Dr. Fernando Siqueira", "contacto": "+351 922 889 900", "estado": "Em Oficina (Manutenção)"},
+    {"id": "VEH-906", "matricula": "88-MM-55", "vin": "WBS83AY0005519283", "marca_modelo": "BMW M4 CSL Track Edition", "potencia": "550 cv", "proprietario": "Ricardo Santos", "contacto": "+351 912 345 678", "estado": "Em Oficina (Bancada Dyno)"},
+    {"id": "VEH-907", "matricula": "44-CC-66", "vin": "WDD1903791A009821", "marca_modelo": "Mercedes-AMG GT Black Series", "potencia": "730 cv", "proprietario": "Beatriz Vasconcelos", "contacto": "+351 965 432 109", "estado": "Em Oficina (Diagnóstico)"},
+    {"id": "VEH-908", "matricula": "22-DD-11", "vin": "WAUZZZ4S0G0019281", "marca_modelo": "Audi R8 V10 Performance quattro", "potencia": "620 cv", "proprietario": "Tiago Carvalhal", "contacto": "+351 931 112 233", "estado": "Pronto para Entrega"}
 ]
 
 ordens_servico_db = [
@@ -139,6 +139,16 @@ ordens_servico_db = [
     }
 ]
 
+dyno_analytics_db = {
+    "modelos": ["Ferrari F8", "Porsche GT3 RS", "Lamborghini EVO", "McLaren 720S", "Aston Martin DBS", "AMG GT Black"],
+    "potencia_stock": [720, 525, 640, 720, 725, 730],
+    "potencia_dyno": [785, 548, 690, 810, 790, 820],
+    "servicos_distribuicao": {
+        "labels": ["Reprogramação ECU Stage 2", "Escapes Titanium Capristo/Akrapovič", "Suspensão KW Track Spec", "Travões Cerâmica Brembo/AMG", "Detalhamento PPF Cerâmico"],
+        "valores": [35, 25, 20, 12, 8]
+    }
+}
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -150,6 +160,10 @@ def get_ordens():
 @app.route("/api/veiculos", methods=["GET"])
 def get_veiculos():
     return jsonify(veiculos_db)
+
+@app.route("/api/dyno", methods=["GET"])
+def get_dyno():
+    return jsonify(dyno_analytics_db)
 
 @app.route("/api/ordens/criar", methods=["POST"])
 def criar_ordem():
@@ -172,6 +186,20 @@ def criar_ordem():
     }
     
     ordens_servico_db.insert(0, nova_os)
+    
+    # Sync to veiculos_db if not present
+    if not any(v["vin"] == nova_os["vin"] for v in veiculos_db):
+        veiculos_db.append({
+            "id": f"VEH-{900 + len(veiculos_db) + 1}",
+            "matricula": nova_os["matricula"],
+            "vin": nova_os["vin"],
+            "marca_modelo": nova_os["veiculo"],
+            "potencia": "650 cv",
+            "proprietario": nova_os["cliente"],
+            "contacto": "+351 900 000 000",
+            "estado": "Em Oficina (Diagnóstico)"
+        })
+        
     return jsonify({"success": True, "ordem": nova_os})
 
 @app.route("/api/ordens/avancar/<ordem_id>", methods=["POST"])

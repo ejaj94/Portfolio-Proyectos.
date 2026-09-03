@@ -17,8 +17,11 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+    <!-- Chart.js 4.4.1 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
     <!-- Carbon Fiber Supercar Workshop CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v999">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v2000">
 </head>
 <body>
 
@@ -35,10 +38,10 @@
         </div>
 
         <ul class="sidebar-nav-list">
-            <li class="sidebar-nav-item active"><a href="#"><i class="fa-solid fa-car-burst"></i> <span data-i18n="titleWorkshop">Painel Oficina</span></a></li>
+            <li class="sidebar-nav-item active"><a href="#painel"><i class="fa-solid fa-car-burst"></i> <span data-i18n="titleWorkshop">Painel Oficina</span></a></li>
             <li class="sidebar-nav-item"><a href="javascript:void(0)" onclick="openNewOrderModal()"><i class="fa-solid fa-circle-plus"></i> <span data-i18n="btnNewOrder">Nova Ordem de Serviço</span></a></li>
-            <li class="sidebar-nav-item"><a href="#"><i class="fa-solid fa-warehouse"></i> <span>Garagem Supercarros</span></a></li>
-            <li class="sidebar-nav-item"><a href="#"><i class="fa-solid fa-chart-line"></i> <span>Ensaio em Banco (Dyno)</span></a></li>
+            <li class="sidebar-nav-item"><a href="#garagem"><i class="fa-solid fa-warehouse"></i> <span>Garagem Supercarros</span></a></li>
+            <li class="sidebar-nav-item"><a href="#dyno"><i class="fa-solid fa-chart-line"></i> <span>Ensaio em Banco (Dyno)</span></a></li>
         </ul>
 
         <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-dark);">
@@ -75,7 +78,7 @@
         </header>
 
         <!-- KPI Dashboard Grid -->
-        <section class="kpi-grid">
+        <section id="painel" class="kpi-grid">
             <div class="kpi-card">
                 <label data-i18n="kpiRevenue">Faturação Total Oficina</label>
                 <div class="kpi-value" id="kpiRevenueVal" style="color: var(--racing-red);">0 €</div>
@@ -140,6 +143,59 @@
                 <div id="colReadyContainer"></div>
             </div>
         </div>
+
+        <!-- SECTION 2: GARAGEM DE SUPERCARROS (DIRECTORY TABLE) -->
+        <section id="garagem" class="panel-card" style="margin-top: 44px;">
+            <div class="panel-header">
+                <h3 class="panel-title" style="font-size: 20px; font-weight: 900;"><i class="fa-solid fa-warehouse" style="color: var(--racing-red);"></i> Garagem & Diretório de Supercarros VIP</h3>
+                <span style="font-size: 12px; font-weight: 800; color: var(--metallic-silver);">Frota Registada na Oficina</span>
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Matrícula</th>
+                            <th>Supercarro & Modelo</th>
+                            <th>VIN (Chassi)</th>
+                            <th>Potência (cv)</th>
+                            <th>Proprietário VIP</th>
+                            <th>Contacto</th>
+                            <th>Estado da Viatura</th>
+                        </tr>
+                    </thead>
+                    <tbody id="garageTableBody">
+                        <!-- Dynamic Garage Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 3: ENSAIO EM BANCO (DYNO) & ANALYTICS CHARTS -->
+        <section id="dyno" class="panel-card" style="margin-top: 44px;">
+            <div class="panel-header">
+                <h3 class="panel-title" style="font-size: 20px; font-weight: 900;"><i class="fa-solid fa-chart-line" style="color: var(--dyno-yellow);"></i> Telemetria & Ensaio em Bancada Dyno</h3>
+                <span style="font-size: 12px; font-weight: 800; color: var(--dyno-yellow);">Medição de Potência em Tempo Real</span>
+            </div>
+
+            <div class="content-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 28px; margin-top: 20px;">
+                <!-- Bar Chart: Horsepower Stock vs Dyno Stage 2 -->
+                <div style="background: var(--bg-main); padding: 24px; border-radius: 18px; border: 1px solid var(--border-dark);">
+                    <h4 style="font-size: 15px; font-weight: 900; margin-bottom: 16px; color: var(--text-white);">Comparativo de Potência: Stock vs Dyno Stage 2 (cv)</h4>
+                    <div style="height: 320px; position: relative;">
+                        <canvas id="dynoPowerChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Doughnut Chart: Service Types Breakdown -->
+                <div style="background: var(--bg-main); padding: 24px; border-radius: 18px; border: 1px solid var(--border-dark);">
+                    <h4 style="font-size: 15px; font-weight: 900; margin-bottom: 16px; color: var(--text-white);">Distribuição de Serviços de Tuning</h4>
+                    <div style="height: 320px; position: relative;">
+                        <canvas id="servicesDoughnutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- NEW WORK ORDER MODAL -->
@@ -215,6 +271,6 @@
     </div>
 
     <!-- Custom JS Engine -->
-    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v999"></script>
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v2000"></script>
 </body>
 </html>

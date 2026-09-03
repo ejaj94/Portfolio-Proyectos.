@@ -125,10 +125,15 @@ const i18n = {
 
 let currentLang = 'pt';
 let rawOrdensData = [];
+let rawVeiculosData = [];
+let dynoBarChart = null;
+let servicesDoughnutChart = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchStats();
     fetchOrdens();
+    fetchVeiculos();
+    fetchDynoAnalytics();
     
     // Set default delivery date
     const estDelivery = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
@@ -178,12 +183,119 @@ function fetchOrdens() {
         });
 }
 
+function fetchVeiculos() {
+    fetch('/api/veiculos')
+        .then(res => res.json())
+        .then(data => {
+            rawVeiculosData = data;
+            renderGarageTable();
+        });
+}
+
+function fetchDynoAnalytics() {
+    fetch('/api/dyno')
+        .then(res => res.json())
+        .then(data => {
+            renderDynoBarChart(data);
+            renderServicesDoughnutChart(data.servicos_distribuicao);
+        });
+}
+
+function renderGarageTable() {
+    const tbody = document.getElementById('garageTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    
+    rawVeiculosData.forEach(v => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><span style="font-size: 12px; font-weight: 900; background: var(--bg-hover); padding: 4px 8px; border-radius: 6px;">${v.matricula}</span></td>
+            <td style="font-weight: 900; font-size: 14px;">${v.marca_modelo}</td>
+            <td><span class="vin-tag" style="margin: 0;"><i class="fa-solid fa-barcode"></i> ${v.vin}</span></td>
+            <td><span style="font-weight: 900; color: var(--dyno-yellow);">${v.potencia}</span></td>
+            <td><span style="font-weight: 800;">${v.proprietario}</span></td>
+            <td><span style="font-size: 12px; color: var(--metallic-silver);">${v.contacto}</span></td>
+            <td><span style="font-size: 11px; font-weight: 900; color: var(--racing-red); background: var(--racing-red-light); padding: 4px 10px; border-radius: 12px;">${v.estado}</span></td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function renderDynoBarChart(data) {
+    const ctx = document.getElementById('dynoPowerChart');
+    if (!ctx) return;
+    if (dynoBarChart) dynoBarChart.destroy();
+    
+    dynoBarChart = new Chart(ctx.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: data.modelos,
+            datasets: [
+                {
+                    label: 'Potência Stock (cv)',
+                    data: data.potencia_stock,
+                    backgroundColor: 'rgba(148, 163, 184, 0.4)',
+                    borderColor: '#94a3b8',
+                    borderWidth: 1,
+                    borderRadius: 6
+                },
+                {
+                    label: 'Potência Dyno Stage 2 (cv)',
+                    data: data.potencia_dyno,
+                    backgroundColor: 'rgba(220, 38, 38, 0.85)',
+                    borderColor: '#dc2626',
+                    borderWidth: 1,
+                    borderRadius: 6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#ffffff', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } }
+            },
+            scales: {
+                x: { grid: { display: false }, ticks: { color: '#cbd5e1' } },
+                y: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#cbd5e1' } }
+            }
+        }
+    });
+}
+
+function renderServicesDoughnutChart(servicos) {
+    const ctx = document.getElementById('servicesDoughnutChart');
+    if (!ctx) return;
+    if (servicesDoughnutChart) servicesDoughnutChart.destroy();
+
+    servicesDoughnutChart = new Chart(ctx.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: servicos.labels,
+            datasets: [{
+                data: servicos.valores,
+                backgroundColor: ['#dc2626', '#eab308', '#6366f1', '#10b981', '#ec4899'],
+                borderColor: '#1f2937',
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#ffffff', font: { family: 'Plus Jakarta Sans', weight: 'bold', size: 10 } } }
+            }
+        }
+    });
+}
+
 function renderPipelineBoard() {
     const colDiag = document.getElementById('colDiagnosticContainer');
     const colMaint = document.getElementById('colMaintenanceContainer');
     const colDyno = document.getElementById('colDynoContainer');
     const colReady = document.getElementById('colReadyContainer');
     
+    if (!colDiag) return;
     colDiag.innerHTML = '';
     colMaint.innerHTML = '';
     colDyno.innerHTML = '';
@@ -207,7 +319,7 @@ function renderPipelineBoard() {
         const dict = i18n[currentLang];
         
         card.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-align: center; margin-bottom: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <span style="font-size: 11px; font-weight: 900; color: var(--racing-red);">${os.id}</span>
                 <span style="font-size: 11px; font-weight: 900; color: var(--text-white); background: var(--bg-hover); padding: 2px 8px; border-radius: 6px;">
                     ${os.matricula}
@@ -255,6 +367,7 @@ function advanceWorkOrderStage(ordemId) {
         .then(data => {
             if (data.success) {
                 fetchOrdens();
+                fetchVeiculos();
                 fetchStats();
             }
         });
@@ -294,6 +407,7 @@ function submitNewOrderForm(event) {
         if (data.success) {
             closeNewOrderModal();
             fetchOrdens();
+            fetchVeiculos();
             fetchStats();
         }
     });
