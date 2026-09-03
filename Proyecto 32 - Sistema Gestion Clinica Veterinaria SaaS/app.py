@@ -12,7 +12,7 @@ def add_no_cache_headers(response):
     response.headers["Expires"] = "0"
     return response
 
-# Initial Veterinary Mock Database
+# Initial Veterinary Mock Database (12 Full Pet Patients)
 mascotas_db = [
     {
         "id": "PET-101",
@@ -66,7 +66,7 @@ mascotas_db = [
         "microchip": "941000055443322",
         "tutor": "Dr. Manuel Santos",
         "contacto": "+351 919 443 221",
-        "foto": "https://images.unsplash.com/photo-1544943970-2ef8344e138a?auto=format&fit=crop&w=600&q=80",
+        "foto": "https://images.unsplash.com/photo-1522926193341-e9ffd686c60f?auto=format&fit=crop&w=600&q=80",
         "diagnostico_servico": "Serviço: Corte Pedicura de Unhas, Manutenção de Bico & Exame Parasitológico de Penas",
         "ultima_consulta": "2026-08-15"
     },
@@ -125,6 +125,62 @@ mascotas_db = [
         "foto": "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=600&q=80",
         "diagnostico_servico": "Serviço: Ecocardiograma Preventivo & Reforço de Vacina Leucemia Felina (FeLV)",
         "ultima_consulta": "2026-09-01"
+    },
+    {
+        "id": "PET-109",
+        "nome": "Bella",
+        "especie": "Cão",
+        "raca": "Beagle Tricolor",
+        "idade": "2 anos",
+        "peso": "13.2 kg",
+        "microchip": "941000011223344",
+        "tutor": "Fernanda Torres",
+        "contacto": "+351 922 113 355",
+        "foto": "https://images.unsplash.com/photo-1505628346881-b72b27e84530?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Diagnóstico: Conjuntivite Alérgica • Serviço: Gotas Oftálmicas & Limpeza Ocular",
+        "ultima_consulta": "2026-09-03"
+    },
+    {
+        "id": "PET-110",
+        "nome": "Tobias",
+        "especie": "Exótico",
+        "raca": "Tartaruga Terrestre Russa",
+        "idade": "8 anos",
+        "peso": "1.2 kg",
+        "microchip": "941000088990011",
+        "tutor": "Alexandre Fontes",
+        "contacto": "+351 931 445 566",
+        "foto": "https://images.unsplash.com/photo-1508455715210-53cc9c1851e3?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Serviço: Check-up de Carapaça, Calcinose Preventiva & Desparasitação de Réptil",
+        "ultima_consulta": "2026-08-20"
+    },
+    {
+        "id": "PET-111",
+        "nome": "Nina",
+        "especie": "Exótico",
+        "raca": "Chinchila Cinzenta",
+        "idade": "2 anos",
+        "peso": "0.6 kg",
+        "microchip": "941000077889900",
+        "tutor": "Clara Medeiros",
+        "contacto": "+351 915 667 788",
+        "foto": "https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Serviço: Inspeção de Dentes Incisivos & Avaliação de Banho de Areia Vulcânica",
+        "ultima_consulta": "2026-08-25"
+    },
+    {
+        "id": "PET-112",
+        "nome": "Max",
+        "especie": "Cão",
+        "raca": "Labrador Chocolate",
+        "idade": "4 anos",
+        "peso": "34.0 kg",
+        "microchip": "941000055667788",
+        "tutor": "Dr. Fernando Siqueira",
+        "contacto": "+351 922 889 900",
+        "foto": "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Serviço: Vacina Antirrábica Anual, Desparasitação & Corte de Unhas Canino",
+        "ultima_consulta": "2026-09-02"
     }
 ]
 
@@ -247,7 +303,7 @@ def criar_mascota():
     if especie == "Gato":
         foto = "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80"
     elif especie == "Exótico":
-        foto = "https://images.unsplash.com/photo-1544943970-2ef8344e138a?auto=format&fit=crop&w=600&q=80"
+        foto = "https://images.unsplash.com/photo-1522926193341-e9ffd686c60f?auto=format&fit=crop&w=600&q=80"
         
     nova_mascota = {
         "id": new_id,
@@ -310,5 +366,5 @@ def get_stats():
     })
 
 if __name__ == "__main__":
-    print("Iniciando SISTEMA GESTÃO CLÍNICA VETERINÁRIA SAAS em http://localhost:5600")
-    app.run(host="0.0.0.0", port=5600, debug=False)
+    print("Iniciando SISTEMA GESTÃO CLÍNICA VETERINÁRIA SAAS em http://localhost:5650")
+    app.run(host="0.0.0.0", port=5650, debug=False)
