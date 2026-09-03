@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-theme="light">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJAJ BILLING — Sistema de Facturação Profissional SaaS</title>
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Executive Invoicing CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v1">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="billing-sidebar">
+        <div class="brand-billing-header">
+            <div class="brand-billing-logo">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+            </div>
+            <div class="brand-billing-title">
+                <h1>EJAJ BILLING</h1>
+                <span>SOFTWARE CERTIFICADO</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item active"><a href="#"><i class="fa-solid fa-receipt"></i> <span data-i18n="titleBilling">Facturação & Impostos</span></a></li>
+            <li class="sidebar-nav-item"><a href="#wizard"><i class="fa-solid fa-circle-plus"></i> <span data-i18n="btnNewInvoice">Emitir Fatura</span></a></li>
+            <li class="sidebar-nav-item"><a href="#historico"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="tableHeaderTitle">Histórico Faturas</span></a></li>
+            <li class="sidebar-nav-item"><a href="#"><i class="fa-solid fa-building-user"></i> <span>Directório Clientes</span></a></li>
+        </ul>
+
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-light);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-subtle); text-align: center;">
+                EJAJ BILLING SUITE v4.2<br>
+                Enmanuel Jimenez
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content App -->
+    <main class="billing-main-content">
+        <!-- Topbar Header -->
+        <header class="billing-topbar">
+            <div class="topbar-title">
+                <h2 data-i18n="titleBilling">Sistema de Facturação & Gestão Financeira</h2>
+                <p data-i18n="subtitleBilling">Plataforma profissional para emissão de faturas certificadas, gestão de IVA e controlo de clientes.</p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- Language Selector -->
+                <div style="display: flex; gap: 6px; background: var(--bg-card); padding: 4px; border-radius: 12px; border: 1px solid var(--border-light);">
+                    <button class="lang-btn active" data-lang="pt" onclick="setLanguage('pt')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">PT</button>
+                    <button class="lang-btn" data-lang="en" onclick="setLanguage('en')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">EN</button>
+                    <button class="lang-btn" data-lang="es" onclick="setLanguage('es')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">ES</button>
+                    <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">FR</button>
+                </div>
+
+                <a href="#wizard" class="btn-navy-primary" style="text-decoration: none;">
+                    <i class="fa-solid fa-plus"></i>
+                    <span data-i18n="btnNewInvoice">Emitir Nova Fatura</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- KPI Dashboard Grid -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <label data-i18n="kpiRevenue">Total Faturado</label>
+                <div class="kpi-value" id="kpiRevenueVal" style="color: var(--navy-executive);">0 €</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiPending">Faturas Pendentes</label>
+                <div class="kpi-value" id="kpiPendingVal" style="color: var(--accent-amber);">0 €</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiVat">Impostos Liquidados (IVA)</label>
+                <div class="kpi-value" id="kpiVatVal" style="color: var(--accent-emerald);">0 €</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiInvoices">Faturas Emitidas</label>
+                <div class="kpi-value" id="kpiInvoicesVal">0</div>
+            </div>
+        </section>
+
+        <!-- INVOICE CREATION WIZARD PANEL (HOOK: Cliente -> Produtos -> Gerar -> PDF) -->
+        <div id="wizard" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" style="color: var(--navy-executive);"><i class="fa-solid fa-wand-magic-sparkles"></i> Assistente de Emissão de Faturas</h3>
+            </div>
+
+            <!-- Wizard Visual Steps -->
+            <div class="wizard-steps-bar">
+                <div class="wizard-step active">
+                    <div class="wizard-step-number">1</div>
+                    <div class="wizard-step-title" data-i18n="wizardStep1">1. Cliente</div>
+                </div>
+                <div class="wizard-step active">
+                    <div class="wizard-step-number">2</div>
+                    <div class="wizard-step-title" data-i18n="wizardStep2">2. Artigos & IVA</div>
+                </div>
+                <div class="wizard-step active">
+                    <div class="wizard-step-number">3</div>
+                    <div class="wizard-step-title" data-i18n="wizardStep3">3. Resumo Totais</div>
+                </div>
+                <div class="wizard-step active">
+                    <div class="wizard-step-number">4</div>
+                    <div class="wizard-step-title" data-i18n="wizardStep4">4. Emitir & PDF</div>
+                </div>
+            </div>
+
+            <!-- Form Wizard Container -->
+            <form onsubmit="submitCreateInvoiceWizard(event)">
+                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                    <div class="form-group">
+                        <label data-i18n="lblSelectClient">Selecionar Cliente *</label>
+                        <select id="invClientSelect" class="form-control" required>
+                            <!-- Options populated dynamically -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="lblIssueDate">Data de Emissão *</label>
+                        <input type="date" id="invIssueDate" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="lblDueDate">Data de Vencimento *</label>
+                        <input type="date" id="invDueDate" class="form-control" required>
+                    </div>
+                </div>
+
+                <!-- Line Items Table -->
+                <div style="margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h4 style="font-size: 14px; font-weight: 900; color: var(--text-main);">Linhas de Serviços & Produtos</h4>
+                        <button type="button" onclick="addInvoiceLineItem()" class="btn-navy-primary" style="padding: 6px 14px; font-size: 11px;">
+                            <i class="fa-solid fa-plus"></i> <span data-i18n="btnAddLine">Adicionar Linha</span>
+                        </button>
+                    </div>
+
+                    <table class="data-table line-items-table">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Qtd</th>
+                                <th>Preço Un. (€)</th>
+                                <th>Taxa IVA</th>
+                                <th style="text-align: right;">Total (€)</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lineItemsTableBody">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Summary Totals Block -->
+                <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                    <div style="background: var(--bg-main); border: 1.5px solid var(--border-light); border-radius: 16px; padding: 20px; width: 340px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; font-weight: 700;">
+                            <span>Base Imponível:</span>
+                            <span id="summaryBaseVal" style="font-weight: 900;">0,00 €</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; font-weight: 700; color: var(--accent-emerald);">
+                            <span>Montante de IVA:</span>
+                            <span id="summaryIvaVal" style="font-weight: 900;">0,00 €</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding-top: 10px; border-top: 2px solid var(--navy-executive); font-size: 18px; font-weight: 900; color: var(--navy-executive);">
+                            <span>TOTAL FATURA:</span>
+                            <span id="summaryTotalVal">0,00 €</span>
+                        </div>
+
+                        <button type="submit" class="btn-navy-primary" style="width: 100%; justify-content: center; padding: 14px; margin-top: 16px; font-size: 14px;">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            <span data-i18n="btnGeneratePdf">Emitir Fatura & Gerar PDF</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- INVOICE HISTORY LEDGER TABLE PANEL -->
+        <div id="historico" class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="tableHeaderTitle">Histórico Geral de Faturas Certificadas</h3>
+            </div>
+
+            <!-- Search Bar -->
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="searchBox" class="form-control" placeholder="Pesquisar por NIF, Número de Fatura ou Nome do Cliente..." onkeyup="renderFaturasTable()" data-i18n="tableSearchPlaceholder">
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="thNumber">Nº Fatura</th>
+                            <th data-i18n="thClient">Cliente & NIF</th>
+                            <th data-i18n="thDate">Data Emissão</th>
+                            <th data-i18n="thDueDate">Vencimento</th>
+                            <th data-i18n="thStatus">Estado</th>
+                            <th data-i18n="thTotal">Total (€)</th>
+                            <th data-i18n="thActions">Ações & PDF</th>
+                        </tr>
+                    </thead>
+                    <tbody id="faturasTableBody">
+                        <!-- Dynamic Rows Rendered by app.js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- PDF PREVIEW MODAL -->
+    <div id="pdfModal" class="modal-backdrop">
+        <div class="modal-box-large">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 data-i18n="modalPdfTitle" style="font-size: 20px; font-weight: 900; color: var(--navy-executive);">Visualizador de Fatura Certificada PDF</h3>
+                <button onclick="closePdfModal()" style="background: transparent; border: none; font-size: 26px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <iframe id="pdfIframe" style="width: 100%; flex-grow: 1; border: 1px solid var(--border-light); border-radius: 14px;" src=""></iframe>
+        </div>
+    </div>
+
+    <!-- Custom JS Engine -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v1"></script>
+</body>
+</html>
