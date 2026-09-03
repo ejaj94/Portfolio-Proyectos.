@@ -1,0 +1,425 @@
+/* HIGH PERFORMANCE SUPERCAR WORKSHOP — ENTERPRISE STYLESHEET */
+/* Carbon Fiber Dark, Crimson Racing Red, Metallic Silver & Race Yellow */
+
+:root {
+    --bg-main: #0b0f19;          /* Carbon Fiber Dark Slate */
+    --bg-sidebar: #111827;
+    --bg-card: #1f2937;
+    --bg-hover: #374151;
+    
+    --racing-red: #dc2626;
+    --racing-red-dark: #b91c1c;
+    --racing-red-light: rgba(220, 38, 38, 0.2);
+    
+    --metallic-silver: #94a3b8;
+    --dyno-yellow: #eab308;
+    --dyno-yellow-light: rgba(234, 179, 8, 0.2);
+    
+    --accent-emerald: #10b981;
+    --accent-emerald-light: rgba(16, 185, 129, 0.2);
+    
+    --text-white: #ffffff;
+    --text-muted: #cbd5e1;
+    --text-subtle: #94a3b8;
+    
+    --border-dark: #374151;
+    --border-red: rgba(220, 38, 38, 0.4);
+    
+    --shadow-red: 0 0 20px rgba(220, 38, 38, 0.25);
+    --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.6);
+    
+    --font-heading: 'Outfit', -apple-system, sans-serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-white);
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Sidebar Navigation */
+.workshop-sidebar {
+    width: 280px;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border-dark);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 20px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.brand-veloce-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 36px;
+    padding: 0 8px;
+}
+
+.brand-veloce-logo {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--racing-red) 0%, var(--racing-red-dark) 100%);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 22px;
+    box-shadow: var(--shadow-red);
+}
+
+.brand-veloce-title h1 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--text-white);
+}
+
+.brand-veloce-title span {
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--racing-red);
+}
+
+.sidebar-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-grow: 1;
+}
+
+.sidebar-nav-item a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-muted);
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.sidebar-nav-item.active a, .sidebar-nav-item a:hover {
+    background: var(--racing-red-light);
+    color: var(--text-white);
+    border: 1px solid var(--border-red);
+}
+
+/* Main Layout */
+.workshop-main-content {
+    margin-left: 280px;
+    flex-grow: 1;
+    padding: 36px 44px;
+    max-width: 1700px;
+}
+
+.workshop-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.topbar-title h2 {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--text-white);
+}
+
+.topbar-title p {
+    font-size: 14px;
+    color: var(--racing-red);
+    font-weight: 800;
+    margin-top: 4px;
+}
+
+.btn-red-primary {
+    background: linear-gradient(135deg, var(--racing-red) 0%, var(--racing-red-dark) 100%);
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-red);
+}
+
+.btn-red-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.5);
+}
+
+/* KPI Cards Grid */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    margin-bottom: 36px;
+}
+
+.kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dark);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.kpi-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--racing-red);
+}
+
+.kpi-card label {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-subtle);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.kpi-value {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--text-white);
+}
+
+/* Status Pipeline Grid (4 Stage Columns) */
+.pipeline-board-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.pipeline-col {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dark);
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+    min-height: 580px;
+}
+
+.pipeline-col-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-dark);
+}
+
+.pipeline-col-header h4 {
+    font-size: 15px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pipeline-col-header .count-badge {
+    background: var(--bg-hover);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--text-muted);
+}
+
+/* Supercar Work Order Cards */
+.supercar-card {
+    background: var(--bg-main);
+    border: 1.5px solid var(--border-dark);
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.supercar-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--racing-red);
+    box-shadow: var(--shadow-red);
+}
+
+.supercar-model {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--text-white);
+    margin-bottom: 4px;
+}
+
+.vin-tag {
+    font-family: monospace;
+    font-size: 11px;
+    font-weight: 800;
+    background: rgba(148, 163, 184, 0.15);
+    color: var(--metallic-silver);
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.supercar-service {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.supercar-budget {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--racing-red);
+    margin-bottom: 12px;
+}
+
+.supercar-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-dark);
+}
+
+.btn-advance-stage {
+    background: var(--racing-red-light);
+    color: var(--racing-red);
+    border: 1px solid var(--border-red);
+    padding: 7px 14px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-advance-stage:hover {
+    background: var(--racing-red);
+    color: #ffffff;
+}
+
+/* Modal Component */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 15, 25, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dark);
+    border-radius: 24px;
+    width: 90%;
+    max-width: 600px;
+    padding: 36px;
+    box-shadow: var(--shadow-md);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-backdrop.active .modal-box {
+    transform: translateY(0);
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--racing-red);
+    margin-bottom: 6px;
+}
+
+.form-control {
+    width: 100%;
+    background: var(--bg-main);
+    border: 1.5px solid var(--border-dark);
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-white);
+    outline: none;
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    border-color: var(--racing-red);
+    box-shadow: 0 0 0 3px var(--racing-red-light);
+}
+
+/* Responsive */
+@media (max-width: 1300px) {
+    .pipeline-board-grid { grid-template-columns: repeat(2, 1fr); }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .workshop-sidebar { width: 80px; padding: 20px 10px; }
+    .brand-veloce-title, .sidebar-nav-item span { display: none; }
+    .workshop-main-content { margin-left: 80px; padding: 20px; }
+    .pipeline-board-grid { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: 1fr; }
+}
