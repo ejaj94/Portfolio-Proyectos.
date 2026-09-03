@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-theme="light">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJAJ MEDIA — Gestor de Tarefas Social Media</title>
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Digital Agency Task Theme CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v1">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="task-sidebar">
+        <div class="brand-agency-header">
+            <div class="brand-agency-logo">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div class="brand-agency-title">
+                <h1>EJAJ MEDIA</h1>
+                <span>AGENCY WORKFLOW</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item active"><a href="#"><i class="fa-solid fa-kanban"></i> <span data-i18n="titleAgency">Quadro Kanban</span></a></li>
+            <li class="sidebar-nav-item"><a href="javascript:void(0)" onclick="openNewTaskModal()"><i class="fa-solid fa-square-plus"></i> <span data-i18n="btnNewTask">Nova Tarefa</span></a></li>
+            <li class="sidebar-nav-item"><a href="#"><i class="fa-solid fa-calendar-days"></i> <span>Calendário de Posts</span></a></li>
+            <li class="sidebar-nav-item"><a href="#"><i class="fa-solid fa-users"></i> <span>Equipa de Conteúdo</span></a></li>
+        </ul>
+
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-light);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-subtle); text-align: center;">
+                EJAJ MEDIA TASK ENGINE v4.0<br>
+                Enmanuel Jimenez
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content App -->
+    <main class="task-main-content">
+        <!-- Topbar Header -->
+        <header class="task-topbar">
+            <div class="topbar-title">
+                <h2 data-i18n="titleAgency">Gestor de Tarefas Social Media</h2>
+                <p data-i18n="subtitleAgency">Quadro Kanban de produção de conteúdo, equipa e agendamento de publicações.</p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- Filter Assignee Select -->
+                <div style="display: flex; align-items: center; gap: 8px; background: var(--bg-card); padding: 6px 12px; border-radius: 12px; border: 1px solid var(--border-light);">
+                    <i class="fa-solid fa-user-check" style="color: var(--primary-indigo);"></i>
+                    <select id="assigneeFilterSelect" onchange="renderKanbanBoard()" style="background: transparent; border: none; font-size: 13px; font-weight: 800; color: var(--text-main); outline: none;">
+                        <option value="all">Toda a Equipa</option>
+                        <option value="Mariana Ramos">Mariana Ramos</option>
+                        <option value="Diogo Vasconcelos">Diogo Vasconcelos</option>
+                        <option value="Carolina Mendes">Carolina Mendes</option>
+                        <option value="Tiago Carvalhal">Tiago Carvalhal</option>
+                    </select>
+                </div>
+
+                <!-- Language Selector -->
+                <div style="display: flex; gap: 6px; background: var(--bg-card); padding: 4px; border-radius: 12px; border: 1px solid var(--border-light);">
+                    <button class="lang-btn active" data-lang="pt" onclick="setLanguage('pt')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">PT</button>
+                    <button class="lang-btn" data-lang="en" onclick="setLanguage('en')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">EN</button>
+                    <button class="lang-btn" data-lang="es" onclick="setLanguage('es')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">ES</button>
+                    <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">FR</button>
+                </div>
+
+                <button class="btn-indigo-primary" onclick="openNewTaskModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    <span data-i18n="btnNewTask">Nova Tarefa</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Dashboard Grid -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <label data-i18n="kpiTotal">Tarefas no Pipeline</label>
+                <div class="kpi-value" id="kpiTotalVal" style="color: var(--primary-indigo);">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiProduction">Em Produção</label>
+                <div class="kpi-value" id="kpiProductionVal" style="color: var(--accent-amber);">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiPublished">Conteúdos Publicados</label>
+                <div class="kpi-value" id="kpiPublishedVal" style="color: var(--accent-emerald);">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <label data-i18n="kpiHighPriority">Alta Prioridade</label>
+                <div class="kpi-value" id="kpiHighPriorityVal" style="color: var(--accent-coral);">0</div>
+            </div>
+        </section>
+
+        <!-- KANBAN BOARD GRID (4 STAGES) -->
+        <div class="kanban-board-grid">
+            <!-- Stage 1: Briefing & Ideias -->
+            <div class="kanban-col">
+                <div class="kanban-col-header">
+                    <h4><i class="fa-lightbulb fa-solid" style="color: var(--primary-indigo);"></i> <span data-i18n="colBriefing">Briefing & Ideias</span></h4>
+                    <span class="count-badge" id="countBriefing">0</span>
+                </div>
+                <div id="colBriefingContainer"></div>
+            </div>
+
+            <!-- Stage 2: Em Produção -->
+            <div class="kanban-col">
+                <div class="kanban-col-header">
+                    <h4><i class="fa-solid fa-paintbrush" style="color: var(--accent-amber);"></i> <span data-i18n="colProduction">Em Produção</span></h4>
+                    <span class="count-badge" id="countProduction">0</span>
+                </div>
+                <div id="colProductionContainer"></div>
+            </div>
+
+            <!-- Stage 3: Em Revisão -->
+            <div class="kanban-col">
+                <div class="kanban-col-header">
+                    <h4><i class="fa-solid fa-clipboard-check" style="color: var(--accent-pink);"></i> <span data-i18n="colReview">Em Revisão</span></h4>
+                    <span class="count-badge" id="countReview">0</span>
+                </div>
+                <div id="colReviewContainer"></div>
+            </div>
+
+            <!-- Stage 4: Publicado / Agendado -->
+            <div class="kanban-col">
+                <div class="kanban-col-header">
+                    <h4 style="color: var(--accent-emerald);"><i class="fa-solid fa-circle-check"></i> <span data-i18n="colPublished">Publicado / Agendado</span></h4>
+                    <span class="count-badge" id="countPublished" style="background: var(--accent-emerald-light); color: var(--accent-emerald);">0</span>
+                </div>
+                <div id="colPublishedContainer"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- NEW TASK MODAL -->
+    <div id="newTaskModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h3 data-i18n="modalTitle" style="font-size: 22px; font-weight: 900; color: var(--primary-indigo);">Criar Nova Tarefa de Conteúdo</h3>
+                    <p data-i18n="modalSubtitle" style="font-size: 13px; color: var(--text-subtle);">Atribua a tarefa a um membro da equipa de redes sociais.</p>
+                </div>
+                <button onclick="closeNewTaskModal()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <form onsubmit="submitNewTaskForm(event)">
+                <div class="form-group">
+                    <label data-i18n="lblTaskTitle">Título da Tarefa / Post *</label>
+                    <input type="text" id="taskTitleInput" class="form-control" placeholder="Ex: Reel de Tendências no Instagram" required>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblDesc">Descrição / Briefing *</label>
+                    <textarea id="taskDescInput" class="form-control" rows="3" placeholder="Detalhes do conteúdo, copy e requisitos gráficos..." required></textarea>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblPlatform">Rede Social *</label>
+                        <select id="taskPlatformSelect" class="form-control">
+                            <option>Instagram</option>
+                            <option>TikTok</option>
+                            <option>LinkedIn</option>
+                            <option>YouTube</option>
+                            <option>Facebook</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label data-i18n="lblPriority">Prioridade *</label>
+                        <select id="taskPrioritySelect" class="form-control">
+                            <option>Alta</option>
+                            <option selected>Média</option>
+                            <option>Baixa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblAssignee">Membro da Equipa *</label>
+                        <select id="taskAssigneeSelect" class="form-control">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label data-i18n="lblDueDate">Data de Publicação *</label>
+                        <input type="date" id="taskDueDate" class="form-control" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-indigo-primary" style="width: 100%; justify-content: center; padding: 14px; margin-top: 10px;">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span data-i18n="btnSubmitTask">Guardar Tarefa no Kanban</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom JS Engine -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v1"></script>
+</body>
+</html>
