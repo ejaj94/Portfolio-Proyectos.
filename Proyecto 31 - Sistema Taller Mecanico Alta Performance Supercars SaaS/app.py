@@ -229,5 +229,5 @@ def get_stats():
     })
 
 if __name__ == "__main__":
-    print("Iniciando SISTEMA TALLER MECÁNICO ALTA PERFORMANCE SUPERCARS em http://localhost:5500")
-    app.run(host="0.0.0.0", port=5500, debug=False)
+    print("Iniciando SISTEMA TALLER MECÁNICO ALTA PERFORMANCE SUPERCARS em http://localhost:5550")
+    app.run(host="0.0.0.0", port=5550, debug=False)

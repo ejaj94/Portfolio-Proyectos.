@@ -164,7 +164,7 @@ function setLanguage(lang) {
 }
 
 function fetchStats() {
-    fetch('/api/stats')
+    fetch('/api/stats?_t=' + Date.now())
         .then(res => res.json())
         .then(data => {
             document.getElementById('kpiRevenueVal').innerText = data.total_faturacao;
@@ -175,7 +175,7 @@ function fetchStats() {
 }
 
 function fetchOrdens() {
-    fetch('/api/ordens')
+    fetch('/api/ordens?_t=' + Date.now())
         .then(res => res.json())
         .then(data => {
             rawOrdensData = data;
@@ -184,7 +184,7 @@ function fetchOrdens() {
 }
 
 function fetchVeiculos() {
-    fetch('/api/veiculos')
+    fetch('/api/veiculos?_t=' + Date.now())
         .then(res => res.json())
         .then(data => {
             rawVeiculosData = data;
@@ -193,7 +193,7 @@ function fetchVeiculos() {
 }
 
 function fetchDynoAnalytics() {
-    fetch('/api/dyno')
+    fetch('/api/dyno?_t=' + Date.now())
         .then(res => res.json())
         .then(data => {
             renderDynoBarChart(data);
