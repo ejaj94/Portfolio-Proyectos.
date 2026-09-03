@@ -66,7 +66,7 @@ mascotas_db = [
         "microchip": "941000055443322",
         "tutor": "Dr. Manuel Santos",
         "contacto": "+351 919 443 221",
-        "foto": "https://images.unsplash.com/photo-1522926193341-e9ffd686c60f?auto=format&fit=crop&w=600&q=80",
+        "foto": "/static/images/kiwi_papagaio.jpg",
         "diagnostico_servico": "Serviço: Corte Pedicura de Unhas, Manutenção de Bico & Exame Parasitológico de Penas",
         "ultima_consulta": "2026-08-15"
     },
