@@ -12,7 +12,7 @@ def add_no_cache_headers(response):
     response.headers["Expires"] = "0"
     return response
 
-# Initial Educational Mock Database
+# Initial Educational Mock Database (Expanded Disciplines)
 carreras_db = [
     {
         "id": "CAR-01",
@@ -26,26 +26,66 @@ carreras_db = [
     },
     {
         "id": "CAR-02",
-        "nome": "Design de Experiência Digital & Product Design",
-        "duracao": "2.5 Anos • 5 Semestres",
-        "coordenador": "Prof. Elena Rostova",
-        "cursos_count": 14,
-        "alunos_inscritos": 315,
-        "taxa_empregabilidade": "96.2%",
-        "descricao": "Especialização em arquitetura de informação, sistemas de design escaláveis, pesquisa de utilizadores e prototipagem 3D."
+        "nome": "Biologia Molecular, Biotecnologia & Genómica",
+        "duracao": "4 Anos • 8 Semestres",
+        "coordenador": "Dra. Beatriz Siqueira",
+        "cursos_count": 22,
+        "alunos_inscritos": 310,
+        "taxa_empregabilidade": "97.1%",
+        "descricao": "Estudo de bioinformática, edição genética CRISPR, sequenciamento de DNA e biotecnologia farmacêutica."
     },
     {
         "id": "CAR-03",
-        "nome": "Ciência de Dados, Big Data & Analytics",
-        "duracao": "3 Anos • 6 Semestres",
-        "coordenador": "Dr. Carlos Mendes",
-        "cursos_count": 16,
-        "alunos_inscritos": 280,
-        "taxa_empregabilidade": "97.8%",
-        "descricao": "Domínio de modelos estatísticos avançados, engenharia de dados em nuvem e inteligência de negócios."
+        "nome": "Engenharia Robótica & Mecatrónica Avançada",
+        "duracao": "4 Anos • 8 Semestres",
+        "coordenador": "Prof. Ing. Hugo Fonseca",
+        "cursos_count": 20,
+        "alunos_inscritos": 290,
+        "taxa_empregabilidade": "99.0%",
+        "descricao": "Desenvolvimento de robôs autónomos, sistemas de visão computacional e automação industrial IoT."
     },
     {
         "id": "CAR-04",
+        "nome": "Engenharia Civil & Infraestruturas Sustentáveis",
+        "duracao": "4 Anos • 8 Semestres",
+        "coordenador": "Prof. Dr. Fernando Ramos",
+        "cursos_count": 19,
+        "alunos_inscritos": 275,
+        "taxa_empregabilidade": "95.8%",
+        "descricao": "Conceção de edifícios eco-eficientes, modelação BIM 3D, geotecnia e estruturas resilientes."
+    },
+    {
+        "id": "CAR-05",
+        "nome": "Linguística Computacional & Línguas Modernas",
+        "duracao": "3 Anos • 6 Semestres",
+        "coordenador": "Dra. Isabela Camargo",
+        "cursos_count": 16,
+        "alunos_inscritos": 210,
+        "taxa_empregabilidade": "94.5%",
+        "descricao": "Análise de modelos de tradução neural, sintaxe comparada de idiomas e desenvolvimento de motores de linguagem."
+    },
+    {
+        "id": "CAR-06",
+        "nome": "Sociologia Digital & Humanidades Digitais",
+        "duracao": "3 Anos • 6 Semestres",
+        "coordenador": "Prof. Gabriel Nogueira",
+        "cursos_count": 15,
+        "alunos_inscritos": 195,
+        "taxa_empregabilidade": "93.2%",
+        "descricao": "Análise sociológica do impacto das redes sociais, comportamento de comunidades digitais e demografia global."
+    },
+    {
+        "id": "CAR-07",
+        "nome": "Filosofia da Mente, Lógica & Ética da IA",
+        "duracao": "3 Anos • 6 Semestres",
+        "coordenador": "Dr. Marcus Aurelius Vane",
+        "cursos_count": 14,
+        "alunos_inscritos": 180,
+        "taxa_empregabilidade": "92.0%",
+        "descricao": "Investigação de dilemas éticos em sistemas autónomos, epistemologia contemporânea e filosofia da consciência."
+    },
+    {
+        "id": "CAR-08",
         "nome": "Cybersecurity & Cloud Infrastructure",
         "duracao": "2.5 Anos • 5 Semestres",
         "coordenador": "Prof. Marcus Brody",
@@ -71,44 +111,80 @@ cursos_db = [
     },
     {
         "id": "CRS-102",
-        "codigo": "AI-402",
-        "titulo": "Deep Learning & Processamento de Linguagem Natural",
-        "carrera": "Engenharia de Software & IA",
-        "professor": "Dra. Sophia Chen",
+        "codigo": "BIO-201",
+        "titulo": "Genómica Computacional & Edição Genética CRISPR",
+        "carrera": "Biologia Molecular & Biotecnologia",
+        "professor": "Dra. Beatriz Siqueira",
         "modulos": 14,
-        "duracao_horas": 95,
-        "progresso_medio": 64,
-        "alunos": 128,
-        "classificacao": "4.98 ⭐"
+        "duracao_horas": 90,
+        "progresso_medio": 81,
+        "alunos": 115,
+        "classificacao": "4.97 ⭐"
     },
     {
         "id": "CRS-103",
-        "codigo": "UX-201",
-        "titulo": "Design Systems & UI Architecture em Scale",
-        "carrera": "Design de Experiência Digital",
-        "professor": "Prof. Elena Rostova",
-        "modulos": 10,
-        "duracao_horas": 65,
-        "progresso_medio": 85,
-        "alunos": 110,
-        "classificacao": "4.90 ⭐"
+        "codigo": "ROB-302",
+        "titulo": "Robótica Móvel & Visão Computacional em Tempo Real",
+        "carrera": "Engenharia Robótica & Mecatrónica",
+        "professor": "Prof. Ing. Hugo Fonseca",
+        "modulos": 15,
+        "duracao_horas": 100,
+        "progresso_medio": 73,
+        "alunos": 108,
+        "classificacao": "4.94 ⭐"
     },
     {
         "id": "CRS-104",
-        "codigo": "DS-305",
-        "titulo": "Engenharia de Pipelines de Dados & Spark",
-        "carrera": "Ciência de Dados & Big Data",
-        "professor": "Dr. Carlos Mendes",
+        "codigo": "CIV-104",
+        "titulo": "Engenharia Estrutural & BIM (Building Info Modeling)",
+        "carrera": "Engenharia Civil & Infraestruturas",
+        "professor": "Prof. Dr. Fernando Ramos",
         "modulos": 11,
         "duracao_horas": 75,
-        "progresso_medio": 71,
-        "alunos": 95,
-        "classificacao": "4.92 ⭐"
+        "progresso_medio": 84,
+        "alunos": 98,
+        "classificacao": "4.89 ⭐"
     },
     {
         "id": "CRS-105",
+        "codigo": "LNG-105",
+        "titulo": "Tradução Neural & Processamento Sintático Multilingue",
+        "carrera": "Linguística Computacional & Línguas",
+        "professor": "Dra. Isabela Camargo",
+        "modulos": 10,
+        "duracao_horas": 60,
+        "progresso_medio": 88,
+        "alunos": 85,
+        "classificacao": "4.91 ⭐"
+    },
+    {
+        "id": "CRS-106",
+        "codigo": "SOC-202",
+        "titulo": "Sociologia Algorítmica & Dinâmica de Redes Sociais",
+        "carrera": "Sociologia Digital",
+        "professor": "Prof. Gabriel Nogueira",
+        "modulos": 9,
+        "duracao_horas": 55,
+        "progresso_medio": 86,
+        "alunos": 92,
+        "classificacao": "4.88 ⭐"
+    },
+    {
+        "id": "CRS-107",
+        "codigo": "PHI-301",
+        "titulo": "Ética da Inteligência Artificial & Filosofia da Mente",
+        "carrera": "Filosofia da Mente & Ética",
+        "professor": "Dr. Marcus Aurelius Vane",
+        "modulos": 12,
+        "duracao_horas": 70,
+        "progresso_medio": 90,
+        "alunos": 95,
+        "classificacao": "4.96 ⭐"
+    },
+    {
+        "id": "CRS-108",
         "codigo": "SEC-401",
-        "titulo": "Ethical Hacking & Testes de Penetração",
+        "titulo": "Ethical Hacking & Testes de Penetração Zero-Trust",
         "carrera": "Cybersecurity & Cloud",
         "professor": "Prof. Marcus Brody",
         "modulos": 13,
@@ -135,7 +211,7 @@ alunos_db = [
         "id": "ALU-902",
         "nome": "Diogo Fernandes",
         "matricula": "20240214",
-        "carrera": "Design de Experiência Digital",
+        "carrera": "Biologia Molecular & Biotecnologia",
         "email": "diogo.fernandes@lumen.edu",
         "progresso_geral": 92,
         "media_gpa": "19.2 / 20",
@@ -146,7 +222,7 @@ alunos_db = [
         "id": "ALU-903",
         "nome": "Beatriz Albuquerque",
         "matricula": "20240305",
-        "carrera": "Ciência de Dados & Big Data",
+        "carrera": "Filosofia da Mente & Ética",
         "email": "beatriz.albuquerque@lumen.edu",
         "progresso_geral": 76,
         "media_gpa": "17.8 / 20",
@@ -157,7 +233,7 @@ alunos_db = [
         "id": "ALU-904",
         "nome": "Lucas Vasconcelos",
         "matricula": "20240412",
-        "carrera": "Cybersecurity & Cloud",
+        "carrera": "Engenharia Robótica & Mecatrónica",
         "email": "lucas.vasconcelos@lumen.edu",
         "progresso_geral": 88,
         "media_gpa": "18.9 / 20",
@@ -168,7 +244,7 @@ alunos_db = [
         "id": "ALU-905",
         "nome": "Camila Oliveira",
         "matricula": "20240590",
-        "carrera": "Engenharia de Software & IA",
+        "carrera": "Linguística Computacional",
         "email": "camila.oliveira@lumen.edu",
         "progresso_geral": 95,
         "media_gpa": "19.6 / 20",
@@ -190,33 +266,33 @@ profesores_db = [
     },
     {
         "id": "DOC-702",
-        "nome": "Prof. Elena Rostova",
-        "titulo": "Mestre em Human-Computer Interaction (RCA)",
-        "departamento": "Product Design",
-        "cursos_lecionados": 3,
-        "avaliacao": "4.90 ⭐",
-        "email": "elena.rostova@lumen.edu",
+        "nome": "Dra. Beatriz Siqueira",
+        "titulo": "Doutora em Genética Molecular (Oxford)",
+        "departamento": "Biotecnologia & Biologia",
+        "cursos_lecionados": 5,
+        "avaliacao": "4.97 ⭐",
+        "email": "beatriz.siqueira@lumen.edu",
         "foto": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80"
     },
     {
         "id": "DOC-703",
-        "nome": "Dra. Sophia Chen",
-        "titulo": "PhD em Inteligência Artificial (Stanford)",
-        "departamento": "IA & Data Science",
-        "cursos_lecionados": 3,
-        "avaliacao": "4.98 ⭐",
-        "email": "sophia.chen@lumen.edu",
-        "foto": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80"
+        "nome": "Prof. Ing. Hugo Fonseca",
+        "titulo": "Mestre em Robótica & Controlo Autónomo (ETH Zürich)",
+        "departamento": "Engenharia Robótica",
+        "cursos_lecionados": 4,
+        "avaliacao": "4.94 ⭐",
+        "email": "hugo.fonseca@lumen.edu",
+        "foto": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80"
     },
     {
         "id": "DOC-704",
-        "nome": "Prof. Marcus Brody",
-        "titulo": "Especialista Principal em Segurança Cibernética",
-        "departamento": "Cybersecurity",
-        "cursos_lecionados": 4,
+        "nome": "Dr. Marcus Aurelius Vane",
+        "titulo": "PhD em Filosofia Contemporânea & Ética (Cambridge)",
+        "departamento": "Filosofia & Humanidades",
+        "cursos_lecionados": 3,
         "avaliacao": "4.96 ⭐",
-        "email": "marcus.brody@lumen.edu",
-        "foto": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80"
+        "email": "marcus.vane@lumen.edu",
+        "foto": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80"
     }
 ]
 
@@ -232,29 +308,29 @@ examenes_db = [
     },
     {
         "id": "EXM-302",
-        "disciplina": "Deep Learning & NLP",
-        "tipo": "Projeto de Tese Intermédio",
-        "data": "2026-09-15",
-        "duracao": "240 Minutos",
-        "alunos_inscritos": 128,
+        "disciplina": "Genómica Computacional",
+        "tipo": "Projeto de Investigação em Laboratório",
+        "data": "2026-09-14",
+        "duracao": "210 Minutos",
+        "alunos_inscritos": 115,
         "estado": "Agendado"
     },
     {
         "id": "EXM-303",
-        "disciplina": "Design Systems & UI",
-        "tipo": "Avaliação de Portfólio",
-        "data": "2026-09-02",
-        "duracao": "120 Minutos",
-        "alunos_inscritos": 110,
-        "estado": "Concluído"
+        "disciplina": "Robótica Móvel & Visão",
+        "tipo": "Demonstração Prática com Prototipagem",
+        "data": "2026-09-16",
+        "duracao": "240 Minutos",
+        "alunos_inscritos": 108,
+        "estado": "Agendado"
     },
     {
         "id": "EXM-304",
-        "disciplina": "Ethical Hacking",
-        "tipo": "Desafio CTF Red Team",
+        "disciplina": "Ética da Inteligência Artificial",
+        "tipo": "Ensaio Epistemológico Defesa",
         "data": "2026-09-18",
-        "duracao": "300 Minutos",
-        "alunos_inscritos": 104,
+        "duracao": "150 Minutos",
+        "alunos_inscritos": 95,
         "estado": "Agendado"
     }
 ]
@@ -308,8 +384,8 @@ def get_examenes():
 def get_stats():
     total_alunos = sum(c["alunos_inscritos"] for c in carreras_db)
     total_cursos = len(cursos_db)
-    taxa_conclusao = "94.8%"
-    media_gpa = "18.4 / 20"
+    taxa_conclusao = "95.6%"
+    media_gpa = "18.5 / 20"
     total_docentes = len(profesores_db)
     
     return jsonify({
