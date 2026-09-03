@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-theme="light">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJAJ AUTOPARTS — Sistema de Inventário Enterprise</title>
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- AUTODOC Spectrum Inventory CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v1">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="inventory-sidebar">
+        <div class="brand-autodoc-header">
+            <div class="brand-autodoc-logo">
+                <i class="fa-solid fa-gears"></i>
+            </div>
+            <div class="brand-autodoc-title">
+                <h1>EJAJ AUTOPARTS</h1>
+                <span>INVENTORY ENTERPRISE</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item active"><a href="#"><i class="fa-solid fa-boxes-stacked"></i> <span data-i18n="titleInventory">Catálogo & Stock</span></a></li>
+            <li class="sidebar-nav-item"><a href="javascript:void(0)" onclick="openJournalDrawer()"><i class="fa-solid fa-list-check"></i> <span data-i18n="btnJournal">Registo de Movimentos</span></a></li>
+            <li class="sidebar-nav-item"><a href="#"><i class="fa-solid fa-triangle-exclamation"></i> <span>Alertas Críticos</span></a></li>
+            <li class="sidebar-nav-item"><a href="#"><i class="fa-solid fa-truck-ramp-box"></i> <span>Fornecedores OEM</span></a></li>
+        </ul>
+
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-light);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-subtle); text-align: center;">
+                AUTODOC SPECTRUM SUITE v5.0<br>
+                Enmanuel Jimenez
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content App -->
+    <main class="inventory-main-content">
+        <!-- Topbar Header -->
+        <header class="inventory-topbar">
+            <div class="topbar-title">
+                <h2 data-i18n="titleInventory">Gestão de Inventário de Peças Auto</h2>
+                <p data-i18n="subtitleInventory">Catálogo industrial multi-atributo, controlo de stock em tempo real e registo auditável de entradas/saídas.</p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- Language Selector -->
+                <div style="display: flex; gap: 6px; background: var(--bg-card); padding: 4px; border-radius: 12px; border: 1px solid var(--border-light);">
+                    <button class="lang-btn active" data-lang="pt" onclick="setLanguage('pt')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">PT</button>
+                    <button class="lang-btn" data-lang="en" onclick="setLanguage('en')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">EN</button>
+                    <button class="lang-btn" data-lang="es" onclick="setLanguage('es')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">ES</button>
+                    <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')" style="background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer;">FR</button>
+                </div>
+
+                <button class="btn-autodoc-primary" onclick="openJournalDrawer()" style="background: var(--slate-graphite);">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span data-i18n="btnJournal">Movimentos</span>
+                </button>
+
+                <button class="btn-autodoc-primary" onclick="openNewProductModal()">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span data-i18n="btnNewProduct">Registar Nova Peça</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Dashboard Grid -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiValuation">Valor Total em Stock</label>
+                    <div class="kpi-icon orange"><i class="fa-solid fa-sack-dollar"></i></div>
+                </div>
+                <div class="kpi-value" id="kpiValuationVal" style="color: var(--autodoc-orange);">0 €</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiParts">Peças Catalogadas</label>
+                    <div class="kpi-icon blue"><i class="fa-solid fa-cubes"></i></div>
+                </div>
+                <div class="kpi-value" id="kpiPartsVal">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiAlerts">Alertas Críticos</label>
+                    <div class="kpi-icon coral"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                </div>
+                <div class="kpi-value" id="kpiAlertsVal" style="color: var(--accent-coral);">0</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <label data-i18n="kpiMovements">Movimentos Hoje</label>
+                    <div class="kpi-icon emerald"><i class="fa-solid fa-truck-fast"></i></div>
+                </div>
+                <div class="kpi-value" id="kpiMovementsVal">0</div>
+            </div>
+        </section>
+
+        <!-- Main Panel Table -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="tableHeaderTitle">Catálogo Geral de Peças Automóveis</h3>
+
+                <!-- Category Filters Bar -->
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-category="all" onclick="setCategoryFilter('all')" data-i18n="filterAll">Todas as Peças</button>
+                    <button class="filter-btn" data-category="Filtros & Motor" onclick="setCategoryFilter('Filtros & Motor')" data-i18n="filterMotor">Filtros & Motor</button>
+                    <button class="filter-btn" data-category="Sistema de Travões" onclick="setCategoryFilter('Sistema de Travões')" data-i18n="filterBrakes">Sistema de Travões</button>
+                    <button class="filter-btn" data-category="Suspensão & Direção" onclick="setCategoryFilter('Suspensão & Direção')" data-i18n="filterSuspension">Suspensão & Direção</button>
+                    <button class="filter-btn" data-category="Sistema Elétrico" onclick="setCategoryFilter('Sistema Elétrico')" data-i18n="filterElectric">Sistema Elétrico</button>
+                    <button class="filter-btn" data-category="Iluminação" onclick="setCategoryFilter('Iluminação')" data-i18n="filterLighting">Iluminação</button>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="searchBox" class="form-control" placeholder="Pesquisar por Referência OEM, SKU, Nome ou Modelo de Veículo..." onkeyup="renderProdutosTable()" data-i18n="tableSearchPlaceholder">
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="thSku">SKU / OEM</th>
+                            <th data-i18n="thPartName">Nome da Peça & Compatibilidade</th>
+                            <th data-i18n="thCategory">Categoria</th>
+                            <th data-i18n="thLocation">Localização</th>
+                            <th data-i18n="thStock">Stock</th>
+                            <th data-i18n="thPrice">Preço Venda</th>
+                            <th data-i18n="thStatus">Estado</th>
+                            <th data-i18n="thActions">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="produtosTableBody">
+                        <!-- Dynamic Rows Rendered by app.js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Form: New Auto Part -->
+    <div id="newProductModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h3 data-i18n="modalTitle" style="font-size: 22px; font-weight: 900; color: var(--autodoc-orange);">Registar Nova Peça no Inventário</h3>
+                    <p data-i18n="modalSubtitle" style="font-size: 13px; color: var(--text-subtle);">Preencha os atributos técnicos da peça automóvel.</p>
+                </div>
+                <button onclick="closeNewProductModal()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <form onsubmit="submitNewProductForm(event)">
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblOem">Referência OEM *</label>
+                        <input type="text" id="partOem" class="form-control" placeholder="Ex: OEM-13717597586" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblBrand">Marca *</label>
+                        <input type="text" id="partBrand" class="form-control" placeholder="Ex: BOSCH / BREMBO" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblPartName">Nome da Peça *</label>
+                    <input type="text" id="partName" class="form-control" placeholder="Ex: Filtro de Óleo de Alta Performance" required>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblCategory">Categoria *</label>
+                        <select id="partCategory" class="form-control">
+                            <option>Filtros & Motor</option>
+                            <option>Sistema de Travões</option>
+                            <option>Suspensão & Direção</option>
+                            <option>Sistema Elétrico</option>
+                            <option>Iluminação</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label data-i18n="lblLocation">Localização no Armazém *</label>
+                        <input type="text" id="partLocation" class="form-control" placeholder="Ex: Corredor A-04-02" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblCompatibility">Veículos Compatíveis *</label>
+                    <input type="text" id="partCompatibility" class="form-control" placeholder="Ex: BMW Série 3 (F30) / VW Golf VII" required>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label data-i18n="lblStockInit">Stock Inicial</label>
+                        <input type="number" id="partStock" class="form-control" value="20" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblStockMin">Min Alerta</label>
+                        <input type="number" id="partStockMin" class="form-control" value="10" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblCostPrice">Custo (€)</label>
+                        <input type="number" step="0.01" id="partCostPrice" class="form-control" value="15.00" required>
+                    </div>
+                    <div>
+                        <label data-i18n="lblSalePrice">Venda (€)</label>
+                        <input type="number" step="0.01" id="partSalePrice" class="form-control" value="35.00" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-autodoc-primary" style="width: 100%; justify-content: center; padding: 14px; margin-top: 10px;">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span data-i18n="btnSubmitPart">Guardar no Inventário</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Form: Stock Movement Logger -->
+    <div id="movementModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h3 data-i18n="movModalTitle" style="font-size: 22px; font-weight: 900; color: var(--autodoc-orange);">Registar Movimento de Stock</h3>
+                    <p id="movTargetName" style="font-size: 13px; color: var(--text-subtle); font-weight: 800;">Peça</p>
+                </div>
+                <button onclick="closeMovementModal()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <form onsubmit="submitMovementForm(event)">
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div>
+                        <label data-i18n="lblMovType">Tipo de Movimento *</label>
+                        <select id="movTypeSelect" class="form-control">
+                            <option value="Entrada">Entrada (Recebimento)</option>
+                            <option value="Saída">Saída (Expedição)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label data-i18n="lblMovQty">Quantidade *</label>
+                        <input type="number" id="movQtyInput" class="form-control" value="1" min="1" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="lblMovReason">Motivo / Ref. Documento *</label>
+                    <input type="text" id="movReasonInput" class="form-control" placeholder="Ex: Recebimento Fornecedor / Encomenda #5541" required>
+                </div>
+
+                <button type="submit" class="btn-autodoc-primary" style="width: 100%; justify-content: center; padding: 14px; margin-top: 10px;">
+                    <i class="fa-solid fa-check-to-slot"></i>
+                    <span data-i18n="btnSubmitMov">Confirmar Movimento</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Movement Journal Drawer -->
+    <div id="journalDrawerBackdrop" class="journal-drawer-backdrop" onclick="closeJournalDrawer()">
+        <div class="journal-drawer-panel" onclick="event.stopPropagation()">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--border-light);">
+                <div>
+                    <h3 style="font-size: 20px; font-weight: 900; color: var(--autodoc-orange);">Registo de Movimentos (Audit Log)</h3>
+                    <p style="font-size: 13px; color: var(--text-subtle); font-weight: 700;">Histórico em tempo real de Entradas e Saídas</p>
+                </div>
+                <button onclick="closeJournalDrawer()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <div id="journalListContainer" style="flex-grow: 1; overflow-y: auto; margin-top: 20px;">
+                <!-- Movement journal list rendered dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JS Engine -->
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v1"></script>
+</body>
+</html>
