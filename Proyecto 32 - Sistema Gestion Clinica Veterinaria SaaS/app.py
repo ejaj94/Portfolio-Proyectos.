@@ -150,7 +150,7 @@ mascotas_db = [
         "microchip": "941000088990011",
         "tutor": "Alexandre Fontes",
         "contacto": "+351 931 445 566",
-        "foto": "https://images.unsplash.com/photo-1508455715210-53cc9c1851e3?auto=format&fit=crop&w=600&q=80",
+        "foto": "/static/images/tobias_tartaruga.jpg",
         "diagnostico_servico": "Serviço: Check-up de Carapaça, Calcinose Preventiva & Desparasitação de Réptil",
         "ultima_consulta": "2026-08-20"
     },
