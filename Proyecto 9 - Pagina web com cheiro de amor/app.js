@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
     {
+        id: "candle-concha_de_ondas-1",
+        category: "vaso",
+        price: 6.90,
+        image: "assets/vela_concha_de_ondas.jpg",
+        qty: 1,
+        pt: {
+            name: "Concha de Ondas",
+            categoryLabel: "Velas Aromáticas Oceânicas em Cerâmica",
+            aromaBrief: "Delicada concha de cerâmica com efeito 3D de ondas do mar cristalinas, espuma e conchinhas naturais.",
+            description: "Uma obra-prima inspirada na serenidade do oceano! Esta encantadora vela artesanal é apresentada num gracioso prato de cerâmica branca em formato de concha. Composta por cera de gel de alta transparência que recria com perfeição as ondas azuis do mar a rebentar na areia, com espuma branca detalhada, conchas marinhas genuínas e pavio duplo para uma queima harmoniosa. Traz a brisa marinha e a frescura do mar para a sua casa.",
+            aromaProfile: "Brisa Marinha, Flor de Sal, Lírio do Vale, Algas Frescas, Almíscar Suave"
+        },
+        es: {
+            name: "Concha de Olas",
+            categoryLabel: "Velas Aromáticas Oceánicas en Cerámica",
+            aromaBrief: "Delicada concha de cerámica con efecto 3D de olas del mar cristalinas, espuma y conchitas naturales.",
+            description: "¡Una obra maestra inspirada en la serenidad del océano! Esta encantadora vela artesanal se presenta en un gracioso plato de cerámica blanca con forma de concha. Compuesta por cera de gel de alta transparencia que recrea las olas azules del mar rompiendo en la arena, con espuma blanca detallada, conchas marinas genuinas y doble mecha.",
+            aromaProfile: "Brisa Marina, Flor de Sal, Lirio del Valle, Algas Frescas, Almizcle Suave"
+        },
+        en: {
+            name: "Ocean Wave Shell Candle",
+            categoryLabel: "Oceanic Ceramic Shell Scented Candle",
+            aromaBrief: "Delicate white ceramic shell dish with 3D crystal blue ocean waves, seafoam, and natural shells.",
+            description: "An ocean-inspired masterpiece! This charming handcrafted candle is set in a graceful white ceramic shell-shaped dish. Crafted with crystal-clear gel wax mimicking turquoise ocean waves crashing onto sandy shores with detailed white seafoam, genuine seashells, and double cotton wicks for a serene ambiance.",
+            aromaProfile: "Ocean Breeze, Sea Salt, Lily of the Valley, Fresh Algae, Soft Musk"
+        },
+        fr: {
+            name: "Coquillage de Vagues",
+            categoryLabel: "Bougie Aromatique Océanique en Céramique",
+            aromaBrief: "Délicieux coquillage en céramique avec effet 3D de vagues bleues, écume et coquillages naturels.",
+            description: "Une création poétique inspirée par la sérénité de l'océan ! Cette superbe bougie artisanale est coulée dans une élégante coupelle en céramique blanche en forme de coquillage. Composée de cire gel transparente reproduisant les vagues turquoise s'échouant sur le sable.",
+            aromaProfile: "Brise Marine, Fleur de Sel, Muguet, Algues Fraîches, Musc Doux"
+        }
+    },
+    {
         id: "candle-ice_coffee-1",
         category: "vaso",
         price: 10.90,
