@@ -40,9 +40,9 @@ propiedades_db = [
         "tipologia": "T3 • 2 WC • 140m²",
         "proprietario": "Ana Vasconcelos",
         "estado": "Alugado",
-        "foto": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80",
+        "foto": "/static/images/moradia_t3.jpg",
         "galeria": [
-            {"url": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80", "legenda": "Fachada Principal & Relvado Privativo"},
+            {"url": "/static/images/moradia_t3.jpg", "legenda": "Fachada Principal & Relvado Privativo"},
             {"url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", "legenda": "Sala de Estar Aberta com Lareira"},
             {"url": "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80", "legenda": "Cozinha Moderna com Ilha Central"},
             {"url": "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80", "legenda": "Quarto de Casal Confortável"}
@@ -265,5 +265,5 @@ def get_stats():
     })
 
 if __name__ == "__main__":
-    print("Iniciando GESTOR DE PROPRIEDADES INMOBILIARIAS SAAS em http://localhost:5950")
-    app.run(host="0.0.0.0", port=5950, debug=False)
+    print("Iniciando GESTOR DE PROPRIEDADES INMOBILIARIAS SAAS em http://localhost:6000")
+    app.run(host="0.0.0.0", port=6000, debug=False)
