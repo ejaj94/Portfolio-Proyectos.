@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Property Management Lilac/Purple CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v1000">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v99999">
 </head>
 <body>
 
@@ -177,6 +177,32 @@
         </section>
     </main>
 
+    <!-- PHOTO GALLERY MODAL -->
+    <div id="galleryModal" class="modal-backdrop">
+        <div class="gallery-modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px;">
+                <div>
+                    <h3 id="galleryTitle" style="font-size: 22px; font-weight: 900; color: var(--purple-dark);">Galeria do Imóvel</h3>
+                    <p id="galleryAddress" style="font-size: 13px; color: var(--text-subtle); font-weight: 700;">Morada da propriedade</p>
+                </div>
+                <button onclick="closeGalleryModal()" style="background: transparent; border: none; font-size: 26px; cursor: pointer; color: var(--text-subtle);">&times;</button>
+            </div>
+
+            <!-- Viewer Container -->
+            <div class="gallery-viewer">
+                <button class="gallery-nav-btn gallery-nav-prev" onclick="prevGalleryImage()"><i class="fa-solid fa-chevron-left"></i></button>
+                <img id="galleryMainImg" class="gallery-main-img" src="" alt="Galeria">
+                <div id="galleryCaption" class="gallery-caption">Legenda da Foto</div>
+                <button class="gallery-nav-btn gallery-nav-next" onclick="nextGalleryImage()"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <!-- Thumbnails Container -->
+            <div id="galleryThumbsContainer" class="gallery-thumbs-wrapper">
+                <!-- Dynamic Thumbnails -->
+            </div>
+        </div>
+    </div>
+
     <!-- NEW PROPERTY REGISTRATION MODAL -->
     <div id="newPropertyModal" class="modal-backdrop">
         <div class="modal-box">
@@ -235,6 +261,6 @@
     </div>
 
     <!-- Custom JS Engine -->
-    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v1000"></script>
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v99999"></script>
 </body>
 </html>

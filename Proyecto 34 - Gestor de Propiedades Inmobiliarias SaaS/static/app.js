@@ -1,4 +1,4 @@
-/* NEXUS REALTY & PROPERTY SaaS — JAVASCRIPT ENGINE */
+/* NEXUS REALTY & PROPERTY SaaS — JAVASCRIPT ENGINE WITH PHOTO GALLERY MODAL */
 
 const i18n = {
     pt: {
@@ -185,6 +185,10 @@ let rawInquilinosData = [];
 let rawPagosData = [];
 let rawIncidenciasData = [];
 
+// Gallery Modal Active State
+let currentGalleryProperty = null;
+let currentGalleryIndex = 0;
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchStats();
     fetchPropiedades();
@@ -279,11 +283,13 @@ function renderPropiedades() {
         
         const card = document.createElement('div');
         card.className = 'property-card';
+        card.onclick = () => openGalleryModal(p.id);
         
         card.innerHTML = `
             <div class="property-img-container">
                 <img src="${p.foto}" alt="${p.titulo}" class="property-img">
                 <span class="property-badge ${badgeClass}">${p.estado}</span>
+                <button class="btn-open-gallery"><i class="fa-solid fa-images"></i> Ver Galeria</button>
             </div>
             <div class="property-body">
                 <h3 class="property-title">${p.titulo}</h3>
@@ -381,6 +387,63 @@ function renderIncidencias() {
         `;
         tbody.appendChild(tr);
     });
+}
+
+// PHOTO GALLERY MODAL ENGINE
+function openGalleryModal(propId) {
+    const prop = rawPropiedadesData.find(p => p.id === propId);
+    if (!prop) return;
+    
+    currentGalleryProperty = prop;
+    currentGalleryIndex = 0;
+    
+    document.getElementById('galleryTitle').innerText = prop.titulo;
+    document.getElementById('galleryAddress').innerText = prop.morada + ' • ' + prop.tipologia;
+    
+    updateGalleryViewer();
+    document.getElementById('galleryModal').classList.add('active');
+}
+
+function closeGalleryModal() {
+    document.getElementById('galleryModal').classList.remove('active');
+}
+
+function updateGalleryViewer() {
+    if (!currentGalleryProperty || !currentGalleryProperty.galeria) return;
+    
+    const item = currentGalleryProperty.galeria[currentGalleryIndex];
+    const mainImg = document.getElementById('galleryMainImg');
+    const caption = document.getElementById('galleryCaption');
+    const thumbsContainer = document.getElementById('galleryThumbsContainer');
+    
+    mainImg.src = item.url;
+    caption.innerText = item.legenda || `Foto ${currentGalleryIndex + 1}`;
+    
+    thumbsContainer.innerHTML = '';
+    currentGalleryProperty.galeria.forEach((g, idx) => {
+        const thumb = document.createElement('div');
+        thumb.className = `gallery-thumb ${idx === currentGalleryIndex ? 'active' : ''}`;
+        thumb.onclick = () => {
+            currentGalleryIndex = idx;
+            updateGalleryViewer();
+        };
+        thumb.innerHTML = `<img src="${g.url}" alt="${g.legenda}">`;
+        thumbsContainer.appendChild(thumb);
+    });
+}
+
+function prevGalleryImage() {
+    if (!currentGalleryProperty) return;
+    const total = currentGalleryProperty.galeria.length;
+    currentGalleryIndex = (currentGalleryIndex - 1 + total) % total;
+    updateGalleryViewer();
+}
+
+function nextGalleryImage() {
+    if (!currentGalleryProperty) return;
+    const total = currentGalleryProperty.galeria.length;
+    currentGalleryIndex = (currentGalleryIndex + 1) % total;
+    updateGalleryViewer();
 }
 
 // Modal Form Controller

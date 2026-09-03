@@ -12,7 +12,7 @@ def add_no_cache_headers(response):
     response.headers["Expires"] = "0"
     return response
 
-# Initial Real Estate Property Management Mock Database
+# Initial Real Estate Property Management Mock Database with Photo Galleries
 propiedades_db = [
     {
         "id": "PROP-101",
@@ -23,11 +23,16 @@ propiedades_db = [
         "tipologia": "T2 • 1 WC • 85m²",
         "proprietario": "Carlos Silva",
         "estado": "Alugado",
-        "foto": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80"
+        "foto": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+        "galeria": [
+            {"url": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80", "legenda": "Sala de Estar Espaçosa & Luminosa"},
+            {"url": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80", "legenda": "Cozinha Totalmente Equipada"},
+            {"url": "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80", "legenda": "Quarto Principal com Roupeiro Embutido"},
+            {"url": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", "legenda": "Casa de Banho Renovada"}
+        ]
     },
     {
         "id": "PROP-102",
-        "nome_curto": "Moradia Jardim T3",
         "titulo": "Moradia Geminada T3 com Jardim",
         "tipo": "Moradia",
         "morada": "Rua dos Pinheiros 28, Setúbal",
@@ -35,7 +40,13 @@ propiedades_db = [
         "tipologia": "T3 • 2 WC • 140m²",
         "proprietario": "Ana Vasconcelos",
         "estado": "Alugado",
-        "foto": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80"
+        "foto": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80",
+        "galeria": [
+            {"url": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80", "legenda": "Fachada Principal & Relvado Privativo"},
+            {"url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", "legenda": "Sala de Estar Aberta com Lareira"},
+            {"url": "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80", "legenda": "Cozinha Moderna com Ilha Central"},
+            {"url": "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80", "legenda": "Quarto de Casal Confortável"}
+        ]
     },
     {
         "id": "PROP-103",
@@ -46,7 +57,12 @@ propiedades_db = [
         "tipologia": "T1 • 1 WC • 48m²",
         "proprietario": "Ricardo Alvares",
         "estado": "Disponível",
-        "foto": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80"
+        "foto": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+        "galeria": [
+            {"url": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80", "legenda": "Zona de Estar & Cama Integrada"},
+            {"url": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80", "legenda": "Kitchinete Compacta Equipada"},
+            {"url": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", "legenda": "Casa de Banho Privativa com Poliban"}
+        ]
     },
     {
         "id": "PROP-104",
@@ -57,7 +73,13 @@ propiedades_db = [
         "tipologia": "T3 • 2 WC • 110m²",
         "proprietario": "Beatriz Lima",
         "estado": "Alugado",
-        "foto": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=600&q=80"
+        "foto": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80",
+        "galeria": [
+            {"url": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80", "legenda": "Sala Panorâmica com Vista para o Rio"},
+            {"url": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80", "legenda": "Cozinha com Zona de Refeições"},
+            {"url": "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80", "legenda": "Quarto T3 com Varanda"},
+            {"url": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", "legenda": "Casa de Banho de Serviço"}
+        ]
     },
     {
         "id": "PROP-105",
@@ -68,7 +90,12 @@ propiedades_db = [
         "tipologia": "T2 • 1.5 WC • 95m²",
         "proprietario": "Dr. Fernando Siqueira",
         "estado": "Em Manutenção",
-        "foto": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+        "foto": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+        "galeria": [
+            {"url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80", "legenda": "Entrada Principal Townhouse Cascais"},
+            {"url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", "legenda": "Sala Aconchegante"},
+            {"url": "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80", "legenda": "Cozinha Americana"}
+        ]
     }
 ]
 
@@ -187,6 +214,7 @@ def criar_propriedade():
     data = request.json or {}
     new_id = f"PROP-{100 + len(propiedades_db) + 1}"
     
+    cover_photo = "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
     nova_propriedade = {
         "id": new_id,
         "titulo": data.get("titulo", "Nova Propriedade Residencial"),
@@ -196,7 +224,12 @@ def criar_propriedade():
         "tipologia": f"{data.get('tipologia', 'T2')} • 1 WC • 80m²",
         "proprietario": data.get("proprietario", "Proprietário Registado"),
         "estado": "Disponível",
-        "foto": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80"
+        "foto": cover_photo,
+        "galeria": [
+            {"url": cover_photo, "legenda": "Vista Geral da Propriedade"},
+            {"url": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80", "legenda": "Cozinha Equipada"},
+            {"url": "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80", "legenda": "Quarto Confortável"}
+        ]
     }
     
     propiedades_db.insert(0, nova_propriedade)
@@ -232,5 +265,5 @@ def get_stats():
     })
 
 if __name__ == "__main__":
-    print("Iniciando GESTOR DE PROPRIEDADES INMOBILIARIAS SAAS em http://localhost:5850")
-    app.run(host="0.0.0.0", port=5850, debug=False)
+    print("Iniciando GESTOR DE PROPRIEDADES INMOBILIARIAS SAAS em http://localhost:5900")
+    app.run(host="0.0.0.0", port=5900, debug=False)
