@@ -122,7 +122,7 @@ mascotas_db = [
         "microchip": "941000066778899",
         "tutor": "Tiago Carvalhal",
         "contacto": "+351 918 776 554",
-        "foto": "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=600&q=80",
+        "foto": "/static/images/oliver_mainecoon.jpg",
         "diagnostico_servico": "Serviço: Ecocardiograma Preventivo & Reforço de Vacina Leucemia Felina (FeLV)",
         "ultima_consulta": "2026-09-01"
     },
