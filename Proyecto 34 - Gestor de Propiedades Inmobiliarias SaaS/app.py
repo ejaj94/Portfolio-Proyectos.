@@ -265,5 +265,5 @@ def get_stats():
     })
 
 if __name__ == "__main__":
-    print("Iniciando GESTOR DE PROPRIEDADES INMOBILIARIAS SAAS em http://localhost:6000")
-    app.run(host="0.0.0.0", port=6000, debug=False)
+    print("Iniciando GESTOR DE PROPRIEDADES INMOBILIARIAS SAAS em http://localhost:5880")
+    app.run(host="0.0.0.0", port=5880, debug=False)
