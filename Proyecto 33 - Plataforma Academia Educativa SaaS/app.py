@@ -397,5 +397,5 @@ def get_stats():
     })
 
 if __name__ == "__main__":
-    print("Iniciando PLATAFORMA ACADEMIA EDUCATIVA SAAS em http://localhost:5750")
-    app.run(host="0.0.0.0", port=5750, debug=False)
+    print("Iniciando PLATAFORMA ACADEMIA EDUCATIVA SAAS em http://localhost:5800")
+    app.run(host="0.0.0.0", port=5800, debug=False)
