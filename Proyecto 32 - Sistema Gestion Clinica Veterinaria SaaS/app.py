@@ -366,5 +366,5 @@ def get_stats():
     })
 
 if __name__ == "__main__":
-    print("Iniciando SISTEMA GESTÃO CLÍNICA VETERINÁRIA SAAS em http://localhost:5650")
-    app.run(host="0.0.0.0", port=5650, debug=False)
+    print("Iniciando SISTEMA GESTÃO CLÍNICA VETERINÁRIA SAAS em http://localhost:5700")
+    app.run(host="0.0.0.0", port=5700, debug=False)
