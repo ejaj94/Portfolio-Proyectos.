@@ -24,7 +24,8 @@ mascotas_db = [
         "microchip": "941000028919201",
         "tutor": "Ana Vasconcelos",
         "contacto": "+351 914 556 778",
-        "foto": "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=400&q=80",
+        "foto": "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Diagnóstico: Otite Externa Biliar Ligeira • Serviço: Limpeza Auricular & Antibiótico",
         "ultima_consulta": "2026-08-28"
     },
     {
@@ -37,7 +38,8 @@ mascotas_db = [
         "microchip": "941000088192831",
         "tutor": "Gonçalo Mendonça",
         "contacto": "+351 962 114 889",
-        "foto": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=400&q=80",
+        "foto": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Serviço: Tartrectomia Dentária Ultrassónica & Desparasitação Interna",
         "ultima_consulta": "2026-09-01"
     },
     {
@@ -50,21 +52,79 @@ mascotas_db = [
         "microchip": "941000077162541",
         "tutor": "Carolina Fonseca",
         "contacto": "+351 933 778 990",
-        "foto": "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=400&q=80",
+        "foto": "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Diagnóstico: Dermatite Atópica Canina • Serviço: Champôterapia & Hipoalergénico",
         "ultima_consulta": "2026-09-02"
     },
     {
         "id": "PET-104",
         "nome": "Kiwi",
         "especie": "Exótico",
-        "raca": "Papagaio-Cinzento",
+        "raca": "Papagaio-Cinzento (Psittacus erithacus)",
         "idade": "4 anos",
-        "peso": "0.5 kg",
+        "peso": "0.48 kg",
         "microchip": "941000055443322",
         "tutor": "Dr. Manuel Santos",
         "contacto": "+351 919 443 221",
-        "foto": "https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=400&q=80",
+        "foto": "https://images.unsplash.com/photo-1544943970-2ef8344e138a?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Serviço: Corte Pedicura de Unhas, Manutenção de Bico & Exame Parasitológico de Penas",
         "ultima_consulta": "2026-08-15"
+    },
+    {
+        "id": "PET-105",
+        "nome": "Rex",
+        "especie": "Cão",
+        "raca": "Pastor Alemão",
+        "idade": "5 anos",
+        "peso": "38.0 kg",
+        "microchip": "941000099881122",
+        "tutor": "Ricardo Alvares",
+        "contacto": "+351 912 345 678",
+        "foto": "https://images.unsplash.com/photo-1589941013453-ec89f33b5e95?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Diagnóstico: Displasia Coxofemoral Grau I • Serviço: Fisioterapia & Condroprotetores",
+        "ultima_consulta": "2026-09-02"
+    },
+    {
+        "id": "PET-106",
+        "nome": "Mimi",
+        "especie": "Gato",
+        "raca": "Siamês Tradicional",
+        "idade": "3 anos",
+        "peso": "3.8 kg",
+        "microchip": "941000044556677",
+        "tutor": "Beatriz Lima",
+        "contacto": "+351 965 432 109",
+        "foto": "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Diagnóstico: Gastroenterite Ligeira • Serviço: Fluidoterapia & Dieta Gastrointestinal",
+        "ultima_consulta": "2026-09-03"
+    },
+    {
+        "id": "PET-107",
+        "nome": "Barnabé",
+        "especie": "Exótico",
+        "raca": "Coelho Holland Lop",
+        "idade": "1 ano",
+        "peso": "1.8 kg",
+        "microchip": "941000033221100",
+        "tutor": "Sofia Carvalhal",
+        "contacto": "+351 931 112 233",
+        "foto": "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Serviço: Desgaste Dentário Preventivo, Vacinação Mixomatose & Suplementação Feno",
+        "ultima_consulta": "2026-08-30"
+    },
+    {
+        "id": "PET-108",
+        "nome": "Oliver",
+        "especie": "Gato",
+        "raca": "Maine Coon",
+        "idade": "4 anos",
+        "peso": "8.5 kg",
+        "microchip": "941000066778899",
+        "tutor": "Tiago Carvalhal",
+        "contacto": "+351 918 776 554",
+        "foto": "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=600&q=80",
+        "diagnostico_servico": "Serviço: Ecocardiograma Preventivo & Reforço de Vacina Leucemia Felina (FeLV)",
+        "ultima_consulta": "2026-09-01"
     }
 ]
 
@@ -75,6 +135,7 @@ citas_db = [
         "tutor": "Ana Vasconcelos",
         "veterinario": "Dra. Maria Luz (Clínica Geral)",
         "motivo": "Check-up Anual & Vacina Rábica",
+        "diagnostico_previsto": "Limpeza Auricular & Vacinação",
         "data": "2026-09-04",
         "hora": "10:30",
         "estado": "Confirmada"
@@ -85,19 +146,43 @@ citas_db = [
         "tutor": "Gonçalo Mendonça",
         "veterinario": "Dr. Pedro Alves (Felinologia)",
         "motivo": "Limpeza Dentária e Desparasitação",
+        "diagnostico_previsto": "Tartrectomia Ultrassónica",
         "data": "2026-09-04",
         "hora": "11:45",
         "estado": "Em Espera"
     },
     {
         "id": "CIT-503",
-        "mascota": "Luna (French Bulldog)",
-        "tutor": "Carolina Fonseca",
-        "veterinario": "Dra. Maria Luz (Clínica Geral)",
-        "motivo": "Avaliação Dermatológica Alérgica",
-        "data": "2026-09-03",
-        "hora": "16:00",
-        "estado": "Concluída"
+        "mascota": "Kiwi (Papagaio-Cinzento)",
+        "tutor": "Dr. Manuel Santos",
+        "veterinario": "Dr. Hugo Rocha (Animais Exóticos)",
+        "motivo": "Corte de Unhas & Exame de Penas",
+        "diagnostico_previsto": "Check-up Aviário & Pedicura",
+        "data": "2026-09-04",
+        "hora": "15:00",
+        "estado": "Confirmada"
+    },
+    {
+        "id": "CIT-504",
+        "mascota": "Rex (Pastor Alemão)",
+        "tutor": "Ricardo Alvares",
+        "veterinario": "Dra. Maria Luz (Ortopedia)",
+        "motivo": "Sessão de Fisioterapia Coxofemoral",
+        "diagnostico_previsto": "Reabilitação Articular",
+        "data": "2026-09-05",
+        "hora": "09:30",
+        "estado": "Confirmada"
+    },
+    {
+        "id": "CIT-505",
+        "mascota": "Mimi (Gato Siamês)",
+        "tutor": "Beatriz Lima",
+        "veterinario": "Dr. Pedro Alves (Felinologia)",
+        "motivo": "Revisão Gastroenterite & Nutrição",
+        "diagnostico_previsto": "Ecografia Abdominal",
+        "data": "2026-09-05",
+        "hora": "14:15",
+        "estado": "Em Espera"
     }
 ]
 
@@ -120,10 +205,26 @@ vacunas_db = [
     },
     {
         "id": "VAC-803",
-        "mascota": "Luna",
+        "mascota": "Kiwi",
+        "vacuna": "Suplementação & Vitaminas Penas",
+        "data_aplicacao": "2026-06-01",
+        "proxima_dose": "2026-12-01",
+        "estado": "Em Dia"
+    },
+    {
+        "id": "VAC-804",
+        "mascota": "Rex",
         "vacuna": "Eurican DHPPi (Esgana/Parvovirose)",
-        "data_aplicacao": "2026-02-14",
-        "proxima_dose": "2027-02-14",
+        "data_aplicacao": "2026-01-20",
+        "proxima_dose": "2027-01-20",
+        "estado": "Em Dia"
+    },
+    {
+        "id": "VAC-805",
+        "mascota": "Barnabé",
+        "vacuna": "Nobivac Myxo-RHD (Mixomatose Coelho)",
+        "data_aplicacao": "2026-04-15",
+        "proxima_dose": "2027-04-15",
         "estado": "Em Dia"
     }
 ]
@@ -141,13 +242,12 @@ def criar_mascota():
     data = request.json or {}
     new_id = f"PET-{100 + len(mascotas_db) + 1}"
     
-    # Default pet images by species
     especie = data.get("especie", "Cão")
-    foto = "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=400&q=80"
+    foto = "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80"
     if especie == "Gato":
-        foto = "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=400&q=80"
+        foto = "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80"
     elif especie == "Exótico":
-        foto = "https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=400&q=80"
+        foto = "https://images.unsplash.com/photo-1544943970-2ef8344e138a?auto=format&fit=crop&w=600&q=80"
         
     nova_mascota = {
         "id": new_id,
@@ -160,6 +260,7 @@ def criar_mascota():
         "tutor": data.get("tutor", "Tutor Registado"),
         "contacto": data.get("contacto", "+351 900 000 000"),
         "foto": foto,
+        "diagnostico_servico": data.get("diagnostico_servico", "Serviço: Check-up Clínico Geral & Desparasitação"),
         "ultima_consulta": datetime.now().strftime("%Y-%m-%d")
     }
     
@@ -181,6 +282,7 @@ def criar_cita():
         "tutor": data.get("tutor", "Ana Vasconcelos"),
         "veterinario": data.get("veterinario", "Dra. Maria Luz"),
         "motivo": data.get("motivo", "Consulta Geral"),
+        "diagnostico_previsto": data.get("diagnostico_previsto", "Avaliação Médica"),
         "data": data.get("data", datetime.now().strftime("%Y-%m-%d")),
         "hora": data.get("hora", "14:00"),
         "estado": "Confirmada"

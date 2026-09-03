@@ -230,7 +230,7 @@ body {
 /* Pet Patient Gallery Grid */
 .pet-gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 24px;
     margin-bottom: 40px;
 }
@@ -242,6 +242,8 @@ body {
     overflow: hidden;
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
+    display: flex;
+    flex-direction: column;
 }
 
 .pet-card:hover {
@@ -250,14 +252,26 @@ body {
     border-color: var(--solar-orange);
 }
 
+.pet-image-container {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: var(--slate-black);
+    position: relative;
+}
+
 .pet-card-image {
     width: 100%;
-    height: 180px;
+    height: 100%;
     object-fit: cover;
+    object-position: center;
 }
 
 .pet-card-body {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .pet-header {
@@ -269,13 +283,13 @@ body {
 
 .pet-name {
     font-family: var(--font-heading);
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 900;
     color: var(--slate-black);
 }
 
 .species-badge {
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 12px;
     font-size: 11px;
     font-weight: 900;
@@ -292,6 +306,19 @@ body {
     margin-bottom: 12px;
 }
 
+/* Medical Diagnosis Box */
+.pet-diagnosis-box {
+    background: #fff7ed;
+    border-left: 4px solid var(--solar-orange);
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--slate-black);
+    line-height: 1.4;
+}
+
 .pet-tutor-box {
     background: var(--bg-main);
     padding: 10px 14px;
@@ -302,6 +329,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-top: auto;
 }
 
 /* Data Tables & Panels */

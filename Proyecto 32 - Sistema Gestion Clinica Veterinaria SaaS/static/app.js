@@ -23,7 +23,7 @@ const i18n = {
         thPet: "Mascota",
         thTutor: "Tutor",
         thVet: "Veterinário",
-        thReason: "Motivo da Consulta",
+        thReason: "Motivo & Diagnóstico",
         thDateTime: "Data & Hora",
         thStatus: "Estado",
         
@@ -37,6 +37,7 @@ const i18n = {
         lblChip: "Número de Microchip *",
         lblTutorName: "Nome do Tutor *",
         lblContact: "Contacto Telefónico *",
+        lblDiagnosis: "Diagnóstico Médico ou Serviço *",
         btnSubmitPet: "Guardar Ficha do Paciente"
     },
     en: {
@@ -61,7 +62,7 @@ const i18n = {
         thPet: "Pet",
         thTutor: "Pet Owner",
         thVet: "Veterinarian",
-        thReason: "Reason for Visit",
+        thReason: "Reason & Diagnosis",
         thDateTime: "Date & Time",
         thStatus: "Status",
         
@@ -75,6 +76,7 @@ const i18n = {
         lblChip: "Microchip Number *",
         lblTutorName: "Pet Owner Name *",
         lblContact: "Phone Contact *",
+        lblDiagnosis: "Medical Diagnosis / Service *",
         btnSubmitPet: "Save Pet Record"
     },
     es: {
@@ -99,7 +101,7 @@ const i18n = {
         thPet: "Mascota",
         thTutor: "Propietario",
         thVet: "Veterinario",
-        thReason: "Motivo de Consulta",
+        thReason: "Motivo y Diagnóstico",
         thDateTime: "Fecha y Hora",
         thStatus: "Estado",
         
@@ -113,6 +115,7 @@ const i18n = {
         lblChip: "Número de Microchip *",
         lblTutorName: "Nombre del Propietario *",
         lblContact: "Contacto Telefónico *",
+        lblDiagnosis: "Diagnóstico Médico o Servicio *",
         btnSubmitPet: "Guardar Ficha de Paciente"
     },
     fr: {
@@ -137,7 +140,7 @@ const i18n = {
         thPet: "Animal",
         thTutor: "Propriétaire",
         thVet: "Vétérinaire",
-        thReason: "Motif de Consultation",
+        thReason: "Motif & Diagnostic",
         thDateTime: "Date & Heure",
         thStatus: "Statut",
         
@@ -151,6 +154,7 @@ const i18n = {
         lblChip: "Numéro de Puce *",
         lblTutorName: "Nom du Propriétaire *",
         lblContact: "Téléphone *",
+        lblDiagnosis: "Diagnostic Médical ou Service *",
         btnSubmitPet: "Enregistrer le Dossier"
     }
 };
@@ -252,7 +256,8 @@ function renderPetGallery() {
             
         const matchesSearch = m.nome.toLowerCase().includes(searchVal) ||
             m.raca.toLowerCase().includes(searchVal) ||
-            m.tutor.toLowerCase().includes(searchVal);
+            m.tutor.toLowerCase().includes(searchVal) ||
+            (m.diagnostico_servico && m.diagnostico_servico.toLowerCase().includes(searchVal));
             
         return matchesFilter && matchesSearch;
     });
@@ -272,7 +277,9 @@ function renderPetGallery() {
         card.className = 'pet-card';
         
         card.innerHTML = `
-            <img src="${m.foto}" alt="${m.nome}" class="pet-card-image">
+            <div class="pet-image-container">
+                <img src="${m.foto}" alt="${m.nome}" class="pet-card-image">
+            </div>
             <div class="pet-card-body">
                 <div class="pet-header">
                     <h4 class="pet-name">${m.nome}</h4>
@@ -283,8 +290,12 @@ function renderPetGallery() {
                     <strong>${m.raca}</strong> • ${m.idade} • ${m.peso}
                 </div>
                 
-                <div style="font-size: 11px; color: var(--text-subtle); font-weight: 700; margin-bottom: 12px;">
+                <div style="font-size: 11px; color: var(--text-subtle); font-weight: 700; margin-bottom: 10px;">
                     <i class="fa-solid fa-microchip" style="color: var(--solar-orange);"></i> CHIP: ${m.microchip}
+                </div>
+                
+                <div class="pet-diagnosis-box">
+                    <i class="fa-solid fa-stethoscope" style="color: var(--solar-orange-dark);"></i> ${m.diagnostico_servico || 'Serviço: Check-up Clínico Geral'}
                 </div>
                 
                 <div class="pet-tutor-box">
@@ -315,7 +326,10 @@ function renderCitasTable() {
             <td style="font-weight: 900;">${c.mascota}</td>
             <td>${c.tutor}</td>
             <td><span style="font-size: 12px; font-weight: 800; color: var(--text-muted);">${c.veterinario}</span></td>
-            <td>${c.motivo}</td>
+            <td>
+                <div style="font-weight: 800;">${c.motivo}</div>
+                <div style="font-size: 11px; color: var(--solar-orange-dark); font-weight: 700;">Diagnóstico: ${c.diagnostico_previsto || 'Avaliação Médica'}</div>
+            </td>
             <td><i class="fa-regular fa-clock" style="color: var(--solar-orange);"></i> ${c.data} às ${c.hora}</td>
             <td><span style="padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 900; ${statusStyle}">${c.estado}</span></td>
         `;
@@ -364,7 +378,8 @@ function submitNewPetForm(event) {
         peso: document.getElementById('petWeightInput').value.trim(),
         microchip: document.getElementById('petChipInput').value.trim(),
         tutor: document.getElementById('tutorNameInput').value.trim(),
-        contacto: document.getElementById('tutorContactInput').value.trim()
+        contacto: document.getElementById('tutorContactInput').value.trim(),
+        diagnostico_servico: document.getElementById('petDiagnosisInput').value.trim() || 'Serviço: Check-up Clínico Geral'
     };
     
     fetch('/api/mascotas/criar', {

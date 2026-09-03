@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Veterinary Pet Hospital CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v100">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v9999">
 </head>
 <body>
 
@@ -113,7 +113,7 @@
 
             <!-- Search Box -->
             <div style="margin-bottom: 24px;">
-                <input type="text" id="petSearchBox" class="form-control" placeholder="Pesquisar por nome do animal, raça ou tutor..." onkeyup="renderPetGallery()">
+                <input type="text" id="petSearchBox" class="form-control" placeholder="Pesquisar por nome do animal, raça, diagnóstico ou tutor..." onkeyup="renderPetGallery()">
             </div>
 
             <!-- Pet Cards Grid -->
@@ -136,7 +136,7 @@
                             <th data-i18n="thPet">Mascota</th>
                             <th data-i18n="thTutor">Tutor</th>
                             <th data-i18n="thVet">Veterinário</th>
-                            <th data-i18n="thReason">Motivo da Consulta</th>
+                            <th data-i18n="thReason">Motivo & Diagnóstico</th>
                             <th data-i18n="thDateTime">Data & Hora</th>
                             <th data-i18n="thStatus">Estado</th>
                         </tr>
@@ -222,6 +222,11 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label data-i18n="lblDiagnosis">Diagnóstico Médico ou Serviço *</label>
+                    <input type="text" id="petDiagnosisInput" class="form-control" placeholder="Ex: Diagnóstico: Dermatite • Serviço: Banhos Medicinais & Champô">
+                </div>
+
                 <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                     <div>
                         <label data-i18n="lblTutorName">Nome do Tutor *</label>
@@ -242,6 +247,6 @@
     </div>
 
     <!-- Custom JS Engine -->
-    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v100"></script>
+    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v9999"></script>
 </body>
 </html>
