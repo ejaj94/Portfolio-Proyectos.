@@ -136,7 +136,7 @@ mascotas_db = [
         "microchip": "941000011223344",
         "tutor": "Fernanda Torres",
         "contacto": "+351 922 113 355",
-        "foto": "https://images.unsplash.com/photo-1505628346881-b72b27e84530?auto=format&fit=crop&w=600&q=80",
+        "foto": "/static/images/bella_beagle.jpg",
         "diagnostico_servico": "Diagnóstico: Conjuntivite Alérgica • Serviço: Gotas Oftálmicas & Limpeza Ocular",
         "ultima_consulta": "2026-09-03"
     },
