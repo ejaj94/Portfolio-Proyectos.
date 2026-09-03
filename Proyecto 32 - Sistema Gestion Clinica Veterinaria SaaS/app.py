@@ -164,7 +164,7 @@ mascotas_db = [
         "microchip": "941000077889900",
         "tutor": "Clara Medeiros",
         "contacto": "+351 915 667 788",
-        "foto": "https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=600&q=80",
+        "foto": "/static/images/nina_chinchila.jpg",
         "diagnostico_servico": "Serviço: Inspeção de Dentes Incisivos & Avaliação de Banho de Areia Vulcânica",
         "ultima_consulta": "2026-08-25"
     },
