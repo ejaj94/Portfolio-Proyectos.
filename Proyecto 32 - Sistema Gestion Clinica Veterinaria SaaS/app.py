@@ -94,7 +94,7 @@ mascotas_db = [
         "microchip": "941000044556677",
         "tutor": "Beatriz Lima",
         "contacto": "+351 965 432 109",
-        "foto": "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80",
+        "foto": "/static/images/mimi_siames.jpg",
         "diagnostico_servico": "Diagnóstico: Gastroenterite Ligeira • Serviço: Fluidoterapia & Dieta Gastrointestinal",
         "ultima_consulta": "2026-09-03"
     },
