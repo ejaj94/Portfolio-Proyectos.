@@ -254,17 +254,25 @@ body {
 
 .pet-image-container {
     width: 100%;
-    height: 220px;
+    height: 250px;
     overflow: hidden;
-    background: var(--slate-black);
+    background: #f8fafc;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-bottom: 1.5px solid var(--border-light);
 }
 
 .pet-card-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
     object-position: center;
+    border-radius: 14px;
 }
 
 .pet-card-body {
