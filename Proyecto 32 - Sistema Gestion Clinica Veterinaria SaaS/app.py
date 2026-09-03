@@ -178,7 +178,7 @@ mascotas_db = [
         "microchip": "941000055667788",
         "tutor": "Dr. Fernando Siqueira",
         "contacto": "+351 922 889 900",
-        "foto": "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&w=600&q=80",
+        "foto": "/static/images/max_labrador.jpg",
         "diagnostico_servico": "Serviço: Vacina Antirrábica Anual, Desparasitação & Corte de Unhas Canino",
         "ultima_consulta": "2026-09-02"
     }
