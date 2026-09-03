@@ -203,7 +203,7 @@ incidencias_db = [
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", ts=int(datetime.now().timestamp()))
 
 @app.route("/api/propiedades", methods=["GET"])
 def get_propiedades():
@@ -265,5 +265,5 @@ def get_stats():
     })
 
 if __name__ == "__main__":
-    print("Iniciando GESTOR DE PROPRIEDADES INMOBILIARIAS SAAS em http://localhost:5900")
-    app.run(host="0.0.0.0", port=5900, debug=False)
+    print("Iniciando GESTOR DE PROPRIEDADES INMOBILIARIAS SAAS em http://localhost:5950")
+    app.run(host="0.0.0.0", port=5950, debug=False)

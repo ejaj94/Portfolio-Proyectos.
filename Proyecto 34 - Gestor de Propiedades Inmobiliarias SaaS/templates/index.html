@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Property Management Lilac/Purple CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260903_v99999">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ ts }}">
 </head>
 <body>
 
@@ -261,6 +261,6 @@
     </div>
 
     <!-- Custom JS Engine -->
-    <script src="{{ url_for('static', filename='app.js') }}?v=20260903_v99999"></script>
+    <script src="{{ url_for('static', filename='app.js') }}?v={{ ts }}"></script>
 </body>
 </html>
