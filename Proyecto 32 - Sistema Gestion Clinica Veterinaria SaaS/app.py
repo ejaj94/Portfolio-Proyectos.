@@ -108,7 +108,7 @@ mascotas_db = [
         "microchip": "941000033221100",
         "tutor": "Sofia Carvalhal",
         "contacto": "+351 931 112 233",
-        "foto": "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=600&q=80",
+        "foto": "/static/images/barnabe_coelho.jpg",
         "diagnostico_servico": "Serviço: Desgaste Dentário Preventivo, Vacinação Mixomatose & Suplementação Feno",
         "ultima_consulta": "2026-08-30"
     },
