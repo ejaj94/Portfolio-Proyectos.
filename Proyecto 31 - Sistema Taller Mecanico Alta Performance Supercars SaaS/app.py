@@ -14,33 +14,14 @@ def add_no_cache_headers(response):
 
 # Initial Supercar Workshop Mock Database
 veiculos_db = [
-    {
-        "id": "VEH-901",
-        "matricula": "99-ZZ-88",
-        "vin": "ZFF83CFA00025419",
-        "marca_modelo": "Ferrari F8 Tributo V8 Turbo",
-        "potencia": "720 cv",
-        "proprietario": "Carlos Vasconcelos",
-        "contacto": "+351 912 887 766"
-    },
-    {
-        "id": "VEH-902",
-        "matricula": "11-AA-99",
-        "vin": "WP0ZZZ99ZLS29811",
-        "marca_modelo": "Porsche 911 GT3 RS (992)",
-        "potencia": "525 cv",
-        "proprietario": "Gonçalo Mendonça",
-        "contacto": "+351 965 112 233"
-    },
-    {
-        "id": "VEH-903",
-        "matricula": "55-HH-44",
-        "vin": "HW1123884992011",
-        "marca_modelo": "Lamborghini Huracán EVO V10",
-        "potencia": "640 cv",
-        "proprietario": "Alexandre Fontes",
-        "contacto": "+351 931 445 566"
-    }
+    {"id": "VEH-901", "matricula": "99-ZZ-88", "vin": "ZFF83CFA00025419", "marca_modelo": "Ferrari F8 Tributo V8 Turbo", "potencia": "720 cv", "proprietario": "Carlos Vasconcelos", "contacto": "+351 912 887 766"},
+    {"id": "VEH-902", "matricula": "11-AA-99", "vin": "WP0ZZZ99ZLS29811", "marca_modelo": "Porsche 911 GT3 RS (992)", "potencia": "525 cv", "proprietario": "Gonçalo Mendonça", "contacto": "+351 965 112 233"},
+    {"id": "VEH-903", "matricula": "55-HH-44", "vin": "HW1123884992011", "marca_modelo": "Lamborghini Huracán EVO V10", "potencia": "640 cv", "proprietario": "Alexandre Fontes", "contacto": "+351 931 445 566"},
+    {"id": "VEH-904", "matricula": "77-XX-22", "vin": "SBM11AAR80019288", "marca_modelo": "McLaren 720S Spider Performance", "potencia": "720 cv", "proprietario": "Sofia Carvalhal", "contacto": "+351 918 776 554"},
+    {"id": "VEH-905", "matricula": "33-BB-11", "vin": "SCFBDCCW8MG001928", "marca_modelo": "Aston Martin DBS Superleggera V12", "potencia": "725 cv", "proprietario": "Dr. Fernando Siqueira", "contacto": "+351 922 889 900"},
+    {"id": "VEH-906", "matricula": "88-MM-55", "vin": "WBS83AY0005519283", "marca_modelo": "BMW M4 CSL Track Edition", "potencia": "550 cv", "proprietario": "Ricardo Santos", "contacto": "+351 912 345 678"},
+    {"id": "VEH-907", "matricula": "44-CC-66", "vin": "WDD1903791A009821", "marca_modelo": "Mercedes-AMG GT Black Series", "potencia": "730 cv", "proprietario": "Beatriz Vasconcelos", "contacto": "+351 965 432 109"},
+    {"id": "VEH-908", "matricula": "22-DD-11", "vin": "WAUZZZ4S0G0019281", "marca_modelo": "Audi R8 V10 Performance quattro", "potencia": "620 cv", "proprietario": "Tiago Carvalhal", "contacto": "+351 931 112 233"}
 ]
 
 ordens_servico_db = [
@@ -85,6 +66,76 @@ ordens_servico_db = [
         "data_entrada": "2026-08-28",
         "previsao_entrega": "2026-09-03",
         "diagnostico_notas": "Veículo testado e aprovado. Pronto para entrega com certificação."
+    },
+    {
+        "id": "OS-2026/104",
+        "matricula": "77-XX-22",
+        "vin": "SBM11AAR80019288",
+        "veiculo": "McLaren 720S Spider Performance",
+        "cliente": "Sofia Carvalhal",
+        "mecanico_chefe": "Mestre Hugo Rocha (ECU Remap Spec)",
+        "servico": "Diagnóstico Telemétrico de Suspensão Proactive Chassis Control II & Mapeamento Stage 1",
+        "estagio": "diagnostico",
+        "orcamento": 11500.00,
+        "data_entrada": "2026-09-03",
+        "previsao_entrega": "2026-09-08",
+        "diagnostico_notas": "Análise de telemetria completa. Calibração de sensores de pressão de óleo."
+    },
+    {
+        "id": "OS-2026/105",
+        "matricula": "33-BB-11",
+        "vin": "SCFBDCCW8MG001928",
+        "veiculo": "Aston Martin DBS Superleggera V12",
+        "cliente": "Dr. Fernando Siqueira",
+        "mecanico_chefe": "Mestre Miguel Silva (Tuning Spec)",
+        "servico": "Instalação de Kit Aerodinâmico Carbon Spec & Linha de Escape Akrapovič Titanium",
+        "estagio": "manutencao",
+        "orcamento": 18200.00,
+        "data_entrada": "2026-09-02",
+        "previsao_entrega": "2026-09-07",
+        "diagnostico_notas": "Montagem de difusor traseiro e ponteiras em fibra de carbono concluída."
+    },
+    {
+        "id": "OS-2026/106",
+        "matricula": "88-MM-55",
+        "vin": "WBS83AY0005519283",
+        "veiculo": "BMW M4 CSL Track Edition",
+        "cliente": "Ricardo Santos",
+        "mecanico_chefe": "Mestre Pedro Alvo (Porsche Motorsport)",
+        "servico": "Calibração de Suspensão KW Competition & Teste Dyno 4x4",
+        "estagio": "dyno",
+        "orcamento": 7800.00,
+        "data_entrada": "2026-09-02",
+        "previsao_entrega": "2026-09-06",
+        "diagnostico_notas": "Testes de telemetria em banco a 280 km/h concluídos com sucesso."
+    },
+    {
+        "id": "OS-2026/107",
+        "matricula": "44-CC-66",
+        "vin": "WDD1903791A009821",
+        "veiculo": "Mercedes-AMG GT Black Series",
+        "cliente": "Beatriz Vasconcelos",
+        "mecanico_chefe": "Mestre Hugo Rocha (ECU Remap Spec)",
+        "servico": "Substituição de Discos de Cerâmica AMG Carbon & Teste de Aerodinâmica Ativa",
+        "estagio": "diagnostico",
+        "orcamento": 21500.00,
+        "data_entrada": "2026-09-03",
+        "previsao_entrega": "2026-09-09",
+        "diagnostico_notas": "Inspeção inicial de travagem e alinhamento de asa traseira ajustável."
+    },
+    {
+        "id": "OS-2026/108",
+        "matricula": "22-DD-11",
+        "vin": "WAUZZZ4S0G0019281",
+        "veiculo": "Audi R8 V10 Performance quattro",
+        "cliente": "Tiago Carvalhal",
+        "mecanico_chefe": "Mestre Miguel Silva (Tuning Spec)",
+        "servico": "Revisão Anual de Motor V10 5.2 FSI & Proteção Paint Protection Film (PPF)",
+        "estagio": "pronto",
+        "orcamento": 8400.00,
+        "data_entrada": "2026-08-29",
+        "previsao_entrega": "2026-09-03",
+        "diagnostico_notas": "Aplicação de cerâmica PPF concluída. Pronta para levantamento pelo cliente."
     }
 ]
 
@@ -146,7 +197,7 @@ def get_stats():
         "total_faturacao": f"{total_faturacao:,.2f} €".replace(",", " ").replace(".", ","),
         "em_reparacao": em_reparacao,
         "concluidos": concluidos,
-        "potencia_preparada": "1.885 cv"
+        "potencia_preparada": "5.210 cv"
     })
 
 if __name__ == "__main__":
