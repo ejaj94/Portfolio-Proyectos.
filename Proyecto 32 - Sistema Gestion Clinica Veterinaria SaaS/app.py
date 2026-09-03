@@ -38,7 +38,7 @@ mascotas_db = [
         "microchip": "941000088192831",
         "tutor": "Gonçalo Mendonça",
         "contacto": "+351 962 114 889",
-        "foto": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80",
+        "foto": "/static/images/simba_persa.jpg",
         "diagnostico_servico": "Serviço: Tartrectomia Dentária Ultrassónica & Desparasitação Interna",
         "ultima_consulta": "2026-09-01"
     },
