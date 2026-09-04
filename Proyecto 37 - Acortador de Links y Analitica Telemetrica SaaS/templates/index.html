@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | VELOCE-LINK SaaS{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+    <!-- HERO SHORTENER FORM CARD -->
+    <div class="glass-card p-6 sm:p-8 space-y-6 relative overflow-hidden">
+        <div class="space-y-2">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center">
+                <i class="fas fa-scissors text-cyan-400 mr-3"></i>Encurtador de Links & Analítica Telemétrica
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-400">Cole o seu URL longo, personalize o alias e acompanhe cada clique com rastreio de países e dispositivos.</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('api_create_link') }}" class="space-y-4">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- LONG URL -->
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                        URL Original de Destino <span class="text-cyan-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="url" name="original_url" placeholder="https://ejajtech.com/servicos/desenvolvimento-software-telemétrica-elite" class="glass-input w-full pl-9 text-xs" required>
+                        <i class="fas fa-globe absolute left-3 top-3 text-slate-500 text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- ALIAS PERSONALIZADO -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                        Alias Personalizado (Opcional)
+                    </label>
+                    <div class="relative">
+                        <input type="text" name="custom_alias" placeholder="ex: veloce-suite" class="glass-input w-full text-xs font-code">
+                    </div>
+                </div>
+            </div>
+
+            <!-- TITULO OPCIONAL -->
+            <div>
+                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                    Título do Hiperlink (Opcional)
+                </label>
+                <input type="text" name="title" placeholder="ex. Campanha Redes Sociais EJAJ TECH 2026" class="glass-input w-full text-xs">
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <div class="flex items-center justify-end">
+                <button type="submit" class="btn-cyan text-sm px-6 py-3 flex items-center">
+                    <i class="fas fa-magic mr-2"></i>Encurtar Hiperlink Agora
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- TELEMETRY KPIS -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <!-- TOTAL CLICADOS -->
+        <div class="glass-card p-4 flex flex-col justify-between border-cyan-500/30">
+            <div class="flex items-center justify-between text-cyan-400">
+                <span class="text-xs font-semibold">Total de Clics</span>
+                <i class="fas fa-mouse-pointer"></i>
+            </div>
+            <div class="mt-3">
+                <span class="text-2xl font-black text-cyan-400">{{ sum_clicks }}</span>
+                <span class="text-[10px] text-cyan-300 block">Visitas Registadas</span>
+            </div>
+        </div>
+
+        <!-- TOTAL LINKS ACTIVOS -->
+        <div class="glass-card p-4 flex flex-col justify-between border-blue-500/30">
+            <div class="flex items-center justify-between text-blue-400">
+                <span class="text-xs font-semibold">Hiperlinks Ativos</span>
+                <i class="fas fa-link"></i>
+            </div>
+            <div class="mt-3">
+                <span class="text-2xl font-black text-white">{{ total_links }}</span>
+                <span class="text-[10px] text-slate-400 block">Gerados no Sistema</span>
+            </div>
+        </div>
+
+        <!-- TOP PAÍS -->
+        <div class="glass-card p-4 flex flex-col justify-between border-purple-500/30">
+            <div class="flex items-center justify-between text-purple-400">
+                <span class="text-xs font-semibold">Top País Origem</span>
+                <i class="fas fa-earth-europe"></i>
+            </div>
+            <div class="mt-3">
+                <span class="text-2xl font-black text-purple-400">{{ top_country }}</span>
+                <span class="text-[10px] text-purple-300 block">Maior Tráfego</span>
+            </div>
+        </div>
+
+        <!-- TOP DISPOSITIVO -->
+        <div class="glass-card p-4 flex flex-col justify-between border-emerald-500/30">
+            <div class="flex items-center justify-between text-emerald-400">
+                <span class="text-xs font-semibold">Top Dispositivo</span>
+                <i class="fas fa-mobile-screen-button"></i>
+            </div>
+            <div class="mt-3">
+                <span class="text-2xl font-black text-emerald-400">{{ top_device }}</span>
+                <span class="text-[10px] text-emerald-300 block">Plataforma Principal</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- FILTER & SEARCH -->
+    <div class="glass-card p-4">
+        <form method="GET" action="{{ url_for('index') }}" class="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="relative w-full sm:w-96">
+                <input type="text" name="q" value="{{ search_q }}" placeholder="Pesquisar por título, código ou URL..." class="glass-input w-full pl-9 text-xs">
+                <i class="fas fa-search absolute left-3 top-3 text-slate-500 text-xs"></i>
+            </div>
+            <button type="submit" class="btn-cyan text-xs py-2 px-4 w-full sm:w-auto flex items-center justify-center">
+                <i class="fas fa-filter mr-2"></i>Filtrar Lista
+            </button>
+        </form>
+    </div>
+
+    <!-- LINKS TABLE -->
+    <div class="glass-card overflow-hidden">
+        <div class="p-4 border-b border-cyan-500/20 flex items-center justify-between">
+            <h2 class="text-base font-bold text-white flex items-center">
+                <i class="fas fa-list-ul text-cyan-400 mr-2"></i>Gestão de Hiperlinks Encurtados
+                <span class="ml-2 text-xs font-normal text-slate-400">({{ links|length }} resultados)</span>
+            </h2>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-black/40 text-slate-400 text-xs uppercase font-bold border-b border-slate-800">
+                    <tr>
+                        <th class="py-3 px-4">Título / URL Curto</th>
+                        <th class="py-3 px-4">URL Destino</th>
+                        <th class="py-3 px-4 text-center">Total Clics</th>
+                        <th class="py-3 px-4">Data Criação</th>
+                        <th class="py-3 px-4 text-right">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60">
+                    {% for l in links %}
+                    {% set short_full = base_host + '/' + l.short_code %}
+                    <tr class="hover:bg-white/5 transition-colors group">
+                        
+                        <!-- TITULO & SHORT URL -->
+                        <td class="py-3.5 px-4">
+                            <div class="font-bold text-white text-xs mb-1 line-clamp-1 group-hover:text-cyan-300">
+                                {{ l.title }}
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <a href="{{ short_full }}" target="_blank" class="font-code text-xs text-cyan-400 font-bold hover:underline">
+                                    {{ short_full }}
+                                </a>
+                                <button onclick="copyToClipboard('{{ short_full }}')" class="text-slate-500 hover:text-cyan-400 p-1" title="Copiar hiperlink">
+                                    <i class="fas fa-copy text-xs"></i>
+                                </button>
+                            </div>
+                        </td>
+
+                        <!-- DESTINO ORIGINAL -->
+                        <td class="py-3.5 px-4 max-w-xs">
+                            <a href="{{ l.original_url }}" target="_blank" class="text-xs text-slate-400 hover:text-slate-200 truncate block">
+                                {{ l.original_url }}
+                            </a>
+                        </td>
+
+                        <!-- CLICS -->
+                        <td class="py-3.5 px-4 text-center">
+                            <span class="px-3 py-1 rounded-full text-xs font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                                {{ l.total_clicks }} clics
+                            </span>
+                        </td>
+
+                        <!-- DATA -->
+                        <td class="py-3.5 px-4 text-xs text-slate-400">
+                            {{ l.created_at.split()[0] }}
+                        </td>
+
+                        <!-- AÇÕES -->
+                        <td class="py-3.5 px-4 text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <button onclick="openQRModal('{{ l.title }}', '{{ l.qr_code_url }}', '{{ short_full }}')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 text-xs font-bold transition-colors" title="Ver Código QR">
+                                    <i class="fas fa-qrcode"></i>
+                                </button>
+
+                                <a href="{{ url_for('stats', code_or_alias=l.short_code) }}" class="px-3 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-xs font-bold border border-cyan-500/30 transition-colors flex items-center">
+                                    <i class="fas fa-chart-pie mr-1.5"></i>Telemetria
+                                </a>
+                            </div>
+                        </td>
+
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-slate-500 text-xs">
+                            Nenhum hiperlink encurtado encontrado.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
