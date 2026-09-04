@@ -80,8 +80,8 @@
         }
         .label-title.beer {
             color: #b4281e;
-            font-family: Arial, sans-serif;
-            font-size: 11pt;
+            font-family: 'Georgia', serif;
+            font-size: 11.5pt;
         }
         .label-sub {
             font-style: italic;
@@ -96,9 +96,9 @@
             color: #666666;
             letter-spacing: 0.5px;
         }
-        .beer-icon {
-            width: 45px;
-            height: auto;
+        .beer-icon-svg {
+            width: 65px;
+            height: 38px;
             margin-bottom: 2px;
         }
         @media print {
@@ -120,7 +120,7 @@
 </head>
 <body>
     <div class="no-print-bar">
-        <span>✨ <strong>Folha de Etiquetas Pronta para Impressão A4</strong> (36 Etiquetas)</span>
+        <span>✨ <strong>Folha de Etiquetas Pronta para Impressão A4 (Design HD)</strong></span>
         <button class="btn-print" onclick="window.print()">🖨️ Imprimir Etiquetas (PDF)</button>
     </div>
 
@@ -142,13 +142,29 @@
                 
                 if (ltype === "CERVEJA ARTESANAL") {
                     card.innerHTML = `
-                        <svg class="beer-icon" viewBox="0 0 100 60" fill="none">
-                            <path d="M20 15 H40 V45 H20 Z" fill="#E6A100" stroke="#333" stroke-width="2"/>
-                            <path d="M15 20 H20 V40 H15 C10 40 10 20 15 20 Z" stroke="#333" stroke-width="2" fill="none"/>
-                            <path d="M18 10 C25 5 35 5 42 10 C45 15 35 18 20 18 Z" fill="#FFFFFF" stroke="#333" stroke-width="1.5"/>
-                            <path d="M60 15 H80 V45 H60 Z" fill="#E6A100" stroke="#333" stroke-width="2"/>
-                            <path d="M80 20 H85 C90 20 90 40 85 40 H80 Z" stroke="#333" stroke-width="2" fill="none"/>
-                            <path d="M58 10 C65 5 75 5 82 10 C85 15 75 18 60 18 Z" fill="#FFFFFF" stroke="#333" stroke-width="1.5"/>
+                        <svg class="beer-icon-svg" viewBox="0 0 200 110" fill="none">
+                            <!-- Left Mug -->
+                            <rect x="35" y="35" width="45" height="55" rx="6" fill="#E69B14" stroke="#8C500A" stroke-width="3"/>
+                            <rect x="15" y="45" width="22" height="35" rx="7" fill="none" stroke="#8C500A" stroke-width="3.5"/>
+                            <line x1="50" y1="42" x2="50" y2="85" stroke="#FAFE3C" stroke-width="3"/>
+                            <line x1="62" y1="42" x2="62" y2="85" stroke="#FAFE3C" stroke-width="3"/>
+                            <circle cx="35" cy="30" r="16" fill="#FFFFFF" stroke="#D3C8BE" stroke-width="1.5"/>
+                            <circle cx="55" cy="24" r="18" fill="#FFFFFF" stroke="#D3C8BE" stroke-width="1.5"/>
+                            <circle cx="72" cy="30" r="15" fill="#FFFFFF" stroke="#D3C8BE" stroke-width="1.5"/>
+
+                            <!-- Right Mug -->
+                            <rect x="120" y="35" width="45" height="55" rx="6" fill="#E69B14" stroke="#8C500A" stroke-width="3"/>
+                            <rect x="163" y="45" width="22" height="35" rx="7" fill="none" stroke="#8C500A" stroke-width="3.5"/>
+                            <line x1="133" y1="42" x2="133" y2="85" stroke="#FAFE3C" stroke-width="3"/>
+                            <line x1="145" y1="42" x2="145" y2="85" stroke="#FAFE3C" stroke-width="3"/>
+                            <circle cx="118" cy="30" r="15" fill="#FFFFFF" stroke="#D3C8BE" stroke-width="1.5"/>
+                            <circle cx="138" cy="24" r="18" fill="#FFFFFF" stroke="#D3C8BE" stroke-width="1.5"/>
+                            <circle cx="158" cy="30" r="16" fill="#FFFFFF" stroke="#D3C8BE" stroke-width="1.5"/>
+
+                            <!-- Sparkles -->
+                            <circle cx="100" cy="35" r="8" fill="#FFDC64"/>
+                            <circle cx="90" cy="22" r="5" fill="#FFE678"/>
+                            <circle cx="110" cy="24" r="5" fill="#FFE678"/>
                         </svg>
                         <div class="label-title beer">CERVEJA ARTESANAL</div>
                         <div class="label-sub">By com cheiro de amor</div>
