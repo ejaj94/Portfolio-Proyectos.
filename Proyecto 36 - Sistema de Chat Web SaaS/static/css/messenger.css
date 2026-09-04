@@ -1,0 +1,127 @@
+/* CONNECT-CHAT SaaS - Facebook Messenger Blue Theme */
+
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --fb-blue: #0866ff;
+    --fb-blue-hover: #0056df;
+    --fb-active-blue: #0084ff;
+    --fb-bg-dark: #0f172a;
+    --fb-card-dark: #1e293b;
+    --fb-border-dark: rgba(255, 255, 255, 0.1);
+    --msg-sent: linear-gradient(135deg, #0084ff 0%, #00c6ff 100%);
+    --msg-received: #334155;
+    --status-online: #31a24c;
+    --status-away: #f59e0b;
+    --status-dnd: #e41e3f;
+    --status-offline: #64748b;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+    background-color: var(--fb-bg-dark);
+    color: #f8fafc;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--fb-blue);
+}
+
+/* Chat Message Bubbles */
+.bubble-sent {
+    background: var(--msg-sent);
+    color: #ffffff;
+    border-radius: 18px 18px 4px 18px;
+    box-shadow: 0 4px 12px rgba(0, 132, 255, 0.25);
+}
+
+.bubble-received {
+    background: var(--msg-received);
+    color: #f1f5f9;
+    border-radius: 18px 18px 18px 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Status Indicator Dots */
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--fb-card-dark);
+}
+
+.status-online { background-color: var(--status-online); box-shadow: 0 0 8px var(--status-online); }
+.status-away { background-color: var(--status-away); }
+.status-dnd { background-color: var(--status-dnd); }
+.status-offline { background-color: var(--status-offline); }
+
+/* Typing Dots Animation */
+.typing-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 14px;
+    background: var(--msg-received);
+    border-radius: 18px;
+}
+
+.typing-indicator span {
+    width: 6px;
+    height: 6px;
+    background-color: #94a3b8;
+    border-radius: 50%;
+    animation: typing-bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing-bounce {
+    0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; background-color: var(--fb-active-blue); }
+}
+
+/* Reaction Popover Bar */
+.reaction-popover {
+    display: none;
+    position: absolute;
+    top: -38px;
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 2px 8px;
+    gap: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    z-index: 30;
+}
+
+.message-item:hover .reaction-popover {
+    display: flex;
+}
+
+.reaction-btn {
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.reaction-btn:hover {
+    transform: scale(1.4);
+}
+
+/* Active Conversation Item */
+.conv-item-active {
+    background: rgba(8, 102, 255, 0.15) !important;
+    border-left: 4px solid var(--fb-blue);
+}

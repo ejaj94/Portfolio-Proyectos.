@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONNECT-CHAT SaaS | EJAJ TECH Messenger Suite</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Facebook Messenger Styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/messenger.css') }}">
+</head>
+<body class="bg-slate-950 text-slate-100 flex h-screen overflow-hidden">
+
+    <!-- LEFT SIDEBAR: CONVERSATIONS LIST -->
+    <aside class="w-80 md:w-96 bg-slate-900 border-r border-slate-800 flex flex-col h-full shrink-0">
+        
+        <!-- SIDEBAR HEADER: BRAND & ACTIVE USER PROFILE -->
+        <div class="p-4 border-b border-slate-800 space-y-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl font-black shadow-lg shadow-blue-500/30">
+                        <i class="fab fa-facebook-messenger"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h1 class="font-extrabold text-base text-white tracking-tight">CONNECT<span class="text-blue-500">-CHAT</span></h1>
+                            <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">SaaS</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 font-medium">EJAJ TECH Messenger Suite</p>
+                    </div>
+                </div>
+
+                <!-- NUEVO CHAT MODAL TRIGGER -->
+                <button onclick="document.getElementById('newChatModal').classList.remove('hidden')" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition-colors" title="Nuevo Chat Directo">
+                    <i class="fas fa-edit text-sm"></i>
+                </button>
+            </div>
+
+            <!-- PERFIL DEL USUARIO ACTIVO (ENMANUEL JIMENEZ) -->
+            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <img src="{{ current_user.avatar_url }}" class="w-10 h-10 rounded-full border border-blue-500/50 object-cover">
+                        <span class="status-dot status-{{ current_user.status }} absolute bottom-0 right-0"></span>
+                    </div>
+                    <div>
+                        <h2 class="text-xs font-bold text-white leading-snug">{{ current_user.name }}</h2>
+                        <span class="text-[10px] text-blue-400 font-semibold block leading-tight">{{ current_user.role }}</span>
+                    </div>
+                </div>
+
+                <!-- SELECTOR ESTADO PRESENCIA -->
+                <select onchange="setUserPresenceStatus(this.value)" class="bg-slate-900 text-slate-300 border border-slate-700 text-[10px] font-bold rounded px-2 py-1 outline-none">
+                    <option value="online" {% if current_user.status == 'online' %}selected{% endif %}>🟢 En línea</option>
+                    <option value="away" {% if current_user.status == 'away' %}selected{% endif %}>🟡 Ausente</option>
+                    <option value="dnd" {% if current_user.status == 'dnd' %}selected{% endif %}>🔴 Ocupado</option>
+                </select>
+            </div>
+
+            <!-- SEARCH BAR -->
+            <div class="relative">
+                <input type="text" id="searchChatInput" placeholder="Buscar conversaciones o personas..." class="w-full bg-slate-950 border border-slate-800 rounded-full py-2 pl-9 pr-4 text-xs text-white outline-none focus:border-blue-500 transition-colors">
+                <i class="fas fa-search absolute left-3 top-2.5 text-slate-500 text-xs"></i>
+            </div>
+        </div>
+
+        <!-- CONVERSATIONS LIST FEED -->
+        <div class="flex-grow overflow-y-auto divide-y divide-slate-800/40">
+            {% for conv in conversations %}
+            <a href="{{ url_for('index', conv_id=conv.id) }}" class="flex items-center space-x-3 p-3.5 hover:bg-slate-800/50 transition-colors {% if active_conversation and active_conversation.id == conv.id %}conv-item-active{% endif %}">
+                
+                <!-- AVATAR CON INDICADOR ONLINE -->
+                <div class="relative shrink-0">
+                    <img src="{{ conv.display_avatar }}" class="w-12 h-12 rounded-full object-cover border border-slate-700">
+                    {% if conv.type == 'direct' %}
+                        <span class="status-dot status-{{ conv.display_status }} absolute bottom-0 right-0"></span>
+                    {% else %}
+                        <span class="w-3.5 h-3.5 bg-blue-500 border-2 border-slate-900 rounded-full absolute bottom-0 right-0 flex items-center justify-center text-[8px] text-white">#</span>
+                    {% endif %}
+                </div>
+
+                <!-- DETALLES DEL CHAT -->
+                <div class="flex-grow min-w-0">
+                    <div class="flex items-center justify-between mb-1">
+                        <h3 class="text-xs font-bold text-white truncate">{{ conv.display_name }}</h3>
+                        {% if conv.last_message_time %}
+                            <span class="text-[10px] text-slate-400 font-medium shrink-0">{{ conv.last_message_time.split()[1][:5] }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs text-slate-400 truncate pr-2 {% if conv.unread_count > 0 %}font-bold text-slate-100{% endif %}">
+                            {{ conv.last_message or 'Comienza la conversación...' }}
+                        </p>
+                        {% if conv.unread_count > 0 %}
+                            <span class="px-1.5 py-0.5 text-[10px] font-black rounded-full bg-blue-600 text-white shrink-0">
+                                {{ conv.unread_count }}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </a>
+            {% else %}
+            <div class="text-center py-10 text-xs text-slate-500">
+                No hay conversaciones activas aún.
+            </div>
+            {% endfor %}
+        </div>
+
+    </aside>
+
+    <!-- CENTER COLUMN: ACTIVE CHAT THREAD -->
+    {% if active_conversation %}
+    <main class="flex-grow flex flex-col h-full bg-slate-950 relative">
+
+        <!-- ACTIVE CHAT TOP BAR -->
+        <header class="h-16 px-6 bg-slate-900/90 border-b border-slate-800 backdrop-blur-md flex items-center justify-between shrink-0 z-20">
+            <div class="flex items-center space-x-3">
+                <div class="relative">
+                    <img src="{{ active_conversation.display_avatar }}" class="w-10 h-10 rounded-full border border-blue-500/40 object-cover">
+                    {% if active_conversation.type == 'direct' %}
+                        <span class="status-dot status-{{ active_conversation.display_status }} absolute bottom-0 right-0"></span>
+                    {% endif %}
+                </div>
+                <div>
+                    <h2 class="text-sm font-extrabold text-white flex items-center space-x-2">
+                        <span>{{ active_conversation.display_name }}</span>
+                        {% if active_conversation.type == 'group' %}
+                            <span class="px-2 py-0.5 rounded text-[10px] bg-blue-500/20 text-blue-400 font-bold border border-blue-500/30">Grupo Equipo</span>
+                        {% endif %}
+                    </h2>
+                    <p class="text-[11px] text-blue-400 font-medium">
+                        {% if active_conversation.type == 'direct' %}
+                            {% if active_conversation.display_status == 'online' %}🟢 En línea ahora{% else %}🟡 {{ active_conversation.display_role }}{% endif %}
+                        {% else %}
+                            👥 5 miembros en el canal
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <!-- ACTION BUTTONS MOCK -->
+            <div class="flex items-center space-x-3">
+                <button class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition-colors" title="Videollamada HD">
+                    <i class="fas fa-video text-xs"></i>
+                </button>
+                <button class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition-colors" title="Llamada de Voz">
+                    <i class="fas fa-phone text-xs"></i>
+                </button>
+                <button onclick="document.getElementById('rightDrawer').classList.toggle('hidden')" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition-colors" title="Información">
+                    <i class="fas fa-info-circle text-xs"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- MESSAGES FEED CONTAINER -->
+        <div id="chatMessagesContainer" class="flex-grow overflow-y-auto p-6 space-y-4">
+            
+            {% for msg in messages %}
+            {% set is_me = (msg.sender_id == current_user.id) %}
+            
+            <div class="flex items-end space-x-2 message-item relative group {% if is_me %}justify-end{% else %}justify-start{% endif %}">
+                
+                <!-- SENDER AVATAR (RECEIVED) -->
+                {% if not is_me %}
+                    <img src="{{ msg.sender_avatar }}" class="w-7 h-7 rounded-full object-cover shrink-0 mb-1 border border-slate-700" title="{{ msg.sender_name }}">
+                {% endif %}
+
+                <!-- FLOATING REACTION POPOVER -->
+                <div class="reaction-popover">
+                    <button type="button" onclick="reactToMessage({{ msg.id }}, '👍')" class="reaction-btn">👍</button>
+                    <button type="button" onclick="reactToMessage({{ msg.id }}, '❤️')" class="reaction-btn">❤️</button>
+                    <button type="button" onclick="reactToMessage({{ msg.id }}, '😂')" class="reaction-btn">😂</button>
+                    <button type="button" onclick="reactToMessage({{ msg.id }}, '😮')" class="reaction-btn">😮</button>
+                    <button type="button" onclick="reactToMessage({{ msg.id }}, '🔥')" class="reaction-btn">🔥</button>
+                </div>
+
+                <!-- BUBBLE -->
+                <div class="max-w-md">
+                    {% if not is_me and active_conversation.type == 'group' %}
+                        <span class="text-[10px] text-slate-400 font-bold block mb-1 pl-1">{{ msg.sender_name }}</span>
+                    {% endif %}
+
+                    <div class="p-3 text-xs leading-relaxed {% if is_me %}bubble-sent{% else %}bubble-received{% endif %}">
+                        {{ msg.content }}
+                    </div>
+
+                    <!-- FOOTER: TIME & READ RECEIPT -->
+                    <div class="flex items-center space-x-1 mt-1 text-[10px] text-slate-500 {% if is_me %}justify-end{% else %}justify-start{% endif %}">
+                        <span>{{ msg.created_at.split()[1][:5] }}</span>
+                        {% if is_me %}
+                            <span class="text-blue-400 font-black ml-1" title="Visto en azul">✓✓</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- DISPLAY REACTIONS -->
+                    {% if msg.reactions and msg.reactions|length > 0 %}
+                    <div class="flex flex-wrap gap-1 mt-1 {% if is_me %}justify-end{% else %}justify-start{% endif %}">
+                        {% for react in msg.reactions %}
+                            <span class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-0.5 rounded-full border border-slate-700" title="Reaccionado por {{ react.user_name }}">
+                                {{ react.emoji }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+            {% endfor %}
+
+            <!-- TYPING DOTS SIMULATION -->
+            <div class="flex items-center space-x-2 text-slate-400 pt-2">
+                <span class="typing-indicator">
+                    <span></span><span></span><span></span>
+                </span>
+                <span class="text-[11px] font-medium italic text-slate-400">Ana Rodrigues está escribiendo...</span>
+            </div>
+
+        </div>
+
+        <!-- BOTTOM MESSAGE INPUT BAR -->
+        <footer class="p-4 bg-slate-900 border-t border-slate-800 shrink-0">
+            
+            <!-- QUICK EMOJI BAR -->
+            <div id="quickEmojiBar" class="flex items-center space-x-2 mb-2 px-2 text-xs"></div>
+
+            <form onsubmit="sendMessage(event)" class="flex items-center space-x-3">
+                <input type="hidden" id="activeConvId" value="{{ active_conversation.id }}">
+
+                <button type="button" class="text-slate-400 hover:text-blue-400 transition-colors p-2 text-lg">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+
+                <input type="text" id="messageInput" placeholder="Escribe un mensaje en azul Messenger..." class="flex-grow bg-slate-950 border border-slate-800 rounded-full px-4 py-2.5 text-xs text-white outline-none focus:border-blue-500 transition-colors" autocomplete="off" required>
+
+                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-full text-xs flex items-center shadow-lg shadow-blue-600/30 transition-all hover:scale-105">
+                    <i class="fas fa-paper-plane mr-2"></i>Enviar
+                </button>
+            </form>
+        </footer>
+
+    </main>
+
+    <!-- RIGHT DRAWER: CHAT INFO -->
+    <aside id="rightDrawer" class="w-72 bg-slate-900 border-l border-slate-800 hidden lg:flex flex-col p-6 space-y-6 shrink-0 overflow-y-auto">
+        <div class="text-center space-y-3">
+            <img src="{{ active_conversation.display_avatar }}" class="w-20 h-20 rounded-full object-cover border-2 border-blue-500 mx-auto shadow-xl">
+            <div>
+                <h3 class="text-sm font-extrabold text-white">{{ active_conversation.display_name }}</h3>
+                <p class="text-xs text-blue-400 font-semibold">{{ active_conversation.display_role }}</p>
+            </div>
+            {% if active_conversation.custom_status %}
+                <p class="text-[11px] text-slate-400 bg-slate-950 p-2 rounded-lg border border-slate-800 italic">
+                    "{{ active_conversation.custom_status }}"
+                </p>
+            {% endif %}
+        </div>
+
+        <div class="border-t border-slate-800 pt-4 space-y-3">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Opciones del Chat</h4>
+            
+            <div class="space-y-2 text-xs">
+                <button class="w-full bg-slate-950 hover:bg-slate-800 text-slate-300 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between transition-colors">
+                    <span><i class="fas fa-bell text-blue-400 mr-2"></i>Silenciar Notificaciones</span>
+                    <i class="fas fa-chevron-right text-slate-500 text-[10px]"></i>
+                </button>
+
+                <button class="w-full bg-slate-950 hover:bg-slate-800 text-slate-300 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between transition-colors">
+                    <span><i class="fas fa-images text-cyan-400 mr-2"></i>Archivos & Fotos Compartidas</span>
+                    <i class="fas fa-chevron-right text-slate-500 text-[10px]"></i>
+                </button>
+
+                <button class="w-full bg-slate-950 hover:bg-slate-800 text-slate-300 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between transition-colors">
+                    <span><i class="fas fa-shield-alt text-emerald-400 mr-2"></i>Cifrado de Extremo a Extremo</span>
+                    <i class="fas fa-check text-emerald-400 text-[10px]"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    {% else %}
+    <main class="flex-grow flex items-center justify-center bg-slate-950">
+        <div class="text-center space-y-3">
+            <div class="w-16 h-16 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-3xl mx-auto border border-blue-500/30">
+                <i class="fab fa-facebook-messenger"></i>
+            </div>
+            <h2 class="text-lg font-bold text-white">Selecciona una conversación</h2>
+            <p class="text-xs text-slate-400">Elige un chat directo o canal de equipo para comenzar a enviar mensajes.</p>
+        </div>
+    </main>
+    {% endif %}
+
+    <!-- MODAL: NUEVO CHAT DIRECTO -->
+    <div id="newChatModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-96 p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center">
+                    <i class="fas fa-user-plus text-blue-400 mr-2"></i>Iniciar Nuevo Chat
+                </h3>
+                <button onclick="document.getElementById('newChatModal').classList.add('hidden')" class="text-slate-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="space-y-2 max-h-80 overflow-y-auto">
+                {% for u in all_users %}
+                <button onclick="startDirectChat({{ u.id }})" class="w-full bg-slate-950 hover:bg-slate-800 p-3 rounded-xl border border-slate-800 flex items-center space-x-3 transition-colors text-left">
+                    <div class="relative">
+                        <img src="{{ u.avatar_url }}" class="w-10 h-10 rounded-full object-cover">
+                        <span class="status-dot status-{{ u.status }} absolute bottom-0 right-0"></span>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-white">{{ u.name }}</div>
+                        <div class="text-[10px] text-blue-400">{{ u.role }}</div>
+                    </div>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Chat JS -->
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>
