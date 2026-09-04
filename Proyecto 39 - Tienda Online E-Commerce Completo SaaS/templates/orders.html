@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}As Minhas Encomendas - NOVA TRENDS SaaS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-extrabold text-dark mb-1">
+                <i class="fa-solid fa-box-archive me-2" style="color: var(--brand-violet);"></i> As Minhas Encomendas
+            </h2>
+            <p class="text-secondary small mb-0">Acompanha o estado das tuas compras em tempo real</p>
+        </div>
+        <a href="{{ url_for('index') }}" class="btn btn-outline-brand rounded-pill">
+            <i class="fa-solid fa-store me-1"></i> Ir para a Loja
+        </a>
+    </div>
+
+    {% if orders %}
+    <div class="d-flex flex-column gap-4 mb-5">
+        {% for ord in orders %}
+        <div class="card-static p-4 border-0 shadow-sm rounded-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 mb-3 border-bottom border-light">
+                <div>
+                    <span class="badge bg-light text-dark border me-2 fs-6 fw-bold">{{ ord.order_number }}</span>
+                    <span class="text-secondary small">
+                        <i class="fa-regular fa-calendar me-1"></i> Data: {{ ord.created_at }}
+                    </span>
+                </div>
+
+                <div class="d-flex align-items-center gap-3 mt-2 mt-sm-0">
+                    <span class="text-secondary small">Pagamento: <strong>{{ ord.payment_method }}</strong></span>
+                    
+                    {% if ord.status == 'Entregue' %}
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill">
+                            <i class="fa-solid fa-circle-check me-1"></i> Entregue
+                        </span>
+                    {% elif ord.status == 'Em Trânsito' %}
+                        <span class="badge bg-warning bg-opacity-20 text-warning border border-warning px-3 py-2 rounded-pill">
+                            <i class="fa-solid fa-truck-fast me-1"></i> Em Trânsito
+                        </span>
+                    {% else %}
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-2 rounded-pill">
+                            <i class="fa-solid fa-gear me-1"></i> {{ ord.status }}
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Tracker Timeline -->
+            <div class="row align-items-center mb-4 py-2">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between position-relative text-center">
+                        <div class="flex-grow-1">
+                            <div class="badge rounded-circle p-3 mb-2 {% if ord.status in ['Processado', 'Em Trânsito', 'Entregue'] %}bg-primary text-white{% else %}bg-light text-muted{% endif %}">
+                                <i class="fa-solid fa-receipt"></i>
+                            </div>
+                            <span class="d-block small fw-bold text-dark">Confirmado</span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="badge rounded-circle p-3 mb-2 {% if ord.status in ['Em Trânsito', 'Entregue'] %}bg-primary text-white{% else %}bg-light text-muted{% endif %}">
+                                <i class="fa-solid fa-box-open"></i>
+                            </div>
+                            <span class="d-block small fw-bold text-dark">Em Preparação</span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="badge rounded-circle p-3 mb-2 {% if ord.status in ['Em Trânsito', 'Entregue'] %}bg-warning text-dark{% else %}bg-light text-muted{% endif %}">
+                                <i class="fa-solid fa-truck"></i>
+                            </div>
+                            <span class="d-block small fw-bold text-dark">Em Trânsito</span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="badge rounded-circle p-3 mb-2 {% if ord.status == 'Entregue' %}bg-success text-white{% else %}bg-light text-muted{% endif %}">
+                                <i class="fa-solid fa-house-chimney"></i>
+                            </div>
+                            <span class="d-block small fw-bold text-dark">Entregue</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center pt-3 border-top bg-light p-3 rounded-3">
+                <div class="text-secondary small">
+                    <i class="fa-solid fa-location-dot text-danger me-1"></i> Destino: <strong>{{ ord.address }}, {{ ord.city }}</strong>
+                </div>
+                <div class="mt-2 mt-sm-0">
+                    <span class="text-secondary me-2">Total da Encomenda:</span>
+                    <strong class="fs-4 text-primary fw-extrabold">{{ "%.2f"|format(ord.total_amount) }} €</strong>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card-static p-5 text-center my-5 rounded-4">
+        <i class="fa-solid fa-box-open text-muted fs-1 mb-3"></i>
+        <h4 class="fw-bold text-dark mb-2">Ainda não tens encomendas registadas</h4>
+        <p class="text-secondary mb-4">Quando fizeres a tua primeira compra na NOVA TRENDS, ela aparecerá aqui.</p>
+        <a href="{{ url_for('index') }}" class="btn btn-brand rounded-pill px-4">Ir para a Loja</a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

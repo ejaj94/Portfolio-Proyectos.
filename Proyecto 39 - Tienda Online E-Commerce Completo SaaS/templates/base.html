@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NOVA TRENDS - E-Commerce de Inovação & Tecnologia{% endblock %}</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Light Premium CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern_light.css') }}">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top py-3 shadow-sm">
+        <div class="container">
+            <!-- Brand Logo -->
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-extrabold fs-4 text-dark" href="{{ url_for('index') }}">
+                <span class="d-inline-flex justify-content-center align-items-center rounded-3 p-2 text-white" style="background: linear-gradient(135deg, #2563eb, #7c3aed); width: 40px; height: 40px;">
+                    <i class="fa-solid fa-bag-shopping fs-5"></i>
+                </span>
+                <span>NOVA<span style="color: var(--brand-violet);">TRENDS</span></span>
+            </a>
+
+            <!-- Toggler -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <i class="fa-solid fa-bars fs-3 text-dark"></i>
+            </button>
+
+            <!-- Navbar Links & Actions -->
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <!-- Search Form -->
+                <form action="{{ url_for('index') }}" method="GET" class="mx-auto my-2 my-lg-0 d-flex position-relative w-100 max-w-md" style="max-width: 400px;">
+                    <input type="text" name="search" class="form-control form-input-light ps-5 rounded-pill" placeholder="Pesquisar produtos inovadores..." value="{{ request.args.get('search', '') }}">
+                    <i class="fa-solid fa-magnifying-glass position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                </form>
+
+                <ul class="navbar-nav ms-auto align-items-center gap-3">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold text-dark hover-brand" href="{{ url_for('index') }}">
+                            <i class="fa-solid fa-store me-1 text-primary"></i> Loja
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold text-dark hover-brand" href="{{ url_for('orders') }}">
+                            <i class="fa-solid fa-box me-1" style="color: var(--brand-violet);"></i> As Minhas Encomendas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold text-dark hover-brand" href="{{ url_for('dashboard') }}">
+                            <i class="fa-solid fa-chart-line me-1 text-success"></i> Painel Admin
+                        </a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a href="{{ url_for('cart') }}" class="btn btn-outline-brand position-relative rounded-pill px-4">
+                            <i class="fa-solid fa-cart-shopping me-2"></i> Carrinho
+                            <span class="cart-badge cart-badge-count {% if cart_count == 0 %}d-none{% endif %}">
+                                {{ cart_count }}
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flashed Messages -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show border-0 shadow-sm rounded-3 mb-3" role="alert">
+                        <i class="fa-solid fa-circle-info me-2"></i> {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top mt-5 py-5 text-muted">
+        <div class="container">
+            <div class="row align-items-center g-4">
+                <div class="col-md-6 text-center text-md-start">
+                    <h5 class="fw-extrabold text-dark mb-1 d-flex align-items-center gap-2 justify-content-center justify-content-md-start">
+                        <span class="p-1 rounded text-white" style="background: linear-gradient(135deg, #2563eb, #7c3aed);">
+                            <i class="fa-solid fa-bag-shopping fs-6"></i>
+                        </span>
+                        NOVA TRENDS SaaS
+                    </h5>
+                    <p class="small text-secondary mb-0">
+                        A plataforma e-commerce de produtos mais inovadores do mercado. Qualidade, rapidez e garantia de satisfação.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="d-flex flex-column align-items-center align-items-md-end gap-1">
+                        <div class="fw-semibold text-dark">
+                            <i class="fa-solid fa-code text-primary me-1"></i> Arquitetado por <strong style="color: var(--brand-violet);">Enmanuel Jimenez</strong>
+                        </div>
+                        <div class="small">
+                            Founder & Lead Architect — <strong>EJAJ TECH</strong> | Instagram: <a href="https://instagram.com/ejajtech" target="_blank" class="text-primary text-decoration-none fw-bold">@ejajtech</a>
+                        </div>
+                        <div class="badge bg-primary mt-1 p-2 rounded-3 text-wrap" style="background: linear-gradient(135deg, #2563eb, #7c3aed) !important;">
+                            <i class="fa-brands fa-whatsapp me-1"></i> Suporte WhatsApp: +351 911 151 993 — Envia "<strong>AJUDA</strong>"
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-top mt-4 pt-3 text-center small text-muted">
+                &copy; 2026 NOVA TRENDS E-Commerce SaaS. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/ecommerce.js') }}"></script>
+</body>
+</html>

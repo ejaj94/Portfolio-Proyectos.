@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - NOVA TRENDS SaaS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-decoration-none text-primary">Loja</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('index', category=product.category) }}" class="text-decoration-none text-primary">{{ product.category }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <!-- Main Product Section -->
+    <div class="card-static p-4 p-md-5 mb-5 border-0 shadow-lg" style="border-radius: 1.5rem;">
+        <div class="row g-5 align-items-center">
+            
+            <!-- Product Media -->
+            <div class="col-lg-6">
+                <div class="position-relative overflow-hidden rounded-4 bg-light shadow-sm">
+                    <img src="{{ product.image_url }}" class="w-100 object-fit-cover" style="max-height: 420px;" alt="{{ product.name }}">
+                    {% if product.badge %}
+                    <div class="position-absolute top-0 start-0 m-4">
+                        <span class="badge badge-trend shadow-md fs-6"><i class="fa-solid fa-fire me-1"></i> {{ product.badge }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="col-lg-6">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-primary bg-opacity-10 text-primary fw-bold px-3 py-2 rounded-pill">
+                        {{ product.category }}
+                    </span>
+                    <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2 rounded-pill">
+                        <i class="fa-solid fa-check-circle me-1"></i> Em Stock ({{ product.stock }} unidades)
+                    </span>
+                </div>
+
+                <h1 class="display-6 fw-extrabold text-dark mb-3">{{ product.name }}</h1>
+
+                <!-- Rating & Sales Record -->
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="d-flex align-items-center text-warning fs-5">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                        <strong class="text-dark ms-2 fs-6">{{ product.rating }}</strong>
+                    </div>
+                    <span class="text-muted">|</span>
+                    <span class="text-secondary small fw-semibold">
+                        <i class="fa-solid fa-comment-dots text-primary me-1"></i> {{ product.reviews_count }} avaliações verificadas
+                    </span>
+                    <span class="text-muted">|</span>
+                    <span class="text-success small fw-bold">
+                        <i class="fa-solid fa-chart-line me-1"></i> {{ product.sales_count }} unidades vendidas
+                    </span>
+                </div>
+
+                <!-- Price Box -->
+                <div class="p-4 rounded-4 bg-light mb-4 d-flex align-items-center justify-content-between border">
+                    <div>
+                        <span class="text-muted small d-block mb-1">Preço Especial E-Commerce</span>
+                        <span class="display-6 fw-extrabold text-dark">{{ "%.2f"|format(product.price) }} €</span>
+                        {% if product.old_price %}
+                        <span class="text-muted text-decoration-line-through fs-5 ms-2">{{ "%.2f"|format(product.old_price) }} €</span>
+                        <span class="badge bg-danger ms-2 px-2 py-1">Poupe {{ "%.2f"|format(product.old_price - product.price) }} €</span>
+                        {% endif %}
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-white text-dark border px-3 py-2 rounded-pill">
+                            <i class="fa-solid fa-truck-fast text-primary me-1"></i> Portes Grátis > 80€
+                        </span>
+                    </div>
+                </div>
+
+                <p class="text-secondary lead fs-6 mb-4" style="line-height: 1.7;">
+                    {{ product.description }}
+                </p>
+
+                <!-- Actions Form -->
+                <div class="d-flex gap-3 align-items-center pt-3 border-top">
+                    <div class="d-flex align-items-center border rounded-3 bg-white p-1" style="width: 130px;">
+                        <button class="btn btn-light btn-sm fw-bold px-2" onclick="let q=document.getElementById('qtyInput'); if(q.value>1)q.value--;">-</button>
+                        <input type="number" id="qtyInput" class="form-control border-0 text-center fw-bold p-1" value="1" min="1" max="{{ product.stock }}">
+                        <button class="btn btn-light btn-sm fw-bold px-2" onclick="let q=document.getElementById('qtyInput'); q.value++;">+</button>
+                    </div>
+
+                    <button class="btn btn-brand btn-lg rounded-3 flex-grow-1" onclick="addToCart({{ product.id }}, parseInt(document.getElementById('qtyInput').value))">
+                        <i class="fa-solid fa-cart-plus me-2"></i> Adicionar ao Carrinho
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Related Products Section -->
+    {% if related_products %}
+    <div class="mb-5">
+        <h3 class="fw-extrabold text-dark mb-4">Produtos Relacionados</h3>
+        <div class="row g-4">
+            {% for rel in related_products %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card-light h-100 d-flex flex-column overflow-hidden">
+                    <img src="{{ rel.image_url }}" class="w-100" style="height: 160px; object-fit: cover;" alt="{{ rel.name }}">
+                    <div class="p-3 flex-grow-1 d-flex flex-column">
+                        <h6 class="fw-bold text-dark mb-1">{{ rel.name }}</h6>
+                        <span class="fs-5 fw-extrabold text-primary mb-3">{{ "%.2f"|format(rel.price) }} €</span>
+                        <a href="{{ url_for('product_detail', product_id=rel.id) }}" class="btn btn-outline-brand btn-sm mt-auto rounded-3">
+                            Ver Produto
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

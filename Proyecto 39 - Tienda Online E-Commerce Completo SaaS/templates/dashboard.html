@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Painel Analítico Merchant - NOVA TRENDS SaaS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Page Title -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2 rounded-pill mb-2">
+                <i class="fa-solid fa-chart-pie me-1"></i> Admin Analytics
+            </span>
+            <h2 class="fw-extrabold text-dark mb-1">Painel de Desempenho & Vendas</h2>
+            <p class="text-secondary small mb-0">Métricas financeiras e inventário em tempo real para o comerciante</p>
+        </div>
+        <a href="{{ url_for('index') }}" class="btn btn-outline-brand rounded-pill">
+            <i class="fa-solid fa-store me-1"></i> Ir para a Loja
+        </a>
+    </div>
+
+    <!-- KPI Cards Grid -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card-static p-4 h-100 border-0 shadow-sm">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-secondary small font-weight-semibold text-uppercase">Faturação Total</span>
+                    <span class="p-2 rounded-circle bg-primary bg-opacity-10 text-primary">
+                        <i class="fa-solid fa-euro-sign fs-5"></i>
+                    </span>
+                </div>
+                <h2 class="fw-extrabold text-dark mb-1">{{ "%.2f"|format(total_revenue) }} €</h2>
+                <span class="text-success small fw-bold"><i class="fa-solid fa-arrow-trend-up me-1"></i> +24.5% este mês</span>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-static p-4 h-100 border-0 shadow-sm">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-secondary small font-weight-semibold text-uppercase">Encomendas Realizadas</span>
+                    <span class="p-2 rounded-circle bg-purple bg-opacity-10" style="color: var(--brand-violet); background: rgba(124, 58, 237, 0.1);">
+                        <i class="fa-solid fa-box fs-5"></i>
+                    </span>
+                </div>
+                <h2 class="fw-extrabold text-dark mb-1">{{ total_orders }}</h2>
+                <span class="text-success small fw-bold"><i class="fa-solid fa-check-double me-1"></i> 100% Taxa de Sucesso</span>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-static p-4 h-100 border-0 shadow-sm">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-secondary small font-weight-semibold text-uppercase">Unidades Vendidas</span>
+                    <span class="p-2 rounded-circle bg-success bg-opacity-10 text-success">
+                        <i class="fa-solid fa-bag-shopping fs-5"></i>
+                    </span>
+                </div>
+                <h2 class="fw-extrabold text-dark mb-1">{{ total_items_sold }}</h2>
+                <span class="text-secondary small">Em {{ total_products }} produtos de catálogo</span>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-static p-4 h-100 border-0 shadow-sm">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-secondary small font-weight-semibold text-uppercase">Produto Estrela</span>
+                    <span class="p-2 rounded-circle bg-warning bg-opacity-10 text-warning">
+                        <i class="fa-solid fa-crown fs-5"></i>
+                    </span>
+                </div>
+                <h6 class="fw-bold text-dark mb-1 text-truncate">{{ top_product.name if top_product else 'N/A' }}</h6>
+                <span class="text-primary small fw-bold">{{ top_product.sales_count if top_product else 0 }} vendas registadas</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts & Analytics Section -->
+    <div class="row g-4 mb-5">
+        <!-- Revenue Bar Chart -->
+        <div class="col-lg-8">
+            <div class="card-static p-4 border-0 shadow-sm h-100">
+                <h5 class="fw-bold text-dark mb-3">
+                    <i class="fa-solid fa-chart-column text-primary me-2"></i> Receita por Categoria de Produto
+                </h5>
+                
+                {% set cat_names = [] %}
+                {% set cat_revs = [] %}
+                {% for cm in category_metrics %}
+                    {% set _ = cat_names.append(cm.category) %}
+                    {% set _ = cat_revs.append(cm.revenue or 0) %}
+                {% endfor %}
+
+                <div style="height: 280px; position: relative;">
+                    <canvas id="revenueChart" 
+                            data-categories='{{ cat_names|tojson }}' 
+                            data-revenues='{{ cat_revs|tojson }}'>
+                    </canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Product Card Showcase -->
+        <div class="col-lg-4">
+            <div class="card-static p-4 border-0 shadow-sm h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <span class="badge badge-bestseller mb-2"><i class="fa-solid fa-fire me-1"></i> #1 Mais Vendido</span>
+                    <h5 class="fw-bold text-dark mb-2">{{ top_product.name }}</h5>
+                    <p class="text-secondary small mb-3">{{ top_product.description|truncate(90) }}</p>
+                </div>
+
+                <div class="p-3 bg-light rounded-3 border">
+                    <div class="d-flex justify-content-between mb-1 small text-secondary">
+                        <span>Preço:</span>
+                        <strong class="text-dark">{{ "%.2f"|format(top_product.price) }} €</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1 small text-secondary">
+                        <span>Classificação:</span>
+                        <strong class="text-warning"><i class="fa-solid fa-star me-1"></i> {{ top_product.rating }} / 5.0</strong>
+                    </div>
+                    <div class="d-flex justify-content-between small text-secondary">
+                        <span>Unidades em Stock:</span>
+                        <strong class="text-success">{{ top_product.stock }} unid.</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders Table -->
+    <div class="card-static p-4 border-0 shadow-sm rounded-4 mb-5">
+        <h5 class="fw-bold text-dark mb-3">
+            <i class="fa-solid fa-clock-rotate-left text-primary me-2"></i> Encomendas Recentes
+        </h5>
+
+        {% if recent_orders %}
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr class="text-secondary small text-uppercase">
+                        <th>N.º Encomenda</th>
+                        <th>Cliente</th>
+                        <th>Data</th>
+                        <th>Pagamento</th>
+                        <th>Montante Total</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in recent_orders %}
+                    <tr>
+                        <td class="fw-bold text-dark">{{ order.order_number }}</td>
+                        <td>
+                            <div class="fw-bold text-dark">{{ order.customer_name }}</div>
+                            <span class="text-muted small">{{ order.customer_email }}</span>
+                        </td>
+                        <td class="text-secondary small">{{ order.created_at }}</td>
+                        <td><span class="badge bg-light text-dark border">{{ order.payment_method }}</span></td>
+                        <td class="fw-extrabold text-primary">{{ "%.2f"|format(order.total_amount) }} €</td>
+                        <td>
+                            {% if order.status == 'Entregue' %}
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-1 rounded-pill">Entregue</span>
+                            {% elif order.status == 'Em Trânsito' %}
+                                <span class="badge bg-warning bg-opacity-20 text-warning border border-warning px-3 py-1 rounded-pill">Em Trânsito</span>
+                            {% else %}
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1 rounded-pill">Processado</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-secondary small mb-0">Nenhuma encomenda efetuada até ao momento.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

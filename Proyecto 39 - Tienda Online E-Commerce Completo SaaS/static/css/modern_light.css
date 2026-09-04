@@ -1,0 +1,177 @@
+/* NOVA TRENDS E-Commerce SaaS - Modern Bright Light Theme */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --bg-light: #f8fafc;
+    --bg-card: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --brand-blue: #2563eb;
+    --brand-violet: #7c3aed;
+    --brand-emerald: #10b981;
+    --brand-amber: #f59e0b;
+    --brand-rose: #f43f5e;
+    --border-subtle: #e2e8f0;
+    --border-hover: #cbd5e1;
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 10px 25px -5px rgba(37, 99, 235, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 20px 35px -10px rgba(37, 99, 235, 0.12);
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+/* Glass & Card Styling */
+.card-light {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-light:hover {
+    border-color: rgba(37, 99, 235, 0.3);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+
+.card-static {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Custom Buttons */
+.btn-brand {
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.875rem;
+    padding: 0.75rem 1.5rem;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-brand:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+.btn-outline-brand {
+    background: transparent;
+    border: 2px solid var(--brand-blue);
+    color: var(--brand-blue);
+    font-weight: 700;
+    border-radius: 0.875rem;
+    padding: 0.625rem 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-brand:hover {
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--brand-blue);
+    border-color: var(--brand-violet);
+}
+
+/* Badges */
+.badge-trend {
+    background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 0.4rem 0.8rem;
+    border-radius: 9999px;
+}
+
+.badge-bestseller {
+    background: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 0.4rem 0.8rem;
+    border-radius: 9999px;
+}
+
+.badge-innovation {
+    background: linear-gradient(135deg, #10b981 0%, #2563eb 100%);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 0.4rem 0.8rem;
+    border-radius: 9999px;
+}
+
+/* Category Filter Tabs */
+.nav-pills-custom .nav-link {
+    color: var(--text-secondary);
+    font-weight: 600;
+    border-radius: 9999px;
+    padding: 0.6rem 1.25rem;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-subtle);
+    background: #ffffff;
+}
+
+.nav-pills-custom .nav-link.active,
+.nav-pills-custom .nav-link:hover {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
+}
+
+/* Form Controls */
+.form-input-light {
+    background: #ffffff;
+    border: 1.5px solid var(--border-subtle);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.form-input-light:focus {
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+    outline: none;
+}
+
+/* Cart Counter Badge */
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background: var(--brand-rose);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - NOVA TRENDS SaaS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="fw-extrabold text-dark mb-1">
+            <i class="fa-solid fa-credit-card me-2 text-primary"></i> Finalizar Encomenda
+        </h2>
+        <p class="text-secondary small">Preenche os teus dados de envio e método de pagamento para concluir a compra.</p>
+    </div>
+
+    <form action="{{ url_for('api_checkout_process') }}" method="POST">
+        <div class="row g-4 mb-5">
+            
+            <!-- Shipping & Payment Details Column -->
+            <div class="col-lg-8">
+                
+                <!-- Shipping Address Card -->
+                <div class="card-static p-4 border-0 shadow-sm rounded-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3">
+                        <i class="fa-solid fa-truck-ramp-box text-primary me-2"></i> 1. Dados de Envio & Contacto
+                    </h5>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary fw-semibold">Nome Completo</label>
+                            <input type="text" name="name" class="form-control form-input-light" value="Diogo Silva" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary fw-semibold">Email</label>
+                            <input type="email" name="email" class="form-control form-input-light" value="diogo.silva@ejajtech.pt" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-secondary fw-semibold">Morada de Entrega</label>
+                            <input type="text" name="address" class="form-control form-input-light" placeholder="Rua, Avenida, Número, Andar" value="Avenida da Liberdade 125, 3.º Dir" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary fw-semibold">Cidade</label>
+                            <input type="text" name="city" class="form-control form-input-light" value="Lisboa" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary fw-semibold">Código Postal</label>
+                            <input type="text" name="postal_code" class="form-control form-input-light" value="1250-142" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method Card -->
+                <div class="card-static p-4 border-0 shadow-sm rounded-4">
+                    <h5 class="fw-bold text-dark mb-3">
+                        <i class="fa-solid fa-wallet text-success me-2"></i> 2. Método de Pagamento
+                    </h5>
+
+                    <div class="d-flex flex-column gap-3">
+                        <!-- MB WAY Option -->
+                        <div class="border rounded-3 p-3 d-flex align-items-center justify-content-between bg-white cursor-pointer hover-border">
+                            <div class="form-check d-flex align-items-center gap-3">
+                                <input class="form-check-input" type="radio" name="payment_method" id="payMBWAY" value="MB WAY" checked>
+                                <label class="form-check-label fw-bold text-dark mb-0 cursor-pointer" for="payMBWAY">
+                                    <i class="fa-solid fa-mobile-screen text-danger me-2"></i> MB WAY
+                                </label>
+                            </div>
+                            <span class="badge bg-light text-secondary border">Instantâneo</span>
+                        </div>
+
+                        <!-- Multibanco Option -->
+                        <div class="border rounded-3 p-3 d-flex align-items-center justify-content-between bg-white cursor-pointer hover-border">
+                            <div class="form-check d-flex align-items-center gap-3">
+                                <input class="form-check-input" type="radio" name="payment_method" id="payMB" value="Multibanco">
+                                <label class="form-check-label fw-bold text-dark mb-0 cursor-pointer" for="payMB">
+                                    <i class="fa-solid fa-building-columns text-primary me-2"></i> Referência Multibanco
+                                </label>
+                            </div>
+                            <span class="badge bg-light text-secondary border">Caixa / Homebanking</span>
+                        </div>
+
+                        <!-- Credit Card Option -->
+                        <div class="border rounded-3 p-3 d-flex align-items-center justify-content-between bg-white cursor-pointer hover-border">
+                            <div class="form-check d-flex align-items-center gap-3">
+                                <input class="form-check-input" type="radio" name="payment_method" id="payCard" value="Cartão de Crédito">
+                                <label class="form-check-label fw-bold text-dark mb-0 cursor-pointer" for="payCard">
+                                    <i class="fa-solid fa-credit-card text-warning me-2"></i> Cartão de Crédito / Débito (Visa / Mastercard)
+                                </label>
+                            </div>
+                            <span class="badge bg-light text-secondary border">SSL 256-bit</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Order Summary Column -->
+            <div class="col-lg-4">
+                <div class="card-static p-4 border-0 shadow-lg rounded-4 sticky-top" style="top: 90px;">
+                    <h5 class="fw-bold text-dark mb-3">Resumo dos Produtos</h5>
+
+                    <div class="d-flex flex-column gap-3 mb-3 max-h-60 overflow-y-auto" style="max-height: 250px;">
+                        {% for item in cart_items %}
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                            <div>
+                                <h6 class="fw-bold text-dark mb-0 small">{{ item.name }}</h6>
+                                <span class="text-muted small">Qtd: {{ item.quantity }} x {{ "%.2f"|format(item.price) }} €</span>
+                            </div>
+                            <strong class="text-dark small">{{ "%.2f"|format(item.subtotal) }} €</strong>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex justify-content-between text-secondary mb-2">
+                        <span>Subtotal</span>
+                        <strong class="text-dark">{{ "%.2f"|format(subtotal) }} €</strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between text-secondary mb-3">
+                        <span>Envio</span>
+                        {% if shipping == 0.0 %}
+                            <strong class="text-success">Grátis</strong>
+                        {% else %}
+                            <strong class="text-dark">{{ "%.2f"|format(shipping) }} €</strong>
+                        {% endif %}
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between text-dark fs-4 fw-extrabold mb-4">
+                        <span>Total a Pagar</span>
+                        <span class="text-primary">{{ "%.2f"|format(total) }} €</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-brand btn-lg w-100 rounded-3">
+                        <i class="fa-solid fa-lock me-2"></i> Confirmar & Pagar Encomenda
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+{% endblock %}

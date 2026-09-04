@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Loja Online NOVA TRENDS - Os Produtos Mais Inovadores do Mercado{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Hero Showcase Banner -->
+    <div class="card-static p-4 p-md-5 mb-5 overflow-hidden position-relative border-0 shadow-lg" style="background: linear-gradient(135deg, #ffffff 0%, #eff6ff 50%, #f3e8ff 100%); border-radius: 2rem;">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="badge badge-innovation mb-3 px-3 py-2 text-uppercase fs-7">
+                    <i class="fa-solid fa-bolt me-1"></i> Nova Coleção 2026
+                </span>
+                <h1 class="display-4 fw-extrabold text-dark mb-3">
+                    Tecnologia de Ponta & <span style="background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Produtos Inovadores</span>
+                </h1>
+                <p class="lead text-secondary mb-4">
+                    Descobre os 10 produtos de maior sucesso e mais desejados do momento. Garantia oficial EJAJ TECH, envios rápidos e suporte personalizado.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="#catalog" class="btn btn-brand btn-lg rounded-pill px-4">
+                        <i class="fa-solid fa-sparkles me-2"></i> Explorar Catálogo
+                    </a>
+                    <a href="{{ url_for('orders') }}" class="btn btn-outline-brand btn-lg rounded-pill px-4">
+                        <i class="fa-solid fa-truck-fast me-2"></i> Rastrear Encomenda
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                <div class="position-relative d-inline-block">
+                    <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800" class="img-fluid rounded-4 shadow-lg" style="max-height: 280px; object-fit: cover;" alt="Smart Ring Aurora Pro">
+                    <div class="position-absolute bottom-0 start-0 m-3 bg-white p-3 rounded-4 shadow-lg text-start border">
+                        <div class="badge bg-warning text-dark fw-bold mb-1"><i class="fa-solid fa-star me-1"></i> 4.9 (340 avaliações)</div>
+                        <h6 class="fw-bold mb-0">Smart Ring Aurora Pro</h6>
+                        <span class="text-primary fw-extrabold fs-5">149.99 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div id="catalog" class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h3 class="fw-extrabold text-dark mb-1">Catálogo Exclusivo</h3>
+            <p class="text-muted small mb-0">Exibindo os produtos com registo de vendas mais elevado</p>
+        </div>
+
+        <ul class="nav nav-pills nav-pills-custom gap-2">
+            <li class="nav-item">
+                <a class="nav-link {% if current_category == 'all' %}active{% endif %}" href="{{ url_for('index') }}">Todos</a>
+            </li>
+            {% for cat in categories %}
+            <li class="nav-item">
+                <a class="nav-link {% if current_category == cat %}active{% endif %}" href="{{ url_for('index', category=cat) }}">{{ cat }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Products Grid -->
+    {% if products %}
+    <div class="row g-4 mb-5">
+        {% for prod in products %}
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="card-light h-100 d-flex flex-column overflow-hidden">
+                
+                <!-- Product Image & Badges -->
+                <div class="position-relative bg-light" style="height: 220px;">
+                    <img src="{{ prod.image_url }}" class="w-100 h-100 object-fit-cover" alt="{{ prod.name }}">
+                    
+                    {% if prod.badge %}
+                    <div class="position-absolute top-0 start-0 m-3">
+                        {% if 'Vendido' in prod.badge or 'Bestseller' in prod.badge %}
+                            <span class="badge badge-bestseller shadow-sm"><i class="fa-solid fa-fire me-1"></i> {{ prod.badge }}</span>
+                        {% elif 'Inovação' in prod.badge or 'Trend' in prod.badge %}
+                            <span class="badge badge-trend shadow-sm"><i class="fa-solid fa-bolt me-1"></i> {{ prod.badge }}</span>
+                        {% else %}
+                            <span class="badge badge-innovation shadow-sm"><i class="fa-solid fa-gem me-1"></i> {{ prod.badge }}</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <div class="position-absolute top-0 end-0 m-3">
+                        <span class="badge bg-white text-dark shadow-sm px-2 py-1 border rounded-pill">
+                            <i class="fa-solid fa-star text-warning me-1"></i> {{ prod.rating }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Product Content -->
+                <div class="p-4 flex-grow-1 d-flex flex-column">
+                    <span class="text-uppercase small fw-bold text-primary mb-1">{{ prod.category }}</span>
+                    <h5 class="fw-bold text-dark mb-2">
+                        <a href="{{ url_for('product_detail', product_id=prod.id) }}" class="text-dark text-decoration-none hover-primary">
+                            {{ prod.name }}
+                        </a>
+                    </h5>
+                    <p class="text-secondary small mb-3 flex-grow-1" style="line-height: 1.5;">
+                        {{ prod.description|truncate(85) }}
+                    </p>
+
+                    <!-- Sales Metrics -->
+                    <div class="d-flex align-items-center justify-content-between text-muted small mb-3 pt-2 border-top">
+                        <span><i class="fa-solid fa-bag-shopping text-success me-1"></i> {{ prod.sales_count }} vendidos</span>
+                        <span><i class="fa-solid fa-box text-warning me-1"></i> Stock: {{ prod.stock }}</span>
+                    </div>
+
+                    <!-- Price & Action -->
+                    <div class="d-flex align-items-center justify-content-between mt-auto">
+                        <div>
+                            <span class="fs-4 fw-extrabold text-dark">{{ "%.2f"|format(prod.price) }} €</span>
+                            {% if prod.old_price %}
+                            <span class="text-muted text-decoration-line-through small ms-1">{{ "%.2f"|format(prod.old_price) }} €</span>
+                            {% endif %}
+                        </div>
+                        <div class="d-flex gap-1">
+                            <a href="{{ url_for('product_detail', product_id=prod.id) }}" class="btn btn-light btn-sm rounded-circle p-2" title="Ver Ficha">
+                                <i class="fa-solid fa-eye text-secondary"></i>
+                            </a>
+                            <button class="btn btn-brand btn-sm rounded-3 px-3" onclick="addToCart({{ prod.id }})">
+                                <i class="fa-solid fa-cart-plus me-1"></i> Comprar
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card-static p-5 text-center my-5">
+        <i class="fa-solid fa-magnifying-glass text-muted fs-1 mb-3"></i>
+        <h4 class="fw-bold text-dark mb-2">Nenhum produto encontrado</h4>
+        <p class="text-secondary mb-4">Não encontramos produtos que correspondam à tua pesquisa.</p>
+        <a href="{{ url_for('index') }}" class="btn btn-brand rounded-pill px-4">Ver Todos os Produtos</a>
+    </div>
+    {% endif %}
+
+    <!-- Value Proposition Banner -->
+    <div class="row g-4 my-5">
+        <div class="col-md-4">
+            <div class="card-static p-4 text-center h-100">
+                <div class="d-inline-flex p-3 rounded-circle mb-3 text-primary" style="background: rgba(37, 99, 235, 0.1);">
+                    <i class="fa-solid fa-truck-fast fs-3"></i>
+                </div>
+                <h5 class="fw-bold text-dark">Entrega Rápida 24h</h5>
+                <p class="text-secondary small mb-0">Envios para Portugal Continental e Ilhas com rastreio em tempo real.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-static p-4 text-center h-100">
+                <div class="d-inline-flex p-3 rounded-circle mb-3 text-success" style="background: rgba(16, 185, 129, 0.1);">
+                    <i class="fa-solid fa-shield-halved fs-3"></i>
+                </div>
+                <h5 class="fw-bold text-dark">Garantia EJAJ TECH</h5>
+                <p class="text-secondary small mb-0">3 anos de garantia oficial e suporte dedicado via WhatsApp.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-static p-4 text-center h-100">
+                <div class="d-inline-flex p-3 rounded-circle mb-3" style="background: rgba(124, 58, 237, 0.1); color: var(--brand-violet);">
+                    <i class="fa-solid fa-credit-card fs-3"></i>
+                </div>
+                <h5 class="fw-bold text-dark">Pagamentos Flexíveis</h5>
+                <p class="text-secondary small mb-0">MB WAY, Multibanco e Cartão de Crédito com encriptação SSL segura.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
