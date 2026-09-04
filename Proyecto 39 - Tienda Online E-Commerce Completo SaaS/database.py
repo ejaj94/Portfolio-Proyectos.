@@ -216,7 +216,7 @@ def seed_data(cursor):
             280,
             1290,
             35,
-            'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800',
+            '/static/images/neurowave_eeg.jpg',
             'Máscara de sono inteligente em seda natural com sensores de ondas cerebrais EEG que induzem o sono profundo através de neurosom binaural.',
             'Saúde & Bem-Estar'
         )
