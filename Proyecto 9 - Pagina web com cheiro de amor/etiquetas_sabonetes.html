@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folha de Etiquetas Sabonetes A4 - Com Cheiro de Amor</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 10mm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: #f7f5f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .no-print-bar {
+            background: #ffffff;
+            border: 1px solid #e0d8cf;
+            padding: 15px 30px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .btn-print {
+            background: #4A7C59;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-print:hover {
+            background: #396245;
+            transform: translateY(-2px);
+        }
+        .a4-sheet {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            padding: 8mm;
+            box-sizing: border-box;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+            gap: 4mm;
+        }
+        .label-card {
+            border: 2px solid #2c2c2c;
+            outline: 1px solid #777777;
+            outline-offset: -3px;
+            border-radius: 8px;
+            padding: 6px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: #ffffff;
+        }
+        .label-title {
+            font-weight: bold;
+            font-size: 13pt;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+        .label-sub {
+            font-style: italic;
+            font-size: 9pt;
+            color: #555555;
+            margin-bottom: 4px;
+        }
+        .label-footer {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 6.5pt;
+            color: #666666;
+            letter-spacing: 0.5px;
+        }
+        @media print {
+            .no-print-bar {
+                display: none !important;
+            }
+            body {
+                background: none;
+                padding: 0;
+            }
+            .a4-sheet {
+                box-shadow: none;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print-bar">
+        <span>🧼 <strong>Folha de Etiquetas de Sabonetes A4 (36 Etiquetas - 13 Variedades)</strong></span>
+        <button class="btn-print" onclick="window.print()">🖨️ Imprimir Etiquetas de Sabonetes (PDF)</button>
+    </div>
+
+    <div class="a4-sheet">
+        <!-- Generated Grid of 36 Labels -->
+    </div>
+    <script>
+        const sheetContainer = document.querySelector('.a4-sheet');
+        const soapNames = [
+            "CHIA", "ROSAS", "AVEIA & MEL", "ALOE VERA",
+            "CAMOMILA", "LAVANDA", "MEL", "COCO",
+            "JASMIM", "CARBÃO ATIVADO", "ANIS & MEL", "MAÇÃ & CANELA",
+            "SAL GROSSO & ARRUDA"
+        ];
+        
+        let idx = 0;
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 4; c++) {
+                const sname = soapNames[idx % soapNames.length];
+                idx++;
+                
+                const card = document.createElement('div');
+                card.className = 'label-card';
+                card.innerHTML = `
+                    <div class="label-title" style="${sname.length > 12 ? 'font-size: 10.5pt;' : ''}">${sname}</div>
+                    <div class="label-sub">By com cheiro de amor</div>
+                    <div class="label-footer">✦ 100% ARTESANAL COM AMOR ✦</div>
+                `;
+                sheetContainer.appendChild(card);
+            }
+        }
+    </script>
+</body>
+</html>
