@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MINDHABIT SaaS - Tracker de Hábitos & Neuro-Performance{% endblock %}</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Cyber Emerald CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/habits.css') }}">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-expand-lg glass-card my-3 mx-3 px-4">
+        <div class="container-fluid px-0">
+            <!-- Brand Logo -->
+            <a class="navbar-brand d-flex align-items-center gap-3 text-white fw-bold fs-4" href="{{ url_for('index') }}">
+                <span class="d-inline-flex justify-content-center align-items-center rounded-circle" style="width: 42px; height: 42px; background: linear-gradient(135deg, #10b981, #8b5cf6);">
+                    <i class="fa-solid fa-brain text-white fs-5"></i>
+                </span>
+                <span>MIND<span style="color: var(--emerald-primary);">HABIT</span></span>
+            </a>
+
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <i class="fa-solid fa-bars fs-3 text-success"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-semibold hover-emerald" href="{{ url_for('index') }}">
+                            <i class="fa-solid fa-list-check me-1 text-emerald"></i> Os Meus Hábitos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-semibold hover-emerald" href="{{ url_for('calendar') }}">
+                            <i class="fa-solid fa-calendar-days me-1" style="color: var(--violet-accent);"></i> Calendário
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-semibold hover-emerald" href="{{ url_for('analytics') }}">
+                            <i class="fa-solid fa-chart-pie me-1 text-info"></i> Analítica
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-semibold hover-emerald" href="{{ url_for('goals') }}">
+                            <i class="fa-solid fa-bullseye me-1 text-warning"></i> Objetivos
+                        </a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <button class="btn btn-emerald" data-bs-toggle="modal" data-bs-target="#newHabitModal">
+                            <i class="fa-solid fa-plus me-1"></i> Novo Hábito
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flashed Messages -->
+    <div class="container mt-2">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show glass-card border-0 text-white mb-3" role="alert">
+                        <i class="fa-solid fa-circle-info me-2 text-warning"></i> {{ message }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Modal Criar Novo Hábito -->
+    <div class="modal fade" id="newHabitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card text-white border-0">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title fw-bold" style="color: var(--emerald-primary);">
+                        <i class="fa-solid fa-plus-circle me-2"></i> Criar Novo Hábito
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url_for('api_habit_create') }}" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label text-warning fw-semibold">Título do Hábito</label>
+                            <input type="text" name="title" class="form-control glass-input" placeholder="Ex: Meditação Guiada 15 Min" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-warning fw-semibold">Categoria</label>
+                            <select name="category" class="form-select glass-input" required>
+                                <option value="Saúde">Saúde</option>
+                                <option value="Foco">Foco</option>
+                                <option value="Aprendizagem">Aprendizagem</option>
+                                <option value="Fitness">Fitness</option>
+                                <option value="Mente">Mente</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-warning fw-semibold">Ícone</label>
+                                <select name="icon" class="form-select glass-input">
+                                    <option value="fa-brain">🧠 Mente</option>
+                                    <option value="fa-dumbbell">🏋️ Fitness</option>
+                                    <option value="fa-book">📚 Leitura</option>
+                                    <option value="fa-droplet">💧 Hidratação</option>
+                                    <option value="fa-bolt">⚡ Foco</option>
+                                    <option value="fa-capsules">💊 Saúde</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-warning fw-semibold">Cor de Destaque</label>
+                                <input type="color" name="color" class="form-control form-control-color glass-input w-100" value="#10b981">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top border-secondary">
+                        <button type="button" class="btn btn-outline-emerald text-white" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-emerald">
+                            <i class="fa-solid fa-plus me-1"></i> Criar Hábito
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass-card my-4 mx-3 p-4 text-center text-md-start">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5 class="fw-bold mb-1" style="color: var(--emerald-primary);">
+                        <i class="fa-solid fa-brain me-2"></i> MINDHABIT SaaS
+                    </h5>
+                    <p class="text-white-50 small mb-0">
+                        Plataforma Inteligente de Gestão de Hábitos, Streaks & Neuro-Performance.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex flex-column align-items-md-end gap-1">
+                        <div class="fw-semibold text-white">
+                            <i class="fa-solid fa-code me-1" style="color: var(--violet-accent);"></i> Arquitetura por <strong style="color: var(--emerald-primary);">Enmanuel Jimenez</strong>
+                        </div>
+                        <div class="small text-white-50">
+                            Founder & Lead Architect — <strong class="text-white">EJAJ TECH</strong> | Instagram: <a href="https://instagram.com/ejajtech" target="_blank" class="text-warning text-decoration-none">@ejajtech</a>
+                        </div>
+                        <div class="badge bg-success bg-opacity-20 border border-success mt-1 p-2 rounded-3 text-wrap" style="background: linear-gradient(135deg, #10b981, #059669) !important; color: white !important;">
+                            <i class="fa-brands fa-whatsapp me-1"></i> Suporte WhatsApp: +351 911 151 993 — Envia "<strong>AJUDA</strong>"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/habits.js') }}"></script>
+</body>
+</html>

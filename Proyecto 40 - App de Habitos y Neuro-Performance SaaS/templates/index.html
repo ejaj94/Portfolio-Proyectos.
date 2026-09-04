@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Painel de Hábitos - MINDHABIT SaaS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Hero Overview Banner -->
+    <div class="glass-card p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge badge-streak mb-3 text-uppercase">
+                    <i class="fa-solid fa-fire me-1"></i> Foco Diário Ativo
+                </span>
+                <h1 class="display-5 fw-extrabold text-white mb-2">
+                    Domina as tuas Rotinas, Eleva a tua <span style="color: var(--emerald-primary);">Neuro-Performance</span>
+                </h1>
+                <p class="lead text-white-50 mb-4">
+                    Mantém a tua sequência de vitórias (Streaks), cumpre hábitos diários com consistência e monitoriza a tua evolução.
+                </p>
+
+                <!-- Global Progress Bar -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between text-white-50 small mb-1">
+                        <span>Progresso do Dia</span>
+                        <strong class="text-warning" id="globalRateText">{{ "%.1f"|format(completion_rate) }}%</strong>
+                    </div>
+                    <div class="progress bg-dark" style="height: 10px; border-radius: 5px;">
+                        <div class="progress-bar" id="globalRateBar" role="progressbar" 
+                             style="width: {{ completion_rate }}%; background: linear-gradient(90deg, #10b981, #8b5cf6);" 
+                             aria-valuenow="{{ completion_rate }}" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center mt-4 mt-lg-0">
+                <div class="glass-card p-4 border-emerald">
+                    <div class="d-inline-flex p-3 rounded-circle mb-2" style="background: rgba(245, 158, 11, 0.2); color: var(--flame-amber);">
+                        <i class="fa-solid fa-fire-flame-curved fs-1"></i>
+                    </div>
+                    <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Maior Sequência Ativa</h6>
+                    <h2 class="fw-extrabold text-warning mb-0">{{ best_current_streak }} Dias 🔥</h2>
+                    <span class="small text-white-50 mt-1 d-block">Recorde Histórico: {{ total_best_streak }} Dias 🏆</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metrics Bar -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="glass-card p-3 text-center">
+                <div class="text-white-50 small text-uppercase mb-1">Hábitos Cumpridos Hoje</div>
+                <div class="fs-3 fw-bold text-emerald">
+                    {{ completed_today_count }} <span class="fs-6 text-white-50">/ {{ total_habits }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card p-3 text-center">
+                <div class="text-white-50 small text-uppercase mb-1">Taxa de Sucesso</div>
+                <div class="fs-3 fw-bold text-info">{{ "%.0f"|format(completion_rate) }}%</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card p-3 text-center">
+                <div class="text-white-50 small text-uppercase mb-1">Categorias Ativas</div>
+                <div class="fs-3 fw-bold text-warning">5</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card p-3 text-center">
+                <div class="text-white-50 small text-uppercase mb-1">Status da Mente</div>
+                <div class="fs-3 fw-bold text-success"><i class="fa-solid fa-bolt me-1"></i> Alta Energia</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Habits List Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-white mb-0">
+            <i class="fa-solid fa-list-check me-2" style="color: var(--emerald-primary);"></i> Hábitos de Hoje
+        </h3>
+        <button class="btn btn-outline-emerald btn-sm" data-bs-toggle="modal" data-bs-target="#newHabitModal">
+            <i class="fa-solid fa-plus me-1"></i> Novo Hábito
+        </button>
+    </div>
+
+    <!-- Habits Grid -->
+    {% if habits %}
+    <div class="row g-4 mb-5">
+        {% for habit in habits %}
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between {% if habit.completed_today %}border-success{% endif %}" id="habit-card-{{ habit.id }}">
+                <div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="p-3 rounded-3 text-white fs-4" style="background: {{ habit.color }}22; border: 1px solid {{ habit.color }};">
+                                <i class="fa-solid {{ habit.icon }}"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold text-white mb-1">{{ habit.title }}</h5>
+                                <span class="badge bg-dark border border-secondary text-white-50">
+                                    {{ habit.category }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Checkbox Toggle -->
+                        <div class="habit-checkbox {% if habit.completed_today %}checked{% endif %}" id="check-{{ habit.id }}" onclick="toggleHabit({{ habit.id }})">
+                            {% if habit.completed_today %}
+                                <i class="fa-solid fa-check text-white"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-top border-dark d-flex justify-content-between align-items-center mt-3">
+                    <span class="badge badge-streak">
+                        <i class="fa-solid fa-fire me-1"></i> <span id="streak-{{ habit.id }}">{{ habit.current_streak }} dias</span>
+                    </span>
+                    <span class="small text-white-50">
+                        Recorde: <strong>{{ habit.best_streak }} dias</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="glass-card p-5 text-center my-5">
+        <i class="fa-solid fa-brain text-warning fs-1 mb-3"></i>
+        <h4 class="fw-bold text-white mb-2">Ainda não tens hábitos criados!</h4>
+        <p class="text-white-50 mb-4">Cria o teu primeiro hábito diário para começares a construir a tua sequência.</p>
+        <button class="btn btn-emerald btn-lg" data-bs-toggle="modal" data-bs-target="#newHabitModal">
+            <i class="fa-solid fa-plus me-2"></i> Criar Primeiro Hábito
+        </button>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

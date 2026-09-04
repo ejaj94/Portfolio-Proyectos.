@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Objetivos & Metas - MINDHABIT SaaS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-extrabold text-white mb-1">
+                <i class="fa-solid fa-bullseye me-2 text-warning"></i> Objetivos & Metas 2026
+            </h2>
+            <p class="text-white-50 small mb-0">Define e acompanha metas de longo prazo com métricas quantitativas</p>
+        </div>
+        <button class="btn btn-emerald btn-sm" data-bs-toggle="modal" data-bs-target="#newGoalModal">
+            <i class="fa-solid fa-plus me-1"></i> Novo Objetivo
+        </button>
+    </div>
+
+    <!-- Goals Grid -->
+    {% if goals %}
+    <div class="row g-4 mb-5">
+        {% for goal in goals %}
+        {% set pct = (goal.current_value / goal.target_value * 100) if goal.target_value > 0 else 0 %}
+        <div class="col-md-6">
+            <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-dark border border-warning text-warning px-3 py-1">
+                            {{ goal.category }}
+                        </span>
+                        {% if goal.status == 'Concluído' %}
+                            <span class="badge bg-success bg-opacity-20 text-success border border-success px-3 py-1 rounded-pill">
+                                <i class="fa-solid fa-trophy me-1"></i> Concluído
+                            </span>
+                        {% else %}
+                            <span class="badge bg-primary bg-opacity-20 text-info border border-info px-3 py-1 rounded-pill">
+                                Em Progresso
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <h4 class="fw-bold text-white mb-3">{{ goal.title }}</h4>
+
+                    <div class="p-3 glass-card mb-3" style="background: rgba(11, 15, 25, 0.7);">
+                        <div class="d-flex justify-content-between align-items-center text-white-50 small mb-1">
+                            <span>Progresso Atual</span>
+                            <strong class="text-white fs-5">{{ "%.0f"|format(goal.current_value) }} <span class="fs-6 text-white-50">/ {{ "%.0f"|format(goal.target_value) }} {{ goal.unit }}</span></strong>
+                        </div>
+
+                        <div class="progress bg-dark" style="height: 10px; border-radius: 5px;">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ pct if pct <= 100 else 100 }}%; background: linear-gradient(90deg, #f59e0b, #10b981);" 
+                                 aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div class="text-end text-warning small mt-1 fw-bold">{{ "%.1f"|format(pct) }}%</div>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-top border-secondary d-flex justify-content-between align-items-center">
+                    <span class="text-white-50 small">
+                        <i class="fa-regular fa-clock me-1 text-warning"></i> Data Limite: {{ goal.deadline }}
+                    </span>
+
+                    <button class="btn btn-outline-emerald btn-sm" onclick="updateGoalProgress({{ goal.id }}, 1)">
+                        <i class="fa-solid fa-plus me-1"></i> +1 {{ goal.unit }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="glass-card p-5 text-center my-5">
+        <i class="fa-solid fa-bullseye text-warning fs-1 mb-3"></i>
+        <h4 class="fw-bold text-white mb-2">Sem objetivos registados</h4>
+        <p class="text-white-50 mb-4">Define a tua primeira grande meta para 2026.</p>
+        <button class="btn btn-emerald btn-lg" data-bs-toggle="modal" data-bs-target="#newGoalModal">
+            <i class="fa-solid fa-plus me-2"></i> Criar Primeiro Objetivo
+        </button>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- Modal Novo Objetivo -->
+<div class="modal fade" id="newGoalModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-card text-white border-0">
+            <div class="modal-header border-bottom border-secondary">
+                <h5 class="modal-title fw-bold text-warning">
+                    <i class="fa-solid fa-bullseye me-2"></i> Adicionar Novo Objetivo
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('api_goal_create') }}" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-warning fw-semibold">Título do Objetivo</label>
+                        <input type="text" name="title" class="form-control glass-input" placeholder="Ex: Ler 12 Livros em 2026" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-warning fw-semibold">Categoria</label>
+                        <select name="category" class="form-select glass-input" required>
+                            <option value="Aprendizagem">Aprendizagem</option>
+                            <option value="Mente">Mente</option>
+                            <option value="Fitness">Fitness</option>
+                            <option value="Foco">Foco</option>
+                            <option value="Saúde">Saúde</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-warning fw-semibold">Valor Alvo (Target)</label>
+                            <input type="number" step="0.5" name="target_value" class="form-control glass-input" value="10" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-warning fw-semibold">Unidade de Medida</label>
+                            <input type="text" name="unit" class="form-control glass-input" placeholder="Ex: livros, horas, dias" value="livros" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-warning fw-semibold">Data Limite</label>
+                        <input type="date" name="deadline" class="form-control glass-input" value="2026-12-31" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary">
+                    <button type="button" class="btn btn-outline-emerald text-white" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-emerald">
+                        <i class="fa-solid fa-plus me-1"></i> Criar Objetivo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

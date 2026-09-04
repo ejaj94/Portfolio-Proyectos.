@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Calendário de Hábitos - MINDHABIT SaaS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-extrabold text-white mb-1">
+                <i class="fa-solid fa-calendar-days me-2" style="color: var(--violet-accent);"></i> Calendário de Consistência
+            </h2>
+            <p class="text-white-50 small mb-0">Mapa de calor de hábitos concluídos nos últimos 28 dias</p>
+        </div>
+        <button class="btn btn-emerald btn-sm" data-bs-toggle="modal" data-bs-target="#newHabitModal">
+            <i class="fa-solid fa-plus me-1"></i> Novo Hábito
+        </button>
+    </div>
+
+    <!-- Monthly Heatmap Card -->
+    <div class="glass-card p-4 p-md-5 mb-5">
+        <h5 class="fw-bold text-white mb-3">
+            <i class="fa-solid fa-fire text-warning me-2"></i> Registo de Atividade Recente (Heatmap)
+        </h5>
+
+        <div class="d-flex flex-wrap gap-2 justify-content-start my-4">
+            {% for day in days_list %}
+                {% set level = 0 %}
+                {% if day.completed_count >= 5 %}
+                    {% set level = 3 %}
+                {% elif day.completed_count >= 3 %}
+                    {% set level = 2 %}
+                {% elif day.completed_count >= 1 %}
+                    {% set level = 1 %}
+                {% endif %}
+
+                <div class="calendar-cell level-{{ level }} {% if day.is_today %}border-warning{% endif %}" title="{{ day.date }}: {{ day.completed_count }} hábitos concluídos">
+                    <span>{{ day.day_number }}</span>
+                    <span class="fs-7 text-white-50" style="font-size: 0.65rem;">{{ day.day_name }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="d-flex align-items-center justify-content-end gap-3 text-white-50 small pt-3 border-top border-secondary">
+            <span>Menos Consistência</span>
+            <div class="d-flex gap-1">
+                <div class="calendar-cell level-0" style="width: 20px; height: 20px;"></div>
+                <div class="calendar-cell level-1" style="width: 20px; height: 20px;"></div>
+                <div class="calendar-cell level-2" style="width: 20px; height: 20px;"></div>
+                <div class="calendar-cell level-3" style="width: 20px; height: 20px;"></div>
+            </div>
+            <span>Mais Consistência 🔥</span>
+        </div>
+    </div>
+
+    <!-- Habits Summary Breakdown -->
+    <div class="glass-card p-4">
+        <h5 class="fw-bold text-white mb-3">Resumo dos Hábitos Ativos</h5>
+        <div class="row g-3">
+            {% for habit in habits %}
+            <div class="col-md-6">
+                <div class="glass-card p-3 d-flex align-items-center justify-content-between" style="background: rgba(11, 15, 25, 0.6);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="p-2 rounded text-white" style="background: {{ habit.color }}22; border: 1px solid {{ habit.color }};">
+                            <i class="fa-solid {{ habit.icon }}"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-white mb-0">{{ habit.title }}</h6>
+                            <span class="text-white-50 small">{{ habit.category }}</span>
+                        </div>
+                    </div>
+                    <span class="badge badge-streak">
+                        <i class="fa-solid fa-fire me-1"></i> {{ habit.current_streak }} dias
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

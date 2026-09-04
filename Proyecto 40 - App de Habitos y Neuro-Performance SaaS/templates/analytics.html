@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Analítica de Desempenho - MINDHABIT SaaS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-extrabold text-white mb-1">
+                <i class="fa-solid fa-chart-pie me-2 text-info"></i> Analítica de Neuro-Performance
+            </h2>
+            <p class="text-white-50 small mb-0">Estatísticas detalhadas sobre a tua evolução e consistência de hábitos</p>
+        </div>
+        <a href="{{ url_for('index') }}" class="btn btn-outline-emerald btn-sm">
+            <i class="fa-solid fa-arrow-left me-1"></i> Voltar ao Painel
+        </a>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="row g-4 mb-5">
+        
+        <!-- Chart 1: Weekly Trend -->
+        <div class="col-lg-8">
+            <div class="glass-card p-4 h-100">
+                <h5 class="fw-bold text-white mb-3">
+                    <i class="fa-solid fa-chart-column text-emerald me-2"></i> Tendência dos Últimos 7 Dias
+                </h5>
+                <div style="height: 280px; position: relative;">
+                    <canvas id="weeklyTrendChart" data-trend='{{ weekly_trend|tojson }}'></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 2: Category Breakdown -->
+        <div class="col-lg-4">
+            <div class="glass-card p-4 h-100">
+                <h5 class="fw-bold text-white mb-3">
+                    <i class="fa-solid fa-chart-pie text-warning me-2"></i> Hábitos por Categoria
+                </h5>
+
+                {% set cat_list = [] %}
+                {% for cm in categories_data %}
+                    {% set _ = cat_list.append({'category': cm.category, 'count': cm.count}) %}
+                {% endfor %}
+
+                <div style="height: 250px; position: relative;">
+                    <canvas id="categoryChart" data-categories='{{ cat_list|tojson }}'></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Habits Performance Roster -->
+    <div class="glass-card p-4">
+        <h5 class="fw-bold text-white mb-3">Métricas de Consistência por Hábito</h5>
+        <div class="table-responsive">
+            <table class="table align-middle text-white">
+                <thead>
+                    <tr class="text-white-50 small text-uppercase">
+                        <th>Hábito</th>
+                        <th>Categoria</th>
+                        <th>Sequência Atual</th>
+                        <th>Melhor Recorde</th>
+                        <th>Estado Hoje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for habit in habits %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2 fw-bold">
+                                <i class="fa-solid {{ habit.icon }}" style="color: {{ habit.color }};"></i>
+                                {{ habit.title }}
+                            </div>
+                        </td>
+                        <td><span class="badge bg-dark border border-secondary text-white-50">{{ habit.category }}</span></td>
+                        <td><span class="badge badge-streak"><i class="fa-solid fa-fire me-1"></i> {{ habit.current_streak }} dias</span></td>
+                        <td class="fw-bold text-warning">{{ habit.best_streak }} dias 🏆</td>
+                        <td>
+                            {% if habit.completed_today %}
+                                <span class="badge bg-success bg-opacity-20 text-success border border-success px-3 py-1 rounded-pill">
+                                    <i class="fa-solid fa-check me-1"></i> Cumprido
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary bg-opacity-20 text-white-50 border border-secondary px-3 py-1 rounded-pill">
+                                    Pendente
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
