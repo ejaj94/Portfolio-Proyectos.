@@ -138,7 +138,7 @@ def seed_data(cursor):
             410,
             1850,
             25,
-            'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800',
+            '/static/images/lumina_levitating_lamp.jpg',
             'Lâmpada LED minimalista a flutuar no ar através de indução eletromagnética com carregador wireless integrado na base de madeira de nogueira.',
             'Bestseller Home'
         ),
