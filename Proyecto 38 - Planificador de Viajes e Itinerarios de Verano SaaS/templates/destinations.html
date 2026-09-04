@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Destinos de Verão - SUNSET TRAVEL SaaS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Page Header -->
+    <div class="glass-card p-4 p-md-5 mb-5 text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 61, 0, 0.2) 100%);">
+        <span class="badge px-3 py-2 mb-2 rounded-pill text-uppercase fw-bold" style="background: linear-gradient(135deg, #ff5722, #ffc107); color: white;">
+            <i class="fa-solid fa-compass me-1"></i> Catálogo Exclusivo
+        </span>
+        <h1 class="display-5 fw-extrabold text-white mb-2">Destinos Paradisíacos de Verão</h1>
+        <p class="lead text-white-50 max-w-2xl mx-auto mb-0">
+            Explora os locais mais procurados para férias de sol, praias cristalinas, gastronomia de sonho e experiências memoráveis.
+        </p>
+    </div>
+
+    <!-- Destinations Grid -->
+    <div class="row g-4 mb-5">
+        {% for dest in destinations %}
+        <div class="col-md-6 col-lg-6">
+            <div class="glass-card h-100 overflow-hidden d-flex flex-column flex-md-row">
+                <div class="w-100 w-md-50 position-relative" style="min-height: 220px;">
+                    <img src="{{ dest.image_url }}" class="w-100 h-100 object-fit-cover" alt="{{ dest.name }}">
+                    <div class="position-absolute top-0 start-0 m-3">
+                        <span class="badge bg-dark bg-opacity-75 text-warning backdrop-blur border border-warning px-3 py-2 rounded-pill">
+                            <i class="fa-solid fa-sun me-1"></i> {{ dest.weather }}
+                        </span>
+                    </div>
+                </div>
+                <div class="p-4 w-100 w-md-50 d-flex flex-column justify-content-between">
+                    <div>
+                        <h4 class="fw-bold text-white mb-1">{{ dest.name }}</h4>
+                        <p class="text-white-50 small mb-2">
+                            <i class="fa-solid fa-earth-europe me-1" style="color: var(--sunset-orange);"></i> {{ dest.country }}
+                        </p>
+                        <p class="text-white-50 small mb-3">{{ dest.description }}</p>
+                    </div>
+
+                    <div>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <span class="badge bg-dark border border-secondary text-white">
+                                <i class="fa-solid fa-money-bill me-1 text-warning"></i> Moeda: {{ dest.currency }}
+                            </span>
+                            <span class="badge bg-dark border border-secondary text-white">
+                                <i class="fa-solid fa-passport me-1 text-warning"></i> Visto: {{ dest.visa_required }}
+                            </span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top border-secondary">
+                            <div>
+                                <span class="text-white-50 small d-block">Custo Médio Diário</span>
+                                <strong class="fs-5 text-warning">{{ dest.avg_daily_cost }} €</strong>
+                            </div>
+                            <button class="btn btn-sunset btn-sm" data-bs-toggle="modal" data-bs-target="#newTripModal">
+                                Planear Viagem <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

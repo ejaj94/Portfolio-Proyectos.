@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}{{ trip.title }} - SUNSET TRAVEL SaaS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Trip Header Card -->
+    <div class="glass-card p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(255, 87, 34, 0.3) 0%, rgba(30, 15, 34, 0.9) 100%);">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-warning text-dark font-weight-bold px-3 py-2 rounded-pill">
+                        <i class="fa-solid fa-location-dot me-1"></i> {{ trip.dest_name }} ({{ trip.dest_country }})
+                    </span>
+                    <span class="badge bg-dark text-warning border border-warning px-3 py-2 rounded-pill">
+                        <i class="fa-solid fa-sun me-1"></i> {{ trip.dest_weather }}
+                    </span>
+                </div>
+                <h1 class="display-5 fw-extrabold text-white mb-2" id="tripTitleText">{{ trip.title }}</h1>
+                <p class="text-white-50 lead mb-3">
+                    <i class="fa-regular fa-calendar me-2" style="color: var(--sunset-salmon);"></i> {{ trip.start_date }} a {{ trip.end_date }}
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-sunset" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                        <i class="fa-solid fa-plus me-1"></i> Adicionar Atividade
+                    </button>
+                    <button class="btn btn-outline-sunset" onclick="copyTripSummary()">
+                        <i class="fa-solid fa-share-nodes me-1"></i> Partilhar Viagem
+                    </button>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary text-white ms-auto">
+                        <i class="fa-solid fa-arrow-left me-1"></i> Voltar
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 mt-4 mt-lg-0 text-center">
+                <div class="glass-card p-3 border-warning">
+                    <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Resumo Financeiro</h6>
+                    <div class="fs-3 fw-bold text-white mb-1">
+                        {{ "%.2f"|format(trip.total_spent) }} € <span class="fs-6 text-white-50">/ {{ "%.2f"|format(trip.total_budget) }} €</span>
+                    </div>
+                    {% set pct = (trip.total_spent / trip.total_budget * 100) if trip.total_budget > 0 else 0 %}
+                    <div class="progress bg-dark my-2" style="height: 10px; border-radius: 5px;">
+                        <div class="progress-bar" role="progressbar" style="width: {{ pct if pct <= 100 else 100 }}%; background: linear-gradient(90deg, #ffc107, #ff5722);"></div>
+                    </div>
+                    <span class="small text-warning fw-semibold">
+                        {% if trip.total_budget >= trip.total_spent %}
+                            <i class="fa-solid fa-check-circle me-1"></i> Restam {{ "%.2f"|format(trip.total_budget - trip.total_spent) }} € no teu orçamento
+                        {% else %}
+                            <i class="fa-solid fa-triangle-exclamation me-1" style="color: var(--sunset-red);"></i> Ultrapassaste o orçamento em {{ "%.2f"|format(trip.total_spent - trip.total_budget) }} €
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Grid: Itinerary & Budget Chart -->
+    <div class="row g-4 mb-5">
+        
+        <!-- Day-by-Day Itinerary Column -->
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold text-white mb-0">
+                    <i class="fa-solid fa-calendar-days me-2" style="color: var(--sunset-yellow);"></i> Itinerário Dia a Dia
+                </h3>
+                <button class="btn btn-outline-sunset btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                    <i class="fa-solid fa-plus me-1"></i> Adicionar
+                </button>
+            </div>
+
+            {% if days_dict %}
+                {% for day_num, items in days_dict.items() %}
+                <div class="glass-card mb-4 p-4">
+                    <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom border-secondary">
+                        <h4 class="fw-bold text-white mb-0" style="color: var(--sunset-salmon) !important;">
+                            <i class="fa-solid fa-sun me-2 text-warning"></i> Dia {{ day_num }}
+                        </h4>
+                        <span class="badge bg-dark border border-warning text-warning px-3 py-1">
+                            {{ items|length }} {% if items|length == 1 %}atividade{% else %}atividades{% endif %}
+                        </span>
+                    </div>
+
+                    <div class="timeline ps-2">
+                        {% for item in items %}
+                        <div class="d-flex gap-3 mb-4 position-relative">
+                            <div class="text-center" style="min-width: 70px;">
+                                <span class="badge bg-dark border border-secondary text-white px-2 py-1 fs-7 fw-bold">
+                                    {{ item.time_slot }}
+                                </span>
+                            </div>
+                            <div class="flex-grow-1 glass-card p-3" style="background: rgba(18, 9, 20, 0.6);">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="fw-bold text-white mb-0">{{ item.title }}</h6>
+                                    {% if item.category == 'Voo' %}
+                                        <span class="badge badge-cat-voo"><i class="fa-solid fa-plane me-1"></i> Voo</span>
+                                    {% elif item.category == 'Hotel' %}
+                                        <span class="badge badge-cat-hotel"><i class="fa-solid fa-hotel me-1"></i> Hotel</span>
+                                    {% elif item.category == 'Restaurante' %}
+                                        <span class="badge badge-cat-restaurante"><i class="fa-solid fa-utensils me-1"></i> Restaurante</span>
+                                    {% else %}
+                                        <span class="badge badge-cat-atividade"><i class="fa-solid fa-camera me-1"></i> Atividade</span>
+                                    {% endif %}
+                                </div>
+
+                                {% if item.location %}
+                                <div class="text-white-50 small mb-1">
+                                    <i class="fa-solid fa-location-dot me-1 text-danger"></i> {{ item.location }}
+                                </div>
+                                {% endif %}
+
+                                {% if item.notes %}
+                                <p class="text-white-50 small mb-2">{{ item.notes }}</p>
+                                {% endif %}
+
+                                <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top border-dark">
+                                    <span class="fw-bold text-warning small">
+                                        Custo: {{ "%.2f"|format(item.cost) }} €
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="glass-card p-5 text-center">
+                    <i class="fa-solid fa-calendar-plus text-warning fs-1 mb-3"></i>
+                    <h5 class="fw-bold text-white mb-2">Ainda não adicionaste atividades!</h5>
+                    <p class="text-white-50 mb-3">Começa a planear o teu itinerário adicionando passeios, restaurantes e estadias.</p>
+                    <button class="btn btn-sunset" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                        <i class="fa-solid fa-plus me-1"></i> Adicionar Primeira Atividade
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar: Budget Chart & Recommended Hotels -->
+        <div class="col-lg-4">
+            
+            <!-- Budget Doughnut Chart Widget -->
+            <div class="glass-card p-4 mb-4">
+                <h5 class="fw-bold text-white mb-3">
+                    <i class="fa-solid fa-chart-pie me-2" style="color: var(--sunset-salmon);"></i> Distribuição do Orçamento
+                </h5>
+                <div style="height: 230px; position: relative;">
+                    <canvas id="budgetChart" data-trip-id="{{ trip.id }}"></canvas>
+                </div>
+            </div>
+
+            <!-- Destination Hotels Widget -->
+            <div class="glass-card p-4">
+                <h5 class="fw-bold text-white mb-3">
+                    <i class="fa-solid fa-hotel me-2" style="color: var(--sunset-yellow);"></i> Hotéis Recomendados
+                </h5>
+                {% if hotels %}
+                    <div class="d-flex flex-column gap-3">
+                        {% for hotel in hotels %}
+                        <div class="glass-card p-3" style="background: rgba(18, 9, 20, 0.7);">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <h6 class="fw-bold text-white mb-0 fs-6">{{ hotel.name }}</h6>
+                                <span class="badge bg-warning text-dark fw-bold">
+                                    <i class="fa-solid fa-star me-1"></i> {{ hotel.stars }}
+                                </span>
+                            </div>
+                            <p class="text-white-50 small mb-2">{{ hotel.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center text-warning small fw-bold">
+                                <span>{{ "%.2f"|format(hotel.price_per_night) }} € / noite</span>
+                                <span class="text-success"><i class="fa-solid fa-circle-check me-1"></i> Disponível</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-white-50 small mb-0">Sem sugestões de hotéis para este destino.</p>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal Adicionar Atividade ao Itinerário -->
+<div class="modal fade" id="addItemModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-card text-white border-0">
+            <div class="modal-header border-bottom border-secondary">
+                <h5 class="modal-title fw-bold" style="color: var(--sunset-salmon);">
+                    <i class="fa-solid fa-plus-circle me-2"></i> Adicionar Atividade ao Itinerário
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('api_add_itinerary_item', trip_id=trip.id) }}" method="POST">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-warning fw-semibold">N.º do Dia</label>
+                            <input type="number" name="day_number" min="1" max="30" class="form-control glass-input" value="1" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-warning fw-semibold">Horário</label>
+                            <input type="time" name="time_slot" class="form-control glass-input" value="10:00" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-warning fw-semibold">Categoria</label>
+                            <select name="category" class="form-select glass-input" required>
+                                <option value="Atividade">Atividade</option>
+                                <option value="Restaurante">Restaurante</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="Voo">Voo</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-warning fw-semibold">Título / Descrição Curta</label>
+                        <input type="text" name="title" class="form-control glass-input" placeholder="Ex: Passeio de barco ao pôr do sol" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-7 mb-3">
+                            <label class="form-label text-warning fw-semibold">Localização</label>
+                            <input type="text" name="location" class="form-control glass-input" placeholder="Ex: Marina de Vilamoura">
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label text-warning fw-semibold">Custo (€)</label>
+                            <input type="number" step="5" name="cost" class="form-control glass-input" value="50.0" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-warning fw-semibold">Notas / Detalhes</label>
+                        <textarea name="notes" class="form-control glass-input" rows="2" placeholder="Ex: Confirmar reserva com antecedência"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary">
+                    <button type="button" class="btn btn-outline-sunset" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-sunset">
+                        <i class="fa-solid fa-plus me-1"></i> Adicionar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

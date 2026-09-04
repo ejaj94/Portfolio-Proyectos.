@@ -1,0 +1,109 @@
+/* SUNSET TRAVEL SaaS - Summer Sunset Color Theme */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --bg-dark: #120914;
+    --bg-card: rgba(30, 15, 34, 0.8);
+    --border-sunset: rgba(255, 122, 89, 0.25);
+    --border-bright: rgba(255, 87, 34, 0.6);
+    --sunset-orange: #ff5722;
+    --sunset-yellow: #ffc107;
+    --sunset-red: #ff3d00;
+    --sunset-salmon: #ff7a59;
+    --sunset-cream: #fff3e0;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(at 10% 10%, rgba(255, 87, 34, 0.2) 0px, transparent 50%),
+        radial-gradient(at 90% 10%, rgba(255, 193, 7, 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 90%, rgba(255, 122, 89, 0.18) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: #fff3e0;
+    min-height: 100vh;
+}
+
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-sunset);
+    border-radius: 1.25rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+    border-color: var(--border-bright);
+    box-shadow: 0 12px 40px 0 rgba(255, 87, 34, 0.25);
+}
+
+.glass-input {
+    background: rgba(18, 9, 20, 0.85);
+    border: 1px solid var(--border-sunset);
+    color: #ffffff;
+    border-radius: 0.75rem;
+    padding: 0.625rem 1rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+    border-color: var(--sunset-orange);
+    box-shadow: 0 0 15px rgba(255, 87, 34, 0.4);
+}
+
+.btn-sunset {
+    background: linear-gradient(135deg, #ff5722 0%, #ff7a59 50%, #ffc107 100%);
+    color: #ffffff;
+    font-weight: 800;
+    border-radius: 0.75rem;
+    padding: 0.625rem 1.25rem;
+    box-shadow: 0 0 20px rgba(255, 87, 34, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-sunset:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(255, 87, 34, 0.7);
+}
+
+.btn-outline-sunset {
+    background: transparent;
+    border: 1px solid var(--sunset-salmon);
+    color: var(--sunset-salmon);
+    font-weight: 700;
+    border-radius: 0.75rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-sunset:hover {
+    background: rgba(255, 122, 89, 0.15);
+    box-shadow: 0 0 15px rgba(255, 122, 89, 0.3);
+}
+
+/* Category Badges */
+.badge-cat-voo { background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.5); color: #93c5fd; }
+.badge-cat-hotel { background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.5); color: #d8b4fe; }
+.badge-cat-restaurante { background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fcd34d; }
+.badge-cat-atividade { background: rgba(255, 87, 34, 0.2); border: 1px solid rgba(255, 87, 34, 0.5); color: #ff7a59; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 87, 34, 0.3);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--sunset-orange);
+}

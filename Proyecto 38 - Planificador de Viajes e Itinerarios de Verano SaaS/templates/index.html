@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Painel Principal - SUNSET TRAVEL SaaS{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Hero Banner -->
+    <div class="glass-card p-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(255, 87, 34, 0.25) 0%, rgba(255, 193, 7, 0.15) 100%);">
+        <div class="row align-items-center position-relative" style="z-index: 2;">
+            <div class="col-lg-8">
+                <span class="badge px-3 py-2 mb-3 rounded-pill text-uppercase fw-bold" style="background: linear-gradient(135deg, #ff3d00, #ff7a59); color: white;">
+                    <i class="fa-solid fa-fire me-1"></i> Verão 2026 Edition
+                </span>
+                <h1 class="display-4 fw-extrabold text-white mb-3">
+                    Planeia o teu Verão com Sol, Praia e <span style="color: var(--sunset-yellow);">Total Controlo</span>
+                </h1>
+                <p class="lead text-white-50 mb-4">
+                    Organiza os teus itinerários dia a dia, faz a gestão do orçamento em tempo real, descobre hotéis exclusivos e vive momentos inesquecíveis.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <button class="btn btn-sunset btn-lg" data-bs-toggle="modal" data-bs-target="#newTripModal">
+                        <i class="fa-solid fa-plane-departure me-2"></i> Criar Nova Viagem
+                    </button>
+                    <a href="{{ url_for('destinations') }}" class="btn btn-outline-sunset btn-lg">
+                        <i class="fa-solid fa-compass me-2"></i> Explorar Destinos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metrics Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <div class="d-inline-flex p-3 rounded-circle mb-3" style="background: rgba(255, 87, 34, 0.15); color: var(--sunset-orange);">
+                    <i class="fa-solid fa-route fs-3"></i>
+                </div>
+                <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Viagens Planeadas</h6>
+                <h2 class="fw-extrabold text-white mb-0">{{ trips|length }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <div class="d-inline-flex p-3 rounded-circle mb-3" style="background: rgba(255, 193, 7, 0.15); color: var(--sunset-yellow);">
+                    <i class="fa-solid fa-wallet fs-3"></i>
+                </div>
+                <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Orçamento Total</h6>
+                <h2 class="fw-extrabold text-white mb-0">{{ "%.2f"|format(sum_budget) }} €</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <div class="d-inline-flex p-3 rounded-circle mb-3" style="background: rgba(255, 122, 89, 0.15); color: var(--sunset-salmon);">
+                    <i class="fa-solid fa-piggy-bank fs-3"></i>
+                </div>
+                <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Total Alocado / Gasto</h6>
+                <h2 class="fw-extrabold text-white mb-0">{{ "%.2f"|format(sum_spent) }} €</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <div class="d-inline-flex p-3 rounded-circle mb-3" style="background: rgba(255, 61, 0, 0.15); color: var(--sunset-red);">
+                    <i class="fa-solid fa-umbrella-beach fs-3"></i>
+                </div>
+                <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Destinos de Verão</h6>
+                <h2 class="fw-extrabold text-white mb-0">{{ destinations|length }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Trips Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-white mb-0">
+            <i class="fa-solid fa-sun me-2" style="color: var(--sunset-yellow);"></i> As Minhas Viagens de Verão
+        </h3>
+        <button class="btn btn-outline-sunset btn-sm" data-bs-toggle="modal" data-bs-target="#newTripModal">
+            <i class="fa-solid fa-plus me-1"></i> Nova Viagem
+        </button>
+    </div>
+
+    {% if trips %}
+    <div class="row g-4 mb-5">
+        {% for trip in trips %}
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 d-flex flex-column overflow-hidden">
+                <div class="position-relative" style="height: 180px;">
+                    <img src="{{ trip.cover_image }}" class="w-100 h-100 object-fit-cover" alt="{{ trip.title }}">
+                    <div class="position-absolute top-0 end-0 m-3">
+                        <span class="badge bg-dark bg-opacity-75 text-warning backdrop-blur border border-warning px-3 py-2 rounded-pill">
+                            <i class="fa-solid fa-sun me-1"></i> {{ trip.dest_weather }}
+                        </span>
+                    </div>
+                    <div class="position-absolute bottom-0 start-0 m-3">
+                        <span class="badge bg-dark bg-opacity-75 text-white backdrop-blur border border-secondary px-2 py-1">
+                            <i class="fa-solid fa-location-dot me-1" style="color: var(--sunset-orange);"></i> {{ trip.dest_name }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-4 flex-grow-1 d-flex flex-column">
+                    <h5 class="fw-bold text-white mb-2">{{ trip.title }}</h5>
+                    <p class="text-white-50 small mb-3">
+                        <i class="fa-regular fa-calendar me-1" style="color: var(--sunset-salmon);"></i> {{ trip.start_date }} a {{ trip.end_date }}
+                    </p>
+
+                    <!-- Budget Bar -->
+                    {% set pct = (trip.total_spent / trip.total_budget * 100) if trip.total_budget > 0 else 0 %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between text-white-50 small mb-1">
+                            <span>Gasto: <strong>{{ "%.2f"|format(trip.total_spent) }} €</strong></span>
+                            <span>Orçamento: <strong>{{ "%.2f"|format(trip.total_budget) }} €</strong></span>
+                        </div>
+                        <div class="progress bg-dark" style="height: 8px; border-radius: 4px;">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ pct if pct <= 100 else 100 }}%; background: linear-gradient(90deg, #ffc107, #ff5722);" 
+                                 aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto pt-3 border-top border-secondary d-flex justify-content-between align-items-center">
+                        <span class="badge bg-success bg-opacity-20 border border-success text-success px-3 py-2 rounded-pill">
+                            {{ trip.status }}
+                        </span>
+                        <a href="{{ url_for('trip_detail', trip_id=trip.id) }}" class="btn btn-sunset btn-sm px-3">
+                            Ver Itinerário <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="glass-card p-5 text-center mb-5">
+        <i class="fa-solid fa-umbrella-beach text-warning fs-1 mb-3"></i>
+        <h4 class="fw-bold text-white mb-2">Ainda não tens nenhuma viagem planeada!</h4>
+        <p class="text-white-50 mb-4">Começa agora a planear as tuas férias de verão dos sonhos nos melhores destinos.</p>
+        <button class="btn btn-sunset btn-lg" data-bs-toggle="modal" data-bs-target="#newTripModal">
+            <i class="fa-solid fa-plus me-2"></i> Criar Primeira Viagem
+        </button>
+    </div>
+    {% endif %}
+
+    <!-- Featured Summer Destinations -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-white mb-0">
+            <i class="fa-solid fa-umbrella-beach me-2" style="color: var(--sunset-salmon);"></i> Destinos em Destaque
+        </h3>
+        <a href="{{ url_for('destinations') }}" class="btn btn-outline-sunset btn-sm">Ver Todos</a>
+    </div>
+
+    <div class="row g-4">
+        {% for dest in destinations %}
+        <div class="col-md-6 col-lg-3">
+            <div class="glass-card h-100 d-flex flex-column overflow-hidden">
+                <img src="{{ dest.image_url }}" class="w-100" style="height: 160px; object-fit: cover;" alt="{{ dest.name }}">
+                <div class="p-3 flex-grow-1 d-flex flex-column">
+                    <h6 class="fw-bold text-white mb-1">{{ dest.name }}</h6>
+                    <p class="text-white-50 small mb-2"><i class="fa-solid fa-earth-europe me-1" style="color: var(--sunset-yellow);"></i> {{ dest.country }}</p>
+                    <p class="text-white-50 small mb-3 flex-grow-1">{{ dest.description|truncate(80) }}</p>
+                    
+                    <div class="d-flex justify-content-between align-items-center small text-warning pt-2 border-top border-secondary">
+                        <span><i class="fa-solid fa-coins me-1"></i> {{ dest.avg_daily_cost }} € / dia</span>
+                        <span><i class="fa-solid fa-sun me-1"></i> {{ dest.weather }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
