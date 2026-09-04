@@ -164,7 +164,7 @@ def seed_data(cursor):
             185,
             840,
             15,
-            'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800',
+            '/static/images/pocket_laser_projector.jpg',
             'Mini projetor laser portátil com resolução nativa 4K HDR, auto-foco laser instantâneo e colunas harman/kardon integradas.',
             'Premium Tech'
         ),
