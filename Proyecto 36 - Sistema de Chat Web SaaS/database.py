@@ -97,11 +97,11 @@ def seed_initial_data():
     cursor.execute('SELECT COUNT(*) FROM users')
     if cursor.fetchone()[0] == 0:
         users_data = [
-            ('Enmanuel Jimenez', 'enmanuel', 'enmanuel@ejajtech.com', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', 'Founder & Lead Architect', 'online', 'Construyendo el futuro con EJAJ TECH 🚀'),
-            ('Ana Rodrigues', 'ana.ui', 'ana.rodrigues@ejajtech.com', 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150', 'Lead UI/UX Designer', 'online', 'Perfeccionando la interfaz Messenger Blue ✨'),
-            ('Carlos Silva', 'carlos.dev', 'carlos.silva@ejajtech.com', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150', 'Senior Backend Engineer', 'away', 'En reunión con el equipo de infraestructura ☕'),
-            ('Sofia Costa', 'sofia.pm', 'sofia.costa@ejajtech.com', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150', 'Senior Product Manager', 'dnd', 'Evaluando roadmap del Proyecto 36 📋'),
-            ('Tiago Mendes', 'tiago.mobile', 'tiago.mendes@ejajtech.com', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150', 'Fullstack App Lead', 'offline', 'De vuelta en 1 hora')
+            ('Enmanuel Jimenez', 'enmanuel', 'enmanuel@ejajtech.com', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', 'Fundador & Arquiteto Principal', 'online', 'A construir o futuro com a EJAJ TECH 🚀'),
+            ('Ana Rodrigues', 'ana.ui', 'ana.rodrigues@ejajtech.com', 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150', 'Líder de Design UI/UX', 'online', 'A aperfeiçoar a interface Messenger Blue ✨'),
+            ('Carlos Silva', 'carlos.dev', 'carlos.silva@ejajtech.com', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150', 'Engenheiro Principal Backend', 'away', 'Em reunião com a equipa de infraestrutura ☕'),
+            ('Sofia Costa', 'sofia.pm', 'sofia.costa@ejajtech.com', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150', 'Gestora Sénior de Produto', 'dnd', 'A avaliar o roadmap do Projeto 36 📋'),
+            ('Tiago Mendes', 'tiago.mobile', 'tiago.mendes@ejajtech.com', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150', 'Líder de Aplicações Móveis', 'offline', 'De volta dentro de 1 hora')
         ]
         cursor.executemany('''
             INSERT INTO users (name, username, email, avatar_url, role, status, custom_status)
@@ -116,7 +116,7 @@ def seed_initial_data():
         # 1. Grupo Dev & Arch
         cursor.execute('''
             INSERT INTO conversations (name, type, icon_url, created_at, last_message_at)
-            VALUES ('#general-dev-ejajtech', 'group', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150', ?, ?)
+            VALUES ('#desenvolvimento-geral-ejajtech', 'group', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150', ?, ?)
         ''', ((now - timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S'), now.strftime('%Y-%m-%d %H:%M:%S')))
         conv_group_id = cursor.lastrowid
 
@@ -162,13 +162,13 @@ def seed_initial_data():
             (conv_carlos_id, 3, 1)
         ])
 
-        # Seed Mensajes en Group
+        # Seed Mensajes en Group Pt-PT
         messages_group = [
-            (conv_group_id, 1, '¡Hola equipo! Bienvenidos al nuevo canal de mensajería **CONNECT-CHAT SaaS** de EJAJ TECH 🚀', None, 'read', (now - timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')),
-            (conv_group_id, 2, '¡Quedó espectacular la paleta de colores azul Messenger (#0866FF)! La velocidad de respuesta es al instante. 👍', None, 'read', (now - timedelta(hours=1, minutes=45)).strftime('%Y-%m-%d %H:%M:%S')),
-            (conv_group_id, 3, 'Los endpoints REST de la API de mensajería están corriendo con una latencia de menos de 15ms. Excelente trabajo Enmanuel.', None, 'read', (now - timedelta(hours=1, minutes=30)).strftime('%Y-%m-%d %H:%M:%S')),
-            (conv_group_id, 4, '¿Tenemos lista la integración de notificaciones y confirmación de lectura azul ✓✓?', None, 'read', (now - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')),
-            (conv_group_id, 1, '¡Así es Sofia! Todo funcionando al 100%. Pueden probar enviando mensajes y reacciones.', None, 'read', (now - timedelta(minutes=20)).strftime('%Y-%m-%d %H:%M:%S'))
+            (conv_group_id, 1, 'Olá equipa! Bem-vindos ao novo canal de mensagens **CONNECT-CHAT SaaS** da EJAJ TECH 🚀', None, 'read', (now - timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')),
+            (conv_group_id, 2, 'Ficou espetacular a paleta de cores azul Messenger (#0866FF)! A velocidade de resposta é instantânea. 👍', None, 'read', (now - timedelta(hours=1, minutes=45)).strftime('%Y-%m-%d %H:%M:%S')),
+            (conv_group_id, 3, 'Os endpoints REST da API de mensagens estão a correr com uma latência inferior a 15ms. Excelente trabalho Enmanuel.', None, 'read', (now - timedelta(hours=1, minutes=30)).strftime('%Y-%m-%d %H:%M:%S')),
+            (conv_group_id, 4, 'Temos pronta a integração de notificações e confirmação de leitura azul ✓✓?', None, 'read', (now - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')),
+            (conv_group_id, 1, 'Com certeza Sofia! Tudo a funcionar a 100%. Podem testar enviando mensagens e reações.', None, 'read', (now - timedelta(minutes=20)).strftime('%Y-%m-%d %H:%M:%S'))
         ]
 
         cursor.executemany('''
@@ -176,10 +176,10 @@ def seed_initial_data():
             VALUES (?, ?, ?, ?, ?, ?)
         ''', messages_group)
 
-        # Seed Mensajes Directos Ana
+        # Seed Mensajes Directos Ana Pt-PT
         messages_ana = [
-            (conv_ana_id, 2, 'Hola Enmanuel, ¿qué opinas de los iconos y botones de reacción flotantes en los chats directos?', None, 'read', (now - timedelta(minutes=45)).strftime('%Y-%m-%d %H:%M:%S')),
-            (conv_ana_id, 1, 'Están geniales Ana. La animación de escritura "Escribiendo..." y los contadores en rojo de mensajes sin leer le dan una estética idéntica a Facebook Messenger.', None, 'read', (now - timedelta(minutes=10)).strftime('%Y-%m-%d %H:%M:%S'))
+            (conv_ana_id, 2, 'Olá Enmanuel, o que achas dos ícones e botões de reação flutuantes nas conversas diretas?', None, 'read', (now - timedelta(minutes=45)).strftime('%Y-%m-%d %H:%M:%S')),
+            (conv_ana_id, 1, 'Estão fantásticos Ana. A animação de escrita "A escrever..." e os contadores a vermelho de mensagens não lidas dão uma estética idêntica ao Facebook Messenger.', None, 'read', (now - timedelta(minutes=10)).strftime('%Y-%m-%d %H:%M:%S'))
         ]
 
         cursor.executemany('''
@@ -187,9 +187,9 @@ def seed_initial_data():
             VALUES (?, ?, ?, ?, ?, ?)
         ''', messages_ana)
 
-        # Seed Mensajes Directos Carlos
+        # Seed Mensajes Directos Carlos Pt-PT
         messages_carlos = [
-            (conv_carlos_id, 3, 'Enmanuel, dejé listas las funciones de la base de datos SQLite para soportar hilos ilimitados y reacciones por mensaje.', None, 'read', (now - timedelta(minutes=15)).strftime('%Y-%m-%d %H:%M:%S'))
+            (conv_carlos_id, 3, 'Enmanuel, deixei prontas as funções da base de dados SQLite para suportar conversas ilimitadas e reações por mensagem.', None, 'read', (now - timedelta(minutes=15)).strftime('%Y-%m-%d %H:%M:%S'))
         ]
 
         cursor.executemany('''
@@ -215,4 +215,4 @@ def seed_initial_data():
 
 if __name__ == '__main__':
     init_db()
-    print("[OK] Base de datos chat.db inicializada con exito para Proyecto 36.")
+    print("[OK] Base de dados chat.db inicializada com exito em Portugues de Portugal.")

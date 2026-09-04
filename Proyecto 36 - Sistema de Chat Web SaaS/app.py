@@ -176,7 +176,7 @@ def api_send_message(conv_id):
     media_url = data.get('media_url')
 
     if not content:
-        return jsonify({'success': False, 'message': 'El mensaje no puede estar vacío'}), 400
+        return jsonify({'success': False, 'message': 'A mensagem não pode estar vazia'}), 400
 
     conn = database.get_db_connection()
     cursor = conn.cursor()

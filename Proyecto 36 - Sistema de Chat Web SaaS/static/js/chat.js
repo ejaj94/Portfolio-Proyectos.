@@ -1,4 +1,4 @@
-// CONNECT-CHAT SaaS - Client Side Realtime Logic & Interactive Features
+// CONNECT-CHAT SaaS - Client Side Realtime Logic & Interactive Features (Pt-PT)
 
 let activeConvId = null;
 let pollInterval = null;
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initEmojiPicker();
 });
 
-// Polling de mensajes en tiempo real
+// Polling de mensagens em tempo real
 function startMessagePolling() {
     if (pollInterval) clearInterval(pollInterval);
     pollInterval = setInterval(() => {
@@ -30,7 +30,7 @@ function startMessagePolling() {
     }, 4000);
 }
 
-// Obtener mensajes vía AJAX
+// Obter mensagens via AJAX
 async function fetchMessages(convId, scrollToBottom = true) {
     try {
         const res = await fetch(`/api/conversations/${convId}/messages`);
@@ -43,11 +43,11 @@ async function fetchMessages(convId, scrollToBottom = true) {
             }
         }
     } catch (err) {
-        console.error('Error al consultar mensajes:', err);
+        console.error('Erro ao consultar mensagens:', err);
     }
 }
 
-// Enviar Nuevo Mensaje
+// Enviar Nova Mensagem
 async function sendMessage(event) {
     event.preventDefault();
     const input = document.getElementById('messageInput');
@@ -70,15 +70,15 @@ async function sendMessage(event) {
             const container = document.getElementById('chatMessagesContainer');
             if (container) container.scrollTop = container.scrollHeight;
         } else {
-            alert('Error enviando mensaje: ' + (data.message || 'Desconocido'));
+            alert('Erro ao enviar mensagem: ' + (data.message || 'Desconhecido'));
         }
     } catch (err) {
         console.error(err);
-        alert('Error de conexión al servidor de chat.');
+        alert('Erro de ligação ao servidor de chat.');
     }
 }
 
-// Reaccionar a un mensaje (👍, ❤️, 😂, 😮, 😢, 🔥) con actualización instantánea en DOM
+// Reagir a uma mensagem (👍, ❤️, 😂, 😮, 😢, 🔥) com atualização instantânea no DOM
 async function reactToMessage(msgId, emoji) {
     try {
         const res = await fetch(`/api/messages/${msgId}/react`, {
@@ -89,14 +89,14 @@ async function reactToMessage(msgId, emoji) {
         const data = await res.json();
         if (data.success) {
             updateMessageReactionsDOM(msgId, data.reactions);
-            showToast(`Reacción ${emoji} ${data.action === 'added' ? 'agregada' : 'removida'}`);
+            showToast(`Reação ${emoji} ${data.action === 'added' ? 'adicionada' : 'removida'}`);
         }
     } catch (err) {
-        console.error('Error al reaccionar:', err);
+        console.error('Erro ao reagir:', err);
     }
 }
 
-// Actualizar reacciones de un mensaje en el DOM
+// Atualizar reações de uma mensagem no DOM
 function updateMessageReactionsDOM(msgId, reactions) {
     const msgElem = document.querySelector(`[data-message-id="${msgId}"]`);
     if (!msgElem) return;
@@ -115,12 +115,12 @@ function updateMessageReactionsDOM(msgId, reactions) {
 
     let html = '';
     reactions.forEach(r => {
-        html += `<span class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-0.5 rounded-full border border-slate-700 font-bold" title="Reaccionado por ${r.user_name}">${r.emoji}</span>`;
+        html += `<span class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-0.5 rounded-full border border-slate-700 font-bold" title="Reagido por ${r.user_name}">${r.emoji}</span>`;
     });
     reactionsContainer.innerHTML = html;
 }
 
-// Silenciar Notificaciones del Chat
+// Silenciar Notificações do Chat
 async function toggleMuteNotifications() {
     if (!activeConvId) return;
 
@@ -134,12 +134,12 @@ async function toggleMuteNotifications() {
 
             if (data.is_muted) {
                 if (icon) icon.className = 'fas fa-bell-slash text-amber-400 mr-2';
-                if (text) text.innerText = 'Activar Notificaciones';
-                showToast('🔕 Notificaciones silenciadas para esta conversación');
+                if (text) text.innerText = 'Ativar Notificações';
+                showToast('🔕 Notificações silenciadas para esta conversa');
             } else {
                 if (icon) icon.className = 'fas fa-bell text-blue-400 mr-2';
-                if (text) text.innerText = 'Silenciar Notificaciones';
-                showToast('🔔 Notificaciones activadas');
+                if (text) text.innerText = 'Silenciar Notificações';
+                showToast('🔔 Notificações ativadas');
             }
         }
     } catch (err) {
@@ -147,7 +147,7 @@ async function toggleMuteNotifications() {
     }
 }
 
-// Abrir Modal de Archivos & Fotos Compartidas
+// Abrir Modal de Ficheiros & Fotos Partilhadas
 async function openSharedMediaModal() {
     if (!activeConvId) return;
 
@@ -156,7 +156,7 @@ async function openSharedMediaModal() {
     if (!modal || !container) return;
 
     modal.classList.remove('hidden');
-    container.innerHTML = '<div class="text-center text-xs text-slate-400 py-6">Cargando archivos compartidos...</div>';
+    container.innerHTML = '<div class="text-center text-xs text-slate-400 py-6">A carregar ficheiros partilhados...</div>';
 
     try {
         const res = await fetch(`/api/conversations/${activeConvId}/media`);
@@ -181,15 +181,15 @@ async function openSharedMediaModal() {
             });
             container.innerHTML = html;
         } else {
-            container.innerHTML = '<div class="text-center text-xs text-slate-500 py-6">No hay archivos ni fotos compartidas aún.</div>';
+            container.innerHTML = '<div class="text-center text-xs text-slate-500 py-6">Sem ficheiros nem fotos partilhadas ainda.</div>';
         }
     } catch (err) {
         console.error(err);
-        container.innerHTML = '<div class="text-center text-xs text-red-400 py-6">Error cargando archivos.</div>';
+        container.innerHTML = '<div class="text-center text-xs text-red-400 py-6">Erro ao carregar ficheiros.</div>';
     }
 }
 
-// Iniciar Videollamada WebRTC HD
+// Iniciar Videochamada HD WebRTC
 function startVideoCall() {
     const modal = document.getElementById('videoCallModal');
     if (!modal) return;
@@ -198,7 +198,7 @@ function startVideoCall() {
     playCallRingSound();
 }
 
-// Iniciar Llamada de Voz
+// Iniciar Chamada de Voz
 function startVoiceCall() {
     const modal = document.getElementById('voiceCallModal');
     if (!modal) return;
@@ -207,16 +207,16 @@ function startVoiceCall() {
     playCallRingSound();
 }
 
-// Finalizar Llamada
+// Terminar Chamada
 function endCall(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) modal.classList.add('hidden');
     if (callTimerInterval) clearInterval(callTimerInterval);
     callSeconds = 0;
-    showToast('Llamada finalizada');
+    showToast('Chamada terminada');
 }
 
-// Temporizador de Llamada
+// Temporizador de Chamada
 function startCallTimer(timerElemId) {
     if (callTimerInterval) clearInterval(callTimerInterval);
     callSeconds = 0;
@@ -229,7 +229,7 @@ function startCallTimer(timerElemId) {
     }, 1000);
 }
 
-// Alternar Cajón Lateral de Información
+// Alternar Painel Lateral de Informações
 function toggleRightDrawer() {
     const drawer = document.getElementById('rightDrawer');
     if (drawer) {
@@ -238,7 +238,7 @@ function toggleRightDrawer() {
     }
 }
 
-// Cambiar Estado Online
+// Alterar Estado Em Linha
 async function setUserPresenceStatus(status) {
     try {
         const res = await fetch('/api/user/status', {
@@ -248,14 +248,14 @@ async function setUserPresenceStatus(status) {
         });
         const data = await res.json();
         if (data.success) {
-            showToast(`Estado actualizado a: ${status}`);
+            showToast(`Estado atualizado para: ${status}`);
         }
     } catch (err) {
         console.error(err);
     }
 }
 
-// Iniciar Chat Directo
+// Iniciar Conversa Direta
 async function startDirectChat(userId) {
     try {
         const res = await fetch('/api/conversations/start-direct', {
@@ -294,7 +294,7 @@ function initEmojiPicker() {
     }
 }
 
-// Insertar mensaje en el DOM dinámicamente
+// Inserir mensagem no DOM dinamicamente
 function appendSingleMessageDOM(msg) {
     const container = document.getElementById('chatMessagesContainer');
     if (!container) return;
@@ -317,7 +317,7 @@ function appendSingleMessageDOM(msg) {
             </div>
             <div class="flex items-center space-x-1 mt-1 text-[10px] text-slate-500 justify-end">
                 <span>${msg.created_at.split(' ')[1].substring(0, 5)}</span>
-                <span class="text-blue-400 font-black ml-1" title="Visto en azul">✓✓</span>
+                <span class="text-blue-400 font-black ml-1" title="Visto a azul">✓✓</span>
             </div>
             <div class="reactions-container flex flex-wrap gap-1 mt-1 justify-end"></div>
         </div>
@@ -326,7 +326,7 @@ function appendSingleMessageDOM(msg) {
     container.appendChild(div);
 }
 
-// Mostrar Toast Flotante
+// Mostrar Toast Flutuante em Pt-PT
 function showToast(text) {
     const toast = document.createElement('div');
     toast.className = 'fixed bottom-5 right-5 bg-blue-600 text-white font-bold text-xs px-4 py-3 rounded-xl shadow-2xl z-50 animate-bounce flex items-center space-x-2 border border-blue-400';
@@ -335,7 +335,7 @@ function showToast(text) {
     setTimeout(() => toast.remove(), 3000);
 }
 
-// Sonido Notificación
+// Som de Notificação
 function playNotificationSound() {
     try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -368,9 +368,8 @@ function playCallRingSound() {
     } catch (e) {}
 }
 
-// Renderizar lista completa
+// Renderizar mensagens
 function renderMessages(messagesList) {
-    // Si viene la misma cantidad, no recargar
     const container = document.getElementById('chatMessagesContainer');
     if (!container) return;
 
