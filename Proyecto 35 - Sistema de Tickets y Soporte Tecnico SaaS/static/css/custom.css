@@ -96,6 +96,25 @@ body {
 }
 
 /* Priority Badges */
+.badge-priority-critical,
+.badge-priority-high,
+.badge-priority-medium,
+.badge-priority-low,
+.badge-status-open,
+.badge-status-process,
+.badge-status-pending,
+.badge-status-resolved,
+.badge-status-closed {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    line-height: 1.2 !important;
+    box-sizing: border-box !important;
+    max-width: max-content !important;
+    vertical-align: middle !important;
+}
+
 .badge-priority-critical {
     background: rgba(239, 68, 68, 0.2);
     border: 1px solid rgba(239, 68, 68, 0.6);

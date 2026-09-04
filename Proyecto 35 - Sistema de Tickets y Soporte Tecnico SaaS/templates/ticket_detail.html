@@ -23,28 +23,28 @@
                 
                 <!-- PRIORIDAD -->
                 {% if ticket.priority == 'Crítica' %}
-                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-priority-critical">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-priority-critical whitespace-nowrap inline-flex items-center">
                         <i class="fas fa-fire mr-1"></i>Crítica
                     </span>
                 {% elif ticket.priority == 'Alta' %}
-                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-priority-high">Alta</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-priority-high whitespace-nowrap inline-flex items-center">Alta</span>
                 {% elif ticket.priority == 'Media' %}
-                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-priority-medium">Media</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-priority-medium whitespace-nowrap inline-flex items-center">Media</span>
                 {% else %}
-                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-priority-low">Baja</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-priority-low whitespace-nowrap inline-flex items-center">Baja</span>
                 {% endif %}
 
                 <!-- ESTADO -->
                 {% if ticket.status == 'Abierto' %}
-                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-status-open">Abierto</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-status-open whitespace-nowrap inline-flex items-center">Abierto</span>
                 {% elif ticket.status == 'En Proceso' %}
-                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-status-process">En Proceso</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-status-process whitespace-nowrap inline-flex items-center">En Proceso</span>
                 {% elif ticket.status == 'Pendiente Cliente' %}
-                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-status-pending">Pendiente Cliente</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-status-pending whitespace-nowrap inline-flex items-center">Pendiente Cliente</span>
                 {% elif ticket.status == 'Resuelto' %}
-                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-status-resolved">Resuelto</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-status-resolved whitespace-nowrap inline-flex items-center">Resuelto</span>
                 {% else %}
-                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-status-closed">Cerrado</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold badge-status-closed whitespace-nowrap inline-flex items-center">Cerrado</span>
                 {% endif %}
 
                 <span class="px-3 py-1 rounded bg-gray-800 text-xs font-semibold text-gray-300 border border-gray-700">
@@ -176,8 +176,8 @@
                                 </label>
                             </div>
 
-                            <input type="hidden" name="author_name" value="Carlos Silva">
-                            <input type="hidden" name="author_role" value="Agente Lead">
+                            <input type="hidden" name="author_name" value="Enmanuel Jimenez">
+                            <input type="hidden" name="author_role" value="Lead Engineer">
 
                             <button type="submit" class="btn-neon text-xs px-5 py-2 flex items-center">
                                 <i class="fas fa-paper-plane mr-2"></i>Enviar Respuesta
