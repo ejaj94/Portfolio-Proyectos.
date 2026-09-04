@@ -117,7 +117,7 @@
 
         <!-- ACTIVE CHAT TOP BAR -->
         <header class="h-16 px-6 bg-slate-900/90 border-b border-slate-800 backdrop-blur-md flex items-center justify-between shrink-0 z-20">
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="toggleRightDrawer()">
                 <div class="relative">
                     <img src="{{ active_conversation.display_avatar }}" class="w-10 h-10 rounded-full border border-blue-500/40 object-cover">
                     {% if active_conversation.type == 'direct' %}
@@ -141,16 +141,16 @@
                 </div>
             </div>
 
-            <!-- ACTION BUTTONS MOCK -->
+            <!-- ACTION BUTTONS: CALLS & INFO DRAWER TOGGLE -->
             <div class="flex items-center space-x-3">
-                <button class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition-colors" title="Videollamada HD">
+                <button onclick="startVideoCall()" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition-colors shadow-md" title="Iniciar Videollamada HD">
                     <i class="fas fa-video text-xs"></i>
                 </button>
-                <button class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition-colors" title="Llamada de Voz">
+                <button onclick="startVoiceCall()" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition-colors shadow-md" title="Iniciar Llamada de Voz">
                     <i class="fas fa-phone text-xs"></i>
                 </button>
-                <button onclick="document.getElementById('rightDrawer').classList.toggle('hidden')" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition-colors" title="Información">
-                    <i class="fas fa-info-circle text-xs"></i>
+                <button onclick="toggleRightDrawer()" class="w-9 h-9 rounded-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/40 flex items-center justify-center transition-colors shadow-md" title="Ver Detalles del Chat (Información)">
+                    <i class="fas fa-info-circle text-sm"></i>
                 </button>
             </div>
         </header>
@@ -161,7 +161,7 @@
             {% for msg in messages %}
             {% set is_me = (msg.sender_id == current_user.id) %}
             
-            <div class="flex items-end space-x-2 message-item relative group {% if is_me %}justify-end{% else %}justify-start{% endif %}">
+            <div class="flex items-end space-x-2 message-item relative group {% if is_me %}justify-end{% else %}justify-start{% endif %}" data-message-id="{{ msg.id }}">
                 
                 <!-- SENDER AVATAR (RECEIVED) -->
                 {% if not is_me %}
@@ -177,8 +177,8 @@
                     <button type="button" onclick="reactToMessage({{ msg.id }}, '🔥')" class="reaction-btn">🔥</button>
                 </div>
 
-                <!-- BUBBLE -->
-                <div class="max-w-md">
+                <!-- BUBBLE WRAPPER -->
+                <div class="max-w-md bubble-content-wrapper">
                     {% if not is_me and active_conversation.type == 'group' %}
                         <span class="text-[10px] text-slate-400 font-bold block mb-1 pl-1">{{ msg.sender_name }}</span>
                     {% endif %}
@@ -195,16 +195,16 @@
                         {% endif %}
                     </div>
 
-                    <!-- DISPLAY REACTIONS -->
-                    {% if msg.reactions and msg.reactions|length > 0 %}
-                    <div class="flex flex-wrap gap-1 mt-1 {% if is_me %}justify-end{% else %}justify-start{% endif %}">
-                        {% for react in msg.reactions %}
-                            <span class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-0.5 rounded-full border border-slate-700" title="Reaccionado por {{ react.user_name }}">
-                                {{ react.emoji }}
-                            </span>
-                        {% endfor %}
+                    <!-- DISPLAY REACTIONS CONTAINER -->
+                    <div class="reactions-container flex flex-wrap gap-1 mt-1 {% if is_me %}justify-end{% else %}justify-start{% endif %}">
+                        {% if msg.reactions and msg.reactions|length > 0 %}
+                            {% for react in msg.reactions %}
+                                <span class="bg-slate-800 text-slate-200 text-[10px] px-1.5 py-0.5 rounded-full border border-slate-700 font-bold" title="Reaccionado por {{ react.user_name }}">
+                                    {{ react.emoji }}
+                                </span>
+                            {% endfor %}
+                        {% endif %}
                     </div>
-                    {% endif %}
                 </div>
 
             </div>
@@ -229,7 +229,7 @@
             <form onsubmit="sendMessage(event)" class="flex items-center space-x-3">
                 <input type="hidden" id="activeConvId" value="{{ active_conversation.id }}">
 
-                <button type="button" class="text-slate-400 hover:text-blue-400 transition-colors p-2 text-lg">
+                <button type="button" onclick="openSharedMediaModal()" class="text-slate-400 hover:text-blue-400 transition-colors p-2 text-lg" title="Adjuntar Archivo o Imagen">
                     <i class="fas fa-paperclip"></i>
                 </button>
 
@@ -244,7 +244,7 @@
     </main>
 
     <!-- RIGHT DRAWER: CHAT INFO -->
-    <aside id="rightDrawer" class="w-72 bg-slate-900 border-l border-slate-800 hidden lg:flex flex-col p-6 space-y-6 shrink-0 overflow-y-auto">
+    <aside id="rightDrawer" class="w-72 bg-slate-900 border-l border-slate-800 flex flex-col p-6 space-y-6 shrink-0 overflow-y-auto z-20">
         <div class="text-center space-y-3">
             <img src="{{ active_conversation.display_avatar }}" class="w-20 h-20 rounded-full object-cover border-2 border-blue-500 mx-auto shadow-xl">
             <div>
@@ -262,18 +262,20 @@
             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Opciones del Chat</h4>
             
             <div class="space-y-2 text-xs">
-                <button class="w-full bg-slate-950 hover:bg-slate-800 text-slate-300 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between transition-colors">
-                    <span><i class="fas fa-bell text-blue-400 mr-2"></i>Silenciar Notificaciones</span>
+                <!-- SILENCIAR NOTIFICACIONES BUTTON -->
+                <button id="btnMuteNotifications" onclick="toggleMuteNotifications()" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-300 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between transition-colors">
+                    <span class="flex items-center"><i id="iconMuteNotifications" class="fas fa-bell text-blue-400 mr-2"></i><span id="textMuteNotifications">Silenciar Notificaciones</span></span>
+                    <i class="fas fa-toggle-on text-blue-500 text-sm"></i>
+                </button>
+
+                <!-- ARCHIVOS Y FOTOS COMPARTIDAS BUTTON -->
+                <button onclick="openSharedMediaModal()" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-300 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between transition-colors">
+                    <span class="flex items-center"><i class="fas fa-images text-cyan-400 mr-2"></i>Archivos & Fotos Compartidas</span>
                     <i class="fas fa-chevron-right text-slate-500 text-[10px]"></i>
                 </button>
 
                 <button class="w-full bg-slate-950 hover:bg-slate-800 text-slate-300 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between transition-colors">
-                    <span><i class="fas fa-images text-cyan-400 mr-2"></i>Archivos & Fotos Compartidas</span>
-                    <i class="fas fa-chevron-right text-slate-500 text-[10px]"></i>
-                </button>
-
-                <button class="w-full bg-slate-950 hover:bg-slate-800 text-slate-300 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between transition-colors">
-                    <span><i class="fas fa-shield-alt text-emerald-400 mr-2"></i>Cifrado de Extremo a Extremo</span>
+                    <span class="flex items-center"><i class="fas fa-shield-alt text-emerald-400 mr-2"></i>Cifrado de Extremo a Extremo</span>
                     <i class="fas fa-check text-emerald-400 text-[10px]"></i>
                 </button>
             </div>
@@ -292,7 +294,7 @@
     </main>
     {% endif %}
 
-    <!-- MODAL: NUEVO CHAT DIRECTO -->
+    <!-- MODAL 1: NUEVO CHAT DIRECTO -->
     <div id="newChatModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-96 p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -318,6 +320,78 @@
                 </button>
                 {% endfor %}
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: ARCHIVOS & FOTOS COMPARTIDAS -->
+    <div id="sharedMediaModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-[500px] p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center">
+                    <i class="fas fa-folder-open text-cyan-400 mr-2"></i>Archivos & Fotos Compartidas
+                </h3>
+                <button onclick="document.getElementById('sharedMediaModal').classList.add('hidden')" class="text-slate-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="sharedMediaGrid" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: VIDEOLLAMADA HD WEBRTC -->
+    <div id="videoCallModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex flex-col items-center justify-between p-8 hidden">
+        <div class="flex items-center justify-between w-full max-w-4xl text-xs font-bold text-slate-400">
+            <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-red-500 animate-ping"></span>
+                <span class="text-white">Videollamada HD en Curso</span>
+            </div>
+            <span id="videoCallTimer" class="font-mono text-base text-blue-400">00:00</span>
+        </div>
+
+        <div class="w-full max-w-3xl aspect-video bg-slate-900 rounded-3xl border border-blue-500/30 flex items-center justify-center relative overflow-hidden shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800" class="w-full h-full object-cover">
+            <div class="absolute bottom-4 right-4 w-36 aspect-video bg-slate-950 rounded-xl border-2 border-blue-500 shadow-xl overflow-hidden">
+                <img src="{{ current_user.avatar_url }}" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold text-white flex items-center space-x-2 border border-white/20">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Ana Rodrigues (UI/UX Lead)</span>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-6">
+            <button class="w-12 h-12 rounded-full bg-slate-800 hover:bg-slate-700 text-white text-lg flex items-center justify-center transition-transform hover:scale-110">
+                <i class="fas fa-microphone"></i>
+            </button>
+            <button class="w-12 h-12 rounded-full bg-slate-800 hover:bg-slate-700 text-white text-lg flex items-center justify-center transition-transform hover:scale-110">
+                <i class="fas fa-video"></i>
+            </button>
+            <button onclick="endCall('videoCallModal')" class="w-14 h-14 rounded-full bg-red-600 hover:bg-red-500 text-white text-xl flex items-center justify-center transition-transform hover:scale-110 shadow-lg shadow-red-600/40">
+                <i class="fas fa-phone-slash"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 4: LLAMADA DE VOZ -->
+    <div id="voiceCallModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex flex-col items-center justify-between p-8 hidden">
+        <div class="text-xs font-bold text-slate-400">Llamada de Voz Encriptada</div>
+
+        <div class="text-center space-y-4">
+            <div class="relative w-28 h-28 mx-auto">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300" class="w-full h-full rounded-full object-cover border-4 border-blue-500 shadow-2xl animate-pulse">
+            </div>
+            <h3 class="text-xl font-extrabold text-white">Ana Rodrigues</h3>
+            <p id="voiceCallTimer" class="text-blue-400 font-mono font-bold text-lg">00:00</p>
+        </div>
+
+        <div class="flex items-center space-x-6">
+            <button class="w-12 h-12 rounded-full bg-slate-800 hover:bg-slate-700 text-white text-lg flex items-center justify-center transition-transform hover:scale-110">
+                <i class="fas fa-microphone-slash"></i>
+            </button>
+            <button onclick="endCall('voiceCallModal')" class="w-14 h-14 rounded-full bg-red-600 hover:bg-red-500 text-white text-xl flex items-center justify-center transition-transform hover:scale-110 shadow-lg shadow-red-600/40">
+                <i class="fas fa-phone-slash"></i>
+            </button>
         </div>
     </div>
 

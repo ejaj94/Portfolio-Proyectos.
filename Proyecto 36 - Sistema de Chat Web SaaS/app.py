@@ -243,9 +243,71 @@ def api_react_message(msg_id):
         action = 'added'
 
     conn.commit()
+
+    # Obtener lista actualizada de reacciones
+    cursor.execute('''
+        SELECT r.emoji, r.user_id, u.name as user_name
+        FROM reactions r
+        JOIN users u ON r.user_id = u.id
+        WHERE r.message_id = ?
+    ''', (msg_id,))
+    updated_reactions = [dict(r) for r in cursor.fetchall()]
+
     conn.close()
 
-    return jsonify({'success': True, 'action': action, 'emoji': emoji})
+    return jsonify({'success': True, 'action': action, 'emoji': emoji, 'reactions': updated_reactions, 'message_id': msg_id})
+
+
+@app.route('/api/conversations/<int:conv_id>/toggle-mute', methods=['POST'])
+def api_toggle_mute(conv_id):
+    conn = database.get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT is_muted FROM conversation_members
+        WHERE conversation_id = ? AND user_id = ?
+    ''', (conv_id, CURRENT_USER_ID))
+    row = cursor.fetchone()
+
+    is_muted = 0
+    if row and row['is_muted']:
+        cursor.execute('UPDATE conversation_members SET is_muted = 0 WHERE conversation_id = ? AND user_id = ?', (conv_id, CURRENT_USER_ID))
+        is_muted = 0
+    else:
+        cursor.execute('UPDATE conversation_members SET is_muted = 1 WHERE conversation_id = ? AND user_id = ?', (conv_id, CURRENT_USER_ID))
+        is_muted = 1
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({'success': True, 'is_muted': is_muted, 'message': 'Notificaciones silenciadas' if is_muted else 'Notificaciones activadas'})
+
+
+@app.route('/api/conversations/<int:conv_id>/media', methods=['GET'])
+def api_get_media(conv_id):
+    conn = database.get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT m.id, m.content, m.media_url, m.created_at, u.name as sender_name
+        FROM messages m
+        JOIN users u ON m.sender_id = u.id
+        WHERE m.conversation_id = ? AND (m.media_url IS NOT NULL OR m.content LIKE '%.png%' OR m.content LIKE '%.jpg%' OR m.content LIKE '%.pdf%' OR m.content LIKE '%.zip%')
+        ORDER BY m.created_at DESC
+    ''', (conv_id,))
+    raw_media = [dict(row) for row in cursor.fetchall()]
+
+    # Si no hay archivos, generar mock realista de demostración
+    if len(raw_media) == 0:
+        raw_media = [
+            {'id': 101, 'content': 'Especificaciones_SaaS_EJAJTECH.pdf', 'media_url': 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300', 'created_at': '2026-09-04 11:30:00', 'sender_name': 'Ana Rodrigues'},
+            {'id': 102, 'content': 'Mockup_Messenger_UI_v2.png', 'media_url': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300', 'created_at': '2026-09-04 10:15:00', 'sender_name': 'Enmanuel Jimenez'},
+            {'id': 103, 'content': 'Arquitectura_BaseDatos.png', 'media_url': 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=300', 'created_at': '2026-09-04 09:00:00', 'sender_name': 'Carlos Silva'}
+        ]
+
+    conn.close()
+    return jsonify({'success': True, 'media': raw_media})
+
 
 
 @app.route('/api/user/status', methods=['POST'])
