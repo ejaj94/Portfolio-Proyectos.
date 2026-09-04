@@ -99,7 +99,7 @@ def seed_data(cursor):
             340,
             1420,
             45,
-            'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800',
+            '/static/images/smart_ring_aurora_pro.jpg',
             'Anel inteligente em titânio cirúrgico com monitorização contínua de sono, frequência cardíaca, oxigénio no sangue e autonomia para 7 dias.',
             'Mais Vendido'
         ),
