@@ -1,14 +1,148 @@
-// NOVA TRENDS E-Commerce SaaS - Client Side JavaScript Logic
+// NOVA TRENDS E-Commerce SaaS - Client Side JavaScript Logic & Features
+
+const TRANSLATIONS = {
+    'pt': {
+        'store': 'Loja',
+        'my_orders': 'As Minhas Encomendas',
+        'admin_panel': 'Painel Admin',
+        'cart': 'Carrinho',
+        'search_placeholder': 'Pesquisar produtos inovadores...',
+        'hero_badge': 'Nova Coleção 2026',
+        'hero_title': 'Tecnologia de Ponta & Produtos Inovadores',
+        'hero_desc': 'Descobre os 10 produtos de maior sucesso e mais desejados do momento.',
+        'explore': 'Explorar Catálogo',
+        'track_order': 'Rastrear Encomenda',
+        'buy': 'Comprar',
+        'details': 'Ver Ficha',
+        'add_to_cart': 'Adicionar ao Carrinho',
+        'total': 'Total',
+        'checkout': 'Finalizar Compra',
+        'cart_empty': 'O teu carrinho está vazio',
+        'theme_light': '☀️ Claro',
+        'theme_dark': '🌙 Escuro'
+    },
+    'en': {
+        'store': 'Store',
+        'my_orders': 'My Orders',
+        'admin_panel': 'Admin Dashboard',
+        'cart': 'Cart',
+        'search_placeholder': 'Search innovative products...',
+        'hero_badge': 'New Collection 2026',
+        'hero_title': 'Cutting-Edge Tech & Innovative Products',
+        'hero_desc': 'Discover the 10 most successful and sought-after products right now.',
+        'explore': 'Explore Catalog',
+        'track_order': 'Track Order',
+        'buy': 'Buy Now',
+        'details': 'View Details',
+        'add_to_cart': 'Add to Cart',
+        'total': 'Total',
+        'checkout': 'Proceed to Checkout',
+        'cart_empty': 'Your cart is empty',
+        'theme_light': '☀️ Light',
+        'theme_dark': '🌙 Dark'
+    },
+    'es': {
+        'store': 'Tienda',
+        'my_orders': 'Mis Pedidos',
+        'admin_panel': 'Panel Admin',
+        'cart': 'Carrito',
+        'search_placeholder': 'Buscar productos innovadores...',
+        'hero_badge': 'Nueva Colección 2026',
+        'hero_title': 'Tecnología de Punta y Productos Innovadores',
+        'hero_desc': 'Descubre los 10 productos de mayor éxito y más deseados del momento.',
+        'explore': 'Explorar Catálogo',
+        'track_order': 'Rastrear Pedido',
+        'buy': 'Comprar',
+        'details': 'Ver Ficha',
+        'add_to_cart': 'Añadir al Carrito',
+        'total': 'Total',
+        'checkout': 'Finalizar Compra',
+        'cart_empty': 'Tu carrito está vacío',
+        'theme_light': '☀️ Claro',
+        'theme_dark': '🌙 Oscuro'
+    }
+};
 
 document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    initLanguage();
     initAdminChart();
 });
 
+// --- THEME SWITCHER (LIGHT / DARK) ---
+function initTheme() {
+    const savedTheme = localStorage.getItem('nova_theme') || 'light';
+    setTheme(savedTheme);
+}
+
+function toggleTheme() {
+    const currentTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    setTheme(currentTheme);
+}
+
+function setTheme(theme) {
+    if (theme === 'dark') {
+        document.body.setAttribute('data-theme', 'dark');
+        localStorage.setItem('nova_theme', 'dark');
+    } else {
+        document.body.removeAttribute('data-theme');
+        localStorage.setItem('nova_theme', 'light');
+    }
+    updateThemeButtonText();
+}
+
+function updateThemeButtonText() {
+    const btn = document.getElementById('themeToggleBtn');
+    if (!btn) return;
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    const lang = localStorage.getItem('nova_lang') || 'pt';
+    const dict = TRANSLATIONS[lang] || TRANSLATIONS['pt'];
+    btn.innerHTML = isDark ? dict['theme_light'] : dict['theme_dark'];
+}
+
+// --- MULTI-LANGUAGE SYSTEM ---
+function initLanguage() {
+    const savedLang = localStorage.getItem('nova_lang') || 'pt';
+    setLanguage(savedLang, false);
+}
+
+function changeLanguage(lang) {
+    setLanguage(lang, true);
+}
+
+function setLanguage(lang, reload = false) {
+    localStorage.setItem('nova_lang', lang);
+    const langSelect = document.getElementById('langSelect');
+    if (langSelect) langSelect.value = lang;
+
+    updateThemeButtonText();
+
+    // Translate DOM elements marked with data-i18n
+    const elements = document.querySelectorAll('[data-i18n]');
+    const dict = TRANSLATIONS[lang] || TRANSLATIONS['pt'];
+
+    elements.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+            if (el.tagName === 'INPUT' && el.placeholder) {
+                el.placeholder = dict[key];
+            } else {
+                el.innerText = dict[key];
+            }
+        }
+    });
+
+    if (reload) {
+        showToast(`Idioma alterado: ${lang.toUpperCase()}`, 'success');
+    }
+}
+
+// --- CART API OPERATIONS ---
 function addToCart(productId, quantity = 1) {
     fetch('/api/cart/add', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application.json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ product_id: productId, quantity: quantity })
     })
@@ -18,7 +152,7 @@ function addToCart(productId, quantity = 1) {
             updateCartCounter(data.cart_count);
             showToast('🛒 ' + data.message, 'success');
         } else {
-            showToast('⚠️ ' + data.message, 'error');
+            showToast('⚠️ ' + (data.message || 'Erro ao adicionar'), 'error');
         }
     })
     .catch(err => {
@@ -31,7 +165,7 @@ function updateCartQuantity(productId, newQty) {
     fetch('/api/cart/update', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application.json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ product_id: productId, quantity: newQty })
     })
@@ -50,7 +184,7 @@ function removeFromCart(productId) {
     fetch('/api/cart/remove', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application.json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ product_id: productId })
     })
@@ -145,7 +279,7 @@ function initAdminChart() {
             scales: {
                 y: {
                     beginAtZero: true,
-                    grid: { color: '#f1f5f9' },
+                    grid: { color: 'rgba(200, 200, 200, 0.15)' },
                     ticks: {
                         callback: function(val) { return val + ' €'; }
                     }

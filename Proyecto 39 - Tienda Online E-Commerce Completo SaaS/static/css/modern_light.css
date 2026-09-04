@@ -1,4 +1,4 @@
-/* NOVA TRENDS E-Commerce SaaS - Modern Bright Light Theme */
+/* NOVA TRENDS E-Commerce SaaS - Modern Light & Dark Theme */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
@@ -20,11 +20,52 @@
     --shadow-lg: 0 20px 35px -10px rgba(37, 99, 235, 0.12);
 }
 
+/* Dark Theme Adaptations */
+[data-theme="dark"] {
+    --bg-light: #0b0f19;
+    --bg-card: #161e2e;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
+    --border-subtle: #243044;
+    --border-hover: #3b82f6;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 20px 35px -10px rgba(0, 0, 0, 0.7);
+}
+
 body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-light);
     color: var(--text-primary);
     min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-theme="dark"] .bg-white {
+    background-color: #161e2e !important;
+}
+
+[data-theme="dark"] .bg-light {
+    background-color: #0f172a !important;
+}
+
+[data-theme="dark"] .text-dark {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .text-secondary {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .table {
+    color: #f8fafc !important;
+    border-color: #243044 !important;
+}
+
+[data-theme="dark"] .table tr, [data-theme="dark"] .table td, [data-theme="dark"] .table th {
+    border-color: #243044 !important;
+    background-color: transparent !original;
 }
 
 /* Glass & Card Styling */
@@ -37,7 +78,7 @@ body {
 }
 
 .card-light:hover {
-    border-color: rgba(37, 99, 235, 0.3);
+    border-color: rgba(37, 99, 235, 0.4);
     box-shadow: var(--shadow-lg);
     transform: translateY(-4px);
 }
@@ -78,7 +119,7 @@ body {
 }
 
 .btn-outline-brand:hover {
-    background: rgba(37, 99, 235, 0.08);
+    background: rgba(37, 99, 235, 0.12);
     color: var(--brand-blue);
     border-color: var(--brand-violet);
 }
@@ -116,7 +157,7 @@ body {
     padding: 0.6rem 1.25rem;
     transition: all 0.2s ease;
     border: 1px solid var(--border-subtle);
-    background: #ffffff;
+    background: var(--bg-card);
 }
 
 .nav-pills-custom .nav-link.active,
@@ -129,7 +170,7 @@ body {
 
 /* Form Controls */
 .form-input-light {
-    background: #ffffff;
+    background: var(--bg-card);
     border: 1.5px solid var(--border-subtle);
     border-radius: 0.75rem;
     padding: 0.75rem 1rem;
@@ -139,8 +180,10 @@ body {
 
 .form-input-light:focus {
     border-color: var(--brand-blue);
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
     outline: none;
+    background: var(--bg-card);
+    color: var(--text-primary);
 }
 
 /* Cart Counter Badge */
@@ -158,7 +201,24 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #ffffff;
+    border: 2px solid var(--bg-card);
+}
+
+/* Theme Toggle Button */
+.theme-btn {
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: 9999px;
+    padding: 0.5rem 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.theme-btn:hover {
+    border-color: var(--brand-blue);
+    color: var(--brand-blue);
 }
 
 /* Custom Scrollbar */
@@ -166,7 +226,7 @@ body {
     width: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: var(--bg-light);
 }
 ::-webkit-scrollbar-thumb {
     background: #cbd5e1;

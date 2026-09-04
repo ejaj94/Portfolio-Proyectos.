@@ -1,4 +1,5 @@
 import os
+import json
 import random
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
@@ -248,13 +249,28 @@ def dashboard():
 
 # --- APIS REST ---
 
+def _get_request_data():
+    if request.is_json and request.get_json(silent=True):
+        return request.get_json(silent=True)
+    if request.form:
+        return request.form.to_dict()
+    if request.data:
+        try:
+            return json.loads(request.data.decode('utf-8'))
+        except:
+            pass
+    return request.args.to_dict() or {}
+
 @app.route('/api/cart/add', methods=['POST'])
 def api_cart_add():
-    data = request.get_json() or request.form
-    product_id = str(data.get('product_id'))
-    quantity = int(data.get('quantity', 1))
+    data = _get_request_data()
+    product_id = str(data.get('product_id', '')).strip()
+    try:
+        quantity = int(data.get('quantity', 1))
+    except (ValueError, TypeError):
+        quantity = 1
 
-    if not product_id:
+    if not product_id or product_id == 'None':
         return jsonify({'success': False, 'message': 'ID de produto inválido'}), 400
 
     cart_dict = session.get('cart', {})
@@ -269,9 +285,12 @@ def api_cart_add():
 
 @app.route('/api/cart/update', methods=['POST'])
 def api_cart_update():
-    data = request.get_json() or request.form
-    product_id = str(data.get('product_id'))
-    quantity = int(data.get('quantity', 1))
+    data = _get_request_data()
+    product_id = str(data.get('product_id', '')).strip()
+    try:
+        quantity = int(data.get('quantity', 1))
+    except (ValueError, TypeError):
+        quantity = 1
 
     cart_dict = session.get('cart', {})
     if quantity <= 0:
@@ -288,8 +307,8 @@ def api_cart_update():
 
 @app.route('/api/cart/remove', methods=['POST'])
 def api_cart_remove():
-    data = request.get_json() or request.form
-    product_id = str(data.get('product_id'))
+    data = _get_request_data()
+    product_id = str(data.get('product_id', '')).strip()
 
     cart_dict = session.get('cart', {})
     cart_dict.pop(product_id, None)
