@@ -125,7 +125,7 @@ def seed_data(cursor):
             230,
             980,
             65,
-            'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=800',
+            '/static/images/magsafe_solar_charger.jpg',
             'Powerbank solar magnético ultrafino com carregamento rápido MagSafe de 50W, resistência IP68 e indicador digital de bateria.',
             'Inovação'
         ),
