@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Agentes & SLA | RESOLV-IT SaaS{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+    <!-- HEADER -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-extrabold text-white flex items-center">
+                <i class="fas fa-user-shield text-pink-400 mr-3"></i>Roster de Agentes & Rendimiento SLA
+            </h1>
+            <p class="text-xs text-gray-400">Equipo técnico especializado de atención y resolución de incidencias EJAJ TECH.</p>
+        </div>
+    </div>
+
+    <!-- AGENTS GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for ag in agents %}
+        <div class="glass-card p-6 flex flex-col justify-between space-y-4">
+            
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <img src="{{ ag.avatar_url }}" class="w-14 h-14 rounded-full border-2 border-pink-500/50 shadow-lg object-cover">
+                    {% if ag.status == 'Disponible' %}
+                        <span class="w-4 h-4 bg-emerald-500 border-2 border-black rounded-full absolute bottom-0 right-0" title="Disponible"></span>
+                    {% elif ag.status == 'En Llamada' %}
+                        <span class="w-4 h-4 bg-amber-500 border-2 border-black rounded-full absolute bottom-0 right-0 animate-ping" title="En Llamada"></span>
+                    {% elif ag.status == 'Ocupado' %}
+                        <span class="w-4 h-4 bg-red-500 border-2 border-black rounded-full absolute bottom-0 right-0" title="Ocupado"></span>
+                    {% else %}
+                        <span class="w-4 h-4 bg-gray-500 border-2 border-black rounded-full absolute bottom-0 right-0" title="Ausente"></span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-extrabold text-white leading-tight">{{ ag.name }}</h3>
+                    <p class="text-[11px] text-pink-400 font-semibold">{{ ag.role }}</p>
+                    <span class="text-[10px] text-gray-400 block mt-0.5"><i class="fas fa-microchip mr-1"></i>{{ ag.specialty }}</span>
+                </div>
+            </div>
+
+            <!-- STATUS BADGE -->
+            <div class="flex items-center justify-between text-xs pt-2 border-t border-gray-800">
+                <span class="text-gray-400 font-medium">Estado de Guardia:</span>
+                {% if ag.status == 'Disponible' %}
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Disponible</span>
+                {% elif ag.status == 'En Llamada' %}
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">En Llamada</span>
+                {% elif ag.status == 'Ocupado' %}
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-300 border border-red-500/40">Ocupado</span>
+                {% else %}
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-500/20 text-gray-300 border border-gray-500/40">Ausente</span>
+                {% endif %}
+            </div>
+
+            <!-- METRICS SUMMARY -->
+            <div class="grid grid-cols-2 gap-2 bg-black/40 p-3 rounded-xl border border-gray-800 text-center">
+                <div>
+                    <span class="text-[10px] text-gray-400 block font-semibold">Tickets Activos</span>
+                    <span class="text-lg font-black text-pink-400">{{ ag.open_count }}</span>
+                </div>
+                <div>
+                    <span class="text-[10px] text-gray-400 block font-semibold">Histórico Resueltos</span>
+                    <span class="text-lg font-black text-emerald-400">{{ ag.closed_count + ag.resolved_tickets }}</span>
+                </div>
+            </div>
+
+            <!-- ACTION LINK -->
+            <a href="{{ url_for('index') }}?q={{ ag.name }}" class="btn-outline-neon text-xs py-2 text-center block w-full">
+                <i class="fas fa-filter mr-1.5"></i>Ver Tickets Asignados
+            </a>
+
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
