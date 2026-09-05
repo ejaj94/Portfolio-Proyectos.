@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Emissão de Novo Orçamento — PRESUPUESTO PRO SaaS{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.4rem;">Emitir Novo Orçamento Comercial 📝</h1>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">Preencha os dados do cliente e especifique as linhas de serviço para gerar a proposta executiva.</p>
+</div>
+
+<form id="quoteForm">
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+        
+        <!-- Left Column: Form Details & Items Table -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            
+            <!-- Client & Date Info Card -->
+            <div class="glass-card">
+                <h2 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-user-tie" style="color: #94A3B8;"></i> Seleção do Cliente & Validade
+                </h2>
+
+                <div class="form-group">
+                    <label class="form-label" for="clientSelect">Cliente Corporativo Registado</label>
+                    <select id="clientSelect" class="form-select" required>
+                        <option value="" disabled selected>Selecione um cliente da lista...</option>
+                        {% for c in clients %}
+                        <option value="{{ c.id }}">{{ c.company }} — {{ c.name }} (NIF: {{ c.nif }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" for="issueDateInput">Data de Emissão</label>
+                        <input type="date" id="issueDateInput" class="form-input" value="{{ (now if now else '2026-09-05') }}">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" for="validUntilInput">Validade (30 Dias)</label>
+                        <input type="date" id="validUntilInput" class="form-input">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" for="taxRateInput">Taxa de IVA (%)</label>
+                        <input type="number" id="taxRateInput" class="form-input" value="23" min="0" max="100" step="1" oninput="calculateTotals()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Items Table Card -->
+            <div class="glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <h2 style="font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-cubes" style="color: #94A3B8;"></i> Descrição dos Serviços / Requisitos
+                    </h2>
+                    <button type="button" id="addItemBtn" class="btn-slate" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+                        <i class="fa-solid fa-plus"></i> Adicionar Serviço
+                    </button>
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--card-border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">
+                            <th style="padding: 0.75rem;">Descrição do Serviço</th>
+                            <th style="padding: 0.75rem; width: 100px;">Qtd</th>
+                            <th style="padding: 0.75rem; width: 160px;">Preço Unit. (€)</th>
+                            <th style="padding: 0.75rem; width: 160px; text-align: right;">Total Líquido</th>
+                            <th style="padding: 0.75rem; width: 50px; text-align: center;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemsTableBody">
+                        <tr class="item-row" style="border-bottom: 1px solid var(--card-border);">
+                            <td style="padding: 0.75rem;">
+                                <input type="text" class="form-input item-desc" placeholder="Ex: Arquitetura & Desenvolvimento de App Móvel SaaS" required>
+                            </td>
+                            <td style="padding: 0.75rem;">
+                                <input type="number" class="form-input item-qty" value="1" min="1" step="1" oninput="calculateTotals()" required>
+                            </td>
+                            <td style="padding: 0.75rem;">
+                                <input type="number" class="form-input item-price" value="2500.00" min="0" step="0.01" oninput="calculateTotals()" required>
+                            </td>
+                            <td style="padding: 0.75rem; font-weight: 700; text-align: right;" class="item-total quote-number">
+                                € 2 500,00
+                            </td>
+                            <td style="padding: 0.75rem; text-align: center;">
+                                <button type="button" class="btn-slate remove-row-btn" style="padding: 0.4rem 0.6rem; color: #EF4444; border-color: rgba(239,68,68,0.3);">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Notes & Payment terms -->
+            <div class="glass-card">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="notesInput">Termos de Pagamento & Notas Adicionais</label>
+                    <textarea id="notesInput" class="form-textarea" rows="3">Condições de pagamento: 50% na aprovação do orçamento e 50% após entrega final da plataforma.</textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Summary Card -->
+        <div>
+            <div class="glass-card" style="position: sticky; top: 90px;">
+                <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.75rem;">
+                    Resumo do Orçamento
+                </h2>
+
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Subtotal Líquido:</span>
+                        <strong id="calcSubtotal" class="quote-number">€ 2 500,00</strong>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">IVA (23%):</span>
+                        <strong id="calcTax" class="quote-number">€ 575,00</strong>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px solid var(--card-border);">
+
+                    <div style="display: flex; justify-content: space-between; font-size: 1.25rem;">
+                        <span style="font-weight: 800;">VALOR TOTAL:</span>
+                        <strong id="calcTotal" class="quote-number" style="color: #F8FAFC;">€ 3 075,00</strong>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-executive" style="width: 100%; justify-content: center;">
+                    <i class="fa-solid fa-file-signature"></i> Gerar Orçamento Executivo
+                </button>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const issueDate = document.getElementById('issueDateInput');
+        const validUntil = document.getElementById('validUntilInput');
+        if (issueDate && validUntil) {
+            const today = new Date();
+            issueDate.value = today.toISOString().split('T')[0];
+            const future = new Date();
+            future.setDate(future.getDate() + 30);
+            validUntil.value = future.toISOString().split('T')[0];
+        }
+        calculateTotals();
+    });
+</script>
+{% endblock %}

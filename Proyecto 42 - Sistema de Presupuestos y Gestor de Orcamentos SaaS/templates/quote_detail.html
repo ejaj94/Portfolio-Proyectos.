@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}{{ quote.quote_number }} — PRESUPUESTO PRO SaaS{% endblock %}
+
+{% block content %}
+<!-- Top Header Actions -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.3rem;">
+            <h1 style="font-size: 2rem; font-weight: 800;" class="quote-number">{{ quote.quote_number }}</h1>
+            <span class="badge badge-{{ quote.status|lower }}">{{ quote.status }}</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Emitido para <strong>{{ quote.client_company }}</strong> em {{ quote.issue_date }}.</p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+        <button onclick="updateQuoteStatus({{ quote.id }}, 'Aprovado')" class="btn-slate" style="color: #34D399; border-color: rgba(52,211,153,0.3);">
+            <i class="fa-solid fa-check"></i> Aprovar
+        </button>
+        <button onclick="updateQuoteStatus({{ quote.id }}, 'Rejeitado')" class="btn-slate" style="color: #F87171; border-color: rgba(248,113,113,0.3);">
+            <i class="fa-solid fa-xmark"></i> Rejeitar
+        </button>
+        <button onclick="sendQuoteEmail({{ quote.id }}, '{{ quote.client_email|escapejs }}')" class="btn-slate">
+            <i class="fa-solid fa-paper-plane"></i> Enviar por E-mail
+        </button>
+        <a href="/quotes/{{ quote.id }}/pdf" class="btn-executive" download>
+            <i class="fa-solid fa-file-pdf"></i> Descarregar PDF
+        </a>
+    </div>
+</div>
+
+<!-- Document Preview Card (Executive Sheet) -->
+<div class="glass-card" style="background: #0F1117; border: 1px solid #334155; padding: 2.5rem; max-width: 1000px; margin: 0 auto; box-shadow: 0 20px 50px rgba(0,0,0,0.7);">
+    
+    <!-- Document Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 1.5rem; border-bottom: 1px solid var(--card-border);">
+        <div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: #F8FAFC; margin-bottom: 0.3rem;">EJAJ TECH</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                Engenharia de Software & Soluções SaaS<br/>
+                NIF: PT509988776<br/>
+                Contacto: contacto@ejajtech.com | +351 911 151 993<br/>
+                Website: www.ejajtech.com
+            </div>
+        </div>
+
+        <div style="text-align: right;">
+            <div style="font-size: 1.25rem; font-weight: 800; color: #F8FAFC; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.4rem;">PROPOSTA COMERCIAL</div>
+            <div style="font-size: 1.1rem; font-weight: 700;" class="quote-number">{{ quote.quote_number }}</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                <strong>Data Emissão:</strong> {{ quote.issue_date }}<br/>
+                <strong>Validade:</strong> {{ quote.valid_until }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Card -->
+    <div style="background: #161923; border: 1px solid var(--card-border); padding: 1.25rem; border-radius: 10px; margin: 1.75rem 0;">
+        <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">DADOS DO CLIENTE</div>
+        <div style="font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 0.2rem;">{{ quote.client_company }}</div>
+        <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
+            <strong>A/C:</strong> {{ quote.client_name }} | <strong>NIF:</strong> {{ quote.client_nif }}<br/>
+            <strong>Email:</strong> {{ quote.client_email }} | <strong>Tel:</strong> {{ quote.client_phone }}<br/>
+            <strong>Morada:</strong> {{ quote.client_address }}
+        </div>
+    </div>
+
+    <!-- Items Table -->
+    <table style="width: 100%; border-collapse: collapse; text-align: left; margin-bottom: 1.75rem;">
+        <thead>
+            <tr style="background: #1E293B; border-bottom: 1px solid #334155; color: #F8FAFC; font-weight: 700; font-size: 0.85rem; text-transform: uppercase;">
+                <th style="padding: 0.85rem 1rem;">Descrição do Serviço / Requisito</th>
+                <th style="padding: 0.85rem 1rem; width: 80px; text-align: center;">Qtd</th>
+                <th style="padding: 0.85rem 1rem; width: 140px; text-align: right;">Preço Unit.</th>
+                <th style="padding: 0.85rem 1rem; width: 140px; text-align: right;">Total Líquido</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.95rem;">
+                <td style="padding: 0.85rem 1rem; color: #F8FAFC; font-weight: 500;">
+                    {{ item.description }}
+                </td>
+                <td style="padding: 0.85rem 1rem; text-align: center; color: var(--text-muted);">
+                    {{ item.quantity|int }}
+                </td>
+                <td style="padding: 0.85rem 1rem; text-align: right; color: var(--text-muted);" class="quote-number">
+                    {{ item.unit_price|currency }}
+                </td>
+                <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 700; color: #F8FAFC;" class="quote-number">
+                    {{ item.total_price|currency }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Totals Summary Block -->
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 2rem;">
+        <div style="width: 320px; font-size: 0.95rem;">
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; color: var(--text-muted);">
+                <span>Subtotal Líquido:</span>
+                <strong class="quote-number" style="color: white;">{{ quote.subtotal|currency }}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; color: var(--text-muted);">
+                <span>IVA ({{ quote.tax_rate|int }}%):</span>
+                <strong class="quote-number" style="color: white;">{{ quote.tax_amount|currency }}</strong>
+            </div>
+            <hr style="border: none; border-top: 1px solid var(--card-border); margin: 0.5rem 0;">
+            <div style="display: flex; justify-content: space-between; font-size: 1.2rem; padding: 0.4rem 0;">
+                <span style="font-weight: 800;">VALOR TOTAL:</span>
+                <strong class="quote-number" style="color: #F8FAFC; font-size: 1.3rem;">{{ quote.total|currency }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes & Signature Footer -->
+    <div style="border-top: 1px solid var(--card-border); padding-top: 1.5rem; display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+        <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+            <strong style="color: #F8FAFC; text-transform: uppercase;">TERMOS E CONDIÇÕES DE PAGAMENTO:</strong><br/>
+            {{ quote.notes }}<br/>
+            <i>Esta proposta comercial tem validade de 30 dias após a data de emissão.</i>
+        </div>
+
+        <div style="text-align: right; font-size: 0.85rem; color: var(--text-muted);">
+            <div style="margin-top: 2rem; border-top: 1px solid #475569; pt: 0.5rem;">
+                <strong style="color: #F8FAFC;">Enmanuel Jimenez</strong><br/>
+                Founder & Lead Architect<br/>
+                <strong>EJAJ TECH Studio</strong>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

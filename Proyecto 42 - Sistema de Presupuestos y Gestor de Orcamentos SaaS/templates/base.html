@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PRESUPUESTO PRO SaaS — Gestor de Orçamentos Executivos{% endblock %}</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand-logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                </div>
+                <div>
+                    <div class="logo-text">PRESUPUESTO <span style="font-weight: 400; color: #94A3B8;">PRO</span></div>
+                    <span class="logo-badge">Executive Edition</span>
+                </div>
+            </a>
+
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}"><i class="fa-solid fa-chart-pie"></i> Painel Executivo</a></li>
+                <li><a href="/quotes/new" class="nav-link {% if request.path == '/quotes/new' %}active{% endif %}"><i class="fa-solid fa-plus-circle"></i> Novo Orçamento</a></li>
+                <li><a href="/clients" class="nav-link {% if request.path == '/clients' %}active{% endif %}"><i class="fa-solid fa-users"></i> Clientes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main class="main-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <strong>PRESUPUESTO PRO SaaS</strong> &copy; 2026 — Sistema de Engenharia Financeira & Propostas Comerciais
+            </div>
+            <div>
+                Desenvolvido por <strong>Enmanuel Jimenez</strong> | Lead Architect <strong>EJAJ TECH</strong>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/quotes.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
