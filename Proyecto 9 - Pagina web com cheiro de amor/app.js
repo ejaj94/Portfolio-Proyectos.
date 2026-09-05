@@ -2035,6 +2035,41 @@ const PRODUCTS = [
             description: "Une création décorative nostalgique et pleine de charme ! Ce pot artisanal aux finitions minutieuses met en scène des chevaux de manège en relief 3D, couronné par un couvercle bordeaux rehaussé d'une touche dorée. Parfait pour ranger bijoux, petits trésors ou sublimer votre décoration.",
             aromaProfile: "Vanille Vintage, Fleur de Coton, Ambre Doré, Musc Doux"
         }
+    },
+    {
+        id: "candle-lama-1",
+        category: "vaso",
+        price: 3.90,
+        image: "assets/vela_lama.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Lama",
+            categoryLabel: "Velas Aromáticas em Copo de Vidro",
+            aromaBrief: "Adorável e pacífica chama/lama esculpida em cera vegetal num delicado copo de vidro transparente.",
+            description: "Uma vela encantadora que transmite paz e doçura! Apresentada num copo de vidro transparente com cera vegetal cremosa, esta vela destaca-se pela figura esculpida à mão de uma mimosinha lama com olhos fechados e selim com brilho. Ideal para criar uma atmosfera aconchegante e serena no seu espaço.",
+            aromaProfile: "Flor de Baunilha, Leite de Amêndoa, Algodão Doce, Almíscar Suave"
+        },
+        es: {
+            name: "Vela Llama",
+            categoryLabel: "Velas Aromáticas en Vaso de Cristal",
+            aromaBrief: "Adorable y pacífica llama esculpida en cera vegetal en un delicado vaso de cristal transparente.",
+            description: "¡Una vela encantadora que transmite paz y dulzura! Presentada en un vaso de cristal transparente con cera vegetal cremosa, esta vela destaca por la figura esculpida a mano de una tierna llamita con ojos cerrados y manta brillante. Ideal para crear una atmósfera acogedora y serena en tu hogar.",
+            aromaProfile: "Flor de Vainilla, Leche de Almendras, Algodón de Azúcar, Almizcle Suave"
+        },
+        en: {
+            name: "Llama Candle",
+            categoryLabel: "Scented Candle in Clear Glass Cup",
+            aromaBrief: "Sweet handcrafted sleeping llama figurine sculpted in soy wax inside a clear glass cup.",
+            description: "A charming scented candle that brings serene sweetness to any space! Set inside a clear glass cup filled with creamy soy wax, featuring a hand-sculpted sleeping llama figurine with glittery details. Perfect for creating a cozy, relaxing ambiance.",
+            aromaProfile: "Vanilla Blossom, Almond Milk, Sweet Cotton, Soft Musk"
+        },
+        fr: {
+            name: "Bougie Lama",
+            categoryLabel: "Bougie Parfumée en Verre Transparent",
+            aromaBrief: "Adorable petit lama sculpté à la main en cire végétale dans une verrine transparente.",
+            description: "Une bougie parfumée empreinte de douceur et de sérénité ! Présentée dans une verrine en verre transparent avec de la cire végétale crémeuse, elle met en scène un mignon petit lama aux yeux fermés avec une selle scintillante. Parfaite pour offrir une ambiance chaleureuse et apaisante.",
+            aromaProfile: "Fleur de Vanille, Lait d'Amande, Coton Doux, Musc Apaisant"
+        }
     }
 ];
 
