@@ -32,6 +32,13 @@ def escapejs_filter(val):
         return ""
     return json.dumps(str(val))[1:-1]
 
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '-1'
+    return response
+
 # Ensure DB exists
 if not os.path.exists(DB_PATH):
     init_db()
