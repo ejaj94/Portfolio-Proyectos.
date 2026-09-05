@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerador de Faturas com IA 🤖🧾 — EJAJ TECH SaaS{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Top Stats Bar -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="neon-card neon-card-blue p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-bold">Total Faturado</span>
+                        <h3 class="fw-black text-dark mb-0 mt-1">{{ total_invoiced | currency }}</h3>
+                    </div>
+                    <span class="badge badge-neon-blue p-3 rounded-circle fs-4">
+                        <i class="bi bi-wallet2"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="neon-card neon-card-green p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-bold">Faturas Pagas</span>
+                        <h3 class="fw-black text-dark mb-0 mt-1">{{ paid_invoiced | currency }}</h3>
+                    </div>
+                    <span class="badge badge-neon-green p-3 rounded-circle fs-4">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="neon-card neon-card-orange p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-bold">Valores Pendentes</span>
+                        <h3 class="fw-black text-dark mb-0 mt-1">{{ pending_invoiced | currency }}</h3>
+                    </div>
+                    <span class="badge badge-neon-orange p-3 rounded-circle fs-4">
+                        <i class="bi bi-clock-history"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Generator Section -->
+    <div id="aiWorkspace" class="neon-card neon-card-blue p-4 mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+            <div>
+                <h4 class="fw-bold text-dark mb-1">
+                    <i class="bi bi-cpu-fill text-neon-blue me-2"></i>Gerador Inteligente de Faturas com IA
+                </h4>
+                <p class="text-muted small mb-0">Escreva o trabalho realizado em linguagem natural e a IA irá criar a fatura automaticamente.</p>
+            </div>
+            <span class="badge badge-neon-blue px-3 py-2">PARSER INTELIGENTE v2.6</span>
+        </div>
+
+        <div class="mb-3">
+            <textarea class="form-control ai-textarea p-3" id="aiPromptInput" rows="3" placeholder="Exemplo: Emitir fatura para a TechCorp Portugal Lda no valor de 1200€ por desenvolvimento de plataforma web, mais 300€ por integração de pagamentos MB WAY e 150€ por configuração de servidor. IVA a 23%."></textarea>
+        </div>
+
+        <!-- Quick Prompt Preset Buttons -->
+        <div class="d-flex gap-2 mb-4 flex-wrap align-items-center">
+            <small class="fw-bold text-muted me-1">Prompts de Exemplo:</small>
+            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" onclick="document.getElementById('aiPromptInput').value = 'Fatura para TechCorp Portugal Lda: 1200€ por desenvolvimento web, 300€ por alojamento e 200€ por SEO.';">
+                ⚡ Dev Web 1200€ + Hosting 300€
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-success rounded-pill" onclick="document.getElementById('aiPromptInput').value = 'Fatura para Restaurante Gourmet Sol & Mar: 500€ por branding neon e 350€ por menu digital QR code.';">
+                ⚡ Branding 500€ + Menu QR 350€
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-warning rounded-pill" onclick="document.getElementById('aiPromptInput').value = 'Fatura para Imobiliária Vale do Sol: 1800€ por CRM Enterprise e 500€ por formação técnica.';">
+                ⚡ CRM Enterprise 1800€
+            </button>
+        </div>
+
+        <div class="text-end">
+            <button type="button" id="btnProcessAI" class="btn btn-neon-blue px-5 py-3 fs-6" onclick="aiInvoice.processAIPrompt()">
+                <i class="bi bi-cpu-fill me-2"></i>GERAR FATURA COM IA 🤖
+            </button>
+        </div>
+    </div>
+
+    <!-- Invoice Form & Editor -->
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="neon-card neon-card-green p-4 mb-4">
+                <h5 class="fw-bold text-dark mb-4">
+                    <i class="bi bi-pencil-square text-neon-green me-2"></i>Detalhamento e Itens da Fatura
+                </h5>
+
+                <!-- Client Selector -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-8">
+                        <label for="clientSelect" class="form-label fw-bold small text-muted">Cliente Recetor *</label>
+                        <select class="form-select border-secondary-subtle" id="clientSelect">
+                            <option value="">-- Selecione o Cliente --</option>
+                            {% for c in clients %}
+                            <option value="{{ c.id }}">{{ c.name }} (NIF: {{ c.nif }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="vatRateSelect" class="form-label fw-bold small text-muted">Taxa de IVA Aplicável *</label>
+                        <select class="form-select border-secondary-subtle" id="vatRateSelect">
+                            <option value="23.0" selected>23% (Taxa Normal Portugal)</option>
+                            <option value="13.0">13% (Taxa Intermédia)</option>
+                            <option value="6.0">6% (Taxa Reduzida)</option>
+                            <option value="0.0">0% (Isento de IVA)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Line Items Table -->
+                <div class="table-responsive mb-3">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Descrição do Serviço / Produto</th>
+                                <th class="text-center">Qtd</th>
+                                <th class="text-end">Preço Unit.</th>
+                                <th class="text-end">Total</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTableBody">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    Utilize a caixa de IA acima para preencher automaticamente ou adicione linhas manualmente.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center pt-2">
+                    <button type="button" class="btn btn-outline-success btn-sm rounded-pill fw-bold" onclick="aiInvoice.addItemRow()">
+                        <i class="bi bi-plus-lg me-1"></i>Adicionar Linha de Serviço
+                    </button>
+                </div>
+            </div>
+
+            <div class="neon-card p-4">
+                <label for="invoiceNotes" class="form-label fw-bold small text-muted">Notas / Termos de Pagamento</label>
+                <textarea class="form-control border-secondary-subtle" id="invoiceNotes" rows="2" placeholder="Obrigado pela preferência. Pagamento via transferência bancária ou MB WAY no prazo de 15 dias."></textarea>
+            </div>
+        </div>
+
+        <!-- Totals & Confirmation Sidebar -->
+        <div class="col-lg-4">
+            <div class="neon-card neon-card-orange p-4 sticky-top" style="top: 90px;">
+                <h5 class="fw-bold text-dark mb-4"><i class="bi bi-calculator text-neon-orange me-2"></i>Resumo de Totais</h5>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Subtotal:</span>
+                    <span class="fw-bold fs-6 text-dark" id="lblSubtotal">€ 0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Imposto IVA:</span>
+                    <span class="fw-bold fs-6 text-neon-orange" id="lblVatAmount">€ 0.00</span>
+                </div>
+                <hr class="my-3">
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="fs-5 fw-black">Total Fatura:</span>
+                    <span class="fs-4 fw-black text-neon-green" id="lblTotal">€ 0.00</span>
+                </div>
+
+                <button type="button" class="btn btn-neon-green text-dark fw-bold w-100 py-3 fs-6 shadow mb-3" onclick="aiInvoice.submitInvoice()">
+                    <i class="bi bi-file-earmark-pdf-fill me-2"></i>EMITIR FATURA & PDF 🧾
+                </button>
+
+                <div class="p-3 bg-light rounded-3 text-center border">
+                    <small class="text-muted"><i class="bi bi-shield-check text-success me-1"></i>Conforme regras de faturação e IVA em Portugal.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Invoices Table -->
+    <div class="neon-card p-4 mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <h5 class="fw-bold text-dark mb-0"><i class="bi bi-clock-history text-neon-blue me-2"></i>Faturas Emitidas Recentes</h5>
+            <a href="/history" class="btn btn-outline-primary btn-sm rounded-pill fw-bold">Ver Todo o Histórico</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>N.º Fatura</th>
+                        <th>Cliente</th>
+                        <th>Data Emissão</th>
+                        <th class="text-end">Total</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inv in recent_invoices %}
+                    <tr>
+                        <td><span class="fw-bold text-neon-blue">{{ inv.invoice_number }}</span></td>
+                        <td><span class="fw-semibold text-dark">{{ inv.client_name }}</span></td>
+                        <td><small class="text-muted">{{ inv.issue_date }}</small></td>
+                        <td class="text-end fw-black text-dark">{{ inv.total | currency }}</td>
+                        <td class="text-center">
+                            {% if inv.status == 'Paga' %}
+                            <span class="badge badge-neon-green">Paga</span>
+                            {% elif inv.status == 'Pendente' %}
+                            <span class="badge badge-neon-orange">Pendente</span>
+                            {% else %}
+                            <span class="badge badge-neon-red">Vencida</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <a href="/invoice/{{ inv.id }}" class="btn btn-sm btn-outline-info me-1" title="Ver Fatura"><i class="bi bi-eye"></i></a>
+                            <a href="/api/invoice/{{ inv.id }}/pdf" class="btn btn-sm btn-outline-success" title="Download PDF"><i class="bi bi-file-pdf"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

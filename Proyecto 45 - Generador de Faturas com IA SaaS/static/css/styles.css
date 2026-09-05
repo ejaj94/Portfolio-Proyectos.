@@ -1,0 +1,182 @@
+:root {
+    --bg-white: #FFFFFF;
+    --bg-soft-white: #F8FAFC;
+    --neon-green: #00E676;
+    --neon-green-glow: rgba(0, 230, 118, 0.35);
+    --neon-blue: #00B0FF;
+    --neon-blue-glow: rgba(0, 176, 255, 0.35);
+    --neon-red: #FF1744;
+    --neon-red-glow: rgba(255, 23, 68, 0.35);
+    --neon-orange: #FF6D00;
+    --neon-orange-glow: rgba(255, 109, 0, 0.35);
+    
+    --text-dark: #0F172A;
+    --text-muted: #64748B;
+    --border-light: #E2E8F0;
+}
+
+body {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+}
+
+/* White Cards with Neon Glowing Borders */
+.neon-card {
+    background: var(--bg-white);
+    border-radius: 1rem;
+    border: 2px solid var(--border-light);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neon-card-blue {
+    border-color: var(--neon-blue);
+    box-shadow: 0 8px 30px var(--neon-blue-glow);
+}
+
+.neon-card-green {
+    border-color: var(--neon-green);
+    box-shadow: 0 8px 30px var(--neon-green-glow);
+}
+
+.neon-card-orange {
+    border-color: var(--neon-orange);
+    box-shadow: 0 8px 30px var(--neon-orange-glow);
+}
+
+.neon-card-red {
+    border-color: var(--neon-red);
+    box-shadow: 0 8px 30px var(--neon-red-glow);
+}
+
+.neon-card:hover {
+    transform: translateY(-3px);
+}
+
+/* Neon Gradient Buttons */
+.btn-neon-green {
+    background: linear-gradient(135deg, #00E676 0%, #10B981 100%);
+    color: #000;
+    font-weight: 700;
+    border: none;
+    border-radius: 50rem;
+    padding: 0.65rem 1.75rem;
+    box-shadow: 0 0 15px var(--neon-green-glow);
+    transition: all 0.3s ease;
+}
+
+.btn-neon-green:hover {
+    color: #000;
+    box-shadow: 0 0 25px rgba(0, 230, 118, 0.6);
+    transform: scale(1.02);
+}
+
+.btn-neon-blue {
+    background: linear-gradient(135deg, #00B0FF 0%, #2563EB 100%);
+    color: #FFF;
+    font-weight: 700;
+    border: none;
+    border-radius: 50rem;
+    padding: 0.65rem 1.75rem;
+    box-shadow: 0 0 15px var(--neon-blue-glow);
+    transition: all 0.3s ease;
+}
+
+.btn-neon-blue:hover {
+    color: #FFF;
+    box-shadow: 0 0 25px rgba(0, 176, 255, 0.6);
+    transform: scale(1.02);
+}
+
+.btn-neon-orange {
+    background: linear-gradient(135deg, #FF6D00 0%, #F97316 100%);
+    color: #FFF;
+    font-weight: 700;
+    border: none;
+    border-radius: 50rem;
+    padding: 0.65rem 1.75rem;
+    box-shadow: 0 0 15px var(--neon-orange-glow);
+    transition: all 0.3s ease;
+}
+
+.btn-neon-orange:hover {
+    color: #FFF;
+    box-shadow: 0 0 25px rgba(255, 109, 0, 0.6);
+    transform: scale(1.02);
+}
+
+.btn-neon-red {
+    background: linear-gradient(135deg, #FF1744 0%, #EF4444 100%);
+    color: #FFF;
+    font-weight: 700;
+    border: none;
+    border-radius: 50rem;
+    padding: 0.65rem 1.75rem;
+    box-shadow: 0 0 15px var(--neon-red-glow);
+    transition: all 0.3s ease;
+}
+
+.btn-neon-red:hover {
+    color: #FFF;
+    box-shadow: 0 0 25px rgba(255, 23, 68, 0.6);
+    transform: scale(1.02);
+}
+
+/* Neon Text & Badges */
+.text-neon-green { color: var(--neon-green) !important; }
+.text-neon-blue { color: var(--neon-blue) !important; }
+.text-neon-red { color: var(--neon-red) !important; }
+.text-neon-orange { color: var(--neon-orange) !important; }
+
+.badge-neon-green {
+    background: rgba(0, 230, 118, 0.15);
+    color: #00A859;
+    border: 1.5px solid var(--neon-green);
+    font-weight: 700;
+}
+
+.badge-neon-blue {
+    background: rgba(0, 176, 255, 0.15);
+    color: #0088CC;
+    border: 1.5px solid var(--neon-blue);
+    font-weight: 700;
+}
+
+.badge-neon-orange {
+    background: rgba(255, 109, 0, 0.15);
+    color: #D85C00;
+    border: 1.5px solid var(--neon-orange);
+    font-weight: 700;
+}
+
+.badge-neon-red {
+    background: rgba(255, 23, 68, 0.15);
+    color: #D50000;
+    border: 1.5px solid var(--neon-red);
+    font-weight: 700;
+}
+
+/* Header Navbar */
+.navbar-white {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--border-light);
+}
+
+/* AI Prompt Textarea Glow */
+.ai-textarea {
+    background: #FFFFFF;
+    border: 2px solid var(--neon-blue);
+    border-radius: 0.75rem;
+    box-shadow: 0 0 20px var(--neon-blue-glow);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.ai-textarea:focus {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 30px var(--neon-green-glow);
+    outline: none;
+}

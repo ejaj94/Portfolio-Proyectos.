@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ invoice.invoice_number }} — Visualização de Fatura{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Top Actions -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 d-print-none">
+        <a href="/history" class="btn btn-outline-secondary btn-sm rounded-pill">
+            <i class="bi bi-arrow-left me-1"></i>Voltar ao Histórico
+        </a>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-outline-primary fw-bold">
+                <i class="bi bi-printer me-1"></i>Imprimir Fatura
+            </button>
+            <a href="/api/invoice/{{ invoice.id }}/pdf" class="btn btn-neon-green text-dark fw-bold">
+                <i class="bi bi-file-earmark-pdf-fill me-1"></i>Download PDF Oficial
+            </a>
+        </div>
+    </div>
+
+    <!-- Official Printable Invoice Box -->
+    <div class="neon-card p-5 bg-white shadow-lg border-2 border-secondary-subtle">
+        <div class="row align-items-center mb-4 pb-4 border-bottom">
+            <div class="col-6">
+                <h2 class="fw-black text-dark mb-0">EJAJ <span class="text-neon-blue">TECH</span></h2>
+                <p class="text-muted small mb-0">Soluções Digitais & Inteligência Artificial Lda</p>
+                <small class="text-muted">NIF: 599111519 • Av. da Liberdade 100, Lisboa</small>
+            </div>
+            <div class="col-6 text-end">
+                <h3 class="fw-black text-neon-blue mb-1">{{ invoice.invoice_number }}</h3>
+                <span class="badge {% if invoice.status == 'Paga' %}badge-neon-green{% elif invoice.status == 'Pendente' %}badge-neon-orange{% else %}badge-neon-red{% endif %} px-3 py-2 fs-6">
+                    FATURA {{ invoice.status | upper }}
+                </span>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-6">
+                <div class="p-3 bg-light rounded border">
+                    <h6 class="fw-bold text-dark mb-2">DADOS DO CLIENTE:</h6>
+                    <h5 class="fw-bold text-dark mb-1">{{ invoice.client_name }}</h5>
+                    <p class="small text-muted mb-1"><strong>NIF / NIPC:</strong> {{ invoice.client_nif }}</p>
+                    <p class="small text-muted mb-1"><strong>Morada:</strong> {{ invoice.client_address }}</p>
+                    <p class="small text-muted mb-0"><strong>Contacto:</strong> {{ invoice.client_email }} | {{ invoice.client_phone }}</p>
+                </div>
+            </div>
+            <div class="col-6 text-end">
+                <div class="p-3 bg-light rounded border">
+                    <h6 class="fw-bold text-dark mb-2">DETALHES DE EMISSÃO:</h6>
+                    <p class="small text-muted mb-1"><strong>Data de Emissão:</strong> {{ invoice.issue_date }}</p>
+                    <p class="small text-muted mb-1"><strong>Data de Vencimento:</strong> {{ invoice.due_date }}</p>
+                    <p class="small text-muted mb-0"><strong>Moeda:</strong> EUR (€)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Item / Descrição do Serviço</th>
+                        <th class="text-center" style="width: 80px;">Qtd</th>
+                        <th class="text-end" style="width: 140px;">Preço Unitário</th>
+                        <th class="text-end" style="width: 140px;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td class="fw-semibold text-dark">{{ item.description }}</td>
+                        <td class="text-center">{{ item.quantity }}</td>
+                        <td class="text-end">{{ item.unit_price | currency }}</td>
+                        <td class="text-end fw-bold text-dark">{{ item.total_price | currency }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Summary & Totals -->
+        <div class="row justify-content-end mb-4">
+            <div class="col-md-5">
+                <div class="p-3 bg-light rounded border">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Subtotal:</span>
+                        <span class="fw-bold text-dark">{{ invoice.subtotal | currency }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Taxa de IVA ({{ invoice.vat_rate }}%):</span>
+                        <span class="fw-bold text-neon-orange">{{ invoice.vat_amount | currency }}</span>
+                    </div>
+                    <hr class="my-2">
+                    <div class="d-flex justify-content-between">
+                        <span class="fs-5 fw-black text-dark">TOTAL FATURA:</span>
+                        <span class="fs-4 fw-black text-neon-green">{{ invoice.total | currency }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="border-top pt-3 text-muted small">
+            <strong>Observações & Termos de Pagamento:</strong><br>
+            {{ invoice.notes or 'Processado via Inteligência Artificial EJAJ TECH.' }}
+        </div>
+    </div>
+</div>
+{% endblock %}

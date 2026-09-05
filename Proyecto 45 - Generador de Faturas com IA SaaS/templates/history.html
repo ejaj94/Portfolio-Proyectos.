@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Histórico de Faturas — AI Invoice Generator SaaS{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-black text-dark mb-1">
+                <i class="bi bi-receipt text-neon-orange me-2"></i>Histórico Geral de Faturação
+            </h2>
+            <p class="text-muted mb-0">Consulte, pesquise e faça download de todas as faturas geradas por IA.</p>
+        </div>
+        <a href="/" class="btn btn-neon-green">
+            <i class="bi bi-plus-circle-fill me-1"></i>Nova Fatura com IA
+        </a>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="neon-card p-3 mb-4">
+        <form method="GET" action="/history" class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Pesquisar por n.º fatura, nome do cliente ou NIF...">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select name="status" class="form-select">
+                    <option value="">-- Todos os Estados --</option>
+                    <option value="Paga" {% if status_filter == 'Paga' %}selected{% endif %}>Paga</option>
+                    <option value="Pendente" {% if status_filter == 'Pendente' %}selected{% endif %}>Pendente</option>
+                    <option value="Vencida" {% if status_filter == 'Vencida' %}selected{% endif %}>Vencida</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-neon-blue w-100">Filtrar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- History Table -->
+    <div class="neon-card p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>N.º Fatura</th>
+                        <th>Cliente</th>
+                        <th>NIF</th>
+                        <th>Emissão</th>
+                        <th>Vencimento</th>
+                        <th class="text-end">Valor Total</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inv in invoices %}
+                    <tr>
+                        <td><span class="fw-bold text-neon-blue">{{ inv.invoice_number }}</span></td>
+                        <td><span class="fw-semibold text-dark">{{ inv.client_name }}</span></td>
+                        <td><small class="text-muted">{{ inv.client_nif }}</small></td>
+                        <td><small class="text-muted">{{ inv.issue_date }}</small></td>
+                        <td><small class="text-muted">{{ inv.due_date }}</small></td>
+                        <td class="text-end fw-black text-dark fs-6">{{ inv.total | currency }}</td>
+                        <td class="text-center">
+                            <div class="dropdown">
+                                <button class="btn btn-sm dropdown-toggle border-0 {% if inv.status == 'Paga' %}badge-neon-green{% elif inv.status == 'Pendente' %}badge-neon-orange{% else %}badge-neon-red{% endif %}" type="button" data-bs-toggle="dropdown">
+                                    {{ inv.status }}
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-menu-item dropdown-item text-success" href="#" onclick="aiInvoice.updateStatus({{ inv.id }}, 'Paga')">Marcar como Paga</a></li>
+                                    <li><a class="dropdown-menu-item dropdown-item text-warning" href="#" onclick="aiInvoice.updateStatus({{ inv.id }}, 'Pendente')">Marcar como Pendente</a></li>
+                                    <li><a class="dropdown-menu-item dropdown-item text-danger" href="#" onclick="aiInvoice.updateStatus({{ inv.id }}, 'Vencida')">Marcar como Vencida</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <a href="/invoice/{{ inv.id }}" class="btn btn-sm btn-outline-info me-1" title="Ver Fatura"><i class="bi bi-eye"></i></a>
+                            <a href="/api/invoice/{{ inv.id }}/pdf" class="btn btn-sm btn-outline-success" title="Download PDF"><i class="bi bi-file-pdf"></i></a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">
+                            Nenhuma fatura encontrada no histórico.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
