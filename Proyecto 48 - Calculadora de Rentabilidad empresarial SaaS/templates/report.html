@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <title>Relatório de Rentabilidade - {{ sim.name }} | EJAJ TECH</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: #1F2937;
+      margin: 0;
+      padding: 40px;
+      background: white;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #DC2626;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1C0A0E;
+    }
+    .logo span { color: #DC2626; }
+    .title-box {
+      background: #FFF1F2;
+      border: 1px solid #FCA5A5;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .grid-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    .metric-card {
+      background: #F9FAFB;
+      border: 1px solid #E5E7EB;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .metric-card .val {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1C0A0E;
+      margin-top: 6px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #E5E7EB;
+      text-align: left;
+    }
+    th {
+      background: #FFF1F2;
+      color: #9F1239;
+      font-weight: 700;
+    }
+    .btn-print {
+      background: #DC2626;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    @media print {
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print" style="margin-bottom: 20px; text-align: right;">
+    <button onclick="window.print()" class="btn-print">🖨️ Imprimir / Guardar em PDF</button>
+  </div>
+
+  <div class="header-bar">
+    <div class="logo">EJAJ <span>TECH</span></div>
+    <div>
+      <h3 style="margin:0; color:#9F1239;">Estudo Financeiro & Rentabilidade</h3>
+      <small style="color:#6B7280;">Data: {{ sim.created_at }}</small>
+    </div>
+  </div>
+
+  <div class="title-box">
+    <h1 style="margin:0 0 8px 0; color:#1C0A0E;">{{ sim.name }}</h1>
+    <span style="background:#DC2626; color:white; font-size:12px; font-weight:700; padding:4px 8px; border-radius:4px;">
+      {{ sim.category }}
+    </span>
+    {% if sim.notes %}
+    <p style="margin:12px 0 0 0; color:#4B5563;">{{ sim.notes }}</p>
+    {% endif %}
+  </div>
+
+  <div class="grid-metrics">
+    <div class="metric-card">
+      <small>Custo Unitário Total</small>
+      <div class="val">{{ sim.total_cost | currency }}</div>
+    </div>
+    <div class="metric-card">
+      <small>Preço Venda (s/ IVA)</small>
+      <div class="val">{{ sim.selling_price | currency }}</div>
+    </div>
+    <div class="metric-card">
+      <small>Margem Bruta (€)</small>
+      <div class="val" style="color: #047857;">{{ sim.gross_margin | currency }}</div>
+    </div>
+    <div class="metric-card">
+      <small>Ponto de Equilíbrio</small>
+      <div class="val" style="color: #991B1B;">{{ sim.breakeven_units }} un.</div>
+    </div>
+  </div>
+
+  <h3>Detalhamento da Estrutura de Custos</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Componente de Custo</th>
+        <th>Valor Unitário (€)</th>
+        <th>Percentual do Custo Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Custo de Matéria-Prima / Produto Base</td>
+        <td>{{ sim.product_cost | currency }}</td>
+        <td>{{ ((sim.product_cost / sim.total_cost) * 100) if sim.total_cost > 0 else 0 | percent }}</td>
+      </tr>
+      <tr>
+        <td>Mão de Obra ({{ sim.labor_hours }}h @ {{ sim.labor_rate | currency }}/h)</td>
+        <td>{{ (sim.labor_hours * sim.labor_rate) | currency }}</td>
+        <td>{{ (((sim.labor_hours * sim.labor_rate) / sim.total_cost) * 100) if sim.total_cost > 0 else 0 | percent }}</td>
+      </tr>
+      <tr>
+        <td>Gastos Diretos / Embalagem / Marketing</td>
+        <td>{{ sim.overhead_cost | currency }}</td>
+        <td>{{ ((sim.overhead_cost / sim.total_cost) * 100) if sim.total_cost > 0 else 0 | percent }}</td>
+      </tr>
+      <tr style="font-weight: 800; background: #FAF5FF;">
+        <td>TOTAL CUSTO VARIÁVEL UNITÁRIO</td>
+        <td>{{ sim.total_cost | currency }}</td>
+        <td>100,0%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Análise do Ponto de Equilíbrio (Break-Even)</h3>
+  <ul>
+    <li><strong>Custos Fixos Mensais da Empresa:</strong> {{ sim.monthly_fixed_costs | currency }}</li>
+    <li><strong>Margem de Contribuição por Unidade:</strong> {{ sim.gross_margin | currency }}</li>
+    <li><strong>Vendas Mínimas para Cobrir Custos Fixos:</strong> {{ sim.breakeven_units }} unidades por mês</li>
+    <li><strong>Faturação Mínima Mensal (Break-Even Revenue):</strong> {{ sim.breakeven_revenue | currency }}</li>
+  </ul>
+
+  <div style="margin-top: 50px; border-top: 1px solid #E5E7EB; padding-top: 20px; text-align: center; color: #9CA3AF; font-size: 12px;">
+    Documento gerado automaticamente pelo Sistema SaaS EJAJ TECH — Contacto: +351 911 151 993
+  </div>
+</body>
+</html>

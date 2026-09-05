@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Calculadora de Rentabilidade Empresarial SaaS | EJAJ TECH{% endblock %}</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v=1.0_no_cache">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/" class="brand-logo">
+        <span class="brand-badge">EJAJ TECH</span>
+        <span class="brand-title">Calculadora de <span>Rentabilidade</span></span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">
+          <i class="fas fa-calculator"></i> Calculadora
+        </a>
+        <a href="/simulations" class="nav-link {% if request.path == '/simulations' %}active{% endif %}">
+          <i class="fas fa-folder-open"></i> Simulações Salvas
+        </a>
+        <a href="https://wa.me/351911151993?text=AJUDA" target="_blank" class="nav-link" style="color: var(--salmon-pink);">
+          <i class="fab fa-whatsapp"></i> Contacto Directo
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="main-wrapper">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="nav-container" style="flex-direction: column; gap: 0.5rem;">
+      <p><strong>EJAJ TECH</strong> &copy; 2026 — Plataforma SaaS de Análise Financeira & Margem de Lucro.</p>
+      <p>Desenvolvido por <strong>Enmanuel Jimenez</strong> (<span class="tech-highlight">Lead Architect & Founder EJAJ TECH</span>).</p>
+      <p style="font-size: 0.82rem; color: #6B7280; margin-top: 4px;">
+        Para consultoria personalizada de sistemas empresariais, envie a palavra <strong>"AJUDA"</strong> para o WhatsApp <strong>+351 911 151 993</strong>.
+      </p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/calculator.js') }}?v=1.0_no_cache"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

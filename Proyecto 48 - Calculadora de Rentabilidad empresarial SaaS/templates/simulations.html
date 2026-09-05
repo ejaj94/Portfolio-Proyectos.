@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Simulações Guardadas | EJAJ TECH{% endblock %}
+
+{% block content %}
+<section class="hero-header">
+  <h1><i class="fas fa-folder-open" style="color: var(--salmon-pink);"></i> Historias & <span>Simulações de Rentabilidade</span></h1>
+  <p>Consulte a lista de simulações guardadas, comparativo de margens de lucro, estimativas de Ponto de Equilíbrio e exportação de relatórios executivos.</p>
+</section>
+
+<div class="card-panel" style="overflow-x: auto;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--dark-bg);">
+      <i class="fas fa-list-alt" style="color: var(--primary-red);"></i> Simulações Registadas ({{ simulations|length }})
+    </h2>
+    <a href="/" class="btn-primary" style="text-decoration: none; padding: 8px 16px; font-size: 0.88rem;">
+      <i class="fas fa-plus-circle"></i> Nova Simulação
+    </a>
+  </div>
+
+  {% if simulations %}
+  <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+    <thead>
+      <tr style="background: #FFF1F2; border-bottom: 2px solid #FCA5A5; color: #9F1239;">
+        <th style="padding: 12px;">Produto / Serviço</th>
+        <th style="padding: 12px;">Categoria</th>
+        <th style="padding: 12px;">Custo Unitário</th>
+        <th style="padding: 12px;">Preço Venda (s/ IVA)</th>
+        <th style="padding: 12px;">Margem Bruta</th>
+        <th style="padding: 12px;">Margem (%)</th>
+        <th style="padding: 12px;">Ponto Equilíbrio</th>
+        <th style="padding: 12px; text-align: right;">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sim in simulations %}
+      <tr style="border-bottom: 1px solid #FFE4E6; transition: background 0.15s;" onmouseover="this.style.background='#FFF5F5'" onmouseout="this.style.background='transparent'">
+        <td style="padding: 12px; font-weight: 700; color: var(--dark-bg);">
+          {{ sim.name }}
+          {% if sim.notes %}
+          <div style="font-size: 0.78rem; font-weight: 400; color: #6B7280;">{{ sim.notes }}</div>
+          {% endif %}
+        </td>
+        <td style="padding: 12px;">
+          <span style="background: #FFE4E6; color: #9F1239; font-weight: 600; font-size: 0.8rem; padding: 4px 10px; border-radius: 12px;">
+            {{ sim.category }}
+          </span>
+        </td>
+        <td style="padding: 12px; font-weight: 600;">{{ sim.total_cost | currency }}</td>
+        <td style="padding: 12px; font-weight: 700; color: var(--dark-bg);">{{ sim.selling_price | currency }}</td>
+        <td style="padding: 12px; font-weight: 700; color: #047857;">{{ sim.gross_margin | currency }}</td>
+        <td style="padding: 12px;">
+          {% if sim.margin_percentage >= 30 %}
+          <span style="color: #047857; font-weight: 800;">{{ sim.margin_percentage | percent }}</span>
+          {% elif sim.margin_percentage > 0 %}
+          <span style="color: #D97706; font-weight: 800;">{{ sim.margin_percentage | percent }}</span>
+          {% else %}
+          <span style="color: #DC2626; font-weight: 800;">{{ sim.margin_percentage | percent }}</span>
+          {% endif %}
+        </td>
+        <td style="padding: 12px; font-weight: 700; color: #991B1B;">
+          {{ sim.breakeven_units }} un. /mês
+        </td>
+        <td style="padding: 12px; text-align: right; white-space: nowrap;">
+          <a href="/report/{{ sim.id }}" target="_blank" class="btn-secondary" style="text-decoration: none; padding: 6px 10px; font-size: 0.8rem;">
+            <i class="fas fa-file-pdf"></i> Relatório
+          </a>
+          <button onclick="deleteSimulation({{ sim.id }})" class="btn-secondary" style="color: var(--danger); border-color: #FCA5A5; padding: 6px 10px; font-size: 0.8rem; margin-left: 4px;">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div style="text-align: center; padding: 3rem; color: #9CA3AF;">
+    <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem; color: #FCA5A5;"></i>
+    <p>Ainda não registou nenhuma simulação de rentabilidade.</p>
+    <a href="/" class="btn-primary" style="margin-top: 1rem; text-decoration: none;">Criar Primeira Simulação</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+async function deleteSimulation(id) {
+  if (!confirm('Tem certeza de que pretende eliminar esta simulação?')) return;
+  try {
+    const res = await fetch('/api/simulations/delete/' + id, { method: 'POST' });
+    const result = await res.json();
+    if (result.success) {
+      location.reload();
+    }
+  } catch(e) {
+    alert('Erro ao eliminar simulação.');
+  }
+}
+</script>
+{% endblock %}

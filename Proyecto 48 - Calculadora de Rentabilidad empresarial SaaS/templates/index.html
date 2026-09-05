@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}Calculadora Interativa de Rentabilidade | EJAJ TECH{% endblock %}
+
+{% block content %}
+<!-- HERO BANNER -->
+<section class="hero-header">
+  <h1><i class="fas fa-coins" style="color: var(--salmon-pink);"></i> Calculadora de <span>Rentabilidade Empresarial</span></h1>
+  <p>Calcule os custos reais de produção, mão de obra, margem de lucro bruta e líquida, IVA e o <strong>Ponto de Equilíbrio (Break-Even Point)</strong> para saber exatamente quantas unidades precisa de vender por mês para ter lucro.</p>
+  
+  <div style="margin-top: 1.25rem;">
+    <div style="font-size: 0.85rem; font-weight: 700; color: var(--salmon-pink); margin-bottom: 0.5rem; text-transform: uppercase;">
+      <i class="fas fa-bolt"></i> Modelos Pré-Carregados (Presets Rápidos):
+    </div>
+    <div class="presets-bar">
+      <button class="preset-chip" onclick="loadPreset(8.50, 0.2, 15.00, 3.50, 800, 23, 29.90)">👕 T-Shirt E-Commerce</button>
+      <button class="preset-chip" onclick="loadPreset(50, 40, 35, 200, 2500, 23, 3500)">💻 Sprint Software Dev</button>
+      <button class="preset-chip" onclick="loadPreset(3.20, 0.25, 12, 1.20, 1800, 13, 12.50)">🍔 Hambúrguer Gourmet</button>
+      <button class="preset-chip" onclick="loadPreset(1.50, 0.1, 25, 8, 600, 23, 49)">📚 Curso Digital Online</button>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR 3-COLUMN GRID -->
+<div class="calc-grid">
+
+  <!-- COLUMN 1: INPUTS -->
+  <div class="card-panel">
+    <div class="panel-title">
+      <i class="fas fa-sliders-h"></i> 1. Custos & Preço
+    </div>
+
+    <!-- Product Cost -->
+    <div class="form-group">
+      <label for="product_cost">
+        <span>Matéria-Prima / Custo Produto</span>
+        <span id="val_product_cost" class="unit-hint">€ 8,50</span>
+      </label>
+      <div class="input-with-icon">
+        <i class="fas fa-box-open"></i>
+        <input type="number" id="product_cost" step="0.5" min="0" value="8.50">
+      </div>
+    </div>
+
+    <!-- Labor Hours -->
+    <div class="form-group">
+      <label for="labor_hours">
+        <span>Mão de Obra (Horas por Unidade)</span>
+        <span id="val_labor_hours" class="unit-hint">0.2 hrs</span>
+      </label>
+      <div class="input-with-icon">
+        <i class="fas fa-clock"></i>
+        <input type="number" id="labor_hours" step="0.1" min="0" value="0.2">
+      </div>
+    </div>
+
+    <!-- Labor Rate -->
+    <div class="form-group">
+      <label for="labor_rate">
+        <span>Valor/Hora da Mão de Obra</span>
+        <span id="val_labor_rate" class="unit-hint">€ 15,00/h</span>
+      </label>
+      <div class="input-with-icon">
+        <i class="fas fa-user-clock"></i>
+        <input type="number" id="labor_rate" step="1" min="0" value="15.00">
+      </div>
+    </div>
+
+    <!-- Overhead Cost -->
+    <div class="form-group">
+      <label for="overhead_cost">
+        <span>Gastos Diretos / Embalagem / Ads</span>
+        <span id="val_overhead_cost" class="unit-hint">€ 3,50</span>
+      </label>
+      <div class="input-with-icon">
+        <i class="fas fa-truck-loading"></i>
+        <input type="number" id="overhead_cost" step="0.5" min="0" value="3.50">
+      </div>
+    </div>
+
+    <!-- Fixed Costs -->
+    <div class="form-group">
+      <label for="monthly_fixed_costs">
+        <span>Gastos Fixos Mensais (Renda, Luz, Softwares)</span>
+        <span id="val_monthly_fixed" class="unit-hint">€ 800,00</span>
+      </label>
+      <div class="input-with-icon">
+        <i class="fas fa-building"></i>
+        <input type="number" id="monthly_fixed_costs" step="50" min="0" value="800.00">
+      </div>
+    </div>
+
+    <!-- VAT Rate -->
+    <div class="form-group">
+      <label for="vat_rate">
+        <span>Taxa de IVA Aplicável</span>
+        <span id="val_vat_rate" class="unit-hint">23%</span>
+      </label>
+      <select id="vat_rate" class="form-control" style="padding-left: 38px;">
+        <option value="23" selected>23% (Taxa Normal)</option>
+        <option value="13">13% (Taxa Intermédia / Restauração)</option>
+        <option value="6">6% (Taxa Reduzida)</option>
+        <option value="0">0% (Isento de IVA)</option>
+      </select>
+    </div>
+
+    <!-- Selling Price -->
+    <div class="form-group">
+      <label for="selling_price">
+        <span>Preço de Venda Proposto (sem IVA)</span>
+        <span id="val_selling_price" class="unit-hint">€ 29,90</span>
+      </label>
+      <div class="input-with-icon">
+        <i class="fas fa-tag"></i>
+        <input type="number" id="selling_price" step="1" min="0" value="29.90">
+      </div>
+    </div>
+  </div>
+
+  <!-- COLUMN 2: MARGIN & PROFIT OUTPUTS -->
+  <div class="card-panel">
+    <div class="panel-title">
+      <i class="fas fa-chart-line"></i> 2. Margem & Lucro Unitário
+    </div>
+
+    <!-- Status Badge -->
+    <div id="margin_status_badge" class="status-pill status-profitable">
+      <i class="fas fa-check-circle"></i> PRODUTO RENTÁVEL
+    </div>
+
+    <!-- Total Cost -->
+    <div class="metric-box">
+      <span class="metric-label">Custo Total de Produção</span>
+      <span id="out_total_cost" class="metric-value">€ 15,00</span>
+      <span class="metric-sub">Matéria prima + Mão de obra + Gastos diretos</span>
+    </div>
+
+    <!-- Price with VAT -->
+    <div class="metric-box" style="background: #FAF5FF; border-color: #D8B4FE;">
+      <span class="metric-label" style="color: #6B21A8;">Preço ao Cliente (com IVA)</span>
+      <span id="out_price_vat" class="metric-value" style="color: #581C87;">€ 36,78</span>
+      <span class="metric-sub">Preço de tabela final no mercado</span>
+    </div>
+
+    <!-- Gross Margin & Percent -->
+    <div class="metric-box" style="background: #ECFDF5; border-color: #6EE7B7;">
+      <span class="metric-label" style="color: #065F46;">Margem Bruta por Unidade</span>
+      <span id="out_gross_margin" class="metric-value" style="color: #047857;">€ 14,90</span>
+      <span class="metric-sub">Margem Percentual: <strong id="out_margin_pct" style="color: #065F46;">49,8%</strong></span>
+    </div>
+
+    <!-- Net Profit -->
+    <div class="metric-box">
+      <span class="metric-label">Benefício Líquido Real</span>
+      <span id="out_net_profit" class="metric-value" style="color: var(--primary-red);">€ 14,90</span>
+      <span class="metric-sub">Lucro limpo que fica para a empresa</span>
+    </div>
+
+    <button onclick="saveSimulation()" class="btn-primary" style="margin-top: auto;">
+      <i class="fas fa-save"></i> Guardar Simulação
+    </button>
+  </div>
+
+  <!-- COLUMN 3: BREAK-EVEN POINT & CHART -->
+  <div class="card-panel">
+    <div class="panel-title">
+      <i class="fas fa-balance-scale"></i> 3. Ponto de Equilíbrio
+    </div>
+
+    <div class="metric-box" style="background: #FEF2F2; border-color: #FCA5A5;">
+      <span class="metric-label" style="color: #991B1B;">Ponto de Equilíbrio (Vendas Mínimas)</span>
+      <span id="out_breakeven_units" class="metric-value" style="color: #991B1B;">54 un.</span>
+      <span class="metric-sub">Faturação Mínima Necessária: <strong id="out_breakeven_revenue" style="color: #991B1B;">€ 1.614,60</strong></span>
+    </div>
+
+    <div style="flex: 1; min-height: 280px; position: relative;">
+      <canvas id="breakevenChart"></canvas>
+    </div>
+
+    <div style="font-size: 0.82rem; color: #6B7280; text-align: center;">
+      <i class="fas fa-info-circle"></i> O Ponto de Equilíbrio indica a quantidade exata de vendas onde a receita total iguala a soma dos custos fixos e variáveis.
+    </div>
+  </div>
+
+</div>
+{% endblock %}
