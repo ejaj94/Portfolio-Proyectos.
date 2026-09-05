@@ -1965,7 +1965,42 @@ const PRODUCTS = [
         }
     }
 
-
+,
+    {
+        id: "candle-virgem_santa-1",
+        category: "decorativa",
+        price: 14.90,
+        image: "assets/vela_virgem_santa.jpg",
+        qty: 1,
+        pt: {
+            name: "Virgem Santa",
+            categoryLabel: "Peças Decorativas e Esculturas Artesanais",
+            aromaBrief: "Majestosa cúpula de vidro com imagem da Virgem Santa coroada, envolvida por delicadas rosas.",
+            description: "Uma verdadeira obra de arte devocional e decorativa! Esta belíssima peça apresenta uma cúpula de vidro transparente sobre base de madeira natural, abrigando no seu interior a imagem delicadamente detalhada e coroada da Virgem Santa, rodeada por rosas e folhagem verdejante.",
+            aromaProfile: "Rosas Brancas, Flor de Lótus, Incenso Suave, Baunilha Angelical"
+        },
+        es: {
+            name: "Virgem Santa",
+            categoryLabel: "Piezas Decorativas y Esculturas Artesanales",
+            aromaBrief: "Majestuosa cúpula de cristal con imagen de la Virgen Santa coronada, rodeada de delicadas rosas.",
+            description: "¡Una verdadera obra de arte devocional y decorativa! Esta bellísima pieza presenta una cúpula de cristal transparente sobre base de madera natural, albergando en su interior la imagen delicadamente detallada y coronada de la Virgen Santa, rodeada por rosas y follaje verde.",
+            aromaProfile: "Rosas Blancas, Flor de Loto, Incienso Suave, Vainilla Angelical"
+        },
+        en: {
+            name: "Virgem Santa",
+            categoryLabel: "Decorative Pieces & Handcrafted Sculptures",
+            aromaBrief: "Majestic glass dome featuring a crowned Virgin Mary figurine surrounded by delicate roses.",
+            description: "A devotional and decorative masterpiece! This exquisite piece features a clear glass dome atop a natural wooden base, enclosing a finely detailed crowned Virgin Mary statue nestled among soft roses and lush greenery.",
+            aromaProfile: "White Roses, Lotus Flower, Soft Incense, Heavenly Vanilla"
+        },
+        fr: {
+            name: "Virgem Santa",
+            categoryLabel: "Pièces Décoratives & Sculptures Artisanales",
+            aromaBrief: "Majestueuse cloche en verre abritant la Sainte Vierge couronnée entourée de délicates roses.",
+            description: "Une véritable œuvre d'art dévotionnelle et décorative ! Cette création d'une grande élégance présente une cloche en verre sur socle en bois naturel, protégeant en son cœur la figurine de la Sainte Vierge couronnée au milieu de roses et de verdure.",
+            aromaProfile: "Roses Blanches, Fleur de Lotus, Encens Doux, Vanille Angélique"
+        }
+    }
 ];
 
 // Dynamically generate the 39 decorative pieces to keep codebase clean and modular
