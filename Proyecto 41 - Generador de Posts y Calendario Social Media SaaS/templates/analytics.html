@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Analítica de Desempenho AI — SOCIALPOST AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Analítica & Recomendações de Alcance IA 📊</h1>
+    <p class="page-subtitle">Métricas preditivas de distribuição por plataforma, alcance de hashtags e melhores horários de publicação.</p>
+</div>
+
+<!-- Charts Row -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+    <!-- Chart 1: Posts por Plataforma -->
+    <div class="glass-card">
+        <h2 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem;">
+            <i class="fa-solid fa-chart-pie" style="color: #E1306C;"></i> Distribuição por Plataforma
+        </h2>
+        <div style="height: 280px; position: relative;">
+            <canvas id="platformChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Chart 2: Estado dos Posts -->
+    <div class="glass-card">
+        <h2 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem;">
+            <i class="fa-solid fa-chart-column" style="color: #FCAF45;"></i> Estado das Publicações
+        </h2>
+        <div style="height: 280px; position: relative;">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- AI Recommendations Box -->
+<div class="glass-card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem;">
+        <i class="fa-solid fa-lightbulb" style="color: #FBBF24;"></i> Recomendações Inteligentes de Publicação (EJAJ TECH Algorithm)
+    </h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+        <div style="background: rgba(10, 12, 20, 0.6); padding: 1.25rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <span style="color: #E1306C; font-size: 1.3rem;"><i class="fa-brands fa-instagram"></i></span>
+                <strong style="font-size: 1rem;">Instagram Feed & Reels</strong>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                Picos de maior interação registados às <strong>11:00 - 13:00</strong> e <strong>19:00 - 21:00</strong>. Recomendado o uso de 5 a 8 hashtags de nicho para maximizar a descoberta no feed Explore.
+            </p>
+        </div>
+
+        <div style="background: rgba(10, 12, 20, 0.6); padding: 1.25rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <span style="color: #0A66C2; font-size: 1.3rem;"><i class="fa-brands fa-linkedin"></i></span>
+                <strong style="font-size: 1rem;">LinkedIn Corporate</strong>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                Horários nobres corporativos de Terça a Quinta das <strong>08:30 às 10:30</strong>. Posts com estrutura de lista e CTA de discussão nos comentários geram 2.4x mais alcance orgânico.
+            </p>
+        </div>
+
+        <div style="background: rgba(10, 12, 20, 0.6); padding: 1.25rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <span style="color: #00F2FE; font-size: 1.3rem;"><i class="fa-brands fa-tiktok"></i></span>
+                <strong style="font-size: 1rem;">TikTok Viral Format</strong>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                O gancho inicial nos primeiros <strong>1.5 segundos</strong> determina 80% do tempo de retenção. O algoritmo favorece publicações noturnas das <strong>18:30 às 22:00</strong>.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Data from Flask
+    const platformData = {{ posts_by_platform|tojson }};
+    const statusData = {{ posts_by_status|tojson }};
+    
+    // Platform Doughnut Chart
+    const platformCtx = document.getElementById('platformChart').getContext('2d');
+    new Chart(platformCtx, {
+        type: 'doughnut',
+        data: {
+            labels: platformData.map(d => d.platform),
+            datasets: [{
+                data: platformData.map(d => d.count),
+                backgroundColor: ['#C13584', '#0A66C2', '#00F2FE', '#1DA1F2', '#1877F2', '#FCAF45'],
+                borderWidth: 2,
+                borderColor: '#12131A'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#9CA3AF', font: { family: 'Plus Jakarta Sans', weight: '600' } } }
+            }
+        }
+    });
+
+    // Status Bar Chart
+    const statusCtx = document.getElementById('statusChart').getContext('2d');
+    new Chart(statusCtx, {
+        type: 'bar',
+        data: {
+            labels: statusData.map(d => d.status),
+            datasets: [{
+                label: 'Publicações',
+                data: statusData.map(d => d.count),
+                backgroundColor: ['#60A5FA', '#34D399', '#FBBF24'],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: { ticks: { color: '#9CA3AF' }, grid: { display: false } },
+                y: { ticks: { color: '#9CA3AF', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' } }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SOCIALPOST AI — Generador de Posts & Calendário SaaS{% endblock %}</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand-logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <div>
+                    <div class="logo-text">SOCIALPOST <span style="font-weight: 400; color: #E1306C;">AI</span></div>
+                    <span class="logo-badge">Instagram Edition</span>
+                </div>
+            </a>
+
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}"><i class="fa-solid fa-sparkles"></i> Gerador AI</a></li>
+                <li><a href="/calendar" class="nav-link {% if request.path == '/calendar' %}active{% endif %}"><i class="fa-solid fa-calendar-days"></i> Calendário</a></li>
+                <li><a href="/library" class="nav-link {% if request.path == '/library' %}active{% endif %}"><i class="fa-solid fa-folder-open"></i> Biblioteca</a></li>
+                <li><a href="/analytics" class="nav-link {% if request.path == '/analytics' %}active{% endif %}"><i class="fa-solid fa-chart-line"></i> Analítica AI</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main class="main-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <strong>SOCIALPOST AI SaaS</strong> &copy; 2026 — Plataforma de Engenharia de Marketing Digital
+            </div>
+            <div class="footer-brand">
+                Desenvolvido por <span>Enmanuel Jimenez</span> | Founder & Lead Architect <strong>EJAJ TECH</strong>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

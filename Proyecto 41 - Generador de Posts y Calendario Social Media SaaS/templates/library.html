@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Biblioteca de Posts & Exportação — SOCIALPOST AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+    <div>
+        <h1 class="page-title">Biblioteca de Publicações 📚</h1>
+        <p class="page-subtitle">Gestão centralizada de todo o histórico de cópias geradas com opções de exportação rápida.</p>
+    </div>
+
+    <!-- Export Buttons -->
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/api/export?format=json" class="btn-secondary" download>
+            <i class="fa-solid fa-file-code" style="color: #FCAF45;"></i> Exportar JSON
+        </a>
+        <a href="/api/export?format=csv" class="btn-secondary" download>
+            <i class="fa-solid fa-file-csv" style="color: #34D399;"></i> Exportar CSV
+        </a>
+    </div>
+</div>
+
+<!-- Filters Bar -->
+<div class="glass-card" style="margin-bottom: 2rem; padding: 1.25rem;">
+    <form method="GET" action="/library" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.9rem;">
+            <i class="fa-solid fa-filter" style="color: #E1306C;"></i> Filtrar:
+        </div>
+
+        <select name="platform" class="form-select" style="width: auto; padding: 0.5rem 1rem; font-size: 0.85rem;" onchange="this.form.submit()">
+            <option value="">Todas as Plataformas</option>
+            <option value="Instagram" {% if platform_filter == 'Instagram' %}selected{% endif %}>📸 Instagram</option>
+            <option value="LinkedIn" {% if platform_filter == 'LinkedIn' %}selected{% endif %}>💼 LinkedIn</option>
+            <option value="TikTok" {% if platform_filter == 'TikTok' %}selected{% endif %}>🎵 TikTok</option>
+            <option value="Twitter/X" {% if platform_filter == 'Twitter/X' %}selected{% endif %}>🐦 Twitter / X</option>
+            <option value="Facebook" {% if platform_filter == 'Facebook' %}selected{% endif %}>📘 Facebook</option>
+        </select>
+
+        <select name="status" class="form-select" style="width: auto; padding: 0.5rem 1rem; font-size: 0.85rem;" onchange="this.form.submit()">
+            <option value="">Todos os Estados</option>
+            <option value="Agendado" {% if status_filter == 'Agendado' %}selected{% endif %}>Agendado</option>
+            <option value="Publicado" {% if status_filter == 'Publicado' %}selected{% endif %}>Publicado</option>
+            <option value="Rascunho" {% if status_filter == 'Rascunho' %}selected{% endif %}>Rascunho</option>
+        </select>
+
+        {% if platform_filter or status_filter %}
+            <a href="/library" class="btn-secondary" style="padding: 0.45rem 0.85rem; font-size: 0.8rem;">Limpar Filtros</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Table View -->
+<div class="glass-card" style="padding: 0; overflow: hidden;">
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+                <tr style="background: rgba(255, 255, 255, 0.05); border-bottom: 1px solid var(--card-border); color: var(--text-muted); font-weight: 700;">
+                    <th style="padding: 1rem 1.25rem;">Plataforma</th>
+                    <th style="padding: 1rem 1.25rem;">Tema</th>
+                    <th style="padding: 1rem 1.25rem;">Copy & CTA</th>
+                    <th style="padding: 1rem 1.25rem;">Hashtags</th>
+                    <th style="padding: 1rem 1.25rem;">Agendado</th>
+                    <th style="padding: 1rem 1.25rem;">Estado</th>
+                    <th style="padding: 1rem 1.25rem; text-align: right;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr id="post-row-{{ post.id }}" style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.2s ease;">
+                    <td style="padding: 1rem 1.25rem; font-weight: 700;">
+                        {{ post.platform }}
+                    </td>
+                    <td style="padding: 1rem 1.25rem; font-weight: 600; color: white;">
+                        {{ post.topic }}
+                    </td>
+                    <td style="padding: 1rem 1.25rem; max-width: 300px;">
+                        <div style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: var(--text-main);">
+                            {{ post.copy }}
+                        </div>
+                    </td>
+                    <td style="padding: 1rem 1.25rem; color: #38BDF8; font-size: 0.8rem; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        {{ post.hashtags }}
+                    </td>
+                    <td style="padding: 1rem 1.25rem; white-space: nowrap; color: var(--text-muted);">
+                        {{ post.scheduled_date }} ({{ post.scheduled_time }})
+                    </td>
+                    <td style="padding: 1rem 1.25rem;">
+                        <span class="badge badge-{{ post.status | lower }}">
+                            {{ post.status }}
+                        </span>
+                    </td>
+                    <td style="padding: 1rem 1.25rem; text-align: right; white-space: nowrap;">
+                        <button onclick="copyToClipboard('{{ post.copy|escapejs }} \n\n{{ post.cta|escapejs }} \n\n{{ post.hashtags|escapejs }}')" class="btn-secondary" style="padding: 0.4rem 0.6rem; font-size: 0.8rem;" title="Copiar">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                        <button onclick="deletePost({{ post.id }})" class="btn-secondary" style="padding: 0.4rem 0.6rem; font-size: 0.8rem; color: #EF4444; border-color: rgba(239,68,68,0.3);" title="Eliminar">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

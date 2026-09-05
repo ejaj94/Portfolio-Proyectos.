@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Gerador de Posts AI — SOCIALPOST AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Gerador Inteligente de Conteúdos 🤖📱</h1>
+    <p class="page-subtitle">Crie publicações de alto impacto com copywriting otimizado, hashtags estratégicas e pré-visualização em tempo real.</p>
+</div>
+
+<!-- Stats Bar -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="glass-card" style="display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 50px; height: 50px; border-radius: 14px; background: rgba(225, 48, 108, 0.15); color: #E1306C; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <i class="fa-solid fa-file-pen"></i>
+        </div>
+        <div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Total de Publicações</div>
+            <div style="font-size: 1.6rem; font-weight: 800;">{{ total_posts }}</div>
+        </div>
+    </div>
+    
+    <div class="glass-card" style="display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 50px; height: 50px; border-radius: 14px; background: rgba(59, 130, 246, 0.15); color: #60A5FA; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <i class="fa-solid fa-calendar-check"></i>
+        </div>
+        <div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Posts Agendados</div>
+            <div style="font-size: 1.6rem; font-weight: 800;">{{ scheduled_count }}</div>
+        </div>
+    </div>
+
+    <div class="glass-card" style="display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 50px; height: 50px; border-radius: 14px; background: rgba(245, 158, 11, 0.15); color: #FBBF24; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <i class="fa-solid fa-bolt"></i>
+        </div>
+        <div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Motor IA Ativo</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #34D399;">v4.2 High Precision</div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Layout: Form + Preview Card -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+
+    <!-- Left: Generator Form -->
+    <div class="glass-card">
+        <h2 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem;">
+            <i class="fa-solid fa-sliders" style="color: #E1306C;"></i> Configurar Publicação
+        </h2>
+
+        <form id="generatorForm">
+            <div class="form-group">
+                <label class="form-label" for="topicInput">Tema ou Nicho do Post</label>
+                <input type="text" id="topicInput" class="form-input" placeholder="Ex: Lançamento de Loja Online / Dicas de Produtividade" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label" for="platformSelect">Plataforma</label>
+                    <select id="platformSelect" class="form-select">
+                        <option value="Instagram" selected>📸 Instagram</option>
+                        <option value="LinkedIn">💼 LinkedIn</option>
+                        <option value="TikTok">🎵 TikTok</option>
+                        <option value="Twitter/X">🐦 Twitter / X</option>
+                        <option value="Facebook">📘 Facebook</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="toneSelect">Tom de Voz</label>
+                    <select id="toneSelect" class="form-select">
+                        <option value="Profissional & Educacional" selected>💼 Profissional & Educacional</option>
+                        <option value="Vendedor & Persuasivo">🎯 Vendedor & Persuasivo</option>
+                        <option value="Descontraído & Entusiasta">🎉 Descontraído & Entusiasta</option>
+                        <option value="Viral & Divertido">🚀 Viral & Divertido</option>
+                        <option value="Exclusivo & Elegante">💎 Exclusivo & Elegante</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="ctaSelect">Objetivo da Chamada para Ação (CTA)</label>
+                <select id="ctaSelect" class="form-select">
+                    <option value="Engagement" selected>💬 Gerar Comentários & Discussão</option>
+                    <option value="Vendas">🛍️ Venda Direta / Desconto</option>
+                    <option value="Leads">📩 Captar Lead / Contacto Directo</option>
+                    <option value="Partilha">🔄 Fazer Partilhar / Repostar</option>
+                    <option value="Guardar">📌 Salvar para Consultar Mais Tarde</option>
+                </select>
+            </div>
+
+            <button type="submit" id="generateBtn" class="btn-ig" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar Post com IA
+            </button>
+        </form>
+    </div>
+
+    <!-- Right: Live Preview Card -->
+    <div id="previewContainer">
+        <div id="previewCard" class="ig-post-preview" style="display: none;">
+            <div class="ig-post-header">
+                <div class="ig-user-info">
+                    <div class="ig-avatar">
+                        <div class="ig-avatar-placeholder">EJ</div>
+                    </div>
+                    <div>
+                        <div class="ig-username">@ejajtech</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);" id="previewPlatform">Instagram</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-ellipsis" style="color: var(--text-muted);"></i>
+            </div>
+
+            <div class="ig-post-media">
+                <i class="fa-solid fa-photo-film ig-media-icon" style="background: var(--ig-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                <div style="font-weight: 700; font-size: 0.95rem; margin-top: 0.2rem;" id="previewMedia">Sugestão de Recurso Visual</div>
+                <span style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Gerado automaticamente pela IA da EJAJ TECH</span>
+            </div>
+
+            <div class="ig-post-actions">
+                <div style="display: flex; gap: 1rem; color: var(--text-main);">
+                    <i class="fa-regular fa-heart" style="color: #E1306C;"></i>
+                    <i class="fa-regular fa-comment"></i>
+                    <i class="fa-regular fa-paper-plane"></i>
+                </div>
+                <i class="fa-regular fa-bookmark"></i>
+            </div>
+
+            <div class="ig-post-body">
+                <div class="ig-copy-text" id="previewCopy">O seu copy gerado aparecerá aqui...</div>
+                <div class="ig-cta" id="previewCta">Chamada para Ação</div>
+                <div class="ig-hashtags" id="previewHashtags" style="margin-top: 0.8rem;">#Hashtags</div>
+
+                <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 1.25rem 0;">
+
+                <!-- Scheduling options -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Data do Agendamento</label>
+                        <input type="date" id="scheduleDateInput" class="form-input" style="padding: 0.5rem; font-size: 0.85rem;" value="{{ (now if now else '2026-09-06') }}">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Horário</label>
+                        <input type="time" id="scheduleTimeInput" class="form-input" style="padding: 0.5rem; font-size: 0.85rem;" value="14:00">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem;">
+                    <button type="button" id="copyFullPostBtn" class="btn-secondary" style="flex: 1; justify-content: center;">
+                        <i class="fa-regular fa-copy"></i> Copiar Texto
+                    </button>
+                    <button type="button" id="savePostBtn" class="btn-ig" style="flex: 1; justify-content: center;">
+                        <i class="fa-solid fa-calendar-plus"></i> Agendar Post
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Initial Placeholder State -->
+        <div id="initialPlaceholder" class="glass-card" style="height: 100%; min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 2px dashed rgba(255,255,255,0.15);">
+            <div style="width: 70px; height: 70px; border-radius: 50%; background: var(--ig-gradient); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; margin-bottom: 1rem; box-shadow: 0 0 25px var(--ig-glow);">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Pronto para criar o próximo post viral?</h3>
+            <p style="color: var(--text-muted); max-width: 320px; font-size: 0.9rem;">Preencha os campos à esquerda e clique em <strong>Gerar Post com IA</strong> para visualizar o resultado em tempo real.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Set default date input to tomorrow
+    document.addEventListener('DOMContentLoaded', () => {
+        const dateInput = document.getElementById('scheduleDateInput');
+        if (dateInput) {
+            const tmr = new Date();
+            tmr.setDate(tmr.getDate() + 1);
+            dateInput.value = tmr.toISOString().split('T')[0];
+        }
+    });
+</script>
+{% endblock %}

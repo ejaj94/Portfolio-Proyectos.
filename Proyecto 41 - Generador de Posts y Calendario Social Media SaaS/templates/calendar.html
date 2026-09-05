@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Calendário Editorial — SOCIALPOST AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+    <div>
+        <h1 class="page-title">Calendário Editorial 📅</h1>
+        <p class="page-subtitle">Organização cronológica das publicações programadas por data, hora e plataforma.</p>
+    </div>
+    <a href="/" class="btn-ig">
+        <i class="fa-solid fa-plus"></i> Novo Post com IA
+    </a>
+</div>
+
+<!-- Calendar Cards Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+    {% for post in posts %}
+    <div class="glass-card" id="post-card-{{ post.id }}" style="position: relative; display: flex; flex-direction: column; justify-content: space-between;">
+        
+        <div>
+            <!-- Header of card -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                    {% if post.platform == 'Instagram' %}
+                        <span style="color: #E1306C; font-size: 1.2rem;"><i class="fa-brands fa-instagram"></i></span>
+                    {% elif post.platform == 'LinkedIn' %}
+                        <span style="color: #0A66C2; font-size: 1.2rem;"><i class="fa-brands fa-linkedin"></i></span>
+                    {% elif post.platform == 'TikTok' %}
+                        <span style="color: #00F2FE; font-size: 1.2rem;"><i class="fa-brands fa-tiktok"></i></span>
+                    {% elif post.platform == 'Twitter/X' %}
+                        <span style="color: #1DA1F2; font-size: 1.2rem;"><i class="fa-brands fa-x-twitter"></i></span>
+                    {% else %}
+                        <span style="color: #1877F2; font-size: 1.2rem;"><i class="fa-brands fa-facebook"></i></span>
+                    {% endif %}
+                    <strong style="font-size: 0.95rem;">{{ post.platform }}</strong>
+                </div>
+
+                <span class="badge badge-{{ post.status | lower }}">
+                    {{ post.status }}
+                </span>
+            </div>
+
+            <!-- Topic Title -->
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; color: #FFF;">
+                {{ post.topic }}
+            </h3>
+
+            <!-- Copy Snippet -->
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                {{ post.copy }}
+            </p>
+
+            <!-- Hashtags -->
+            <div style="font-size: 0.8rem; color: #38BDF8; font-weight: 600; margin-bottom: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                {{ post.hashtags }}
+            </div>
+        </div>
+
+        <!-- Schedule Date Footer & Actions -->
+        <div>
+            <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 1rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 0.4rem;">
+                    <i class="fa-regular fa-clock" style="color: #FCAF45;"></i>
+                    {{ post.scheduled_date }} às {{ post.scheduled_time }}
+                </div>
+
+                <div style="display: flex; gap: 0.5rem;">
+                    <button onclick="copyToClipboard('{{ post.copy|escapejs }} \n\n{{ post.cta|escapejs }} \n\n{{ post.hashtags|escapejs }}')" class="btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;" title="Copiar Texto">
+                        <i class="fa-regular fa-copy"></i>
+                    </button>
+                    <button onclick="deletePost({{ post.id }})" class="btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; color: #EF4444; border-color: rgba(239,68,68,0.3);" title="Eliminar">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
