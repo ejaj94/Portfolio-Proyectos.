@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-PT" style="--theme-primary: {{ restaurant.primary_color }}; --theme-bg: {{ restaurant.bg_theme }};">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ restaurant.name }} — Menu Digital QR</title>
+
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Custom Theme Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <!-- Header Banner Image -->
+    <div class="position-relative w-100 overflow-hidden" style="height: 200px;">
+        <img src="{{ restaurant.banner_url }}" alt="{{ restaurant.name }}" class="w-100 h-100 object-fit-cover">
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+        <div class="position-absolute bottom-0 start-0 w-100 p-3 bg-gradient-dark text-white d-flex align-items-center">
+            <img src="{{ restaurant.logo_url }}" alt="{{ restaurant.name }}" class="rounded-circle border border-2 border-white me-3 object-fit-cover shadow" style="width: 65px; height: 65px;">
+            <div>
+                <h4 class="fw-black mb-0 text-white">{{ restaurant.name }}</h4>
+                <small class="text-white-50"><i class="bi bi-geo-alt me-1"></i>{{ restaurant.address }}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container py-3" style="max-width: 600px;">
+        <!-- Search Bar -->
+        <div class="input-group mb-3 shadow-sm">
+            <span class="input-group-text bg-dark border-secondary text-muted"><i class="bi bi-search"></i></span>
+            <input type="text" class="form-control bg-dark text-white border-secondary" id="menuSearchInput" placeholder="Pesquisar prato, bebida ou ingrediente...">
+        </div>
+
+        <!-- Offers Carousel / Badges -->
+        {% if offers %}
+        <div class="mb-4">
+            <h6 class="fw-bold text-theme-primary mb-2"><i class="bi bi-fire me-1"></i>Ofertas & Promoções Especiais</h6>
+            <div class="d-flex gap-2 overflow-x-auto pb-2">
+                {% for off in offers %}
+                <div class="p-3 menu-card border-theme-primary flex-shrink-0" style="width: 260px;">
+                    <span class="badge badge-offer mb-1">{{ off.badge_text }}</span>
+                    <h6 class="fw-bold text-white mb-1">{{ off.title }}</h6>
+                    <small class="text-muted d-block">{{ off.description }}</small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Sticky Category Slider -->
+        <div class="category-slider sticky-top bg-dark py-2 mb-4 border-bottom border-secondary">
+            <button class="cat-pill active" onclick="qrMenu.selectCategory('all', this)">Todos</button>
+            {% for cat in categories %}
+            <button class="cat-pill" onclick="qrMenu.selectCategory({{ cat.id }}, this)">
+                <i class="bi {{ cat.icon }} me-1"></i>{{ cat.name }}
+            </button>
+            {% endfor %}
+        </div>
+
+        <!-- Category Sections & Products -->
+        {% for cat in categories %}
+        <div class="category-section mb-5" id="cat-section-{{ cat.id }}">
+            <h5 class="fw-bold text-theme-primary mb-3 pb-2 border-bottom border-secondary d-flex align-items-center">
+                <i class="bi {{ cat.icon }} me-2"></i>{{ cat.name }}
+                <span class="badge bg-secondary ms-auto small" style="font-size: 0.75rem;">{{ cat.products | length }} opções</span>
+            </h5>
+
+            <div class="row g-3">
+                {% for prod in cat.products %}
+                <div class="col-12 product-item-card" data-name="{{ prod.name }}" data-desc="{{ prod.description }}">
+                    <div class="menu-card p-3 d-flex justify-content-between align-items-center">
+                        <div class="pe-2 flex-grow-1">
+                            {% if prod.is_featured %}
+                            <span class="badge bg-warning text-dark mb-1" style="font-size: 0.65rem;"><i class="bi bi-star-fill me-1"></i>EM DESTAQUE</span>
+                            {% endif %}
+                            <h6 class="fw-bold text-white mb-1">{{ prod.name }}</h6>
+                            <p class="text-muted small mb-2" style="font-size: 0.85rem; line-height: 1.3;">{{ prod.description }}</p>
+
+                            {% if prod.allergens %}
+                            <div class="mb-2">
+                                {% for alg in prod.allergens.split(',') %}
+                                <span class="badge badge-allergen me-1">{{ alg.strip() }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="fs-5 fw-bold text-theme-primary">{{ prod.price | currency }}</span>
+                                {% if prod.original_price %}
+                                <span class="text-decoration-line-through text-muted small">{{ prod.original_price | currency }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="position-relative flex-shrink-0 text-center" style="width: 95px;">
+                            <img src="{{ prod.image_url }}" alt="{{ prod.name }}" class="rounded-3 object-fit-cover mb-2" style="width: 90px; height: 90px;">
+                            <button class="btn btn-sm btn-theme-primary w-100 py-1" style="font-size: 0.75rem;" onclick="qrMenu.addToCart({{ prod.id }}, '{{ prod.name | escapejs }}', {{ prod.price }})">
+                                <i class="bi bi-plus-lg me-1"></i>PEDIR
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Floating WhatsApp Cart Drawer Bar -->
+    <div class="floating-cart-bar shadow-lg" id="floatingCartBar" style="display: none;" onclick="qrMenu.sendWhatsAppOrder('{{ restaurant.phone_whatsapp }}')">
+        <div>
+            <span class="badge bg-white text-dark me-2 rounded-circle px-2 py-1 fw-bold" id="cartCountLbl">0</span>
+            <span class="fw-bold">Ver Pedido do Menu</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <span class="fs-5 fw-black me-3" id="cartTotalLbl">€ 0.00</span>
+            <i class="bi bi-whatsapp fs-3"></i>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+</body>
+</html>

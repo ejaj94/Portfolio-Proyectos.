@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Criador de Menus Digitais QR 🍔📱 — EJAJ TECH SaaS{% endblock %}</title>
+
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Custom QR Menu Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top border-bottom border-secondary py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <span class="fs-4 fw-black text-white me-2"><i class="bi bi-qr-code-scan text-warning me-2"></i>QR <span class="text-warning">MENU.AI</span></span>
+                <span class="badge bg-warning text-dark font-monospace" style="font-size: 0.65rem;">RESTAURAÇÃO SaaS</span>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarQRMenu" aria-controls="navbarQRMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="bi bi-list fs-2 text-white"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarQRMenu">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-light fw-medium" href="/"><i class="bi bi-house-door me-1"></i>Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light fw-medium" href="/menu/burgers-crunch"><i class="bi bi-phone me-1"></i>Ver Menu Exemplo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light fw-medium" href="/qr/burgers-crunch"><i class="bi bi-qr-code me-1"></i>Cartaz QR Mesa</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-warning text-dark fw-bold px-4 py-2 rounded-pill" href="/admin">
+                            <i class="bi bi-speedometer2 me-1"></i>Painel do Restaurante
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white border-top border-secondary py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-1 fw-bold">🍔 <strong>CRIADOR DE MENUS DIGITAIS QR</strong> — Desenvolvido por <strong>EJAJ TECH</strong></p>
+            <small class="text-muted">Plataforma SaaS para Restaurantes, Hamburguerias & Bares em Portugal • Versão 2026.1</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+</body>
+</html>

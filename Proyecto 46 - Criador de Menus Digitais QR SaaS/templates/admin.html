@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{% block title %}Painel do Proprietário — {{ restaurant.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Top Header & Restaurant Switcher -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold text-white mb-1">
+                <i class="bi bi-speedometer2 text-warning me-2"></i>Painel do Proprietário
+            </h2>
+            <p class="text-muted mb-0">Gestão de produtos, preços, categorias, ofertas e QR Code de mesa.</p>
+        </div>
+
+        <div class="d-flex gap-2 align-items-center">
+            <select class="form-select bg-dark text-white border-secondary" onchange="window.location.href='/admin/' + this.value">
+                {% for r in restaurants %}
+                <option value="{{ r.slug }}" {% if r.slug == restaurant.slug %}selected{% endif %}>{{ r.name }}</option>
+                {% endfor %}
+            </select>
+            <a href="/menu/{{ restaurant.slug }}" target="_blank" class="btn btn-outline-warning text-nowrap">
+                <i class="bi bi-eye me-1"></i>Ver Menu Público
+            </a>
+            <a href="/qr/{{ restaurant.slug }}" class="btn btn-warning text-dark fw-bold text-nowrap">
+                <i class="bi bi-qr-code me-1"></i>Cartaz QR Mesa
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats & Theme Customization Bar -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="menu-card p-3 text-center border-warning">
+                <span class="text-muted small fw-bold">Total de Pratos</span>
+                <h3 class="fw-bold text-warning mb-0 mt-1">{{ products | length }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="menu-card p-3 text-center border-info">
+                <span class="text-muted small fw-bold">Categorias Ativas</span>
+                <h3 class="fw-bold text-info mb-0 mt-1">{{ categories | length }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="menu-card p-3 text-center border-danger">
+                <span class="text-muted small fw-bold">Ofertas Ativas</span>
+                <h3 class="fw-bold text-danger mb-0 mt-1">{{ offers | length }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="menu-card p-3 text-center border-success">
+                <span class="text-muted small fw-bold">WhatsApp do Pedido</span>
+                <h6 class="fw-bold text-success mb-0 mt-1 text-truncate">{{ restaurant.phone_whatsapp }}</h6>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Tabs -->
+    <ul class="nav nav-pills mb-4 gap-2" id="adminTab" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active bg-dark text-white border border-secondary" id="prods-tab" data-bs-toggle="tab" data-bs-target="#prods-pane">
+                <i class="bi bi-box-seam me-2"></i>Gestão de Pratos ({{ products | length }})
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link bg-dark text-white border border-secondary" id="cats-tab" data-bs-toggle="tab" data-bs-target="#cats-pane">
+                <i class="bi bi-grid-3x3-gap me-2"></i>Categorias ({{ categories | length }})
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link bg-dark text-white border border-secondary" id="offers-tab" data-bs-toggle="tab" data-bs-target="#offers-pane">
+                <i class="bi bi-tags me-2"></i>Ofertas & Promoções
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link bg-dark text-white border border-secondary" id="theme-tab" data-bs-toggle="tab" data-bs-target="#theme-pane">
+                <i class="bi bi-palette me-2"></i>Personalização do Tema
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="adminTabContent">
+        <!-- Products Pane -->
+        <div class="tab-pane fade show active" id="prods-pane">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold text-white mb-0">Produtos & Itens do Menu</h5>
+                <button class="btn btn-warning text-dark fw-bold" data-bs-toggle="modal" data-bs-target="#newProductModal">
+                    <i class="bi bi-plus-circle me-1"></i>Adicionar Prato / Bebida
+                </button>
+            </div>
+
+            <div class="menu-card p-0 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Categoria</th>
+                                <th class="text-end">Preço</th>
+                                <th class="text-center">Destaque</th>
+                                <th class="text-center">Alérgenos</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in products %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ p.image_url }}" alt="{{ p.name }}" class="rounded me-3 object-fit-cover" style="width: 50px; height: 50px;">
+                                        <div>
+                                            <h6 class="fw-bold text-white mb-0">{{ p.name }}</h6>
+                                            <small class="text-muted">{{ p.description[:60] }}...</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-secondary">{{ p.category_name }}</span></td>
+                                <td class="text-end fw-bold text-warning">{{ p.price | currency }}</td>
+                                <td class="text-center">
+                                    {% if p.is_featured %}<span class="badge bg-warning text-dark">Sim</span>{% else %}<span class="badge bg-dark text-muted">Não</span>{% endif %}
+                                </td>
+                                <td class="text-center">
+                                    <small class="text-muted">{{ p.allergens or 'Sem avisos' }}</small>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-info" title="Editar"><i class="bi bi-pencil"></i></button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Pane -->
+        <div class="tab-pane fade" id="cats-pane">
+            <div class="row g-4">
+                <div class="col-md-5">
+                    <div class="menu-card p-4">
+                        <h5 class="fw-bold text-white mb-3">Nova Categoria de Menu</h5>
+                        <div class="mb-3">
+                            <label for="catName" class="form-label small text-muted">Nome da Categoria *</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" id="catName" placeholder="Ex: Sobremesas Gourmet">
+                        </div>
+                        <div class="mb-3">
+                            <label for="catIcon" class="form-label small text-muted">Ícone Bootstrap</label>
+                            <select class="form-select bg-dark text-white border-secondary" id="catIcon">
+                                <option value="bi-cup-hot">Hambúrgueres / Quentes (bi-cup-hot)</option>
+                                <option value="bi-box-seam">Entradas (bi-box-seam)</option>
+                                <option value="bi-cup-straw">Bebidas (bi-cup-straw)</option>
+                                <option value="bi-cake2">Sobremesas (bi-cake2)</option>
+                                <option value="bi-egg-fried">Pratos Principais (bi-egg-fried)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-warning text-dark fw-bold w-100" onclick="qrMenu.createCategory({{ restaurant.id }})">
+                            Criar Categoria
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="menu-card p-4">
+                        <h5 class="fw-bold text-white mb-3">Categorias Existentes</h5>
+                        <ul class="list-group list-group-flush bg-transparent">
+                            {% for c in categories %}
+                            <li class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="bi {{ c.icon }} text-warning me-2 fs-5"></i>
+                                    <strong class="fs-6">{{ c.name }}</strong>
+                                </div>
+                                <span class="badge bg-secondary">Ordem {{ c.display_order }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Offers Pane -->
+        <div class="tab-pane fade" id="offers-pane">
+            <div class="row g-4">
+                <div class="col-md-5">
+                    <div class="menu-card p-4 border-danger">
+                        <h5 class="fw-bold text-white mb-3">Lançar Nova Promoção</h5>
+                        <div class="mb-3">
+                            <label for="offerTitle" class="form-label small text-muted">Título da Oferta *</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" id="offerTitle" placeholder="Ex: Happy Hour 2 por 1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="offerBadge" class="form-label small text-muted">Badge / Destaque *</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" id="offerBadge" value="PROMO -20%">
+                        </div>
+                        <div class="mb-3">
+                            <label for="offerDiscount" class="form-label small text-muted">Desconto (%)</label>
+                            <input type="number" class="form-control bg-dark text-white border-secondary" id="offerDiscount" value="20">
+                        </div>
+                        <div class="mb-3">
+                            <label for="offerDesc" class="form-label small text-muted">Descrição Breve</label>
+                            <textarea class="form-control bg-dark text-white border-secondary" id="offerDesc" rows="2" placeholder="Válido de segunda a sexta na compra de qualquer hambúrguer."></textarea>
+                        </div>
+                        <button class="btn btn-danger text-white fw-bold w-100" onclick="qrMenu.createOffer({{ restaurant.id }})">
+                            Ativar Oferta no Menu
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="menu-card p-4">
+                        <h5 class="fw-bold text-white mb-3">Promoções Ativas</h5>
+                        {% for off in offers %}
+                        <div class="p-3 bg-dark rounded border border-danger mb-3">
+                            <span class="badge bg-danger mb-1">{{ off.badge_text }}</span>
+                            <h6 class="fw-bold text-white mb-1">{{ off.title }}</h6>
+                            <p class="small text-muted mb-0">{{ off.description }}</p>
+                        </div>
+                        {% else %}
+                        <p class="text-muted">Sem promoções ativas de momento.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme Pane -->
+        <div class="tab-pane fade" id="theme-pane">
+            <div class="menu-card p-4 border-warning style-form" style="max-width: 600px;">
+                <h5 class="fw-bold text-white mb-3">Personalização da Marca & Cores</h5>
+                <div class="mb-3">
+                    <label for="themeColor" class="form-label small text-muted">Cor Principal de Destaque</label>
+                    <input type="color" class="form-control form-control-color bg-dark border-secondary w-100" id="themeColor" value="{{ restaurant.primary_color }}">
+                </div>
+                <div class="mb-3">
+                    <label for="themeBg" class="form-label small text-muted">Cor de Fundo do Menu</label>
+                    <input type="color" class="form-control form-control-color bg-dark border-secondary w-100" id="themeBg" value="{{ restaurant.bg_theme }}">
+                </div>
+                <div class="mb-3">
+                    <label for="themeTagline" class="form-label small text-muted">Slogan do Restaurante</label>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" id="themeTagline" value="{{ restaurant.tagline }}">
+                </div>
+                <div class="mb-3">
+                    <label for="themePhone" class="form-label small text-muted">Número WhatsApp para Receber Pedidos</label>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" id="themePhone" value="{{ restaurant.phone_whatsapp }}">
+                </div>
+                <button class="btn btn-warning text-dark fw-bold w-100 py-2" onclick="qrMenu.updateTheme({{ restaurant.id }})">
+                    Guardar Alterações de Tema
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Novo Produto -->
+<div class="modal fade" id="newProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white border border-secondary">
+            <div class="modal-header border-secondary py-3">
+                <h5 class="modal-title fw-bold text-warning"><i class="bi bi-plus-circle me-2"></i>Adicionar Novo Prato / Bebida</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label for="prodName" class="form-label small text-muted">Nome do Prato *</label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" id="prodName" placeholder="Ex: Hambúrguer Double Trufado" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="prodCatId" class="form-label small text-muted">Categoria *</label>
+                        <select class="form-select bg-dark text-white border-secondary" id="prodCatId" required>
+                            {% for c in categories %}
+                            <option value="{{ c.id }}">{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="prodPrice" class="form-label small text-muted">Preço Atual (€) *</label>
+                        <input type="number" step="0.01" class="form-control bg-dark text-white border-secondary" id="prodPrice" placeholder="14.90" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="prodOrigPrice" class="form-label small text-muted">Preço Original (Para Rasurar)</label>
+                        <input type="number" step="0.01" class="form-control bg-dark text-white border-secondary" id="prodOrigPrice" placeholder="16.90">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="prodImage" class="form-label small text-muted">URL da Foto HD</label>
+                        <input type="url" class="form-control bg-dark text-white border-secondary" id="prodImage" placeholder="https://images.unsplash.com/photo-...">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="prodAllergens" class="form-label small text-muted">Badges de Alérgenos / Notas</label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" id="prodAllergens" placeholder="Ex: Vegetariano, Sem Glúten, Picante">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="prodDesc" class="form-label small text-muted">Descrição dos Ingredientes</label>
+                        <textarea class="form-control bg-dark text-white border-secondary" id="prodDesc" rows="3" placeholder="Descreva os ingredientes, acompanhamentos e forma de confeção..."></textarea>
+                    </div>
+
+                    <div class="col-12 form-check ms-2">
+                        <input class="form-check-input" type="checkbox" id="prodFeatured">
+                        <label class="form-check-label text-warning fw-bold" for="prodFeatured">
+                            Destacar no Topo do Menu ("Em Destaque")
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning text-dark fw-bold" onclick="qrMenu.createProduct({{ restaurant.id }})">Guardar Prato</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

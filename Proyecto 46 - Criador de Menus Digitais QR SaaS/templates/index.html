@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block title %}Criador de Menus Digitais QR 🍔📱 — EJAJ TECH SaaS{% endblock %}
+
+{% block content %}
+<!-- HERO BANNER -->
+<section class="py-5 position-relative bg-dark text-white border-bottom border-secondary">
+    <div class="container py-lg-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <span class="badge bg-warning text-dark px-3 py-2 fw-bold font-monospace mb-3">🚀 RESTAURAÇÃO 2026</span>
+                <h1 class="display-4 fw-black text-white mb-3">
+                    Crie o Menu Digital QR <br><span class="text-warning">Perfeito para o Seu Restaurante.</span>
+                </h1>
+                <p class="fs-5 text-muted mb-4 pe-lg-3">
+                    Elimine as cartas em papel, atualize preços e pratos em tempo real, promova ofertas especiais e permita que os seus clientes façam pedidos diretamente do telemóvel por WhatsApp!
+                </p>
+
+                <div class="d-flex flex-wrap gap-3 mb-4">
+                    <a href="/menu/burgers-crunch" class="btn btn-warning text-dark fw-bold px-4 py-3 rounded-pill">
+                        <i class="bi bi-phone me-2"></i>Ver Menu Digital no Telemóvel
+                    </a>
+                    <a href="/admin" class="btn btn-outline-light px-4 py-3 rounded-pill">
+                        <i class="bi bi-speedometer2 me-2"></i>Painel do Proprietário
+                    </a>
+                </div>
+
+                <div class="row g-3 border-top border-secondary pt-4">
+                    <div class="col-4">
+                        <h3 class="fw-bold text-warning mb-0">100%</h3>
+                        <small class="text-muted">Digital sem Papel</small>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="fw-bold text-white mb-0">QR</h3>
+                        <small class="text-muted">Código para Mesas</small>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="fw-bold text-warning mb-0">0s</h3>
+                        <small class="text-muted">Atualização de Preço</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 text-center">
+                <div class="menu-card p-4 border-warning shadow-lg text-center" style="max-width: 360px; margin: 0 auto;">
+                    <span class="badge bg-danger mb-2">AO VIVO NA MESA 04</span>
+                    <h5 class="fw-bold text-white mb-2">Burger & Crunch Gourmet</h5>
+                    <img src="/api/qr/image/burgers-crunch" alt="QR Code Mesa" class="w-100 rounded-3 mb-3 p-2 bg-white border border-warning" style="max-width: 240px;">
+                    <p class="small text-muted mb-3">Digitalize com a câmara do telemóvel para abrir a e-carta instantaneamente.</p>
+                    <a href="/qr/burgers-crunch" class="btn btn-sm btn-outline-warning w-100 rounded-pill">
+                        <i class="bi bi-printer me-1"></i>Ver Cartaz de Mesa Imprimível
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES GRID -->
+<section class="py-5">
+    <div class="container py-lg-4">
+        <div class="text-center mb-5">
+            <span class="badge bg-warning-subtle text-warning border border-warning px-3 py-2 mb-2">⚡ RECURSOS SaaS</span>
+            <h2 class="display-5 fw-bold text-white">Tudo o Que Precisa no Seu Menu</h2>
+            <p class="text-muted mx-auto" style="max-width: 600px;">
+                Construído para aumentar a faturação média por mesa e agilizar o serviço dos empregados de mesa.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="menu-card p-4 h-100">
+                    <div class="fs-1 text-warning mb-3"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+                    <h4 class="fw-bold text-white mb-2">Categorias & Fotos HD</h4>
+                    <p class="text-muted small">Organize o seu menu por secções (Hambúrgueres, Pizzas, Bebidas) com imagens apetitosas em alta definição.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="menu-card p-4 h-100">
+                    <div class="fs-1 text-warning mb-3"><i class="bi bi-tags-fill"></i></div>
+                    <h4 class="fw-bold text-white mb-2">Preços & Promoções</h4>
+                    <p class="text-muted small">Altere preços em segundos e destaque badges de promoção (ex: <em>Promo -20%</em> ou <em>Menu do Dia</em>) para alavancar vendas.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="menu-card p-4 h-100">
+                    <div class="fs-1 text-warning mb-3"><i class="bi bi-qr-code-scan"></i></div>
+                    <h4 class="fw-bold text-white mb-2">Código QR Instantâneo</h4>
+                    <p class="text-muted small">Gere códigos QR para colocar nas mesas, balcões ou cartazes de rua com opção de descarregamento imediato.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="menu-card p-4 h-100">
+                    <div class="fs-1 text-warning mb-3"><i class="bi bi-palette-fill"></i></div>
+                    <h4 class="fw-bold text-white mb-2">Personalização de Tema</h4>
+                    <p class="text-muted small">Adapte a cor principal do menu à sua marca: Ouro Executivo, Laranja Neon, Verde Esmeralda ou Azul Ciano.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="menu-card p-4 h-100">
+                    <div class="fs-1 text-warning mb-3"><i class="bi bi-whatsapp"></i></div>
+                    <h4 class="fw-bold text-white mb-2">Pedidos por WhatsApp</h4>
+                    <p class="text-muted small">Permita que o cliente monte o seu pedido e envie os artigos escolhidos diretamente para o WhatsApp do restaurante.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="menu-card p-4 h-100">
+                    <div class="fs-1 text-warning mb-3"><i class="bi bi-shield-check"></i></div>
+                    <h4 class="fw-bold text-white mb-2">Identificação de Alérgenos</h4>
+                    <p class="text-muted small">Badges visuais para informar clientes sobre pratos <em>Vegetarianos</em>, <em>Picantes</em> ou <em>Sem Glúten</em>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DEMO RESTAURANTS -->
+<section class="py-5 bg-dark border-top border-secondary">
+    <div class="container py-lg-4">
+        <div class="text-center mb-5">
+            <h3 class="fw-bold text-white mb-2">Restaurantes Demonstrativos Ativos</h3>
+            <p class="text-muted">Clique para ver o menu público tal como é visto no smartphone do cliente.</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            {% for r in restaurants %}
+            <div class="col-md-5">
+                <div class="menu-card p-4 d-flex align-items-center">
+                    <img src="{{ r.logo_url }}" alt="{{ r.name }}" class="rounded-circle me-3 object-fit-cover" style="width: 70px; height: 70px;">
+                    <div class="flex-grow-1">
+                        <h5 class="fw-bold text-white mb-1">{{ r.name }}</h5>
+                        <p class="small text-muted mb-2">{{ r.tagline }}</p>
+                        <div class="d-flex gap-2">
+                            <a href="/menu/{{ r.slug }}" class="btn btn-sm btn-warning fw-bold px-3 rounded-pill">
+                                Ver Menu <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                            <a href="/admin/{{ r.slug }}" class="btn btn-sm btn-outline-light rounded-pill">
+                                Editar no Admin
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
