@@ -1,0 +1,156 @@
+:root {
+    --bg-dark: #0F172A;
+    --bg-card: rgba(30, 41, 59, 0.75);
+    --border-light: rgba(255, 255, 255, 0.12);
+    --color-indigo: #6366F1;
+    --color-indigo-glow: rgba(99, 102, 241, 0.35);
+    --color-emerald: #10B981;
+    --color-emerald-glow: rgba(16, 185, 129, 0.35);
+    --color-rose: #F43F5E;
+    --color-rose-glow: rgba(244, 63, 94, 0.35);
+    --text-white: #F8FAFC;
+    --text-muted: #94A3B8;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Glassmorphism Cards */
+.booking-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border-light);
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.booking-card:hover {
+    border-color: var(--color-indigo);
+    box-shadow: 0 15px 40px var(--color-indigo-glow);
+}
+
+/* Wizard Steps Bar */
+.wizard-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.wizard-step-item {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.wizard-step-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #1E293B;
+    border: 2px solid var(--border-light);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.5rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.wizard-step-item.active .wizard-step-icon {
+    background: var(--color-indigo);
+    border-color: #818CF8;
+    color: #FFF;
+    box-shadow: 0 0 20px var(--color-indigo-glow);
+}
+
+.wizard-step-item.completed .wizard-step-icon {
+    background: var(--color-emerald);
+    border-color: #34D399;
+    color: #FFF;
+}
+
+/* Time Slot Pills */
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.75rem;
+}
+
+.slot-pill {
+    padding: 0.65rem 0.5rem;
+    background: #1E293B;
+    border: 1.5px solid var(--border-light);
+    border-radius: 0.75rem;
+    color: var(--text-white);
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.slot-pill:hover, .slot-pill.active {
+    background: var(--color-indigo);
+    border-color: #818CF8;
+    color: #FFF;
+    box-shadow: 0 0 15px var(--color-indigo-glow);
+    transform: translateY(-2px);
+}
+
+/* Status Badges */
+.badge-confirmada {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+    border: 1px solid #10B981;
+    font-weight: 700;
+}
+
+.badge-cancelada {
+    background: rgba(244, 63, 94, 0.15);
+    color: #FB7185;
+    border: 1px solid #F43F5E;
+    font-weight: 700;
+}
+
+/* Buttons */
+.btn-indigo {
+    background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+    color: #FFF;
+    font-weight: 700;
+    border: none;
+    border-radius: 50rem;
+    padding: 0.75rem 2rem;
+    box-shadow: 0 0 20px var(--color-indigo-glow);
+    transition: all 0.3s ease;
+}
+
+.btn-indigo:hover {
+    color: #FFF;
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.6);
+    transform: scale(1.02);
+}
+
+.btn-emerald {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: #FFF;
+    font-weight: 700;
+    border: none;
+    border-radius: 50rem;
+    padding: 0.75rem 2rem;
+    box-shadow: 0 0 20px var(--color-emerald-glow);
+    transition: all 0.3s ease;
+}
+
+.btn-emerald:hover {
+    color: #FFF;
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
+    transform: scale(1.02);
+}

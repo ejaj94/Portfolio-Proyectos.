@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Painel de Agenda do Profissional — {{ professional.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header & Professional Switcher -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold text-white mb-1">
+                <i class="bi bi-speedometer2 text-indigo me-2"></i>Painel da Agenda Médica & Profissional
+            </h2>
+            <p class="text-muted mb-0">Gestão de consultas, controlo de cancelamentos e envio de lembretes automáticos.</p>
+        </div>
+
+        <div class="d-flex gap-2 align-items-center">
+            <select class="form-select bg-dark text-white border-secondary" onchange="window.location.href='/admin/' + this.value">
+                {% for p in professionals %}
+                <option value="{{ p.id }}" {% if p.id == professional.id %}selected{% endif %}>{{ p.name }} ({{ p.specialty }})</option>
+                {% endfor %}
+            </select>
+            <a href="/" class="btn btn-emerald text-white text-nowrap">
+                <i class="bi bi-plus-circle me-1"></i>Nova Marcação
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="booking-card p-3 text-center border-indigo">
+                <span class="text-muted small fw-bold">Consultas Hoje ({{ today_str }})</span>
+                <h3 class="fw-bold text-indigo mb-0 mt-1">{{ today_appointments | length }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="booking-card p-3 text-center border-success">
+                <span class="text-muted small fw-bold">Confirmadas Totais</span>
+                <h3 class="fw-bold text-success mb-0 mt-1">{{ confirmed_count }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="booking-card p-3 text-center border-danger">
+                <span class="text-muted small fw-bold">Cancelamentos</span>
+                <h3 class="fw-bold text-danger mb-0 mt-1">{{ cancelled_count }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="booking-card p-3 text-center border-info">
+                <span class="text-muted small fw-bold">Especialidade</span>
+                <h6 class="fw-bold text-info mb-0 mt-1 text-truncate">{{ professional.specialty }}</h6>
+            </div>
+        </div>
+    </div>
+
+    <!-- Today's Schedule Card -->
+    {% if today_appointments %}
+    <div class="booking-card p-4 mb-4 border-indigo">
+        <h5 class="fw-bold text-white mb-3"><i class="bi bi-bell-fill text-indigo me-2"></i>Agenda Prioritária para Hoje ({{ today_str }})</h5>
+        <div class="row g-3">
+            {% for appt in today_appointments %}
+            <div class="col-md-4">
+                <div class="p-3 bg-dark rounded-3 border border-secondary">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge bg-indigo text-white">{{ appt.start_time }} - {{ appt.end_time }}</span>
+                        <span class="badge bg-success">Confirmada</span>
+                    </div>
+                    <h6 class="fw-bold text-white mb-1">{{ appt.client_name }}</h6>
+                    <small class="text-info d-block mb-2">{{ appt.service_title }} ({{ appt.duration_minutes }} min)</small>
+                    <small class="text-muted d-block mb-2"><i class="bi bi-phone me-1"></i>{{ appt.client_phone }}</small>
+                    <button class="btn btn-sm btn-outline-info w-100 rounded-pill" onclick="bookingApp.sendReminder({{ appt.id }})">
+                        <i class="bi bi-chat-left-text me-1"></i>Reenviar Lembrete SMS
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Full Appointments Table -->
+    <div class="booking-card p-4 mb-5">
+        <h5 class="fw-bold text-white mb-4"><i class="bi bi-calendar-check text-indigo me-2"></i>Histórico Completo de Marcações na Agenda</h5>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Data & Horário</th>
+                        <th>Cliente</th>
+                        <th>Serviço</th>
+                        <th class="text-end">Valor</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in appointments %}
+                    <tr>
+                        <td><span class="fw-bold text-indigo">{{ a.code }}</span></td>
+                        <td>
+                            <strong class="text-white d-block">{{ a.appointment_date }}</strong>
+                            <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ a.start_time }} - {{ a.end_time }}</small>
+                        </td>
+                        <td>
+                            <strong class="text-white d-block">{{ a.client_name }}</strong>
+                            <small class="text-muted"><i class="bi bi-phone me-1"></i>{{ a.client_phone }} | {{ a.client_email }}</small>
+                        </td>
+                        <td>
+                            <span class="fw-semibold text-light">{{ a.service_title }}</span>
+                            <small class="text-muted d-block">{{ a.duration_minutes }} min</small>
+                        </td>
+                        <td class="text-end fw-bold text-success">{{ a.price | currency }}</td>
+                        <td class="text-center">
+                            {% if a.status == 'Confirmada' %}
+                            <span class="badge badge-confirmada">Confirmada</span>
+                            {% else %}
+                            <span class="badge badge-cancelada" title="{{ a.cancel_reason or 'Motivo não especificado' }}">Cancelada</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            {% if a.status == 'Confirmada' %}
+                            <button class="btn btn-sm btn-outline-info me-1" title="Enviar Lembrete SMS" onclick="bookingApp.sendReminder({{ a.id }})">
+                                <i class="bi bi-send"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" title="Cancelar Consulta" onclick="bookingApp.cancelAppointment('{{ a.code }}')">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+                            {% else %}
+                            <small class="text-muted" title="{{ a.cancel_reason }}">Cancelada</small>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">Sem agendamentos registados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

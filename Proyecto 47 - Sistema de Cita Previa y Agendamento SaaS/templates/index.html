@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% block title %}Agendar Consulta ou Serviço — Sistema de Cita Previa SaaS{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <span class="badge bg-indigo text-white px-3 py-2 fw-bold mb-2">📅 AGENDAMENTO ONLINE EM 4 PASSOS</span>
+        <h1 class="display-5 fw-black text-white">Marque a Sua Consulta ou Serviço</h1>
+        <p class="text-muted mx-auto" style="max-width: 650px;">
+            Escolha a especialidade, o profissional da sua preferência e selecione um horário disponível na agenda em tempo real.
+        </p>
+    </div>
+
+    <!-- Wizard Steps Indicator Bar -->
+    <div class="wizard-steps max-w-700 mx-auto mb-4" style="max-width: 700px;">
+        <div class="wizard-step-item active" id="step-item-1">
+            <div class="wizard-step-icon">1</div>
+            <small class="fw-bold text-white d-block">Serviço</small>
+        </div>
+        <div class="wizard-step-item" id="step-item-2">
+            <div class="wizard-step-icon">2</div>
+            <small class="fw-bold text-white d-block">Profissional</small>
+        </div>
+        <div class="wizard-step-item" id="step-item-3">
+            <div class="wizard-step-icon">3</div>
+            <small class="fw-bold text-white d-block">Data & Hora</small>
+        </div>
+        <div class="wizard-step-item" id="step-item-4">
+            <div class="wizard-step-icon">4</div>
+            <small class="fw-bold text-white d-block">Confirmação</small>
+        </div>
+    </div>
+
+    <!-- WIZARD CONTAINER -->
+    <div class="booking-card p-4 p-lg-5 max-w-850 mx-auto" style="max-width: 850px;">
+        <!-- STEP 1: Select Service -->
+        <div id="wizard-pane-1">
+            <h4 class="fw-bold text-white mb-3"><i class="bi bi-card-checklist text-indigo me-2"></i>Passo 1: Escolha o Serviço Pretendido</h4>
+            <p class="text-muted small mb-4">Selecione o tipo de atendimento para visualizar a duração e valor correspondentes.</p>
+
+            <div class="row g-3">
+                {% for s in services %}
+                <div class="col-md-6">
+                    <div class="p-3 bg-dark rounded-3 border border-secondary h-100 d-flex flex-column justify-content-between hover-card" style="cursor: pointer;" onclick="bookingApp.selectService({{ s.id }}, '{{ s.title | escapejs }}', {{ s.duration_minutes }}, {{ s.price }}, {{ s.professional_id }}, '{{ s.professional_name | escapejs }}')">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-indigo text-white">{{ s.category }}</span>
+                                <span class="fw-bold text-success fs-5">{{ s.price | currency }}</span>
+                            </div>
+                            <h5 class="fw-bold text-white mb-1">{{ s.title }}</h5>
+                            <p class="text-muted small mb-3">{{ s.description }}</p>
+                        </div>
+
+                        <div class="pt-2 border-top border-secondary d-flex justify-content-between align-items-center">
+                            <small class="text-info"><i class="bi bi-clock me-1"></i>Duração: {{ s.duration_minutes }} min</small>
+                            <small class="text-muted"><i class="bi bi-person me-1"></i>{{ s.professional_name }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- STEP 2: Select Professional -->
+        <div id="wizard-pane-2" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold text-white mb-0"><i class="bi bi-person-badge text-indigo me-2"></i>Passo 2: Selecione o Profissional</h4>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill" onclick="bookingApp.goToStep(1)"><i class="bi bi-arrow-left me-1"></i>Voltar</button>
+            </div>
+            <p class="text-muted small mb-4">Escolha o profissional especializado para realizar o atendimento.</p>
+
+            <div class="row g-3">
+                {% for p in professionals %}
+                <div class="col-md-4">
+                    <div class="p-3 bg-dark rounded-3 border border-secondary text-center h-100 d-flex flex-column justify-content-between hover-card" style="cursor: pointer;" onclick="bookingApp.selectProfessional({{ p.id }}, '{{ p.name | escapejs }}')">
+                        <div>
+                            <img src="{{ p.avatar_url }}" alt="{{ p.name }}" class="rounded-circle mb-3 object-fit-cover border border-2 border-indigo shadow-sm" style="width: 80px; height: 80px;">
+                            <h5 class="fw-bold text-white mb-1">{{ p.name }}</h5>
+                            <span class="badge bg-secondary mb-2">{{ p.title }}</span>
+                            <p class="text-info small mb-3 fw-semibold">{{ p.specialty }}</p>
+                            <p class="text-muted small" style="font-size: 0.8rem; line-height: 1.3;">{{ p.bio[:90] }}...</p>
+                        </div>
+
+                        <button class="btn btn-sm btn-indigo w-100 rounded-pill mt-2">
+                            Selecionar Profissional
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- STEP 3: Select Date & Time Slot -->
+        <div id="wizard-pane-3" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold text-white mb-0"><i class="bi bi-calendar3 text-indigo me-2"></i>Passo 3: Data & Horários Disponíveis</h4>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill" onclick="bookingApp.goToStep(2)"><i class="bi bi-arrow-left me-1"></i>Voltar</button>
+            </div>
+            <p class="text-muted small mb-4">Selecione o dia pretendido no calendário para visualizar os horários livres na agenda.</p>
+
+            <div class="row g-4">
+                <div class="col-md-5">
+                    <label for="bookingDatePicker" class="form-label fw-bold text-white small">Selecione a Data Pretendida *</label>
+                    <input type="date" class="form-control bg-dark text-white border-secondary p-3 fs-6 rounded-3 mb-3" id="bookingDatePicker">
+                    <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Agenda aberta de Segunda a Sexta-feira.</small>
+                </div>
+
+                <div class="col-md-7 border-start-md">
+                    <label class="form-label fw-bold text-white small mb-3">Horários Livres na Agenda (Em Tempo Real)</label>
+                    <div id="slotsContainer">
+                        <div class="text-center text-muted py-4">Por favor selecione uma data no calendário.</div>
+                    </div>
+
+                    <div class="text-end mt-4">
+                        <button type="button" id="btnStep3Next" class="btn btn-indigo px-4 py-2" disabled onclick="bookingApp.goToStep(4)">
+                            Continuar para Dados <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 4: Client Info & Confirmation -->
+        <div id="wizard-pane-4" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold text-white mb-0"><i class="bi bi-shield-check text-success me-2"></i>Passo 4: Dados de Contacto & Confirmação</h4>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill" onclick="bookingApp.goToStep(3)"><i class="bi bi-arrow-left me-1"></i>Voltar</button>
+            </div>
+
+            <div class="row g-4">
+                <!-- Summary Sidebar -->
+                <div class="col-lg-5">
+                    <div class="p-3 bg-dark rounded-3 border border-indigo">
+                        <h6 class="fw-bold text-indigo mb-3"><i class="bi bi-receipt me-1"></i>Resumo do Agendamento</h6>
+                        
+                        <div class="mb-2"><span class="text-muted small d-block">Serviço:</span><strong class="text-white" id="sumService">...</strong></div>
+                        <div class="mb-2"><span class="text-muted small d-block">Profissional:</span><strong class="text-white" id="sumProf">...</strong></div>
+                        <div class="mb-2"><span class="text-muted small d-block">Data & Hora:</span><strong class="text-indigo fs-6" id="sumDate">...</strong></div>
+                        <div class="mb-2"><span class="text-muted small d-block">Duração Estimada:</span><strong class="text-white" id="sumDuration">...</strong></div>
+                        <hr class="my-2 border-secondary">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-white">Valor a Pagar:</span>
+                            <span class="fs-4 fw-bold text-success" id="sumPrice">€ 0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Client Form -->
+                <div class="col-lg-7">
+                    <form id="bookingClientForm" onsubmit="event.preventDefault(); bookingApp.submitBooking();">
+                        <div class="mb-3">
+                            <label for="clientName" class="form-label small text-muted">Nome Completo do Cliente *</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" id="clientName" placeholder="Ex: Ana Maria Silva" required>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="clientPhone" class="form-label small text-muted">Telemóvel / WhatsApp *</label>
+                                <input type="tel" class="form-control bg-dark text-white border-secondary" id="clientPhone" placeholder="+351 912 345 678" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="clientEmail" class="form-label small text-muted">E-mail para Confirmação *</label>
+                                <input type="email" class="form-control bg-dark text-white border-secondary" id="clientEmail" placeholder="ana@email.pt" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="clientNotes" class="form-label small text-muted">Observações / Motivo da Consulta</label>
+                            <textarea class="form-control bg-dark text-white border-secondary" id="clientNotes" rows="2" placeholder="Descreva brevemente qualquer detalhe relevante para o profissional..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-emerald text-white fw-bold w-100 py-3 fs-6">
+                            <i class="bi bi-check-circle-fill me-2"></i>CONFIRMAR MARCAÇÃO AGORA
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white border border-success">
+            <div class="modal-header border-secondary py-3">
+                <h5 class="modal-title fw-bold text-success"><i class="bi bi-check-circle-fill me-2"></i>Marcação Confirmada!</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                <span class="badge bg-success text-white fs-5 mb-3 px-3 py-2" id="confirmedCodeLbl">AG-2026-XXXX</span>
+                <p class="text-white fw-bold fs-6 mb-3" id="confirmedMessageLbl">O seu agendamento foi efetuado com sucesso.</p>
+                <p class="text-muted small mb-4">Guarde o seu código de agendamento para consultar ou cancelar a marcação em qualquer altura.</p>
+                
+                <div class="d-flex gap-2 justify-content-center">
+                    <a href="/appointments" class="btn btn-outline-light rounded-pill">Ver Marcação</a>
+                    <button type="button" class="btn btn-emerald text-white rounded-pill px-4" data-bs-dismiss="modal" onclick="window.location.reload();">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

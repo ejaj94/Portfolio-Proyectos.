@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Consultar ou Cancelar Agendamento — Sistema de Cita Previa SaaS{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <span class="badge bg-indigo text-white px-3 py-2 fw-bold mb-2">🔍 CONSULTA DE MARCAÇÃO</span>
+        <h1 class="display-5 fw-black text-white">Consulte a Sua Marcação</h1>
+        <p class="text-muted mx-auto" style="max-width: 600px;">
+            Introduza o seu código único de agendamento (ex: <code>AG-2026-1001</code>) ou o número de telemóvel para verificar os detalhes da consulta.
+        </p>
+    </div>
+
+    <!-- Search Form -->
+    <div class="booking-card p-4 max-w-650 mx-auto mb-5" style="max-width: 650px;">
+        <form method="GET" action="/appointments" class="row g-2">
+            <div class="col-8">
+                <input type="text" name="code" value="{{ q }}" class="form-control bg-dark text-white border-secondary p-3" placeholder="Código (AG-2026-XXXX) ou Telemóvel..." required>
+            </div>
+            <div class="col-4">
+                <button type="submit" class="btn btn-indigo w-100 h-100 fw-bold">
+                    <i class="bi bi-search me-1"></i>Pesquisar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Found Appointment Result Card -->
+    {% if found_appointment %}
+    <div class="booking-card p-4 p-lg-5 max-w-750 mx-auto mb-5 border-indigo" style="max-width: 750px;">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 pb-3 border-bottom border-secondary">
+            <div>
+                <span class="badge bg-indigo text-white fs-5 me-2">{{ found_appointment.code }}</span>
+                <span class="text-muted small">Data de Agendamento</span>
+            </div>
+            <div>
+                {% if found_appointment.status == 'Confirmada' %}
+                <span class="badge badge-confirmada px-3 py-2 fs-6">CONFIRMADA</span>
+                {% else %}
+                <span class="badge badge-cancelada px-3 py-2 fs-6">CANCELADA</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="{{ found_appointment.professional_avatar }}" alt="{{ found_appointment.professional_name }}" class="rounded-circle me-3 object-fit-cover border border-2 border-indigo" style="width: 60px; height: 60px;">
+                    <div>
+                        <h5 class="fw-bold text-white mb-0">{{ found_appointment.professional_name }}</h5>
+                        <small class="text-info">{{ found_appointment.professional_specialty }}</small>
+                    </div>
+                </div>
+
+                <h6 class="fw-bold text-white mb-1">{{ found_appointment.service_title }}</h6>
+                <p class="text-muted small mb-2"><i class="bi bi-clock me-1 text-indigo"></i>Duração: {{ found_appointment.duration_minutes }} minutos</p>
+                <p class="text-success fw-bold fs-5 mb-0">{{ found_appointment.price | currency }}</p>
+            </div>
+
+            <div class="col-md-6 border-start-md">
+                <h6 class="fw-bold text-white mb-3"><i class="bi bi-person-check text-indigo me-2"></i>Dados do Utente / Cliente</h6>
+                <p class="small text-light mb-1"><strong>Nome:</strong> {{ found_appointment.client_name }}</p>
+                <p class="small text-light mb-1"><strong>Telemóvel:</strong> {{ found_appointment.client_phone }}</p>
+                <p class="small text-light mb-2"><strong>E-mail:</strong> {{ found_appointment.client_email }}</p>
+                
+                <div class="p-3 bg-dark rounded-3 border border-secondary mb-3">
+                    <small class="text-muted d-block">Data & Hora do Atendimento:</small>
+                    <strong class="text-indigo fs-5"><i class="bi bi-calendar-event me-1"></i>{{ found_appointment.appointment_date }} às {{ found_appointment.start_time }}</strong>
+                </div>
+
+                {% if found_appointment.status == 'Confirmada' %}
+                <button class="btn btn-outline-danger w-100 rounded-pill" onclick="bookingApp.cancelAppointment('{{ found_appointment.code }}')">
+                    <i class="bi bi-x-circle me-1"></i>Solicitar Cancelamento da Marcação
+                </button>
+                {% else %}
+                <div class="alert alert-danger mb-0 small">
+                    <strong>Motivo do Cancelamento:</strong> {{ found_appointment.cancel_reason or 'Cancelado a pedido do cliente.' }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% elif q %}
+    <div class="text-center py-4 text-muted">
+        <i class="bi bi-search fs-1 mb-2 d-block text-secondary"></i>
+        <h5>Nenhuma marcação encontrada para o código ou telemóvel "{{ q }}".</h5>
+    </div>
+    {% endif %}
+
+    <!-- Recent List -->
+    <div class="booking-card p-4 max-w-850 mx-auto" style="max-width: 850px;">
+        <h5 class="fw-bold text-white mb-3"><i class="bi bi-clock-history me-2 text-indigo"></i>Últimas Marcações Registadas</h5>
+        <div class="list-group list-group-flush">
+            {% for r in recent_list %}
+            <a href="/appointments?code={{ r.code }}" class="list-group-item bg-dark text-white border-secondary d-flex justify-content-between align-items-center py-3">
+                <div>
+                    <span class="badge bg-indigo me-2">{{ r.code }}</span>
+                    <strong class="text-white">{{ r.service_title }}</strong> com <strong>{{ r.professional_name }}</strong>
+                    <small class="text-muted d-block mt-1"><i class="bi bi-person me-1"></i>{{ r.client_name }} • {{ r.appointment_date }} às {{ r.start_time }}</small>
+                </div>
+                <div>
+                    {% if r.status == 'Confirmada' %}
+                    <span class="badge badge-confirmada">Confirmada</span>
+                    {% else %}
+                    <span class="badge badge-cancelada">Cancelada</span>
+                    {% endif %}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

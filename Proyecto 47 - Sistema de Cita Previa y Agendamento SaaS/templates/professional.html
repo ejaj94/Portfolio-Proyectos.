@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ professional.name }} — Perfil e Marcações Online{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="booking-card p-4 p-lg-5 max-w-850 mx-auto border-indigo" style="max-width: 850px;">
+        <div class="row g-4 align-items-center mb-4 pb-4 border-bottom border-secondary">
+            <div class="col-md-4 text-center">
+                <img src="{{ professional.avatar_url }}" alt="{{ professional.name }}" class="rounded-circle object-fit-cover border border-3 border-indigo shadow-lg" style="width: 140px; height: 140px;">
+            </div>
+            <div class="col-md-8">
+                <span class="badge bg-indigo text-white mb-2 fs-6">{{ professional.title }}</span>
+                <h2 class="fw-black text-white mb-1">{{ professional.name }}</h2>
+                <h5 class="text-info mb-3">{{ professional.specialty }}</h5>
+                <p class="text-muted small mb-3" style="line-height: 1.6;">{{ professional.bio }}</p>
+                <div class="d-flex gap-3 text-muted small">
+                    <span><i class="bi bi-envelope text-indigo me-1"></i>{{ professional.email }}</span>
+                    <span><i class="bi bi-phone text-indigo me-1"></i>{{ professional.phone }}</span>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="fw-bold text-white mb-3"><i class="bi bi-card-checklist text-indigo me-2"></i>Serviços Prestados</h4>
+        <div class="row g-3">
+            {% for s in services %}
+            <div class="col-md-6">
+                <div class="p-3 bg-dark rounded-3 border border-secondary d-flex flex-column justify-content-between h-100">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-secondary">{{ s.category }}</span>
+                            <span class="fw-bold text-success fs-5">{{ s.price | currency }}</span>
+                        </div>
+                        <h6 class="fw-bold text-white mb-1">{{ s.title }}</h6>
+                        <p class="text-muted small mb-2">{{ s.description }}</p>
+                    </div>
+                    <a href="/#wizard-pane-1" class="btn btn-sm btn-indigo w-100 rounded-pill mt-2" onclick="bookingApp.selectService({{ s.id }}, '{{ s.title | escapejs }}', {{ s.duration_minutes }}, {{ s.price }}, {{ professional.id }}, '{{ professional.name | escapejs }}')">
+                        Agendar Este Serviço ({{ s.duration_minutes }} min)
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
