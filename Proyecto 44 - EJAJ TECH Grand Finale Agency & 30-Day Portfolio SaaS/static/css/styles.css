@@ -1,0 +1,183 @@
+:root {
+    --ejaj-bg: #0B0F19;
+    --ejaj-card: rgba(17, 24, 39, 0.75);
+    --ejaj-card-hover: rgba(30, 41, 59, 0.85);
+    --ejaj-border: rgba(255, 255, 255, 0.1);
+    --ejaj-border-glow: rgba(0, 240, 255, 0.4);
+    --ejaj-cyan: #00F0FF;
+    --ejaj-blue: #3B82F6;
+    --ejaj-purple: #8B5CF6;
+    --ejaj-emerald: #10B981;
+    --ejaj-text-light: #F8FAFC;
+    --ejaj-text-muted: #94A3B8;
+}
+
+body {
+    background-color: var(--ejaj-bg);
+    color: var(--ejaj-text-light);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: var(--ejaj-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--ejaj-border);
+    border-radius: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    border-color: var(--ejaj-cyan);
+    box-shadow: 0 10px 30px -10px rgba(0, 240, 255, 0.25);
+    transform: translateY(-4px);
+}
+
+/* Gradient Text */
+.gradient-text {
+    background: linear-gradient(135deg, #00F0FF 0%, #3B82F6 50%, #8B5CF6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-emerald {
+    background: linear-gradient(135deg, #00F0FF 0%, #10B981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Buttons */
+.btn-cyber-primary {
+    background: linear-gradient(135deg, #00F0FF 0%, #2563EB 100%);
+    color: #000;
+    font-weight: 700;
+    border: none;
+    border-radius: 50rem;
+    padding: 0.75rem 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+.btn-cyber-primary:hover {
+    color: #000;
+    box-shadow: 0 0 35px rgba(0, 240, 255, 0.6);
+    transform: scale(1.03);
+}
+
+.btn-cyber-outline {
+    background: transparent;
+    color: var(--ejaj-cyan);
+    font-weight: 600;
+    border: 1.5px solid var(--ejaj-cyan);
+    border-radius: 50rem;
+    padding: 0.75rem 2rem;
+    transition: all 0.3s ease;
+}
+
+.btn-cyber-outline:hover {
+    background: rgba(0, 240, 255, 0.1);
+    color: #FFF;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+/* Navbar */
+.navbar-cyber {
+    background: rgba(11, 15, 25, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--ejaj-border);
+}
+
+.nav-link-cyber {
+    color: var(--ejaj-text-muted);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link-cyber:hover, .nav-link-cyber.active {
+    color: var(--ejaj-cyan);
+}
+
+/* Timeline / Day Montage Slider */
+.timeline-slider {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 1rem 0.5rem;
+    scroll-behavior: smooth;
+}
+
+.timeline-slider::-webkit-scrollbar {
+    height: 6px;
+}
+
+.timeline-slider::-webkit-scrollbar-thumb {
+    background: var(--ejaj-cyan);
+    border-radius: 10px;
+}
+
+.day-pill {
+    flex: 0 0 auto;
+    min-width: 140px;
+    padding: 0.85rem 1.25rem;
+    background: var(--ejaj-card);
+    border: 1px solid var(--ejaj-border);
+    border-radius: 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.day-pill:hover, .day-pill.active {
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.15) 0%, rgba(59, 130, 246, 0.2) 100%);
+    border-color: var(--ejaj-cyan);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Badges */
+.badge-tech {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60A5FA;
+    border: 1px solid rgba(96, 165, 250, 0.3);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.375rem;
+}
+
+.badge-day {
+    background: linear-gradient(135deg, #00F0FF 0%, #3B82F6 100%);
+    color: #000;
+    font-weight: 800;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.75rem;
+}
+
+/* Floating Glow Background */
+.glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.glow-cyan {
+    background: var(--ejaj-cyan);
+    width: 400px;
+    height: 400px;
+}
+
+.glow-blue {
+    background: var(--ejaj-blue);
+    width: 500px;
+    height: 500px;
+}
+
+/* Footer */
+.footer-cyber {
+    background: #070A10;
+    border-top: 1px solid var(--ejaj-border);
+}

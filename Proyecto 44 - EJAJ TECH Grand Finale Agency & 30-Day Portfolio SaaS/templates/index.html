@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+
+{% block title %}EJAJ TECH — We Build Digital Solutions | Desafio 30 Dias & 29 Projetos{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section id="home" class="py-5 position-relative">
+    <div class="container py-lg-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill glass-card mb-4 border-info">
+                    <span class="badge bg-info text-dark font-monospace fw-bold">DESAFIO 30 DIAS</span>
+                    <span class="text-cyan small fw-semibold">29 Projetos Desenvolvidos & Entregues</span>
+                </div>
+
+                <h1 class="display-3 fw-black text-white mb-3 lh-sm">
+                    We Build <br><span class="gradient-text">Digital Solutions.</span>
+                </h1>
+
+                <p class="fs-5 text-muted mb-4 pe-lg-4" style="line-height: 1.7;">
+                    Transformamos ideias complexas em plataformas digitais de classe mundial. Durante 30 dias consecutivos, desenvolvemos um software único a cada 24 horas — provando a nossa arquitetura, velocidade de entrega e excelência em engenharia.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3 mb-5">
+                    <a href="#desafio" class="btn btn-cyber-primary text-dark fw-bold px-4 py-3">
+                        <i class="bi bi-play-circle-fill me-2"></i>Ver Montagem dos 29 Dias
+                    </a>
+                    <a href="#contacto" class="btn btn-cyber-outline px-4 py-3">
+                        <i class="bi bi-rocket-takeoff me-2"></i>Criar o Seu Projeto
+                    </a>
+                </div>
+
+                <!-- Stats Counters -->
+                <div class="row g-3 border-top border-secondary-subtle pt-4">
+                    <div class="col-4">
+                        <h2 class="fw-extrabold text-cyan mb-0">29</h2>
+                        <span class="small text-muted">Projetos Concluídos</span>
+                    </div>
+                    <div class="col-4">
+                        <h2 class="fw-extrabold text-white mb-0">100%</h2>
+                        <span class="small text-muted">Full-Stack Python/JS</span>
+                    </div>
+                    <div class="col-4">
+                        <h2 class="fw-extrabold text-cyan mb-0">30</h2>
+                        <span class="small text-muted">Dias de Desafio</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="glass-card p-4 position-relative border-info shadow-lg text-center">
+                    <div class="position-relative overflow-hidden rounded-4 mb-3" style="max-height: 320px;">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80" alt="EJAJ TECH Code" class="w-100 h-100 object-fit-cover">
+                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+                        <div class="position-absolute top-50 start-50 translate-middle text-white text-center">
+                            <i class="bi bi-cpu fs-1 text-cyan mb-2 d-block"></i>
+                            <h5 class="fw-bold mb-0">EJAJ TECH Core System</h5>
+                            <small class="text-info">Founder: Enmanuel Jimenez</small>
+                        </div>
+                    </div>
+                    <div class="bg-dark p-3 rounded-3 border border-secondary text-start font-monospace small text-cyan">
+                        <div><span class="text-muted">></span> Status: <span class="text-success">ONLINE (Porta 6600)</span></div>
+                        <div><span class="text-muted">></span> Desafio: <span class="text-white">29 Projetos Ativos</span></div>
+                        <div><span class="text-muted">></span> Resposta: <span class="text-info">&lt; 2 horas</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICOS SECTION -->
+<section id="servicos" class="py-5 bg-dark-subtle border-top border-bottom border-secondary-subtle">
+    <div class="container py-lg-4">
+        <div class="text-center mb-5">
+            <span class="badge bg-primary-subtle text-cyan border border-info mb-2 px-3 py-2">💻 O QUE FAZEMOS</span>
+            <h2 class="display-5 fw-bold text-white">Serviços de Engenharia Digital</h2>
+            <p class="text-muted mx-auto" style="max-width: 600px;">
+                Construímos soluções completas, desde websites institucionais a ecossistemas SaaS multi-inquilino altamente complexos.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            {% for s in services %}
+            <div class="col-lg-4 col-md-6">
+                <div class="glass-card h-100 p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="p-3 rounded-3 bg-primary-subtle text-cyan fs-3">
+                                <i class="bi {{ s.icon }}"></i>
+                            </div>
+                            <span class="badge bg-dark text-cyan border border-info">{{ s.badge }}</span>
+                        </div>
+                        <h4 class="fw-bold text-white mb-2">{{ s.title }}</h4>
+                        <h6 class="text-info small mb-3 fw-semibold">{{ s.tagline }}</h6>
+                        <p class="text-muted small mb-3">{{ s.description }}</p>
+                    </div>
+                    <div class="pt-3 border-top border-secondary-subtle">
+                        <small class="text-white fw-bold d-block mb-1"><i class="bi bi-check2-circle text-cyan me-1"></i>Entregáveis:</small>
+                        <p class="text-muted small mb-0">{{ s.deliverables }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- DESAFIO 30 DIAS MONTAGEM SECTION -->
+<section id="desafio" class="py-5 position-relative">
+    <div class="container py-lg-4">
+        <div class="text-center mb-4">
+            <span class="badge bg-warning-subtle text-warning border border-warning mb-2 px-3 py-2">🚀 MONTAGEM DO DESAFIO</span>
+            <h2 class="display-5 fw-bold text-white">“Durante 30 dias construí um projeto diferente cada dia.”</h2>
+            <p class="text-muted mx-auto" style="max-width: 700px;">
+                Navegue dia a dia pela linha do tempo e descubra como cada aplicação foi desenhada, codificada e implementada do zero em apenas 24 horas.
+            </p>
+        </div>
+
+        <!-- Horizontal Timeline Slider (Dia 1 -> Dia 29) -->
+        <div class="timeline-slider mb-5">
+            {% for p in projects %}
+            <div class="day-pill {% if p.day == 1 %}active{% endif %}" id="day-pill-{{ p.day }}" onclick="ejajAgency.scrollToDay({{ p.day }})">
+                <span class="badge badge-day mb-1">Dia {{ p.day }}</span>
+                <div class="fw-bold text-white text-truncate small" style="max-width: 120px;">{{ p.title }}</div>
+                <small class="text-muted d-block" style="font-size: 0.7rem;">{{ p.category }}</small>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Highlight Featured Montage Carousel / Cards -->
+        <div class="glass-card p-4 border-info">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <h4 class="fw-bold text-white mb-0"><i class="bi bi-film me-2 text-cyan"></i>Montagem de Projetos (Dia 1 a 29)</h4>
+                <span class="text-muted small"><i class="bi bi-mouse me-1"></i>Clique no projeto para ver a ficha técnica e guião</span>
+            </div>
+            <div class="row g-3">
+                {% for p in projects[:6] %}
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="card bg-dark text-white border-secondary h-100 overflow-hidden text-center p-2 hover-card" style="cursor: pointer;" onclick="ejajAgency.scrollToDay({{ p.day }})">
+                        <img src="{{ p.image_url }}" alt="{{ p.title }}" class="rounded mb-2 object-fit-cover" style="height: 100px;">
+                        <span class="badge badge-day mx-auto mb-1" style="font-size: 0.65rem;">Dia {{ p.day }}</span>
+                        <small class="fw-bold text-truncate d-block" title="{{ p.title }}">{{ p.title }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PORTFOLIO SECTION (29 PROJETOS) -->
+<section id="portfolio" class="py-5 bg-dark-subtle border-top border-secondary-subtle">
+    <div class="container py-lg-4">
+        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+            <div>
+                <span class="badge bg-primary-subtle text-cyan border border-info mb-2 px-3 py-2">📂 PORTFÓLIO COMPLETO</span>
+                <h2 class="display-6 fw-bold text-white mb-1">Os 29 Projetos do Desafio</h2>
+                <p class="text-muted mb-0">Explore cada projeto, tecnologia utilizada e guião de apresentação em vídeo.</p>
+            </div>
+
+            <!-- Search & Filters -->
+            <div class="d-flex gap-2 flex-wrap">
+                <div class="input-group input-group-sm" style="width: 250px;">
+                    <span class="input-group-text bg-dark text-cyan border-secondary"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" id="projectSearchInput" placeholder="Pesquisar projeto ou stack...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Pills -->
+        <div class="d-flex gap-2 overflow-x-auto pb-3 mb-4">
+            <button class="btn btn-sm btn-cyber-primary cat-filter-btn active" onclick="ejajAgency.selectCategory('', this)">Todos (29)</button>
+            {% for cat in categories %}
+            <button class="btn btn-sm btn-cyber-outline cat-filter-btn" onclick="ejajAgency.selectCategory('{{ cat }}', this)">{{ cat }}</button>
+            {% endfor %}
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="row g-4" id="projectsGrid">
+            {% for p in projects %}
+            <div class="col-lg-4 col-md-6" id="project-card-day-{{ p.day }}">
+                <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between position-relative">
+                    <div>
+                        <div class="position-relative mb-3 overflow-hidden rounded-3" style="height: 190px;">
+                            <img src="{{ p.image_url }}" alt="{{ p.title }}" class="w-100 h-100 object-fit-cover">
+                            <span class="position-absolute top-0 start-0 m-2 badge badge-day">
+                                Dia {{ p.day }}
+                            </span>
+                            <span class="position-absolute top-0 end-0 m-2 badge bg-dark text-cyan border border-info">
+                                {{ p.category }}
+                            </span>
+                        </div>
+
+                        <h5 class="fw-bold text-white mb-2">{{ p.title }}</h5>
+                        <p class="text-muted small mb-3">{{ p.short_desc }}</p>
+                        
+                        <div class="d-flex flex-wrap gap-1 mb-3">
+                            {% for tech in p.tech_stack.split(',') %}
+                            <span class="badge badge-tech">{{ tech.strip() }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-top border-secondary-subtle d-flex justify-content-between align-items-center">
+                        <button class="btn btn-sm btn-outline-info rounded-pill px-3" onclick="ejajAgency.openScriptModal({{ p.day }}, '{{ p.title | escapejs }}', '{{ p.script_pt | escapejs }}')">
+                            <i class="bi bi-mic-fill me-1"></i>Guião Vídeo
+                        </button>
+                        <a href="/project/{{ p.day }}" class="btn btn-sm btn-cyber-primary px-3">
+                            Ver Projeto <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- CTA SECTION -->
+<section id="contacto" class="py-5 position-relative">
+    <div class="container py-lg-5">
+        <div class="glass-card p-4 p-lg-5 border-info position-relative overflow-hidden">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-6">
+                    <span class="badge bg-success-subtle text-success border border-success mb-2 px-3 py-2">📞 O SEU PRÓXIMO PROJETO</span>
+                    <h2 class="display-6 fw-bold text-white mb-3">
+                        “¿Necesitas una web o aplicación para tu negocio? Escríbeme. <span class="gradient-text-emerald">El tuyo podría ser el próximo proyecto.</span>”
+                    </h2>
+                    <p class="text-muted mb-4 pe-lg-3">
+                        Já construímos 29 projetos com sucesso. Estamos prontos para transformar a sua ideia num produto digital rentável e escalável. Preencha o formulário ou envie uma mensagem direta.
+                    </p>
+
+                    <div class="d-flex flex-column gap-3 mb-4">
+                        <div class="d-flex align-items-center text-light">
+                            <i class="bi bi-whatsapp fs-3 text-success me-3"></i>
+                            <div>
+                                <strong class="d-block">WhatsApp Oficial EJAJ TECH</strong>
+                                <a href="https://wa.me/351911151993?text=Olá!%20Enviar%20palavra%20AJUDA" target="_blank" class="text-cyan text-decoration-none">+351 911 151 993 (Palavra "AJUDA")</a>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center text-light">
+                            <i class="bi bi-envelope-at fs-3 text-cyan me-3"></i>
+                            <div>
+                                <strong class="d-block">E-mail Comercial</strong>
+                                <span class="text-muted">contacto@ejajtech.com</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <form id="contactForm" onsubmit="event.preventDefault(); ejajAgency.submitContactForm();" class="bg-dark p-4 rounded-4 border border-secondary">
+                        <h5 class="fw-bold text-white mb-3"><i class="bi bi-send-fill text-cyan me-2"></i>Solicitar Proposta Gratuita</h5>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="contactName" class="form-label text-muted small">O Seu Nome *</label>
+                                <input type="text" class="form-control bg-dark-subtle text-white border-secondary" id="contactName" placeholder="Ex: João Silva" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contactEmail" class="form-label text-muted small">E-mail de Contacto *</label>
+                                <input type="email" class="form-control bg-dark-subtle text-white border-secondary" id="contactEmail" placeholder="joao@empresa.pt" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="contactPhone" class="form-label text-muted small">Telemóvel / WhatsApp</label>
+                                <input type="tel" class="form-control bg-dark-subtle text-white border-secondary" id="contactPhone" placeholder="+351 912 345 678">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contactService" class="form-label text-muted small">Serviço Pretendido</label>
+                                <select class="form-select bg-dark-subtle text-white border-secondary" id="contactService">
+                                    <option value="Desenvolvimento Web">Desenvolvimento Web</option>
+                                    <option value="Aplicações Mobile/Desktop">Aplicações Mobile & Desktop</option>
+                                    <option value="Sistemas Empresariais ERP">Sistemas Empresariais ERP</option>
+                                    <option value="Automatizações & IA">Automatizações & IA</option>
+                                    <option value="E-Commerce & SaaS">E-Commerce & SaaS</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="contactBudget" class="form-label text-muted small">Orçamento Estimado</label>
+                                <select class="form-select bg-dark-subtle text-white border-secondary" id="contactBudget">
+                                    <option value="€ 500 - € 1.000">€ 500 - € 1.000 (Projeto Inicial)</option>
+                                    <option value="€ 1.000 - € 3.000" selected>€ 1.000 - € 3.000 (Profissional / SaaS)</option>
+                                    <option value="€ 3.000+">€ 3.000+ (Plataforma Enterprise)</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="contactMessage" class="form-label text-muted small">Descrição do Seu Projeto *</label>
+                                <textarea class="form-control bg-dark-subtle text-white border-secondary" id="contactMessage" rows="3" placeholder="Explique brevemente o objetivo do seu projeto, funcionalidades desejadas e prazos..." required></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-cyber-primary text-dark fw-bold w-100 mt-4 py-3 fs-6">
+                            <i class="bi bi-rocket-takeoff-fill me-2"></i>ENVIAR PEDIDO DE PROPOSTA
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

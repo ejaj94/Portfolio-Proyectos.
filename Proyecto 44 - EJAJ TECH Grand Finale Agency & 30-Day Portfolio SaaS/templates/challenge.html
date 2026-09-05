@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Desafio de 30 Dias — 29 Projetos EJAJ TECH{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <span class="badge bg-warning-subtle text-warning border border-warning mb-2 px-3 py-2">🚀 DESAFIO 30 DIAS COMPLETO</span>
+        <h1 class="display-4 fw-bold text-white">“Durante 30 dias construí um projeto diferente cada dia.”</h1>
+        <p class="text-muted mx-auto fs-5" style="max-width: 800px;">
+            Confira o registo cronológico da montagem dos 29 projetos criados, codificados e lançados consecutivamente pela EJAJ TECH.
+        </p>
+    </div>
+
+    <div class="row g-4">
+        {% for p in projects %}
+        <div class="col-lg-4 col-md-6">
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="position-relative mb-3 overflow-hidden rounded-3" style="height: 180px;">
+                        <img src="{{ p.image_url }}" alt="{{ p.title }}" class="w-100 h-100 object-fit-cover">
+                        <span class="position-absolute top-0 start-0 m-2 badge badge-day">Dia {{ p.day }}</span>
+                        <span class="position-absolute top-0 end-0 m-2 badge bg-dark text-cyan border border-info">{{ p.category }}</span>
+                    </div>
+
+                    <h5 class="fw-bold text-white mb-2">{{ p.title }}</h5>
+                    <p class="text-muted small mb-3">{{ p.short_desc }}</p>
+                </div>
+
+                <div class="pt-3 border-top border-secondary-subtle d-flex justify-content-between align-items-center">
+                    <button class="btn btn-sm btn-outline-info rounded-pill px-3" onclick="ejajAgency.openScriptModal({{ p.day }}, '{{ p.title | escapejs }}', '{{ p.script_pt | escapejs }}')">
+                        <i class="bi bi-mic-fill me-1"></i>Guião Vídeo
+                    </button>
+                    <a href="/project/{{ p.day }}" class="btn btn-sm btn-cyber-primary px-3">
+                        Ver Estudo de Caso <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block title %}Dia {{ project.day }}: {{ project.title }} — EJAJ TECH Case Study{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb & Day Navigation -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/" class="text-cyan text-decoration-none">Home</a></li>
+                <li class="breadcrumb-item"><a href="/#portfolio" class="text-cyan text-decoration-none">Portfólio 29 Projetos</a></li>
+                <li class="breadcrumb-item active text-white" aria-current="page">Dia {{ project.day }}</li>
+            </ol>
+        </nav>
+
+        <div class="d-flex gap-2">
+            <a href="/project/{{ prev_day }}" class="btn btn-sm btn-cyber-outline">
+                <i class="bi bi-chevron-left me-1"></i>Dia {{ prev_day }} Anterior
+            </a>
+            <a href="/project/{{ next_day }}" class="btn btn-sm btn-cyber-outline">
+                Dia {{ next_day }} Seguinte <i class="bi bi-chevron-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Case Study Header -->
+    <div class="glass-card p-4 p-lg-5 mb-5 border-info">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-7">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <span class="badge badge-day fs-6">Dia {{ project.day }} de 30</span>
+                    <span class="badge bg-dark text-cyan border border-info fs-6">{{ project.category }}</span>
+                    <span class="badge bg-secondary-subtle text-light border border-secondary fs-6"><i class="bi bi-eye me-1"></i>{{ project.views }} Visualizações</span>
+                </div>
+
+                <h1 class="display-5 fw-bold text-white mb-3">{{ project.title }}</h1>
+                <p class="fs-5 text-muted mb-4">{{ project.full_desc }}</p>
+
+                <!-- Tech Stack Badges -->
+                <div class="mb-4">
+                    <h6 class="fw-bold text-cyan text-uppercase mb-2">Stack Tecnológico Utilizado:</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for tech in project.tech_stack.split(',') %}
+                        <span class="badge badge-tech px-3 py-2 fs-6">{{ tech.strip() }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-3">
+                    <button class="btn btn-cyber-primary text-dark fw-bold px-4 py-2" onclick="ejajAgency.openScriptModal({{ project.day }}, '{{ project.title | escapejs }}', '{{ project.script_pt | escapejs }}')">
+                        <i class="bi bi-mic-fill me-2"></i>Ver Guião de Locução em Vídeo
+                    </button>
+                    <a href="https://wa.me/351911151993?text=Olá!%20Interessei-me%20pelo%20projeto%20do%20Dia%20{{ project.day }}%20({{ project.title | urlencode }})" target="_blank" class="btn btn-cyber-outline px-4 py-2">
+                        <i class="bi bi-chat-text me-2"></i>Quero um Software Parecido
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="position-relative overflow-hidden rounded-4 shadow-lg border border-secondary" style="min-height: 280px;">
+                    <img src="{{ project.image_url }}" alt="{{ project.title }}" class="w-100 h-100 object-fit-cover">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features & Technical Breakdown -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-8">
+            <div class="glass-card p-4 h-100">
+                <h4 class="fw-bold text-white mb-4"><i class="bi bi-stars text-cyan me-2"></i>Funcionalidades Chave do Software</h4>
+                <div class="row g-3">
+                    {% for feat in project.features.split(',') %}
+                    <div class="col-md-6">
+                        <div class="p-3 bg-dark rounded-3 border border-secondary d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-cyan fs-4 me-3"></i>
+                            <span class="fw-semibold text-white">{{ feat.strip() }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mt-4 pt-4 border-top border-secondary">
+                    <h5 class="fw-bold text-white mb-2"><i class="bi bi-code-square text-cyan me-2"></i>Guião Oficial do Locutor (Pt-PT)</h5>
+                    <div class="p-3 bg-dark text-cyan rounded-3 font-monospace border border-info" style="font-size: 0.95rem; line-height: 1.6;">
+                        "{{ project.script_pt }}"
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="glass-card p-4 h-100 border-info">
+                <h5 class="fw-bold text-white mb-3"><i class="bi bi-info-circle text-cyan me-2"></i>Ficha do Desafio</h5>
+                <ul class="list-group list-group-flush bg-transparent">
+                    <li class="list-group-item bg-transparent text-light border-secondary d-flex justify-content-between">
+                        <span class="text-muted">Dia do Desafio:</span>
+                        <strong class="text-cyan">Dia {{ project.day }} / 30</strong>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light border-secondary d-flex justify-content-between">
+                        <span class="text-muted">Porta Local Execução:</span>
+                        <strong class="text-white">Porta {{ project.port }}</strong>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light border-secondary d-flex justify-content-between">
+                        <span class="text-muted">Arquitetura:</span>
+                        <strong class="text-white">Python / Flask REST</strong>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light border-secondary d-flex justify-content-between">
+                        <span class="text-muted">Base de Dados:</span>
+                        <strong class="text-white">SQLite3 Relacional</strong>
+                    </li>
+                </ul>
+
+                <div class="mt-4 p-3 bg-dark rounded-3 border border-secondary text-center">
+                    <h6 class="fw-bold text-white mb-2">Precisa de um projeto como este?</h6>
+                    <p class="small text-muted mb-3">Desenvolvemos o seu software à medida em tempo recorde.</p>
+                    <a href="/#contacto" class="btn btn-cyber-primary text-dark fw-bold w-100 py-2">
+                        Solicitar Proposta
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Projects -->
+    {% if related %}
+    <h4 class="fw-bold text-white mb-4"><i class="bi bi-grid me-2 text-cyan"></i>Outros Projetos da Categoria ({{ project.category }})</h4>
+    <div class="row g-4">
+        {% for r in related %}
+        <div class="col-md-4">
+            <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <img src="{{ r.image_url }}" alt="{{ r.title }}" class="w-100 rounded mb-3 object-fit-cover" style="height: 140px;">
+                    <span class="badge badge-day mb-2">Dia {{ r.day }}</span>
+                    <h6 class="fw-bold text-white mb-1">{{ r.title }}</h6>
+                    <p class="text-muted small mb-2">{{ r.short_desc }}</p>
+                </div>
+                <a href="/project/{{ r.day }}" class="btn btn-sm btn-cyber-outline mt-2 w-100">
+                    Ver Projeto Dia {{ r.day }} <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

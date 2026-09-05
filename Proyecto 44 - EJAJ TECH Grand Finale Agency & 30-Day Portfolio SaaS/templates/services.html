@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Serviços de Engenharia Digital — EJAJ TECH{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <span class="badge bg-primary-subtle text-cyan border border-info mb-2 px-3 py-2">💻 SOLUÇÕES DIGITAIS DE ALTO NIVEL</span>
+        <h1 class="display-4 fw-bold text-white">Serviços EJAJ TECH</h1>
+        <p class="text-muted mx-auto fs-5" style="max-width: 700px;">
+            Desenvolvemos ecossistemas de software robustos, rápidos e escaláveis adaptados às exigências reais do seu negócio.
+        </p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        {% for s in services %}
+        <div class="col-lg-6">
+            <div class="glass-card p-4 p-lg-5 h-100 border-info d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="p-3 rounded-4 bg-primary-subtle text-cyan fs-2">
+                            <i class="bi {{ s.icon }}"></i>
+                        </div>
+                        <span class="badge bg-dark text-cyan border border-info px-3 py-2 fs-6">{{ s.badge }}</span>
+                    </div>
+
+                    <h3 class="fw-bold text-white mb-2">{{ s.title }}</h3>
+                    <h6 class="text-cyan mb-3 fw-semibold fs-5">{{ s.tagline }}</h6>
+                    <p class="text-muted fs-6 mb-4" style="line-height: 1.7;">{{ s.description }}</p>
+
+                    <div class="p-3 bg-dark rounded-3 border border-secondary mb-4">
+                        <strong class="text-white d-block mb-2"><i class="bi bi-box-seam text-cyan me-2"></i>Entregáveis do Serviço:</strong>
+                        <p class="text-muted small mb-0">{{ s.deliverables }}</p>
+                    </div>
+                </div>
+
+                <a href="/#contacto" class="btn btn-cyber-primary text-dark fw-bold w-100 py-3">
+                    Solicitar Proposta para {{ s.title }} <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
