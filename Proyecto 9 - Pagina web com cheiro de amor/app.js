@@ -2070,6 +2070,41 @@ const PRODUCTS = [
             description: "Une bougie parfumée empreinte de douceur et de sérénité ! Présentée dans une verrine en verre transparent avec de la cire végétale crémeuse, elle met en scène un mignon petit lama aux yeux fermés avec une selle scintillante. Parfaite pour offrir une ambiance chaleureuse et apaisante.",
             aromaProfile: "Fleur de Vanille, Lait d'Amande, Coton Doux, Musc Apaisant"
         }
+    },
+    {
+        id: "candle-pote_carrossel_azul-1",
+        category: "decorativa",
+        price: 12.90,
+        image: "assets/pote_carrossel_azul.jpg",
+        qty: 1,
+        pt: {
+            name: "Pote Carrossel Azul",
+            categoryLabel: "Peças Decorativas e Porta-Jóias Artesanais",
+            aromaBrief: "Elegante pote artesanal em formato de carrossel vintage com cavalinhos em relevo e tampa azul pastel com topo dourado.",
+            description: "Uma graciosa peça decorativa cheia de ternura! Este pote artesanal esculpido em pormenor apresenta cavalinhos de carrossel em relevo 3D ao redor do corpo branco porcelana, coroado por uma delicada tampa em tom azul pastel com remate dourado. Perfeito para guardar joias, pequenos tesouros ou como ornamento de destaque.",
+            aromaProfile: "Brisa Suave, Flor de Algodão, Baunilha Doce, Almíscar Branco"
+        },
+        es: {
+            name: "Pote Carrusel Azul",
+            categoryLabel: "Piezas Decorativas y Joyeros Artesanales",
+            aromaBrief: "Elegante tarro artesanal en forma de carrusel vintage con caballitos en relieve y tapa azul pastel con remate dorado.",
+            description: "¡Una graciosa pieza decorativa llena de ternura! Este tarro artesanal esculpido con gran detalle presenta caballitos de carrusel en relieve 3D sobre cuerpo blanco porcelana, coronado por una delicada tapa en tono azul pastel con remate dorado. Perfecto para guardar joyas, pequeños tesoros o como pieza decorativa de distinción.",
+            aromaProfile: "Brisa Suave, Flor de Algodón, Vainilla Dulce, Almizcle Blanco"
+        },
+        en: {
+            name: "Blue Carousel Jar",
+            categoryLabel: "Decorative Pieces & Handcrafted Keepsake Jars",
+            aromaBrief: "Elegant handcrafted vintage carousel jar featuring 3D embossed horses and a pastel blue canopy lid with a gold finial.",
+            description: "A charming and graceful decorative centerpiece! Handcrafted with intricate detail, this porcelain-white jar features 3D embossed carousel horses along its body, topped with a soft pastel blue canopy lid and a touch of gold. Ideal for holding jewelry, trinkets, or adding serene elegance to any room.",
+            aromaProfile: "Soft Breeze, Cotton Blossom, Sweet Vanilla, White Musk"
+        },
+        fr: {
+            name: "Pot Carrousel Bleu",
+            categoryLabel: "Pièces Décoratives & Boîtes à Bijoux Artisanales",
+            aromaBrief: "Élégant pot artisanal en forme de carrousel vintage avec chevaux en relief et couvercle bleu pastel à pointe dorée.",
+            description: "Une délicieuse création décorative empreinte de douceur ! Ce pot artisanal aux finitions soignées met en scène des chevaux de manège en relief 3D, couronné par un couvercle bleu pastel rehaussé d'une touche dorée. Parfait pour ranger bijoux, petits trésors ou embellir votre intérieur.",
+            aromaProfile: "Brise Douce, Fleur de Coton, Vanille Douce, Musc Blanc"
+        }
     }
 ];
 
