@@ -65,20 +65,33 @@ body {
 /* Mobile Sticky Category Slider */
 .category-slider {
     display: flex;
+    flex-wrap: nowrap;
     gap: 0.75rem;
     overflow-x: auto;
-    padding: 0.75rem 0;
+    padding: 0.75rem 0.75rem;
     scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
 }
 
 .category-slider::-webkit-scrollbar {
-    display: none;
+    height: 4px;
+}
+
+.category-slider::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.5);
+}
+
+.category-slider::-webkit-scrollbar-thumb {
+    background: var(--theme-primary);
+    border-radius: 10px;
 }
 
 .cat-pill {
     flex: 0 0 auto;
-    padding: 0.6rem 1.2rem;
-    background: rgba(30, 41, 59, 0.8);
+    white-space: nowrap;
+    padding: 0.6rem 1.25rem;
+    background: rgba(30, 41, 59, 0.9);
     border: 1px solid var(--theme-border);
     border-radius: 50rem;
     color: var(--text-muted);

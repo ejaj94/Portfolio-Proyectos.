@@ -57,7 +57,7 @@
         {% endif %}
 
         <!-- Sticky Category Slider -->
-        <div class="category-slider sticky-top bg-dark py-2 mb-4 border-bottom border-secondary">
+        <div class="category-slider sticky-top bg-dark py-2 px-3 mx-n3 mb-4 border-bottom border-secondary">
             <button class="cat-pill active" onclick="qrMenu.selectCategory('all', this)">Todos</button>
             {% for cat in categories %}
             <button class="cat-pill" onclick="qrMenu.selectCategory({{ cat.id }}, this)">
