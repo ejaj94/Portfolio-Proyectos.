@@ -129,13 +129,20 @@
     </div>
     <script>
         const sheetContainer = document.querySelector('.a4-sheet');
+        const rowLabels = [
+            "CERVEJA ARTESANAL",
+            "ICED COFFEE",
+            "AUTUMN'S BEAR",
+            "URCHIN",
+            "URCHIN OF LOVE",
+            "MIRTILO",
+            "SÂNDALO",
+            "ÂMBAR",
+            "MIRTILO"
+        ];
         for (let r = 0; r < 9; r++) {
+            let ltype = rowLabels[r];
             for (let c = 0; c < 4; c++) {
-                let ltype = "";
-                if (c === 0) ltype = "CERVEJA ARTESANAL";
-                else if (c === 1) ltype = "ICED COFFEE";
-                else if (c === 2) ltype = "AUTUMN'S BEAR";
-                else if (c === 3) ltype = (r < 4) ? "URCHIN" : "URCHIN OF LOVE";
                 
                 const card = document.createElement('div');
                 card.className = 'label-card';
