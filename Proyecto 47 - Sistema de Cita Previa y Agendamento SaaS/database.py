@@ -100,7 +100,7 @@ def seed_data(cursor):
     # Professionals
     profs = [
         ('Dr. Gabriel Santos', 'Médico Especialista', 'Medicina Geral & Preventiva', 'gabriel.santos@medilux.pt', '+351 912 345 678', 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=400&q=80', 'Mais de 15 anos de experiência em medicina preventiva, check-ups executivos e rastreios de saúde.'),
-        ('Dra. Sofia Lima', 'Psicóloga Clínica', 'Psicologia & Neuro-Performance', 'sofia.lima@menteforma.pt', '+351 913 456 789', 'https://images.unsplash.com/photo-1594824813566-88855ce78963?auto=format&fit=crop&w=400&q=80', 'Especialista em psicoterapia cognitiva-comportamental, gestão de stress ocupacional e desenvolvimento pessoal.'),
+        ('Dra. Sofia Lima', 'Psicóloga Clínica', 'Psicologia & Neuro-Performance', 'sofia.lima@menteforma.pt', '+351 913 456 789', '/static/images/sofia_lima.jpg', 'Especialista em psicoterapia cognitiva-comportamental, gestão de stress ocupacional e desenvolvimento pessoal.'),
         ('Dr. Miguel Costa', 'Advogado Sénior', 'Direito Empresarial & Contratos', 'miguel.costa@costalaw.pt', '+351 914 567 890', 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80', 'Consultoria jurídica especializada para startups, reestruturações empresariais e assessoria contratual.')
     ]
     cursor.executemany('''
