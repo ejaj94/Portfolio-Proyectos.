@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}OLX Marketplace — Mini Amazon SaaS{% endblock %}</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- OLX Header Navigation -->
+    <header class="olx-navbar">
+        <div class="olx-nav-container">
+            <a href="/" class="olx-brand">
+                <div class="olx-logo">olx<span>.</span>market</div>
+            </a>
+
+            <!-- Search bar -->
+            <form action="/" method="GET" class="olx-search-box">
+                <input type="text" name="q" class="olx-search-input" placeholder="O que procuras hoje? (Ex: Smart Ring, Carregador Solar, Drone 4K...)" value="{{ query_str if query_str else '' }}">
+                <button type="submit" class="olx-search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+
+            <div class="olx-nav-actions">
+                <a href="/cart" class="olx-nav-link">
+                    <i class="fa-solid fa-cart-shopping" style="font-size: 1.1rem; color: var(--olx-mint);"></i> Carrinho
+                    <span class="cart-badge" style="{% if not cart_count or cart_count == 0 %}display:none;{% endif %}">{{ cart_count }}</span>
+                </a>
+                <a href="/orders" class="olx-nav-link">
+                    <i class="fa-solid fa-box"></i> Encomendas
+                </a>
+                <a href="/seller/dashboard" class="btn-olx-mint">
+                    <i class="fa-solid fa-circle-plus"></i> Anunciar Produto
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Categories Navigation Bar -->
+    <nav class="olx-categories-bar">
+        <div class="olx-cat-container">
+            <a href="/" class="cat-pill {% if not category_filter %}active{% endif %}">Todos os Anúncios</a>
+            <a href="/?category=Tecnologia" class="cat-pill {% if category_filter == 'Tecnologia' %}active{% endif %}">💻 Tecnologia</a>
+            <a href="/?category=Saúde & Bem-Estar" class="cat-pill {% if category_filter == 'Saúde & Bem-Estar' %}active{% endif %}">🧠 Saúde & Neuro-Wellness</a>
+            <a href="/?category=Gadgets" class="cat-pill {% if category_filter == 'Gadgets' %}active{% endif %}">⚡ Gadgets & Energia</a>
+            <a href="/?category=Imagem & Som" class="cat-pill {% if category_filter == 'Imagem & Som' %}active{% endif %}">📷 Imagem & Som</a>
+            <a href="/?category=Casa & Decoração" class="cat-pill {% if category_filter == 'Casa & Decoração' %}active{% endif %}">🏡 Casa & Decoração</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main class="main-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- OLX Footer -->
+    <footer class="olx-footer">
+        <div class="olx-footer-container">
+            <div>
+                <strong>OLX Marketplace SaaS &copy; 2026</strong> — Plataforma Multi-Vendedor estilo Mini Amazon
+            </div>
+            <div>
+                Desenvolvido por <strong>Enmanuel Jimenez</strong> | Lead Architect <strong>EJAJ TECH</strong>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/marketplace.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

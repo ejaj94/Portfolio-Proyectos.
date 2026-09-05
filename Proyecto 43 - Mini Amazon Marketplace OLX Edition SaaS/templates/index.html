@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}OLX Marketplace — Produtos Inovadores & Anúncios de Confiança{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div style="background: var(--olx-teal); color: white; border-radius: 8px; padding: 2rem 2.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <span style="background: var(--olx-mint); color: var(--olx-teal); font-size: 0.8rem; font-weight: 900; padding: 0.25rem 0.75rem; border-radius: 4px; text-transform: uppercase;">Mini Amazon Edition</span>
+        <h1 style="font-size: 2.2rem; font-weight: 900; margin: 0.5rem 0 0.4rem;">Compre e Venda Produtos Inovadores 🛍️</h1>
+        <p style="color: #B0C4C7; font-size: 1rem;">Milhares de ofertas exclusivas com vendedores verificados e pagamento seguro via MB WAY.</p>
+    </div>
+    <div style="font-size: 4rem; color: var(--olx-mint); opacity: 0.9;">
+        <i class="fa-solid fa-store"></i>
+    </div>
+</div>
+
+<!-- Results Header -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--olx-teal);">
+        {% if query_str %}Resultados para "{{ query_str }}"{% elif category_filter %}{{ category_filter }}{% else %}Anúncios em Destaque{% endif %}
+    </h2>
+    <span style="color: var(--olx-muted); font-size: 0.9rem; font-weight: 700;">{{ products|length }} produtos encontrados</span>
+</div>
+
+<!-- Product Cards Grid -->
+<div class="product-grid">
+    {% for p in products %}
+    <div class="product-card">
+        <div>
+            <div class="product-image-wrap">
+                <img src="{{ p.image_url }}" alt="{{ p.title }}">
+                <span class="condition-badge">{{ p.condition }}</span>
+            </div>
+
+            <div class="product-content">
+                <div class="product-price">{{ p.price|currency }}</div>
+                <a href="/product/{{ p.id }}" style="text-decoration: none;">
+                    <h3 class="product-title">{{ p.title }}</h3>
+                </a>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.75rem;">
+                    <div class="product-location">
+                        <i class="fa-solid fa-location-dot"></i> {{ p.location }}
+                    </div>
+                    <div style="font-size: 0.8rem; color: #F59E0B; font-weight: 700;">
+                        ★ {{ p.seller_rating }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 0 1.25rem 1.25rem; display: flex; gap: 0.5rem;">
+            <a href="/product/{{ p.id }}" class="btn-olx-teal" style="flex: 1; justify-content: center; font-size: 0.85rem; padding: 0.6rem;">
+                <i class="fa-solid fa-eye"></i> Ver Detalhes
+            </a>
+            <button onclick="addToCart({{ p.id }})" class="btn-olx-mint" style="padding: 0.6rem 0.8rem;" title="Adicionar ao Carrinho">
+                <i class="fa-solid fa-cart-plus"></i>
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

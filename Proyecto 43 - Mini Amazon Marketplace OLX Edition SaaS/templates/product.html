@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.title }} — OLX Marketplace{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-bottom: 3rem;">
+    <!-- Left: Product Image -->
+    <div style="background: white; border: 1px solid var(--olx-border); border-radius: 8px; overflow: hidden; padding: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <img src="{{ product.image_url }}" alt="{{ product.title }}" style="width: 100%; height: 420px; object-fit: cover; border-radius: 6px;">
+    </div>
+
+    <!-- Right: Product Info & Buy Box -->
+    <div style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <span class="badge badge-{{ product.condition|lower|replace(' ', '-') }}">{{ product.condition }}</span>
+                <span style="font-size: 0.85rem; color: var(--olx-muted); font-weight: 700;">Categoria: {{ product.category }}</span>
+            </div>
+
+            <h1 style="font-size: 1.8rem; font-weight: 900; color: var(--olx-teal); margin-bottom: 1rem;">{{ product.title }}</h1>
+            <div style="font-size: 2.2rem; font-weight: 900; color: var(--olx-teal); margin-bottom: 1.5rem;">{{ product.price|currency }}</div>
+
+            <!-- Description Box -->
+            <div style="background: white; border: 1px solid var(--olx-border); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1rem; font-weight: 800; color: var(--olx-teal); margin-bottom: 0.5rem;">Descrição do Anúncio</h3>
+                <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;">{{ product.description }}</p>
+            </div>
+        </div>
+
+        <!-- Buy Actions & Seller Card -->
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="display: flex; gap: 1rem;">
+                <button onclick="addToCart({{ product.id }})" class="btn-olx-mint" style="flex: 1; justify-content: center; font-size: 1.05rem; padding: 0.9rem;">
+                    <i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho
+                </button>
+            </div>
+
+            <!-- Seller Card -->
+            <div style="background: var(--olx-teal); color: white; border-radius: 8px; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--olx-mint); font-weight: 900; text-transform: uppercase;">VENDEDOR VERIFICADO OLX</div>
+                    <div style="font-size: 1.1rem; font-weight: 800; margin-top: 0.2rem;">{{ product.seller_name }}</div>
+                    <div style="font-size: 0.85rem; color: #B0C4C7; margin-top: 0.2rem;">
+                        <i class="fa-solid fa-location-dot"></i> {{ product.seller_location }} | ★ {{ product.seller_rating }} Excelente
+                    </div>
+                </div>
+
+                <div style="text-align: right;">
+                    <a href="tel:{{ product.seller_phone }}" class="btn-olx-mint" style="font-size: 0.85rem; padding: 0.5rem 0.9rem;">
+                        <i class="fa-solid fa-phone"></i> Ver Telefone
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Related Products -->
+{% if related_products %}
+<div style="margin-top: 3rem;">
+    <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--olx-teal); margin-bottom: 1.25rem;">Produtos Relacionados</h2>
+    <div class="product-grid">
+        {% for p in related_products %}
+        <div class="product-card">
+            <div>
+                <div class="product-image-wrap">
+                    <img src="{{ p.image_url }}" alt="{{ p.title }}">
+                    <span class="condition-badge">{{ p.condition }}</span>
+                </div>
+                <div class="product-content">
+                    <div class="product-price">{{ p.price|currency }}</div>
+                    <a href="/product/{{ p.id }}" style="text-decoration: none;">
+                        <h3 class="product-title">{{ p.title }}</h3>
+                    </a>
+                </div>
+            </div>
+            <div style="padding: 0 1.25rem 1.25rem;">
+                <a href="/product/{{ p.id }}" class="btn-olx-teal" style="width: 100%; justify-content: center; font-size: 0.85rem;">Ver Anúncio</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

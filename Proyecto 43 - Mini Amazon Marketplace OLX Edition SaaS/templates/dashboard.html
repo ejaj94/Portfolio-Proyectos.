@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+
+{% block title %}Painel do Vendedor - OLX Marketplace SaaS{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold mb-1" style="color: var(--olx-teal);">
+                <i class="bi bi-speedometer2 me-2"></i>Painel de Gestão do Vendedor
+            </h2>
+            <p class="text-muted mb-0">Bem-vindo, <strong>{{ seller.name }}</strong> ({{ seller.company }})</p>
+        </div>
+        <button class="btn btn-mint text-dark fw-bold px-4 py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#newProductModal">
+            <i class="bi bi-plus-circle-fill me-2"></i>Publicar Novo Anúncio
+        </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-white p-3 border-start border-4 border-primary">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-semibold">Vendas Totais</span>
+                        <h3 class="fw-bold text-dark mb-0 mt-1">{{ total_sales | currency }}</h3>
+                    </div>
+                    <div class="bg-primary-subtle text-primary p-3 rounded-circle">
+                        <i class="bi bi-currency-euro fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-white p-3 border-start border-4 border-success">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-semibold">Anúncios Ativos</span>
+                        <h3 class="fw-bold text-dark mb-0 mt-1">{{ total_products }}</h3>
+                    </div>
+                    <div class="bg-success-subtle text-success p-3 rounded-circle">
+                        <i class="bi bi-box-seam fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-white p-3 border-start border-4 border-warning">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-semibold">Avaliação Média</span>
+                        <h3 class="fw-bold text-dark mb-0 mt-1">
+                            {{ seller.rating }} <i class="bi bi-star-fill text-warning fs-5"></i>
+                        </h3>
+                    </div>
+                    <div class="bg-warning-subtle text-warning p-3 rounded-circle">
+                        <i class="bi bi-star-half fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-white p-3 border-start border-4 border-info">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-semibold">Localização</span>
+                        <h5 class="fw-bold text-dark mb-0 mt-1 text-truncate" style="max-width: 140px;">{{ seller.location }}</h5>
+                    </div>
+                    <div class="bg-info-subtle text-info p-3 rounded-circle">
+                        <i class="bi bi-geo-alt fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seller Tabs -->
+    <ul class="nav nav-pills mb-4 gap-2" id="sellerTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-item-pill active" id="products-tab" data-bs-toggle="tab" data-bs-target="#products-pane" type="button" role="tab">
+                <i class="bi bi-grid-3x3-gap me-2"></i>Os Meus Anúncios ({{ total_products }})
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-item-pill" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders-pane" type="button" role="tab">
+                <i class="bi bi-receipt-cutoff me-2"></i>Encomendas Recebidas ({{ seller_orders | length }})
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="sellerTabContent">
+        <!-- Products Tab Pane -->
+        <div class="tab-pane fade show active" id="products-pane" role="tabpanel">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Categoria</th>
+                                    <th>Estado</th>
+                                    <th class="text-end">Preço</th>
+                                    <th class="text-center">Stock</th>
+                                    <th class="text-center">Visualizações</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for prod in my_products %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ prod.image_url }}" alt="{{ prod.title }}" class="rounded me-3 object-fit-cover" style="width: 50px; height: 50px;">
+                                            <div>
+                                                <a href="/product/{{ prod.id }}" class="fw-semibold text-dark text-decoration-none d-block">
+                                                    {{ prod.title }}
+                                                </a>
+                                                <small class="text-muted"><i class="bi bi-geo-alt me-1"></i>{{ prod.location }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge text-bg-light border text-dark">{{ prod.category }}</span></td>
+                                    <td><span class="badge text-bg-secondary">{{ prod.condition }}</span></td>
+                                    <td class="text-end fw-bold text-teal">{{ prod.price | currency }}</td>
+                                    <td class="text-center"><span class="badge bg-success-subtle text-success border border-success">{{ prod.stock }} un.</span></td>
+                                    <td class="text-center"><i class="bi bi-eye me-1 text-muted"></i>{{ prod.views }}</td>
+                                    <td class="text-center">
+                                        <a href="/product/{{ prod.id }}" class="btn btn-sm btn-outline-teal me-1" title="Ver Anúncio"><i class="bi bi-eye"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Tab Pane -->
+        <div class="tab-pane fade" id="orders-pane" role="tabpanel">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>N.º Encomenda</th>
+                                    <th>Data</th>
+                                    <th>Comprador</th>
+                                    <th>Artigo Vendido</th>
+                                    <th class="text-center">Qtd</th>
+                                    <th class="text-end">Valor Total</th>
+                                    <th class="text-center">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in seller_orders %}
+                                <tr>
+                                    <td><span class="fw-bold text-teal">{{ order.order_number }}</span></td>
+                                    <td><small class="text-muted">{{ order.created_at }}</small></td>
+                                    <td><span class="fw-semibold text-dark">{{ order.buyer_name }}</span></td>
+                                    <td>{{ order.product_title }}</td>
+                                    <td class="text-center fw-bold">{{ order.quantity }}</td>
+                                    <td class="text-end fw-bold text-teal">{{ (order.unit_price * order.quantity) | currency }}</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-warning-subtle text-warning border border-warning px-3 py-1">
+                                            {{ order.status }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-4 text-muted">Sem vendas registadas até ao momento.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Publicar Novo Anúncio -->
+<div class="modal fade" id="newProductModal" tabindex="-1" aria-labelledby="newProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-teal text-white py-3">
+                <h5 class="modal-header-title mb-0 fw-bold" id="newProductModalLabel">
+                    <i class="bi bi-plus-circle me-2"></i>Publicar Novo Anúncio no OLX Marketplace
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="newProductForm" onsubmit="event.preventDefault(); olxMarketplace.createProduct();">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label for="prodTitle" class="form-label fw-semibold small">Título do Anúncio *</label>
+                            <input type="text" class="form-control" id="prodTitle" placeholder="Ex: iPhone 15 Pro Max 256GB Titanium" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="prodPrice" class="form-label fw-semibold small">Preço (€) *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">€</span>
+                                <input type="number" step="0.01" class="form-control" id="prodPrice" placeholder="99.00" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="prodCategory" class="form-label fw-semibold small">Categoria *</label>
+                            <select class="form-select" id="prodCategory" required>
+                                <option value="Tecnologia">Tecnologia</option>
+                                <option value="Telemóveis & Tablets">Telemóveis & Tablets</option>
+                                <option value="Informática">Informática</option>
+                                <option value="TV, Som & Arte">TV, Som & Arte</option>
+                                <option value="Mobilidade & Veículos">Mobilidade & Veículos</option>
+                                <option value="Lazer & Desporto">Lazer & Desporto</option>
+                                <option value="Moda & Acessórios">Moda & Acessórios</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="prodCondition" class="form-label fw-semibold small">Estado do Equipamento *</label>
+                            <select class="form-select" id="prodCondition" required>
+                                <option value="Novo">Novo (Em caixa selada)</option>
+                                <option value="Como Novo">Como Novo (Sem marcas de uso)</option>
+                                <option value="Usado">Usado (Bom estado de funcionamento)</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="prodStock" class="form-label fw-semibold small">Quantidade em Stock</label>
+                            <input type="number" class="form-control" id="prodStock" value="5" min="1">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="prodLocation" class="form-label fw-semibold small">Localização (Distrito/Cidade)</label>
+                            <input type="text" class="form-control" id="prodLocation" value="Lisboa, Portugal">
+                        </div>
+
+                        <div class="col-12">
+                            <label for="prodImage" class="form-label fw-semibold small">URL da Imagem Principal</label>
+                            <input type="url" class="form-control" id="prodImage" placeholder="https://images.unsplash.com/photo-...">
+                            <small class="text-muted">Se deixar em branco, será atribuída uma imagem tecnológica profissional HD.</small>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="prodDesc" class="form-label fw-semibold small">Descrição Detalhada do Produto *</label>
+                            <textarea class="form-control" id="prodDesc" rows="4" placeholder="Descreva as especificações técnicas, estado de conservação e o que inclui na embalagem..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-end">
+                        <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-teal text-white fw-bold px-4">
+                            <i class="bi bi-check-lg me-1"></i>Publicar Anúncio Agora
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

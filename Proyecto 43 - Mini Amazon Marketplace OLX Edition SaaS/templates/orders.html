@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}As Minhas Encomendas - OLX Marketplace SaaS{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/" class="text-teal text-decoration-none">Início</a></li>
+            <li class="breadcrumb-item active" aria-current="page">As Minhas Encomendas</li>
+        </ol>
+    </nav>
+
+    <h2 class="fw-bold mb-4" style="color: var(--olx-teal);">
+        <i class="bi bi-clock-history me-2"></i>Histórico de Encomendas & Compras
+    </h2>
+
+    {% if orders %}
+    <div class="row g-4">
+        {% for order in orders %}
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-teal-light py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <span class="badge bg-teal text-white me-2 fs-6">{{ order.order_number }}</span>
+                        <small class="text-muted"><i class="bi bi-calendar3 me-1"></i>Data: {{ order.created_at }}</small>
+                    </div>
+                    <div>
+                        <span class="badge bg-warning-subtle text-warning border border-warning px-3 py-2 fs-6">
+                            <i class="bi bi-truck me-1"></i>{{ order.status }}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-lg-8">
+                            <h6 class="fw-bold text-dark mb-3">Artigos Adquiridos:</h6>
+                            <div class="list-group list-group-flush border rounded-3 mb-3">
+                                {% for item in order.order_items %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ item.image_url }}" alt="{{ item.title }}" class="rounded me-3 object-fit-cover" style="width: 50px; height: 50px;">
+                                        <div>
+                                            <h6 class="fw-semibold text-dark mb-1">{{ item.title }}</h6>
+                                            <small class="text-muted">Vendido por: <strong>{{ item.seller_name }}</strong></small>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="fw-bold d-block text-teal">{{ item.unit_price | currency }}</span>
+                                        <small class="text-muted">Qtd: {{ item.quantity }}</small>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-lg-4 border-start-lg">
+                            <div class="p-3 bg-light rounded-3">
+                                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-geo-alt me-1 text-teal"></i>Detalhes de Envio & Pagamento</h6>
+                                <p class="small mb-2"><strong>Morada de Entrega:</strong><br><span class="text-muted">{{ order.shipping_address }}</span></p>
+                                <p class="small mb-2"><strong>Método de Pagamento:</strong><br><span class="badge text-bg-light border text-dark"><i class="bi bi-phone-vibrate text-teal me-1"></i>{{ order.payment_method }}</span></p>
+                                <hr class="my-2">
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="fw-bold text-dark">Total Pago:</span>
+                                    <span class="fs-4 fw-bold text-teal">{{ order.total_amount | currency }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress tracking steps -->
+                    <div class="mt-4 pt-3 border-top">
+                        <small class="fw-bold text-muted text-uppercase d-block mb-3">Estado de Acompanhamento</small>
+                        <div class="row text-center g-2">
+                            <div class="col-4">
+                                <div class="p-2 rounded bg-success-subtle text-success border border-success fw-semibold small">
+                                    <i class="bi bi-check-circle-fill me-1"></i>1. Confirmada
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-2 rounded bg-warning-subtle text-warning border border-warning fw-semibold small">
+                                    <i class="bi bi-box-seam me-1"></i>2. Em Embalagem
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-2 rounded bg-light text-muted border fw-semibold small">
+                                    <i class="bi bi-house-door me-1"></i>3. Entregue
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-box-seam text-muted" style="font-size: 4rem;"></i>
+        <h4 class="mt-3 fw-bold text-secondary">Ainda não tem encomendas registadas</h4>
+        <p class="text-muted">Faça a sua primeira compra com pagamentos seguros MB WAY no OLX Marketplace.</p>
+        <a href="/" class="btn btn-teal px-4 py-2 mt-2 fw-semibold">
+            <i class="bi bi-cart-plus me-2"></i>Ir para o Mercado
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
