@@ -2105,6 +2105,41 @@ const PRODUCTS = [
             description: "Une délicieuse création décorative empreinte de douceur ! Ce pot artisanal aux finitions soignées met en scène des chevaux de manège en relief 3D, couronné par un couvercle bleu pastel rehaussé d'une touche dorée. Parfait pour ranger bijoux, petits trésors ou embellir votre intérieur.",
             aromaProfile: "Brise Douce, Fleur de Coton, Vanille Douce, Musc Blanc"
         }
+    },
+    {
+        id: "candle-pote_carrossel_dourado-1",
+        category: "decorativa",
+        price: 12.90,
+        image: "assets/pote_carrossel_dourado.jpg",
+        qty: 1,
+        pt: {
+            name: "Pote Carrossel Dourado",
+            categoryLabel: "Peças Decorativas e Porta-Jóias Artesanais",
+            aromaBrief: "Elegante pote artesanal em formato de carrossel vintage com cavalinhos em relevo e luxuosa tampa dourada.",
+            description: "Uma peça decorativa radiante e cheia de sofisticação! Este pote artesanal esculpido em pormenor apresenta cavalinhos de carrossel em relevo 3D ao redor do corpo branco porcelana, coroado por uma luxuosa tampa em tom dourado reluzente. Perfeito para guardar joias, pequenos tesouros ou como ornamento de destaque.",
+            aromaProfile: "Âmbar Real, Flor de Baunilha, Sândalo Nobre, Almíscar Quente"
+        },
+        es: {
+            name: "Pote Carrusel Dorado",
+            categoryLabel: "Piezas Decorativas y Joyeros Artesanales",
+            aromaBrief: "Elegante tarro artesanal en forma de carrusel vintage con caballitos en relieve y lujosa tapa dorada.",
+            description: "¡Una pieza decorativa radiante y llena de sofisticación! Este tarro artesanal esculpido con gran detalle presenta caballitos de carrusel en relieve 3D sobre cuerpo blanco porcelana, coronado por una lujosa tapa en tono dorado reluciente. Perfecto para guardar joyas, pequeños tesoros o como pieza decorativa de distinción.",
+            aromaProfile: "Ámbar Real, Flor de Vainilla, Sándalo Noble, Almizcle Cálido"
+        },
+        en: {
+            name: "Gold Carousel Jar",
+            categoryLabel: "Decorative Pieces & Handcrafted Keepsake Jars",
+            aromaBrief: "Elegant handcrafted vintage carousel jar featuring 3D embossed horses and a luxurious metallic gold canopy lid.",
+            description: "A radiant and sophisticated decorative centerpiece! Handcrafted with intricate detail, this porcelain-white jar features 3D embossed carousel horses along its body, topped with a luxurious metallic gold canopy lid. Ideal for holding jewelry, trinkets, or adding opulent elegance to any room.",
+            aromaProfile: "Royal Amber, Vanilla Blossom, Noble Sandalwood, Warm Musk"
+        },
+        fr: {
+            name: "Pot Carrousel Doré",
+            categoryLabel: "Pièces Décoratives & Boîtes à Bijoux Artisanales",
+            aromaBrief: "Élégant pot artisanal en forme de carrousel vintage avec chevaux en relief et luxueux couvercle doré.",
+            description: "Une superbe création décorative étincelante et raffinée ! Ce pot artisanal aux finitions soignées met en scène des chevaux de manège en relief 3D, couronné par un luxueux couvercle au fini doré brillant. Parfait pour ranger bijoux, petits trésors ou embellir votre intérieur.",
+            aromaProfile: "Ambre Royal, Fleur de Vanille, Bois de Santal, Musc Chaud"
+        }
     }
 ];
 
