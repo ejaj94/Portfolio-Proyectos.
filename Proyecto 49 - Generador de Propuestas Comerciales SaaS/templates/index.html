@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% block title %}Criar Nova Proposta Comercial Executiva | EJAJ TECH{% endblock %}
+
+{% block content %}
+<section class="hero-header">
+  <h1><i class="fas fa-file-signature" style="color: var(--emerald);"></i> Criador de <span>Propostas Comerciais</span></h1>
+  <p>Crie propostas de alto valor executivo com descrição do projeto, desdobramento de serviços, cronograma (*timeline* por fases), cálculo de IVA e portal de **assinatura digital tátil** para o seu cliente.</p>
+</section>
+
+<!-- STEP 1: CLIENT & PROJECT INFO -->
+<div class="card-panel">
+  <div class="panel-title">
+    <i class="fas fa-building"></i> 1. Dados do Cliente & Âmbito do Projeto
+  </div>
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label for="client_name">Nome do Contacto / Decisor *</label>
+      <input type="text" id="client_name" class="form-control" placeholder="ex: Dr. Ricardo Fonseca" value="Dr. Ricardo Fonseca" required>
+    </div>
+
+    <div class="form-group">
+      <label for="client_company">Empresa Cliente *</label>
+      <input type="text" id="client_company" class="form-control" placeholder="ex: Grupo Retail Luxe Lda" value="Grupo Retail Luxe Lda" required>
+    </div>
+
+    <div class="form-group">
+      <label for="client_email">E-mail do Cliente *</label>
+      <input type="email" id="client_email" class="form-control" placeholder="ex: cliente@empresa.pt" value="r.fonseca@retailluxe.pt">
+    </div>
+
+    <div class="form-group">
+      <label for="client_phone">Telefone / WhatsApp</label>
+      <input type="text" id="client_phone" class="form-control" placeholder="ex: +351 912 345 678" value="+351 912 345 678">
+    </div>
+
+    <div class="form-group full-width">
+      <label for="title">Título da Proposta Comercial *</label>
+      <input type="text" id="title" class="form-control" placeholder="ex: Redesenho de Plataforma E-Commerce SaaS & App Móvel" value="Redesenho de Plataforma E-Commerce SaaS & App Móvel iOS/Android" required>
+    </div>
+
+    <div class="form-group full-width">
+      <label for="description">Descrição do Projeto & Objetivos de Negócio</label>
+      <textarea id="description" class="form-control" placeholder="Descreva os objetivos, metodologia e proposta de valor...">Proposta comercial completa para reformulação integral da loja online, integração com ERP de stocks, pasarela de pagamento Stripe & MB WAY e lançamento de aplicação móvel nativa.</textarea>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2: SERVICES & PRICING -->
+<div class="card-panel">
+  <div class="panel-title" style="justify-content: space-between;">
+    <span><i class="fas fa-list-check"></i> 2. Serviços & Orçamento</span>
+    <button type="button" id="btn_add_item" class="btn-secondary" style="font-size: 0.82rem; padding: 6px 12px;">
+      <i class="fas fa-plus"></i> Adicionar Serviço
+    </button>
+  </div>
+
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th>Descrição do Serviço / Âmbito</th>
+        <th style="width: 100px;">Qtd</th>
+        <th style="width: 150px;">Preço Unit. (€)</th>
+        <th style="width: 130px; text-align: right;">Total (€)</th>
+        <th style="width: 50px;"></th>
+      </tr>
+    </thead>
+    <tbody id="items_tbody">
+      <tr>
+        <td>
+          <input type="text" class="form-control item-title" value="Design UI/UX & Protótipo Interativo" required>
+          <input type="text" class="form-control item-desc" value="Criativo Figma completo de todas as páginas da loja web e app móvel com sistema de design corporativo." style="margin-top: 4px; font-size: 0.85rem;">
+        </td>
+        <td style="width: 100px;">
+          <input type="number" class="form-control item-qty" value="1" min="1" oninput="recalculateTotals()">
+        </td>
+        <td style="width: 150px;">
+          <input type="number" class="form-control item-price" value="2500.00" step="50" min="0" oninput="recalculateTotals()">
+        </td>
+        <td style="width: 130px; font-weight: 700; text-align: right;" class="item-subtotal">
+          € 2 500,00
+        </td>
+        <td style="width: 50px; text-align: center;">
+          <button type="button" onclick="removeRow(this)" style="background: none; border: none; color: #EF4444; cursor: pointer;">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="text" class="form-control item-title" value="Desenvolvimento Web Frontend & Backend SaaS" required>
+          <input type="text" class="form-control item-desc" value="Plataforma em Python/Flask com base de dados SQLite/PostgreSQL, checkout responsivo e área de cliente." style="margin-top: 4px; font-size: 0.85rem;">
+        </td>
+        <td style="width: 100px;">
+          <input type="number" class="form-control item-qty" value="1" min="1" oninput="recalculateTotals()">
+        </td>
+        <td style="width: 150px;">
+          <input type="number" class="form-control item-price" value="4000.00" step="50" min="0" oninput="recalculateTotals()">
+        </td>
+        <td style="width: 130px; font-weight: 700; text-align: right;" class="item-subtotal">
+          € 4 000,00
+        </td>
+        <td style="width: 50px; text-align: center;">
+          <button type="button" onclick="removeRow(this)" style="background: none; border: none; color: #EF4444; cursor: pointer;">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- TOTALS BREAKDOWN -->
+  <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 1.25rem; border-radius: var(--radius-sm); max-width: 450px; margin-left: auto;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.95rem;">
+      <span>Subtotal (sem IVA):</span>
+      <strong id="out_subtotal">€ 6 500,00</strong>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.95rem;">
+      <span>Taxa de IVA:</span>
+      <select id="vat_rate" class="form-control" style="width: 140px; padding: 4px 8px;">
+        <option value="23" selected>23% (Normal)</option>
+        <option value="13">13% (Intermédia)</option>
+        <option value="6">6% (Reduzida)</option>
+        <option value="0">0% (Isento)</option>
+      </select>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-size: 0.95rem; color: #64748B;">
+      <span>Valor de IVA:</span>
+      <strong id="out_vat">€ 1 495,00</strong>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 800; color: var(--navy-bg); border-top: 2px solid #CBD5E1; padding-top: 0.75rem;">
+      <span>TOTAL DA PROPOSTA:</span>
+      <strong id="out_total" style="color: var(--emerald-dark);">€ 7 995,00</strong>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3: TIMELINE -->
+<div class="card-panel">
+  <div class="panel-title" style="justify-content: space-between;">
+    <span><i class="fas fa-stream"></i> 3. Cronograma de Entregas (Timeline por Fases)</span>
+    <button type="button" id="btn_add_phase" class="btn-secondary" style="font-size: 0.82rem; padding: 6px 12px;">
+      <i class="fas fa-plus"></i> Adicionar Fase
+    </button>
+  </div>
+
+  <div id="timeline_container" class="timeline-stepper">
+    <div class="timeline-step">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div style="display: flex; gap: 8px; width: 80%;">
+          <input type="text" class="form-control phase-title" value="Fase 1: Levantamento de Requisitos & UX/UI" style="font-weight: 700;">
+          <input type="text" class="form-control phase-duration" value="Semana 1 - 2" style="width: 140px; font-weight: 700;">
+        </div>
+        <button type="button" onclick="this.closest('.timeline-step').remove()" style="background: none; border: none; color: #EF4444; cursor: pointer;">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
+      <input type="text" class="form-control phase-deliverables" value="Documento de arquitetura funcional e protótipo navegável no Figma.">
+    </div>
+
+    <div class="timeline-step">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div style="display: flex; gap: 8px; width: 80%;">
+          <input type="text" class="form-control phase-title" value="Fase 2: Desenvolvimento de Software & APIs" style="font-weight: 700;">
+          <input type="text" class="form-control phase-duration" value="Semana 3 - 6" style="width: 140px; font-weight: 700;">
+        </div>
+        <button type="button" onclick="this.closest('.timeline-step').remove()" style="background: none; border: none; color: #EF4444; cursor: pointer;">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
+      <input type="text" class="form-control phase-deliverables" value="Código fonte backend, motor de checkout responsivo e integração de pagamentos.">
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4: PAYMENT TERMS & SUBMIT -->
+<div class="card-panel">
+  <div class="panel-title">
+    <i class="fas fa-handshake"></i> 4. Condições de Pagamento & Validade
+  </div>
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label for="validity_days">Validade da Proposta (Dias)</label>
+      <input type="number" id="validity_days" class="form-control" value="30">
+    </div>
+
+    <div class="form-group full-width">
+      <label for="payment_terms">Condições de Pagamento & Milestones *</label>
+      <input type="text" id="payment_terms" class="form-control" value="50% no início do projeto e 50% após aprovação final e entrega em produção.">
+    </div>
+  </div>
+
+  <div style="margin-top: 1.5rem; text-align: right;">
+    <button type="button" onclick="submitProposal()" class="btn-primary" style="font-size: 1.05rem; padding: 14px 28px;">
+      <i class="fas fa-paper-plane"></i> Criar & Gerar Link de Assinatura Digital
+    </button>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestor de Propostas Comerciais | EJAJ TECH{% endblock %}
+
+{% block content %}
+<section class="hero-header">
+  <h1><i class="fas fa-file-contract" style="color: var(--emerald);"></i> Gestor de <span>Propostas Comerciais</span></h1>
+  <p>Acompanhe o estado de todas as propostas enviadas, consulte assinaturas digitais efetuadas e exporte os documentos em PDF.</p>
+</section>
+
+<div class="card-panel" style="overflow-x: auto;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+    <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--navy-bg);">
+      <i class="fas fa-list-alt" style="color: var(--emerald);"></i> Propostas Comerciais Registadas ({{ proposals|length }})
+    </h2>
+    <a href="/" class="btn-primary" style="text-decoration: none; padding: 8px 16px; font-size: 0.88rem;">
+      <i class="fas fa-plus-circle"></i> Criar Nova Proposta
+    </a>
+  </div>
+
+  {% if proposals %}
+  <table class="items-table" style="font-size: 0.9rem;">
+    <thead>
+      <tr>
+        <th>Código & Data</th>
+        <th>Cliente & Empresa</th>
+        <th>Título do Projeto</th>
+        <th style="text-align: right;">Valor Total (€)</th>
+        <th style="text-align: center;">Estado</th>
+        <th style="text-align: right;">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for prop in proposals %}
+      <tr>
+        <td style="font-weight: 700;">
+          <a href="/proposal/{{ prop.code }}" style="color: var(--navy-bg); text-decoration: none;">
+            {{ prop.code }}
+          </a>
+          <div style="font-size: 0.78rem; font-weight: 400; color: #64748B;">{{ prop.created_at }}</div>
+        </td>
+        <td>
+          <strong style="color: var(--navy-bg);">{{ prop.client_company }}</strong>
+          <div style="font-size: 0.82rem; color: #64748B;">{{ prop.client_name }}</div>
+        </td>
+        <td style="font-weight: 600; color: #334155;">{{ prop.title }}</td>
+        <td style="text-align: right; font-weight: 800; color: var(--emerald-dark);">
+          {{ prop.total_amount | currency }}
+        </td>
+        <td style="text-align: center;">
+          {% if prop.status == 'Aceite / Assinada' %}
+          <span class="status-badge status-signed"><i class="fas fa-check-double"></i> Assinada</span>
+          {% elif prop.status == 'Enviada' %}
+          <span class="status-badge status-sent"><i class="fas fa-paper-plane"></i> Enviada</span>
+          {% else %}
+          <span class="status-badge status-draft">{{ prop.status }}</span>
+          {% endif %}
+        </td>
+        <td style="text-align: right; white-space: nowrap;">
+          <a href="/proposal/{{ prop.code }}" class="btn-secondary" style="text-decoration: none; padding: 6px 10px; font-size: 0.8rem;">
+            <i class="fas fa-eye"></i> Ver / Assinar
+          </a>
+          <a href="/proposal/{{ prop.code }}/pdf" target="_blank" class="btn-secondary" style="text-decoration: none; padding: 6px 10px; font-size: 0.8rem; margin-left: 4px;">
+            <i class="fas fa-print"></i> PDF
+          </a>
+          <button onclick="deleteProposal({{ prop.id }})" class="btn-secondary" style="color: #EF4444; padding: 6px 10px; font-size: 0.8rem; margin-left: 4px;">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div style="text-align: center; padding: 3rem; color: #94A3B8;">
+    <i class="fas fa-file-contract" style="font-size: 3rem; margin-bottom: 1rem; color: var(--emerald);"></i>
+    <p>Ainda não registou nenhuma proposta comercial.</p>
+    <a href="/" class="btn-primary" style="margin-top: 1rem; text-decoration: none;">Criar Primeira Proposta</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+async function deleteProposal(id) {
+  if (!confirm('Tem certeza de que pretende eliminar esta proposta comercial?')) return;
+  try {
+    const res = await fetch('/api/proposals/delete/' + id, { method: 'POST' });
+    const result = await res.json();
+    if (result.success) {
+      location.reload();
+    }
+  } catch(e) {
+    alert('Erro ao eliminar proposta.');
+  }
+}
+</script>
+{% endblock %}
