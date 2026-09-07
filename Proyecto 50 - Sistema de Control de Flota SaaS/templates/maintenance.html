@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Manutenção & ITV | EJAJ TECH{% endblock %}
+
+{% block content %}
+<section class="hero-header">
+  <h1><i class="fas fa-wrench" style="color: var(--cyan-primary);"></i> Manutenção & <span>Inspeções (ITV/IPO)</span></h1>
+  <p>Histórico de reparações mecânicas, mudanças de óleo, revisões de travões e controlo de inspeções periódicas obrigatórias.</p>
+</section>
+
+<!-- MAINTENANCE FORM -->
+<div class="card-panel">
+  <div class="panel-title">
+    <i class="fas fa-plus-circle"></i> Agendar / Registar Manutenção
+  </div>
+
+  <form id="maintForm">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="maint_vehicle_id">Selecione o Veículo *</label>
+        <select id="maint_vehicle_id" class="form-control" required>
+          <option value="" disabled selected>Escolha a viatura...</option>
+          {% for v in vehicles %}
+          <option value="{{ v.id }}">{{ v.plate }} - {{ v.brand }} {{ v.model }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="maint_type">Tipo de Intervenção *</label>
+        <select id="maint_type" class="form-control" required>
+          <option value="Mudança de Óleo & Filtros" selected>Mudança de Óleo & Filtros</option>
+          <option value="Revisão de Travões & Discos">Revisão de Travões & Discos</option>
+          <option value="Troca de Pneus">Troca de Pneus</option>
+          <option value="Inspeção Periódica (ITV/IPO)">Inspeção Periódica (ITV/IPO)</option>
+          <option value="Reparação Geral de Motor">Reparação Geral de Motor</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="maint_date">Data da Manutenção *</label>
+        <input type="date" id="maint_date" class="form-control" value="2026-09-07" required>
+      </div>
+
+      <div class="form-group">
+        <label for="km_at_maint">Km no Momento *</label>
+        <input type="number" id="km_at_maint" class="form-control" value="90000" required>
+      </div>
+
+      <div class="form-group">
+        <label for="maint_cost">Custo da Reparação (€) *</label>
+        <input type="number" id="maint_cost" class="form-control" step="10" value="250.00" required>
+      </div>
+
+      <div class="form-group">
+        <label for="next_due_date">Data da Próxima Revisão / ITV</label>
+        <input type="date" id="next_due_date" class="form-control" value="2026-12-31">
+      </div>
+
+      <div class="form-group full-width">
+        <label for="maint_description">Descrição do Serviço Efetuado</label>
+        <input type="text" id="maint_description" class="form-control" placeholder="Descreva os trabalhos efetuados ou oficina responsável..." value="Substituição de filtro de ar, óleo sintético 5W30 e calços dianteiros.">
+      </div>
+    </div>
+
+    <div style="margin-top: 1.5rem; text-align: right;">
+      <button type="submit" class="btn-primary">
+        <i class="fas fa-tools"></i> Guardar Manutenção
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- MAINTENANCES TABLE -->
+<div class="card-panel">
+  <div class="panel-title">
+    <i class="fas fa-history"></i> Histórico de Intervenções ({{ maintenances|length }})
+  </div>
+
+  <table class="fleet-table">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Viatura</th>
+        <th>Tipo de Intervenção</th>
+        <th>Descrição</th>
+        <th>Km no Momento</th>
+        <th>Custo (€)</th>
+        <th>Próxima Revisão</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in maintenances %}
+      <tr>
+        <td style="font-weight: 700;">{{ m.maint_date }}</td>
+        <td><strong style="color: var(--cyan-dark); font-size: 1.05rem;">{{ m.vehicle_plate }}</strong></td>
+        <td><span class="status-pill status-maint">{{ m.maint_type }}</span></td>
+        <td style="font-size: 0.88rem;">{{ m.description }}</td>
+        <td>{{ m.km_at_maint | km }}</td>
+        <td style="font-weight: 800;">{{ m.cost | currency }}</td>
+        <td style="font-weight: 700; color: #0369A1;">{{ m.next_due_date or 'N/D' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

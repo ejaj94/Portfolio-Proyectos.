@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestão de Veículos | EJAJ TECH{% endblock %}
+
+{% block content %}
+<section class="hero-header">
+  <h1><i class="fas fa-truck-monster" style="color: var(--cyan-primary);"></i> Catálogo de <span>Veículos da Frota</span></h1>
+  <p>Registo e controlo técnico de frotas comerciais, camiões pesados e ligeiros executivos.</p>
+</section>
+
+<!-- ADD VEHICLE FORM -->
+<div class="card-panel">
+  <div class="panel-title">
+    <i class="fas fa-plus-circle"></i> Adicionar Nova Viatura à Frota
+  </div>
+
+  <form id="vehicleForm">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="plate">Matrícula (ex: 45-AB-89) *</label>
+        <input type="text" id="plate" class="form-control" placeholder="ex: 88-XY-99" required>
+      </div>
+
+      <div class="form-group">
+        <label for="brand">Marca *</label>
+        <input type="text" id="brand" class="form-control" placeholder="ex: Volvo, Mercedes-Benz, Renault" required>
+      </div>
+
+      <div class="form-group">
+        <label for="model">Modelo *</label>
+        <input type="text" id="model" class="form-control" placeholder="ex: Sprinter 316 CDI" required>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Categoria da Viatura</label>
+        <select id="category" class="form-control">
+          <option value="Carrinha Comercial" selected>Carrinha Comercial</option>
+          <option value="Camião Pesado de Mercadorias">Camião Pesado de Mercadorias</option>
+          <option value="Ligeiro Executivo">Ligeiro Executivo</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="year">Ano de Fabrico</label>
+        <input type="number" id="year" class="form-control" value="2024">
+      </div>
+
+      <div class="form-group">
+        <label for="fuel_type">Combustível</label>
+        <select id="fuel_type" class="form-control">
+          <option value="Diesel" selected>Diesel</option>
+          <option value="Gasolina">Gasolina</option>
+          <option value="Elétrico">Elétrico</option>
+          <option value="Híbrido">Híbrido</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="current_km">Quilometragem Atual (Km)</label>
+        <input type="number" id="current_km" class="form-control" value="45000">
+      </div>
+
+      <div class="form-group">
+        <label for="driver_name">Condutor Atribuído</label>
+        <select id="driver_name" class="form-control">
+          <option value="Não Atribuído">Não Atribuído</option>
+          {% for d in drivers %}
+          <option value="{{ d.name }}">{{ d.name }} ({{ d.license_category }})</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="insurance_expiry">Validade do Seguro *</label>
+        <input type="date" id="insurance_expiry" class="form-control" value="2026-12-31" required>
+      </div>
+
+      <div class="form-group">
+        <label for="itv_expiry">Validade da Inspeção (ITV/IPO) *</label>
+        <input type="date" id="itv_expiry" class="form-control" value="2026-11-15" required>
+      </div>
+    </div>
+
+    <div style="margin-top: 1.5rem; text-align: right;">
+      <button type="submit" class="btn-primary">
+        <i class="fas fa-save"></i> Registar Veículo na Frota
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- VEHICLES TABLE -->
+<div class="card-panel">
+  <div class="panel-title">
+    <i class="fas fa-list"></i> Lista Completa da Frota ({{ vehicles|length }})
+  </div>
+
+  <table class="fleet-table">
+    <thead>
+      <tr>
+        <th>Matrícula & Viatura</th>
+        <th>Categoria</th>
+        <th>Ano</th>
+        <th>Combustível</th>
+        <th>Quilometragem</th>
+        <th>Condutor</th>
+        <th>ITV/IPO</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in vehicles %}
+      <tr>
+        <td>
+          <strong style="color: var(--text-black); font-size: 1.05rem;">{{ v.plate }}</strong>
+          <div style="font-size: 0.82rem; color: var(--text-muted);">{{ v.brand }} {{ v.model }}</div>
+        </td>
+        <td>{{ v.category }}</td>
+        <td>{{ v.year }}</td>
+        <td>{{ v.fuel_type }}</td>
+        <td style="font-weight: 800; color: var(--cyan-dark);">{{ v.current_km | km }}</td>
+        <td>{{ v.driver_name }}</td>
+        <td style="font-weight: 700;">{{ v.itv_expiry }}</td>
+        <td>
+          {% if v.status == 'Operacional' %}
+          <span class="status-pill status-operational"><i class="fas fa-check-circle"></i> Operacional</span>
+          {% elif v.status == 'Em Manutenção' %}
+          <span class="status-pill status-maint"><i class="fas fa-tools"></i> Em Manutenção</span>
+          {% else %}
+          <span class="status-pill status-inactive">{{ v.status }}</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

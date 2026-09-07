@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Central de Alertas & Validades | EJAJ TECH{% endblock %}
+
+{% block content %}
+<section class="hero-header">
+  <h1><i class="fas fa-bell" style="color: var(--cyan-primary);"></i> Central de <span>Alertas & Caducidades</span></h1>
+  <p>Notificações automáticas de proximidade de validade de inspeções (ITV/IPO), seguros automóveis e alertas de telemetria.</p>
+</section>
+
+<div class="card-panel">
+  <div class="panel-title">
+    <i class="fas fa-exclamation-circle"></i> Alertas Registados no Sistema ({{ alerts|length }})
+  </div>
+
+  {% if alerts %}
+  <div style="display: flex; flex-direction: column; gap: 1rem;">
+    {% for alert in alerts %}
+    <div style="background: white; border: 1px solid #BAE6FD; border-left: 5px solid {% if alert.severity == 'danger' %}#EF4444{% elif alert.severity == 'warning' %}#F59E0B{% else %}#06B6D4{% endif %}; padding: 1.25rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-weight: 900; font-size: 1.1rem; color: var(--text-black);">
+            [{{ alert.vehicle_plate }}] {{ alert.title }}
+          </span>
+          {% if alert.is_resolved %}
+          <span class="status-pill status-operational"><i class="fas fa-check"></i> Resolvido</span>
+          {% else %}
+          <span class="status-pill status-maint" style="background: #FEE2E2; color: #991B1B; border-color: #FCA5A5;">Pendente</span>
+          {% endif %}
+        </div>
+        <p style="font-size: 0.95rem; color: #475569; margin-top: 6px;">{{ alert.message }}</p>
+        <div style="font-size: 0.78rem; color: #94A3B8; margin-top: 4px;">Gerado em: {{ alert.created_at }}</div>
+      </div>
+
+      {% if not alert.is_resolved %}
+      <button onclick="resolveAlert({{ alert.id }})" class="btn-primary" style="font-size: 0.85rem; padding: 8px 16px;">
+        <i class="fas fa-check"></i> Resolver Alerta
+      </button>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="text-align: center; padding: 3rem; color: #94A3B8;">
+    <i class="fas fa-check-circle" style="font-size: 3rem; margin-bottom: 1rem; color: var(--cyan-primary);"></i>
+    <p>Não existem alertas pendentes. Toda a frota está com as inspeções e seguros em dia!</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

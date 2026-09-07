@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Sistema de Controlo de Frota SaaS | EJAJ TECH{% endblock %}</title>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v=1.0_no_cache">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/" class="brand-logo">
+        <span class="brand-badge">EJAJ TECH</span>
+        <span class="brand-title">Controlo de <span>Frota</span> 🚚</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">
+          <i class="fas fa-chart-pie"></i> Dashboard
+        </a>
+        <a href="/vehicles" class="nav-link {% if request.path == '/vehicles' %}active{% endif %}">
+          <i class="fas fa-truck-monster"></i> Veículos
+        </a>
+        <a href="/drivers" class="nav-link {% if request.path == '/drivers' %}active{% endif %}">
+          <i class="fas fa-id-card"></i> Condutores
+        </a>
+        <a href="/fuel" class="nav-link {% if request.path == '/fuel' %}active{% endif %}">
+          <i class="fas fa-gas-pump"></i> Combustível
+        </a>
+        <a href="/maintenance" class="nav-link {% if request.path == '/maintenance' %}active{% endif %}">
+          <i class="fas fa-wrench"></i> Manutenção & ITV
+        </a>
+        <a href="/alerts" class="nav-link {% if request.path == '/alerts' %}active{% endif %}">
+          <i class="fas fa-bell"></i> Alertas
+        </a>
+        <a href="https://wa.me/351911151993?text=AJUDA" target="_blank" class="nav-link" style="color: var(--cyan-primary);">
+          <i class="fab fa-whatsapp"></i> Suporte WhatsApp
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="main-wrapper">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="nav-container" style="flex-direction: column; gap: 0.5rem;">
+      <p><strong>EJAJ TECH</strong> &copy; 2026 — Plataforma Empresarial de Gestão de Frotas & Telemetria SaaS.</p>
+      <p>Desenvolvido por <strong>Enmanuel Jimenez</strong> (<span class="tech-highlight">Lead Architect & Founder EJAJ TECH</span>).</p>
+      <p style="font-size: 0.82rem; color: #94A3B8; margin-top: 4px;">
+        Para desenvolvimento de sistemas de frota e rastreio personalizados, envie a palavra <strong>"AJUDA"</strong> para o WhatsApp <strong>+351 911 151 993</strong>.
+      </p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/fleet.js') }}?v=1.0_no_cache"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>
