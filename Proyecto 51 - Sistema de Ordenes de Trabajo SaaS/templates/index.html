@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | EJAJ Workorders SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">Painel de Controlo de Serviços</h1>
+        <p style="color: #64748b;">Visão geral de intervenções técnicas, estado de ordens e equipa de campo.</p>
+    </div>
+    <a href="/workorder/new" class="btn btn-primary"><i class="fa-solid fa-circle-plus"></i> Emitir Folha de Serviço</a>
+</div>
+
+<!-- Key Performance Indicators (KPIs) -->
+<div class="stats-grid">
+    <div class="stat-card primary">
+        <div class="stat-title"><i class="fa-solid fa-folder-open"></i> Total de Ordens</div>
+        <div class="stat-value">{{ total_orders }}</div>
+    </div>
+    <div class="stat-card pending">
+        <div class="stat-title"><i class="fa-solid fa-clock"></i> Pendentes</div>
+        <div class="stat-value">{{ pending_orders }}</div>
+    </div>
+    <div class="stat-card progress">
+        <div class="stat-title"><i class="fa-solid fa-spinner"></i> Em Progresso</div>
+        <div class="stat-value">{{ in_progress_orders }}</div>
+    </div>
+    <div class="stat-card completed">
+        <div class="stat-title"><i class="fa-solid fa-circle-check"></i> Concluídas</div>
+        <div class="stat-value">{{ completed_orders }}</div>
+    </div>
+    <div class="stat-card primary" style="border-left-color: #0d9488;">
+        <div class="stat-title"><i class="fa-solid fa-euro-sign"></i> Faturação Total</div>
+        <div class="stat-value" style="color: #0d9488;">€{{ "%.2f"|format(total_revenue) }}</div>
+    </div>
+</div>
+
+<div class="detail-grid">
+    <!-- Recent Work Orders -->
+    <div class="table-card" style="margin-bottom: 0;">
+        <div class="table-header">
+            <h2><i class="fa-solid fa-list-check" style="color: #06b6d4;"></i> Útimas Intervenções Registadas</h2>
+            <a href="/workorders" class="btn btn-secondary btn-sm" style="font-size: 0.8rem;">Ver Todas</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Cliente / Empresa</th>
+                    <th>Técnico</th>
+                    <th>Prioridade</th>
+                    <th>Estado</th>
+                    <th>Total</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in recent_orders %}
+                <tr>
+                    <td><strong><a href="/workorder/{{ order['code'] }}" style="color: #0284c7; text-decoration: none;">{{ order['code'] }}</a></strong></td>
+                    <td>
+                        <div style="font-weight: 700;">{{ order['client_company'] }}</div>
+                        <div style="font-size: 0.82rem; color: #64748b;">{{ order['client_name'] }}</div>
+                    </td>
+                    <td><i class="fa-solid fa-user-gear" style="color: #64748b;"></i> {{ order['technician_name'] }}</td>
+                    <td>
+                        {% if 'Urgente' in order['priority'] %}
+                            <span class="badge badge-priority-urgent"><i class="fa-solid fa-triangle-exclamation"></i> Urgente</span>
+                        {% elif order['priority'] == 'Alta' %}
+                            <span class="badge badge-priority-high">Alta</span>
+                        {% else %}
+                            <span class="badge badge-priority-medium">Média</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if order['status'] == 'Pendente' %}
+                            <span class="badge badge-pending">Pendente</span>
+                        {% elif order['status'] == 'Em Progresso' %}
+                            <span class="badge badge-progress">Em Progresso</span>
+                        {% else %}
+                            <span class="badge badge-completed"><i class="fa-solid fa-check"></i> Concluída</span>
+                        {% endif %}
+                    </td>
+                    <td><strong>€{{ "%.2f"|format(order['total_cost']) }}</strong></td>
+                    <td>
+                        <a href="/workorder/{{ order['code'] }}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-eye"></i></a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" style="text-align: center; color: #94a3b8; padding: 2rem;">Nenhuma ordem de trabalho registada.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Available Technicians -->
+    <div>
+        <div class="panel">
+            <div class="panel-title">
+                <span><i class="fa-solid fa-users" style="color: #06b6d4;"></i> Técnicos Disponíveis</span>
+                <span class="badge badge-completed">{{ available_techs|length }} Ativos</span>
+            </div>
+            {% for tech in available_techs %}
+            <div style="padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 0.75rem;">
+                <div style="background: #e0f2fe; color: #0284c7; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                    {{ tech['name'][0] }}
+                </div>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.95rem;">{{ tech['name'] }}</div>
+                    <div style="font-size: 0.8rem; color: #64748b;">{{ tech['specialty'] }}</div>
+                    <div style="font-size: 0.78rem; color: #0d9488;"><i class="fa-solid fa-phone"></i> {{ tech['phone'] }}</div>
+                </div>
+            </div>
+            {% else %}
+            <p style="color: #94a3b8; font-size: 0.9rem;">Todos os técnicos estão atualmente atribuídos em serviço.</p>
+            {% endfor %}
+        </div>
+
+        <div class="panel" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff;">
+            <h3 style="color: #06b6d4; font-size: 1.1rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-file-signature"></i> Assinatura Digital no Cliente</h3>
+            <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 1rem;">
+                O técnico pode recolher a assinatura em tablet ou smartphone diretamente no local do serviço para fechar a Folha de Serviço instantaneamente.
+            </p>
+            <a href="/workorders" class="btn btn-primary" style="width: 100%; justify-content: center;"><i class="fa-solid fa-pen-nib"></i> Gerir Folhas Ativas</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

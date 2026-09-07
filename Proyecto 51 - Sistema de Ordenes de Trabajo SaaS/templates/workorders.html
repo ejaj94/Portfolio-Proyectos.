@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Gestão de Ordens de Trabalho | EJAJ Workorders SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">Listagem Geral de Ordens de Trabalho</h1>
+        <p style="color: #64748b;">Pesquise, filtre e acompanhe o estado das intervenções técnicas.</p>
+    </div>
+    <a href="/workorder/new" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Criar Nova Folha</a>
+</div>
+
+<!-- Filters Bar -->
+<div class="panel" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+    <form method="GET" action="/workorders" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+        <div style="flex: 2; min-width: 200px;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Pesquisa por Texto</label>
+            <input type="text" name="q" class="form-control" placeholder="Código OT, Cliente, Empresa ou Título..." value="{{ query_search }}">
+        </div>
+
+        <div style="flex: 1; min-width: 150px;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Estado</label>
+            <select name="status" class="form-control">
+                <option value="">Todos os Estados</option>
+                <option value="Pendente" {% if status_filter == 'Pendente' %}selected{% endif %}>Pendente</option>
+                <option value="Em Progresso" {% if status_filter == 'Em Progresso' %}selected{% endif %}>Em Progresso</option>
+                <option value="Concluída" {% if status_filter == 'Concluída' %}selected{% endif %}>Concluída</option>
+            </select>
+        </div>
+
+        <div style="flex: 1; min-width: 150px;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Prioridade</label>
+            <select name="priority" class="form-control">
+                <option value="">Todas as Prioridades</option>
+                <option value="Urgente / Crítica" {% if priority_filter == 'Urgente / Crítica' %}selected{% endif %}>Urgente / Crítica</option>
+                <option value="Alta" {% if priority_filter == 'Alta' %}selected{% endif %}>Alta</option>
+                <option value="Média" {% if priority_filter == 'Média' %}selected{% endif %}>Média</option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-filter"></i> Filtrar</button>
+            <a href="/workorders" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Limpar</a>
+        </div>
+    </form>
+</div>
+
+<!-- Table Card -->
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Código OT</th>
+                <th>Cliente / Empresa</th>
+                <th>Contacto / Morada</th>
+                <th>Técnico Responsável</th>
+                <th>Prioridade</th>
+                <th>Estado</th>
+                <th>Custo Total</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>
+                    <a href="/workorder/{{ order['code'] }}" style="color: #0284c7; text-decoration: none; font-weight: 700;">{{ order['code'] }}</a>
+                    <div style="font-size: 0.78rem; color: #64748b;">{{ order['created_at'][:10] }}</div>
+                </td>
+                <td>
+                    <div style="font-weight: 700; color: #0f172a;">{{ order['client_company'] }}</div>
+                    <div style="font-size: 0.85rem; color: #475569;">{{ order['client_name'] }}</div>
+                    <div style="font-size: 0.8rem; color: #06b6d4; font-weight: 600;">{{ order['title'] }}</div>
+                </td>
+                <td>
+                    <div style="font-size: 0.85rem;"><i class="fa-solid fa-phone" style="color: #64748b;"></i> {{ order['client_phone'] }}</div>
+                    <div style="font-size: 0.8rem; color: #64748b;"><i class="fa-solid fa-location-dot" style="color: #64748b;"></i> {{ order['client_address'] }}</div>
+                </td>
+                <td><i class="fa-solid fa-user-gear" style="color: #64748b;"></i> {{ order['technician_name'] }}</td>
+                <td>
+                    {% if 'Urgente' in order['priority'] %}
+                        <span class="badge badge-priority-urgent">Urgente</span>
+                    {% elif order['priority'] == 'Alta' %}
+                        <span class="badge badge-priority-high">Alta</span>
+                    {% else %}
+                        <span class="badge badge-priority-medium">Média</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if order['status'] == 'Pendente' %}
+                        <span class="badge badge-pending">Pendente</span>
+                    {% elif order['status'] == 'Em Progresso' %}
+                        <span class="badge badge-progress">Em Progresso</span>
+                    {% else %}
+                        <span class="badge badge-completed"><i class="fa-solid fa-check"></i> Concluída</span>
+                    {% endif %}
+                </td>
+                <td><strong>€{{ "%.2f"|format(order['total_cost']) }}</strong></td>
+                <td>
+                    <div style="display: flex; gap: 0.4rem;">
+                        <a href="/workorder/{{ order['code'] }}" class="btn btn-secondary btn-sm" title="Ver / Editar"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="/workorder/{{ order['code'] }}/pdf" target="_blank" class="btn btn-outline-sky btn-sm" title="Imprimir PDF"><i class="fa-solid fa-file-pdf"></i></a>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteWorkOrder('{{ order['code'] }}')" title="Eliminar"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8" style="text-align: center; color: #94a3b8; padding: 2.5rem;">
+                    <i class="fa-solid fa-folder-open fa-2x" style="margin-bottom: 0.5rem; display: block;"></i>
+                    Nenhuma ordem de trabalho encontrada com os critérios selecionados.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Órdenes de Trabajo SaaS{% endblock %} | EJAJ TECH</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+            <div>EJAJ <span>WORKORDERS</span></div>
+        </a>
+        <ul class="navbar-nav">
+            <li><a href="/" class="{% if request.path == '/' %}active{% endif %}"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="/workorders" class="{% if request.path == '/workorders' %}active{% endif %}"><i class="fa-solid fa-clipboard-list"></i> Ordens de Trabalho</a></li>
+            <li><a href="/workorder/new" class="btn-header-cta"><i class="fa-solid fa-plus"></i> Nova Folha de Serviço</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer & Support -->
+    <footer>
+        <p><strong>EJAJ TECH - Gestão Inteligente de Serviços & Manutenção</strong></p>
+        <p>Desenvolvido por Enmanuel Jimenez | Lead Architect & Founder</p>
+        <div class="footer-support">
+            <span>Precisa de assistência ou integração personalizada?</span>
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20Sistema%20de%20Ordenes%20de%20Trabajo" target="_blank" class="whatsapp-link">
+                <i class="fa-brands fa-whatsapp"></i> Suporte WhatsApp: +351 911 151 993 (Digite "AJUDA")
+            </a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.8rem; color: #64748b;">&copy; 2026 EJAJ TECH. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/workorders.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

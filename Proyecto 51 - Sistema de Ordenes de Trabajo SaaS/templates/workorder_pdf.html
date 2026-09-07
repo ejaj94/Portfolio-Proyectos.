@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folha_de_Servico_{{ order['code'] }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #0f172a;
+            margin: 0;
+            padding: 20px;
+            background: #ffffff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .header-table {
+            width: 100%;
+            border-bottom: 3px solid #06b6d4;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .logo-text span {
+            color: #06b6d4;
+        }
+
+        .wo-title {
+            text-align: right;
+            font-size: 20px;
+            font-weight: 700;
+            color: #0284c7;
+        }
+
+        .info-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            flex: 1;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 12px 15px;
+        }
+
+        .info-box h4 {
+            margin: 0 0 8px 0;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #64748b;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 4px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background: #f1f5f9;
+            text-align: left;
+            padding: 8px 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #475569;
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .totals-table {
+            width: 300px;
+            margin-left: auto;
+            margin-top: 15px;
+        }
+
+        .totals-table td {
+            border: none;
+            padding: 4px 10px;
+        }
+
+        .totals-table tr.grand-total {
+            font-size: 16px;
+            font-weight: 800;
+            color: #0284c7;
+            border-top: 2px solid #0f172a;
+        }
+
+        .signature-section {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .sig-box {
+            width: 250px;
+            text-align: center;
+            border-top: 1px solid #0f172a;
+            padding-top: 5px;
+            font-size: 12px;
+        }
+
+        @media print {
+            .no-print { display: none; }
+            body { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Printable Header Controls -->
+    <div class="no-print" style="margin-bottom: 20px; text-align: right;">
+        <button onclick="window.print()" style="background: #06b6d4; color: #0f172a; padding: 10px 20px; font-weight: 700; border: none; border-radius: 6px; cursor: pointer;">
+            🖨️ Imprimir / Imprimir em PDF
+        </button>
+    </div>
+
+    <!-- Company Header -->
+    <table class="header-table">
+        <tr>
+            <td>
+                <div class="logo-text">EJAJ <span>TECH</span></div>
+                <div style="font-size: 12px; color: #64748b;">Serviços Técnicos & Soluções Industriais</div>
+                <div style="font-size: 11px; color: #64748b;">WhatsApp / Suporte: +351 911 151 993</div>
+            </td>
+            <td class="wo-title">
+                FOLHA DE SERVIÇO<br>
+                <span style="color: #0f172a; font-size: 18px;">{{ order['code'] }}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Info Grid -->
+    <div class="info-grid">
+        <div class="info-box">
+            <h4>DADOS DO CLIENTE</h4>
+            <strong>{{ order['client_company'] }}</strong><br>
+            A/C: {{ order['client_name'] }}<br>
+            Tel: {{ order['client_phone'] }}<br>
+            Morada: {{ order['client_address'] }}
+        </div>
+        <div class="info-box">
+            <h4>DETALHES DO SERVIÇO</h4>
+            <strong>Data Emissão:</strong> {{ order['created_at'][:10] }}<br>
+            <strong>Técnico:</strong> {{ order['technician_name'] }}<br>
+            <strong>Prioridade:</strong> {{ order['priority'] }}<br>
+            <strong>Estado:</strong> {{ order['status'] }}
+        </div>
+    </div>
+
+    <!-- Intervenção -->
+    <div class="section-title">1. Diagnóstico & Avaria Declarada</div>
+    <p><strong>Título:</strong> {{ order['title'] }}</p>
+    <p style="background: #f8fafc; padding: 10px; border-left: 3px solid #06b6d4; border-radius: 4px;">{{ order['problem_description'] }}</p>
+
+    <div class="section-title">2. Relatório de Trabalhos Efetuados</div>
+    <p style="background: #f8fafc; padding: 10px; border-left: 3px solid #10b981; border-radius: 4px;">
+        {{ order['resolution_notes'] if order['resolution_notes'] else 'Intervenção em processamento pelo técnico responsável.' }}
+    </p>
+
+    <!-- Materials Table -->
+    <div class="section-title">3. Peças & Materiais Aplicados</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Descrição do Item / Peça</th>
+                <th style="width: 80px; text-align: center;">Qtd</th>
+                <th style="width: 120px; text-align: right;">Preço Unit. (€)</th>
+                <th style="width: 120px; text-align: right;">Total (€)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mat in materials %}
+            <tr>
+                <td>{{ mat['item_name'] }}</td>
+                <td style="text-align: center;">{{ mat['quantity'] }}</td>
+                <td style="text-align: right;">€{{ "%.2f"|format(mat['unit_price']) }}</td>
+                <td style="text-align: right;">€{{ "%.2f"|format(mat['total_price']) }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center; color: #94a3b8;">Sem peças faturadas separadamente.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Totals Table -->
+    <table class="totals-table">
+        <tr>
+            <td>Mão de Obra ({{ order['labor_hours'] }}h):</td>
+            <td style="text-align: right;">€{{ "%.2f"|format(order['labor_hours'] * order['labor_rate']) }}</td>
+        </tr>
+        <tr>
+            <td>Subtotal Materiais:</td>
+            <td style="text-align: right;">€{{ "%.2f"|format(order['subtotal_materials']) }}</td>
+        </tr>
+        <tr class="grand-total">
+            <td>TOTAL GERAL:</td>
+            <td style="text-align: right;">€{{ "%.2f"|format(order['total_cost']) }}</td>
+        </tr>
+    </table>
+
+    <!-- Signature Section -->
+    <div class="signature-section">
+        <div class="sig-box">
+            Técnico Responsável<br>
+            <strong>{{ order['technician_name'] }}</strong>
+        </div>
+
+        <div class="sig-box">
+            {% if order['signature_data'] %}
+                <img src="{{ order['signature_data'] }}" alt="Assinatura" style="height: 45px; display: block; margin: 0 auto;">
+                <br>
+            {% else %}
+                <div style="height: 45px;"></div>
+            {% endif %}
+            Conforme / Validação Cliente<br>
+            <strong>{{ order['signed_by_name'] if order['signed_by_name'] else order['client_name'] }}</strong>
+        </div>
+    </div>
+
+</body>
+</html>

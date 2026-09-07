@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}{{ order['code'] }} - {{ order['title'] }} | EJAJ Workorders SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <h1 style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">{{ order['code'] }}</h1>
+            {% if order['status'] == 'Pendente' %}
+                <span class="badge badge-pending">Pendente</span>
+            {% elif order['status'] == 'Em Progresso' %}
+                <span class="badge badge-progress">Em Progresso</span>
+            {% else %}
+                <span class="badge badge-completed"><i class="fa-solid fa-check"></i> Concluída</span>
+            {% endif %}
+
+            {% if 'Urgente' in order['priority'] %}
+                <span class="badge badge-priority-urgent">Urgente</span>
+            {% elif order['priority'] == 'Alta' %}
+                <span class="badge badge-priority-high">Alta</span>
+            {% else %}
+                <span class="badge badge-priority-medium">Média</span>
+            {% endif %}
+        </div>
+        <p style="color: #64748b;">Criada em: {{ order['created_at'] }} | Técnico: <strong>{{ order['technician_name'] }}</strong></p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/workorder/{{ order['code'] }}/pdf" target="_blank" class="btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Gerar Relatório PDF</a>
+        <a href="/workorders" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+    </div>
+</div>
+
+<div class="detail-grid">
+    <!-- Left Column: Details & Technical Notes -->
+    <div>
+        <!-- Client Information Panel -->
+        <div class="panel">
+            <div class="panel-title"><i class="fa-solid fa-building-user" style="color: #06b6d4;"></i> Informação do Cliente & Morada</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="info-group">
+                    <div class="info-label">Cliente / Contacto</div>
+                    <div class="info-value">{{ order['client_name'] }}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">Empresa</div>
+                    <div class="info-value">{{ order['client_company'] }}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">Telefone / Telemóvel</div>
+                    <div class="info-value"><i class="fa-solid fa-phone" style="color: #06b6d4;"></i> {{ order['client_phone'] }}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">Localização da Intervenção</div>
+                    <div class="info-value"><i class="fa-solid fa-location-dot" style="color: #ef4444;"></i> {{ order['client_address'] }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem & Resolution Panel -->
+        <div class="panel">
+            <div class="panel-title"><i class="fa-solid fa-clipboard-question" style="color: #06b6d4;"></i> Descrição da Avaria & Notas Técnicas</div>
+            
+            <div style="margin-bottom: 1.25rem;">
+                <div class="info-label">Título da Intervenção</div>
+                <h3 style="font-size: 1.15rem; color: #0f172a; font-weight: 700;">{{ order['title'] }}</h3>
+            </div>
+
+            <div style="margin-bottom: 1.25rem; background: #f8fafc; padding: 1rem; border-radius: 8px; border-left: 4px solid #06b6d4;">
+                <div class="info-label">Problema Declarado</div>
+                <p style="white-space: pre-wrap; font-size: 0.95rem;">{{ order['problem_description'] }}</p>
+            </div>
+
+            <!-- Technician Execution Notes Form -->
+            <div class="panel-title" style="margin-top: 1.5rem; font-size: 1.05rem;">
+                <i class="fa-solid fa-screwdriver-wrench" style="color: #06b6d4;"></i> Relatório de Trabalho Efetuado
+            </div>
+
+            <div class="form-group">
+                <label>Notas de Resolução do Técnico</label>
+                <textarea id="resolutionNotesInput" class="form-control" rows="4" placeholder="Descreva os testes efetuados, reparações, substituições e recomendações técnicas ao cliente...">{{ order['resolution_notes'] }}</textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                <div class="form-group">
+                    <label>Estado Atual</label>
+                    <select id="statusSelect" class="form-control">
+                        <option value="Pendente" {% if order['status'] == 'Pendente' %}selected{% endif %}>Pendente</option>
+                        <option value="Em Progresso" {% if order['status'] == 'Em Progresso' %}selected{% endif %}>Em Progresso</option>
+                        <option value="Concluída" {% if order['status'] == 'Concluída' %}selected{% endif %}>Concluída</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Horas de Trabalho</label>
+                    <input type="number" id="laborHoursInput" class="form-control" value="{{ order['labor_hours'] }}" step="0.5" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Preço / Hora (€)</label>
+                    <input type="number" id="laborRateInput" class="form-control" value="{{ order['labor_rate'] }}" step="1.0" min="0">
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="updateOrderStatus('{{ order['code'] }}')" style="margin-top: 0.5rem;">
+                <i class="fa-solid fa-floppy-disk"></i> Atualizar Relatório Técnico
+            </button>
+        </div>
+
+        <!-- Materials & Parts List -->
+        <div class="panel">
+            <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span><i class="fa-solid fa-boxes-stacked" style="color: #06b6d4;"></i> Peças & Materiais Utilizados</span>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="quickAddMaterial('{{ order['code'] }}')">
+                    <i class="fa-solid fa-plus"></i> Adicionar Peça
+                </button>
+            </div>
+
+            <table style="margin-top: 1rem;">
+                <thead>
+                    <tr>
+                        <th>Material / Peça</th>
+                        <th>Qtd</th>
+                        <th>Preço Unit.</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mat in materials %}
+                    <tr>
+                        <td><strong>{{ mat['item_name'] }}</strong></td>
+                        <td>{{ mat['quantity'] }}</td>
+                        <td>€{{ "%.2f"|format(mat['unit_price']) }}</td>
+                        <td><strong>€{{ "%.2f"|format(mat['total_price']) }}</strong></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #94a3b8;">Nenhum material registado nesta ordem.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Photos Attachment Gallery -->
+        {% if photos %}
+        <div class="panel">
+            <div class="panel-title"><i class="fa-solid fa-camera" style="color: #06b6d4;"></i> Registo Fotográfico da Intervenção</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                {% for photo in photos %}
+                <a href="{{ photo }}" target="_blank" style="display: block; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1;">
+                    <img src="{{ photo }}" alt="Foto da avaria" style="width: 100%; height: 130px; object-fit: cover; display: block;">
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Right Column: Digital Signature & Summary -->
+    <div>
+        <!-- Cost Summary Box -->
+        <div class="panel" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff;">
+            <div class="panel-title" style="color: #ffffff; border-bottom-color: #334155;">
+                <i class="fa-solid fa-receipt" style="color: #06b6d4;"></i> Resumo de Custos
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-size: 0.95rem;">
+                <span style="color: #cbd5e1;">Mão de Obra ({{ order['labor_hours'] }}h x €{{ "%.2f"|format(order['labor_rate']) }}):</span>
+                <strong>€{{ "%.2f"|format(order['labor_hours'] * order['labor_rate']) }}</strong>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-size: 0.95rem;">
+                <span style="color: #cbd5e1;">Subtotal Materiais:</span>
+                <strong>€{{ "%.2f"|format(order['subtotal_materials']) }}</strong>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #334155; margin: 1rem 0;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.3rem; font-weight: 800;">
+                <span style="color: #06b6d4;">TOTAL FINAL:</span>
+                <span style="color: #38bdf8;">€{{ "%.2f"|format(order['total_cost']) }}</span>
+            </div>
+        </div>
+
+        <!-- Digital Signature Canvas Box -->
+        <div class="panel">
+            <div class="panel-title"><i class="fa-solid fa-signature" style="color: #06b6d4;"></i> Assinatura Digital do Cliente</div>
+            
+            {% if order['signature_data'] %}
+                <div style="text-align: center; background: #f8fafc; padding: 1rem; border-radius: 8px; border: 1px solid #cbd5e1;">
+                    <p style="font-size: 0.85rem; color: #10b981; font-weight: 700; margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-check"></i> Ordem Assinada & Concluída</p>
+                    <img src="{{ order['signature_data'] }}" alt="Assinatura Digital" style="max-width: 100%; height: 80px; display: block; margin: 0 auto;">
+                    <div style="font-size: 0.9rem; font-weight: 700; margin-top: 0.5rem; color: #0f172a;">Assinado por: {{ order['signed_by_name'] }}</div>
+                    <div style="font-size: 0.78rem; color: #64748b;">Data: {{ order['signed_at'] }}</div>
+                </div>
+            {% else %}
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 0.75rem;">
+                    Assine com o dedo no ecrã tátil ou com o rato para confirmar a receção e aceitação do serviço efetuado.
+                </p>
+
+                <div class="form-group">
+                    <label>Nome Completo do Assinante *</label>
+                    <input type="text" id="signerNameInput" class="form-control" value="{{ order['client_name'] }}" placeholder="Nome de quem assina">
+                </div>
+
+                <div class="signature-box">
+                    <canvas id="sigCanvas" width="450" height="180"></canvas>
+                    <div style="margin-top: 0.5rem; display: flex; justify-content: space-between;">
+                        <button type="button" id="btnClearSignature" class="btn btn-secondary btn-sm"><i class="fa-solid fa-eraser"></i> Limpar</button>
+                        <button type="button" id="btnSaveSignature" data-code="{{ order['code'] }}" class="btn btn-success btn-sm"><i class="fa-solid fa-check"></i> Confirmar Assinatura</button>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
