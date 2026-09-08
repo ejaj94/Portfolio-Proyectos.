@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard do Cliente{% endblock %}
+{% block header_title %}Painel Geral & Visão Geral de Projetos{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">Bem-vindo(a), {{ user['full_name'] }}!</h1>
+    <p style="color: #64748b;">Acompanhe o desenvolvimento dos seus projetos, orçamentos e faturações em tempo real.</p>
+</div>
+
+<!-- KPI Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card cyan">
+        <div class="kpi-label"><i class="fa-solid fa-diagram-project"></i> Projetos Ativos</div>
+        <div class="kpi-val">{{ active_projects_count }}</div>
+    </div>
+
+    <div class="kpi-card amber">
+        <div class="kpi-label"><i class="fa-solid fa-clock"></i> Faturas Pendentes</div>
+        <div class="kpi-val" style="color: #d97706;">€{{ "%.2f"|format(pending_invoices_total) }}</div>
+    </div>
+
+    <div class="kpi-card green">
+        <div class="kpi-label"><i class="fa-solid fa-circle-check"></i> Orçamentos Aprovados</div>
+        <div class="kpi-val" style="color: #10b981;">€{{ "%.2f"|format(approved_budgets_total) }}</div>
+    </div>
+
+    <div class="kpi-card blue">
+        <div class="kpi-label"><i class="fa-solid fa-headset"></i> Tickets de Suporte</div>
+        <div class="kpi-val" style="color: #3a86ff;">{{ open_tickets_count }}</div>
+    </div>
+</div>
+
+<div class="layout-grid">
+    <!-- Active Projects List -->
+    <div>
+        <div class="card-panel">
+            <div class="card-title">
+                <span><i class="fa-solid fa-rocket" style="color: #3a86ff;"></i> Projetos em Desenvolvimento</span>
+                <a href="/projects" class="btn btn-secondary btn-sm">Ver Todos</a>
+            </div>
+
+            {% for prj in projects %}
+            <div style="padding: 1.25rem; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <div>
+                        <span style="font-size: 0.8rem; font-weight: 700; color: #3a86ff;">{{ prj['project_code'] }}</span>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: #0f172a;">{{ prj['title'] }}</h3>
+                    </div>
+                    {% if prj['status'] == 'Concluído' %}
+                        <span class="badge badge-completed">Concluído</span>
+                    {% elif prj['status'] == 'Fase de Testes' %}
+                        <span class="badge badge-urgent" style="background: #e0e7ff; color: #3730a3;">Fase de Testes</span>
+                    {% else %}
+                        <span class="badge badge-progress">Em Desenvolvimento</span>
+                    {% endif %}
+                </div>
+
+                <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 0.75rem;">{{ prj['description'][:130] }}...</p>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; font-weight: 700; color: #0f172a; margin-bottom: 0.3rem;">
+                    <span>Progresso de Execução</span>
+                    <span style="color: #3a86ff;">{{ prj['progress_pct'] }}%</span>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar-fill" style="width: {{ prj['progress_pct'] }}%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-size: 0.85rem;">
+                    <span style="color: #64748b;"><i class="fa-regular fa-calendar"></i> Prazo: <strong>{{ prj['deadline'] }}</strong></span>
+                    <a href="/project/{{ prj['id'] }}" class="btn btn-blue btn-sm"><i class="fa-solid fa-eye"></i> Detalhes & Fases</a>
+                </div>
+            </div>
+            {% else %}
+            <p style="color: #94a3b8; text-align: center; padding: 2rem;">Sem projetos ativos no momento.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Right Sidebar Activity & Quick Actions -->
+    <div>
+        <!-- Recent Chat Stream -->
+        <div class="card-panel">
+            <div class="card-title">
+                <span><i class="fa-solid fa-comments" style="color: #00f5d4;"></i> Comunicação Recente</span>
+                <a href="/messages" class="btn btn-secondary btn-sm">Abrir Chat</a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                {% for msg in messages %}
+                <div style="padding: 0.85rem; border-radius: 8px; background: {% if msg['is_agency'] %}#f0f9ff{% else %}#f8fafc{% endif %}; border-left: 3px solid {% if msg['is_agency'] %}#00f5d4{% else %}#3a86ff{% endif %}; font-size: 0.88rem;">
+                    <div style="font-weight: 700; font-size: 0.8rem; color: #0f172a; margin-bottom: 0.2rem;">
+                        {{ msg['sender_name'] }} {% if msg['is_agency'] %}<span class="badge badge-completed" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">EJAJ TECH</span>{% endif %}
+                    </div>
+                    <div style="color: #334155;">{{ msg['content'] }}</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.3rem;">{{ msg['sent_at'] }}</div>
+                </div>
+                {% else %}
+                <p style="color: #94a3b8; font-size: 0.85rem;">Nenhuma mensagem recente.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Support Callout Card -->
+        <div class="card-panel" style="background: linear-gradient(135deg, #1c2541 0%, #0b132b 100%); color: #ffffff;">
+            <h3 style="color: #00f5d4; font-size: 1.1rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-headset"></i> Apoio ao Cliente 24/7</h3>
+            <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 1rem;">
+                Tem alguma dúvida sobre os marcos do projeto ou precisa de ajustar especificações? Abra um ticket técnico direto com a equipa da EJAJ TECH.
+            </p>
+            <a href="/support" class="btn btn-cyan" style="width: 100%; justify-content: center;"><i class="fa-solid fa-plus-circle"></i> Enviar Ticket de Suporte</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Meu Perfil{% endblock %}
+{% block header_title %}Definições da Conta do Cliente{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="margin-bottom: 1.5rem;">
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">Definições de Perfil</h1>
+        <p style="color: #64748b;">Mantenha os dados de contacto da sua empresa atualizados.</p>
+    </div>
+
+    <div class="card-panel">
+        <div style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid #e2e8f0;">
+            <img src="{{ user['avatar_url'] }}" alt="Avatar" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #00f5d4;">
+            <div>
+                <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a;">{{ user['full_name'] }}</h2>
+                <p style="color: #3a86ff; font-weight: 700; font-size: 0.9rem;">{{ user['company_name'] }}</p>
+                <span class="badge badge-progress" style="background: #e0f2fe; color: #0369a1; margin-top: 0.3rem;">Cliente Verificado</span>
+            </div>
+        </div>
+
+        <form onsubmit="updateProfile(event)">
+            <div class="form-group">
+                <label>Nome Completo do Responsável *</label>
+                <input type="text" id="fullNameInput" class="form-control" value="{{ user['full_name'] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Nome da Empresa / Organização *</label>
+                <input type="text" id="companyNameInput" class="form-control" value="{{ user['company_name'] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email de Contacto (Leitura)</label>
+                <input type="email" class="form-control" value="{{ user['email'] }}" disabled style="background: #f1f5f9;">
+            </div>
+
+            <div class="form-group">
+                <label>Telefone / Telemóvel de Contacto *</label>
+                <input type="text" id="phoneInput" class="form-control" value="{{ user['phone'] }}" required>
+            </div>
+
+            <div style="margin-top: 1.5rem; text-align: right;">
+                <button type="submit" class="btn btn-cyan btn-lg"><i class="fa-solid fa-floppy-disk"></i> Guardar Alterações</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

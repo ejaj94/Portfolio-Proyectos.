@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Canal de Comunicação{% endblock %}
+{% block header_title %}Mensagens & Chat Direto com a Equipas EJAJ TECH{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">Canal de Mensagens</h1>
+        <p style="color: #64748b;">Comunicação direta com o seu gestor de conta e equipa de engenharia.</p>
+    </div>
+</div>
+
+<div class="card-panel">
+    <div class="chat-container" style="max-height: 500px; margin-bottom: 1.5rem;">
+        {% for msg in messages %}
+        <div class="chat-bubble {% if msg['is_agency'] %}agency{% else %}client{% endif %}">
+            <div style="font-weight: 700; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                {{ msg['sender_name'] }} {% if msg['is_agency'] %}<span class="badge badge-completed" style="font-size: 0.65rem; padding: 0.1rem 0.4rem;">EJAJ TECH</span>{% endif %}
+            </div>
+            <div>{{ msg['content'] }}</div>
+            <div class="chat-meta">{{ msg['sent_at'] }}</div>
+        </div>
+        {% else %}
+        <p style="text-align: center; color: #94a3b8; padding: 2rem;">Ainda não existem mensagens trocadas neste canal.</p>
+        {% endfor %}
+    </div>
+
+    <form onsubmit="sendMessage(event)">
+        <div class="form-group">
+            <label>Projeto Relacionado (Opcional)</label>
+            <select id="chatProjectSelect" class="form-control" style="margin-bottom: 0.75rem;">
+                <option value="">Geral / Sem Projeto Específico</option>
+                {% for p in projects %}
+                <option value="{{ p['id'] }}">{{ p['project_code'] }} - {{ p['title'] }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Sua Mensagem</label>
+            <textarea id="chatInput" class="form-control" rows="3" placeholder="Escreva a sua mensagem para a equipa EJAJ TECH..." required></textarea>
+        </div>
+        <div style="text-align: right;">
+            <button type="submit" class="btn btn-cyan btn-lg"><i class="fa-solid fa-paper-plane"></i> Enviar Mensagem</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

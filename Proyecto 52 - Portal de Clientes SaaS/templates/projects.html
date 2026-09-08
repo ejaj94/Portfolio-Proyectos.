@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Meus Projetos{% endblock %}
+{% block header_title %}Lista de Projetos Ativos & Concluídos{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">Meus Projetos Contratados</h1>
+        <p style="color: #64748b;">Consulte o estado de desenvolvimento, percentagem de conclusão e datas de entrega.</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+    {% for prj in projects %}
+    <div class="card-panel" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <span class="badge badge-progress" style="background: #e0f2fe; color: #0369a1;">{{ prj['category'] }}</span>
+                {% if prj['status'] == 'Concluído' %}
+                    <span class="badge badge-completed">Concluído</span>
+                {% elif prj['status'] == 'Fase de Testes' %}
+                    <span class="badge badge-urgent" style="background: #e0e7ff; color: #3730a3;">Fase de Testes</span>
+                {% else %}
+                    <span class="badge badge-progress">Em Desenvolvimento</span>
+                {% endif %}
+            </div>
+
+            <span style="font-size: 0.8rem; font-weight: 700; color: #3a86ff;">{{ prj['project_code'] }}</span>
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0.2rem 0 0.5rem 0;">{{ prj['title'] }}</h2>
+            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 1rem;">{{ prj['description'] }}</p>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.3rem;">
+                <span>Progresso</span>
+                <span style="color: #3a86ff;">{{ prj['progress_pct'] }}%</span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar-fill" style="width: {{ prj['progress_pct'] }}%;"></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Orçamento Total</div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: #0f172a;">€{{ "%.2f"|format(prj['budget_total']) }}</div>
+            </div>
+            <a href="/project/{{ prj['id'] }}" class="btn btn-blue btn-sm"><i class="fa-solid fa-diagram-project"></i> Ver Fases & Marcos</a>
+        </div>
+    </div>
+    {% else %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0;">
+        <i class="fa-solid fa-folder-open fa-3x" style="color: #cbd5e1; margin-bottom: 1rem;"></i>
+        <h3 style="color: #64748b;">Nenhum projeto registado.</h3>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
