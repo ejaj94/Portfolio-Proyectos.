@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Planos de Membresia | FitClub Gym SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #111827;">Planos de Membresia & Quotas</h1>
+        <p style="color: #6b7280;">Catálogo de mensalidades, vantagens e acesso ao ginásio.</p>
+    </div>
+    <a href="/member/new" class="btn btn-lime"><i class="fa-solid fa-user-plus"></i> Inscrever Sócio</a>
+</div>
+
+<div class="plan-grid">
+    {% for p in plans %}
+    <div class="plan-card {% if p['is_popular'] %}popular{% endif %}">
+        <div>
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: #111827;">{{ p['name'] }}</h2>
+            <div class="plan-price">€{{ "%.2f"|format(p['price']) }} <span>/mês</span></div>
+
+            <div style="font-size: 0.85rem; font-weight: 700; color: #10b981; margin-bottom: 1rem;">
+                <i class="fa-regular fa-clock"></i> {{ p['access_hours'] }}
+            </div>
+
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.9rem; color: #4b5563; margin-bottom: 1.5rem;">
+                {% for perk in p['perks'].split(',') %}
+                <li style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-check" style="color: #10b981;"></i> {{ perk.strip() }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <a href="/member/new" class="btn {% if p['is_popular'] %}btn-lime{% else %}btn-secondary{% endif %}" style="width: 100%; justify-content: center;">
+            <i class="fa-solid fa-cart-shopping"></i> Selecionar Plano
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

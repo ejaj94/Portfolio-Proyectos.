@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}{{ member['full_name'] }} | FitClub Gym SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 0.9rem; font-weight: 800; color: #10b981;">{{ member['member_code'] }}</span>
+            {% if member['status'] == 'Ativo' %}
+                <span class="badge badge-active"><i class="fa-solid fa-check"></i> Ativo</span>
+            {% else %}
+                <span class="badge badge-expired">Atrasado / Vencido</span>
+            {% endif %}
+        </div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #111827; margin-top: 0.25rem;">{{ member['full_name'] }}</h1>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <button type="button" class="btn btn-lime" onclick="renewMembership({{ member['id'] }})"><i class="fa-solid fa-rotate"></i> Renovar Quota</button>
+        <a href="/members" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+    <!-- Left Column: Member Card Info -->
+    <div>
+        <div class="panel-card" style="text-align: center;">
+            <img src="{{ member['avatar_url'] }}" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid #10b981; margin-bottom: 1rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: #111827;">{{ member['full_name'] }}</h2>
+            <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 1rem;">{{ member['email'] }}</p>
+
+            <div style="text-align: left; background: #f9fafb; padding: 1rem; border-radius: 10px; border: 1px solid #e5e7eb; font-size: 0.9rem;">
+                <div style="margin-bottom: 0.6rem;"><strong>Telefone:</strong> {{ member['phone'] }}</div>
+                <div style="margin-bottom: 0.6rem;"><strong>NIF:</strong> {{ member['nif'] }}</div>
+                <div style="margin-bottom: 0.6rem;"><strong>Inscrição:</strong> {{ member['start_date'] }}</div>
+                <div><strong>Vencimento:</strong> <span style="color: #ef4444; font-weight: 700;">{{ member['expiration_date'] }}</span></div>
+            </div>
+        </div>
+
+        <!-- Plan Card -->
+        <div class="panel-card" style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); color: #ffffff;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #22c55e; text-transform: uppercase;">Plano de Membresia Ativo</div>
+            <h3 style="font-size: 1.3rem; font-weight: 800; color: #ffffff; margin: 0.3rem 0;">{{ member['plan_name'] }}</h3>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #22c55e; margin-bottom: 0.75rem;">€{{ "%.2f"|format(member['plan_price']) }}<span style="font-size: 0.85rem; color: #9ca3af;">/mês</span></div>
+            
+            <p style="font-size: 0.85rem; color: #d1d5db; margin-bottom: 0.5rem;"><i class="fa-regular fa-clock"></i> <strong>Horário:</strong> {{ member['access_hours'] }}</p>
+            <p style="font-size: 0.85rem; color: #d1d5db;"><i class="fa-solid fa-gift"></i> <strong>Benefícios:</strong> {{ member['perks'] }}</p>
+        </div>
+    </div>
+
+    <!-- Right Column: Payment Ledger & Check-ins -->
+    <div>
+        <!-- Payment Ledger -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-receipt" style="color: #10b981;"></i> Histórico de Recibos & Pagamentos</h2>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>N.º Recibo</th>
+                        <th>Valor (€)</th>
+                        <th>Método</th>
+                        <th>Data</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in payments %}
+                    <tr>
+                        <td><strong>{{ p['receipt_number'] }}</strong></td>
+                        <td><strong style="color: #10b981;">€{{ "%.2f"|format(p['amount']) }}</strong></td>
+                        <td>{{ p['payment_method'] }}</td>
+                        <td>{{ p['payment_date'][:10] }}</td>
+                        <td><span class="badge badge-active"><i class="fa-solid fa-check"></i> Pago</span></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #9ca3af;">Nenhum pagamento registado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Attendance Logs -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-qrcode" style="color: #22c55e;"></i> Histórico de Entradas no Ginásio</h2>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data & Hora</th>
+                        <th>Método de Entrada</th>
+                        <th>Estado Acesso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in attendances %}
+                    <tr>
+                        <td><i class="fa-regular fa-clock" style="color: #6b7280;"></i> {{ a['checkin_time'] }}</td>
+                        <td>{{ a['entry_type'] }}</td>
+                        <td><span class="badge badge-active"><i class="fa-solid fa-shield-halved"></i> Autorizado</span></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: #9ca3af;">Nenhum registo de entrada recente.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

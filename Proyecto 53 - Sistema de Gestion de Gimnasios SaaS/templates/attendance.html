@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Registo de Asistência & Check-ins | FitClub Gym SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #111827;">Registo Diário de Asistência (Check-ins)</h1>
+        <p style="color: #6b7280;">Histórico de entradas nos torniquetes e receção em tempo real.</p>
+    </div>
+    <button type="button" class="btn btn-lime" onclick="openCheckinModal()"><i class="fa-solid fa-qrcode"></i> Simular Entrada QR</button>
+</div>
+
+<div class="panel-card" style="padding: 0;">
+    <table>
+        <thead>
+            <tr>
+                <th>ID Registo</th>
+                <th>Nome do Sócio</th>
+                <th>Data & Hora de Entrada</th>
+                <th>Método de Validação</th>
+                <th>Estado Acesso</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in attendances %}
+            <tr>
+                <td><strong>#{{ a['id'] }}</strong></td>
+                <td><strong style="color: #111827;">{{ a['member_name'] }}</strong></td>
+                <td><i class="fa-regular fa-clock" style="color: #6b7280;"></i> {{ a['checkin_time'] }}</td>
+                <td><span class="badge badge-active" style="background: #e0f2fe; color: #0369a1;">{{ a['entry_type'] }}</span></td>
+                <td><span class="badge badge-active"><i class="fa-solid fa-circle-check"></i> Autorizado</span></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2.5rem;">Nenhum registo de entrada recente.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Aulas de Grupo | FitClub Gym SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #111827;">Agenda de Aulas de Grupo</h1>
+        <p style="color: #6b7280;">Horários, lotação de estúdios e instrutores de cada modalidade.</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for c in classes %}
+    <div class="panel-card" style="margin-bottom: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <span class="badge badge-active" style="background: #e0f2fe; color: #0369a1;"><i class="fa-regular fa-clock"></i> {{ c['schedule_time'] }}</span>
+            <span class="badge badge-active">{{ c['enrolled_count'] }}/{{ c['max_capacity'] }} Vagas</span>
+        </div>
+
+        <h2 style="font-size: 1.25rem; font-weight: 800; color: #111827; margin-bottom: 0.5rem;">{{ c['class_name'] }}</h2>
+        
+        <div style="font-size: 0.9rem; color: #4b5563; margin-bottom: 1rem;">
+            <div><i class="fa-solid fa-user-ninja" style="color: #10b981;"></i> PT: <strong>{{ c['trainer_name'] }}</strong></div>
+            <div><i class="fa-solid fa-location-dot" style="color: #ef4444;"></i> <strong>Local:</strong> {{ c['room'] }}</div>
+        </div>
+
+        <div style="background: #e5e7eb; border-radius: 50px; height: 8px; width: 100%; overflow: hidden;">
+            <div style="background: #10b981; height: 100%; width: {{ (c['enrolled_count'] / c['max_capacity'] * 100)|round|int }}%;"></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

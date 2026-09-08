@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Diretório de Sócios | FitClub Gym SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #111827;">Diretório Geral de Sócios</h1>
+        <p style="color: #6b7280;">Pesquise, filtre e gira o estado das inscricões do ginásio.</p>
+    </div>
+    <a href="/member/new" class="btn btn-lime"><i class="fa-solid fa-user-plus"></i> Inscrever Novo Sócio</a>
+</div>
+
+<!-- Search & Filter Bar -->
+<div class="panel-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+    <form method="GET" action="/members" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+        <div style="flex: 2; min-width: 200px;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #6b7280; text-transform: uppercase;">Pesquisa por Texto</label>
+            <input type="text" name="q" class="form-control" placeholder="Código Sócio, Nome, Email ou NIF..." value="{{ query_search }}">
+        </div>
+
+        <div style="flex: 1; min-width: 150px;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #6b7280; text-transform: uppercase;">Estado da Quota</label>
+            <select name="status" class="form-control">
+                <option value="">Todos os Estados</option>
+                <option value="Ativo" {% if status_filter == 'Ativo' %}selected{% endif %}>Ativo</option>
+                <option value="Atrasado" {% if status_filter == 'Atrasado' %}selected{% endif %}>Atrasado / Vencido</option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-lime"><i class="fa-solid fa-filter"></i> Filtrar</button>
+            <a href="/members" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Limpar</a>
+        </div>
+    </form>
+</div>
+
+<!-- Members Table Card -->
+<div class="panel-card" style="padding: 0;">
+    <table>
+        <thead>
+            <tr>
+                <th>Código / Sócio</th>
+                <th>Contacto / Email</th>
+                <th>Plano Contratado</th>
+                <th>Data de Vencimento</th>
+                <th>Estado Quota</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in members %}
+            <tr>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <img src="{{ m['avatar_url'] }}" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        <div>
+                            <div style="font-weight: 700; color: #111827;">
+                                <a href="/member/{{ m['id'] }}" style="color: #111827; text-decoration: none;">{{ m['full_name'] }}</a>
+                            </div>
+                            <div style="font-size: 0.78rem; color: #10b981; font-weight: 700;">{{ m['member_code'] }}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div style="font-size: 0.88rem;"><i class="fa-solid fa-phone" style="color: #6b7280;"></i> {{ m['phone'] }}</div>
+                    <div style="font-size: 0.8rem; color: #6b7280;">NIF: {{ m['nif'] }}</div>
+                </td>
+                <td>
+                    <span class="badge badge-active" style="background: #e0f2fe; color: #0369a1;">{{ m['plan_name'] }}</span>
+                    <div style="font-size: 0.8rem; color: #6b7280;">€{{ "%.2f"|format(m['plan_price']) }}/mês</div>
+                </td>
+                <td>
+                    <strong><i class="fa-regular fa-calendar"></i> {{ m['expiration_date'] }}</strong>
+                </td>
+                <td>
+                    {% if m['status'] == 'Ativo' %}
+                        <span class="badge badge-active"><i class="fa-solid fa-check"></i> Ativo</span>
+                    {% else %}
+                        <span class="badge badge-expired">Atrasado / Vencido</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div style="display: flex; gap: 0.4rem;">
+                        <a href="/member/{{ m['id'] }}" class="btn btn-secondary btn-sm" title="Ver Ficha"><i class="fa-solid fa-id-card"></i> Ficha</a>
+                        <button type="button" class="btn btn-lime btn-sm" onclick="renewMembership({{ m['id'] }})" title="Renovar Quota"><i class="fa-solid fa-rotate"></i> Renovar</button>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center; color: #9ca3af; padding: 2.5rem;">Nenhum sócio encontrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

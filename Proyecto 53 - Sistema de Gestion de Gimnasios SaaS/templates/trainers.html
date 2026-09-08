@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Equipa de Treinadores | FitClub Gym SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #111827;">Equipa de Personal Trainers & Instrutores</h1>
+        <p style="color: #6b7280;">Profissionais certificados responsáveis pelas aulas e treinos acompanhados.</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for t in trainers %}
+    <div class="panel-card" style="margin-bottom: 0;">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="width: 54px; height: 54px; background: #111827; color: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800;">
+                {{ t['name'][0] }}
+            </div>
+            <div>
+                <h2 style="font-size: 1.15rem; font-weight: 800; color: #111827;">{{ t['name'] }}</h2>
+                <div style="font-size: 0.85rem; color: #10b981; font-weight: 700;">{{ t['specialty'] }}</div>
+            </div>
+        </div>
+
+        <div style="background: #f9fafb; padding: 0.85rem; border-radius: 8px; font-size: 0.88rem; color: #4b5563;">
+            <div style="margin-bottom: 0.3rem;"><i class="fa-solid fa-phone" style="color: #10b981;"></i> {{ t['phone'] }}</div>
+            <div><i class="fa-solid fa-envelope" style="color: #10b981;"></i> {{ t['email'] }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

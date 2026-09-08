@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Inscrever Novo Sócio | FitClub Gym SaaS{% endblock %}
+
+{% block content %}
+<div style="max-width: 750px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.8rem; font-weight: 800; color: #111827;">Inscrição de Novo Sócio</h1>
+            <p style="color: #6b7280;">Código de Sócio Atribuído: <strong style="color: #10b981;">{{ next_code }}</strong></p>
+        </div>
+        <a href="/members" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+    </div>
+
+    <div class="panel-card">
+        <form onsubmit="submitNewMemberForm(event)">
+            <div class="form-group">
+                <label>Nome Completo do Sócio *</label>
+                <input type="text" id="full_name" class="form-control" placeholder="Ex: Dra. Sofia Martins" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label>Email de Contacto *</label>
+                    <input type="email" id="email" class="form-control" placeholder="socio@email.pt" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefone / Telemóvel *</label>
+                    <input type="text" id="phone" class="form-control" placeholder="+351 912 345 678" required>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label>NIF (Número de Contribuinte) *</label>
+                    <input type="text" id="nif" class="form-control" placeholder="245890123" required>
+                </div>
+                <div class="form-group">
+                    <label>Plano de Membresia Selecionado *</label>
+                    <select id="plan_id" class="form-control" required>
+                        {% for p in plans %}
+                            <option value="{{ p['id'] }}">{{ p['name'] }} — €{{ "%.2f"|format(p['price']) }}/mês ({{ p['access_hours'] }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+                <a href="/members" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-lime btn-lg"><i class="fa-solid fa-check"></i> Concluir Inscrição & Registar Pagamento</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

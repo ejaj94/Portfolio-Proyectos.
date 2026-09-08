@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Vencimentos de Quotas | FitClub Gym SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #111827;">Gestão de Vencimentos & Quotas a Expirar</h1>
+        <p style="color: #6b7280;">Acompanhe as mensalidades com caducidade nos próximos 15 dias ou em atraso.</p>
+    </div>
+</div>
+
+<div class="panel-card" style="padding: 0;">
+    <table>
+        <thead>
+            <tr>
+                <th>Sócio / Código</th>
+                <th>Contacto</th>
+                <th>Plano Ativo</th>
+                <th>Data de Vencimento</th>
+                <th>Estado Quota</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in members %}
+            <tr>
+                <td>
+                    <div style="font-weight: 700; color: #111827;">{{ m['full_name'] }}</div>
+                    <div style="font-size: 0.8rem; color: #10b981; font-weight: 700;">{{ m['member_code'] }}</div>
+                </td>
+                <td><i class="fa-solid fa-phone" style="color: #6b7280;"></i> {{ m['phone'] }}</td>
+                <td><strong>{{ m['plan_name'] }}</strong> (€{{ "%.2f"|format(m['plan_price']) }})</td>
+                <td><strong style="color: #ef4444;"><i class="fa-regular fa-calendar"></i> {{ m['expiration_date'] }}</strong></td>
+                <td>
+                    {% if m['status'] == 'Ativo' %}
+                        <span class="badge badge-warning">A Expirar Brevemente</span>
+                    {% else %}
+                        <span class="badge badge-expired">Vencido / Quota em Atraso</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <button type="button" class="btn btn-lime btn-sm" onclick="renewMembership({{ m['id'] }})">
+                        <i class="fa-solid fa-rotate"></i> Renovar Quota Já
+                    </button>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center; color: #9ca3af; padding: 2.5rem;">Nenhum vencimento pendente para os próximos 15 dias.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
