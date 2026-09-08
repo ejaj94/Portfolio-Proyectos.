@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Empregados de Mesa | Gourmet POS SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary);">Equipa de Empregados de Mesa</h1>
+        <p style="color: var(--text-muted);">Atribuição de zonas da sala, turnos e estado de serviço.</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for w in waiters %}
+    <div class="panel-card" style="margin-bottom: 0;">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="width: 50px; height: 50px; background: var(--violet-light); color: var(--violet-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800;">
+                <i class="fa-solid fa-user-tie"></i>
+            </div>
+            <div>
+                <h2 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">{{ w['name'] }}</h2>
+                <span class="badge badge-free" style="font-size: 0.7rem;">{{ w['status'] }}</span>
+            </div>
+        </div>
+
+        <div style="background: var(--violet-light); padding: 0.85rem; border-radius: 8px; font-size: 0.88rem; color: var(--text-primary);">
+            <div style="margin-bottom: 0.3rem;"><i class="fa-solid fa-phone" style="color: var(--violet-primary);"></i> {{ w['phone'] }}</div>
+            <div style="margin-bottom: 0.3rem;"><i class="fa-solid fa-clock" style="color: var(--violet-primary);"></i> <strong>Turno:</strong> {{ w['shift'] }}</div>
+            <div><i class="fa-solid fa-table-cells" style="color: var(--violet-primary);"></i> <strong>Mesas Atribuídas:</strong> {{ w['assigned_tables'] }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

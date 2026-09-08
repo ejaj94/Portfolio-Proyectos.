@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Cozinha KDS | Gourmet POS SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary);"><i class="fa-solid fa-fire-burner" style="color: #ef4444;"></i> Ecrã de Controlo da Cozinha (KDS)</h1>
+        <p style="color: var(--text-muted);">Fila de confeção de pratos em tempo real para a equipa da cozinha.</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+    {% for item in items %}
+    <div class="panel-card" style="margin-bottom: 0; border-left: 5px solid {% if item['kitchen_status'] == 'A Cozinhar' %}#3b82f6{% elif item['kitchen_status'] == 'Pronto' %}#10b981{% else %}#f59e0b{% endif %};">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+            <div>
+                <strong style="font-size: 1.2rem; color: var(--violet-primary);">Mesa {{ item['table_number'] }}</strong>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Comanda: {{ item['order_code'] }}</div>
+            </div>
+            {% if item['kitchen_status'] == 'Pronto' %}
+                <span class="badge badge-free"><i class="fa-solid fa-bell"></i> Pronto a Servir</span>
+            {% elif item['kitchen_status'] == 'A Cozinhar' %}
+                <span class="badge badge-cooking"><i class="fa-solid fa-fire"></i> A Cozinhar</span>
+            {% else %}
+                <span class="badge badge-reserved">Pendente</span>
+            {% endif %}
+        </div>
+
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin: 0.5rem 0;">
+            {{ item['quantity'] }}x {{ item['item_name'] }}
+        </h3>
+
+        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            <i class="fa-solid fa-user-tie"></i> Empregado: {{ item['waiter_name'] }}
+        </div>
+
+        <div style="display: flex; gap: 0.4rem; justify-content: flex-end;">
+            {% if item['kitchen_status'] != 'A Cozinhar' %}
+                <button type="button" class="btn btn-secondary btn-sm" onclick="updateKitchenStatus({{ item['id'] }}, 'A Cozinhar')">🔥 Cozinhar</button>
+            {% endif %}
+
+            {% if item['kitchen_status'] != 'Pronto' %}
+                <button type="button" class="btn btn-violet btn-sm" onclick="updateKitchenStatus({{ item['id'] }}, 'Pronto')">🔔 Marcar Pronto</button>
+            {% endif %}
+
+            <button type="button" class="btn btn-secondary btn-sm" onclick="updateKitchenStatus({{ item['id'] }}, 'Entregue')">✔ Entregue</button>
+        </div>
+    </div>
+    {% else %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color);">
+        <i class="fa-solid fa-circle-check fa-3x" style="color: #10b981; margin-bottom: 1rem;"></i>
+        <h3 style="color: var(--text-primary);">Todos os pratos foram confecionados! Cozinha limpa.</h3>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

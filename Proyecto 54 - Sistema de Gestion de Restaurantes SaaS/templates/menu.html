@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Menú Digital | Gourmet POS SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary);">Menú Digital do Restaurante</h1>
+        <p style="color: var(--text-muted);">Carta gastronómica, preços e informação de alergénios.</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for m in menu_items %}
+    <div class="panel-card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <span class="badge badge-free" style="background: var(--violet-light); color: var(--violet-primary);">{{ m['category'] }}</span>
+                <strong style="font-size: 1.25rem; color: var(--violet-primary);">€{{ "%.2f"|format(m['price']) }}</strong>
+            </div>
+
+            <h2 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.4rem;">{{ m['name'] }}</h2>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;">{{ m['description'] }}</p>
+        </div>
+
+        <div style="padding-top: 0.75rem; border-top: 1px solid var(--border-color); font-size: 0.78rem; color: #ef4444; font-weight: 700;">
+            <i class="fa-solid fa-triangle-exclamation"></i> Alergénios: {{ m['allergens'] }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

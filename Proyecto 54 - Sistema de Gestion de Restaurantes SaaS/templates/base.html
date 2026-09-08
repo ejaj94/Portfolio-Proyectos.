@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gourmet POS SaaS{% endblock %} | EJAJ TECH</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <i class="fa-solid fa-utensils" style="color: var(--violet-primary);"></i>
+            <div>GOURMET <span>POS</span></div>
+        </a>
+
+        <ul class="navbar-nav">
+            <li><a href="/" class="{% if request.path == '/' %}active{% endif %}"><i class="fa-solid fa-chart-line"></i> <span data-i18n="dashboard">Dashboard</span></a></li>
+            <li><a href="/tables" class="{% if request.path == '/tables' %}active{% endif %}"><i class="fa-solid fa-table-cells"></i> <span data-i18n="tables">Mesas</span></a></li>
+            <li><a href="/reservations" class="{% if request.path == '/reservations' %}active{% endif %}"><i class="fa-regular fa-calendar-check"></i> <span data-i18n="reservations">Reservas</span></a></li>
+            <li><a href="/orders" class="{% if request.path == '/orders' %}active{% endif %}"><i class="fa-solid fa-cash-register"></i> <span data-i18n="orders">Comandas POS</span></a></li>
+            <li><a href="/menu" class="{% if request.path == '/menu' %}active{% endif %}"><i class="fa-solid fa-book-open-reader"></i> <span data-i18n="menu">Menú Digital</span></a></li>
+            <li><a href="/kitchen" class="{% if request.path == '/kitchen' %}active{% endif %}"><i class="fa-solid fa-fire-burner"></i> <span data-i18n="kitchen">Cozinha (KDS)</span></a></li>
+            <li><a href="/waiters" class="{% if request.path == '/waiters' %}active{% endif %}"><i class="fa-solid fa-user-tie"></i> <span data-i18n="waiters">Empregados</span></a></li>
+            <li><a href="/billing" class="{% if request.path == '/billing' %}active{% endif %}"><i class="fa-solid fa-receipt"></i> <span data-i18n="billing">Facturação</span></a></li>
+            
+            <!-- Controls: Theme & Language -->
+            <li>
+                <button type="button" id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">
+                    🌙 Modo Escuro
+                </button>
+            </li>
+            <li>
+                <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                    <option value="pt">🇵🇹 PT</option>
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="en">🇬🇧 EN</option>
+                </select>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer Support Callout -->
+    <footer style="background: var(--bg-card); color: var(--text-muted); padding: 2.5rem 1.5rem; text-align: center; margin-top: 4rem; border-top: 3px solid var(--violet-primary);">
+        <p style="color: var(--text-primary); font-weight: 700; font-size: 1.05rem;">Gourmet POS SaaS — Plataforma Inteligente de Gestão de Restaurantes</p>
+        <p style="font-size: 0.88rem; margin-top: 0.25rem;">Desenvolvido por Enmanuel Jimenez | Lead Architect EJAJ TECH</p>
+        <div style="margin-top: 1rem;">
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20Sistema%20de%20Restaurantes" target="_blank" style="color: var(--violet-primary); font-weight: 700; text-decoration: none; background: var(--violet-light); padding: 0.4rem 1.2rem; border-radius: 50px; border: 1px solid var(--violet-border);">
+                <i class="fa-brands fa-whatsapp"></i> Suporte WhatsApp: +351 911 151 993 (Digite "AJUDA")
+            </a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.78rem;">&copy; 2026 EJAJ TECH. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/restaurant.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

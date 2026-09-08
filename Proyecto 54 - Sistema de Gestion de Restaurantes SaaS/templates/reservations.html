@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Reservas de Mesas | Gourmet POS SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary);">Gestão de Reservas de Mesas</h1>
+        <p style="color: var(--text-muted);">Consulte e gira os agendamentos dos clientes do restaurante.</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+    <!-- Reservations Table -->
+    <div class="panel-card" style="padding: 0;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Cliente / Contacto</th>
+                    <th>Pessoas</th>
+                    <th>Hora</th>
+                    <th>Mesa & Zona</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in reservations %}
+                <tr>
+                    <td>
+                        <div style="font-weight: 700; color: var(--text-primary);">{{ r['guest_name'] }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);"><i class="fa-solid fa-phone"></i> {{ r['guest_phone'] }}</div>
+                    </td>
+                    <td><strong>{{ r['party_size'] }} Pax</strong></td>
+                    <td><strong style="color: var(--violet-primary);"><i class="fa-regular fa-clock"></i> {{ r['reservation_time'] }}</strong></td>
+                    <td>Mesa {{ r['table_number'] }} ({{ r['location'] }})</td>
+                    <td><span class="badge badge-reserved"><i class="fa-solid fa-check"></i> {{ r['status'] }}</span></td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">Nenhuma reserva registada.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Booking Form Panel -->
+    <div class="panel-card">
+        <div class="panel-header">
+            <h2><i class="fa-solid fa-calendar-plus" style="color: var(--violet-primary);"></i> Nova Reserva</h2>
+        </div>
+
+        <form onsubmit="submitReservation(event)">
+            <div class="form-group">
+                <label>Nome do Cliente *</label>
+                <input type="text" id="resGuestName" class="form-control" placeholder="Ex: Eng. Manuel Ribeiro" required>
+            </div>
+
+            <div class="form-group">
+                <label>Telefone / WhatsApp *</label>
+                <input type="text" id="resGuestPhone" class="form-control" placeholder="+351 919 888 777" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label>N.º de Pessoas *</label>
+                    <input type="number" id="resPartySize" class="form-control" value="2" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Hora da Reserva *</label>
+                    <input type="time" id="resTime" class="form-control" value="20:30" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Mesa Atribuída *</label>
+                <select id="resTableSelect" class="form-control" required>
+                    {% for t in tables %}
+                        <option value="{{ t['id'] }}">Mesa {{ t['table_number'] }} ({{ t['capacity'] }} Pax) — {{ t['location'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Notas / Pedidos Especiais</label>
+                <textarea id="resNotes" class="form-control" rows="2" placeholder="Ex: Celebracão de aniversário, cadeira de bebé..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-violet" style="width: 100%; justify-content: center;"><i class="fa-solid fa-check"></i> Confirmar Reserva</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

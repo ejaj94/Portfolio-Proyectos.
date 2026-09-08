@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Facturação & Caixas | Gourmet POS SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary);">Facturação, Encerramento de Conta & Faturas</h1>
+        <p style="color: var(--text-muted);">Emissão de faturas simplificadas, métodos de pagamento e fecho de conta.</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <!-- Open Comandas Ready for Settlement -->
+    <div class="panel-card">
+        <div class="panel-header">
+            <h2><i class="fa-solid fa-cash-register" style="color: var(--violet-primary);"></i> Comandas Abertas Prontas para Fecho</h2>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            {% for o in open_orders %}
+            <div style="padding: 1.25rem; background: var(--violet-light); border-radius: 12px; border: 1px solid var(--violet-border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <div>
+                        <strong style="font-size: 1.1rem; color: var(--violet-primary);">Mesa {{ o['table_number'] }}</strong>
+                        <div style="font-size: 0.82rem; color: var(--text-muted);">Comanda: {{ o['order_code'] }}</div>
+                    </div>
+                    <span class="badge badge-cooking">{{ o['status'] }}</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin: 0.5rem 0;">
+                    <span>Subtotal s/ IVA:</span>
+                    <span>€{{ "%.2f"|format(o['subtotal']) }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 0.75rem;">
+                    <span>IVA (23%):</span>
+                    <span>€{{ "%.2f"|format(o['tax_amount']) }}</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 800; border-top: 1px solid var(--violet-border); padding-top: 0.5rem; margin-bottom: 1rem;">
+                    <span>TOTAL A PAGAR:</span>
+                    <span style="color: var(--violet-primary);">€{{ "%.2f"|format(o['total_amount']) }}</span>
+                </div>
+
+                <button type="button" class="btn btn-violet" style="width: 100%; justify-content: center;" onclick="issueInvoice({{ o['id'] }})">
+                    <i class="fa-solid fa-file-invoice-dollar"></i> Liquidar & Emitir Fatura (Libertar Mesa)
+                </button>
+            </div>
+            {% else %}
+            <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Sem comandas abertas aguardando pagamento.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Issued Invoices Ledger -->
+    <div class="panel-card" style="padding: 0;">
+        <div style="padding: 1.25rem; border-bottom: 1px solid var(--border-color);">
+            <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary);"><i class="fa-solid fa-receipt" style="color: var(--violet-primary);"></i> Faturas Emitidas Hoje</h2>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>N.º Fatura</th>
+                    <th>Mesa</th>
+                    <th>Total (€)</th>
+                    <th>Método</th>
+                    <th>Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inv in invoices %}
+                <tr>
+                    <td><strong><span style="color: var(--violet-primary);">{{ inv['invoice_code'] }}</span></strong></td>
+                    <td>Mesa {{ inv['table_number'] }}</td>
+                    <td><strong style="color: #10b981;">€{{ "%.2f"|format(inv['total_amount']) }}</strong></td>
+                    <td><span class="badge badge-free" style="background: var(--violet-light); color: var(--violet-primary);">{{ inv['payment_method'] }}</span></td>
+                    <td>{{ inv['issued_at'][11:16] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">Nenhuma fatura emitida hoje.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

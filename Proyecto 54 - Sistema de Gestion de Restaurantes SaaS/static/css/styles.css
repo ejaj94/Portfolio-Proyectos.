@@ -1,0 +1,315 @@
+/* EJAJ TECH - Gourmet POS & Restaurant SaaS Stylesheet */
+:root {
+    --bg-body: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-navbar: #ffffff;
+    --border-color: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-muted: #64748b;
+    --violet-primary: #8b5cf6;
+    --violet-hover: #7c3aed;
+    --violet-light: #f3e8ff;
+    --violet-border: #ddd6fe;
+    --status-free: #10b981;
+    --status-occupied: #ef4444;
+    --status-reserved: #f59e0b;
+    --status-cooking: #3b82f6;
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Dark Mode Theme Overrides */
+html[data-theme="dark"] {
+    --bg-body: #0f172a;
+    --bg-card: #1e293b;
+    --bg-navbar: #1e293b;
+    --border-color: #334155;
+    --text-primary: #f8fafc;
+    --text-muted: #94a3b8;
+    --violet-light: #2e1065;
+    --violet-border: #5b21b6;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header & Navbar */
+.navbar {
+    background: var(--bg-navbar);
+    color: var(--text-primary);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid var(--violet-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 800;
+    font-size: 1.35rem;
+}
+
+.navbar-brand span {
+    color: var(--violet-primary);
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    list-style: none;
+}
+
+.navbar-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: color 0.2s ease;
+}
+
+.navbar-nav a:hover, .navbar-nav a.active {
+    color: var(--violet-primary);
+}
+
+.theme-toggle-btn {
+    background: var(--violet-light);
+    color: var(--violet-primary);
+    border: 1px solid var(--violet-border);
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+}
+
+.lang-select {
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+/* Layout Container */
+.container {
+    max-width: 1280px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Stats Cards Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-card .stat-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-top: 0.5rem;
+}
+
+.stat-card.violet { border-left: 5px solid var(--violet-primary); }
+.stat-card.green { border-left: 5px solid var(--status-free); }
+.stat-card.red { border-left: 5px solid var(--status-occupied); }
+.stat-card.amber { border-left: 5px solid var(--status-reserved); }
+
+/* Table Map Floor Plan Grid */
+.floor-map-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.table-node {
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.25rem;
+    text-align: center;
+    transition: all 0.25 ease;
+}
+
+.table-node.Livre { border-color: var(--status-free); background: rgba(16, 185, 129, 0.05); }
+.table-node.Ocupada { border-color: var(--status-occupied); background: rgba(239, 68, 68, 0.05); }
+.table-node.Reservada { border-color: var(--status-reserved); background: rgba(245, 158, 11, 0.05); }
+
+.table-number-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+}
+
+/* Panels & Cards */
+.panel-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.panel-header h2 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    font-weight: 800;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th {
+    background: var(--violet-light);
+    padding: 0.9rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--violet-primary);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-color);
+}
+
+td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+tr:hover {
+    background-color: var(--violet-light);
+}
+
+/* Status Badges */
+.badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+.badge-free { background: #d1fae5; color: #065f46; }
+.badge-occupied { background: #fee2e2; color: #991b1b; }
+.badge-reserved { background: #fef3c7; color: #92400e; }
+.badge-cooking { background: #dbeafe; color: #1e40af; }
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-violet { background: var(--violet-primary); color: #ffffff; }
+.btn-violet:hover { background: var(--violet-hover); }
+
+.btn-secondary { background: var(--border-color); color: var(--text-primary); }
+.btn-secondary:hover { opacity: 0.8; }
+
+.btn-sm { padding: 0.35rem 0.75rem; font-size: 0.8rem; }
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--violet-primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}

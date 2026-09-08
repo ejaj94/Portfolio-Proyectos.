@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Mapa de Mesas | Gourmet POS SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary);">Mapa de Mesas & Disposição da Sala</h1>
+        <p style="color: var(--text-muted);">Gira o estado de ocupação, atribuição de empregados e zonas da sala.</p>
+    </div>
+</div>
+
+<div class="floor-map-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+    {% for t in tables %}
+    <div class="table-node {{ t['status'] }}">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--violet-primary); text-transform: uppercase;">{{ t['location'] }}</div>
+        <div class="table-number-title">Mesa {{ t['table_number'] }}</div>
+        <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">Capacidade: <strong>{{ t['capacity'] }} Pessoas</strong></div>
+
+        <div style="margin-bottom: 0.75rem;">
+            {% if t['status'] == 'Livre' %}
+                <span class="badge badge-free"><i class="fa-solid fa-circle-check"></i> Livre</span>
+            {% elif t['status'] == 'Ocupada' %}
+                <span class="badge badge-occupied"><i class="fa-solid fa-utensils"></i> Ocupada</span>
+            {% else %}
+                <span class="badge badge-reserved"><i class="fa-regular fa-clock"></i> Reservada</span>
+            {% endif %}
+        </div>
+
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;"><i class="fa-solid fa-user-tie"></i> Empregado: <strong>{{ t['waiter_name'] }}</strong></div>
+
+        <div style="display: flex; gap: 0.3rem; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="updateTableStatus({{ t['id'] }}, 'Livre')">Livre</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="updateTableStatus({{ t['id'] }}, 'Ocupada')">Ocupar</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="updateTableStatus({{ t['id'] }}, 'Reservada')">Reservar</button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Gourmet POS SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary);">Painel de Controlo da Sala & Cozinha</h1>
+        <p style="color: var(--text-muted);">Visão em tempo real de ocupação de mesas, comandas ativas e faturação.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/orders" class="btn btn-violet"><i class="fa-solid fa-plus"></i> <span data-i18n="new_order">Nova Comanda POS</span></a>
+        <a href="/reservations" class="btn btn-secondary"><i class="fa-regular fa-calendar"></i> <span data-i18n="new_reservation">Nova Reserva</span></a>
+    </div>
+</div>
+
+<!-- KPI Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card red">
+        <div class="stat-title"><i class="fa-solid fa-chair"></i> <span data-i18n="active_tables">Mesas Ocupadas</span></div>
+        <div class="stat-value" style="color: #ef4444;">{{ occupied_tables }}/{{ total_tables }}</div>
+    </div>
+
+    <div class="stat-card violet">
+        <div class="stat-title"><i class="fa-solid fa-euro-sign"></i> <span data-i18n="daily_revenue">Facturação do Dia</span></div>
+        <div class="stat-value" style="color: #8b5cf6;">€{{ "%.2f"|format(daily_revenue) }}</div>
+    </div>
+
+    <div class="stat-card green" style="border-left-color: #3b82f6;">
+        <div class="stat-title"><i class="fa-solid fa-fire-burner"></i> <span data-i18n="kitchen_pending">Pratos a Cozinhar</span></div>
+        <div class="stat-value" style="color: #3b82f6;">{{ kitchen_pending_count }}</div>
+    </div>
+
+    <div class="stat-card amber">
+        <div class="stat-title"><i class="fa-regular fa-calendar-check"></i> <span data-i18n="reservations_today">Reservas Hoje</span></div>
+        <div class="stat-value" style="color: #f59e0b;">{{ reservations_count }}</div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+    <!-- Left Column: Floor Plan Map Grid -->
+    <div>
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-table-cells" style="color: var(--violet-primary);"></i> Mapa de Mesas do Restaurante</h2>
+                <a href="/tables" class="btn btn-secondary btn-sm">Ver Detalhes</a>
+            </div>
+
+            <div class="floor-map-grid">
+                {% for t in tables %}
+                <div class="table-node {{ t['status'] }}">
+                    <div class="table-number-title">Mesa {{ t['table_number'] }}</div>
+                    <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Lotação: {{ t['capacity'] }} Lugares</div>
+                    <div style="font-size: 0.8rem; margin: 0.4rem 0;">
+                        {% if t['status'] == 'Livre' %}
+                            <span class="badge badge-free">Livre</span>
+                        {% elif t['status'] == 'Ocupada' %}
+                            <span class="badge badge-occupied">Ocupada</span>
+                        {% else %}
+                            <span class="badge badge-reserved">Reservada</span>
+                        {% endif %}
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted);"><i class="fa-solid fa-user-tie"></i> {{ t['waiter_name'] }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Kitchen Display Ticker -->
+    <div>
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-fire-burner" style="color: #3b82f6;"></i> Fila da Cozinha (KDS)</h2>
+                <a href="/kitchen" class="btn btn-secondary btn-sm">Painel Cozinha</a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                {% for item in kitchen_items %}
+                <div style="padding: 0.75rem 0.9rem; background: var(--violet-light); border-radius: 8px; border-left: 4px solid #3b82f6;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 800; font-size: 0.9rem; color: var(--violet-primary);">Mesa {{ item['table_number'] }}</span>
+                        <span class="badge badge-cooking" style="font-size: 0.7rem;">{{ item['kitchen_status'] }}</span>
+                    </div>
+                    <div style="font-weight: 700; font-size: 0.95rem; margin-top: 0.2rem;">{{ item['quantity'] }}x {{ item['item_name'] }}</div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem;">Comanda: {{ item['order_code'] }} | Empregado: {{ item['waiter_name'] }}</div>
+                </div>
+                {% else %}
+                <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 1.5rem;">Cozinha sem pedidos pendentes no momento.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
