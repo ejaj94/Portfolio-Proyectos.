@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Executivo | HRTalent AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-chart-line"></i> Dashboard de Gestão de Talentos</h1>
+        <p class="page-subtitle">Visão estratégica em tempo real da equipa, assiduidade, férias e massa salarial.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/api/export/csv" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+        <a href="/api/export/json" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-code"></i> Exportar JSON
+        </a>
+        <a href="/employees" class="btn-sm btn-primary">
+            <i class="fa-solid fa-user-plus"></i> Gerir Equipas
+        </a>
+    </div>
+</div>
+
+<!-- Key Metrics Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_employees }}</div>
+            <div class="stat-label">Total Colaboradores</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #059669);">
+            <i class="fa-solid fa-user-check"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ present_today }} <span style="font-size: 0.9rem; font-weight: 700; color: var(--accent-emerald);">({{ attendance_rate }}%)</span></div>
+            <div class="stat-label">Presentes Hoje</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #F43F5E, #E11D48);">
+            <i class="fa-solid fa-plane-arrival"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ pending_vacations }}</div>
+            <div class="stat-label">Férias a Aprovar</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #60A5FA, #2563EB);">
+            <i class="fa-solid fa-building"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_departments }}</div>
+            <div class="stat-label">Departamentos</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);">
+            <i class="fa-solid fa-euro-sign"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ "%.2f"|format(payroll_sum) }} €</div>
+            <div class="stat-label">Massa Salarial Mensal</div>
+        </div>
+    </div>
+</div>
+
+<!-- Two Columns Grid -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Column 1: Pending Vacation Requests -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.2rem; font-weight: 800; color: white;">
+                <i class="fa-solid fa-clock-rotate-left" style="color: var(--coral-rose);"></i> Pedidos de Férias Pendentes
+            </h2>
+            <a href="/vacations" style="font-size: 0.85rem; color: var(--accent-sky); text-decoration: none; font-weight: 700;">Ver todos &rarr;</a>
+        </div>
+
+        {% if not pending_vacations_list %}
+            <div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                <i class="fa-solid fa-check-circle" style="font-size: 2.5rem; margin-bottom: 0.75rem; color: var(--accent-emerald);"></i>
+                <p>Não existem pedidos de férias pendentes de aprovação.</p>
+            </div>
+        {% else %}
+            <div style="overflow-x: auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Colaborador</th>
+                            <th>Período</th>
+                            <th>Dias</th>
+                            <th style="text-align: right;">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for v in pending_vacations_list %}
+                        <tr>
+                            <td>
+                                <strong style="color: white;">{{ v.full_name }}</strong>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">{{ v.dept_name }}</div>
+                            </td>
+                            <td style="font-size: 0.88rem; color: var(--text-silver);">
+                                {{ v.start_date }} a {{ v.end_date }}
+                            </td>
+                            <td>
+                                <span style="font-weight: 800; color: var(--accent-sky);">{{ v.days_count }} d</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <button onclick="updateVacationStatus({{ v.id }}, 'Aprovado')" class="btn-sm btn-success" title="Aprovar">
+                                    <i class="fa-solid fa-check"></i>
+                                </button>
+                                <button onclick="updateVacationStatus({{ v.id }}, 'Rejeitado')" class="btn-sm btn-danger" title="Rejeitar">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Column 2: Today's Attendance Log -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.2rem; font-weight: 800; color: white;">
+                <i class="fa-solid fa-user-clock" style="color: var(--sapphire-blue);"></i> Registos de Assiduidade Hoje
+            </h2>
+            <a href="/attendance" style="font-size: 0.85rem; color: var(--accent-sky); text-decoration: none; font-weight: 700;">Registar Ponto &rarr;</a>
+        </div>
+
+        {% if not today_attendance_list %}
+            <div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                <i class="fa-solid fa-hourglass-start" style="font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.5;"></i>
+                <p>Nenhum registo de assiduidade efetuado hoje.</p>
+            </div>
+        {% else %}
+            <div style="overflow-x: auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Colaborador</th>
+                            <th>Entrada</th>
+                            <th>Saída</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in today_attendance_list %}
+                        <tr>
+                            <td>
+                                <strong style="color: white;">{{ a.full_name }}</strong>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">{{ a.dept_name }}</div>
+                            </td>
+                            <td style="font-weight: 700; color: var(--accent-emerald);">
+                                <i class="fa-regular fa-clock"></i> {{ a.clock_in or '--:--' }}
+                            </td>
+                            <td style="font-weight: 700; color: var(--text-muted);">
+                                {{ a.clock_out or 'Em Trabalho' }}
+                            </td>
+                            <td>
+                                {% if a.status == 'Presente' %}
+                                    <span class="status-badge status-active"><i class="fa-solid fa-circle"></i> Presente</span>
+                                {% else %}
+                                    <span class="status-badge status-pending"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/hr.js') }}"></script>
+{% endblock %}

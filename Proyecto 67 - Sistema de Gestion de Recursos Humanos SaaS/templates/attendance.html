@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Controlo de Assiduidade & Ponto | HRTalent AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-clock"></i> Assiduidade & Registo de Ponto</h1>
+        <p class="page-subtitle">Simulação de Clock-In/Out em tempo real e monitorização de horas de trabalho diárias.</p>
+    </div>
+</div>
+
+<!-- Clock-In Widget Card -->
+<div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(244, 63, 94, 0.15)); border: 2px solid var(--border-color); border-radius: 24px; padding: 2rem; margin-bottom: 2.5rem; box-shadow: 0 15px 40px rgba(0,0,0,0.6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+        <div>
+            <span style="font-size: 0.82rem; font-weight: 800; text-transform: uppercase; color: var(--accent-sky); letter-spacing: 0.05em;">
+                <i class="fa-solid fa-bolt"></i> Registo Expresso de Entrada/Saída
+            </span>
+            <h2 style="font-size: 1.6rem; font-weight: 900; color: white; margin-top: 0.2rem;">Terminal de Relógio de Ponto</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Selecione o colaborador para efetuar picagem de entrada ou saída automática.</p>
+        </div>
+
+        <form id="clock-in-form" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+            <div style="min-width: 240px;">
+                <select id="clock-employee-id" class="form-select" required>
+                    <option value="">Selecione o Colaborador...</option>
+                    {% for e in employees %}
+                    <option value="{{ e.id }}">{{ e.full_name }} ({{ e.position }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="width: 140px;">
+                <select id="clock-status" class="form-select">
+                    <option value="Presente">Presente</option>
+                    <option value="Atrasado">Atrasado</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-sm btn-primary" style="padding: 0.8rem 1.4rem; font-size: 0.95rem;">
+                <i class="fa-solid fa-fingerprint"></i> Registo de Ponto
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Attendance Records Table -->
+<div class="table-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.2rem; font-weight: 800; color: white;">
+            <i class="fa-solid fa-list-check" style="color: var(--sapphire-blue);"></i> Registos de Assiduidade
+        </h2>
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Data: <strong>{{ today_str }}</strong></span>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Colaborador</th>
+                    <th>Data</th>
+                    <th>Hora Entrada</th>
+                    <th>Hora Saída</th>
+                    <th>Total Horas</th>
+                    <th>Estado de Presença</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in attendance_records %}
+                <tr>
+                    <td>
+                        <strong style="color: white;">{{ a.full_name }}</strong>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">{{ a.dept_name }} &bull; {{ a.position }}</div>
+                    </td>
+                    <td style="font-weight: 700; color: var(--text-silver);">
+                        {{ a.date }}
+                    </td>
+                    <td style="font-weight: 800; color: var(--accent-emerald);">
+                        <i class="fa-regular fa-clock"></i> {{ a.clock_in or '--:--' }}
+                    </td>
+                    <td style="font-weight: 800; color: var(--accent-sky);">
+                        <i class="fa-regular fa-clock"></i> {{ a.clock_out or 'Em trabalho' }}
+                    </td>
+                    <td style="font-weight: 800; color: white;">
+                        {{ "%.1f"|format(a.total_hours) }} h
+                    </td>
+                    <td>
+                        {% if a.status == 'Presente' %}
+                            <span class="status-badge status-active"><i class="fa-solid fa-circle"></i> Presente</span>
+                        {% else %}
+                            <span class="status-badge status-pending"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/hr.js') }}"></script>
+{% endblock %}

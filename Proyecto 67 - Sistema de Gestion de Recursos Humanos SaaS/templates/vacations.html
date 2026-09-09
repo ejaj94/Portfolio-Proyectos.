@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestão de Férias & Ausências | HRTalent AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-plane-departure"></i> Férias & Ausências</h1>
+        <p class="page-subtitle">Aprovação de períodos de descanso, registo de faltas justificadas e licenças.</p>
+    </div>
+    <button onclick="openVacationModal()" class="btn-sm btn-primary">
+        <i class="fa-solid fa-plus"></i> Solicitar Férias
+    </button>
+</div>
+
+<!-- Grid Layout: Vacations & Absences -->
+<div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 2rem;">
+    <!-- Vacations Section -->
+    <div class="table-card">
+        <h2 style="font-size: 1.2rem; font-weight: 800; color: white; margin-bottom: 1.25rem;">
+            <i class="fa-solid fa-calendar-days" style="color: var(--sapphire-blue);"></i> Solicitações de Férias
+        </h2>
+
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Colaborador</th>
+                        <th>Período</th>
+                        <th>Duração</th>
+                        <th>Motivo / Observação</th>
+                        <th>Estado</th>
+                        <th style="text-align: right;">Ações de Aprovação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for v in vacations %}
+                    <tr>
+                        <td style="font-weight: 700; color: var(--text-muted);">#{{ v.id }}</td>
+                        <td>
+                            <strong style="color: white;">{{ v.full_name }}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ v.dept_name }} &bull; {{ v.position }}</div>
+                        </td>
+                        <td style="font-size: 0.88rem; color: var(--text-silver);">
+                            <i class="fa-regular fa-calendar-check" style="color: var(--accent-sky);"></i> {{ v.start_date }} a {{ v.end_date }}
+                        </td>
+                        <td>
+                            <span style="font-weight: 800; color: white;">{{ v.days_count }} dias</span>
+                        </td>
+                        <td style="font-size: 0.85rem; color: var(--text-muted);">
+                            {{ v.reason or 'Férias regulares' }}
+                        </td>
+                        <td>
+                            {% if v.status == 'Aprovado' %}
+                                <span class="status-badge status-approved"><i class="fa-solid fa-check"></i> Aprovado</span>
+                            {% elif v.status == 'Pendente' %}
+                                <span class="status-badge status-pending"><i class="fa-solid fa-clock"></i> Pendente</span>
+                            {% else %}
+                                <span class="status-badge status-rejected"><i class="fa-solid fa-xmark"></i> Rejeitado</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            {% if v.status == 'Pendente' %}
+                                <button onclick="updateVacationStatus({{ v.id }}, 'Aprovado')" class="btn-sm btn-success">
+                                    <i class="fa-solid fa-check"></i> Aprovar
+                                </button>
+                                <button onclick="updateVacationStatus({{ v.id }}, 'Rejeitado')" class="btn-sm btn-danger">
+                                    <i class="fa-solid fa-xmark"></i> Rejeitar
+                                </button>
+                            {% else %}
+                                <span style="font-size: 0.82rem; color: var(--text-muted);">Decisão Registada</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Absences Section -->
+    <div class="table-card">
+        <h2 style="font-size: 1.2rem; font-weight: 800; color: white; margin-bottom: 1.25rem;">
+            <i class="fa-solid fa-notes-medical" style="color: var(--coral-rose);"></i> Histórico de Ausências & Baixas
+        </h2>
+
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Colaborador</th>
+                        <th>Data da Ausência</th>
+                        <th>Tipo de Ausência</th>
+                        <th>Estado</th>
+                        <th>Observações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in absences %}
+                    <tr>
+                        <td>
+                            <strong style="color: white;">{{ a.full_name }}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ a.dept_name }}</div>
+                        </td>
+                        <td style="font-weight: 700; color: var(--text-silver);">
+                            {{ a.date }}
+                        </td>
+                        <td>
+                            <span style="font-size: 0.85rem; font-weight: 700; color: var(--coral-rose);">
+                                {{ a.absence_type }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge status-active">{{ a.status }}</span>
+                        </td>
+                        <td style="font-size: 0.85rem; color: var(--text-muted);">
+                            {{ a.notes }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Vacation Request -->
+<div id="vacation-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #152140; border: 2px solid var(--border-color); border-radius: 24px; padding: 2rem; max-width: 500px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.9);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: white;">Solicitar Férias</h2>
+            <button onclick="closeVacationModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="vacation-form">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Colaborador *</label>
+                <select id="vac-employee-id" class="form-select" required>
+                    {% for e in employees %}
+                    <option value="{{ e.id }}">{{ e.full_name }} ({{ e.position }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Data de Início *</label>
+                    <input type="date" id="vac-start-date" class="form-input" required>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Data de Fim *</label>
+                    <input type="date" id="vac-end-date" class="form-input" required>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Motivo / Notas</label>
+                <textarea id="vac-reason" class="form-textarea" rows="2" placeholder="Ex: Férias anuais planeadas..."></textarea>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="closeVacationModal()" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-paper-plane"></i> Submeter Pedido</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/hr.js') }}"></script>
+<script>
+function openVacationModal() {
+    document.getElementById('vacation-modal').style.display = 'flex';
+}
+function closeVacationModal() {
+    document.getElementById('vacation-modal').style.display = 'none';
+}
+</script>
+{% endblock %}

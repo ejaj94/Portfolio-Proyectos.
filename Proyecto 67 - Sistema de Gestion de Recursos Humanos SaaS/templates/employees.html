@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+
+{% block title %}Diretório de Colaboradores | HRTalent AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-users"></i> Diretório de Colaboradores</h1>
+        <p class="page-subtitle">Gestão de dados pessoais, cargos, departamentos, contratos e salários da equipa.</p>
+    </div>
+    <button onclick="openEmployeeModal()" class="btn-sm btn-primary">
+        <i class="fa-solid fa-user-plus"></i> Novo Colaborador
+    </button>
+</div>
+
+<!-- Filters Bar -->
+<div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+    <form method="GET" action="/employees" style="display: flex; gap: 1rem; flex: 1; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 240px;">
+            <input type="text" name="q" value="{{ search_q }}" class="form-input" placeholder="Pesquisar por nome, e-mail ou cargo...">
+        </div>
+        <div style="width: 220px;">
+            <select name="department_id" class="form-select" onchange="this.form.submit()">
+                <option value="">Todos os Departamentos</option>
+                {% for d in departments %}
+                <option value="{{ d.id }}" {% if selected_dept and selected_dept|int == d.id %}selected{% endif %}>{{ d.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn-sm btn-secondary"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
+        {% if search_q or selected_dept %}
+            <a href="/employees" class="btn-sm btn-secondary" style="color: var(--coral-rose);"><i class="fa-solid fa-xmark"></i> Limpar Filtros</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Employees Grid / Cards -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    {% for e in employees %}
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px);">
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.9rem;">
+                    <div class="avatar-circle" style="background-color: {{ e.avatar_color }};">
+                        {{ e.full_name[:2].upper() }}
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.15rem; font-weight: 800; color: white; margin-bottom: 0.1rem;">{{ e.full_name }}</h3>
+                        <span style="font-size: 0.82rem; font-weight: 700; color: var(--accent-sky);">{{ e.position }}</span>
+                    </div>
+                </div>
+
+                {% if e.status == 'Ativo' %}
+                    <span class="status-badge status-active">Ativo</span>
+                {% elif e.status == 'De Férias' %}
+                    <span class="status-badge status-vacation">De Férias</span>
+                {% else %}
+                    <span class="status-badge status-inactive">Inativo</span>
+                {% endif %}
+            </div>
+
+            <div style="background: rgba(11, 19, 43, 0.6); border: 1px solid rgba(37, 99, 235, 0.15); border-radius: 12px; padding: 0.9rem; margin-bottom: 1.25rem; font-size: 0.88rem;">
+                <div style="margin-bottom: 0.4rem; color: var(--text-silver);">
+                    <i class="fa-regular fa-envelope" style="width: 20px; color: var(--sapphire-blue);"></i> {{ e.email }}
+                </div>
+                <div style="margin-bottom: 0.4rem; color: var(--text-silver);">
+                    <i class="fa-solid fa-phone" style="width: 20px; color: var(--sapphire-blue);"></i> {{ e.phone }}
+                </div>
+                <div style="color: var(--text-silver);">
+                    <i class="fa-solid fa-building" style="width: 20px; color: {{ e.department_color }};"></i> {{ e.department_name }}
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.08); margin-bottom: 1rem; font-size: 0.88rem;">
+                <div>
+                    <span style="color: var(--text-muted);">Salário Base:</span>
+                    <strong style="color: white; margin-left: 4px;">{{ "%.2f"|format(e.salary) }} €</strong>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted);">Contrato:</span>
+                    <strong style="color: var(--text-silver); margin-left: 4px;">{{ e.hire_date }}</strong>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; width: 100%;">
+                <button onclick="editEmployee({{ e|tojson|forceescape }})" class="btn-sm btn-secondary" style="flex: 1; justify-content: center;">
+                    <i class="fa-solid fa-user-pen"></i> Editar
+                </button>
+                <button onclick="deleteEmployee({{ e.id }}, '{{ e.full_name|escape }}')" class="btn-sm btn-danger" title="Eliminar">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal Employee -->
+<div id="employee-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #152140; border: 2px solid var(--border-color); border-radius: 24px; padding: 2rem; max-width: 580px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.9);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 id="emp-modal-title" style="font-size: 1.3rem; font-weight: 800; color: white;">Novo Colaborador</h2>
+            <button onclick="closeEmployeeModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="employee-form" onsubmit="saveEmployee(event)">
+            <input type="hidden" id="emp-id" value="">
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Nome Completo *</label>
+                <input type="text" id="emp-name" class="form-input" required placeholder="Ex: Dr. Bernardo Silva">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">E-mail Profissional *</label>
+                    <input type="email" id="emp-email" class="form-input" required placeholder="bernardo@ejajtech.com">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Telefone / Contacto *</label>
+                    <input type="text" id="emp-phone" class="form-input" required placeholder="+351 912 345 678">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Departamento *</label>
+                    <select id="emp-dept" class="form-select" required>
+                        {% for d in departments %}
+                        <option value="{{ d.id }}">{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Cargo / Função *</label>
+                    <input type="text" id="emp-position" class="form-input" required placeholder="Ex: Senior Software Architect">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Salário Base (€)</label>
+                    <input type="number" step="0.01" id="emp-salary" class="form-input" required placeholder="3200.00">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Estado</label>
+                    <select id="emp-status" class="form-select">
+                        <option value="Ativo">Ativo</option>
+                        <option value="De Férias">De Férias</option>
+                        <option value="Inativo">Inativo</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Cor do Avatar</label>
+                    <input type="color" id="emp-avatar-color" value="#2563EB" style="width: 100%; height: 44px; border-radius: 10px; border: 1.5px solid var(--border-color); background: transparent; cursor: pointer;">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="closeEmployeeModal()" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-floppy-disk"></i> Guardar Colaborador</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/hr.js') }}"></script>
+<script>
+function openEmployeeModal() {
+    document.getElementById('emp-id').value = '';
+    document.getElementById('emp-name').value = '';
+    document.getElementById('emp-email').value = '';
+    document.getElementById('emp-phone').value = '';
+    document.getElementById('emp-position').value = '';
+    document.getElementById('emp-salary').value = '2500.00';
+    document.getElementById('emp-status').value = 'Ativo';
+    document.getElementById('emp-avatar-color').value = '#2563EB';
+    document.getElementById('emp-modal-title').innerText = 'Novo Colaborador';
+    document.getElementById('employee-modal').style.display = 'flex';
+}
+
+function closeEmployeeModal() {
+    document.getElementById('employee-modal').style.display = 'none';
+}
+
+function editEmployee(e) {
+    document.getElementById('emp-id').value = e.id;
+    document.getElementById('emp-name').value = e.full_name;
+    document.getElementById('emp-email').value = e.email;
+    document.getElementById('emp-phone').value = e.phone;
+    document.getElementById('emp-dept').value = e.department_id;
+    document.getElementById('emp-position').value = e.position;
+    document.getElementById('emp-salary').value = e.salary;
+    document.getElementById('emp-status').value = e.status;
+    document.getElementById('emp-avatar-color').value = e.avatar_color || '#2563EB';
+    document.getElementById('emp-modal-title').innerText = 'Editar Colaborador';
+    document.getElementById('employee-modal').style.display = 'flex';
+}
+
+function saveEmployee(ev) {
+    ev.preventDefault();
+    const payload = {
+        id: document.getElementById('emp-id').value || null,
+        full_name: document.getElementById('emp-name').value,
+        email: document.getElementById('emp-email').value,
+        phone: document.getElementById('emp-phone').value,
+        department_id: document.getElementById('emp-dept').value,
+        position: document.getElementById('emp-position').value,
+        salary: parseFloat(document.getElementById('emp-salary').value),
+        status: document.getElementById('emp-status').value,
+        avatar_color: document.getElementById('emp-avatar-color').value
+    };
+
+    fetch('/api/employee/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert('⚠️ ' + data.message);
+        }
+    })
+    .catch(err => alert('❌ Erro ao guardar colaborador.'));
+}
+</script>
+{% endblock %}

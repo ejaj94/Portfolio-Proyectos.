@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Repositório de Documentos de RRHH | HRTalent AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-folder-open"></i> Repositório de Documentos</h1>
+        <p class="page-subtitle">Contratos de trabalho, identificações, certificados e documentos legais dos colaboradores.</p>
+    </div>
+    <button onclick="openDocumentModal()" class="btn-sm btn-primary">
+        <i class="fa-solid fa-file-circle-plus"></i> Registar Documento
+    </button>
+</div>
+
+<!-- Documents List Table Card -->
+<div class="table-card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.2rem; font-weight: 800; color: white; margin-bottom: 1.25rem;">
+        <i class="fa-solid fa-file-contract" style="color: var(--sapphire-blue);"></i> Ficheiros Registados
+    </h2>
+
+    <div style="overflow-x: auto;">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Título do Ficheiro</th>
+                    <th>Colaborador</th>
+                    <th>Categoria</th>
+                    <th>Data Registo</th>
+                    <th style="text-align: right;">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in documents %}
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(37, 99, 235, 0.2); color: var(--sapphire-blue); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </div>
+                            <div>
+                                <strong style="color: white;">{{ doc.title }}</strong>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">{{ doc.file_url }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <strong style="color: var(--text-silver);">{{ doc.full_name }}</strong>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">{{ doc.dept_name }}</div>
+                    </td>
+                    <td>
+                        <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 6px; background: rgba(255,255,255,0.08); color: var(--accent-sky);">
+                            {{ doc.category }}
+                        </span>
+                    </td>
+                    <td style="font-size: 0.85rem; color: var(--text-muted);">
+                        {{ doc.uploaded_at }}
+                    </td>
+                    <td style="text-align: right;">
+                        <a href="{{ doc.file_url }}" target="_blank" class="btn-sm btn-secondary" onclick="alert('📄 A abrir visualizador de documento placeholder...')">
+                            <i class="fa-solid fa-download"></i> Descarregar
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Document -->
+<div id="doc-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #152140; border: 2px solid var(--border-color); border-radius: 24px; padding: 2rem; max-width: 500px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.9);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: white;">Registar Documento</h2>
+            <button onclick="closeDocumentModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="document-form">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Colaborador *</label>
+                <select id="doc-employee-id" class="form-select" required>
+                    {% for e in employees %}
+                    <option value="{{ e.id }}">{{ e.full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Título do Documento *</label>
+                <input type="text" id="doc-title" class="form-input" required placeholder="Ex: Contrato de Trabalho Assinado 2026">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Categoria *</label>
+                    <select id="doc-category" class="form-select">
+                        <option value="Contrato">Contrato</option>
+                        <option value="Identificação">Identificação</option>
+                        <option value="Certificado">Certificado</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Caminho / URL do Ficheiro</label>
+                    <input type="text" id="doc-file-url" class="form-input" placeholder="/docs/contrato.pdf">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="closeDocumentModal()" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-floppy-disk"></i> Registar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/hr.js') }}"></script>
+<script>
+function openDocumentModal() {
+    document.getElementById('doc-modal').style.display = 'flex';
+}
+function closeDocumentModal() {
+    document.getElementById('doc-modal').style.display = 'none';
+}
+</script>
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}Departamentos & Estrutura | HRTalent AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-building"></i> Estrutura Departamental</h1>
+        <p class="page-subtitle">Organização por áreas de negócio, responsáveis, orçamentos e distribuição de pessoal.</p>
+    </div>
+    <button onclick="openDepartmentModal()" class="btn-sm btn-primary">
+        <i class="fa-solid fa-plus"></i> Novo Departamento
+    </button>
+</div>
+
+<!-- Departments Cards Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    {% for d in departments %}
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; width: 6px; height: 100%; background-color: {{ d.color }};"></div>
+        
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; padding: 0.25rem 0.65rem; border-radius: 6px; background: rgba(255,255,255,0.08); color: var(--accent-sky);">
+                    ID #{{ d.id }}
+                </span>
+                <span style="font-size: 0.88rem; font-weight: 800; color: var(--accent-emerald);">
+                    <i class="fa-solid fa-users"></i> {{ d.employee_count }} Colaboradores
+                </span>
+            </div>
+
+            <h3 style="font-size: 1.3rem; font-weight: 900; color: white; margin-bottom: 0.5rem;">
+                {{ d.name }}
+            </h3>
+
+            <div style="background: rgba(11, 19, 43, 0.6); border: 1px solid rgba(37, 99, 235, 0.15); border-radius: 12px; padding: 0.9rem; margin-bottom: 1.25rem; font-size: 0.88rem;">
+                <div style="margin-bottom: 0.4rem; color: var(--text-silver);">
+                    <i class="fa-solid fa-user-tie" style="width: 20px; color: var(--sapphire-blue);"></i> Gestor: <strong>{{ d.manager_name }}</strong>
+                </div>
+                <div style="color: var(--text-silver);">
+                    <i class="fa-solid fa-wallet" style="width: 20px; color: var(--coral-rose);"></i> Orçamento Alocado: <strong>{{ "%.2f"|format(d.budget) }} €</strong>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.08); margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted);">
+                <span>Custo Salarial Real: <strong style="color: white;">{{ "%.2f"|format(d.total_dept_salary) }} €</strong></span>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; width: 100%;">
+                <a href="/employees?department_id={{ d.id }}" class="btn-sm btn-secondary" style="flex: 1; justify-content: center;">
+                    <i class="fa-solid fa-users-viewfinder"></i> Ver Equipa
+                </a>
+                <button onclick="editDepartment({{ d|tojson|forceescape }})" class="btn-sm btn-secondary" title="Editar">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal Department -->
+<div id="dept-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #152140; border: 2px solid var(--border-color); border-radius: 24px; padding: 2rem; max-width: 500px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.9);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 id="dept-modal-title" style="font-size: 1.3rem; font-weight: 800; color: white;">Novo Departamento</h2>
+            <button onclick="closeDepartmentModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="dept-form" onsubmit="saveDepartment(event)">
+            <input type="hidden" id="dept-id" value="">
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Nome do Departamento *</label>
+                <input type="text" id="dept-name" class="form-input" required placeholder="Ex: Inovação & Inteligência Artificial">
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Gestor / Responsável *</label>
+                <input type="text" id="dept-manager" class="form-input" required placeholder="Ex: Eng. Ricardo Alves">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Orçamento (€)</label>
+                    <input type="number" step="0.01" id="dept-budget" class="form-input" placeholder="150000.00">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Cor de Identificação</label>
+                    <input type="color" id="dept-color" value="#2563EB" style="width: 100%; height: 44px; border-radius: 10px; border: 1.5px solid var(--border-color); background: transparent; cursor: pointer;">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="closeDepartmentModal()" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-floppy-disk"></i> Guardar Departamento</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function openDepartmentModal() {
+    document.getElementById('dept-id').value = '';
+    document.getElementById('dept-name').value = '';
+    document.getElementById('dept-manager').value = '';
+    document.getElementById('dept-budget').value = '100000.00';
+    document.getElementById('dept-color').value = '#2563EB';
+    document.getElementById('dept-modal-title').innerText = 'Novo Departamento';
+    document.getElementById('dept-modal').style.display = 'flex';
+}
+
+function closeDepartmentModal() {
+    document.getElementById('dept-modal').style.display = 'none';
+}
+
+function editDepartment(d) {
+    document.getElementById('dept-id').value = d.id;
+    document.getElementById('dept-name').value = d.name;
+    document.getElementById('dept-manager').value = d.manager_name;
+    document.getElementById('dept-budget').value = d.budget;
+    document.getElementById('dept-color').value = d.color || '#2563EB';
+    document.getElementById('dept-modal-title').innerText = 'Editar Departamento';
+    document.getElementById('dept-modal').style.display = 'flex';
+}
+
+function saveDepartment(ev) {
+    ev.preventDefault();
+    const payload = {
+        id: document.getElementById('dept-id').value || null,
+        name: document.getElementById('dept-name').value,
+        manager_name: document.getElementById('dept-manager').value,
+        budget: parseFloat(document.getElementById('dept-budget').value),
+        color: document.getElementById('dept-color').value
+    };
+
+    fetch('/api/department/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert('⚠️ ' + data.message);
+        }
+    })
+    .catch(err => alert('❌ Erro ao guardar departamento.'));
+}
+</script>
+{% endblock %}
