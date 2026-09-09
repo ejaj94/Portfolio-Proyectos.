@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Agendar {{ current_service.name if current_service else 'Serviço' }} | BookCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="public-booking-wrapper">
+    <!-- Main Booking Form Card -->
+    <div class="public-booking-card" id="booking-card-container">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(220, 38, 38, 0.15); border: 1px solid var(--border-color); color: var(--blood-red); font-weight: 800; font-size: 0.82rem; padding: 0.35rem 0.9rem; border-radius: 20px; text-transform: uppercase; margin-bottom: 0.75rem;">
+                <i class="fa-solid fa-bolt"></i> Agendamento Directo em Tempo Real
+            </div>
+            <h1 style="font-size: 2rem; font-weight: 900; color: white; margin-bottom: 0.5rem;">
+                Agende a sua Sessão Conosco
+            </h1>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">
+                Selecione o serviço, escolha a data e o horário conveniente, e receba confirmação imediata.
+            </p>
+        </div>
+
+        <form id="public-booking-form">
+            <!-- Step 1: Service Selection -->
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 800; color: var(--steel-silver); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                    <span style="background: var(--blood-red); color: white; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; margin-right: 6px;">1</span>
+                    Selecione o Serviço
+                </label>
+
+                <input type="hidden" name="service_id" id="selected-service-id" value="{{ current_service.id if current_service else '' }}">
+                <input type="hidden" name="booking_time" id="selected-booking-time" value="">
+
+                <div class="services-select-grid">
+                    {% for s in all_services %}
+                    <div class="service-select-card {% if current_service and current_service.id == s.id %}selected{% endif %}" data-id="{{ s.id }}">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+                            <strong style="color: white; font-size: 0.95rem;">{{ s.name }}</strong>
+                            <span style="color: var(--blood-red); font-weight: 800; font-size: 0.9rem;">{{ "%.2f"|format(s.price) }} €</span>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                            <i class="fa-regular fa-clock"></i> {{ s.duration_min }} min &bull; {{ s.category }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Step 2: Date & Slot Picker -->
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 800; color: var(--steel-silver); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                    <span style="background: var(--blood-red); color: white; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; margin-right: 6px;">2</span>
+                    Escolha a Data & Horário
+                </label>
+
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.4rem;">Data Pretendida</label>
+                    <input type="date" name="booking_date" id="booking-date" class="form-input" value="{{ today_date }}" required min="{{ today_date }}">
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.4rem;">Horários Disponíveis</label>
+                    <div id="time-slots-container">
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Selecione uma data para carregar horários.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Contact Details -->
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 800; color: var(--steel-silver); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                    <span style="background: var(--blood-red); color: white; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; margin-right: 6px;">3</span>
+                    Os seus Dados de Contacto
+                </label>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">Nome Completo *</label>
+                        <input type="text" name="client_name" class="form-input" required placeholder="Ex: Dr. Miguel Santos">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">E-mail *</label>
+                        <input type="email" name="client_email" class="form-input" required placeholder="miguel@empresa.com">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">Telefone / WhatsApp *</label>
+                        <input type="tel" name="client_phone" class="form-input" required placeholder="+351 912 345 678">
+                    </div>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">Notas Adicionais (Opcional)</label>
+                    <textarea name="notes" class="form-textarea" rows="2" placeholder="Informações relevantes sobre a sessão ou detalhes do projeto..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-sm btn-primary" style="width: 100%; justify-content: center; padding: 0.9rem; font-size: 1.05rem;">
+                <i class="fa-solid fa-calendar-check"></i> Confirmar Agendamento
+            </button>
+        </form>
+    </div>
+
+    <!-- Success Card (Hidden by default) -->
+    <div id="success-card" style="display: none; background: var(--bg-card); border: 2px solid var(--accent-emerald); border-radius: 24px; padding: 3rem; text-align: center; box-shadow: 0 20px 60px rgba(16, 185, 129, 0.2);">
+        <div style="width: 70px; height: 70px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); font-size: 2.2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <h2 style="font-size: 1.8rem; font-weight: 900; color: white; margin-bottom: 0.75rem;">Reserva Confirmada!</h2>
+        <p id="success-msg-text" style="color: var(--steel-silver); font-size: 1.1rem; margin-bottom: 2rem;"></p>
+        
+        <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; margin-bottom: 2rem; font-size: 0.9rem; color: var(--text-muted);">
+            Enviámos uma notificação de confirmação. Para qualquer alteração, entre em contacto com <strong>Enmanuel Jimenez (Lead Architect EJAJ TECH)</strong> via WhatsApp.
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <button onclick="window.location.reload()" class="btn-sm btn-secondary">
+                <i class="fa-solid fa-rotate"></i> Nova Reserva
+            </button>
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20Fiz%20uma%20reserva%20no%20BookCraft" target="_blank" class="btn-whatsapp-header" style="padding: 0.75rem 1.5rem;">
+                <i class="fa-brands fa-whatsapp"></i> Falar via WhatsApp
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.CURRENT_SERVICE_SLUG = "{{ current_service.slug if current_service else 'consultoria-software-ia' }}";
+</script>
+<script src="{{ url_for('static', filename='js/booking.js') }}"></script>
+{% endblock %}
