@@ -917,16 +917,38 @@ const PRODUCTS = [
     {
         id: "candle-abobora-1",
         category: "vela",
-        price: 12.90,
+        price: 14.90,
         image: "assets/vela_abobora.jpg",
         qty: 1,
         pt: {
             name: "Vela Abóbora",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela decorativa em vaso de cerâmica de abóbora.",
-            description: "Vela aromática artesanal em recipiente de cerâmica em formato de abóbora, feita à mão com cera vegetal e essências selecionadas para decorar e perfumar o seu lar com um toque acolhedor.",
-            aromaProfile: "Canela, Especiarias, Acolhedor, Outono"
+            categoryLabel: "Velas Aromáticas e Decorativas de Outono",
+            aromaBrief: "Encantadora vela artesanal em recipiente de cerâmica em forma de abóbora alaranjada com flor de anis e especiarias de outono.",
+            description: "A essência aconchegante do outono capturada numa peça artesanal única! Esta vela exclusiva é vertida num recipiente de cerâmica esculpido em forma de abóbora vibrante com a sua tampa a par. No seu interior, a cera vegetal cremosa é decorada à mão com um pavio de madeira crepitante, flor de anis estrelado e pérolas delicadas. Uma peça de destaque que envolve o seu lar num aroma quente e envolvente.",
+            aromaProfile: "Canela Quente, Abóbora Especiada, Baunilha Bourbon, Noz-Moscada, Madeira de Cedro"
         },
+        es: {
+            name: "Vela Calabaza",
+            categoryLabel: "Velas Aromáticas y Decorativas de Otoño",
+            aromaBrief: "Encantadora vela artesanal en recipiente de cerámica en forma de calabaza anaranjada con flor de anís y especias otoñales.",
+            description: "¡La esencia acogedora del otoño capturada en una pieza artesanal única! Esta vela exclusiva está vertida en un recipiente de cerámica esculpido en forma de calabaza vibrante con su tapa a juego. En su interior, la cera vegetal cremosa está decorada a mano con mecha de madera crujiente, flor de anís estrellado y delicadas perlas. Una obra de arte decorativa que llena tu hogar con un aroma cálido y envolvente.",
+            aromaProfile: "Canela Cálida, Calabaza Especiada, Vainilla Bourbon, Nuez Moscada, Madera de Cedro"
+        },
+        en: {
+            name: "Autumn Pumpkin Candle",
+            categoryLabel: "Decorative Autumn Scented Candle",
+            aromaBrief: "Charming handcrafted vibrant orange pumpkin ceramic candle decorated with a crackling wooden wick and star anise.",
+            description: "The cozy essence of autumn captured in a unique handcrafted creation! Poured inside a vibrant orange ceramic pumpkin container complete with its lid resting alongside. Made with creamy soy wax, a crackling wooden wick, star anise, and tiny pearl accents. A stunning seasonal centerpiece that fills your space with warm, comforting aromas.",
+            aromaProfile: "Warm Cinnamon, Spiced Pumpkin, Bourbon Vanilla, Nutmeg, Cedarwood"
+        },
+        fr: {
+            name: "Bougie Citrouille d'Automne",
+            categoryLabel: "Bougie Parfumée Décorative d'Automne",
+            aromaBrief: "Ravissante bougie artisanale dans un contenant en céramique forme citrouille orange avec anis étoilé et mèche en bois.",
+            description: "L'esprit chaleureux de l'automne capturé dans une pièce artisanale d'exception ! Moulée dans un élégant contenant en céramique sculpté en forme de citrouille orange avec son couvercle assorti. Sa cire végétale est agrémentée d'une mèche en bois crépitante, d'anis étoilé et de perles délicates pour illuminer vos soirées d'automne.",
+            aromaProfile: "Cannelle Chaude, Citrouille Épicée, Vanille Bourbon, Noix de Muscade, Cèdre"
+        }
+    },
         es: {
             name: "Vela Abóbora",
             categoryLabel: "Vela Aromática",
