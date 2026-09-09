@@ -422,28 +422,7 @@ const PRODUCTS = [
             aromaProfile: "Rose Majestueuse, Fleur de Lotus, Orchidée Blanche, Musc de Soie, Ambre Doux"
         }
     },
-        es: {
-            name: "Vela Cálice de Rosas (Cáliz de Rosas)",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela en cáliz de cerámica con base dorada y rosas esculpidas.",
-            description: "Deslumbrante vela aromática presentada en un exquisito cáliz de cerámica blanca estriada con majestuosa base dorada. En su interior, tres rosas delicadamente esculpidas a mano en cera nude descansan sobre sutiles detalles de pan de oro, liberando un perfume romántico y envolvente.",
-            aromaProfile: "Rosas Reales, Peonía, Vainilla Nude, Lujoso"
-        },
-        en: {
-            name: "Rose Chalice Candle",
-            categoryLabel: "Scented Candle",
-            aromaBrief: "White ribbed ceramic chalice candle with a gold base & sculpted roses.",
-            description: "Stunning scented candle set in a majestic white ribbed ceramic chalice with an elegant gold pedestal. Inside, three handcrafted nude wax roses float gracefully surrounded by subtle gold leaf flakes, radiating a romantic and luxurious fragrance.",
-            aromaProfile: "Real Roses, Peony, Nude Vanilla, Luxurious"
-        },
-        fr: {
-            name: "Bougie Calice de Roses",
-            categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Bougie en calice en céramique à base dorée avec roses sculptées.",
-            description: "Somptueuse bougie parfumée présentée dans un calice en céramique blanche striée avec un élégant piédestal doré. À l'intérieur, trois roses sculptées à la main en cire nude reposent parmi de fines paillettes d'or.",
-            aromaProfile: "Roses Nobles, Pivoine, Vanille Nude, Luxueux"
-        }
-    },
+    
     {
         id: "candle-orchidaceae-1",
         category: "vela",
