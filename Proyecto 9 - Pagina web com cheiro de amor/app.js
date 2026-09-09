@@ -949,28 +949,7 @@ const PRODUCTS = [
             aromaProfile: "Cannelle Chaude, Citrouille Épicée, Vanille Bourbon, Noix de Muscade, Cèdre"
         }
     },
-        es: {
-            name: "Vela Abóbora",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela decorativa en vasija de cerámica de calabaza.",
-            description: "Vela aromática artesanal en recipiente de cerámica con forma de calabaza, hecha a mano con cera vegetal y esencias seleccionadas para decorar y perfumar tu hogar con un toque acogedor.",
-            aromaProfile: "Canela, Especias, Acogedor, Otoño"
-        },
-        en: {
-            name: "Pumpkin Candle",
-            categoryLabel: "Scented Candle",
-            aromaBrief: "Decorative scented candle in a pumpkin ceramic jar.",
-            description: "Handcrafted scented candle in a pumpkin-shaped ceramic jar, made with plant-based wax and premium fragrances to bring warmth and style to your space.",
-            aromaProfile: "Cinnamon, Spice, Cozy, Autumn"
-        },
-        fr: {
-            name: "Bougie Citrouille",
-            categoryLabel: "Bougie Parfumée",
-            aromaBrief: "Bougie parfumée en pot céramique citrouille.",
-            description: "Bougie parfumée artisanale dans un contenant en céramique en forme de citrouille, faite à la main pour une ambiance chaleureuse e raffinée.",
-            aromaProfile: "Cannelle, Épices, Chaleureux, Automne"
-        }
-    },
+    
         {
         id: "candle-benedita-1",
         category: "vela",
