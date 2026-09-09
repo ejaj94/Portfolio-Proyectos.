@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Galeria de Logótipos Guardados{% endblock %}
+
+{% block content %}
+<div class="container fade-in">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 class="brand-title">
+                <i class="fa-solid fa-shapes" style="color: var(--cartoon-coral);"></i> Galeria de Logótipos Guardados
+            </h1>
+            <p style="color: var(--text-muted); font-size: 0.95rem; font-weight: 700;">
+                Consulte a coleção de logótipos e marcas criadas no estúdio LogoCraft AI.
+            </p>
+        </div>
+        <div>
+            <a href="/" class="btn btn-yellow">
+                <i class="fa-solid fa-plus"></i> Criar Novo Logótipo
+            </a>
+        </div>
+    </div>
+
+    {% if not logos %}
+    <div class="panel-card" style="text-align: center; padding: 3.5rem; border-top: 5px solid var(--cartoon-yellow);">
+        <i class="fa-solid fa-paintbrush" style="font-size: 3.5rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+        <h3 style="color: var(--text-dark); font-weight: 900; font-size: 1.4rem;">Nenhum logótipo guardado na galeria</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-weight: 600;">Aceda ao Estúdio de Criação para desenhar o primeiro logótipo da sua marca.</p>
+        <a href="/" class="btn btn-coral"><i class="fa-solid fa-wand-magic-sparkles"></i> Ir para o Estúdio</a>
+    </div>
+    {% endif %}
+
+    <div class="logo-variations-grid">
+        {% for logo in logos %}
+        <div class="variation-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span class="badge badge-yellow">{{ logo['sector'] }}</span>
+                <span class="badge badge-pink">{{ logo['style'] }}</span>
+            </div>
+
+            <div class="svg-preview-box" id="logoBox{{ logo['id'] }}" onclick="openHistoryModal({{ logo['id'] }})" title="Clique para abrir em grande HD">
+                {{ logo['svg_code'] | safe }}
+            </div>
+
+            <div style="text-align: left; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.15rem; font-weight: 900; color: var(--text-dark);">{{ logo['brand_name'] }}</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700;">{{ logo['slogan'] or 'Sem slogan' }}</p>
+                <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-top: 0.3rem;">Criado a: {{ logo['created_at'] }}</span>
+            </div>
+
+            <div style="display: flex; gap: 0.4rem; justify-content: center; flex-wrap: wrap;">
+                <button type="button" class="btn btn-cyan btn-sm" onclick="openHistoryModal({{ logo['id'] }})">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i> Ver HD
+                </button>
+                <button type="button" class="btn btn-pink btn-sm" onclick="downloadHistoryPng({{ logo['id'] }})">
+                    <i class="fa-solid fa-file-image"></i> PNG HD
+                </button>
+                <a href="/export/{{ logo['id'] }}" class="btn btn-yellow btn-sm">
+                    <i class="fa-solid fa-download"></i> Kit
+                </a>
+                <button type="button" class="btn btn-danger btn-sm" onclick="deleteSavedLogo({{ logo['id'] }})" title="Eliminar">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+
+            <!-- Hidden SVG source holder for modal -->
+            <template id="svgSource{{ logo['id'] }}">{{ logo['svg_code'] }}</template>
+            <template id="nameSource{{ logo['id'] }}">{{ logo['brand_name'] }}</template>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function openHistoryModal(id) {
+    const svgTpl = document.getElementById('svgSource' + id);
+    const nameTpl = document.getElementById('nameSource' + id);
+    if (svgTpl && nameTpl) {
+        openLogoModal(null, svgTpl.innerHTML, nameTpl.innerHTML);
+    }
+}
+
+function downloadHistoryPng(id) {
+    const svgTpl = document.getElementById('svgSource' + id);
+    const nameTpl = document.getElementById('nameSource' + id);
+    if (svgTpl && nameTpl) {
+        downloadModalPng(svgTpl.innerHTML, nameTpl.innerHTML);
+    }
+}
+</script>
+{% endblock %}

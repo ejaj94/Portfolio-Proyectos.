@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Galeria de Paletas Animadas{% endblock %}
+
+{% block content %}
+<div class="container fade-in">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h1 class="brand-title">
+                <i class="fa-solid fa-palette" style="color: var(--cartoon-coral);"></i> Galeria de Paletas de Cores
+            </h1>
+            <p style="color: var(--text-muted); font-weight: 700;">
+                Combinações vibrantes e animadas prontas para aplicar na identidade da sua empresa.
+            </p>
+        </div>
+        <a href="/" class="btn btn-yellow">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Ir para o Estúdio
+        </a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.5rem;">
+        {% for palette in palettes %}
+        <div class="panel-card" style="border-top: 5px solid {{ palette['c1'] }}; display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 0;">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="font-weight: 900; font-size: 1.2rem; color: var(--text-dark); margin: 0;">{{ palette['name'] }}</h3>
+                    <span class="badge badge-yellow">{{ palette['category'] }}</span>
+                </div>
+
+                <!-- Palette Color Bars -->
+                <div style="display: flex; height: 75px; border-radius: 14px; overflow: hidden; border: 3px solid var(--border-stroke); box-shadow: var(--pop-shadow); margin-bottom: 1.25rem;">
+                    <div style="flex: 1; background-color: {{ palette['c1'] }}; display: flex; align-items: flex-end; padding: 6px; font-size: 0.75rem; font-weight: 900; color: #1E293B;" title="Primária: {{ palette['c1'] }}">
+                        {{ palette['c1'] }}
+                    </div>
+                    <div style="flex: 1; background-color: {{ palette['c2'] }}; display: flex; align-items: flex-end; padding: 6px; font-size: 0.75rem; font-weight: 900; color: #1E293B;" title="Secundária: {{ palette['c2'] }}">
+                        {{ palette['c2'] }}
+                    </div>
+                    <div style="flex: 1; background-color: {{ palette['c3'] }}; display: flex; align-items: flex-end; padding: 6px; font-size: 0.75rem; font-weight: 900; color: #1E293B;" title="Destaque: {{ palette['c3'] }}">
+                        {{ palette['c3'] }}
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; flex-direction: column;">
+                <a href="/?c1={{ palette['c1']|urlencode }}&c2={{ palette['c2']|urlencode }}" class="btn btn-cyan" style="width: 100%; text-decoration: none;">
+                    ⚡ Aplicar no Estúdio
+                </a>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="copyPaletteColors('{{ palette['c1'] }}', '{{ palette['c2'] }}', this)">
+                    <i class="fa-solid fa-copy"></i> Copiar Cores Hex
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

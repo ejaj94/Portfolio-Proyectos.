@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJAJ TECH - Showcase Dia 50 AutoPlay (9s sem Loop) | Localhost</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --fire-red: #FF3333;
+            --fire-orange: #FF6600;
+            --fire-amber: #FF9900;
+            --bg-black: #0A0A0C;
+            --card-dark: #121216;
+            --panel-dark: #1A1A20;
+            --border-fire: rgba(255, 51, 51, 0.45);
+            --glow-fire: 0 0 30px rgba(255, 102, 0, 0.35);
+            --text-light: #F8FAFC;
+            --text-muted: #A0AEC0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-black);
+            color: var(--text-light);
+            padding: 1.5rem;
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .showcase-container {
+            width: 100%;
+            max-width: 880px;
+            background: var(--card-dark);
+            border: 3px solid var(--fire-red);
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: var(--glow-fire);
+            position: relative;
+        }
+
+        /* Top Header */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255, 51, 51, 0.25);
+            padding-bottom: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .header-title-box {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .icon-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--fire-red), var(--fire-orange));
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 15px rgba(255, 51, 51, 0.4);
+            flex-shrink: 0;
+        }
+
+        .header-main-text h2 {
+            font-size: 1.25rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFFFFF 30%, var(--fire-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        .header-main-text p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .milestone-pill {
+            background: linear-gradient(135deg, var(--fire-red), var(--fire-orange));
+            color: white;
+            font-weight: 900;
+            font-size: 0.8rem;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
+        }
+
+        /* AutoPlay Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--fire-red), var(--fire-orange));
+            transition: width 0.1s linear;
+        }
+
+        /* Slide Project Card */
+        .project-slide-card {
+            background: var(--panel-dark);
+            border: 2px solid rgba(255, 102, 0, 0.3);
+            border-radius: 20px;
+            padding: 1.5rem;
+            min-height: 330px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .card-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .day-badge {
+            background: var(--fire-red);
+            color: white;
+            font-weight: 900;
+            font-size: 0.78rem;
+            padding: 0.3rem 0.85rem;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cat-badge {
+            background: rgba(255, 102, 0, 0.15);
+            color: var(--fire-orange);
+            border: 1.5px solid var(--fire-orange);
+            font-weight: 800;
+            font-size: 0.78rem;
+            padding: 0.3rem 0.85rem;
+            border-radius: 8px;
+        }
+
+        .proj-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #FFFFFF;
+            margin-bottom: 0.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .proj-subtitle {
+            font-size: 0.95rem;
+            color: var(--fire-orange);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .proj-desc {
+            font-size: 0.92rem;
+            color: #CBD5E1;
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            background: var(--bg-black);
+            border: 1.5px solid rgba(255, 51, 51, 0.3);
+            border-radius: 14px;
+            padding: 1rem;
+        }
+
+        .spec-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .spec-label {
+            font-size: 0.72rem;
+            font-weight: 900;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.2rem;
+        }
+
+        .spec-value {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-light);
+        }
+
+        .spec-impact {
+            color: #34D399;
+        }
+
+        /* Controls Navigation Bar */
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.25rem;
+            padding-top: 0.75rem;
+        }
+
+        .btn-nav-arrow {
+            background: linear-gradient(135deg, var(--fire-red), var(--fire-orange));
+            color: white;
+            border: none;
+            font-weight: 900;
+            font-size: 0.88rem;
+            padding: 0.65rem 1.35rem;
+            border-radius: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(255, 51, 51, 0.35);
+            transition: all 0.2s ease;
+        }
+
+        .btn-nav-arrow:hover {
+            transform: scale(1.04);
+        }
+
+        .btn-nav-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-autoplay {
+            background: #1A1A20;
+            color: var(--fire-orange);
+            border: 2px solid var(--fire-orange);
+            font-weight: 900;
+            font-size: 0.85rem;
+            padding: 0.55rem 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-autoplay.active {
+            background: var(--fire-orange);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.5);
+        }
+
+        .indicator-text {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+
+        /* WhatsApp Callout Footer */
+        .whatsapp-bar {
+            margin-top: 1.25rem;
+            background: linear-gradient(135deg, #121216 0%, #0A0A0C 100%);
+            border: 2px solid var(--fire-orange);
+            border-radius: 16px;
+            padding: 0.9rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wa-text {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .wa-text i {
+            font-size: 1.5rem;
+            color: #25D366;
+        }
+
+        .btn-wa {
+            background: linear-gradient(135deg, var(--fire-orange), var(--fire-red));
+            color: white;
+            font-weight: 900;
+            font-size: 0.85rem;
+            padding: 0.55rem 1.2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(255, 102, 0, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .btn-wa:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="showcase-container">
+        <!-- Top Header -->
+        <div class="top-header">
+            <div class="header-title-box">
+                <div class="icon-badge">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <div class="header-main-text">
+                    <h2>DÍA 50 — Master Showcase (Projetos 41 ao 50)</h2>
+                    <p>Enmanuel Jimenez | Founder & Lead Architect EJAJ TECH</p>
+                </div>
+            </div>
+            <div class="milestone-pill">
+                🔥 50 / 50 PROJETOS
+            </div>
+        </div>
+
+        <!-- AutoPlay Progress Bar -->
+        <div class="progress-bar-container">
+            <div id="progressFill" class="progress-bar-fill"></div>
+        </div>
+
+        <!-- Project Display Slide Card -->
+        <div class="project-slide-card" id="projectSlideCard">
+            <div>
+                <div class="card-top-bar">
+                    <span id="slideDay" class="day-badge">DIA 41</span>
+                    <span id="slideCategory" class="cat-badge">Logística & Transportes</span>
+                </div>
+
+                <h3 id="slideTitle" class="proj-title">
+                    <i class="fa-solid fa-car" style="color: var(--fire-orange);"></i> AutoFleet SaaS
+                </h3>
+                <p id="slideSubtitle" class="proj-subtitle">
+                    Gestão Inteligente de Parque Automóvel & Frotas
+                </p>
+
+                <p id="slideDesc" class="proj-desc">
+                    Plataforma completa para controlo de quilometragem, alertas de inspeção periódica, gestão de abastecimentos e custos de manutenção preventiva em frotas corporativas.
+                </p>
+            </div>
+
+            <div class="specs-grid">
+                <div class="spec-item">
+                    <span class="spec-label">🛠️ Tech Stack Utilizado</span>
+                    <span id="slideTech" class="spec-value">Python 3.11, Flask, SQLite, Chart.js</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">📈 Impacto no Negócio</span>
+                    <span id="slideImpact" class="spec-value spec-impact">-25% Custos Operacionais de Frota</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="nav-controls">
+            <button id="btnPrevSlide" onclick="prevSlide()" class="btn-nav-arrow">
+                <i class="fa-solid fa-chevron-left"></i> Anterior
+            </button>
+
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span id="slideCounter" class="indicator-text">
+                    Projeto 1 de 10 (Dia 41)
+                </span>
+                <button id="btnAutoplay" onclick="toggleAutoplay()" class="btn-autoplay active">
+                    <i class="fa-solid fa-pause" id="playIcon"></i> <span id="playText">Pausar</span>
+                </button>
+            </div>
+
+            <button id="btnNextSlide" onclick="nextSlide()" class="btn-nav-arrow">
+                Próximo <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- WhatsApp Callout Footer -->
+        <div class="whatsapp-bar">
+            <div class="wa-text">
+                <i class="fa-brands fa-whatsapp"></i>
+                <div>
+                    <span style="font-weight: 800; font-size: 0.88rem; color: white; display: block;">Precisa de um projeto de software ou app para a sua empresa?</span>
+                    <span style="font-size: 0.78rem; color: var(--text-muted);">Comente a palavra <strong style="color: var(--fire-orange);">"AJUDA"</strong> para assessoria 100% gratuita!</span>
+                </div>
+            </div>
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20Dia%2050" target="_blank" class="btn-wa">
+                +351 911 151 993
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const projectDeck = [
+            {
+                day: 41,
+                icon: "fa-car",
+                title: "AutoFleet SaaS",
+                subtitle: "Gestão Inteligente de Parque Automóvel & Frotas",
+                category: "Logística & Transportes",
+                desc: "Plataforma completa para controlo de quilometragem, alertas de inspeção periódica, gestão de abastecimentos e custos de manutenção preventiva em frotas corporativas.",
+                tech: "Python 3.11, Flask, SQLite, Chart.js",
+                impact: "-25% Custos Operacionais de Frota"
+            },
+            {
+                day: 42,
+                icon: "fa-calendar-check",
+                title: "BeautyBook SaaS",
+                subtitle: "Reservas Automáticas & Gestão de Salões",
+                category: "Serviços & Estética",
+                desc: "Sistema de agendamento automático para salões de cabeleireiro e clínicas de estética com lembretes por WhatsApp e controlo de horários dos profissionais.",
+                tech: "Python, Flask, WebSockets, WhatsApp API",
+                impact: "100% Redução de Faltas sem Aviso"
+            },
+            {
+                day: 43,
+                icon: "fa-chart-line",
+                title: "SEOAnalytics Pro",
+                subtitle: "Monitorização de Ranking & Auditoria Web",
+                category: "Marketing Digital & SEO",
+                desc: "Painel de auditoria técnica SEO, rastreio de palavras-chave no Google, análise de backlinks da concorrência e relatórios automáticos.",
+                tech: "Python, Flask, BeautifulSoup, Data Visualizer",
+                impact: "+60% Tráfego Orgânico Medido"
+            },
+            {
+                day: 44,
+                icon: "fa-award",
+                title: "LoyaltyClub SaaS",
+                subtitle: "Programa de Pontos & Recompensas Digitais",
+                category: "Retalho & Fidelização",
+                desc: "Plataforma para criação de programas de pontos de fidelidade, cartões digitais para telemóvel e envio de cupões promocionais personalizados.",
+                tech: "Python, Flask, QR Code Engine, SQLite",
+                impact: "+35% Retenção de Clientes"
+            },
+            {
+                day: 45,
+                icon: "fa-helmet-safety",
+                title: "BuildCost SaaS",
+                subtitle: "Gestão Orçamental para Construção Civil",
+                category: "Engenharia & Construção",
+                desc: "Aplicação para controlo de custos de obras em tempo real, medição de consumo de materiais, mão de obra e desvios orçamentais.",
+                tech: "Python, Flask, Export Engine PDF/Excel",
+                impact: "Controlo Rigoroso de Orçamento"
+            },
+            {
+                day: 46,
+                icon: "fa-file-pdf",
+                title: "PdfReport Engine",
+                subtitle: "Geração Dinâmica de Relatórios & Faturas",
+                category: "Automação & Utilitários",
+                desc: "Motor de alta velocidade para compilação e conversão de dados JSON/HTML em relatórios empresariais e faturas em formato PDF HD.",
+                tech: "Python, ReportLab, Flask, Jinja2",
+                impact: "Geração Instantânea de Documentos"
+            },
+            {
+                day: 47,
+                icon: "fa-plug",
+                title: "ApiGate SaaS",
+                subtitle: "Hub Middleware de Conexão de Sistemas",
+                category: "Infraestrutura & DevOps",
+                desc: "Gateway para integrar e unificar múltiplos serviços de terceiros, gateways de pagamento, ERPs e CRMs com limitação de taxa e registos de segurança.",
+                tech: "Python, Flask, REST API, JSON Schema",
+                impact: "Conexão & Integração Total"
+            },
+            {
+                day: 48,
+                icon: "fa-building",
+                title: "CondoManager SaaS",
+                subtitle: "Administração Residencial & Quotas",
+                category: "Gestão Imobiliária",
+                desc: "Portal para gestão de mensalidades de condomínio, reserva de espaços comuns, registo de atas de reuniões e comunicação rápida aos condóminos.",
+                tech: "Python, Flask, SQLite, Email Dispatcher",
+                impact: "Transparência Total na Gestão"
+            },
+            {
+                day: 49,
+                icon: "fa-laptop-code",
+                title: "WorkSpace Booking",
+                subtitle: "Gestão de Secretárias & Salas Coworking",
+                category: "Real Estate & Coworking",
+                desc: "Aplicação de check-in e reserva de secretárias e salas de reunião com mapas visuais interativos dos espaços e controlo de lotação.",
+                tech: "Python, Flask, Interactive Canvas JS",
+                impact: "Otimização de Espaços de Trabalho"
+            },
+            {
+                day: 50,
+                icon: "fa-palette",
+                title: "LogoCraft AI SaaS",
+                subtitle: "Criador Vetorial de Marcas & Kit de Exportação",
+                category: "Branding & Design SaaS",
+                desc: "Plataforma SaaS completa para gerar logótipos SVG vetoriais em estilo 3D cartoon, galeria de paletas de cores e exportador em PNG HD.",
+                tech: "Python, Flask, SVG Builder, Canvas, Pillow",
+                impact: "Identidade Visual Instantânea HD"
+            }
+        ];
+
+        let currentIdx = 0;
+        let isAutoplay = true;
+        const DURATION = 9000; // Double duration: 9.0 seconds per slide
+        let startTime = Date.now();
+
+        function updateSlideDisplay() {
+            const item = projectDeck[currentIdx];
+
+            document.getElementById('slideDay').innerText = `DIA ${item.day}`;
+            document.getElementById('slideCategory').innerText = item.category;
+            document.getElementById('slideTitle').innerHTML = `<i class="fa-solid ${item.icon}" style="color: var(--fire-orange);"></i> ${item.title}`;
+            document.getElementById('slideSubtitle').innerText = item.subtitle;
+            document.getElementById('slideDesc').innerText = item.desc;
+            document.getElementById('slideTech').innerText = item.tech;
+            document.getElementById('slideImpact').innerText = item.impact;
+
+            document.getElementById('slideCounter').innerText = `Projeto ${currentIdx + 1} de 10 (Dia ${item.day})`;
+
+            document.getElementById('btnPrevSlide').disabled = (currentIdx === 0);
+            document.getElementById('btnNextSlide').disabled = (currentIdx === projectDeck.length - 1);
+
+            resetProgress();
+        }
+
+        function resetProgress() {
+            startTime = Date.now();
+            const fill = document.getElementById('progressFill');
+            if (fill) fill.style.width = '0%';
+        }
+
+        function tickProgress() {
+            if (!isAutoplay) return;
+            const elapsed = Date.now() - startTime;
+            const pct = Math.min(100, (elapsed / DURATION) * 100);
+            const fill = document.getElementById('progressFill');
+            if (fill) fill.style.width = `${pct}%`;
+
+            if (elapsed >= DURATION) {
+                if (currentIdx < projectDeck.length - 1) {
+                    currentIdx++;
+                    updateSlideDisplay();
+                } else {
+                    // Reached the final slide (Projeto 50) -> STOP autoplay and STAY on slide 50!
+                    isAutoplay = false;
+                    const btn = document.getElementById('btnAutoplay');
+                    const icon = document.getElementById('playIcon');
+                    const txt = document.getElementById('playText');
+                    if (btn && icon && txt) {
+                        btn.classList.remove('active');
+                        icon.className = 'fa-solid fa-play';
+                        txt.innerText = 'Reproduzir';
+                    }
+                    if (fill) fill.style.width = '100%';
+                }
+            }
+        }
+
+        function nextSlide() {
+            if (currentIdx < projectDeck.length - 1) {
+                currentIdx++;
+                updateSlideDisplay();
+            }
+        }
+
+        function prevSlide() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                updateSlideDisplay();
+            }
+        }
+
+        function toggleAutoplay() {
+            if (!isAutoplay && currentIdx === projectDeck.length - 1) {
+                currentIdx = 0;
+            }
+            isAutoplay = !isAutoplay;
+            const btn = document.getElementById('btnAutoplay');
+            const icon = document.getElementById('playIcon');
+            const txt = document.getElementById('playText');
+
+            if (isAutoplay) {
+                btn.classList.add('active');
+                icon.className = 'fa-solid fa-pause';
+                txt.innerText = 'Pausar';
+                startTime = Date.now();
+            } else {
+                btn.classList.remove('active');
+                icon.className = 'fa-solid fa-play';
+                txt.innerText = 'Reproduzir';
+                const fill = document.getElementById('progressFill');
+                if (fill) fill.style.width = '0%';
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === ' ') { e.preventDefault(); toggleAutoplay(); }
+        });
+
+        setInterval(tickProgress, 50);
+        updateSlideDisplay();
+    </script>
+</body>
+</html>

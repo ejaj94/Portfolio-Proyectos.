@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Kit de Marca Completo | {{ logo['brand_name'] }}{% endblock %}
+
+{% block content %}
+<div class="container fade-in">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h1 class="brand-title" style="margin-bottom: 0.25rem;">
+                <i class="fa-solid fa-box-open" style="color: var(--cartoon-coral);"></i> Kit de Marca Completo
+            </h1>
+            <p style="color: var(--text-muted); font-weight: 700;">
+                Exportação de ativos vetoriais HD para <strong>{{ logo['brand_name'] }}</strong>
+            </p>
+        </div>
+        <a href="/history" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Voltar à Galeria
+        </a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+        <!-- Left Column: Visual Preview -->
+        <div class="panel-card" style="border-top: 5px solid var(--cartoon-yellow); text-align: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-weight: 900; font-size: 1.25rem; color: var(--text-dark); margin: 0;">
+                    🎨 Pré-visualização Vetorial
+                </h3>
+                <span class="badge badge-yellow">{{ logo['style'] }}</span>
+            </div>
+
+            <div id="svgExportContainer" class="svg-preview-box" style="min-height: 300px;" onclick="openExportModal()" title="Clique para abrir em grande HD">
+                {{ logo['svg_code']|safe }}
+            </div>
+            
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                <button onclick="downloadSvgDirect()" class="btn btn-yellow" style="flex: 1;">
+                    <i class="fa-solid fa-download"></i> Baixar SVG Vetor
+                </button>
+                <button onclick="downloadPngCanvas()" class="btn btn-cyan" style="flex: 1;">
+                    <i class="fa-solid fa-file-image"></i> Baixar PNG HD
+                </button>
+                <button onclick="openExportModal()" class="btn btn-coral" style="width: 100%;">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i> Ver em Grande HD
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Column: Brand Specs & Code -->
+        <div>
+            <!-- Colors Spec -->
+            <div class="panel-card" style="border-top: 5px solid var(--cartoon-cyan); margin-bottom: 1.5rem;">
+                <h3 style="font-weight: 900; font-size: 1.2rem; margin-bottom: 1rem; color: var(--text-dark);">
+                    🎨 Cores da Identidade Visual
+                </h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 180px; display: flex; align-items: center; gap: 0.75rem; background: #F8FAFC; padding: 0.75rem 1rem; border-radius: 12px; border: 3px solid var(--border-stroke);">
+                        <div style="width: 42px; height: 42px; border-radius: 10px; background-color: {{ logo['primary_color'] }}; border: 3px solid var(--border-stroke); box-shadow: 2px 2px 0px var(--border-stroke);"></div>
+                        <div>
+                            <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted);">COR PRIMÁRIA</div>
+                            <div style="font-weight: 900; font-size: 1.1rem; color: var(--text-dark);">{{ logo['primary_color'] }}</div>
+                        </div>
+                    </div>
+
+                    <div style="flex: 1; min-width: 180px; display: flex; align-items: center; gap: 0.75rem; background: #F8FAFC; padding: 0.75rem 1rem; border-radius: 12px; border: 3px solid var(--border-stroke);">
+                        <div style="width: 42px; height: 42px; border-radius: 10px; background-color: {{ logo['secondary_color'] }}; border: 3px solid var(--border-stroke); box-shadow: 2px 2px 0px var(--border-stroke);"></div>
+                        <div>
+                            <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted);">COR SECUNDÁRIA</div>
+                            <div style="font-weight: 900; font-size: 1.1rem; color: var(--text-dark);">{{ logo['secondary_color'] }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SVG Source Code -->
+            <div class="panel-card" style="border-top: 5px solid var(--cartoon-pink);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <h3 style="font-weight: 900; font-size: 1.2rem; color: var(--text-dark); margin: 0;">
+                        💻 Código SVG Fonte
+                    </h3>
+                    <button onclick="copySvgCode()" id="btnExportCopy" class="btn btn-coral btn-sm">
+                        <i class="fa-solid fa-copy"></i> Copiar Código
+                    </button>
+                </div>
+                <textarea id="svgRawArea" rows="8" readonly style="width: 100%; border: 3px solid var(--border-stroke); border-radius: 12px; font-family: monospace; font-size: 0.85rem; padding: 0.85rem; background: #0F172A; color: #38BDF8; box-sizing: border-box; resize: vertical;">{{ logo['svg_code'] }}</textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const currentLogoSvg = `{{ logo['svg_code']|safe }}`;
+const currentLogoName = `{{ logo['brand_name'] }}`;
+
+function openExportModal() {
+    openLogoModal(null, currentLogoSvg, currentLogoName);
+}
+
+function downloadSvgDirect() {
+    triggerSvgDownload(currentLogoSvg, `${currentLogoName.toLowerCase().replace(/\s+/g, '_')}_vetor.svg`);
+}
+
+function downloadPngCanvas() {
+    currentModalSvg = currentLogoSvg;
+    currentModalTitle = currentLogoName;
+    downloadModalPng();
+}
+
+function copySvgCode() {
+    const copyText = document.getElementById("svgRawArea");
+    copyText.select();
+    navigator.clipboard.writeText(copyText.value).then(() => {
+        const btn = document.getElementById('btnExportCopy');
+        if (btn) {
+            btn.innerHTML = `<i class="fa-solid fa-check"></i> Copiado!`;
+            setTimeout(() => { btn.innerHTML = `<i class="fa-solid fa-copy"></i> Copiar Código`; }, 2000);
+        }
+    });
+}
+</script>
+{% endblock %}

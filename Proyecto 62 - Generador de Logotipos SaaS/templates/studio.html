@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Estúdio de Criação de Logótipos{% endblock %}
+
+{% block content %}
+<!-- Top Welcome Banner -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 900; color: var(--text-dark); display: flex; align-items: center; gap: 0.6rem; margin: 0 0 0.25rem 0;">
+            <i class="fa-solid fa-paintbrush" style="color: var(--cartoon-coral);"></i> Estúdio de Criação de Logótipos & Branding
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem; font-weight: 700; margin: 0;">
+            Crie logótipos vetoriais únicos com estilo animado de caricatura 3D, cores vibrantes e download imediato em SVG.
+        </p>
+    </div>
+    <div>
+        <span class="badge badge-yellow" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+            <i class="fa-solid fa-sparkles"></i> Motor VETORIAL SVG Ativo
+        </span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: minmax(320px, 350px) 1fr; gap: 1.5rem; align-items: start;">
+    <!-- Controls Sidebar -->
+    <div class="panel-card" style="border-top: 5px solid var(--cartoon-coral);">
+        <div class="panel-header">
+            <h2><i class="fa-solid fa-sliders" style="color: var(--cartoon-coral);"></i> Parâmetros da Marca</h2>
+        </div>
+
+        <form id="logoGeneratorForm" onchange="generateLogos(null)">
+            <div class="form-group">
+                <label for="brandNameInput"><i class="fa-solid fa-font"></i> Nome da Marca</label>
+                <input type="text" id="brandNameInput" class="form-control" value="EJAJ Cartoon" placeholder="Ex: Pixel Studio" required>
+            </div>
+
+            <div class="form-group">
+                <label for="sloganInput"><i class="fa-solid fa-quote-left"></i> Slogan / Subtítulo</label>
+                <input type="text" id="sloganInput" class="form-control" value="Creative Studio & Software" placeholder="Ex: Design Divertido">
+            </div>
+
+            <div class="form-group">
+                <label for="sectorInput"><i class="fa-solid fa-briefcase"></i> Sector de Atividade</label>
+                <select id="sectorInput" class="form-control">
+                    <option value="Tecnologia" selected>Tecnologia & IT</option>
+                    <option value="Restauração">Restauração & Alimentação</option>
+                    <option value="Fitness">Fitness & Desporto</option>
+                    <option value="Moda">Moda & Vestuário</option>
+                    <option value="Jogos">Jogos & Entretenimento</option>
+                    <option value="Educação">Educação & Ensino</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="styleInput"><i class="fa-solid fa-icons"></i> Estilo Visual</label>
+                <select id="styleInput" class="form-control">
+                    <option value="Caricatura 3D" selected>Caricatura / Animado 3D</option>
+                    <option value="Cyber Neon">Cyber Neón Divertido</option>
+                    <option value="Minimalista">Minimalista Pop</option>
+                    <option value="Dark Cyber">Dark Obsidian Cyber</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="symbolInput"><i class="fa-solid fa-shapes"></i> Ícone / Símbolo</label>
+                <select id="symbolInput" class="form-control">
+                    <option value="rocket" selected>🚀 Foguete Espacial</option>
+                    <option value="robot">🤖 Robô Futurista</option>
+                    <option value="star">⭐ Estrela Brilhante</option>
+                    <option value="crown">👑 Coroa Real</option>
+                    <option value="coffee">☕ Chávena / Café</option>
+                </select>
+            </div>
+
+            <!-- Color Controls -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem;">
+                <div class="form-group">
+                    <label for="primaryColorInput">Cor Principal</label>
+                    <input type="color" id="primaryColorInput" class="form-control" value="#FFDE59" style="height: 42px; cursor: pointer;">
+                </div>
+                <div class="form-group">
+                    <label for="secondaryColorInput">Cor Secundária</label>
+                    <input type="color" id="secondaryColorInput" class="form-control" value="#FF6B6B" style="height: 42px; cursor: pointer;">
+                </div>
+            </div>
+
+            <!-- Quick Palettes Preset Bar -->
+            <div style="margin-bottom: 1.5rem;">
+                <span style="font-size: 0.8rem; font-weight: 800; color: var(--text-dark); display: block; margin-bottom: 0.5rem;">
+                    🎨 Paletas de Caricatura Rápida:
+                </span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button type="button" onclick="applyPalette('#FFDE59', '#FF6B6B')" style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #FFDE59 50%, #FF6B6B 50%); border: 3px solid #1E293B; cursor: pointer; box-shadow: 2px 2px 0px #1E293B;" title="Amarelo & Coral"></button>
+                    <button type="button" onclick="applyPalette('#4ECDC4', '#FF70A6')" style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #4ECDC4 50%, #FF70A6 50%); border: 3px solid #1E293B; cursor: pointer; box-shadow: 2px 2px 0px #1E293B;" title="Menta & Rosa"></button>
+                    <button type="button" onclick="applyPalette('#00F5D4', '#7000FF')" style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #00F5D4 50%, #7000FF 50%); border: 3px solid #1E293B; cursor: pointer; box-shadow: 2px 2px 0px #1E293B;" title="Cian & Púrpura"></button>
+                    <button type="button" onclick="applyPalette('#F59E0B', '#0F172A')" style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #F59E0B 50%, #0F172A 50%); border: 3px solid #1E293B; cursor: pointer; box-shadow: 2px 2px 0px #1E293B;" title="Dourado & Preto"></button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-coral" style="width: 100%; justify-content: center;">
+                <i class="fa-solid fa-rotate"></i> Gerar Variações do Logótipo
+            </button>
+        </form>
+    </div>
+
+    <!-- Right Variations Display Deck -->
+    <div>
+        <div class="panel-card" style="border-top: 5px solid var(--cartoon-cyan);">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-shapes" style="color: var(--cartoon-cyan);"></i> Variações de Design Geradas</h2>
+                <span class="badge badge-cyan">4 Formatos Disponíveis</span>
+            </div>
+
+            <!-- Variations Grid CONTAINER -->
+            <div id="variationsGrid" class="logo-variations-grid">
+                <!-- Dynamically rendered variation cards -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
