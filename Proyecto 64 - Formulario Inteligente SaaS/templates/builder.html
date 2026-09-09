@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}{% if form_data %}Editar Formulário{% else %}Novo Formulário{% endif %} | FormCraft AI SaaS{% endblock %}
+
+{% block head %}
+<script>
+    window.FORM_ID = {{ form_data.id if form_data else 'null' }};
+    window.INITIAL_FIELDS = {{ (form_data.fields_json if form_data else '[]') | safe }};
+</script>
+{% endblock %}
+
+{% block content %}
+<div style="background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem;">
+    <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h2 style="font-size: 1.4rem; font-weight: 900; color: white;">
+                <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--primary-violet);"></i>
+                {% if form_data %}Editar Formulário: {{ form_data.title }}{% else %}Construtor de Formulários Inteligentes{% endif %}
+            </h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Adicione campos, reordene por drag & drop e personalize os detalhes.</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="/" class="btn-sm btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Cancelar
+            </a>
+            <button type="button" id="btn-save-form" class="btn-sm btn-primary" style="padding: 0.65rem 1.6rem;">
+                <i class="fa-solid fa-floppy-disk"></i> Guardar Formulário
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="builder-container">
+
+    <!-- LEFT PANEL: GENERAL SETTINGS & FIELD PALETTE -->
+    <aside class="builder-panel">
+        <h3 class="panel-title"><i class="fa-solid fa-sliders"></i> Definições Gerais</h3>
+        <div class="form-group">
+            <label class="form-label" style="font-size: 0.82rem;">Título do Formulário</label>
+            <input type="text" id="form-title" class="form-input" value="{{ form_data.title if form_data else 'Novo Formulário Inteligente' }}" placeholder="Ex: Pesquisa de Satisfação">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" style="font-size: 0.82rem;">Descrição / Instruções</label>
+            <textarea id="form-desc" class="form-textarea" placeholder="Explicação para o utilizador...">{{ form_data.description if form_data else '' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" style="font-size: 0.82rem;">Cor de Destaque do Tema</label>
+            <input type="color" id="theme-color" value="{{ form_data.theme_color if form_data else '#8B5CF6' }}" style="width: 100%; height: 38px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border-color); background: none;">
+        </div>
+
+        <hr style="border: none; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
+
+        <h3 class="panel-title"><i class="fa-solid fa-plus-square"></i> Tipos de Campos</h3>
+        <button type="button" class="field-type-btn" onclick="addField('text')">
+            <i class="fa-solid fa-font" style="color: var(--primary-cyan);"></i> Texto Curto
+        </button>
+        <button type="button" class="field-type-btn" onclick="addField('email')">
+            <i class="fa-solid fa-envelope" style="color: var(--primary-violet);"></i> E-mail
+        </button>
+        <button type="button" class="field-type-btn" onclick="addField('phone')">
+            <i class="fa-solid fa-phone" style="color: var(--accent-emerald);"></i> Telefone
+        </button>
+        <button type="button" class="field-type-btn" onclick="addField('number')">
+            <i class="fa-solid fa-hashtag" style="color: var(--accent-gold);"></i> Número
+        </button>
+        <button type="button" class="field-type-btn" onclick="addField('textarea')">
+            <i class="fa-solid fa-paragraph" style="color: #38BDF8;"></i> Parágrafo
+        </button>
+        <button type="button" class="field-type-btn" onclick="addField('radio')">
+            <i class="fa-solid fa-circle-dot" style="color: var(--accent-coral);"></i> Opção Única (Radio)
+        </button>
+        <button type="button" class="field-type-btn" onclick="addField('checkbox')">
+            <i class="fa-solid fa-square-check" style="color: var(--primary-violet);"></i> Caixas de Seleção
+        </button>
+        <button type="button" class="field-type-btn" onclick="addField('dropdown')">
+            <i class="fa-solid fa-caret-down" style="color: var(--primary-cyan);"></i> Menu Suspenso
+        </button>
+        <button type="button" class="field-type-btn" onclick="addField('rating')">
+            <i class="fa-solid fa-star" style="color: var(--accent-gold);"></i> Classificação (Estrelas)
+        </button>
+    </aside>
+
+    <!-- MIDDLE PANEL: CANVAS AREA (DRAG & DROP REORDERING) -->
+    <main class="builder-panel" style="flex: 1;">
+        <h3 class="panel-title"><i class="fa-solid fa-layer-group"></i> Estrutura do Formulário (Drag & Drop)</h3>
+        <div id="fields-canvas" class="canvas-area"></div>
+    </main>
+
+    <!-- RIGHT PANEL: FIELD PROPERTIES INSPECTOR -->
+    <aside class="builder-panel" id="inspector-panel"></aside>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/builder.js') }}"></script>
+{% endblock %}

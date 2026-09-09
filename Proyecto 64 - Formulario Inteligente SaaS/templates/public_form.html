@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ form_data.title if form_data else 'Formulário' }} | FormCraft AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        :root {
+            --theme-color: {{ form_data.theme_color if form_data else '#8B5CF6' }};
+        }
+        body {
+            background: radial-gradient(circle at top center, rgba(139, 92, 246, 0.15) 0%, rgba(9, 13, 22, 1) 100%);
+        }
+        .btn-submit-form {
+            background: linear-gradient(135deg, var(--theme-color), #06B6D4);
+            color: #0F172A;
+            font-weight: 900;
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+            transition: transform 0.2s ease;
+        }
+        .btn-submit-form:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="public-form-wrapper">
+
+        {% if error %}
+        <div class="public-form-card" style="text-align: center;">
+            <i class="fa-solid fa-circle-exclamation" style="font-size: 3.5rem; color: var(--accent-coral); margin-bottom: 1rem;"></i>
+            <h2 style="font-size: 1.6rem; margin-bottom: 0.5rem;">Formulário Não Encontrado</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">O formulário solicitado não existe ou foi removido.</p>
+            <a href="/" class="btn-sm btn-secondary" style="display: inline-flex; width: auto; padding: 0.75rem 2rem;">Voltar ao Início</a>
+        </div>
+        {% else %}
+
+        <div id="form-card-container" class="public-form-card">
+            
+            <div style="margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color);">
+                <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem;">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: var(--theme-color);"></span>
+                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-color); text-transform: uppercase; letter-spacing: 1px;">FormCraft AI</span>
+                </div>
+                <h1 style="font-size: 2.2rem; font-weight: 900; color: white; margin-bottom: 0.5rem;">{{ form_data.title }}</h1>
+                {% if form_data.description %}
+                <p style="color: var(--text-muted); font-size: 1.05rem;">{{ form_data.description }}</p>
+                {% endif %}
+            </div>
+
+            <form id="public-response-form">
+
+                {% for f in fields %}
+                <div class="form-group">
+                    <label class="form-label">
+                        {{ f.label }}
+                        {% if f.required %}<span class="req">*</span>{% endif %}
+                    </label>
+
+                    {% if f.type == 'text' %}
+                        <input type="text" name="{{ f.id }}" class="form-input" placeholder="{{ f.placeholder or '' }}" {% if f.required %}required{% endif %}>
+                    
+                    {% elif f.type == 'email' %}
+                        <input type="email" name="{{ f.id }}" class="form-input" placeholder="{{ f.placeholder or 'exemplo@dominio.pt' }}" {% if f.required %}required{% endif %}>
+                    
+                    {% elif f.type == 'phone' %}
+                        <input type="tel" name="{{ f.id }}" class="form-input" placeholder="{{ f.placeholder or '+351 912 345 678' }}" {% if f.required %}required{% endif %}>
+                    
+                    {% elif f.type == 'number' %}
+                        <input type="number" name="{{ f.id }}" class="form-input" placeholder="{{ f.placeholder or '0' }}" {% if f.required %}required{% endif %}>
+                    
+                    {% elif f.type == 'textarea' %}
+                        <textarea name="{{ f.id }}" class="form-textarea" placeholder="{{ f.placeholder or '' }}" {% if f.required %}required{% endif %}></textarea>
+
+                    {% elif f.type == 'dropdown' %}
+                        <select name="{{ f.id }}" class="form-select" {% if f.required %}required{% endif %}>
+                            <option value="">-- Selecionar Opção --</option>
+                            {% for opt in f.options or [] %}
+                            <option value="{{ opt }}">{{ opt }}</option>
+                            {% endfor %}
+                        </select>
+
+                    {% elif f.type == 'radio' %}
+                        <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
+                            {% for opt in f.options or [] %}
+                            <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-primary); font-size: 0.95rem;">
+                                <input type="radio" name="{{ f.id }}" value="{{ opt }}" style="width: 18px; height: 18px; accent-color: var(--theme-color);" {% if f.required and loop.first %}required{% endif %}>
+                                {{ opt }}
+                            </label>
+                            {% endfor %}
+                        </div>
+
+                    {% elif f.type == 'checkbox' %}
+                        <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
+                            {% for opt in f.options or [] %}
+                            <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; color: var(--text-primary); font-size: 0.95rem;">
+                                <input type="checkbox" name="{{ f.id }}" value="{{ opt }}" style="width: 18px; height: 18px; accent-color: var(--theme-color);">
+                                {{ opt }}
+                            </label>
+                            {% endfor %}
+                        </div>
+
+                    {% elif f.type == 'rating' %}
+                        <input type="hidden" name="{{ f.id }}" id="rating-val-{{ f.id }}" value="" {% if f.required %}required{% endif %}>
+                        <div class="rating-stars-input" data-target="rating-val-{{ f.id }}">
+                            <i class="fa-solid fa-star star" data-rating="1"></i>
+                            <i class="fa-solid fa-star star" data-rating="2"></i>
+                            <i class="fa-solid fa-star star" data-rating="3"></i>
+                            <i class="fa-solid fa-star star" data-rating="4"></i>
+                            <i class="fa-solid fa-star star" data-rating="5"></i>
+                        </div>
+
+                    {% endif %}
+
+                    {% if f.help %}
+                    <div class="form-help">{{ f.help }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn-submit-form" style="margin-top: 2rem;">
+                    <i class="fa-solid fa-paper-plane"></i> Submeter Resposta
+                </button>
+
+            </form>
+        </div>
+
+        <!-- SUCCESS CONFIRMATION BOX -->
+        <div id="success-card" class="public-form-card" style="display: none; text-align: center;">
+            <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: var(--accent-emerald); margin-bottom: 1.25rem;"></i>
+            <h2 style="font-size: 2rem; font-weight: 900; color: white; margin-bottom: 0.75rem;">Resposta Submetida!</h2>
+            <p id="success-msg-text" style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem;">
+                Obrigado por preencher este formulário. A sua resposta foi registada com sucesso.
+            </p>
+            <button type="button" class="btn-sm btn-secondary" style="display: inline-flex; width: auto; padding: 0.75rem 2rem;" onclick="location.reload();">
+                Submeter Outra Resposta
+            </button>
+        </div>
+
+        {% endif %}
+
+        <div style="text-align: center; margin-top: 2rem; color: var(--text-muted); font-size: 0.85rem;">
+            Desenvolvido por <strong>Enmanuel Jimenez</strong> | Lead Architect <strong>EJAJ TECH</strong>
+        </div>
+
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Rating star click interactions
+        document.querySelectorAll('.rating-stars-input').forEach(container => {
+            const targetId = container.getAttribute('data-target');
+            const hiddenInput = document.getElementById(targetId);
+            const stars = container.querySelectorAll('.star');
+
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = star.getAttribute('data-rating');
+                    hiddenInput.value = rating;
+                    stars.forEach(s => {
+                        if (parseInt(s.getAttribute('data-rating')) <= parseInt(rating)) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+            });
+        });
+
+        // Form Submit handler
+        const form = document.getElementById('public-response-form');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                
+                fetch('/form/{{ form_data.slug }}/submit', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('form-card-container').style.display = 'none';
+                        document.getElementById('success-msg-text').innerText = data.message;
+                        document.getElementById('success-card').style.display = 'block';
+                    } else {
+                        alert('⚠️ ' + data.message);
+                    }
+                })
+                .catch(err => alert('❌ Ocorreu um erro ao enviar a resposta.'));
+            });
+        }
+    });
+    </script>
+</body>
+</html>

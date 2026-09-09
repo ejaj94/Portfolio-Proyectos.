@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | FormCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Formulários Inteligentes</h1>
+            <p class="page-subtitle">Gerencie os seus formulários personalizados, acompanhe respostas e analise resultados.</p>
+        </div>
+        <a href="/builder" class="btn-sm btn-primary" style="padding: 0.75rem 1.5rem; font-size: 0.95rem;">
+            <i class="fa-solid fa-plus"></i> Criar Novo Formulário
+        </a>
+    </div>
+
+    <!-- STATS SUMMARY -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-file-pen"></i></div>
+            <div>
+                <div class="stat-val">{{ total_forms }}</div>
+                <div class="stat-label">Formulários Ativos</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, var(--primary-cyan), var(--accent-emerald));"><i class="fa-solid fa-inbox"></i></div>
+            <div>
+                <div class="stat-val">{{ total_responses }}</div>
+                <div class="stat-label">Total de Respostas Recolhidas</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #FF6B6B);"><i class="fa-solid fa-chart-line"></i></div>
+            <div>
+                <div class="stat-val">{{ (total_responses / total_forms if total_forms > 0 else 0) | round(1) }}</div>
+                <div class="stat-label">Média de Respostas por Formulário</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORMS CARDS GRID -->
+    {% if forms %}
+    <div class="forms-grid">
+        {% for f in forms %}
+        <div class="form-card">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <span style="width: 14px; height: 14px; border-radius: 50%; background: {{ f.theme_color }}; display: inline-block;"></span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-regular fa-clock"></i> {{ f.created_at }}</span>
+                </div>
+                <h3 class="form-card-title">{{ f.title }}</h3>
+                <p class="form-card-desc">{{ f.description or 'Sem descrição' }}</p>
+            </div>
+
+            <div class="form-card-meta">
+                <span><i class="fa-solid fa-layer-group" style="color: var(--primary-cyan);"></i> Campos: {{ (f.fields_json | from_json if f.fields_json else []) | length }}</span>
+                <span style="font-weight: 800; color: white;"><i class="fa-solid fa-message" style="color: var(--primary-violet);"></i> {{ f.response_count }} respostas</span>
+            </div>
+
+            <div class="form-card-actions">
+                <a href="/form/{{ f.slug }}" target="_blank" class="btn-sm btn-primary" title="Abrir link público de preenchimento">
+                    <i class="fa-solid fa-paper-plane"></i> Partilhar
+                </a>
+                <a href="/responses/{{ f.id }}" class="btn-sm btn-secondary" title="Ver respostas recolhidas">
+                    <i class="fa-solid fa-inbox"></i> Respostas
+                </a>
+                <a href="/analytics/{{ f.id }}" class="btn-sm btn-secondary" title="Ver estatísticas">
+                    <i class="fa-solid fa-chart-pie"></i> Analítica
+                </a>
+                <a href="/builder?id={{ f.id }}" class="btn-sm btn-secondary" title="Editar formulário">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <button type="button" class="btn-sm btn-danger" onclick="deleteForm({{ f.id }})" title="Eliminar">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 4rem 1.5rem; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 20px;">
+        <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Nenhum Formulário Criado</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Crie o seu primeiro formulário inteligente utilizando o construtor visual.</p>
+        <a href="/builder" class="btn-sm btn-primary" style="padding: 0.75rem 2rem;">
+            <i class="fa-solid fa-plus"></i> Criar Formulário Agora
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function deleteForm(id) {
+    if (confirm('Tem a certeza que deseja eliminar este formulário e todas as suas respostas recolhidas?')) {
+        fetch('/api/form/delete/' + id, { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erro ao eliminar formulário.');
+                }
+            });
+    }
+}
+</script>
+{% endblock %}

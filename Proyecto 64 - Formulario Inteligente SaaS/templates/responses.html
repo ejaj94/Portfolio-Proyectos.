@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Respostas: {{ form_data.title }} | FormCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <div class="page-header">
+        <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+                <a href="/" style="color: var(--text-muted); text-decoration: none;"><i class="fa-solid fa-arrow-left"></i> Voltar ao Dashboard</a>
+            </div>
+            <h1 class="page-title">Respostas: {{ form_data.title }}</h1>
+            <p class="page-subtitle">Total de {{ responses | length }} registo(s) de respostas recolhidos.</p>
+        </div>
+        
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <a href="/api/form/export/{{ form_data.id }}/csv" class="btn-sm btn-primary" style="padding: 0.65rem 1.25rem;">
+                <i class="fa-solid fa-file-csv"></i> Exportar CSV
+            </a>
+            <a href="/api/form/export/{{ form_data.id }}/json" class="btn-sm btn-secondary" style="padding: 0.65rem 1.25rem;">
+                <i class="fa-solid fa-file-code"></i> Exportar JSON
+            </a>
+        </div>
+    </div>
+
+    {% if responses %}
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th># ID</th>
+                    <th>Data / Hora</th>
+                    <th>IP</th>
+                    {% for f in fields %}
+                    <th>{{ f.label }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in responses %}
+                <tr>
+                    <td style="font-weight: 800; color: var(--primary-cyan);">#{{ r.id }}</td>
+                    <td style="font-size: 0.85rem; color: var(--text-muted);">{{ r.submitted_at }}</td>
+                    <td style="font-size: 0.85rem; color: var(--text-muted);">{{ r.user_ip }}</td>
+                    {% for f in fields %}
+                    <td>
+                        {% set ans = r.answers.get(f.id) %}
+                        {% if ans is sequence and ans is not string %}
+                            <span style="background: rgba(139,92,246,0.2); color: var(--primary-violet); font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 20px;">
+                                {{ ans | join(', ') }}
+                            </span>
+                        {% elif f.type == 'rating' %}
+                            <span style="color: var(--accent-gold); font-weight: 900;">
+                                <i class="fa-solid fa-star"></i> {{ ans or '-' }}/5
+                            </span>
+                        {% else %}
+                            {{ ans or '-' }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 4rem 1.5rem; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 20px;">
+        <i class="fa-solid fa-inbox" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Nenhuma Resposta Recolhida</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Partilhe o link do formulário com os seus clientes para começar a receber dados.</p>
+        <a href="/form/{{ form_data.slug }}" target="_blank" class="btn-sm btn-primary" style="padding: 0.75rem 2rem;">
+            <i class="fa-solid fa-paper-plane"></i> Abrir Link Público
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
