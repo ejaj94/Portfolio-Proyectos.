@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Relatórios de Assiduidade | TimePulse AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-file-invoice"></i> Relatórios de Assiduidade</h1>
+        <p class="page-subtitle">Análise detalhada de pontualidade, horas de trabalho acumuladas e atrasos por data.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/api/export/csv" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Descarregar CSV
+        </a>
+        <a href="/api/export/json" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-code"></i> Descarregar JSON
+        </a>
+    </div>
+</div>
+
+<!-- Date Filter Bar -->
+<div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+    <form method="GET" action="/reports" style="display: flex; gap: 1rem; align-items: center;">
+        <label style="font-size: 0.9rem; font-weight: 700; color: var(--text-white);">Filtrar por Data:</label>
+        <input type="date" name="date" value="{{ selected_date }}" class="form-input" style="width: 200px;" onchange="this.form.submit()">
+        <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-filter"></i> Aplicar Data</button>
+    </form>
+
+    <div style="display: flex; gap: 1.5rem; font-size: 0.9rem;">
+        <span>Registos: <strong style="color: white;">{{ total_logs }}</strong></span>
+        <span>Atrasos: <strong style="color: var(--amber-gold);">{{ total_delays }} ({{ sum_delay_min }} min total)</strong></span>
+        <span>Total Horas: <strong style="color: var(--cyan-spark);">{{ "%.2f"|format(sum_worked_hours) }} h</strong></span>
+    </div>
+</div>
+
+<!-- Reports Table Card -->
+<div class="table-card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.2rem; font-weight: 800; color: white; margin-bottom: 1.25rem;">
+        <i class="fa-solid fa-table-list" style="color: var(--chrono-blue);"></i> Registos de Assiduidade para {{ selected_date }}
+    </h2>
+
+    {% if not logs %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <i class="fa-regular fa-calendar-xmark" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+            <p>Nenhum registo de ponto localizado para a data selecionada ({{ selected_date }}).</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Colaborador</th>
+                        <th>Departamento</th>
+                        <th>Turno</th>
+                        <th>Entrada</th>
+                        <th>Saída</th>
+                        <th>Atraso</th>
+                        <th>Horas Normais</th>
+                        <th>Horas Extra</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in logs %}
+                    <tr>
+                        <td style="font-weight: 800; color: var(--cyan-spark);">{{ l.emp_code }}</td>
+                        <td>
+                            <strong style="color: white;">{{ l.full_name }}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ l.position }}</div>
+                        </td>
+                        <td style="font-size: 0.88rem; color: var(--text-muted);">{{ l.department }}</td>
+                        <td style="font-size: 0.85rem; color: var(--text-white);">
+                            {{ l.shift_name }} ({{ l.start_time }}-{{ l.end_time }})
+                        </td>
+                        <td style="font-weight: 800; color: var(--emerald-green);">
+                            <i class="fa-regular fa-clock"></i> {{ l.clock_in or '--:--' }}
+                        </td>
+                        <td style="font-weight: 800; color: var(--chrono-blue);">
+                            <i class="fa-regular fa-clock"></i> {{ l.clock_out or 'Em trabalho' }}
+                        </td>
+                        <td style="font-weight: 800; color: {% if l.delay_minutes > 0 %}var(--amber-gold){% else %}var(--text-muted){% endif %};">
+                            {% if l.delay_minutes > 0 %}
+                                +{{ l.delay_minutes }} min
+                            {% else %}
+                                0 min
+                            {% endif %}
+                        </td>
+                        <td style="font-weight: 800; color: white;">
+                            {{ "%.2f"|format(l.total_hours) }} h
+                        </td>
+                        <td style="font-weight: 800; color: var(--emerald-green);">
+                            {{ "%.2f"|format(l.overtime_hours) }} h
+                        </td>
+                        <td>
+                            {% if l.status == 'No Horário' %}
+                                <span class="status-badge status-ontime"><i class="fa-solid fa-circle-check"></i> No Horário</span>
+                            {% else %}
+                                <span class="status-badge status-delayed"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

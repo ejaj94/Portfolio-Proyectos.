@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Horários & Turnos | TimePulse AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-clock-rotate-left"></i> Horários & Turnos de Trabalho</h1>
+        <p class="page-subtitle">Configuração de horas de entrada, saída, tolerâncias de atraso e metas diárias.</p>
+    </div>
+    <button onclick="openShiftModal()" class="btn-sm btn-primary">
+        <i class="fa-solid fa-plus"></i> Criar Novo Turno
+    </button>
+</div>
+
+<!-- Shifts Cards Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    {% for s in shifts %}
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; padding: 0.25rem 0.65rem; border-radius: 6px; background: rgba(255,255,255,0.08); color: var(--cyan-spark);">
+                    ID #{{ s.id }}
+                </span>
+                <span style="font-size: 0.88rem; font-weight: 800; color: var(--emerald-green);">
+                    <i class="fa-solid fa-user-check"></i> {{ s.assigned_employees }} Colaboradores
+                </span>
+            </div>
+
+            <h3 style="font-size: 1.3rem; font-weight: 900; color: white; margin-bottom: 0.75rem;">
+                {{ s.name }}
+            </h3>
+
+            <div style="background: rgba(11, 15, 25, 0.7); border: 1px solid rgba(59, 130, 246, 0.15); border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.95rem;">
+                    <span style="color: var(--text-muted);">Horário de Trabalho:</span>
+                    <strong style="color: white;"><i class="fa-regular fa-clock" style="color: var(--chrono-blue);"></i> {{ s.start_time }} - {{ s.end_time }}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                    <span style="color: var(--text-muted);">Tolerância de Atraso:</span>
+                    <strong style="color: var(--amber-gold);">{{ s.grace_minutes }} minutos</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                    <span style="color: var(--text-muted);">Carga Horária Alvo:</span>
+                    <strong style="color: var(--cyan-spark);">{{ s.target_hours }} horas / dia</strong>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="editShift({{ s|tojson|forceescape }})" class="btn-sm btn-secondary" style="width: 100%; justify-content: center;">
+            <i class="fa-solid fa-pen"></i> Editar Definições do Turno
+        </button>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal Shift -->
+<div id="shift-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #121929; border: 2px solid var(--border-color); border-radius: 24px; padding: 2rem; max-width: 500px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.9);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 id="shift-modal-title" style="font-size: 1.3rem; font-weight: 800; color: white;">Novo Turno</h2>
+            <button onclick="closeShiftModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="shift-form" onsubmit="saveShift(event)">
+            <input type="hidden" id="shift-id" value="">
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Nome do Turno *</label>
+                <input type="text" id="shift-name" class="form-input" required placeholder="Ex: Turno Intensivo Manhã">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Hora de Entrada *</label>
+                    <input type="time" id="shift-start" class="form-input" required value="09:00">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Hora de Saída *</label>
+                    <input type="time" id="shift-end" class="form-input" required value="18:00">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Tolerância (Min)</label>
+                    <input type="number" id="shift-grace" class="form-input" required value="15">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Horas Diárias Alvo</label>
+                    <input type="number" step="0.5" id="shift-target" class="form-input" required value="8.0">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="closeShiftModal()" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-floppy-disk"></i> Guardar Turno</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function openShiftModal() {
+    document.getElementById('shift-id').value = '';
+    document.getElementById('shift-name').value = '';
+    document.getElementById('shift-start').value = '09:00';
+    document.getElementById('shift-end').value = '18:00';
+    document.getElementById('shift-grace').value = '15';
+    document.getElementById('shift-target').value = '8.0';
+    document.getElementById('shift-modal-title').innerText = 'Novo Turno';
+    document.getElementById('shift-modal').style.display = 'flex';
+}
+function closeShiftModal() {
+    document.getElementById('shift-modal').style.display = 'none';
+}
+function editShift(s) {
+    document.getElementById('shift-id').value = s.id;
+    document.getElementById('shift-name').value = s.name;
+    document.getElementById('shift-start').value = s.start_time;
+    document.getElementById('shift-end').value = s.end_time;
+    document.getElementById('shift-grace').value = s.grace_minutes;
+    document.getElementById('shift-target').value = s.target_hours;
+    document.getElementById('shift-modal-title').innerText = 'Editar Turno';
+    document.getElementById('shift-modal').style.display = 'flex';
+}
+function saveShift(ev) {
+    ev.preventDefault();
+    const payload = {
+        id: document.getElementById('shift-id').value || null,
+        name: document.getElementById('shift-name').value,
+        start_time: document.getElementById('shift-start').value,
+        end_time: document.getElementById('shift-end').value,
+        grace_minutes: parseInt(document.getElementById('shift-grace').value),
+        target_hours: parseFloat(document.getElementById('shift-target').value)
+    };
+
+    fetch('/api/schedule/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert('⚠️ ' + data.message);
+        }
+    })
+    .catch(err => alert('❌ Erro ao guardar turno.'));
+}
+</script>
+{% endblock %}

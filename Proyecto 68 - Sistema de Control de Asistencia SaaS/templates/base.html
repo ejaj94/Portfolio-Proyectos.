@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TimePulse AI - Controlo de Assiduidade & Ponto SaaS{% endblock %}</title>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- App Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar-main">
+        <a href="/" class="brand-title">
+            <i class="fa-solid fa-stopwatch" style="color: var(--chrono-blue);"></i>
+            <span>TimePulse AI</span>
+        </a>
+        <nav class="nav-links">
+            <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
+            <a href="/terminal" class="nav-link {% if request.path == '/terminal' %}active{% endif %}">
+                <i class="fa-solid fa-fingerprint"></i> Terminal Ponto
+            </a>
+            <a href="/employees" class="nav-link {% if request.path == '/employees' %}active{% endif %}">
+                <i class="fa-solid fa-users"></i> Colaboradores
+            </a>
+            <a href="/schedules" class="nav-link {% if request.path == '/schedules' %}active{% endif %}">
+                <i class="fa-solid fa-clock-rotate-left"></i> Horários & Turnos
+            </a>
+            <a href="/reports" class="nav-link {% if request.path == '/reports' %}active{% endif %}">
+                <i class="fa-solid fa-file-invoice"></i> Relatórios
+            </a>
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20Tenho%20interesse%20no%20TimePulse%20AI" target="_blank" class="btn-whatsapp-header">
+                <i class="fa-brands fa-whatsapp"></i> Falar com Arquiteto
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <main class="page-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <p>TimePulse AI SaaS &copy; 2026 &bull; Plataforma Empresarial de Controlo de Ponto e Assiduidade por <strong>EJAJ TECH</strong></p>
+        <p style="margin-top: 0.4rem; font-size: 0.85rem;">
+            Founder & Lead Architect: <strong>Enmanuel Jimenez</strong> &bull; Siga-nos: <strong>@ejajtech</strong> &bull; WhatsApp Directo: <strong>+351 911 151 993</strong> (Envie "AJUDA")
+        </p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

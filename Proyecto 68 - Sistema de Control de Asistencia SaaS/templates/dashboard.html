@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Executivo | TimePulse AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-gauge-high"></i> Painel Geral de Assiduidade</h1>
+        <p class="page-subtitle">Monitorização em tempo real de entradas, saídas, pontualidade e horas acumuladas.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/terminal" class="btn-sm btn-primary">
+            <i class="fa-solid fa-fingerprint"></i> Abrir Terminal Ponto
+        </a>
+        <a href="/api/export/csv" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+        <a href="/api/export/json" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-code"></i> Exportar JSON
+        </a>
+    </div>
+</div>
+
+<!-- Metrics Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_employees }}</div>
+            <div class="stat-label">Total Colaboradores</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #059669);">
+            <i class="fa-solid fa-user-check"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ present_today }}</div>
+            <div class="stat-label">Presentes Hoje</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #06B6D4, #3B82F6);">
+            <i class="fa-solid fa-bullseye"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ punctuality_rate }}%</div>
+            <div class="stat-label">Taxa de Pontualidade</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);">
+            <i class="fa-solid fa-clock"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_delay_min }} min</div>
+            <div class="stat-label">Atrasos Acumulados Hoje</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #8B5CF6, #6D28D9);">
+            <i class="fa-solid fa-hourglass-split"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ "%.1f"|format(total_hours_today) }} h</div>
+            <div class="stat-label">Horas Trabalhadas Hoje</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Punch Terminal Card -->
+<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(6, 182, 212, 0.15)); border: 2px solid var(--border-color); border-radius: 24px; padding: 2rem; margin-bottom: 2.5rem; box-shadow: 0 15px 40px rgba(0,0,0,0.6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+        <div>
+            <span style="font-size: 0.82rem; font-weight: 800; text-transform: uppercase; color: var(--cyan-spark); letter-spacing: 0.05em;">
+                <i class="fa-solid fa-bolt"></i> Registo Rápido de Ponto (Entrada / Saída)
+            </span>
+            <h2 style="font-size: 1.6rem; font-weight: 900; color: white; margin-top: 0.2rem;">Relógio de Ponto Expresso</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Selecione o colaborador para picar a entrada ou saída automática.</p>
+        </div>
+
+        <form id="quick-punch-form" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+            <div style="min-width: 260px;">
+                <select id="punch-employee-id" class="form-select" required>
+                    <option value="">Selecione o Colaborador...</option>
+                    {% for e in employees %}
+                    <option value="{{ e.id }}">[{{ e.emp_code }}] {{ e.full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn-sm btn-primary" style="padding: 0.85rem 1.6rem; font-size: 0.98rem;">
+                <i class="fa-solid fa-fingerprint"></i> Registrar Ponto
+            </button>
+        </form>
+    </div>
+    <div id="punch-result" style="display: none; margin-top: 1rem;"></div>
+</div>
+
+<!-- Today's Logs Table -->
+<div class="table-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.2rem; font-weight: 800; color: white;">
+            <i class="fa-solid fa-list-check" style="color: var(--chrono-blue);"></i> Registos de Assiduidade de Hoje
+        </h2>
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Data: <strong>{{ today_str }}</strong></span>
+    </div>
+
+    {% if not today_logs %}
+        <div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+            <i class="fa-regular fa-clock" style="font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.5;"></i>
+            <p>Nenhum registo de assiduidade efetuado até ao momento hoje.</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Colaborador</th>
+                        <th>Turno</th>
+                        <th>Entrada</th>
+                        <th>Saída</th>
+                        <th>Atraso</th>
+                        <th>Total Horas</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in today_logs %}
+                    <tr>
+                        <td style="font-weight: 800; color: var(--cyan-spark);">{{ l.emp_code }}</td>
+                        <td>
+                            <strong style="color: white;">{{ l.full_name }}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ l.department }} &bull; {{ l.position }}</div>
+                        </td>
+                        <td style="font-size: 0.88rem; color: var(--text-muted);">
+                            {{ l.shift_name }} ({{ l.shift_start }}-{{ l.shift_end }})
+                        </td>
+                        <td style="font-weight: 800; color: var(--emerald-green);">
+                            <i class="fa-regular fa-clock"></i> {{ l.clock_in or '--:--' }}
+                        </td>
+                        <td style="font-weight: 800; color: var(--chrono-blue);">
+                            <i class="fa-regular fa-clock"></i> {{ l.clock_out or 'Em trabalho' }}
+                        </td>
+                        <td style="font-weight: 800; color: {% if l.delay_minutes > 0 %}var(--amber-gold){% else %}var(--text-muted){% endif %};">
+                            {% if l.delay_minutes > 0 %}
+                                +{{ l.delay_minutes }} min
+                            {% else %}
+                                0 min
+                            {% endif %}
+                        </td>
+                        <td style="font-weight: 800; color: white;">
+                            {{ "%.2f"|format(l.total_hours) }} h
+                        </td>
+                        <td>
+                            {% if l.status == 'No Horário' %}
+                                <span class="status-badge status-ontime"><i class="fa-solid fa-circle-check"></i> No Horário</span>
+                            {% else %}
+                                <span class="status-badge status-delayed"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/terminal.js') }}"></script>
+{% endblock %}

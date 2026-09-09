@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}Colaboradores & Turnos | TimePulse AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-users"></i> Gestão de Colaboradores</h1>
+        <p class="page-subtitle">Atribuição de códigos de ponto, departamentos e turnos contratuais.</p>
+    </div>
+    <button onclick="openEmployeeModal()" class="btn-sm btn-primary">
+        <i class="fa-solid fa-user-plus"></i> Novo Colaborador
+    </button>
+</div>
+
+<!-- Employees Table Card -->
+<div class="table-card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.2rem; font-weight: 800; color: white; margin-bottom: 1.25rem;">
+        <i class="fa-solid fa-address-book" style="color: var(--chrono-blue);"></i> Lista Geral de Funcionários
+    </h2>
+
+    <div style="overflow-x: auto;">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nome Completo</th>
+                    <th>E-mail</th>
+                    <th>Departamento</th>
+                    <th>Cargo</th>
+                    <th>Turno Atribuído</th>
+                    <th>Estado</th>
+                    <th style="text-align: right;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in employees %}
+                <tr>
+                    <td style="font-weight: 900; color: var(--cyan-spark);">{{ e.emp_code }}</td>
+                    <td>
+                        <strong style="color: white;">{{ e.full_name }}</strong>
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--text-muted);">{{ e.email }}</td>
+                    <td>
+                        <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 6px; background: rgba(255,255,255,0.08); color: var(--chrono-blue);">
+                            {{ e.department }}
+                        </span>
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--text-white);">{{ e.position }}</td>
+                    <td style="font-size: 0.88rem; color: var(--emerald-green); font-weight: 700;">
+                        <i class="fa-regular fa-clock"></i> {{ e.shift_name }} ({{ e.start_time }}-{{ e.end_time }})
+                    </td>
+                    <td>
+                        <span class="status-badge status-ontime">{{ e.status }}</span>
+                    </td>
+                    <td style="text-align: right;">
+                        <button onclick="editEmployee({{ e|tojson|forceescape }})" class="btn-sm btn-secondary">
+                            <i class="fa-solid fa-pen"></i> Editar
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Employee -->
+<div id="emp-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #121929; border: 2px solid var(--border-color); border-radius: 24px; padding: 2rem; max-width: 540px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.9);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 id="emp-modal-title" style="font-size: 1.3rem; font-weight: 800; color: white;">Novo Colaborador</h2>
+            <button onclick="closeEmployeeModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="emp-form" onsubmit="saveEmployee(event)">
+            <input type="hidden" id="emp-id" value="">
+
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Código *</label>
+                    <input type="text" id="emp-code" class="form-input" required placeholder="EMP-106">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Nome Completo *</label>
+                    <input type="text" id="emp-name" class="form-input" required placeholder="Ex: Dra. Helena Matos">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">E-mail *</label>
+                <input type="email" id="emp-email" class="form-input" required placeholder="helena@ejajtech.com">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Departamento *</label>
+                    <input type="text" id="emp-dept" class="form-input" required placeholder="Engenharia / RH / Vendas">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Cargo *</label>
+                    <input type="text" id="emp-pos" class="form-input" required placeholder="Software Engineer">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Turno Contratual *</label>
+                <select id="emp-shift" class="form-select" required>
+                    {% for s in shifts %}
+                    <option value="{{ s.id }}">{{ s.name }} ({{ s.start_time }}-{{ s.end_time }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="closeEmployeeModal()" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-floppy-disk"></i> Guardar Colaborador</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function openEmployeeModal() {
+    document.getElementById('emp-id').value = '';
+    document.getElementById('emp-code').value = '';
+    document.getElementById('emp-name').value = '';
+    document.getElementById('emp-email').value = '';
+    document.getElementById('emp-dept').value = 'Engenharia & Software';
+    document.getElementById('emp-pos').value = '';
+    document.getElementById('emp-modal-title').innerText = 'Novo Colaborador';
+    document.getElementById('emp-modal').style.display = 'flex';
+}
+function closeEmployeeModal() {
+    document.getElementById('emp-modal').style.display = 'none';
+}
+function editEmployee(e) {
+    document.getElementById('emp-id').value = e.id;
+    document.getElementById('emp-code').value = e.emp_code;
+    document.getElementById('emp-name').value = e.full_name;
+    document.getElementById('emp-email').value = e.email;
+    document.getElementById('emp-dept').value = e.department;
+    document.getElementById('emp-pos').value = e.position;
+    document.getElementById('emp-shift').value = e.shift_id;
+    document.getElementById('emp-modal-title').innerText = 'Editar Colaborador';
+    document.getElementById('emp-modal').style.display = 'flex';
+}
+function saveEmployee(ev) {
+    ev.preventDefault();
+    const payload = {
+        id: document.getElementById('emp-id').value || null,
+        emp_code: document.getElementById('emp-code').value,
+        full_name: document.getElementById('emp-name').value,
+        email: document.getElementById('emp-email').value,
+        department: document.getElementById('emp-dept').value,
+        position: document.getElementById('emp-pos').value,
+        shift_id: document.getElementById('emp-shift').value
+    };
+
+    fetch('/api/employee/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert('⚠️ ' + data.message);
+        }
+    })
+    .catch(err => alert('❌ Erro ao guardar colaborador.'));
+}
+</script>
+{% endblock %}
