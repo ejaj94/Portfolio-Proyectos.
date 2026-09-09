@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}Estúdio de Criação | LandingCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="studio-container">
+
+    <!-- SIDEBAR CONTROLS -->
+    <aside class="sidebar-controls">
+
+        <div style="margin-bottom: 1.5rem; text-align: center;">
+            <h2 style="font-size: 1.5rem; font-weight: 900; background: linear-gradient(135deg, white, var(--primary-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Criador de Landing Pages
+            </h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Personalize e visualize em tempo real.</p>
+        </div>
+
+        <form id="landing-builder-form" onsubmit="return false;">
+
+            <!-- TEMPLATE PRESET SELECTOR -->
+            <div class="section-box">
+                <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Carregar Template Inicial</h3>
+                <div class="form-group">
+                    <select id="template-select" class="form-select">
+                        <option value="">-- Selecionar Preset --</option>
+                        {% for t in templates %}
+                        <option value="{{ t.id }}" data-json='{{ t | tojson | safe }}'>{{ t.name }} ({{ t.category }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- GENERAL INFO -->
+            <div class="section-box">
+                <h3><i class="fa-solid fa-heading"></i> Informações do Hero</h3>
+                <div class="form-group">
+                    <label for="title">Nome do Projeto / Marca</label>
+                    <input type="text" id="title" class="form-input" value="EJAJ Analytics SaaS" placeholder="Ex: AutoFleet SaaS">
+                </div>
+                <div class="form-group">
+                    <label for="hero_headline">Título Principal (Headline)</label>
+                    <input type="text" id="hero_headline" class="form-input" value="A Plataforma Definitiva de Análise de Dados e Vendas" placeholder="Ex: Solução Inteligente para a sua empresa">
+                </div>
+                <div class="form-group">
+                    <label for="hero_subheadline">Subtítulo (Subheadline)</label>
+                    <textarea id="hero_subheadline" class="form-textarea" placeholder="Descrição do produto...">Automatize relatórios empresariais, otimize custos e tome decisões baseadas em inteligência em tempo real.</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="cta_text">Texto do Botão CTA</label>
+                    <input type="text" id="cta_text" class="form-input" value="Experimentar Gratuitamente" placeholder="Ex: Começar Agora">
+                </div>
+            </div>
+
+            <!-- CORES E APARÊNCIA -->
+            <div class="section-box">
+                <h3><i class="fa-solid fa-palette"></i> Paleta de Cores Destaque</h3>
+                <div class="color-picker-grid">
+                    <div class="color-input-wrapper">
+                        <label style="font-size: 0.75rem;">Primária</label>
+                        <input type="color" id="primary_color" class="color-picker-input" value="#00F5D4">
+                    </div>
+                    <div class="color-input-wrapper">
+                        <label style="font-size: 0.75rem;">Secundária</label>
+                        <input type="color" id="secondary_color" class="color-picker-input" value="#7000FF">
+                    </div>
+                    <div class="color-input-wrapper">
+                        <label style="font-size: 0.75rem;">Fundo</label>
+                        <input type="color" id="bg_color" class="color-picker-input" value="#0F172A">
+                    </div>
+                </div>
+
+                <div class="color-palette-presets">
+                    <button type="button" class="palette-btn" style="background: #00F5D4;" onclick="setColors('#00F5D4', '#7000FF', '#0F172A')">Cyber</button>
+                    <button type="button" class="palette-btn" style="background: #10B981; color: white;" onclick="setColors('#10B981', '#064E3B', '#022C22')">Emerald</button>
+                    <button type="button" class="palette-btn" style="background: #FFB703;" onclick="setColors('#FFB703', '#FB8500', '#1C1917')">Sunset</button>
+                    <button type="button" class="palette-btn" style="background: #FF6B6B; color: white;" onclick="setColors('#FF6B6B', '#8B5CF6', '#0F0F1A')">Coral</button>
+                </div>
+            </div>
+
+            <!-- FUNCIONALIDADES / SERVIÇOS -->
+            <div class="section-box">
+                <h3><i class="fa-solid fa-cubes"></i> Serviços & Funcionalidades</h3>
+                <div id="features-list">
+                    <div class="dynamic-item-card feature-item">
+                        <button type="button" class="btn-remove-item" onclick="this.closest('.dynamic-item-card').remove(); triggerLiveUpdate();">&times;</button>
+                        <div class="form-group">
+                            <input type="text" class="form-input feat-icon" value="fa-chart-line" placeholder="Ícone FontAwesome">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input feat-title" value="Dashboards em Tempo Real" placeholder="Título">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input feat-desc" value="Acompanhe todas as métricas críticas com gráficos e relatórios automáticos." placeholder="Descrição">
+                        </div>
+                    </div>
+                    <div class="dynamic-item-card feature-item">
+                        <button type="button" class="btn-remove-item" onclick="this.closest('.dynamic-item-card').remove(); triggerLiveUpdate();">&times;</button>
+                        <div class="form-group">
+                            <input type="text" class="form-input feat-icon" value="fa-bolt" placeholder="Ícone FontAwesome">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input feat-title" value="Automação Inteligente" placeholder="Título">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input feat-desc" value="Elimine processos manuais e poupe mais de 15 horas semanais." placeholder="Descrição">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="btn-add-feature" class="btn-add-item">
+                    <i class="fa-solid fa-plus"></i> Adicionar Funcionalidade
+                </button>
+            </div>
+
+            <!-- TESTEMUNHOS -->
+            <div class="section-box">
+                <h3><i class="fa-solid fa-quote-left"></i> Testemunhos de Clientes</h3>
+                <div id="testimonials-list">
+                    <div class="dynamic-item-card testimonial-item">
+                        <button type="button" class="btn-remove-item" onclick="this.closest('.dynamic-item-card').remove(); triggerLiveUpdate();">&times;</button>
+                        <div class="form-group">
+                            <input type="text" class="form-input test-name" value="Guilherme Ferreira" placeholder="Nome">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input test-role" value="Diretor de Operações" placeholder="Cargo">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-textarea test-comment" placeholder="Comentário">"A implementação da Landing Page aumentou as nossas conversões diretas em 55% no primeiro mês!"</textarea>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="btn-add-testimonial" class="btn-add-item">
+                    <i class="fa-solid fa-plus"></i> Adicionar Testemunho
+                </button>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <button type="button" id="btn-save-landing" class="btn-action-primary">
+                <i class="fa-solid fa-floppy-disk"></i> Guardar Landing Page
+            </button>
+
+        </form>
+
+    </aside>
+
+    <!-- LIVE PREVIEW PANE -->
+    <main class="preview-pane">
+        <div class="preview-toolbar">
+            <div class="preview-title">
+                <i class="fa-solid fa-eye" style="color: var(--primary-cyan);"></i> Visualização em Tempo Real (Live Preview)
+            </div>
+            <div class="preview-viewport-controls">
+                <button type="button" id="vp-desktop" class="btn-viewport active" title="Desktop"><i class="fa-solid fa-desktop"></i></button>
+                <button type="button" id="vp-tablet" class="btn-viewport" title="Tablet"><i class="fa-solid fa-tablet-screen-button"></i></button>
+                <button type="button" id="vp-mobile" class="btn-viewport" title="Mobile"><i class="fa-solid fa-mobile-screen-button"></i></button>
+            </div>
+        </div>
+
+        <div class="preview-iframe-container">
+            <iframe id="preview-iframe" title="Landing Page Preview"></iframe>
+        </div>
+    </main>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/builder.js') }}"></script>
+{% endblock %}

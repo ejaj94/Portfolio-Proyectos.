@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Galeria de Landing Pages Guardadas | LandingCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <div class="page-header">
+        <h1 class="page-title">Landing Pages Guardadas</h1>
+        <p class="page-subtitle">Consulte, exporte o código HTML ou pré-visualize as suas páginas criadas.</p>
+    </div>
+
+    {% if landings %}
+    <div class="landings-grid">
+        {% for l in landings %}
+        <div class="landing-card">
+            <div class="landing-card-header">
+                <span class="landing-tag">{{ l.template_name }}</span>
+                <h3 class="landing-card-title">{{ l.title }}</h3>
+                <div class="landing-card-date">
+                    <i class="fa-regular fa-clock"></i> {{ l.created_at }}
+                </div>
+            </div>
+            
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem; flex: 1;">
+                {{ l.hero_headline[:90] }}...
+            </p>
+
+            <div class="landing-card-actions">
+                <a href="/preview-full/{{ l.id }}" target="_blank" class="btn-card btn-card-preview">
+                    <i class="fa-solid fa-up-right-from-square"></i> Preview
+                </a>
+                <a href="/export/{{ l.id }}" class="btn-card btn-card-export">
+                    <i class="fa-solid fa-code"></i> Exportar
+                </a>
+                <button type="button" class="btn-card btn-card-delete" onclick="deleteLanding({{ l.id }})" title="Eliminar">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 4rem 1.5rem; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 20px; max-width: 600px; margin: 0 auto;">
+        <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Nenhuma Landing Page Guardada</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Crie a sua primeira landing page no estúdio de personalização.</p>
+        <a href="/" class="btn-action-primary" style="display: inline-flex; width: auto; padding: 0.75rem 2rem;">
+            <i class="fa-solid fa-plus"></i> Ir para o Estúdio
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function deleteLanding(id) {
+    if (confirm('Tem a certeza que deseja eliminar esta landing page?')) {
+        fetch('/api/landing/delete/' + id, { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erro ao eliminar landing page.');
+                }
+            });
+    }
+}
+</script>
+{% endblock %}

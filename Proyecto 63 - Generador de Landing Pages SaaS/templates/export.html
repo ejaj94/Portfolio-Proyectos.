@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Exportar Código HTML | {{ landing.title }}{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <div class="page-header">
+        <h1 class="page-title">Exportar Landing Page: {{ landing.title }}</h1>
+        <p class="page-subtitle">Código HTML5 100% autónomo, pronto a ser alojado em qualquer servidor ou plataforma web.</p>
+    </div>
+
+    <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
+        <a href="/api/landing/download/{{ landing.id }}" class="btn-action-primary" style="width: auto; padding: 0.75rem 2rem;">
+            <i class="fa-solid fa-download"></i> Descarregar Ficheiro .HTML
+        </a>
+        <a href="/preview-full/{{ landing.id }}" target="_blank" class="btn-action-secondary" style="width: auto; padding: 0.75rem 2rem;">
+            <i class="fa-solid fa-eye"></i> Ver Página Completa
+        </a>
+        <a href="/history" class="btn-action-secondary" style="width: auto; padding: 0.75rem 2rem;">
+            <i class="fa-solid fa-arrow-left"></i> Voltar aos Guardados
+        </a>
+    </div>
+
+    <div class="code-export-box">
+        <button type="button" class="btn-copy-code" onclick="copyCode()">
+            <i class="fa-solid fa-copy"></i> Copiar Código
+        </button>
+        <pre><code id="html-code-content">{{ landing.html_code | e }}</code></pre>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function copyCode() {
+    const code = document.getElementById('html-code-content').innerText;
+    navigator.clipboard.writeText(code).then(() => {
+        alert('📋 Código HTML copiado para a área de transferência com sucesso!');
+    });
+}
+</script>
+{% endblock %}

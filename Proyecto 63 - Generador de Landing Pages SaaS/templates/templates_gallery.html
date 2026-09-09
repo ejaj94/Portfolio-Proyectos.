@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Catálogo de Templates | LandingCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <div class="page-header">
+        <h1 class="page-title">Catálogo de Templates Pré-definidos</h1>
+        <p class="page-subtitle">Escolha um modelo de alta conversão para iniciar o seu projeto de landing page.</p>
+    </div>
+
+    <div class="landings-grid">
+        {% for t in templates %}
+        <div class="landing-card">
+            <div class="landing-card-header">
+                <span class="landing-tag">{{ t.category }}</span>
+                <h3 class="landing-card-title">{{ t.name }}</h3>
+            </div>
+            
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; flex: 1;">
+                {{ t.description }}
+            </p>
+
+            <div style="display: flex; gap: 0.4rem; margin-bottom: 1.25rem;">
+                <span style="width: 20px; height: 20px; border-radius: 50%; background: {{ t.primary_color }}; display: inline-block;"></span>
+                <span style="width: 20px; height: 20px; border-radius: 50%; background: {{ t.secondary_color }}; display: inline-block;"></span>
+                <span style="width: 20px; height: 20px; border-radius: 50%; background: {{ t.bg_color }}; border: 1px solid var(--border-color); display: inline-block;"></span>
+            </div>
+
+            <div class="landing-card-actions">
+                <a href="/?template_id={{ t.id }}" class="btn-card btn-card-export">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Utilizar no Estúdio
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
