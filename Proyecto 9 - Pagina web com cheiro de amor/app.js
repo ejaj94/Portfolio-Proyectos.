@@ -395,28 +395,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Pureza",
-            categoryLabel: "Velas Aromáticas em Taça de Cristal",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Luxuosa vela artesanal vertida numa taça de cristal trabalhado com rosa esculpida à mão em tons malva e pérolas.",
             description: "A expressão máxima da elegância e serenidade! A Vela Pureza é vertida numa imponente taça de cristal trabalhado com pé refinado. No topo da cera vegetal cremosa, destaca-se uma majestosa rosa esculpida à mão com pétalas em dégradé malva e lilás suave, envolvida por pérolas delicadas. Uma peça devocional e decorativa de alto luxo que ilumina o ambiente com uma aura pura e inesquecível.",
             aromaProfile: "Rosa Majestosa, Flor de Lótus, Orquídea Branca, Almíscar de Seda, Âmbar Suave"
         },
         es: {
             name: "Vela Pureza",
-            categoryLabel: "Velas Aromáticas en Copa de Cristal",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Lujosa vela artesanal vertida en copa de cristal tallado con rosa esculpida a mano en tonos malva y perlas.",
             description: "¡La máxima expresión de elegancia y serenidad! La Vela Pureza está vertida en una imponente copa de cristal tallado sobre pie refinado. Coronando la cera vegetal cremosa, destaca una majestuosa rosa esculpida a mano con pétalos en degradé malva y lila suave, rodeada de delicadas perlas. Una obra maestra decorativa que llena tu hogar con un aura pura e inolvidable.",
             aromaProfile: "Rosa Majestuosa, Flor de Loto, Orquídea Blanca, Almizcle de Seda, Ámbar Suave"
         },
         en: {
             name: "Purity Candle (Vela Pureza)",
-            categoryLabel: "Luxury Crystal Goblet Scented Candle",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Luxurious handcrafted candle in a faceted crystal goblet featuring a hand-sculpted dusty mauve rose and pearls.",
             description: "The pinnacle of elegance and serene sophistication! The Purity Candle is poured inside an exquisite stemmed crystal goblet. Atop creamy soy wax rests a majestic hand-sculpted rose with ombre dusty mauve and soft lilac petals, accented with tiny pearls. A luxurious centerpiece that envelops your space in pure, tranquil fragrance.",
             aromaProfile: "Majestic Rose, White Lotus, Royal Orchid, Silk Musk, Soft Amber"
         },
         fr: {
             name: "Bougie Pureté (Vela Pureza)",
-            categoryLabel: "Bougie Parfumée de Luxe en Coupe en Cristal",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Luxueuse bougie artisanale moulée dans une coupe en cristal avec rose sculptée à la main et perles.",
             description: "L'expression ultime de l'élégance et de la sérénité ! La Bougie Pureté est coulée dans une coupe en cristal ciselé sur pied. Sa cire végétale est couronnée d'une rose majestueuse sculptée à la main aux nuances mauve et lilas, sublimée par de délicates perles. Une création d'exception pour illuminer votre intérieur.",
             aromaProfile: "Rose Majestueuse, Fleur de Lotus, Orchidée Blanche, Musc de Soie, Ambre Doux"
@@ -923,28 +923,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Abóbora",
-            categoryLabel: "Velas Aromáticas e Decorativas de Outono",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantadora vela artesanal em recipiente de cerâmica em forma de abóbora alaranjada com flor de anis e especiarias de outono.",
             description: "A essência aconchegante do outono capturada numa peça artesanal única! Esta vela exclusiva é vertida num recipiente de cerâmica esculpido em forma de abóbora vibrante com a sua tampa a par. No seu interior, a cera vegetal cremosa é decorada à mão com um pavio de madeira crepitante, flor de anis estrelado e pérolas delicadas. Uma peça de destaque que envolve o seu lar num aroma quente e envolvente.",
             aromaProfile: "Canela Quente, Abóbora Especiada, Baunilha Bourbon, Noz-Moscada, Madeira de Cedro"
         },
         es: {
             name: "Vela Calabaza",
-            categoryLabel: "Velas Aromáticas y Decorativas de Otoño",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantadora vela artesanal en recipiente de cerámica en forma de calabaza anaranjada con flor de anís y especias otoñales.",
             description: "¡La esencia acogedora del otoño capturada en una pieza artesanal única! Esta vela exclusiva está vertida en un recipiente de cerámica esculpido en forma de calabaza vibrante con su tapa a juego. En su interior, la cera vegetal cremosa está decorada a mano con mecha de madera crujiente, flor de anís estrellado y delicadas perlas. Una obra de arte decorativa que llena tu hogar con un aroma cálido y envolvente.",
             aromaProfile: "Canela Cálida, Calabaza Especiada, Vainilla Bourbon, Nuez Moscada, Madera de Cedro"
         },
         en: {
             name: "Autumn Pumpkin Candle",
-            categoryLabel: "Decorative Autumn Scented Candle",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Charming handcrafted vibrant orange pumpkin ceramic candle decorated with a crackling wooden wick and star anise.",
             description: "The cozy essence of autumn captured in a unique handcrafted creation! Poured inside a vibrant orange ceramic pumpkin container complete with its lid resting alongside. Made with creamy soy wax, a crackling wooden wick, star anise, and tiny pearl accents. A stunning seasonal centerpiece that fills your space with warm, comforting aromas.",
             aromaProfile: "Warm Cinnamon, Spiced Pumpkin, Bourbon Vanilla, Nutmeg, Cedarwood"
         },
         fr: {
             name: "Bougie Citrouille d'Automne",
-            categoryLabel: "Bougie Parfumée Décorative d'Automne",
+            categoryLabel: "Bougie Parfumée'Automne",
             aromaBrief: "Ravissante bougie artisanale dans un contenant en céramique forme citrouille orange avec anis étoilé et mèche en bois.",
             description: "L'esprit chaleureux de l'automne capturé dans une pièce artisanale d'exception ! Moulée dans un élégant contenant en céramique sculpté en forme de citrouille orange avec son couvercle assorti. Sa cire végétale est agrémentée d'une mèche en bois crépitante, d'anis étoilé et de perles délicates pour illuminer vos soirées d'automne.",
             aromaProfile: "Cannelle Chaude, Citrouille Épicée, Vanille Bourbon, Noix de Muscade, Cèdre"
