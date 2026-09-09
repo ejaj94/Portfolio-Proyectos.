@@ -389,17 +389,39 @@ const PRODUCTS = [
     },
     {
         id: "candle-calice_rosas-1",
-        category: "vela",
-        price: 9.90,
+        category: "vaso",
+        price: 16.90,
         image: "assets/vela_calice_rosas.jpg",
         qty: 1,
         pt: {
-            name: "Vela Cálice de Rosas",
-            categoryLabel: "Vela Aromática",
-            aromaBrief: "Vela em cálice de cerâmica com base dourada e rosas esculpidas.",
-            description: "Deslumbrante vela aromática apresentada num requintado cálice de cerâmica estriada branca com majestosa base dourada. No interior, três rosas delicadamente esculpidas à mão em cera nude descansam sobre pequenos detalhes em folha de ouro, libertando um perfume romântico e envolvente.",
-            aromaProfile: "Rosas Reais, Peónia, Baunilha Nude, Luxuoso"
+            name: "Vela Pureza",
+            categoryLabel: "Velas Aromáticas em Taça de Cristal",
+            aromaBrief: "Luxuosa vela artesanal vertida numa taça de cristal trabalhado com rosa esculpida à mão em tons malva e pérolas.",
+            description: "A expressão máxima da elegância e serenidade! A Vela Pureza é vertida numa imponente taça de cristal trabalhado com pé refinado. No topo da cera vegetal cremosa, destaca-se uma majestosa rosa esculpida à mão com pétalas em dégradé malva e lilás suave, envolvida por pérolas delicadas. Uma peça devocional e decorativa de alto luxo que ilumina o ambiente com uma aura pura e inesquecível.",
+            aromaProfile: "Rosa Majestosa, Flor de Lótus, Orquídea Branca, Almíscar de Seda, Âmbar Suave"
         },
+        es: {
+            name: "Vela Pureza",
+            categoryLabel: "Velas Aromáticas en Copa de Cristal",
+            aromaBrief: "Lujosa vela artesanal vertida en copa de cristal tallado con rosa esculpida a mano en tonos malva y perlas.",
+            description: "¡La máxima expresión de elegancia y serenidad! La Vela Pureza está vertida en una imponente copa de cristal tallado sobre pie refinado. Coronando la cera vegetal cremosa, destaca una majestuosa rosa esculpida a mano con pétalos en degradé malva y lila suave, rodeada de delicadas perlas. Una obra maestra decorativa que llena tu hogar con un aura pura e inolvidable.",
+            aromaProfile: "Rosa Majestuosa, Flor de Loto, Orquídea Blanca, Almizcle de Seda, Ámbar Suave"
+        },
+        en: {
+            name: "Purity Candle (Vela Pureza)",
+            categoryLabel: "Luxury Crystal Goblet Scented Candle",
+            aromaBrief: "Luxurious handcrafted candle in a faceted crystal goblet featuring a hand-sculpted dusty mauve rose and pearls.",
+            description: "The pinnacle of elegance and serene sophistication! The Purity Candle is poured inside an exquisite stemmed crystal goblet. Atop creamy soy wax rests a majestic hand-sculpted rose with ombre dusty mauve and soft lilac petals, accented with tiny pearls. A luxurious centerpiece that envelops your space in pure, tranquil fragrance.",
+            aromaProfile: "Majestic Rose, White Lotus, Royal Orchid, Silk Musk, Soft Amber"
+        },
+        fr: {
+            name: "Bougie Pureté (Vela Pureza)",
+            categoryLabel: "Bougie Parfumée de Luxe en Coupe en Cristal",
+            aromaBrief: "Luxueuse bougie artisanale moulée dans une coupe en cristal avec rose sculptée à la main et perles.",
+            description: "L'expression ultime de l'élégance et de la sérénité ! La Bougie Pureté est coulée dans une coupe en cristal ciselé sur pied. Sa cire végétale est couronnée d'une rose majestueuse sculptée à la main aux nuances mauve et lilas, sublimée par de délicates perles. Une création d'exception pour illuminer votre intérieur.",
+            aromaProfile: "Rose Majestueuse, Fleur de Lotus, Orchidée Blanche, Musc de Soie, Ambre Doux"
+        }
+    },
         es: {
             name: "Vela Cálice de Rosas (Cáliz de Rosas)",
             categoryLabel: "Vela Aromática",
