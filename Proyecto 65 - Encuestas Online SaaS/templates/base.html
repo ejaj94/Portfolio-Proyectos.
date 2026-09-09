@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SurveyPulse AI SaaS | EJAJ TECH{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+    <nav class="navbar-main">
+        <a href="/" class="brand-title">
+            <i class="fa-solid fa-chart-column" style="color: var(--primary-emerald);"></i>
+            <span>SurveyPulse AI</span> SaaS
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                <i class="fa-solid fa-table-columns"></i> Dashboard
+            </a>
+            <a href="/create" class="nav-link {% if request.path == '/create' %}active{% endif %}">
+                <i class="fa-solid fa-plus-circle"></i> Criar Inquérito
+            </a>
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20SurveyPulse%20SaaS" target="_blank" class="btn-whatsapp-header">
+                <i class="fa-brands fa-whatsapp"></i> +351 911 151 993
+            </a>
+        </div>
+    </nav>
+
+    <main style="flex: 1; display: flex; flex-direction: column;">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 <strong>SurveyPulse AI SaaS</strong>. Desenvolvido por <strong>Enmanuel Jimenez</strong> | Lead Architect EJAJ TECH.</p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

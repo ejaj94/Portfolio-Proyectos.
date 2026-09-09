@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | SurveyPulse AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Plataforma de Inquéritos Online</h1>
+            <p class="page-subtitle">Crie sondagens, avalie o NPS dos seus clientes e analise os resultados em tempo real.</p>
+        </div>
+        <a href="/create" class="btn-sm btn-primary" style="padding: 0.75rem 1.5rem; font-size: 0.95rem;">
+            <i class="fa-solid fa-plus"></i> Novo Inquérito
+        </a>
+    </div>
+
+    <!-- STATS SUMMARY ROW -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-square-poll-vertical"></i></div>
+            <div>
+                <div class="stat-val">{{ total_surveys }}</div>
+                <div class="stat-label">Inquéritos Ativos</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, var(--accent-cyan), var(--primary-indigo));"><i class="fa-solid fa-comments"></i></div>
+            <div>
+                <div class="stat-val">{{ total_responses }}</div>
+                <div class="stat-label">Respostas Recolhidas</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, var(--primary-emerald), var(--accent-gold));"><i class="fa-solid fa-gauge-high"></i></div>
+            <div>
+                <div class="stat-val">{% if global_nps != '--' %}{{ global_nps }}{% else %}--{% endif %}</div>
+                <div class="stat-label">NPS Score Global da Marca</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SURVEY CARDS GRID -->
+    {% if surveys %}
+    <div class="surveys-grid">
+        {% for s in surveys %}
+        <div class="survey-card">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <span style="width: 14px; height: 14px; border-radius: 50%; background: {{ s.theme_color }}; display: inline-block;"></span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-regular fa-clock"></i> {{ s.created_at }}</span>
+                </div>
+                <h3 class="survey-card-title">{{ s.title }}</h3>
+                <p class="survey-card-desc">{{ s.description or 'Sem descrição' }}</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; padding: 0.75rem 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); margin-bottom: 1.25rem;">
+                <span style="color: var(--text-muted);"><i class="fa-solid fa-circle-question" style="color: var(--accent-cyan);"></i> Perguntas: {{ (s.questions_json | from_json if s.questions_json else []) | length }}</span>
+                
+                {% if s.nps_score is not none %}
+                    <span class="nps-badge {% if s.nps_score >= 50 %}nps-positive{% elif s.nps_score >= 0 %}nps-neutral{% else %}nps-negative{% endif %}">
+                        <i class="fa-solid fa-gauge-high"></i> NPS {{ s.nps_score }}
+                    </span>
+                {% else %}
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">{{ s.response_count }} respostas</span>
+                {% endif %}
+            </div>
+
+            <div class="survey-card-actions">
+                <a href="/survey/{{ s.slug }}" target="_blank" class="btn-sm btn-primary" title="Abrir link público de resposta">
+                    <i class="fa-solid fa-paper-plane"></i> Partilhar
+                </a>
+                <a href="/results/{{ s.id }}" class="btn-sm btn-secondary" title="Ver gráficos e relatórios">
+                    <i class="fa-solid fa-chart-pie"></i> Gráficos
+                </a>
+                <a href="/responses/{{ s.id }}" class="btn-sm btn-secondary" title="Ver tabela de respostas">
+                    <i class="fa-solid fa-table"></i> Respostas
+                </a>
+                <a href="/create?id={{ s.id }}" class="btn-sm btn-secondary" title="Editar inquérito">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <button type="button" class="btn-sm btn-danger" onclick="deleteSurvey({{ s.id }})" title="Eliminar">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 4rem 1.5rem; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 20px;">
+        <i class="fa-solid fa-square-poll-vertical" style="font-size: 3.5rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Nenhum Inquérito Criado</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Crie o seu primeiro inquérito online para começar a recolher feedback dos utilizadores.</p>
+        <a href="/create" class="btn-sm btn-primary" style="padding: 0.75rem 2rem;">
+            <i class="fa-solid fa-plus"></i> Criar Inquérito Agora
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function deleteSurvey(id) {
+    if (confirm('Tem a certeza que deseja eliminar este inquérito e todas as respostas associadas?')) {
+        fetch('/api/survey/delete/' + id, { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erro ao eliminar inquérito.');
+                }
+            });
+    }
+}
+</script>
+{% endblock %}

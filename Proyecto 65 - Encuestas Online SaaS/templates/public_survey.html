@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ survey_data.title if survey_data else 'Inquérito' }} | SurveyPulse AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        :root {
+            --theme-color: {{ survey_data.theme_color if survey_data else '#10B981' }};
+        }
+        body {
+            background: radial-gradient(circle at top center, rgba(16, 185, 129, 0.15) 0%, rgba(9, 13, 22, 1) 100%);
+        }
+        .btn-submit-survey {
+            background: linear-gradient(135deg, var(--theme-color), #6366F1);
+            color: #0F172A;
+            font-weight: 900;
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            transition: transform 0.2s ease;
+        }
+        .btn-submit-survey:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="public-survey-wrapper">
+
+        {% if error %}
+        <div class="public-survey-card" style="text-align: center;">
+            <i class="fa-solid fa-circle-exclamation" style="font-size: 3.5rem; color: var(--accent-coral); margin-bottom: 1rem;"></i>
+            <h2 style="font-size: 1.6rem; margin-bottom: 0.5rem;">Inquérito Não Encontrado</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">O inquérito solicitado não existe ou foi removido.</p>
+            <a href="/" class="btn-sm btn-secondary" style="display: inline-flex; width: auto; padding: 0.75rem 2rem;">Voltar ao Início</a>
+        </div>
+        {% else %}
+
+        <div id="survey-card-container" class="public-survey-card">
+            
+            <div style="margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color);">
+                <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem;">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: var(--theme-color);"></span>
+                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-color); text-transform: uppercase; letter-spacing: 1px;">SurveyPulse AI</span>
+                </div>
+                <h1 style="font-size: 2.2rem; font-weight: 900; color: white; margin-bottom: 0.5rem;">{{ survey_data.title }}</h1>
+                {% if survey_data.description %}
+                <p style="color: var(--text-muted); font-size: 1.05rem;">{{ survey_data.description }}</p>
+                {% endif %}
+            </div>
+
+            <form id="public-survey-form">
+
+                {% for q in questions %}
+                <div style="margin-bottom: 2.25rem;">
+                    <label style="display: block; font-weight: 800; font-size: 1.05rem; margin-bottom: 0.35rem; color: white;">
+                        <span style="color: var(--theme-color);">{{ loop.index }}.</span> {{ q.title }}
+                        {% if q.required %}<span style="color: var(--accent-coral);">*</span>{% endif %}
+                    </label>
+
+                    {% if q.subtitle %}
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">{{ q.subtitle }}</p>
+                    {% endif %}
+
+                    {% if q.type == 'nps' %}
+                        <input type="hidden" name="{{ q.id }}" id="nps-val-{{ q.id }}" value="" {% if q.required %}required{% endif %}>
+                        <div class="nps-scale-grid">
+                            {% for score in range(0, 11) %}
+                            <button type="button" class="nps-btn {% if score <= 6 %}detractor{% elif score <= 8 %}passive{% else %}promoter{% endif %}" onclick="selectNps('{{ q.id }}', {{ score }}, this)">
+                                {{ score }}
+                            </button>
+                            {% endfor %}
+                        </div>
+
+                    {% elif q.type == 'likert' %}
+                        <div class="likert-options-grid">
+                            {% for opt in q.options or [] %}
+                            <label class="likert-option-card">
+                                <input type="radio" name="{{ q.id }}" value="{{ opt }}" style="width: 18px; height: 18px; accent-color: var(--theme-color);" {% if q.required and loop.first %}required{% endif %}>
+                                <span style="font-size: 0.95rem; font-weight: 700; color: white;">{{ opt }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+
+                    {% elif q.type == 'choice' %}
+                        <div class="likert-options-grid">
+                            {% for opt in q.options or [] %}
+                            <label class="likert-option-card">
+                                <input type="radio" name="{{ q.id }}" value="{{ opt }}" style="width: 18px; height: 18px; accent-color: var(--theme-color);" {% if q.required and loop.first %}required{% endif %}>
+                                <span style="font-size: 0.95rem; font-weight: 700; color: white;">{{ opt }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+
+                    {% elif q.type == 'yesno' %}
+                        <div style="display: flex; gap: 1rem; margin-top: 0.75rem;">
+                            <label class="likert-option-card" style="flex: 1; justify-content: center;">
+                                <input type="radio" name="{{ q.id }}" value="Sim" style="width: 18px; height: 18px; accent-color: var(--theme-color);" {% if q.required %}required{% endif %}>
+                                <span style="font-size: 1rem; font-weight: 800; color: white;"><i class="fa-solid fa-thumbs-up" style="color: var(--primary-emerald);"></i> Sim</span>
+                            </label>
+                            <label class="likert-option-card" style="flex: 1; justify-content: center;">
+                                <input type="radio" name="{{ q.id }}" value="Não" style="width: 18px; height: 18px; accent-color: var(--accent-coral);">
+                                <span style="font-size: 1rem; font-weight: 800; color: white;"><i class="fa-solid fa-thumbs-down" style="color: var(--accent-coral);"></i> Não</span>
+                            </label>
+                        </div>
+
+                    {% elif q.type == 'text' %}
+                        <textarea name="{{ q.id }}" class="form-textarea" placeholder="Escreva a sua resposta em detalhe..." {% if q.required %}required{% endif %}></textarea>
+
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn-submit-survey">
+                    <i class="fa-solid fa-paper-plane"></i> Submeter Respostas
+                </button>
+
+            </form>
+        </div>
+
+        <!-- SUCCESS CONFIRMATION BOX -->
+        <div id="success-card" class="public-survey-card" style="display: none; text-align: center;">
+            <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: var(--primary-emerald); margin-bottom: 1.25rem;"></i>
+            <h2 style="font-size: 2rem; font-weight: 900; color: white; margin-bottom: 0.75rem;">Obrigado pela sua Participação!</h2>
+            <p id="success-msg-text" style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem;">
+                A sua opinião é fundamental para podermos continuar a melhorar os nossos serviços.
+            </p>
+            <button type="button" class="btn-sm btn-secondary" style="display: inline-flex; width: auto; padding: 0.75rem 2rem;" onclick="location.reload();">
+                Responder Novamente
+            </button>
+        </div>
+
+        {% endif %}
+
+        <div style="text-align: center; margin-top: 2rem; color: var(--text-muted); font-size: 0.85rem;">
+            Desenvolvido por <strong>Enmanuel Jimenez</strong> | Lead Architect <strong>EJAJ TECH</strong>
+        </div>
+
+    </div>
+
+    <script>
+    function selectNps(qId, val, btn) {
+        document.getElementById('nps-val-' + qId).value = val;
+        const grid = btn.closest('.nps-scale-grid');
+        grid.querySelectorAll('.nps-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('public-survey-form');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                
+                fetch('/survey/{{ survey_data.slug }}/submit', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('survey-card-container').style.display = 'none';
+                        document.getElementById('success-msg-text').innerText = data.message;
+                        document.getElementById('success-card').style.display = 'block';
+                    } else {
+                        alert('⚠️ ' + data.message);
+                    }
+                })
+                .catch(err => alert('❌ Ocorreu um erro ao submeter o inquérito.'));
+            });
+        }
+    });
+    </script>
+</body>
+</html>
