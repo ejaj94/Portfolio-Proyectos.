@@ -918,7 +918,7 @@ const PRODUCTS = [
     {
         id: "candle-abobora-1",
         category: "vela",
-        price: 15.90,
+        price: 14.90,
         image: "assets/vela_abobora.jpg",
         qty: 1,
         pt: {
