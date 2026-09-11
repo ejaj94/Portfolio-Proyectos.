@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ property.title }} | RealtyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <a href="/properties" style="font-size: 0.85rem; color: var(--text-muted); text-decoration: none; font-weight: 700;">&larr; Voltar à Carteira de Imóveis</a>
+        <h1 class="page-title" style="margin-top: 0.2rem;"><i class="fa-solid {{ property.image_icon }}" style="color: var(--sapphire-blue);"></i> {{ property.title }}</h1>
+        <p class="page-subtitle"><i class="fa-solid fa-location-dot"></i> {{ property.address }}, {{ property.city }} &bull; Angariado por: <strong>{{ property.agent_name }}</strong></p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <button onclick="openVisitModal()" class="btn-sm btn-primary">
+            <i class="fa-solid fa-calendar-plus"></i> Agendar Visita
+        </button>
+        <button onclick="openOfferModal()" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-handshake"></i> Registar Proposta
+        </button>
+    </div>
+</div>
+
+<!-- Property Highlights Bar -->
+<div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+        <div>
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Preço Solicitado:</span>
+            <div style="font-size: 1.6rem; font-weight: 900; color: var(--sapphire-blue); margin-top: 0.2rem;">
+                {{ "%.2f"|format(property.price) }} €
+            </div>
+        </div>
+
+        <div>
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Estado Atual:</span>
+            <div style="margin-top: 0.4rem;">
+                {% if property.status == 'Disponível' %}
+                    <span class="badge-status status-available">Disponível</span>
+                {% elif property.status == 'Reservado' %}
+                    <span class="badge-status status-reserved">Reservado</span>
+                {% else %}
+                    <span class="badge-status status-sold">Vendido</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div>
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Tipologia & Características:</span>
+            <div style="font-size: 1.05rem; font-weight: 800; color: var(--architectural-dark); margin-top: 0.2rem;">
+                {{ property.bedrooms }} Quartos &bull; {{ property.bathrooms }} WCs &bull; {{ property.area_sqm }} m²
+            </div>
+        </div>
+
+        <div>
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Preço por m²:</span>
+            <div style="font-size: 1.1rem; font-weight: 800; color: var(--architectural-slate); margin-top: 0.2rem;">
+                {{ "%.2f"|format(property.price / property.area_sqm) }} € / m²
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grid Layout: Visits & Offers -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Scheduled Visits -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--architectural-dark);">
+                <i class="fa-solid fa-calendar-day" style="color: var(--sapphire-blue);"></i> Visitas Agendadas ({{ visits|length }})
+            </h2>
+        </div>
+
+        {% if not visits %}
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <i class="fa-regular fa-calendar-xmark" style="font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                <p>Nenhuma visita registada para este imóvel.</p>
+            </div>
+        {% else %}
+            <div style="overflow-x: auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Data & Hora</th>
+                            <th>Consultor</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for v in visits %}
+                        <tr>
+                            <td><strong style="color: var(--architectural-dark);">{{ v.client_name }}</strong></td>
+                            <td style="font-size: 0.88rem; color: var(--sapphire-blue); font-weight: 700;">
+                                <i class="fa-regular fa-clock"></i> {{ v.visit_date }} às {{ v.visit_time }}
+                            </td>
+                            <td style="font-size: 0.85rem; color: var(--text-muted);">{{ v.agent_name }}</td>
+                            <td>
+                                {% if v.status == 'Agendada' %}
+                                    <span class="badge-status status-reserved">Agendada</span>
+                                {% else %}
+                                    <span class="badge-status status-available">Realizada</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Offers List -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--architectural-dark);">
+                <i class="fa-solid fa-handshake" style="color: var(--accent-emerald);"></i> Propostas de Compra ({{ offers|length }})
+            </h2>
+        </div>
+
+        {% if not offers %}
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <i class="fa-solid fa-file-signature" style="font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                <p>Nenhuma proposta apresentada até ao momento.</p>
+            </div>
+        {% else %}
+            <div style="overflow-x: auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Cliente Comprador</th>
+                            <th>Valor Oferecido</th>
+                            <th>Data Proposta</th>
+                            <th>Estado</th>
+                            <th style="text-align: right;">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for o in offers %}
+                        <tr>
+                            <td>
+                                <strong style="color: var(--architectural-dark);">{{ o.client_name }}</strong>
+                                <div style="font-size: 0.78rem; color: var(--text-muted);">{{ o.client_phone }}</div>
+                            </td>
+                            <td style="font-size: 1.05rem; font-weight: 900; color: var(--accent-emerald);">
+                                {{ "%.2f"|format(o.offer_amount) }} €
+                            </td>
+                            <td style="font-size: 0.85rem; color: var(--text-muted);">{{ o.offer_date }}</td>
+                            <td>
+                                {% if o.status == 'Aceita' %}
+                                    <span class="badge-status status-available">Aceita</span>
+                                {% elif o.status == 'Pendente' %}
+                                    <span class="badge-status status-reserved">Pendente</span>
+                                {% else %}
+                                    <span class="badge-status status-sold">{{ o.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td style="text-align: right;">
+                                {% if o.status == 'Pendente' %}
+                                    <button onclick="updateOfferStatus({{ o.id }}, 'Aceita')" class="btn-sm btn-primary" style="padding: 0.35rem 0.7rem; font-size: 0.78rem;">
+                                        Aceitar
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal Visit -->
+<div id="visit-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 20px; padding: 2rem; max-width: 500px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--architectural-dark);">Agendar Visita ao Imóvel</h2>
+            <button onclick="closeVisitModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="visit-form">
+            <input type="hidden" id="visit-property-id" value="{{ property.id }}">
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Cliente Interessado *</label>
+                <select id="visit-client-id" class="form-select" required>
+                    {% for c in clients %}
+                    <option value="{{ c.id }}">{{ c.full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Data da Visita *</label>
+                    <input type="date" id="visit-date" class="form-input" required>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Hora da Visita *</label>
+                    <input type="time" id="visit-time" class="form-input" required value="15:00">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Notas Adicionais</label>
+                <textarea id="visit-notes" class="form-textarea" rows="2" placeholder="Observações para o consultor..."></textarea>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="closeVisitModal()" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-calendar-check"></i> Agendar Visita</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Offer -->
+<div id="offer-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 20px; padding: 2rem; max-width: 500px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--architectural-dark);">Registar Proposta de Compra</h2>
+            <button onclick="closeOfferModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="offer-form">
+            <input type="hidden" id="offer-property-id" value="{{ property.id }}">
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Cliente Proponente *</label>
+                <select id="offer-client-id" class="form-select" required>
+                    {% for c in clients %}
+                    <option value="{{ c.id }}">{{ c.full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Valor Oferecido (€) *</label>
+                <input type="number" step="0.01" id="offer-amount" class="form-input" required value="{{ property.price }}">
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Condições / Observações</label>
+                <textarea id="offer-notes" class="form-textarea" rows="2" placeholder="Condições de pagamento ou prazos solicitados..."></textarea>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="closeOfferModal()" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-handshake"></i> Submeter Proposta</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/realty.js') }}"></script>
+<script>
+function openVisitModal() { document.getElementById('visit-modal').style.display = 'flex'; }
+function closeVisitModal() { document.getElementById('visit-modal').style.display = 'none'; }
+function openOfferModal() { document.getElementById('offer-modal').style.display = 'flex'; }
+function closeOfferModal() { document.getElementById('offer-modal').style.display = 'none'; }
+</script>
+{% endblock %}

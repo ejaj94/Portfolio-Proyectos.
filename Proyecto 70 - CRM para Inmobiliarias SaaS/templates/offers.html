@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Propostas & Negociações | RealtyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-handshake" style="color: var(--sapphire-blue);"></i> Propostas & Negociações</h1>
+        <p class="page-subtitle">Registo de ofertas formais de compra, contrapropostas e fecho de contratos.</p>
+    </div>
+</div>
+
+<!-- Offers Table Card -->
+<div class="table-card" style="margin-bottom: 2rem;">
+    <div style="overflow-x: auto;">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Imóvel</th>
+                    <th>Preço Tabela</th>
+                    <th>Cliente Proponente</th>
+                    <th>Valor Oferecido</th>
+                    <th>Data Oferta</th>
+                    <th>Estado</th>
+                    <th style="text-align: right;">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in offers %}
+                <tr>
+                    <td>
+                        <strong style="color: var(--architectural-dark);">{{ o.property_title }}</strong>
+                    </td>
+                    <td style="font-size: 0.95rem; font-weight: 700; color: var(--text-muted);">
+                        {{ "%.2f"|format(o.property_price) }} €
+                    </td>
+                    <td>
+                        <strong style="color: var(--architectural-dark);">{{ o.client_name }}</strong>
+                        <div style="font-size: 0.78rem; color: var(--text-muted);">{{ o.client_phone }}</div>
+                    </td>
+                    <td style="font-size: 1.1rem; font-weight: 900; color: var(--accent-emerald);">
+                        {{ "%.2f"|format(o.offer_amount) }} €
+                    </td>
+                    <td style="font-size: 0.85rem; color: var(--text-muted);">{{ o.offer_date }}</td>
+                    <td>
+                        {% if o.status == 'Aceita' %}
+                            <span class="badge-status status-available">Aceita</span>
+                        {% elif o.status == 'Pendente' %}
+                            <span class="badge-status status-reserved">Pendente</span>
+                        {% else %}
+                            <span class="badge-status status-sold">{{ o.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: right;">
+                        {% if o.status == 'Pendente' %}
+                            <button onclick="updateOfferStatus({{ o.id }}, 'Aceita')" class="btn-sm btn-primary" style="padding: 0.35rem 0.7rem; font-size: 0.78rem;">
+                                Aceitar Proposta
+                            </button>
+                        {% else %}
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">Registado</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/realty.js') }}"></script>
+{% endblock %}

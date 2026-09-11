@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block title %}Carteira de Imóveis | RealtyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-house-user" style="color: var(--sapphire-blue);"></i> Carteira de Imóveis</h1>
+        <p class="page-subtitle">Catálogo completo de propriedades angariadas, preços, tipologia e estados de venda.</p>
+    </div>
+    <button onclick="openPropertyModal()" class="btn-sm btn-primary">
+        <i class="fa-solid fa-plus"></i> Angariar Novo Imóvel
+    </button>
+</div>
+
+<!-- Filters Bar -->
+<div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.15rem; margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+    <form method="GET" action="/properties" style="display: flex; gap: 1rem; flex-wrap: wrap; flex: 1;">
+        <div style="flex: 1; min-width: 220px;">
+            <input type="text" name="q" value="{{ search_q }}" class="form-input" placeholder="Pesquisar por título, cidade ou morada...">
+        </div>
+        <div style="width: 180px;">
+            <select name="type" class="form-select" onchange="this.form.submit()">
+                <option value="">Todos os Tipos</option>
+                <option value="Apartamento" {% if selected_type == 'Apartamento' %}selected{% endif %}>Apartamento</option>
+                <option value="Moradia" {% if selected_type == 'Moradia' %}selected{% endif %}>Moradia</option>
+                <option value="Escritório" {% if selected_type == 'Escritório' %}selected{% endif %}>Escritório</option>
+                <option value="Loja" {% if selected_type == 'Loja' %}selected{% endif %}>Loja</option>
+                <option value="Terreno" {% if selected_type == 'Terreno' %}selected{% endif %}>Terreno</option>
+            </select>
+        </div>
+        <div style="width: 180px;">
+            <select name="status" class="form-select" onchange="this.form.submit()">
+                <option value="">Todos os Estados</option>
+                <option value="Disponível" {% if selected_status == 'Disponível' %}selected{% endif %}>Disponível</option>
+                <option value="Reservado" {% if selected_status == 'Reservado' %}selected{% endif %}>Reservado</option>
+                <option value="Vendido" {% if selected_status == 'Vendido' %}selected{% endif %}>Vendido</option>
+            </select>
+        </div>
+        <button type="submit" class="btn-sm btn-secondary"><i class="fa-solid fa-magnifying-glass"></i> Filtrar</button>
+        {% if selected_type or selected_status or search_q %}
+            <a href="/properties" class="btn-sm btn-secondary" style="color: var(--accent-red);"><i class="fa-solid fa-xmark"></i> Limpar</a>
+        {% endif %}
+    </form>
+
+    <div style="font-size: 0.88rem; color: var(--text-muted);">
+        Total de Imóveis: <strong style="color: var(--architectural-dark);">{{ properties|length }}</strong>
+    </div>
+</div>
+
+<!-- Properties Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    {% for p in properties %}
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.78rem; font-weight: 800; color: var(--sapphire-blue); text-transform: uppercase; background: #EFF6FF; padding: 0.2rem 0.6rem; border-radius: 6px;">
+                    <i class="fa-solid {{ p.image_icon }}"></i> {{ p.property_type }}
+                </span>
+
+                {% if p.status == 'Disponível' %}
+                    <span class="badge-status status-available">Disponível</span>
+                {% elif p.status == 'Reservado' %}
+                    <span class="badge-status status-reserved">Reservado</span>
+                {% else %}
+                    <span class="badge-status status-sold">Vendido</span>
+                {% endif %}
+            </div>
+
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--architectural-dark); margin-bottom: 0.3rem;">
+                <a href="/property/{{ p.id }}" style="color: var(--architectural-dark); text-decoration: none;">{{ p.title }}</a>
+            </h3>
+
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                <i class="fa-solid fa-location-dot" style="color: var(--sapphire-blue);"></i> {{ p.address }}, {{ p.city }}
+            </div>
+
+            <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 10px; padding: 0.85rem; margin-bottom: 1.25rem; display: flex; justify-content: space-around; font-size: 0.85rem; color: var(--architectural-slate);">
+                <span><i class="fa-solid fa-bed" style="color: var(--sapphire-blue);"></i> {{ p.bedrooms }} Quartos</span>
+                <span><i class="fa-solid fa-bath" style="color: var(--sapphire-blue);"></i> {{ p.bathrooms }} WCs</span>
+                <span><i class="fa-solid fa-ruler-combined" style="color: var(--sapphire-blue);"></i> {{ p.area_sqm }} m²</span>
+            </div>
+        </div>
+
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--border-color); margin-bottom: 1rem;">
+                <div>
+                    <span style="font-size: 0.78rem; color: var(--text-muted); display: block;">Preço de Venda:</span>
+                    <span style="font-size: 1.3rem; font-weight: 900; color: var(--sapphire-blue);">
+                        {{ "%.2f"|format(p.price) }} €
+                    </span>
+                </div>
+                <div style="text-align: right; font-size: 0.8rem; color: var(--text-muted);">
+                    Consultor:<br><strong style="color: var(--architectural-dark);">{{ p.agent_name }}</strong>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; width: 100%;">
+                <a href="/property/{{ p.id }}" class="btn-sm btn-primary" style="flex: 1; justify-content: center;">
+                    <i class="fa-solid fa-eye"></i> Ver Ficha Completa
+                </a>
+                <button onclick="editProperty({{ p|tojson|forceescape }})" class="btn-sm btn-secondary" title="Editar">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal Property -->
+<div id="prop-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 20px; padding: 2rem; max-width: 580px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 id="prop-modal-title" style="font-size: 1.3rem; font-weight: 800; color: var(--architectural-dark);">Angariar Novo Imóvel</h2>
+            <button onclick="closePropertyModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="property-form">
+            <input type="hidden" id="prop-id" value="">
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Título do Imóvel *</label>
+                <input type="text" id="prop-title" class="form-input" required placeholder="Ex: Apartamento T3 de Luxo com Terraço">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Tipo de Imóvel *</label>
+                    <select id="prop-type" class="form-select">
+                        <option value="Apartamento">Apartamento</option>
+                        <option value="Moradia">Moradia</option>
+                        <option value="Escritório">Escritório</option>
+                        <option value="Loja">Loja</option>
+                        <option value="Terreno">Terreno</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Preço de Venda (€) *</label>
+                    <input type="number" step="0.01" id="prop-price" class="form-input" required placeholder="450000.00">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Morada / Localização *</label>
+                    <input type="text" id="prop-address" class="form-input" required placeholder="Av. Principal, 100">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Cidade *</label>
+                    <input type="text" id="prop-city" class="form-input" required placeholder="Lisboa / Porto / Cascais">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Quartos</label>
+                    <input type="number" id="prop-bedrooms" class="form-input" value="3">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">WCs</label>
+                    <input type="number" id="prop-bathrooms" class="form-input" value="2">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Área (m²)</label>
+                    <input type="number" step="0.1" id="prop-area" class="form-input" value="120.0">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Estado</label>
+                    <select id="prop-status" class="form-select">
+                        <option value="Disponível">Disponível</option>
+                        <option value="Reservado">Reservado</option>
+                        <option value="Vendido">Vendido</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--architectural-slate);">Consultor Responsável</label>
+                    <input type="text" id="prop-agent" class="form-input" value="Enmanuel Jimenez">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="closePropertyModal()" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-floppy-disk"></i> Guardar Imóvel</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/realty.js') }}"></script>
+<script>
+function openPropertyModal() {
+    document.getElementById('prop-id').value = '';
+    document.getElementById('prop-title').value = '';
+    document.getElementById('prop-price').value = '450000.00';
+    document.getElementById('prop-address').value = '';
+    document.getElementById('prop-city').value = 'Lisboa';
+    document.getElementById('prop-status').value = 'Disponível';
+    document.getElementById('prop-modal-title').innerText = 'Angariar Novo Imóvel';
+    document.getElementById('prop-modal').style.display = 'flex';
+}
+function closePropertyModal() {
+    document.getElementById('prop-modal').style.display = 'none';
+}
+function editProperty(p) {
+    document.getElementById('prop-id').value = p.id;
+    document.getElementById('prop-title').value = p.title;
+    document.getElementById('prop-type').value = p.property_type;
+    document.getElementById('prop-price').value = p.price;
+    document.getElementById('prop-address').value = p.address;
+    document.getElementById('prop-city').value = p.city;
+    document.getElementById('prop-bedrooms').value = p.bedrooms;
+    document.getElementById('prop-bathrooms').value = p.bathrooms;
+    document.getElementById('prop-area').value = p.area_sqm;
+    document.getElementById('prop-status').value = p.status;
+    document.getElementById('prop-agent').value = p.agent_name;
+    document.getElementById('prop-modal-title').innerText = 'Editar Imóvel';
+    document.getElementById('prop-modal').style.display = 'flex';
+}
+</script>
+{% endblock %}

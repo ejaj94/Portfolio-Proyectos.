@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Imobiliário | RealtyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-chart-pie" style="color: var(--sapphire-blue);"></i> Painel Executivo Imobiliário</h1>
+        <p class="page-subtitle">Gestão de carteira de imóveis, valor de portfólio, pipeline de oportunidades e visitas.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/properties" class="btn-sm btn-primary">
+            <i class="fa-solid fa-plus"></i> Angariar Imóvel
+        </a>
+        <a href="/api/export/csv" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+        <a href="/api/export/json" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-code"></i> Exportar JSON
+        </a>
+    </div>
+</div>
+
+<!-- Metrics Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-building"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ active_properties }}</div>
+            <div class="stat-label">Imóveis Ativos</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #ECFDF5; color: var(--accent-emerald);">
+            <i class="fa-solid fa-euro-sign"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ "%.2f"|format(total_portfolio_value / 1000000.0) }} M€</div>
+            <div class="stat-label">Valor Carteira Ativa</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #FFFBEB; color: var(--accent-amber);">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_clients }}</div>
+            <div class="stat-label">Clientes Registados</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #EFF6FF; color: var(--sapphire-blue);">
+            <i class="fa-solid fa-filter-circle-dollar"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ active_leads }}</div>
+            <div class="stat-label">Leads em Negociação</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #FEF2F2; color: var(--accent-red);">
+            <i class="fa-solid fa-calendar-check"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ scheduled_visits }}</div>
+            <div class="stat-label">Visitas Agendadas</div>
+        </div>
+    </div>
+</div>
+
+<!-- Grid Layout: Featured Properties & Recent Leads -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Featured Properties List -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--architectural-dark);">
+                <i class="fa-solid fa-star" style="color: var(--accent-amber);"></i> Imóveis em Destaque no Portfólio
+            </h2>
+            <a href="/properties" style="font-size: 0.85rem; color: var(--sapphire-blue); font-weight: 700; text-decoration: none;">Ver todos &rarr;</a>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {% for p in featured_properties %}
+            <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <span style="font-size: 0.78rem; font-weight: 800; color: var(--sapphire-blue); text-transform: uppercase; background: #EFF6FF; padding: 0.2rem 0.5rem; border-radius: 6px;">
+                        <i class="fa-solid {{ p.image_icon }}"></i> {{ p.property_type }}
+                    </span>
+
+                    {% if p.status == 'Disponível' %}
+                        <span class="badge-status status-available">Disponível</span>
+                    {% elif p.status == 'Reservado' %}
+                        <span class="badge-status status-reserved">Reservado</span>
+                    {% else %}
+                        <span class="badge-status status-sold">Vendido</span>
+                    {% endif %}
+                </div>
+
+                <a href="/property/{{ p.id }}" style="font-size: 1.05rem; font-weight: 800; color: var(--architectural-dark); text-decoration: none; display: block; margin-bottom: 0.4rem;">
+                    {{ p.title }}
+                </a>
+
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                    <i class="fa-solid fa-location-dot"></i> {{ p.city }} &bull; {{ p.area_sqm }} m²
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.6rem; border-top: 1px solid #E2E8F0;">
+                    <span style="font-size: 1.15rem; font-weight: 900; color: var(--sapphire-blue);">
+                        {{ "%.2f"|format(p.price) }} €
+                    </span>
+                    <a href="/property/{{ p.id }}" class="btn-sm btn-secondary" style="font-size: 0.78rem; padding: 0.35rem 0.7rem;">
+                        Ver Ficha
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Recent Leads Stream -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--architectural-dark);">
+                <i class="fa-solid fa-user-plus" style="color: var(--sapphire-blue);"></i> Oportunidades Recentes
+            </h2>
+            <a href="/pipeline" style="font-size: 0.85rem; color: var(--sapphire-blue); font-weight: 700; text-decoration: none;">Ver Funil &rarr;</a>
+        </div>
+
+        {% if not recent_leads %}
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <i class="fa-solid fa-inbox" style="font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                <p>Nenhuma oportunidade registada recentemente.</p>
+            </div>
+        {% else %}
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                {% for l in recent_leads %}
+                <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 10px; padding: 0.85rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.3rem;">
+                        <strong style="font-size: 0.92rem; color: var(--architectural-dark);">{{ l.client_name }}</strong>
+                        <span style="font-size: 0.75rem; font-weight: 800; background: #EFF6FF; color: var(--sapphire-blue); padding: 0.15rem 0.5rem; border-radius: 6px;">
+                            {{ l.status }}
+                        </span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-house"></i> {{ l.property_title or 'Interesse Geral' }}
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--architectural-slate); margin-top: 0.3rem;">
+                        Origem: <strong>{{ l.source }}</strong> &bull; Contacto: {{ l.phone }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/realty.js') }}"></script>
+{% endblock %}

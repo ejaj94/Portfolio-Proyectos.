@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Funil de Vendas Imobiliário | RealtyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-filter-circle-dollar" style="color: var(--sapphire-blue);"></i> Funil de Vendas Imobiliário</h1>
+        <p class="page-subtitle">Acompanhamento de oportunidades por etapa de negociação e fecho de negócios.</p>
+    </div>
+</div>
+
+<!-- Pipeline Stages Grid / Columns -->
+<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.25rem; overflow-x: auto; min-width: 1000px; margin-bottom: 2rem;">
+    {% for stage in stages %}
+    <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; min-height: 550px; display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--sapphire-blue);">
+            <h3 style="font-size: 0.95rem; font-weight: 800; color: var(--architectural-dark);">{{ stage }}</h3>
+            <span style="font-size: 0.78rem; font-weight: 800; background: var(--sapphire-blue); color: white; padding: 0.15rem 0.55rem; border-radius: 12px;">
+                {{ pipeline_data[stage]|length }}
+            </span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.9rem; flex: 1;">
+            {% for l in pipeline_data[stage] %}
+            <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                <strong style="font-size: 0.95rem; color: var(--architectural-dark); display: block; margin-bottom: 0.2rem;">{{ l.client_name }}</strong>
+                
+                <div style="font-size: 0.8rem; color: var(--sapphire-blue); font-weight: 700; margin-bottom: 0.5rem;">
+                    <i class="fa-solid fa-house"></i> {{ l.property_title or 'Interesse Geral' }}
+                </div>
+
+                <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                    <i class="fa-solid fa-phone"></i> {{ l.phone }}<br>
+                    Origem: <strong>{{ l.source }}</strong>
+                </div>
+
+                <!-- Stage Move Selector -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.6rem; border-top: 1px solid #F1F5F9;">
+                    <span style="font-size: 0.72rem; color: var(--text-muted);">Mover para:</span>
+                    <select class="form-select" style="font-size: 0.75rem; padding: 0.25rem 0.4rem; width: auto;" onchange="updateLeadStatus({{ l.id }}, this.value)">
+                        {% for s in stages %}
+                        <option value="{{ s }}" {% if s == l.status %}selected{% endif %}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/realty.js') }}"></script>
+{% endblock %}
