@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Repositório de Ficheiros | TaskCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-folder-open"></i> Repositório Central de Ficheiros</h1>
+        <p class="page-subtitle">Documentação técnica, designs e ficheiros de código anexados aos projetos.</p>
+    </div>
+</div>
+
+<!-- Files Table Card -->
+<div class="table-card" style="margin-bottom: 2rem;">
+    <div style="overflow-x: auto;">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Nome do Ficheiro</th>
+                    <th>Projeto Associado</th>
+                    <th>Tamanho</th>
+                    <th>Categoria</th>
+                    <th>Data Carregamento</th>
+                    <th style="text-align: right;">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in files %}
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.2); color: var(--primary-indigo); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+                                <i class="fa-solid fa-file-code"></i>
+                            </div>
+                            <strong style="color: white;">{{ f.file_name }}</strong>
+                        </div>
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--violet-glow); font-weight: 700;">
+                        {{ f.project_name }}
+                    </td>
+                    <td style="font-size: 0.85rem; color: var(--text-muted);">
+                        {{ f.file_size }}
+                    </td>
+                    <td>
+                        <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 6px; background: rgba(255,255,255,0.08); color: var(--emerald-spark);">
+                            {{ f.category }}
+                        </span>
+                    </td>
+                    <td style="font-size: 0.85rem; color: var(--text-muted);">
+                        {{ f.uploaded_at }}
+                    </td>
+                    <td style="text-align: right;">
+                        <button onclick="alert('📄 A descarregar {{ f.file_name }}...')" class="btn-sm btn-secondary">
+                            <i class="fa-solid fa-download"></i> Descarregar
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

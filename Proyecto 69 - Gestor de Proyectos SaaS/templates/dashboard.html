@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Executivo | TaskCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-chart-pie"></i> Painel Geral de Projetos</h1>
+        <p class="page-subtitle">Acompanhamento executivo de prazos, entregas da equipa, tarefas e progresso.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/projects" class="btn-sm btn-primary">
+            <i class="fa-solid fa-plus"></i> Novo Projeto
+        </a>
+        <a href="/api/export/csv" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+        <a href="/api/export/json" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-code"></i> Exportar JSON
+        </a>
+    </div>
+</div>
+
+<!-- Metrics Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-rocket"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ active_projects }} / {{ total_projects }}</div>
+            <div class="stat-label">Projetos Ativos</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #059669);">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ completed_tasks }} / {{ total_tasks }}</div>
+            <div class="stat-label">Tarefas Concluídas</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #8B5CF6, #6D28D9);">
+            <i class="fa-solid fa-bars-progress"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ overall_progress }}%</div>
+            <div class="stat-label">Progresso Global</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);">
+            <i class="fa-solid fa-euro-sign"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ "%.2f"|format(total_budget) }} €</div>
+            <div class="stat-label">Orçamento Alocado</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #38BDF8, #0284C7);">
+            <i class="fa-solid fa-people-group"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_teams }}</div>
+            <div class="stat-label">Equipas Ativas</div>
+        </div>
+    </div>
+</div>
+
+<!-- Grid Layout: Active Projects & Upcoming Deadlines -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Active Projects Overview -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.2rem; font-weight: 800; color: white;">
+                <i class="fa-solid fa-layer-group" style="color: var(--primary-indigo);"></i> Projetos em Andamento
+            </h2>
+            <a href="/projects" style="font-size: 0.85rem; color: var(--violet-glow); font-weight: 700; text-decoration: none;">Ver todos &rarr;</a>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+            {% for p in projects %}
+            <div style="background: rgba(15, 12, 27, 0.6); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 14px; padding: 1.15rem; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <div>
+                        <a href="/project/{{ p.id }}" style="font-size: 1.1rem; font-weight: 800; color: white; text-decoration: none;">
+                            {{ p.name }}
+                        </a>
+                        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.1rem;">
+                            Cliente: <strong style="color: var(--text-white);">{{ p.client_name }}</strong> &bull; Equipa: <strong style="color: {{ p.team_color }};">{{ p.team_name }}</strong>
+                        </div>
+                    </div>
+
+                    {% if p.status == 'Concluído' %}
+                        <span class="status-pill status-completed"><i class="fa-solid fa-check"></i> Concluído</span>
+                    {% elif p.status == 'Em Progresso' %}
+                        <span class="status-pill status-active"><i class="fa-solid fa-spinner fa-spin"></i> Em Progresso</span>
+                    {% else %}
+                        <span class="status-pill status-onhold"><i class="fa-solid fa-pause"></i> {{ p.status }}</span>
+                    {% endif %}
+                </div>
+
+                <div style="margin-top: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.3rem;">
+                        <span style="color: var(--text-muted);">Progresso do Projeto:</span>
+                        <strong style="color: var(--emerald-spark);">{{ p.progress }}%</strong>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: {{ p.progress }}%;"></div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Upcoming Task Deadlines -->
+    <div class="table-card">
+        <h2 style="font-size: 1.2rem; font-weight: 800; color: white; margin-bottom: 1.25rem;">
+            <i class="fa-solid fa-clock" style="color: var(--violet-glow);"></i> Próximas Tarefas
+        </h2>
+
+        {% if not upcoming_tasks %}
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <i class="fa-solid fa-check-double" style="font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--emerald-spark);"></i>
+                <p>Nenhuma tarefa pendente para breve.</p>
+            </div>
+        {% else %}
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                {% for t in upcoming_tasks %}
+                <div style="background: rgba(15, 12, 27, 0.6); border: 1px solid rgba(99, 102, 241, 0.15); border-radius: 12px; padding: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.3rem;">
+                        <strong style="font-size: 0.92rem; color: white;">{{ t.title }}</strong>
+                        {% if t.priority == 'Alta' %}
+                            <span class="badge-priority priority-high">Alta</span>
+                        {% elif t.priority == 'Média' %}
+                            <span class="badge-priority priority-medium">Média</span>
+                        {% else %}
+                            <span class="badge-priority priority-low">Baixa</span>
+                        {% endif %}
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
+                        <span><i class="fa-regular fa-user"></i> {{ t.assigned_to }}</span>
+                        <span style="color: var(--violet-glow); font-weight: 700;"><i class="fa-regular fa-calendar"></i> {{ t.due_date }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/projects.js') }}"></script>
+{% endblock %}

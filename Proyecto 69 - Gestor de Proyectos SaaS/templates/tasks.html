@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Quadro de Tarefas & Kanban | TaskCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-list-check"></i> Quadro Geral de Tarefas</h1>
+        <p class="page-subtitle">Visualização de prioridades, responsáveis e estado de execução de todas as tarefas.</p>
+    </div>
+</div>
+
+<!-- Filters Bar -->
+<div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.15rem; margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+    <form method="GET" action="/tasks" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <div>
+            <select name="status" class="form-select" style="width: 180px;" onchange="this.form.submit()">
+                <option value="">Todos os Estados</option>
+                <option value="A Fazer" {% if selected_status == 'A Fazer' %}selected{% endif %}>A Fazer</option>
+                <option value="Em Progresso" {% if selected_status == 'Em Progresso' %}selected{% endif %}>Em Progresso</option>
+                <option value="Concluído" {% if selected_status == 'Concluído' %}selected{% endif %}>Concluídos</option>
+            </select>
+        </div>
+        <div>
+            <select name="priority" class="form-select" style="width: 180px;" onchange="this.form.submit()">
+                <option value="">Todas as Prioridades</option>
+                <option value="Alta" {% if selected_priority == 'Alta' %}selected{% endif %}>Alta</option>
+                <option value="Média" {% if selected_priority == 'Média' %}selected{% endif %}>Média</option>
+                <option value="Baixa" {% if selected_priority == 'Baixa' %}selected{% endif %}>Baixa</option>
+            </select>
+        </div>
+        {% if selected_status or selected_priority %}
+            <a href="/tasks" class="btn-sm btn-secondary" style="color: var(--rose-coral);"><i class="fa-solid fa-xmark"></i> Limpar Filtros</a>
+        {% endif %}
+    </form>
+
+    <div style="font-size: 0.88rem; color: var(--text-muted);">
+        Total Encontrado: <strong style="color: white;">{{ tasks|length }} tarefas</strong>
+    </div>
+</div>
+
+<!-- Tasks Table Card -->
+<div class="table-card" style="margin-bottom: 2rem;">
+    <div style="overflow-x: auto;">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Tarefa</th>
+                    <th>Projeto</th>
+                    <th>Responsável</th>
+                    <th>Prioridade</th>
+                    <th>Prazo</th>
+                    <th>Estado</th>
+                    <th style="text-align: right;">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in tasks %}
+                <tr>
+                    <td>
+                        <strong style="color: white;">{{ t.title }}</strong>
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--violet-glow); font-weight: 700;">
+                        {{ t.project_name }}
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--text-white);">
+                        <i class="fa-regular fa-user" style="color: var(--primary-indigo);"></i> {{ t.assigned_to }}
+                    </td>
+                    <td>
+                        {% if t.priority == 'Alta' %}
+                            <span class="badge-priority priority-high">Alta</span>
+                        {% elif t.priority == 'Média' %}
+                            <span class="badge-priority priority-medium">Média</span>
+                        {% else %}
+                            <span class="badge-priority priority-low">Baixa</span>
+                        {% endif %}
+                    </td>
+                    <td style="font-size: 0.85rem; color: var(--text-muted);">
+                        <i class="fa-regular fa-calendar"></i> {{ t.due_date }}
+                    </td>
+                    <td>
+                        {% if t.status == 'Concluído' %}
+                            <span class="status-pill status-completed"><i class="fa-solid fa-check"></i> Concluído</span>
+                        {% elif t.status == 'Em Progresso' %}
+                            <span class="status-pill status-active"><i class="fa-solid fa-spinner fa-spin"></i> Em Progresso</span>
+                        {% else %}
+                            <span class="status-pill status-onhold"><i class="fa-solid fa-clock"></i> {{ t.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: right;">
+                        {% if t.status != 'Concluído' %}
+                            <button onclick="toggleTaskStatus({{ t.id }}, 'Concluído')" class="btn-sm btn-success">
+                                <i class="fa-solid fa-check"></i> Concluir
+                            </button>
+                        {% else %}
+                            <button onclick="toggleTaskStatus({{ t.id }}, 'Em Progresso')" class="btn-sm btn-secondary">
+                                <i class="fa-solid fa-rotate-left"></i> Reabrir
+                            </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/projects.js') }}"></script>
+{% endblock %}

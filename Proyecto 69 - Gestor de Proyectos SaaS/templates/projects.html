@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogo de Projetos | TaskCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-rocket"></i> Projetos Ativos & Arquivados</h1>
+        <p class="page-subtitle">Gestão de prazos, equipas alocadas, orçamentos e estado de execução.</p>
+    </div>
+    <button onclick="openProjectModal()" class="btn-sm btn-primary">
+        <i class="fa-solid fa-plus"></i> Criar Novo Projeto
+    </button>
+</div>
+
+<!-- Filter Bar -->
+<div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.15rem; margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <a href="/projects" class="btn-sm {% if not selected_status %}btn-primary{% else %}btn-secondary{% endif %}">Todos</a>
+        <a href="/projects?status=Em+Progresso" class="btn-sm {% if selected_status == 'Em Progresso' %}btn-primary{% else %}btn-secondary{% endif %}">Em Progresso</a>
+        <a href="/projects?status=Concluído" class="btn-sm {% if selected_status == 'Concluído' %}btn-primary{% else %}btn-secondary{% endif %}">Concluídos</a>
+        <a href="/projects?status=Em+Espera" class="btn-sm {% if selected_status == 'Em Espera' %}btn-primary{% else %}btn-secondary{% endif %}">Em Espera</a>
+    </div>
+
+    <div style="font-size: 0.88rem; color: var(--text-muted);">
+        Total de Projetos: <strong style="color: white;">{{ projects|length }}</strong>
+    </div>
+</div>
+
+<!-- Projects Cards Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    {% for p in projects %}
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px); position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; width: 6px; height: 100%; background-color: {{ p.team_color }};"></div>
+        
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 6px; background: rgba(255,255,255,0.08); color: var(--violet-glow);">
+                    {{ p.client_name }}
+                </span>
+
+                {% if p.status == 'Concluído' %}
+                    <span class="status-pill status-completed"><i class="fa-solid fa-check"></i> Concluído</span>
+                {% elif p.status == 'Em Progresso' %}
+                    <span class="status-pill status-active"><i class="fa-solid fa-spinner fa-spin"></i> Em Progresso</span>
+                {% else %}
+                    <span class="status-pill status-onhold"><i class="fa-solid fa-pause"></i> {{ p.status }}</span>
+                {% endif %}
+            </div>
+
+            <h3 style="font-size: 1.25rem; font-weight: 900; color: white; margin-bottom: 0.4rem;">
+                <a href="/project/{{ p.id }}" style="color: white; text-decoration: none;">{{ p.name }}</a>
+            </h3>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.5;">
+                {{ p.description or 'Sem descrição especificada.' }}
+            </p>
+
+            <div style="background: rgba(15, 12, 27, 0.6); border: 1px solid rgba(99, 102, 241, 0.15); border-radius: 12px; padding: 0.85rem; margin-bottom: 1.25rem; font-size: 0.85rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                    <span style="color: var(--text-muted);">Equipa:</span>
+                    <strong style="color: {{ p.team_color }};">{{ p.team_name }}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                    <span style="color: var(--text-muted);">Prazo Limite:</span>
+                    <strong style="color: white;"><i class="fa-regular fa-calendar"></i> {{ p.due_date }}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted);">Orçamento:</span>
+                    <strong style="color: var(--emerald-spark);">{{ "%.2f"|format(p.budget) }} €</strong>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div style="margin-bottom: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.3rem;">
+                    <span style="color: var(--text-muted);">Progresso:</span>
+                    <strong style="color: var(--emerald-spark);">{{ p.progress }}%</strong>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: {{ p.progress }}%;"></div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; width: 100%;">
+                <a href="/project/{{ p.id }}" class="btn-sm btn-primary" style="flex: 1; justify-content: center;">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Ver Detalhes
+                </a>
+                <button onclick="editProject({{ p|tojson|forceescape }})" class="btn-sm btn-secondary" title="Editar">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal Project -->
+<div id="proj-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #1A152C; border: 2px solid var(--border-color); border-radius: 24px; padding: 2rem; max-width: 540px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.9);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 id="proj-modal-title" style="font-size: 1.3rem; font-weight: 800; color: white;">Novo Projeto</h2>
+            <button onclick="closeProjectModal()" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="project-form">
+            <input type="hidden" id="proj-id" value="">
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Nome do Projeto *</label>
+                <input type="text" id="proj-name" class="form-input" required placeholder="Ex: Plataforma SaaS de Inteligência Artificial">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Cliente / Empresa *</label>
+                    <input type="text" id="proj-client" class="form-input" required placeholder="Ex: EJAJ TECH Global">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Equipa Alocada *</label>
+                    <select id="proj-team" class="form-select" required>
+                        {% for t in teams %}
+                        <option value="{{ t.id }}">{{ t.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Orçamento (€)</label>
+                    <input type="number" step="0.01" id="proj-budget" class="form-input" placeholder="25000.00">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Data Início</label>
+                    <input type="date" id="proj-start-date" class="form-input">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Prazo Limite</label>
+                    <input type="date" id="proj-due-date" class="form-input">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Estado Inicial</label>
+                <select id="proj-status" class="form-select">
+                    <option value="Em Progresso">Em Progresso</option>
+                    <option value="Em Espera">Em Espera</option>
+                    <option value="Concluído">Concluído</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted);">Descrição do Projeto</label>
+                <textarea id="proj-desc" class="form-textarea" rows="2" placeholder="Resumo do escopo e objetivos..."></textarea>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="closeProjectModal()" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-floppy-disk"></i> Guardar Projeto</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/projects.js') }}"></script>
+<script>
+function openProjectModal() {
+    document.getElementById('proj-id').value = '';
+    document.getElementById('proj-name').value = '';
+    document.getElementById('proj-client').value = '';
+    document.getElementById('proj-budget').value = '20000.00';
+    document.getElementById('proj-status').value = 'Em Progresso';
+    document.getElementById('proj-desc').value = '';
+    document.getElementById('proj-modal-title').innerText = 'Novo Projeto';
+    document.getElementById('proj-modal').style.display = 'flex';
+}
+function closeProjectModal() {
+    document.getElementById('proj-modal').style.display = 'none';
+}
+function editProject(p) {
+    document.getElementById('proj-id').value = p.id;
+    document.getElementById('proj-name').value = p.name;
+    document.getElementById('proj-client').value = p.client_name;
+    document.getElementById('proj-team').value = p.team_id;
+    document.getElementById('proj-budget').value = p.budget;
+    document.getElementById('proj-start-date').value = p.start_date;
+    document.getElementById('proj-due-date').value = p.due_date;
+    document.getElementById('proj-status').value = p.status;
+    document.getElementById('proj-desc').value = p.description || '';
+    document.getElementById('proj-modal-title').innerText = 'Editar Projeto';
+    document.getElementById('proj-modal').style.display = 'flex';
+}
+</script>
+{% endblock %}
