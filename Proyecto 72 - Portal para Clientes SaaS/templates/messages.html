@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Mensagens Directas | ClientPortal AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-comments" style="color: var(--dark-gold);"></i> Canal Direto com Gestor de Conta</h1>
+        <p class="page-subtitle">Comunicação direta, encriptada e em tempo real com a equipa da EJAJ TECH.</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem;">
+    <!-- Left Manager Info Card -->
+    <div class="table-card" style="height: fit-content;">
+        <div style="text-align: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1.25rem; margin-bottom: 1.25rem;">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--primary-charcoal); border: 2px solid var(--metallic-gold); color: var(--metallic-gold); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; margin: 0 auto 0.75rem;">
+                EJ
+            </div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-dark);">Enmanuel Jimenez</h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Account Manager Dedicado</span>
+            <div style="margin-top: 0.5rem;">
+                <span class="status-badge status-completed" style="font-size: 0.75rem;"><i class="fa-solid fa-circle" style="font-size: 0.6rem;"></i> Online Agora</span>
+            </div>
+        </div>
+
+        <div style="font-size: 0.85rem; color: var(--text-muted);">
+            <p style="margin-bottom: 0.5rem;"><i class="fa-regular fa-envelope" style="color: var(--dark-gold); margin-right: 0.4rem;"></i> <strong>E-mail:</strong> enmanuel@ejajtech.com</p>
+            <p style="margin-bottom: 0.5rem;"><i class="fa-brands fa-whatsapp" style="color: #25D366; margin-right: 0.4rem;"></i> <strong>WhatsApp:</strong> +351 911 151 993</p>
+            <p><i class="fa-solid fa-clock" style="color: var(--dark-gold); margin-right: 0.4rem;"></i> <strong>Horário:</strong> Seg - Sex (09h - 19h)</p>
+        </div>
+    </div>
+
+    <!-- Chat Messages Thread -->
+    <div class="table-card" style="display: flex; flex-direction: column; height: 600px; padding: 0; overflow: hidden;">
+        <!-- Chat Header -->
+        <div style="background: var(--primary-charcoal); color: #FFFFFF; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fa-solid fa-lock" style="color: var(--metallic-gold);"></i>
+                <div>
+                    <strong style="font-size: 0.95rem;">Canal Encriptado — {{ client.company_name }}</strong>
+                    <div style="font-size: 0.75rem; color: #A1A1AA;">Respostas habituais em menos de 15 minutos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Stream Body -->
+        <div style="flex: 1; padding: 1.5rem; overflow-y: auto; background: #FFFDF5; display: flex; flex-direction: column; gap: 1rem;">
+            {% for m in messages %}
+                {% if m.sender_type == 'Cliente' %}
+                <!-- Client Bubble -->
+                <div style="align-self: flex-end; max-width: 75%;">
+                    <div style="background: var(--primary-charcoal); color: #FFFFFF; border: 1px solid var(--metallic-gold); border-radius: 16px 16px 2px 16px; padding: 0.9rem 1.2rem; box-shadow: 0 3px 10px rgba(0,0,0,0.06);">
+                        <p style="font-size: 0.92rem; line-height: 1.4;">{{ m.content }}</p>
+                    </div>
+                    <div style="font-size: 0.72rem; color: var(--text-muted); text-align: right; margin-top: 0.3rem;">
+                        {{ m.sender_name }} &bull; {{ m.sent_at }}
+                    </div>
+                </div>
+                {% else %}
+                <!-- Manager Bubble -->
+                <div style="align-self: flex-start; max-width: 75%;">
+                    <div style="background: #FFFFFF; color: var(--text-dark); border: 1px solid var(--border-color); border-radius: 16px 16px 16px 2px; padding: 0.9rem 1.2rem; box-shadow: 0 3px 10px rgba(212,175,55,0.08);">
+                        <div style="font-size: 0.75rem; font-weight: 800; color: var(--dark-gold); margin-bottom: 0.2rem;">
+                            <i class="fa-solid fa-user-tie"></i> {{ m.sender_name }} (Gestor)
+                        </div>
+                        <p style="font-size: 0.92rem; line-height: 1.4;">{{ m.content }}</p>
+                    </div>
+                    <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.3rem;">
+                        {{ m.sent_at }}
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- Chat Input Form Footer -->
+        <div style="padding: 1rem 1.5rem; background: #FFFFFF; border-top: 1px solid var(--border-color);">
+            <form id="chat-form" style="display: flex; gap: 0.75rem;">
+                <input type="text" id="chat-message-input" class="form-input" placeholder="Escreva a sua mensagem para o seu Gestor de Conta..." required>
+                <button type="submit" class="btn-sm btn-primary" style="white-space: nowrap;">
+                    <i class="fa-solid fa-paper-plane"></i> Enviar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/portal.js') }}"></script>
+{% endblock %}

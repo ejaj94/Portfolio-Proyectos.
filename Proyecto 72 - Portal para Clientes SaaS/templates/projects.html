@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Projetos | ClientPortal AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-diagram-project" style="color: var(--dark-gold);"></i> Projetos & Desenvolvimento</h1>
+        <p class="page-subtitle">Acompanhamento detalhado de fases, percentagem de conclusão e orçamentos aprovados.</p>
+    </div>
+</div>
+
+<!-- Status Filter Pills -->
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+    <a href="/projects" class="btn-sm {% if not selected_status %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Todos
+    </a>
+    <a href="/projects?status=Em Progresso" class="btn-sm {% if selected_status == 'Em Progresso' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Em Progresso
+    </a>
+    <a href="/projects?status=Em Revisão" class="btn-sm {% if selected_status == 'Em Revisão' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Em Revisão
+    </a>
+    <a href="/projects?status=Concluído" class="btn-sm {% if selected_status == 'Concluído' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Concluídos
+    </a>
+</div>
+
+<!-- Projects Grid Cards -->
+{% if not projects %}
+    <div class="table-card" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+        <i class="fa-solid fa-diagram-next" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+        <p style="font-size: 1.1rem; font-weight: 600;">Nenhum projeto encontrado nesta categoria.</p>
+    </div>
+{% else %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem;">
+        {% for p in projects %}
+        <div class="table-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                    <div>
+                        <span style="font-size: 0.75rem; font-weight: 800; color: var(--dark-gold); text-transform: uppercase; letter-spacing: 0.5px;">{{ p.category }}</span>
+                        <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--text-dark); margin-top: 0.2rem;">{{ p.project_name }}</h2>
+                    </div>
+                    <div>
+                        {% if p.status == 'Concluído' %}
+                            <span class="status-badge status-completed"><i class="fa-solid fa-check"></i> Concluído</span>
+                        {% elif p.status == 'Em Progresso' %}
+                            <span class="status-badge status-progress"><i class="fa-solid fa-spinner fa-spin"></i> Em Progresso</span>
+                        {% elif p.status == 'Em Revisão' %}
+                            <span class="status-badge status-review"><i class="fa-solid fa-magnifying-glass"></i> Em Revisão</span>
+                        {% else %}
+                            <span class="status-badge status-hold"><i class="fa-solid fa-pause"></i> Em Espera</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">
+                    {{ p.description or 'Sem descrição técnica adicional.' }}
+                </p>
+            </div>
+
+            <div>
+                <!-- Progress Bar -->
+                <div style="margin-bottom: 1.25rem; background: #F8FAFC; padding: 0.85rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">
+                        <span>Conclusão de Entregáveis</span>
+                        <span style="color: var(--dark-gold);">{{ p.progress_percent }}%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: {{ p.progress_percent }}%;"></div>
+                    </div>
+                </div>
+
+                <!-- Footer Meta -->
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.85rem;">
+                    <div>
+                        <i class="fa-regular fa-calendar-check"></i> Prazo: <strong style="color: var(--text-dark);">{{ p.deadline }}</strong>
+                    </div>
+                    <div>
+                        Orçamento: <strong style="color: var(--dark-gold); font-size: 0.95rem;">{{ "%.2f"|format(p.budget_total) }} €</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

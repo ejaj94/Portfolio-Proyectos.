@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | ClientPortal AI SaaS{% endblock %}
+
+{% block content %}
+<!-- Page Header & Welcome Banner -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">
+            <i class="fa-solid fa-crown" style="color: var(--dark-gold);"></i> Bem-vindo, {{ client.contact_name }}
+        </h1>
+        <p class="page-subtitle">Portal exclusivo da empresa <strong>{{ client.company_name }}</strong> (NIF: {{ client.nif_vat }}).</p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+        <button onclick="document.getElementById('modal-new-ticket').style.display='flex'" class="btn-sm btn-primary">
+            <i class="fa-solid fa-plus"></i> Novo Ticket Suporte
+        </button>
+        <a href="/api/export/csv" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+        <a href="/api/export/json" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-code"></i> Exportar JSON
+        </a>
+    </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-diagram-project"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ active_projects }} / {{ total_projects }}</div>
+            <div class="stat-label">Projetos em Execução</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #FEF2F2; color: var(--crimson-danger);">
+            <i class="fa-solid fa-receipt"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ "%.2f"|format(pending_amount) }} €</div>
+            <div class="stat-label">Faturas Pendentes ({{ pending_invoices_cnt }})</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #EFF6FF; color: var(--royal-blue);">
+            <i class="fa-solid fa-headset"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ open_tickets_cnt }}</div>
+            <div class="stat-label">Tickets de Suporte Abertos</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #ECFDF5; color: var(--emerald-green);">
+            <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ client.account_manager }}</div>
+            <div class="stat-label">Gestor de Conta Dedicado</div>
+        </div>
+    </div>
+</div>
+
+<!-- Grid Layout: Active Projects & Messages -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Active Projects List -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-bars-progress" style="color: var(--dark-gold);"></i> Progresso dos Projetos Ativos
+            </h2>
+            <a href="/projects" style="font-size: 0.85rem; color: var(--dark-gold); font-weight: 800; text-decoration: none;">Ver Todos &rarr;</a>
+        </div>
+
+        {% if not projects %}
+            <div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                <i class="fa-regular fa-folder-open" style="font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.4;"></i>
+                <p>Nenhum projeto registado para a sua conta.</p>
+            </div>
+        {% else %}
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                {% for p in projects %}
+                <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-dark);">{{ p.project_name }}</h3>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">Categoria: <strong>{{ p.category }}</strong> &bull; Prazo: {{ p.deadline }}</span>
+                        </div>
+                        <div>
+                            {% if p.status == 'Concluído' %}
+                                <span class="status-badge status-completed"><i class="fa-solid fa-check"></i> Concluído</span>
+                            {% elif p.status == 'Em Progresso' %}
+                                <span class="status-badge status-progress"><i class="fa-solid fa-spinner fa-spin"></i> Em Progresso</span>
+                            {% elif p.status == 'Em Revisão' %}
+                                <span class="status-badge status-review"><i class="fa-solid fa-magnifying-glass"></i> Em Revisão</span>
+                            {% else %}
+                                <span class="status-badge status-hold"><i class="fa-solid fa-pause"></i> Em Espera</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 0.8rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.3rem;">
+                            <span>Progresso Global</span>
+                            <span style="color: var(--dark-gold);">{{ p.progress_percent }}%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: {{ p.progress_percent }}%;"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Right Sidebar: Account Manager & Quick Contact -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <!-- Account Manager Card -->
+        <div class="table-card" style="background: var(--primary-charcoal); color: #FFFFFF; border-color: var(--metallic-gold);">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--metallic-gold); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">
+                <i class="fa-solid fa-user-tie"></i> O seu Gestor de Conta
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="width: 52px; height: 52px; border-radius: 50%; background: var(--metallic-gold); color: var(--primary-charcoal); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 900;">
+                    EJ
+                </div>
+                <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 800; color: #FFFFFF;">Enmanuel Jimenez</h3>
+                    <p style="font-size: 0.8rem; color: #A1A1AA;">Lead Software Architect & PM</p>
+                </div>
+            </div>
+            <p style="font-size: 0.85rem; color: #D4D4D8; line-height: 1.4; margin-bottom: 1rem;">
+                "Estou disponível para esclarecer qualquer dúvida técnica sobre as suas entregas e projetos."
+            </p>
+            <a href="/messages" class="btn-sm btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fa-solid fa-comment-dots"></i> Enviar Mensagem Directa
+            </a>
+        </div>
+
+        <!-- Documents Quick Access -->
+        <div class="table-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-dark);">
+                    <i class="fa-solid fa-file-pdf" style="color: var(--crimson-danger);"></i> Últimos Documentos
+                </h3>
+                <a href="/documents" style="font-size: 0.8rem; color: var(--dark-gold); font-weight: 800; text-decoration: none;">Ver Todos &rarr;</a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                {% for doc in documents %}
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem; padding: 0.5rem 0; border-bottom: 1px dashed var(--border-color);">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; overflow: hidden;">
+                        <i class="fa-regular fa-file-pdf" style="color: var(--crimson-danger); font-size: 1.1rem;"></i>
+                        <span style="font-weight: 600; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;">{{ doc.title }}</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">{{ doc.file_size }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Novo Ticket Suporte -->
+<div id="modal-new-ticket" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 520px; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-headset" style="color: var(--dark-gold);"></i> Abrir Ticket de Suporte
+            </h3>
+            <button onclick="document.getElementById('modal-new-ticket').style.display='none'" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="ticket-form">
+            <div style="margin-bottom: 1rem;">
+                <label class="form-label">Assunto / Descrição Sumária *</label>
+                <input type="text" id="ticket-subject" class="form-input" placeholder="Ex: Solicitação de alteração no módulo de relatórios" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label class="form-label">Categoria *</label>
+                    <select id="ticket-category" class="form-input">
+                        <option value="Técnico">Técnico</option>
+                        <option value="Faturação">Faturação</option>
+                        <option value="Dúvida">Dúvida</option>
+                        <option value="Alteração">Alteração</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Prioridade *</label>
+                    <select id="ticket-priority" class="form-input">
+                        <option value="Média">Média</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Baixa">Baixa</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('modal-new-ticket').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-paper-plane"></i> Submeter Ticket</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/portal.js') }}"></script>
+{% endblock %}

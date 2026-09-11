@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Facturas & Pagamentos | ClientPortal AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-file-invoice-dollar" style="color: var(--dark-gold);"></i> Faturação & Estado de Pagamentos</h1>
+        <p class="page-subtitle">Histórico de liquidações, faturas emitidas e montantes pendentes de regularização.</p>
+    </div>
+</div>
+
+<!-- Stats Financial Summary -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 16px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <span style="font-size: 0.85rem; font-weight: 700; color: #065F46; text-transform: uppercase;">Total Liquidado / Pago</span>
+            <h2 style="font-size: 2rem; font-weight: 900; color: #065F46; margin-top: 0.2rem;">{{ "%.2f"|format(total_paid) }} €</h2>
+        </div>
+        <div style="width: 48px; height: 48px; border-radius: 50%; background: #059669; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+    </div>
+
+    <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 16px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <span style="font-size: 0.85rem; font-weight: 700; color: #991B1B; text-transform: uppercase;">Total Pendente de Pagamento</span>
+            <h2 style="font-size: 2rem; font-weight: 900; color: #991B1B; margin-top: 0.2rem;">{{ "%.2f"|format(total_pending) }} €</h2>
+        </div>
+        <div style="width: 48px; height: 48px; border-radius: 50%; background: #DC2626; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Status Filter Pills -->
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+    <a href="/invoices" class="btn-sm {% if not selected_status %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Todas
+    </a>
+    <a href="/invoices?status=Pendente" class="btn-sm {% if selected_status == 'Pendente' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Pendentes
+    </a>
+    <a href="/invoices?status=Paga" class="btn-sm {% if selected_status == 'Paga' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Pagas
+    </a>
+</div>
+
+<!-- Invoices Table Card -->
+<div class="table-card">
+    {% if not invoices %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <i class="fa-solid fa-receipt" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+            <p style="font-size: 1.1rem; font-weight: 600;">Nenhuma fatura encontrada nesta categoria.</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Nº Fatura</th>
+                        <th>Descrição / Conceito</th>
+                        <th>Data Emissão</th>
+                        <th>Vencimento</th>
+                        <th>Valor Total (€)</th>
+                        <th>Estado</th>
+                        <th style="text-align: right;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inv in invoices %}
+                    <tr>
+                        <td style="font-weight: 800; color: var(--primary-charcoal);">{{ inv.invoice_number }}</td>
+                        <td style="font-weight: 600; color: var(--text-dark);">{{ inv.description }}</td>
+                        <td style="font-size: 0.85rem; color: var(--text-muted);">{{ inv.issue_date }}</td>
+                        <td style="font-size: 0.85rem; font-weight: 700; color: var(--text-dark);">{{ inv.due_date }}</td>
+                        <td style="font-size: 1.1rem; font-weight: 900; color: var(--dark-gold);">
+                            {{ "%.2f"|format(inv.amount_total) }} €
+                        </td>
+                        <td>
+                            {% if inv.status == 'Paga' %}
+                                <span class="status-badge status-paid"><i class="fa-solid fa-check"></i> Paga</span>
+                            {% elif inv.status == 'Pendente' %}
+                                <span class="status-badge status-overdue"><i class="fa-solid fa-clock"></i> Pendente</span>
+                            {% else %}
+                                <span class="status-badge status-review"><i class="fa-solid fa-circle-exclamation"></i> Vencida</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <a href="/invoice/{{ inv.id }}" class="btn-sm btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                                <i class="fa-solid fa-eye"></i> Ver / Imprimir
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

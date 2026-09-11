@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ClientPortal AI - Area Reservada do Cliente SaaS{% endblock %}</title>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- App Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar-main">
+        <a href="/" class="brand-title">
+            <i class="fa-solid fa-shield-halved" style="color: var(--metallic-gold);"></i>
+            <span>ClientPortal</span> <small style="font-size: 0.65rem; color: #A1A1AA; font-weight: 700; border: 1px solid rgba(212,175,55,0.4); padding: 0.15rem 0.4rem; border-radius: 4px; text-transform: uppercase;">VIP Area</small>
+        </a>
+
+        {% if client %}
+        <nav class="nav-links">
+            <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                <i class="fa-solid fa-gauge-high"></i> Dashboard
+            </a>
+            <a href="/projects" class="nav-link {% if request.path == '/projects' %}active{% endif %}">
+                <i class="fa-solid fa-diagram-project"></i> Proyectos
+            </a>
+            <a href="/documents" class="nav-link {% if request.path == '/documents' %}active{% endif %}">
+                <i class="fa-solid fa-folder-closed"></i> Documentos
+            </a>
+            <a href="/invoices" class="nav-link {% if request.path == '/invoices' or '/invoice/' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-file-invoice-dollar"></i> Facturas
+            </a>
+            <a href="/messages" class="nav-link {% if request.path == '/messages' %}active{% endif %}">
+                <i class="fa-solid fa-comments"></i> Mensajes
+            </a>
+            <a href="/tickets" class="nav-link {% if request.path == '/tickets' %}active{% endif %}">
+                <i class="fa-solid fa-headset"></i> Soporte
+            </a>
+        </nav>
+
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="/profile" class="user-profile-badge" style="text-decoration: none;">
+                <img src="{{ client.avatar_url }}" alt="Avatar" class="user-avatar">
+                <div>
+                    <div>{{ client.contact_name }}</div>
+                    <div style="font-size: 0.72rem; color: var(--metallic-gold); font-weight: 600;">{{ client.company_name }}</div>
+                </div>
+            </a>
+            <a href="/login" class="nav-link" style="padding: 0.4rem 0.6rem; color: #EF4444;" title="Alternar Cliente / Sair">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- Main Container -->
+    <main class="page-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <p>ClientPortal AI SaaS &copy; 2026 &bull; Área de Gestão & Experiência de Cliente por <strong>EJAJ TECH</strong></p>
+        <p style="margin-top: 0.4rem; font-size: 0.85rem;">
+            Founder & Lead Architect: <strong>Enmanuel Jimenez</strong> &bull; Siga-nos: <strong>@ejajtech</strong> &bull; Suporte Directo WhatsApp: <strong>+351 911 151 993</strong> (Palavra "AJUDA")
+        </p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

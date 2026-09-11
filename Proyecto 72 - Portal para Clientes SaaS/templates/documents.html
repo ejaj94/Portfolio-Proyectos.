@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Documentos & Contratos | ClientPortal AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-folder-closed" style="color: var(--dark-gold);"></i> Repositório de Documentos & Contratos</h1>
+        <p class="page-subtitle">Acesso seguro a contratos em vigor, especificações técnicas e comprovativos de entrega.</p>
+    </div>
+    <div>
+        <button onclick="document.getElementById('modal-new-doc').style.display='flex'" class="btn-sm btn-primary">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Carregar Documento
+        </button>
+    </div>
+</div>
+
+<!-- Category Filter Pills -->
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+    <a href="/documents" class="btn-sm {% if not selected_type %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Todos
+    </a>
+    <a href="/documents?type=Contrato" class="btn-sm {% if selected_type == 'Contrato' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Contratos
+    </a>
+    <a href="/documents?type=Especificação" class="btn-sm {% if selected_type == 'Especificação' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Especificações
+    </a>
+    <a href="/documents?type=Entrega" class="btn-sm {% if selected_type == 'Entrega' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Entregas
+    </a>
+</div>
+
+<!-- Documents Table Card -->
+<div class="table-card">
+    {% if not documents %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <i class="fa-regular fa-folder-open" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+            <p style="font-size: 1.1rem; font-weight: 600;">Nenhum documento disponível nesta secção.</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Nome do Ficheiro / Documento</th>
+                        <th>Projeto Associado</th>
+                        <th>Tipo</th>
+                        <th>Tamanho</th>
+                        <th>Data de Carregamento</th>
+                        <th style="text-align: right;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in documents %}
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <i class="fa-solid fa-file-pdf" style="color: var(--crimson-danger); font-size: 1.4rem;"></i>
+                                <div>
+                                    <strong style="color: var(--text-dark); display: block;">{{ doc.title }}</strong>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Documento Encriptado SSL</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="font-size: 0.88rem; font-weight: 600; color: var(--text-dark);">
+                            {{ doc.project_name or 'Geral da Empresa' }}
+                        </td>
+                        <td>
+                            <span style="background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; padding: 0.2rem 0.6rem; border-radius: 20px; font-weight: 700; font-size: 0.78rem;">
+                                {{ doc.doc_type }}
+                            </span>
+                        </td>
+                        <td style="font-size: 0.85rem; color: var(--text-muted);">{{ doc.file_size }}</td>
+                        <td style="font-size: 0.85rem; color: var(--text-muted);">{{ doc.upload_date }}</td>
+                        <td style="text-align: right;">
+                            <a href="#" onclick="alert('📥 Baixando ficheiro encriptado: {{ doc.title }}'); return false;" class="btn-sm btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                                <i class="fa-solid fa-download"></i> Baixar PDF
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal: Carregar Documento -->
+<div id="modal-new-doc" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 520px; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-cloud-arrow-up" style="color: var(--dark-gold);"></i> Submeter Documento
+            </h3>
+            <button onclick="document.getElementById('modal-new-doc').style.display='none'" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="document-form">
+            <div style="margin-bottom: 1rem;">
+                <label class="form-label">Título do Documento *</label>
+                <input type="text" id="doc-title" class="form-input" placeholder="Ex: Anexo Técnico de Requisitos v1.pdf" required>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label class="form-label">Associar a Projeto</label>
+                <select id="doc-project-id" class="form-input">
+                    <option value="">-- Documento Geral da Empresa --</option>
+                    {% for p in client_projects %}
+                    <option value="{{ p.id }}">{{ p.project_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label class="form-label">Tipo de Ficheiro *</label>
+                <select id="doc-type" class="form-input">
+                    <option value="Especificação">Especificação Técnica</option>
+                    <option value="Contrato">Contrato / Adenda</option>
+                    <option value="Entrega">Comprovativo de Entrega</option>
+                    <option value="Outro">Outro Ficheiro</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('modal-new-doc').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-check"></i> Submeter Documento</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/portal.js') }}"></script>
+{% endblock %}

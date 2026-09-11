@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Central de Suporte | ClientPortal AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-headset" style="color: var(--dark-gold);"></i> Central de Suporte & Helpdesk</h1>
+        <p class="page-subtitle">Abertura de chamados técnicos, pedidos de alteração e acompanhamento SLA.</p>
+    </div>
+    <div>
+        <button onclick="document.getElementById('modal-new-ticket').style.display='flex'" class="btn-sm btn-primary">
+            <i class="fa-solid fa-plus"></i> Abrir Novo Ticket
+        </button>
+    </div>
+</div>
+
+<!-- Status Filter Pills -->
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+    <a href="/tickets" class="btn-sm {% if not selected_status %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Todos
+    </a>
+    <a href="/tickets?status=Aberto" class="btn-sm {% if selected_status == 'Aberto' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Abertos
+    </a>
+    <a href="/tickets?status=Em Análise" class="btn-sm {% if selected_status == 'Em Análise' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Em Análise
+    </a>
+    <a href="/tickets?status=Resolvido" class="btn-sm {% if selected_status == 'Resolvido' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Resolvidos
+    </a>
+</div>
+
+<!-- Tickets Table Card -->
+<div class="table-card">
+    {% if not tickets %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <i class="fa-solid fa-clipboard-check" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+            <p style="font-size: 1.1rem; font-weight: 600;">Nenhum ticket de suporte encontrado nesta categoria.</p>
+            <button onclick="document.getElementById('modal-new-ticket').style.display='flex'" class="btn-sm btn-primary" style="margin-top: 1rem;">
+                <i class="fa-solid fa-plus"></i> Abrir Ticket Agora
+            </button>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Código Chamado</th>
+                        <th>Assunto / Pedido</th>
+                        <th>Categoria</th>
+                        <th>Prioridade</th>
+                        <th>Data Criação</th>
+                        <th>Última Atualização</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in tickets %}
+                    <tr>
+                        <td style="font-weight: 800; color: var(--dark-gold);">{{ t.ticket_code }}</td>
+                        <td style="font-weight: 700; color: var(--text-dark);">{{ t.subject }}</td>
+                        <td>
+                            <span style="background: #F1F5F9; border: 1px solid var(--border-color); padding: 0.2rem 0.5rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; color: var(--text-dark);">
+                                {{ t.category }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if t.priority == 'Alta' %}
+                                <span style="color: var(--crimson-danger); font-weight: 800; font-size: 0.85rem;"><i class="fa-solid fa-fire"></i> Alta</span>
+                            {% elif t.priority == 'Média' %}
+                                <span style="color: var(--amber-warning); font-weight: 800; font-size: 0.85rem;"><i class="fa-solid fa-layer-group"></i> Média</span>
+                            {% else %}
+                                <span style="color: var(--text-muted); font-weight: 700; font-size: 0.85rem;">Baixa</span>
+                            {% endif %}
+                        </td>
+                        <td style="font-size: 0.82rem; color: var(--text-muted);">{{ t.created_at }}</td>
+                        <td style="font-size: 0.82rem; color: var(--text-muted);">{{ t.last_update }}</td>
+                        <td>
+                            {% if t.status == 'Resolvido' %}
+                                <span class="status-badge status-resolved"><i class="fa-solid fa-check"></i> Resolvido</span>
+                            {% elif t.status == 'Em Análise' %}
+                                <span class="status-badge status-analysis"><i class="fa-solid fa-spinner fa-spin"></i> Em Análise</span>
+                            {% else %}
+                                <span class="status-badge status-open"><i class="fa-solid fa-envelope-open-text"></i> Aberto</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal: Abrir Ticket -->
+<div id="modal-new-ticket" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 520px; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-headset" style="color: var(--dark-gold);"></i> Abrir Ticket de Suporte
+            </h3>
+            <button onclick="document.getElementById('modal-new-ticket').style.display='none'" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="ticket-form">
+            <div style="margin-bottom: 1rem;">
+                <label class="form-label">Assunto / Descrição Sumária *</label>
+                <input type="text" id="ticket-subject" class="form-input" placeholder="Ex: Solicitação de alteração no módulo de relatórios" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label class="form-label">Categoria *</label>
+                    <select id="ticket-category" class="form-input">
+                        <option value="Técnico">Técnico</option>
+                        <option value="Faturação">Faturação</option>
+                        <option value="Dúvida">Dúvida</option>
+                        <option value="Alteração">Alteração</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Prioridade *</label>
+                    <select id="ticket-priority" class="form-input">
+                        <option value="Média">Média</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Baixa">Baixa</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('modal-new-ticket').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-paper-plane"></i> Submeter Ticket</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/portal.js') }}"></script>
+{% endblock %}

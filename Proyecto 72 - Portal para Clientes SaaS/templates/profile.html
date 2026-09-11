@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Perfil da Empresa | ClientPortal AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-user-gear" style="color: var(--dark-gold);"></i> Perfil & Dados da Empresa</h1>
+        <p class="page-subtitle">Gestão da conta de cliente, dados de identificação fiscal e preferências de segurança.</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem;">
+    <!-- Left Profile Card -->
+    <div class="table-card" style="text-align: center;">
+        <img src="{{ client.avatar_url }}" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--metallic-gold); margin-bottom: 1rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">{{ client.contact_name }}</h2>
+        <p style="font-size: 0.85rem; color: var(--dark-gold); font-weight: 700; margin-bottom: 0.5rem;">{{ client.company_name }}</p>
+        <span class="status-badge status-completed" style="font-size: 0.75rem;"><i class="fa-solid fa-circle-check"></i> Conta VIP Ativa</span>
+
+        <div style="border-top: 1px solid var(--border-color); margin-top: 1.5rem; padding-top: 1.25rem; text-align: left; font-size: 0.85rem; color: var(--text-muted);">
+            <p style="margin-bottom: 0.5rem;"><strong>NIF / VAT:</strong> {{ client.nif_vat }}</p>
+            <p style="margin-bottom: 0.5rem;"><strong>Contacto Directo:</strong> {{ client.phone or 'N/A' }}</p>
+            <p style="margin-bottom: 0.5rem;"><strong>Gestor Dedicado:</strong> {{ client.account_manager }}</p>
+            <p><strong>Membro desde:</strong> {{ client.created_at }}</p>
+        </div>
+    </div>
+
+    <!-- Right Profile Details Form & Security -->
+    <div class="table-card">
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-dark); margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+            <i class="fa-solid fa-sliders" style="color: var(--dark-gold);"></i> Informações da Conta & Faturação
+        </h3>
+
+        <form onsubmit="alert('✅ Dados de perfil e faturação atualizados com sucesso!'); return false;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label class="form-label">Razão Social / Nome da Empresa</label>
+                    <input type="text" class="form-input" value="{{ client.company_name }}" required>
+                </div>
+                <div>
+                    <label class="form-label">Nome do Contacto Principal</label>
+                    <input type="text" class="form-input" value="{{ client.contact_name }}" required>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label class="form-label">E-mail Corporativo</label>
+                    <input type="email" class="form-input" value="{{ client.email }}" required>
+                </div>
+                <div>
+                    <label class="form-label">Número de Identificação Fiscal (NIF)</label>
+                    <input type="text" class="form-input" value="{{ client.nif_vat }}" required>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label class="form-label">Telefone de Contacto / WhatsApp</label>
+                <input type="text" class="form-input" value="{{ client.phone or '' }}">
+            </div>
+
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-dark); margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-top: 2rem;">
+                <i class="fa-solid fa-lock" style="color: var(--dark-gold);"></i> Segurança & Autenticação
+            </h3>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label class="form-label">Autenticação de 2 Fatores (2FA)</label>
+                    <select class="form-input">
+                        <option value="Ativado">Ativado (SMS + Autenticador)</option>
+                        <option value="Desativado">Desativado</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Notificações por E-mail</label>
+                    <select class="form-input">
+                        <option value="Todas">Todas as Atualizações de Projeto & Faturas</option>
+                        <option value="Apenas Faturas">Apenas Faturas & Avisos Fiscais</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn-sm btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar Alterações
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

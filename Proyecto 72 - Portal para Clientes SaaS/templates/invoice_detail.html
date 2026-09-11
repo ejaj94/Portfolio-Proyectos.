@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Fatura {{ invoice.invoice_number }} | ClientPortal AI SaaS{% endblock %}
+
+{% block extra_head %}
+<style>
+@media print {
+    .navbar-main, .main-footer, .no-print {
+        display: none !important;
+    }
+    body {
+        background: #ffffff !important;
+    }
+    .page-container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .invoice-card {
+        box-shadow: none !important;
+        border: none !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Top Action Bar -->
+<div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <a href="/invoices" class="btn-sm btn-secondary">
+        <i class="fa-solid fa-arrow-left"></i> Voltar às Facturas
+    </a>
+
+    <button onclick="window.print()" class="btn-sm btn-primary">
+        <i class="fa-solid fa-print"></i> Imprimir / Descarregar PDF
+    </button>
+</div>
+
+<!-- Invoice Document Card -->
+<div class="table-card invoice-card" style="padding: 2.5rem; background: #FFFFFF; border-radius: 16px;">
+    <!-- Document Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 2rem;">
+        <div>
+            <div style="display: flex; align-items: center; gap: 0.6rem; font-size: 1.5rem; font-weight: 900; color: var(--primary-charcoal); margin-bottom: 0.3rem;">
+                <i class="fa-solid fa-shield-halved" style="color: var(--metallic-gold);"></i>
+                <span>EJAJ TECH Systems</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">EJAJ TECH Software Architecture &bull; NIF: 509876543</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Avenida da Liberdade 240, 1250-142 Lisboa, Portugal</p>
+        </div>
+
+        <div style="text-align: right;">
+            <span style="font-size: 1.6rem; font-weight: 900; color: var(--primary-charcoal); display: block;">FATURA / RECIBO</span>
+            <div style="font-size: 1.15rem; font-weight: 800; color: var(--dark-gold); margin-top: 0.2rem;">{{ invoice.invoice_number }}</div>
+            <div style="margin-top: 0.5rem;">
+                {% if invoice.status == 'Paga' %}
+                    <span class="status-badge status-paid" style="font-size: 0.9rem;"><i class="fa-solid fa-check"></i> Liquidada / Paga</span>
+                {% else %}
+                    <span class="status-badge status-overdue" style="font-size: 0.9rem;"><i class="fa-solid fa-clock"></i> Pagamento Pendente</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Client & Invoice Meta Info -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+        <div style="background: #F8FAFC; padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Faturado a</div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.3rem;">{{ client.company_name }}</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.2rem;"><strong>Atenção:</strong> {{ client.contact_name }}</p>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.2rem;"><strong>NIF / VAT:</strong> {{ client.nif_vat }}</p>
+            <p style="font-size: 0.9rem; color: var(--text-muted);"><strong>E-mail:</strong> {{ client.email }}</p>
+        </div>
+
+        <div style="background: #F8FAFC; padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Datas da Fatura</div>
+            <p style="font-size: 0.9rem; color: var(--text-dark); margin-bottom: 0.4rem;"><strong>Data de Emissão:</strong> {{ invoice.issue_date }}</p>
+            <p style="font-size: 0.9rem; color: var(--text-dark); margin-bottom: 0.4rem;"><strong>Data de Vencimento:</strong> <span style="color: var(--crimson-danger); font-weight: 800;">{{ invoice.due_date }}</span></p>
+            <p style="font-size: 0.9rem; color: var(--text-dark);"><strong>Moeda:</strong> EUR (€)</p>
+        </div>
+    </div>
+
+    <!-- Description Table -->
+    <div style="margin-bottom: 2rem;">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th style="width: 70%;">Descrição do Serviço / Faturação</th>
+                    <th style="text-align: right;">Montante Total (€)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <strong style="color: var(--text-dark); font-size: 1.05rem;">{{ invoice.description }}</strong>
+                        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">Serviços de desenvolvimento de software e infraestrutura SaaS prestados pela EJAJ TECH.</div>
+                    </td>
+                    <td style="text-align: right; font-size: 1.2rem; font-weight: 900; color: var(--dark-gold);">
+                        {{ "%.2f"|format(invoice.amount_total) }} €
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Totals Summary Grid -->
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 2rem;">
+        <div style="width: 320px; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">
+                <span>Subtotal Inc. IVA:</span>
+                <strong style="color: var(--text-dark);">{{ "%.2f"|format(invoice.amount_total) }} €</strong>
+            </div>
+
+            <div style="border-top: 2px solid var(--border-color); padding-top: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 1rem; font-weight: 800; color: var(--text-dark);">Montante Devido:</span>
+                <span style="font-size: 1.4rem; font-weight: 900; color: var(--primary-charcoal);">{{ "%.2f"|format(invoice.amount_total) }} €</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Instructions & Footer -->
+    <div style="background: #FAF3E0; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem;">
+        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--dark-gold); margin-bottom: 0.4rem;">
+            <i class="fa-solid fa-building-columns"></i> Dados de Transferência Bancária (IBAN)
+        </h4>
+        <p style="font-size: 0.85rem; color: var(--text-dark); margin-bottom: 0.2rem;"><strong>Banco:</strong> Banco Comercial Português (Millennium BCP)</p>
+        <p style="font-size: 0.85rem; color: var(--text-dark); margin-bottom: 0.2rem;"><strong>IBAN:</strong> PT50 0033 0000 4598 7612 3450 1</p>
+        <p style="font-size: 0.85rem; color: var(--text-dark);"><strong>SWIFT / BIC:</strong> BCPT PT PL</p>
+    </div>
+
+    <div style="border-top: 1px dashed var(--border-color); padding-top: 1.25rem; font-size: 0.78rem; color: var(--text-muted); text-align: center;">
+        <p>Documento gerado eletronicamente através da área VIP ClientPortal AI SaaS &bull; EJAJ TECH</p>
+    </div>
+</div>
+{% endblock %}
