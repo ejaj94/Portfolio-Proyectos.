@@ -1,14 +1,16 @@
 :root {
-    --bg-light: #F8FAFC;
+    --bg-light: #FFFDF2;
     --bg-card: #FFFFFF;
-    --border-color: #E2E8F0;
+    --border-color: #EEDC9A;
     --vibrant-crimson: #DC2626;
+    --princess-gold: #D4AF37;
     --warm-amber: #D97706;
     --royal-blue: #2563EB;
-    --text-dark: #0F172A;
-    --text-muted: #64748B;
+    --text-dark: #1E1B18;
+    --text-muted: #786C5E;
     --emerald-green: #166534;
     --soft-crimson-bg: #FEF2F2;
+    --soft-gold-bg: #FAF3E0;
 }
 
 * {
@@ -19,7 +21,8 @@
 
 body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    background-color: var(--bg-light);
+    background: linear-gradient(135deg, #FFFDF2 0%, #FAF3E0 50%, #F6E7C1 100%);
+    background-attachment: fixed;
     color: var(--text-dark);
     line-height: 1.6;
     min-height: 100vh;
@@ -29,7 +32,8 @@ body {
 
 /* NAVBAR */
 .navbar-main {
-    background: #FFFFFF;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
     padding: 1rem 2.5rem;
     position: sticky;
@@ -38,7 +42,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.08);
 }
 
 .brand-title {
@@ -76,7 +80,7 @@ body {
 
 .nav-link:hover, .nav-link.active {
     color: var(--vibrant-crimson);
-    background: var(--soft-crimson-bg);
+    background: var(--soft-gold-bg);
 }
 
 .btn-whatsapp-header {
@@ -143,7 +147,7 @@ body {
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.08);
 }
 
 .stat-icon {
@@ -199,16 +203,16 @@ body {
 }
 
 .btn-secondary {
-    background: #F1F5F9;
+    background: #FFFFFF;
     color: var(--text-dark);
     border: 1px solid var(--border-color);
 }
 
 .btn-secondary:hover {
-    background: #E2E8F0;
+    background: var(--soft-gold-bg);
 }
 
-/* BADGES */
+/* BADGES & STATUS */
 .status-badge {
     font-size: 0.78rem;
     font-weight: 800;
@@ -231,7 +235,7 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 1.75rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.08);
 }
 
 .custom-table {
@@ -255,7 +259,7 @@ body {
 }
 
 .custom-table tr:hover td {
-    background: #F8FAFC;
+    background: #FFFDF0;
 }
 
 /* FORMS & INPUTS */
@@ -273,8 +277,8 @@ body {
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
     outline: none;
-    border-color: var(--vibrant-crimson);
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+    border-color: var(--princess-gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
 }
 
 /* FOOTER */
@@ -282,7 +286,7 @@ body {
     border-top: 1px solid var(--border-color);
     padding: 2rem;
     text-align: center;
-    background: #FFFFFF;
+    background: rgba(255, 255, 255, 0.95);
     margin-top: auto;
     color: var(--text-muted);
     font-size: 0.9rem;
