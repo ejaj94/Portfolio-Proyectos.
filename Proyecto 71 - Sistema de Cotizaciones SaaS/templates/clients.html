@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Clientes & NIF | QuoteCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-address-card" style="color: var(--vibrant-crimson);"></i> Diretório de Clientes & NIF</h1>
+        <p class="page-subtitle">Gestão centralizada de dados de faturação, identificadores fiscais e histórico comercial.</p>
+    </div>
+    <div>
+        <button onclick="document.getElementById('modal-new-client').style.display='flex'" class="btn-sm btn-primary">
+            <i class="fa-solid fa-user-plus"></i> Novo Cliente / Empresa
+        </button>
+    </div>
+</div>
+
+<!-- Clients Table Card -->
+<div class="table-card">
+    {% if not clients %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <i class="fa-solid fa-users-slash" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+            <p style="font-size: 1.1rem; font-weight: 600;">Nenhum cliente registado no sistema.</p>
+            <button onclick="document.getElementById('modal-new-client').style.display='flex'" class="btn-sm btn-primary" style="margin-top: 1rem;">
+                <i class="fa-solid fa-user-plus"></i> Registar Primeiro Cliente
+            </button>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Empresa / Razão Social</th>
+                        <th>Contacto Principal</th>
+                        <th>NIF / VAT</th>
+                        <th>E-mail & Telefone</th>
+                        <th>Nº Orçamentos</th>
+                        <th>Total Faturado (€)</th>
+                        <th>Data Registo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in clients %}
+                    <tr>
+                        <td style="font-weight: 800; color: var(--text-dark);">
+                            <i class="fa-solid fa-building" style="color: var(--royal-blue); margin-right: 0.4rem;"></i>
+                            {{ c.company_name }}
+                        </td>
+                        <td style="font-weight: 600; color: var(--text-dark);">{{ c.full_name }}</td>
+                        <td>
+                            <span style="background: #F1F5F9; border: 1px solid var(--border-color); padding: 0.2rem 0.5rem; border-radius: 6px; font-weight: 800; font-size: 0.85rem; color: var(--text-dark);">
+                                {{ c.vat_nif }}
+                            </span>
+                        </td>
+                        <td style="font-size: 0.85rem;">
+                            <div><i class="fa-regular fa-envelope" style="color: var(--text-muted);"></i> {{ c.email }}</div>
+                            <div style="color: var(--text-muted);"><i class="fa-solid fa-phone" style="font-size: 0.75rem;"></i> {{ c.phone or 'N/A' }}</div>
+                        </td>
+                        <td style="font-weight: 700; text-align: center;">{{ c.quote_count }}</td>
+                        <td style="font-size: 1.05rem; font-weight: 900; color: var(--vibrant-crimson);">
+                            {{ "%.2f"|format(c.total_spent) }} €
+                        </td>
+                        <td style="font-size: 0.8rem; color: var(--text-muted);">{{ c.created_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal: Novo Cliente -->
+<div id="modal-new-client" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 580px; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-building-circle-check" style="color: var(--vibrant-crimson);"></i> Cadastrar Novo Cliente
+            </h3>
+            <button onclick="document.getElementById('modal-new-client').style.display='none'" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="client-form">
+            <div style="margin-bottom: 1rem;">
+                <label class="form-label">Empresa / Razão Social *</label>
+                <input type="text" id="client-company" class="form-input" placeholder="Ex: TechCorp Portugal, Lda." required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label class="form-label">Nome do Contacto *</label>
+                    <input type="text" id="client-name" class="form-input" placeholder="Ex: Ana Silva" required>
+                </div>
+                <div>
+                    <label class="form-label">NIF / VAT *</label>
+                    <input type="text" id="client-nif" class="form-input" placeholder="Ex: PT509123456" required>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label class="form-label">E-mail Corporativo *</label>
+                    <input type="email" id="client-email" class="form-input" placeholder="contacto@empresa.pt" required>
+                </div>
+                <div>
+                    <label class="form-label">Telefone / WhatsApp</label>
+                    <input type="text" id="client-phone" class="form-input" placeholder="+351 912 345 678">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label class="form-label">Morada Faturação</label>
+                <textarea id="client-address" class="form-input" rows="2" placeholder="Ex: Avenida da República 45, 1000-001 Lisboa"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('modal-new-client').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-check"></i> Guardar Cliente</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/quotes.js') }}"></script>
+{% endblock %}

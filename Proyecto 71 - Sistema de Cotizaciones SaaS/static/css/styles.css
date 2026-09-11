@@ -1,0 +1,293 @@
+:root {
+    --bg-light: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --border-color: #E2E8F0;
+    --vibrant-crimson: #DC2626;
+    --warm-amber: #D97706;
+    --royal-blue: #2563EB;
+    --text-dark: #0F172A;
+    --text-muted: #64748B;
+    --emerald-green: #166534;
+    --soft-crimson-bg: #FEF2F2;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* NAVBAR */
+.navbar-main {
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 2.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.brand-title {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--text-dark);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.brand-title span {
+    color: var(--vibrant-crimson);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.nav-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--vibrant-crimson);
+    background: var(--soft-crimson-bg);
+}
+
+.btn-whatsapp-header {
+    background: #25D366;
+    color: white;
+    font-weight: 800;
+    font-size: 0.88rem;
+    padding: 0.55rem 1.25rem;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.25);
+    transition: transform 0.2s ease;
+}
+
+.btn-whatsapp-header:hover {
+    transform: translateY(-2px);
+}
+
+/* PAGE CONTAINER & HEADER */
+.page-container {
+    max-width: 1280px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    flex: 1;
+    width: 100%;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-title {
+    font-size: 2.1rem;
+    font-weight: 900;
+    color: var(--text-dark);
+}
+
+.page-subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+/* STATS GRID */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--soft-crimson-bg);
+    color: var(--vibrant-crimson);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 900;
+}
+
+.stat-val {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: var(--text-dark);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+/* BUTTONS */
+.btn-sm {
+    padding: 0.55rem 1.1rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--vibrant-crimson);
+    color: white;
+    font-weight: 800;
+    box-shadow: 0 3px 12px rgba(220, 38, 38, 0.25);
+}
+
+.btn-primary:hover {
+    background: #B91C1C;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #F1F5F9;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: #E2E8F0;
+}
+
+/* BADGES */
+.status-badge {
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-transform: uppercase;
+}
+
+.status-approved, .status-invoiced { background: #ECFDF5; color: var(--emerald-green); border: 1px solid #A7F3D0; }
+.status-sent { background: #EFF6FF; color: var(--royal-blue); border: 1px solid #BFDBFE; }
+.status-draft { background: #FFFBEB; color: var(--warm-amber); border: 1px solid #FDE68A; }
+.status-rejected { background: #FEF2F2; color: var(--vibrant-crimson); border: 1px solid #FECACA; }
+
+/* TABLES & CARDS */
+.table-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.custom-table th {
+    padding: 0.85rem 1rem;
+    border-bottom: 2px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.custom-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.custom-table tr:hover td {
+    background: #F8FAFC;
+}
+
+/* FORMS & INPUTS */
+.form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.8rem 1.1rem;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--vibrant-crimson);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+/* FOOTER */
+.main-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 2rem;
+    text-align: center;
+    background: #FFFFFF;
+    margin-top: auto;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.main-footer strong {
+    color: var(--text-dark);
+}

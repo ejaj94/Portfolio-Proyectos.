@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}QuoteCraft AI - Sistema de Orçamentos & Cotações SaaS{% endblock %}</title>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- App Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar-main">
+        <a href="/" class="brand-title">
+            <i class="fa-solid fa-file-invoice-dollar" style="color: var(--vibrant-crimson);"></i>
+            <span>QuoteCraft AI</span>
+        </a>
+        <nav class="nav-links">
+            <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
+            <a href="/quotes" class="nav-link {% if request.path == '/quotes' or '/quote/' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-file-signature"></i> Orçamentos
+            </a>
+            <a href="/clients" class="nav-link {% if request.path == '/clients' %}active{% endif %}">
+                <i class="fa-solid fa-address-card"></i> Clientes & NIF
+            </a>
+            <a href="/items" class="nav-link {% if request.path == '/items' %}active{% endif %}">
+                <i class="fa-solid fa-boxes-stacked"></i> Catálogo
+            </a>
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20Tenho%20interesse%20no%20QuoteCraft%20AI" target="_blank" class="btn-whatsapp-header">
+                <i class="fa-brands fa-whatsapp"></i> Falar com Arquiteto
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <main class="page-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <p>QuoteCraft AI SaaS &copy; 2026 &bull; Gerador de Orçamentos & Propostas por <strong>EJAJ TECH</strong></p>
+        <p style="margin-top: 0.4rem; font-size: 0.85rem;">
+            Founder & Lead Architect: <strong>Enmanuel Jimenez</strong> &bull; Siga-nos: <strong>@ejajtech</strong> &bull; WhatsApp Directo: <strong>+351 911 151 993</strong> (Envie "AJUDA")
+        </p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

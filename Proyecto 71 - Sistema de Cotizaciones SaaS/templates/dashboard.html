@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Financeiro | QuoteCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-chart-line" style="color: var(--vibrant-crimson);"></i> Painel Executivo de Cotações</h1>
+        <p class="page-subtitle">Acompanhamento financeiro de propostas emitidas, taxa de aprovação % e volume orçamentado.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/quotes" class="btn-sm btn-primary">
+            <i class="fa-solid fa-plus"></i> Emitir Novo Orçamento
+        </a>
+        <a href="/api/export/csv" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+        <a href="/api/export/json" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-code"></i> Exportar JSON
+        </a>
+    </div>
+</div>
+
+<!-- Metrics Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-file-invoice"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_quotes }}</div>
+            <div class="stat-label">Orçamentos Emitidos</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #ECFDF5; color: var(--emerald-green);">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ "%.2f"|format(approved_val) }} €</div>
+            <div class="stat-label">Valor Aprovado & Faturado</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #EFF6FF; color: var(--royal-blue);">
+            <i class="fa-solid fa-calculator"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ "%.2f"|format(total_quoted_val) }} €</div>
+            <div class="stat-label">Volume Total Orçamentado</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #FFFBEB; color: var(--warm-amber);">
+            <i class="fa-solid fa-percent"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ conversion_rate }}%</div>
+            <div class="stat-label">Taxa de Conversão</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #F1F5F9; color: var(--text-dark);">
+            <i class="fa-solid fa-building-user"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_clients }}</div>
+            <div class="stat-label">Clientes Registados</div>
+        </div>
+    </div>
+</div>
+
+<!-- Grid Layout: Recent Quotes & Catalog Highlights -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Recent Quotes Table -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-clock-rotate-left" style="color: var(--vibrant-crimson);"></i> Cotações Recentes
+            </h2>
+            <a href="/quotes" style="font-size: 0.85rem; color: var(--vibrant-crimson); font-weight: 700; text-decoration: none;">Ver todos &rarr;</a>
+        </div>
+
+        {% if not recent_quotes %}
+            <div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                <i class="fa-regular fa-folder-open" style="font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                <p>Nenhum orçamento emitido recentemente.</p>
+            </div>
+        {% else %}
+            <div style="overflow-x: auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Nº Orçamento</th>
+                            <th>Empresa / Cliente</th>
+                            <th>Data</th>
+                            <th>Total (€)</th>
+                            <th>Estado</th>
+                            <th style="text-align: right;">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for q in recent_quotes %}
+                        <tr>
+                            <td style="font-weight: 800; color: var(--vibrant-crimson);">{{ q.quote_number }}</td>
+                            <td>
+                                <strong style="color: var(--text-dark);">{{ q.company_name }}</strong>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">{{ q.client_name }}</div>
+                            </td>
+                            <td style="font-size: 0.85rem; color: var(--text-muted);">{{ q.issue_date }}</td>
+                            <td style="font-size: 1.05rem; font-weight: 900; color: var(--text-dark);">
+                                {{ "%.2f"|format(q.total_amount) }} €
+                            </td>
+                            <td>
+                                {% if q.status == 'Aprovado' or q.status == 'Faturado' %}
+                                    <span class="status-badge status-approved"><i class="fa-solid fa-check"></i> {{ q.status }}</span>
+                                {% elif q.status == 'Enviado' %}
+                                    <span class="status-badge status-sent"><i class="fa-solid fa-paper-plane"></i> Enviado</span>
+                                {% elif q.status == 'Rascunho' %}
+                                    <span class="status-badge status-draft"><i class="fa-solid fa-pen"></i> Rascunho</span>
+                                {% else %}
+                                    <span class="status-badge status-rejected"><i class="fa-solid fa-xmark"></i> Rejeitado</span>
+                                {% endif %}
+                            </td>
+                            <td style="text-align: right;">
+                                <a href="/quote/{{ q.id }}" class="btn-sm btn-secondary" style="padding: 0.35rem 0.7rem; font-size: 0.8rem;">
+                                    <i class="fa-solid fa-eye"></i> Ver PDF
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Catalog Quick Items -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-boxes-stacked" style="color: var(--warm-amber);"></i> Catálogo em Destaque
+            </h2>
+            <a href="/items" style="font-size: 0.85rem; color: var(--vibrant-crimson); font-weight: 700; text-decoration: none;">Ver Catálogo &rarr;</a>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+            {% for item in catalog_items %}
+            <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 10px; padding: 0.85rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.2rem;">
+                    <strong style="font-size: 0.9rem; color: var(--text-dark);">{{ item.item_name }}</strong>
+                    <span style="font-size: 0.95rem; font-weight: 900; color: var(--vibrant-crimson);">{{ "%.2f"|format(item.unit_price) }} €</span>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--text-muted);">
+                    Categoria: <strong>{{ item.category }}</strong>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/quotes.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block title %}Orçamentos & Cotações | QuoteCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-file-signature" style="color: var(--vibrant-crimson);"></i> Gestão de Cotações & Orçamentos</h1>
+        <p class="page-subtitle">Emissão rápida de propostas comerciais, controlo de aprovações e cálculo automático de impostos.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <button onclick="document.getElementById('modal-new-quote').style.display='flex'" class="btn-sm btn-primary">
+            <i class="fa-solid fa-plus"></i> Novo Orçamento
+        </button>
+        <a href="/api/export/csv" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+    </div>
+</div>
+
+<!-- Status Filter Pills -->
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+    <a href="/quotes" class="btn-sm {% if not selected_status %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Todos
+    </a>
+    <a href="/quotes?status=Enviado" class="btn-sm {% if selected_status == 'Enviado' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Enviados
+    </a>
+    <a href="/quotes?status=Aprovado" class="btn-sm {% if selected_status == 'Aprovado' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Aprovados
+    </a>
+    <a href="/quotes?status=Rascunho" class="btn-sm {% if selected_status == 'Rascunho' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Rascunhos
+    </a>
+    <a href="/quotes?status=Faturado" class="btn-sm {% if selected_status == 'Faturado' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Faturados
+    </a>
+</div>
+
+<!-- Quotes Table Card -->
+<div class="table-card">
+    {% if not quotes %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <i class="fa-solid fa-file-invoice" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+            <p style="font-size: 1.1rem; font-weight: 600;">Nenhum orçamento encontrado nesta categoria.</p>
+            <button onclick="document.getElementById('modal-new-quote').style.display='flex'" class="btn-sm btn-primary" style="margin-top: 1rem;">
+                <i class="fa-solid fa-plus"></i> Criar Orçamento Agora
+            </button>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Nº Orçamento</th>
+                        <th>Cliente / Empresa</th>
+                        <th>NIF</th>
+                        <th>Data Emissão</th>
+                        <th>Validade</th>
+                        <th>Subtotal (€)</th>
+                        <th>Total (€)</th>
+                        <th>Estado</th>
+                        <th style="text-align: right;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for q in quotes %}
+                    <tr>
+                        <td style="font-weight: 800; color: var(--vibrant-crimson);">{{ q.quote_number }}</td>
+                        <td>
+                            <strong style="color: var(--text-dark);">{{ q.company_name }}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ q.client_name }}</div>
+                        </td>
+                        <td style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">{{ q.vat_nif }}</td>
+                        <td style="font-size: 0.85rem;">{{ q.issue_date }}</td>
+                        <td style="font-size: 0.85rem; color: var(--text-muted);">{{ q.valid_until }}</td>
+                        <td style="font-size: 0.95rem;">{{ "%.2f"|format(q.subtotal) }} €</td>
+                        <td style="font-size: 1.05rem; font-weight: 900; color: var(--text-dark);">
+                            {{ "%.2f"|format(q.total_amount) }} €
+                        </td>
+                        <td>
+                            {% if q.status == 'Aprovado' or q.status == 'Faturado' %}
+                                <span class="status-badge status-approved"><i class="fa-solid fa-check"></i> {{ q.status }}</span>
+                            {% elif q.status == 'Enviado' %}
+                                <span class="status-badge status-sent"><i class="fa-solid fa-paper-plane"></i> Enviado</span>
+                            {% elif q.status == 'Rascunho' %}
+                                <span class="status-badge status-draft"><i class="fa-solid fa-pen"></i> Rascunho</span>
+                            {% else %}
+                                <span class="status-badge status-rejected"><i class="fa-solid fa-xmark"></i> Rejeitado</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <div style="display: flex; gap: 0.35rem; justify-content: flex-end;">
+                                <a href="/quote/{{ q.id }}" class="btn-sm btn-secondary" title="Ver / Imprimir PDF">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                                {% if q.status != 'Aprovado' and q.status != 'Faturado' %}
+                                <button onclick="updateQuoteStatus({{ q.id }}, 'Aprovado')" class="btn-sm btn-secondary" style="color: var(--emerald-green);" title="Aprovar Cotação">
+                                    <i class="fa-solid fa-check"></i>
+                                </button>
+                                {% endif %}
+                                {% if q.status == 'Aprovado' %}
+                                <button onclick="updateQuoteStatus({{ q.id }}, 'Faturado')" class="btn-sm btn-secondary" style="color: var(--royal-blue);" title="Converter para Fatura">
+                                    <i class="fa-solid fa-receipt"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal: Novo Orçamento -->
+<div id="modal-new-quote" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-file-circle-plus" style="color: var(--vibrant-crimson);"></i> Gerar Novo Orçamento
+            </h3>
+            <button onclick="document.getElementById('modal-new-quote').style.display='none'" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="quote-form">
+            <div style="margin-bottom: 1rem;">
+                <label class="form-label">Selecione o Cliente *</label>
+                <select id="quote-client-id" class="form-input" required>
+                    <option value="">-- Selecione uma empresa registada --</option>
+                    {% for c in clients %}
+                    <option value="{{ c.id }}">{{ c.company_name }} ({{ c.full_name }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                <div>
+                    <label class="form-label">Desconto Comercial (%)</label>
+                    <input type="number" step="0.5" id="quote-discount" class="form-input" value="0" min="0" max="100">
+                </div>
+                <div>
+                    <label class="form-label">Taxa de IVA (%)</label>
+                    <input type="number" step="0.5" id="quote-vat" class="form-input" value="23" min="0" max="100">
+                </div>
+            </div>
+
+            <!-- Line Items Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <label class="form-label" style="margin-bottom: 0;">Itens & Serviços do Orçamento *</label>
+                <button type="button" id="add-line-item-btn" class="btn-sm btn-secondary" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">
+                    <i class="fa-solid fa-plus"></i> Adicionar Item
+                </button>
+            </div>
+
+            <!-- Pre-populated catalog helper -->
+            {% if items %}
+            <div style="margin-bottom: 0.75rem; background: #F8FAFC; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-muted);">
+                <strong>💡 Seleção rápida do catálogo:</strong>
+                <select onchange="if(this.value){ const [n, p] = this.value.split('||'); const rows = document.querySelectorAll('.line-item-row'); const last = rows[rows.length-1]; if(last){ last.querySelector('.item-name-input').value = n; last.querySelector('.item-price-input').value = p; } this.value=''; }" class="form-input" style="margin-top: 0.3rem; padding: 0.3rem 0.5rem; font-size: 0.8rem;">
+                    <option value="">-- Escolher do Catálogo para preencher linha --</option>
+                    {% for it in items %}
+                    <option value="{{ it.item_name }}||{{ it.unit_price }}">{{ it.item_name }} ({{ "%.2f"|format(it.unit_price) }} €)</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %}
+
+            <div id="quote-line-items-container">
+                <div class="line-item-row" style="display: grid; grid-template-columns: 2fr 1fr 1fr 40px; gap: 0.75rem; margin-bottom: 0.75rem;">
+                    <input type="text" class="form-input item-name-input" placeholder="Nome do Serviço / Produto" required>
+                    <input type="number" class="form-input item-qty-input" value="1" min="1" required>
+                    <input type="number" step="0.01" class="form-input item-price-input" placeholder="Preço (€)" required>
+                    <button type="button" onclick="if(document.querySelectorAll('.line-item-row').length > 1) this.parentElement.remove()" class="btn-sm btn-secondary" style="color: var(--vibrant-crimson); padding: 0.5rem; justify-content: center;">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label class="form-label">Notas / Condições de Pagamento</label>
+                <textarea id="quote-notes" class="form-input" rows="3" placeholder="Ex: Validade de 30 dias. Pagamento de 50% na aprovação e 50% na conclusão."></textarea>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('modal-new-quote').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-check"></i> Emitir Orçamento</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/quotes.js') }}"></script>
+{% endblock %}
