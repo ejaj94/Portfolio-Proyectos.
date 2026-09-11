@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Partilha Encriptada | DocuCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 3rem auto; background: #FFFFFF; border-radius: 20px; border: 1px solid var(--border-color); padding: 2.5rem; box-shadow: 0 10px 25px rgba(3, 105, 161, 0.1);">
+    {% if error %}
+        <div style="text-align: center;">
+            <i class="fa-solid fa-circle-exclamation" style="font-size: 3rem; color: var(--crimson-danger); margin-bottom: 1rem;"></i>
+            <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-dark);">Ficheiro Indisponível</h2>
+            <p style="color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1.5rem;">{{ error }}</p>
+            <a href="/" class="btn-sm btn-primary">Voltar ao Inicio</a>
+        </div>
+    {% else %}
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="width: 64px; height: 64px; background: var(--soft-cyan-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: var(--oceanic-blue); font-size: 1.8rem;">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span style="font-size: 0.78rem; font-weight: 800; color: var(--emerald-green); background: #ECFDF5; padding: 0.25rem 0.75rem; border-radius: 20px; text-transform: uppercase;">
+                <i class="fa-solid fa-lock"></i> Transferência Encriptada SSL
+            </span>
+            <h2 style="font-size: 1.5rem; font-weight: 900; color: var(--text-dark); margin-top: 0.75rem;">{{ document.file_name }}</h2>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.3rem;">Partilhado por <strong>{{ document.uploaded_by }}</strong> &bull; Categoria: {{ document.category }}</p>
+        </div>
+
+        <div style="background: #F0F9FF; border: 1px solid var(--border-color); border-radius: 14px; padding: 1.25rem; margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.88rem; color: var(--text-muted);">
+                <span>Tamanho do Ficheiro:</span>
+                <strong style="color: var(--text-dark);">{{ document.file_size }}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.88rem; color: var(--text-muted);">
+                <span>Formato:</span>
+                <strong style="color: var(--text-dark); text-transform: uppercase;">{{ document.file_extension }}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: var(--text-muted);">
+                <span>Data de Emissão:</span>
+                <strong style="color: var(--text-dark);">{{ document.created_at }}</strong>
+            </div>
+        </div>
+
+        <button onclick="downloadDocument({{ document.id }}, '{{ document.file_name }}')" class="btn-sm btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem; font-size: 1rem;">
+            <i class="fa-solid fa-download"></i> Descarregar Ficheiro Agora
+        </button>
+    {% endif %}
+</div>
+{% endblock %}

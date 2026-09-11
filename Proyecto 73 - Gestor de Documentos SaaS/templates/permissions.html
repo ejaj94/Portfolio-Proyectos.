@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Permissões & Segurança | DocuCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-user-lock" style="color: var(--oceanic-blue);"></i> Controlo de Permissões & Acessos</h1>
+        <p class="page-subtitle">Gestão de privilégios de visualização, restrição de acesso e segurança de ficheiros.</p>
+    </div>
+</div>
+
+<!-- Permission Levels Cards -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+    <div class="table-card" style="border-left: 4px solid #EF4444;">
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: #991B1B; margin-bottom: 0.3rem;">
+            <i class="fa-solid fa-lock"></i> Privado
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.75rem;">
+            Visível e acessível exclusivamente pelo autor ou administradores seniores.
+        </p>
+        <span class="status-badge perm-private">Acesso Restrito</span>
+    </div>
+
+    <div class="table-card" style="border-left: 4px solid #3B82F6;">
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--oceanic-blue); margin-bottom: 0.3rem;">
+            <i class="fa-solid fa-users"></i> Equipas Internas
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.75rem;">
+            Partilhado com todos os colaboradores registados na empresa.
+        </p>
+        <span class="status-badge perm-teams">Acesso Interno</span>
+    </div>
+
+    <div class="table-card" style="border-left: 4px solid #10B981;">
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: #065F46; margin-bottom: 0.3rem;">
+            <i class="fa-solid fa-globe"></i> Público
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.75rem;">
+            Acessível externamente via link encriptado de partilha com token.
+        </p>
+        <span class="status-badge perm-public">Partilha Externa</span>
+    </div>
+
+    <div class="table-card" style="border-left: 4px solid #F59E0B;">
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: #B45309; margin-bottom: 0.3rem;">
+            <i class="fa-solid fa-eye"></i> Leitura Apenas
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.75rem;">
+            Permite visualização sem permissão de alteração ou eliminação.
+        </p>
+        <span class="status-badge perm-readonly">Sem Alterações</span>
+    </div>
+</div>
+
+<!-- Documents Permission Table -->
+<div class="table-card">
+    <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark); margin-bottom: 1.25rem;">
+        <i class="fa-solid fa-shield-halved" style="color: var(--oceanic-blue);"></i> Matriz de Ficheiros & Permissões
+    </h2>
+
+    <div style="overflow-x: auto;">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Nome do Ficheiro</th>
+                    <th>Nível de Permissão</th>
+                    <th>Categoria</th>
+                    <th>Autor / Proprietário</th>
+                    <th>Data Upload</th>
+                    <th style="text-align: right;">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in documents %}
+                <tr>
+                    <td style="font-weight: 700; color: var(--text-dark);">{{ doc.file_name }}</td>
+                    <td>
+                        {% if doc.access_permission == 'Privado' %}
+                            <span class="status-badge perm-private"><i class="fa-solid fa-lock"></i> Privado</span>
+                        {% elif doc.access_permission == 'Equipas' %}
+                            <span class="status-badge perm-teams"><i class="fa-solid fa-users"></i> Equipas</span>
+                        {% elif doc.access_permission == 'Público' %}
+                            <span class="status-badge perm-public"><i class="fa-solid fa-globe"></i> Público</span>
+                        {% else %}
+                            <span class="status-badge perm-readonly"><i class="fa-solid fa-eye"></i> Leitura</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span style="background: var(--soft-cyan-bg); color: var(--oceanic-blue); padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.78rem;">
+                            {{ doc.category }}
+                        </span>
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--text-dark); font-weight: 600;">{{ doc.uploaded_by }}</td>
+                    <td style="font-size: 0.82rem; color: var(--text-muted);">{{ doc.created_at }}</td>
+                    <td style="text-align: right;">
+                        <button onclick="copyShareLink('{{ doc.share_code }}')" class="btn-sm btn-secondary" style="padding: 0.35rem 0.7rem; font-size: 0.8rem;">
+                            <i class="fa-solid fa-share-nodes"></i> Copiar Link
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

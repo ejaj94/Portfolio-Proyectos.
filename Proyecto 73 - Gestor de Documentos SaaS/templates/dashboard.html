@@ -1,0 +1,322 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | DocuCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-cloud-arrow-up" style="color: var(--oceanic-blue);"></i> Gestor de Documentos Cloud</h1>
+        <p class="page-subtitle">Armazenamento encriptado, controlo de pastas, partilha segura e permissões empresariais.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <button onclick="document.getElementById('modal-upload-doc').style.display='flex'" class="btn-sm btn-primary">
+            <i class="fa-solid fa-upload"></i> Subir Ficheiro
+        </button>
+        <button onclick="document.getElementById('modal-create-folder').style.display='flex'" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-folder-plus"></i> Nova Pasta
+        </button>
+        <a href="/api/export/csv" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+    </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-file-lines"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_files }}</div>
+            <div class="stat-label">Ficheiros Armazenados</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #EFF6FF; color: var(--sky-blue);">
+            <i class="fa-solid fa-folder"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_folders }}</div>
+            <div class="stat-label">Pastas Ativas</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #FEF3C7; color: var(--warm-amber);">
+            <i class="fa-solid fa-hard-drive"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ used_gb }} GB</div>
+            <div class="stat-label">Capacidade Utilizada ({{ storage_percentage }}%)</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #ECFDF5; color: var(--emerald-green);">
+            <i class="fa-solid fa-download"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_downloads }}</div>
+            <div class="stat-label">Downloads Realizados</div>
+        </div>
+    </div>
+</div>
+
+<!-- Storage Capacity Gauge Card -->
+<div class="table-card" style="margin-bottom: 2rem; background: linear-gradient(90deg, #0369A1, #0284C7); color: white;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <div>
+            <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9;">Plano Cloud Enterprise</span>
+            <h3 style="font-size: 1.3rem; font-weight: 900;">Capacidade de Armazenamento da Empresa</h3>
+        </div>
+        <div style="font-size: 1.4rem; font-weight: 900;">
+            {{ used_gb }} GB / 100 GB
+        </div>
+    </div>
+
+    <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.25); border-radius: 10px; overflow: hidden;">
+        <div style="height: 100%; width: {{ storage_percentage }}%; background: #F59E0B; border-radius: 10px; transition: width 0.4s ease;"></div>
+    </div>
+</div>
+
+<!-- Folders Grid Preview -->
+<div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+            <i class="fa-solid fa-folder-closed" style="color: var(--oceanic-blue);"></i> Pastas Principais
+        </h2>
+        <a href="/folders" style="font-size: 0.85rem; color: var(--oceanic-blue); font-weight: 800; text-decoration: none;">Ver Todas Pastas &rarr;</a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+        {% for f in folders %}
+        <a href="/folders?id={{ f.id }}" style="text-decoration: none; color: inherit;">
+            <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 14px; padding: 1.1rem; transition: transform 0.2s ease; box-shadow: 0 2px 8px rgba(3,105,161,0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem;">
+                    <i class="fa-solid {{ f.icon }}" style="font-size: 1.8rem; color: {{ f.color }};"></i>
+                    <span style="font-size: 0.75rem; font-weight: 700; background: var(--soft-cyan-bg); color: var(--oceanic-blue); padding: 0.15rem 0.5rem; border-radius: 10px;">
+                        {{ f.file_count }} ficheiros
+                    </span>
+                </div>
+                <h4 style="font-size: 0.95rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ f.folder_name }}</h4>
+                <div style="font-size: 0.78rem; color: var(--text-muted);">Tamanho: {{ f.folder_size }}</div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Recent Documents Table Card -->
+<div class="table-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+            <i class="fa-solid fa-clock-rotate-left" style="color: var(--oceanic-blue);"></i> Ficheiros Recentes
+        </h2>
+        <a href="/documents" style="font-size: 0.85rem; color: var(--oceanic-blue); font-weight: 800; text-decoration: none;">Ver Todos Ficheiros &rarr;</a>
+    </div>
+
+    {% if not recent_files %}
+        <div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+            <i class="fa-regular fa-folder-open" style="font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.4;"></i>
+            <p>Nenhum ficheiro carregado recentemente.</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">★</th>
+                        <th>Nome do Ficheiro</th>
+                        <th>Categoria</th>
+                        <th>Pasta</th>
+                        <th>Tamanho</th>
+                        <th>Permissões</th>
+                        <th>Downloads</th>
+                        <th style="text-align: right;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in recent_files %}
+                    <tr>
+                        <td>
+                            <button onclick="toggleStar({{ doc.id }}, this)" style="background: none; border: none; cursor: pointer; font-size: 1.1rem;">
+                                {% if doc.is_starred == 1 %}
+                                    <i class="fa-solid fa-star" style="color: var(--warm-amber);"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-star" style="color: var(--text-muted);"></i>
+                                {% endif %}
+                            </button>
+                        </td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.65rem;">
+                                {% if doc.file_extension == 'pdf' %}
+                                    <i class="fa-solid fa-file-pdf" style="color: #EF4444; font-size: 1.3rem;"></i>
+                                {% elif doc.file_extension in ['xlsx', 'csv'] %}
+                                    <i class="fa-solid fa-file-excel" style="color: #10B981; font-size: 1.3rem;"></i>
+                                {% elif doc.file_extension in ['zip', 'rar'] %}
+                                    <i class="fa-solid fa-file-zipper" style="color: #F59E0B; font-size: 1.3rem;"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-file-word" style="color: #3B82F6; font-size: 1.3rem;"></i>
+                                {% endif %}
+                                <div>
+                                    <strong style="color: var(--text-dark); display: block; font-size: 0.92rem;">{{ doc.file_name }}</strong>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Por: {{ doc.uploaded_by }} &bull; {{ doc.created_at }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span style="background: var(--soft-cyan-bg); color: var(--oceanic-blue); padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.78rem;">
+                                {{ doc.category }}
+                            </span>
+                        </td>
+                        <td style="font-size: 0.85rem; color: var(--text-muted);">{{ doc.folder_name or 'Geral' }}</td>
+                        <td style="font-size: 0.85rem; font-weight: 600;">{{ doc.file_size }}</td>
+                        <td>
+                            {% if doc.access_permission == 'Privado' %}
+                                <span class="status-badge perm-private"><i class="fa-solid fa-lock"></i> Privado</span>
+                            {% elif doc.access_permission == 'Equipas' %}
+                                <span class="status-badge perm-teams"><i class="fa-solid fa-users"></i> Equipas</span>
+                            {% elif doc.access_permission == 'Público' %}
+                                <span class="status-badge perm-public"><i class="fa-solid fa-globe"></i> Público</span>
+                            {% else %}
+                                <span class="status-badge perm-readonly"><i class="fa-solid fa-eye"></i> Leitura</span>
+                            {% endif %}
+                        </td>
+                        <td style="font-weight: 700; text-align: center;">{{ doc.download_count }}</td>
+                        <td style="text-align: right;">
+                            <div style="display: flex; gap: 0.35rem; justify-content: flex-end;">
+                                <button onclick="downloadDocument({{ doc.id }}, '{{ doc.file_name }}')" class="btn-sm btn-secondary" title="Descarregar Ficheiro">
+                                    <i class="fa-solid fa-download"></i>
+                                </button>
+                                <button onclick="copyShareLink('{{ doc.share_code }}')" class="btn-sm btn-secondary" title="Gerar Link de Partilha">
+                                    <i class="fa-solid fa-share-nodes"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal: Subir Ficheiro -->
+<div id="modal-upload-doc" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 580px; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-cloud-arrow-up" style="color: var(--oceanic-blue);"></i> Subir Ficheiro para a Nuvem
+            </h3>
+            <button onclick="document.getElementById('modal-upload-doc').style.display='none'" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="upload-doc-form">
+            <div style="margin-bottom: 1rem;">
+                <label class="form-label">Nome do Ficheiro *</label>
+                <input type="text" id="upload-file-name" class="form-input" placeholder="Ex: Relatorio_Estrategico_Q2_2026" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label class="form-label">Categoria *</label>
+                    <select id="upload-category" class="form-input">
+                        <option value="Jurídico">Jurídico</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="RH">RH</option>
+                        <option value="Técnico">Técnico</option>
+                        <option value="Geral">Geral</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Extensão de Ficheiro *</label>
+                    <select id="upload-extension" class="form-input">
+                        <option value="pdf">PDF (.pdf)</option>
+                        <option value="xlsx">Excel (.xlsx)</option>
+                        <option value="docx">Word (.docx)</option>
+                        <option value="zip">Arquivo (.zip)</option>
+                        <option value="png">Imagem (.png)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label class="form-label">Guardar na Pasta</label>
+                    <select id="upload-folder-id" class="form-input">
+                        <option value="">-- Pasta Geral / Raíz --</option>
+                        {% for f in folders %}
+                        <option value="{{ f.id }}">{{ f.folder_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Nível de Permissão *</label>
+                    <select id="upload-permission" class="form-input">
+                        <option value="Equipas">Equipas Internas</option>
+                        <option value="Privado">Privado (Apenas Eu)</option>
+                        <option value="Público">Público (Link Encriptado)</option>
+                        <option value="Leitura">Leitura Apenas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label class="form-label">Autor / Utilizador</label>
+                <input type="text" id="upload-author" class="form-input" value="Enmanuel Jimenez">
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('modal-upload-doc').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-cloud-arrow-up"></i> Concluir Upload</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Criar Pasta -->
+<div id="modal-create-folder" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 480px; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-folder-plus" style="color: var(--oceanic-blue);"></i> Criar Nova Pasta
+            </h3>
+            <button onclick="document.getElementById('modal-create-folder').style.display='none'" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="create-folder-form">
+            <div style="margin-bottom: 1.25rem;">
+                <label class="form-label">Nome da Pasta *</label>
+                <input type="text" id="folder-name-input" class="form-input" placeholder="Ex: Auditoria & Contabilidade 2026" required>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label class="form-label">Cor de Identificação</label>
+                <select id="folder-color-input" class="form-input">
+                    <option value="#0369A1">Azul Oceânico (#0369A1)</option>
+                    <option value="#0284C7">Azul Céu (#0284C7)</option>
+                    <option value="#F59E0B">Âmbar Quente (#F59E0B)</option>
+                    <option value="#10B981">Verde Esmeralda (#10B981)</option>
+                    <option value="#6366F1">Índigo (#6366F1)</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('modal-create-folder').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-check"></i> Criar Pasta</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/docucraft.js') }}"></script>
+{% endblock %}

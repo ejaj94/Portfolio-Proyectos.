@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block title %}Pastas & Diretórios | DocuCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-folder-tree" style="color: var(--oceanic-blue);"></i> Estrutura de Pastas & Diretórios</h1>
+        <p class="page-subtitle">Organização hierárquica por projetos, departamentos e permissões de acesso.</p>
+    </div>
+    <div>
+        <button onclick="document.getElementById('modal-create-folder').style.display='flex'" class="btn-sm btn-primary">
+            <i class="fa-solid fa-folder-plus"></i> Criar Nova Pasta
+        </button>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem;">
+    <!-- Left Folders Sidebar List -->
+    <div class="table-card" style="height: fit-content; padding: 1.25rem;">
+        <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-dark); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+            Directório Principal
+        </h3>
+
+        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+            <a href="/folders" class="nav-link {% if not selected_folder %}active{% endif %}" style="justify-content: space-between;">
+                <span><i class="fa-solid fa-hard-drive"></i> Todos Ficheiros</span>
+            </a>
+
+            {% for f in folders %}
+            <a href="/folders?id={{ f.id }}" class="nav-link {% if selected_folder and selected_folder.id == f.id %}active{% endif %}" style="justify-content: space-between;">
+                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 190px;">
+                    <i class="fa-solid {{ f.icon }}" style="color: {{ f.color }}; margin-right: 0.4rem;"></i> {{ f.folder_name }}
+                </span>
+                <span style="font-size: 0.72rem; font-weight: 700; background: var(--soft-cyan-bg); color: var(--oceanic-blue); padding: 0.1rem 0.4rem; border-radius: 8px;">
+                    {{ f.file_count }}
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Right Files List inside Selected Folder -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+            <div>
+                <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">A visualizar:</span>
+                <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark); margin-top: 0.1rem;">
+                    {% if selected_folder %}
+                        <i class="fa-solid {{ selected_folder.icon }}" style="color: {{ selected_folder.color }};"></i> {{ selected_folder.folder_name }}
+                    {% else %}
+                        <i class="fa-solid fa-hard-drive" style="color: var(--oceanic-blue);"></i> Todos os Ficheiros do Sistema
+                    {% endif %}
+                </h2>
+            </div>
+            <button onclick="document.getElementById('modal-upload-doc').style.display='flex'" class="btn-sm btn-secondary" style="font-size: 0.8rem;">
+                <i class="fa-solid fa-upload"></i> Subir para esta Pasta
+            </button>
+        </div>
+
+        {% if not folder_files %}
+            <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                <i class="fa-regular fa-folder-open" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+                <p style="font-size: 1.05rem; font-weight: 600;">Esta pasta ainda não contém ficheiros.</p>
+                <button onclick="document.getElementById('modal-upload-doc').style.display='flex'" class="btn-sm btn-primary" style="margin-top: 1rem;">
+                    <i class="fa-solid fa-upload"></i> Adicionar Primeiro Ficheiro
+                </button>
+            </div>
+        {% else %}
+            <div style="overflow-x: auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;">★</th>
+                            <th>Nome do Ficheiro</th>
+                            <th>Categoria</th>
+                            <th>Tamanho</th>
+                            <th>Permissão</th>
+                            <th>Downloads</th>
+                            <th style="text-align: right;">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in folder_files %}
+                        <tr>
+                            <td>
+                                <button onclick="toggleStar({{ doc.id }}, this)" style="background: none; border: none; cursor: pointer; font-size: 1.1rem;">
+                                    {% if doc.is_starred == 1 %}
+                                        <i class="fa-solid fa-star" style="color: var(--warm-amber);"></i>
+                                    {% else %}
+                                        <i class="fa-regular fa-star" style="color: var(--text-muted);"></i>
+                                    {% endif %}
+                                </button>
+                            </td>
+                            <td>
+                                <strong style="color: var(--text-dark); display: block;">{{ doc.file_name }}</strong>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">{{ doc.uploaded_by }} &bull; {{ doc.created_at }}</span>
+                            </td>
+                            <td>
+                                <span style="background: var(--soft-cyan-bg); color: var(--oceanic-blue); padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.78rem;">
+                                    {{ doc.category }}
+                                </span>
+                            </td>
+                            <td style="font-size: 0.85rem; font-weight: 600;">{{ doc.file_size }}</td>
+                            <td>
+                                {% if doc.access_permission == 'Privado' %}
+                                    <span class="status-badge perm-private"><i class="fa-solid fa-lock"></i> Privado</span>
+                                {% elif doc.access_permission == 'Equipas' %}
+                                    <span class="status-badge perm-teams"><i class="fa-solid fa-users"></i> Equipas</span>
+                                {% elif doc.access_permission == 'Público' %}
+                                    <span class="status-badge perm-public"><i class="fa-solid fa-globe"></i> Público</span>
+                                {% else %}
+                                    <span class="status-badge perm-readonly"><i class="fa-solid fa-eye"></i> Leitura</span>
+                                {% endif %}
+                            </td>
+                            <td style="font-weight: 700; text-align: center;">{{ doc.download_count }}</td>
+                            <td style="text-align: right;">
+                                <div style="display: flex; gap: 0.35rem; justify-content: flex-end;">
+                                    <button onclick="downloadDocument({{ doc.id }}, '{{ doc.file_name }}')" class="btn-sm btn-secondary" title="Descarregar Ficheiro">
+                                        <i class="fa-solid fa-download"></i>
+                                    </button>
+                                    <button onclick="copyShareLink('{{ doc.share_code }}')" class="btn-sm btn-secondary" title="Copiar Link de Partilha">
+                                        <i class="fa-solid fa-share-nodes"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal: Criar Pasta -->
+<div id="modal-create-folder" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 480px; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-folder-plus" style="color: var(--oceanic-blue);"></i> Criar Nova Pasta
+            </h3>
+            <button onclick="document.getElementById('modal-create-folder').style.display='none'" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="create-folder-form">
+            <div style="margin-bottom: 1.25rem;">
+                <label class="form-label">Nome da Pasta *</label>
+                <input type="text" id="folder-name-input" class="form-input" placeholder="Ex: Auditoria & Contabilidade 2026" required>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label class="form-label">Cor de Identificação</label>
+                <select id="folder-color-input" class="form-input">
+                    <option value="#0369A1">Azul Oceânico (#0369A1)</option>
+                    <option value="#0284C7">Azul Céu (#0284C7)</option>
+                    <option value="#F59E0B">Âmbar Quente (#F59E0B)</option>
+                    <option value="#10B981">Verde Esmeralda (#10B981)</option>
+                    <option value="#6366F1">Índigo (#6366F1)</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('modal-create-folder').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-check"></i> Criar Pasta</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Subir Ficheiro -->
+<div id="modal-upload-doc" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 580px; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-cloud-arrow-up" style="color: var(--oceanic-blue);"></i> Subir Ficheiro para a Nuvem
+            </h3>
+            <button onclick="document.getElementById('modal-upload-doc').style.display='none'" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="upload-doc-form">
+            <div style="margin-bottom: 1rem;">
+                <label class="form-label">Nome do Ficheiro *</label>
+                <input type="text" id="upload-file-name" class="form-input" placeholder="Ex: Relatorio_Estrategico_Q2_2026" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label class="form-label">Categoria *</label>
+                    <select id="upload-category" class="form-input">
+                        <option value="Jurídico">Jurídico</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="RH">RH</option>
+                        <option value="Técnico">Técnico</option>
+                        <option value="Geral">Geral</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Extensão de Ficheiro *</label>
+                    <select id="upload-extension" class="form-input">
+                        <option value="pdf">PDF (.pdf)</option>
+                        <option value="xlsx">Excel (.xlsx)</option>
+                        <option value="docx">Word (.docx)</option>
+                        <option value="zip">Arquivo (.zip)</option>
+                        <option value="png">Imagem (.png)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label class="form-label">Guardar na Pasta</label>
+                    <select id="upload-folder-id" class="form-input">
+                        <option value="{% if selected_folder %}{{ selected_folder.id }}{% endif %}">{% if selected_folder %}{{ selected_folder.folder_name }}{% else %}-- Pasta Geral / Raíz --{% endif %}</option>
+                        {% for f in folders %}
+                        <option value="{{ f.id }}">{{ f.folder_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Nível de Permissão *</label>
+                    <select id="upload-permission" class="form-input">
+                        <option value="Equipas">Equipas Internas</option>
+                        <option value="Privado">Privado (Apenas Eu)</option>
+                        <option value="Público">Público (Link Encriptado)</option>
+                        <option value="Leitura">Leitura Apenas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label class="form-label">Autor / Utilizador</label>
+                <input type="text" id="upload-author" class="form-input" value="Enmanuel Jimenez">
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('modal-upload-doc').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-cloud-arrow-up"></i> Concluir Upload</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/docucraft.js') }}"></script>
+{% endblock %}
