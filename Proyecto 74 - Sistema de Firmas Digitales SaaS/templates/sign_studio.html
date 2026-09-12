@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Studio de Assinatura | {{ document.doc_code }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <a href="/documents" class="btn-sm btn-secondary" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-arrow-left"></i> Voltar aos Documentos
+        </a>
+        <h1 class="page-title"><i class="fa-solid fa-pen-nib" style="color: var(--emerald-deep);"></i> Studio de Assinatura Digital</h1>
+        <p class="page-subtitle">Documento: <strong>{{ document.title }}</strong> (Código: {{ document.doc_code }})</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        {% if document.status == 'Assinado' %}
+        <a href="/certificate/{{ document.id }}" class="btn-sm btn-primary">
+            <i class="fa-solid fa-certificate"></i> Ver Certificado Oficial
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 360px; gap: 1.5rem;">
+    <!-- Left Document & Interactive Signature Canvas Card -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <span style="font-size: 0.75rem; font-weight: 800; color: var(--emerald-deep); text-transform: uppercase;">Recolha de Rubrica / Assinatura</span>
+                <h2 style="font-size: 1.3rem; font-weight: 900; color: var(--slate-dark);">Desenhar Rubrica Digital no Canvas</h2>
+            </div>
+            <div>
+                {% if document.status == 'Assinado' %}
+                    <span class="status-badge status-signed" style="font-size: 0.9rem;"><i class="fa-solid fa-check"></i> Documento 100% Assinado</span>
+                {% else %}
+                    <span class="status-badge status-pending" style="font-size: 0.9rem;"><i class="fa-solid fa-clock"></i> Aguardando Assinaturas</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Document Preview Canvas Box -->
+        <div style="background: #F8FAFC; border: 2px dashed var(--border-emerald); border-radius: 14px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;">
+            <div style="font-size: 0.88rem; font-weight: 700; color: var(--slate-dark); margin-bottom: 0.5rem;">
+                <i class="fa-solid fa-file-pdf" style="color: var(--crimson-danger); font-size: 1.5rem; margin-right: 0.4rem;"></i>
+                {{ document.title }} ({{ document.file_size }})
+            </div>
+            <p style="font-size: 0.82rem; color: var(--slate-muted); max-width: 500px; margin: 0 auto 1rem;">
+                O documento encontra-se encriptado com SHA-256 e pronto para validação de assinaturas dos signatários convocados.
+            </p>
+
+            <!-- HTML5 Interactive Signature Canvas -->
+            <div style="margin-bottom: 1rem; position: relative; display: inline-block; background: #FFFFFF; border: 2px solid var(--emerald-deep); border-radius: 12px; box-shadow: 0 4px 12px rgba(6,95,70,0.1);">
+                <canvas id="signature-canvas" width="520" height="180" style="touch-action: none; cursor: crosshair; display: block; border-radius: 10px;"></canvas>
+                <div style="position: absolute; bottom: 8px; right: 12px; font-size: 0.72rem; color: var(--slate-muted); pointer-events: none; font-weight: 700;">
+                    <i class="fa-solid fa-signature"></i> Assine com o Rato ou Dedo
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: center;">
+                <button type="button" id="clear-canvas-btn" class="btn-sm btn-secondary">
+                    <i class="fa-solid fa-eraser"></i> Limpar Desenho
+                </button>
+            </div>
+        </div>
+
+        <!-- Submit Form for Signer -->
+        <form id="sign-submit-form" style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 12px; padding: 1.25rem;">
+            <input type="hidden" id="sign-doc-id" value="{{ document.id }}">
+            <div style="margin-bottom: 1rem;">
+                <label class="form-label" style="color: var(--emerald-deep);">Selecione o Signatário que está a assinar agora *</label>
+                <select id="sign-signer-id" class="form-input" required style="font-weight: 700;">
+                    {% for s in signers %}
+                    <option value="{{ s.id }}" {% if s.status == 'Assinado' %}disabled{% endif %}>
+                        {{ s.full_name }} ({{ s.role_title }}) {% if s.status == 'Assinado' %}— ✅ JÁ ASSINOU{% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn-sm btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem; font-size: 1rem;">
+                <i class="fa-solid fa-signature"></i> Carimbar Assinatura Digital Vinculativa
+            </button>
+        </form>
+    </div>
+
+    <!-- Right Sidebar: Signers & Timeline -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <!-- Signers Status Checklist Card -->
+        <div class="table-card">
+            <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--slate-dark); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                <i class="fa-solid fa-users" style="color: var(--emerald-deep);"></i> Lista de Signatários
+            </h3>
+
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                {% for s in signers %}
+                <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 10px; padding: 0.85rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <strong style="font-size: 0.92rem; color: var(--slate-dark);">{{ s.full_name }}</strong>
+                            <div style="font-size: 0.78rem; color: var(--slate-muted);">{{ s.role_title }} &bull; {{ s.email }}</div>
+                        </div>
+                        <div>
+                            {% if s.status == 'Assinado' %}
+                                <span class="status-badge status-signed" style="font-size: 0.7rem;"><i class="fa-solid fa-check"></i> Assinou</span>
+                            {% else %}
+                                <span class="status-badge status-pending" style="font-size: 0.7rem;"><i class="fa-solid fa-clock"></i> Pendente</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Audit Log Summary Card -->
+        <div class="table-card">
+            <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--slate-dark); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                <i class="fa-solid fa-clock-rotate-left" style="color: var(--emerald-deep);"></i> Trilha de Auditoria
+            </h3>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                {% for log in audit_logs %}
+                <div style="font-size: 0.8rem; border-left: 2px solid var(--emerald-deep); padding-left: 0.6rem;">
+                    <strong style="color: var(--slate-dark); display: block;">{{ log.action }}</strong>
+                    <span style="color: var(--slate-muted); font-size: 0.72rem;">{{ log.timestamp }} &bull; {{ log.ip_hash }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/signcraft.js') }}"></script>
+{% endblock %}

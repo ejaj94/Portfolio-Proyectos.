@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestão de Documentos | SignCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-file-contract" style="color: var(--emerald-deep);"></i> Documentos & Contratos para Assinatura</h1>
+        <p class="page-subtitle">Acompanhamento do estado de assinaturas, prazos de expiração e emissão de certificados.</p>
+    </div>
+    <div>
+        <button onclick="document.getElementById('modal-new-doc').style.display='flex'" class="btn-sm btn-primary">
+            <i class="fa-solid fa-plus"></i> Novo Pedido de Assinatura
+        </button>
+    </div>
+</div>
+
+<!-- Status Filter Pills -->
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+    <a href="/documents" class="btn-sm {% if not selected_status %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Todos
+    </a>
+    <a href="/documents?status=Assinado" class="btn-sm {% if selected_status == 'Assinado' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Assinados
+    </a>
+    <a href="/documents?status=Em Processo" class="btn-sm {% if selected_status == 'Em Processo' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Em Processo
+    </a>
+    <a href="/documents?status=Pendente" class="btn-sm {% if selected_status == 'Pendente' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px;">
+        Pendentes
+    </a>
+</div>
+
+<!-- Documents Table Card -->
+<div class="table-card">
+    {% if not documents %}
+        <div style="text-align: center; padding: 3rem; color: var(--slate-muted);">
+            <i class="fa-solid fa-file-signature" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+            <p style="font-size: 1.1rem; font-weight: 600;">Nenhum documento encontrado nesta secção.</p>
+            <button onclick="document.getElementById('modal-new-doc').style.display='flex'" class="btn-sm btn-primary" style="margin-top: 1rem;">
+                <i class="fa-solid fa-plus"></i> Emitir Novo Documento
+            </button>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Título do Documento</th>
+                        <th>Categoria</th>
+                        <th>Tamanho</th>
+                        <th>Signatários</th>
+                        <th>Data Criação</th>
+                        <th>Estado</th>
+                        <th style="text-align: right;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in documents %}
+                    <tr>
+                        <td style="font-weight: 800; color: var(--emerald-deep);">{{ doc.doc_code }}</td>
+                        <td>
+                            <strong style="color: var(--slate-dark); display: block;">{{ doc.title }}</strong>
+                            <span style="font-size: 0.75rem; color: var(--slate-muted);">Emissor: {{ doc.created_by }} &bull; Prazo: {{ doc.deadline }}</span>
+                        </td>
+                        <td>
+                            <span style="background: var(--soft-emerald-bg); color: var(--emerald-deep); padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.78rem;">
+                                {{ doc.category }}
+                            </span>
+                        </td>
+                        <td style="font-size: 0.85rem; color: var(--slate-muted);">{{ doc.file_size }}</td>
+                        <td style="font-size: 0.88rem; font-weight: 700; color: var(--slate-dark);">
+                            {{ doc.signed_signers }} / {{ doc.total_signers }} Assinados
+                        </td>
+                        <td style="font-size: 0.82rem; color: var(--slate-muted);">{{ doc.created_at }}</td>
+                        <td>
+                            {% if doc.status == 'Assinado' %}
+                                <span class="status-badge status-signed"><i class="fa-solid fa-check"></i> Assinado</span>
+                            {% elif doc.status == 'Em Processo' %}
+                                <span class="status-badge status-in-progress"><i class="fa-solid fa-spinner fa-spin"></i> Em Processo</span>
+                            {% else %}
+                                <span class="status-badge status-pending"><i class="fa-solid fa-clock"></i> Pendente</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <div style="display: flex; gap: 0.35rem; justify-content: flex-end;">
+                                <a href="/sign/{{ doc.id }}" class="btn-sm btn-primary" style="padding: 0.35rem 0.7rem; font-size: 0.8rem;">
+                                    <i class="fa-solid fa-pen-nib"></i> Studio
+                                </a>
+                                {% if doc.status == 'Assinado' %}
+                                <a href="/certificate/{{ doc.id }}" class="btn-sm btn-secondary" style="padding: 0.35rem 0.7rem; font-size: 0.8rem;" title="Ver Certificado">
+                                    <i class="fa-solid fa-certificate"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal: Novo Pedido de Assinatura -->
+<div id="modal-new-doc" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 580px; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--slate-dark);">
+                <i class="fa-solid fa-file-circle-plus" style="color: var(--emerald-deep);"></i> Emitir Novo Pedido de Assinatura
+            </h3>
+            <button onclick="document.getElementById('modal-new-doc').style.display='none'" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--slate-muted);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="create-doc-form">
+            <div style="margin-bottom: 1rem;">
+                <label class="form-label">Título do Documento *</label>
+                <input type="text" id="doc-title-input" class="form-input" placeholder="Ex: Contrato de Prestação de Serviços SaaS 2026.pdf" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label class="form-label">Categoria *</label>
+                    <select id="doc-category-input" class="form-input">
+                        <option value="Contrato">Contrato</option>
+                        <option value="Acordo NDA">Acordo NDA</option>
+                        <option value="Proposta">Proposta Comercial</option>
+                        <option value="RH">Recursos Humanos</option>
+                        <option value="Procuração">Procuração / Notarial</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Emissor / Autor</label>
+                    <input type="text" id="doc-author-input" class="form-input" value="Enmanuel Jimenez">
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid var(--border-color); padding-top: 1rem; margin-top: 1rem; margin-bottom: 1rem;">
+                <label class="form-label" style="color: var(--emerald-deep);">Dados do Signatário Principal *</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0.75rem;">
+                    <input type="text" id="signer-name-input" class="form-input" placeholder="Nome Completo (Ex: Sofia Manso)" required>
+                    <input type="email" id="signer-email-input" class="form-input" placeholder="E-mail (Ex: sofia@empresa.pt)" required>
+                </div>
+                <input type="text" id="signer-role-input" class="form-input" value="CEO / Representante Legal">
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('modal-new-doc').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary"><i class="fa-solid fa-paper-plane"></i> Enviar Pedido</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/signcraft.js') }}"></script>
+{% endblock %}

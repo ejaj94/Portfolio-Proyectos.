@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Histórico & Auditoria | SignCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-clock-rotate-left" style="color: var(--emerald-deep);"></i> Histórico & Trilha de Auditoria</h1>
+        <p class="page-subtitle">Registo inalterável de todas as ações de assinatura, timestamps e hashes de segurança.</p>
+    </div>
+</div>
+
+<!-- Audit Logs Table Card -->
+<div class="table-card">
+    {% if not audit_logs %}
+        <div style="text-align: center; padding: 3rem; color: var(--slate-muted);">
+            <i class="fa-solid fa-shield-halved" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+            <p style="font-size: 1.1rem; font-weight: 600;">Nenhum registo de auditoria no sistema.</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Código Doc</th>
+                        <th>Documento</th>
+                        <th>Ação Auditada</th>
+                        <th>Utilizador / Ator</th>
+                        <th>Timestamp (Data/Hora)</th>
+                        <th>Hash / IP Registado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in audit_logs %}
+                    <tr>
+                        <td style="font-weight: 800; color: var(--emerald-deep);">{{ log.doc_code }}</td>
+                        <td style="font-weight: 700; color: var(--slate-dark);">{{ log.doc_title }}</td>
+                        <td>
+                            <span style="background: var(--soft-emerald-bg); color: var(--emerald-deep); padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.8rem;">
+                                {{ log.action }}
+                            </span>
+                        </td>
+                        <td style="font-size: 0.88rem; font-weight: 600; color: var(--slate-dark);">{{ log.actor_name }}</td>
+                        <td style="font-size: 0.82rem; color: var(--slate-muted);">{{ log.timestamp }}</td>
+                        <td style="font-size: 0.82rem; font-family: monospace; color: var(--slate-muted);">{{ log.ip_hash }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Certificado de Autenticidade | {{ document.doc_code }}{% endblock %}
+
+{% block extra_head %}
+<style>
+@media print {
+    .navbar-main, .main-footer, .no-print {
+        display: none !important;
+    }
+    body {
+        background: #ffffff !important;
+    }
+    .page-container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .cert-card {
+        box-shadow: none !important;
+        border: 2px solid #065F46 !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Top Action Bar -->
+<div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <a href="/sign/{{ document.id }}" class="btn-sm btn-secondary">
+        <i class="fa-solid fa-arrow-left"></i> Voltar ao Studio
+    </a>
+
+    <button onclick="window.print()" class="btn-sm btn-primary">
+        <i class="fa-solid fa-print"></i> Imprimir / Descarregar Certificado PDF
+    </button>
+</div>
+
+<!-- Printable Certificate Card -->
+<div class="table-card cert-card" style="padding: 3rem; background: #FFFFFF; border-radius: 20px; border: 3px solid var(--emerald-deep); box-shadow: 0 10px 30px rgba(6,95,70,0.12);">
+    <!-- Certificate Header -->
+    <div style="text-align: center; border-bottom: 2px solid var(--border-emerald); padding-bottom: 1.5rem; margin-bottom: 2rem;">
+        <div style="width: 72px; height: 72px; background: var(--soft-emerald-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: var(--emerald-deep); font-size: 2.2rem;">
+            <i class="fa-solid fa-certificate"></i>
+        </div>
+        <span style="font-size: 0.82rem; font-weight: 800; color: var(--emerald-deep); text-transform: uppercase; letter-spacing: 1.5px;">EJAJ TECH CERTIFICATION AUTHORITY &bull; eIDAS COMPLIANT</span>
+        <h1 style="font-size: 1.8rem; font-weight: 900; color: var(--slate-dark); margin-top: 0.3rem;">CERTIFICADO DE AUTENTICIDADE DIGITAL</h1>
+        <p style="font-size: 0.9rem; color: var(--slate-muted);">Comprovativo legal de integridade, registos de timestamp e assinaturas eletrónicas.</p>
+    </div>
+
+    <!-- Document Info & SHA-256 Hash Box -->
+    <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 14px; padding: 1.5rem; margin-bottom: 2rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+            <div>
+                <span style="font-size: 0.75rem; font-weight: 800; color: var(--slate-muted); text-transform: uppercase;">Título do Documento</span>
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--slate-dark); margin-top: 0.2rem;">{{ document.title }}</h3>
+                <p style="font-size: 0.85rem; color: var(--slate-muted);">Código: <strong>{{ document.doc_code }}</strong> &bull; Tamanho: {{ document.file_size }}</p>
+            </div>
+            <div>
+                <span style="font-size: 0.75rem; font-weight: 800; color: var(--slate-muted); text-transform: uppercase;">Estado de Validação</span>
+                <div style="margin-top: 0.2rem;">
+                    <span class="status-badge status-signed" style="font-size: 0.9rem;"><i class="fa-solid fa-shield-check"></i> 100% VÁLIDO E ASSINADO</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--slate-muted); margin-top: 0.3rem;">Conclusão: <strong>{{ document.signed_at }}</strong></p>
+            </div>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; font-family: monospace; font-size: 0.8rem; color: var(--slate-dark); word-break: break-all;">
+            <i class="fa-solid fa-lock" style="color: var(--emerald-deep); margin-right: 0.4rem;"></i> <strong>SHA-256 Digest Hash:</strong> e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+        </div>
+    </div>
+
+    <!-- Signers Signature Manifest Grid -->
+    <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--slate-dark); margin-bottom: 1rem;">
+        <i class="fa-solid fa-file-signature" style="color: var(--emerald-deep);"></i> Manifesto de Signatários Vinculados
+    </h3>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        {% for s in signers %}
+        <div style="background: #FFFFFF; border: 1.5px solid var(--border-emerald); border-radius: 12px; padding: 1.1rem; text-align: center;">
+            <span style="font-size: 0.72rem; font-weight: 800; color: var(--emerald-deep); text-transform: uppercase;">{{ s.role_title }}</span>
+            <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--slate-dark); margin-top: 0.2rem;">{{ s.full_name }}</h4>
+            <p style="font-size: 0.8rem; color: var(--slate-muted); margin-bottom: 0.75rem;">{{ s.email }}</p>
+
+            <div style="background: #F8FAFC; border: 1px dashed var(--border-color); border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem; font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.4rem; color: var(--emerald-deep);">
+                {{ s.full_name }}
+            </div>
+
+            <div style="font-size: 0.75rem; color: var(--slate-muted);">
+                <i class="fa-solid fa-circle-check" style="color: var(--emerald-deep);"></i> Assinado em: <strong>{{ s.signed_at }}</strong>
+                <div style="font-family: monospace;">IP: {{ s.ip_address }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Audit Log History -->
+    <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--slate-dark); margin-bottom: 1rem;">
+        <i class="fa-solid fa-clock-rotate-left" style="color: var(--emerald-deep);"></i> Trilha Inviolável de Auditoria
+    </h3>
+
+    <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; margin-bottom: 2rem;">
+        {% for log in audit_logs %}
+        <div style="display: flex; justify-content: space-between; font-size: 0.82rem; padding: 0.4rem 0; border-bottom: 1px dashed var(--border-color);">
+            <span><strong style="color: var(--slate-dark);">{{ log.action }}</strong> — {{ log.actor_name }}</span>
+            <span style="color: var(--slate-muted); font-family: monospace;">{{ log.timestamp }} ({{ log.ip_hash }})</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Certificate Seal Footer -->
+    <div style="border-top: 2px solid var(--border-emerald); padding-top: 1.25rem; font-size: 0.78rem; color: var(--slate-muted); text-align: center;">
+        <p>Certificado gerado eletronicamente por SignCraft AI SaaS &bull; Plataforma de Gestão de Firmas EJAJ TECH</p>
+        <p style="margin-top: 0.2rem;">Este documento possui validade jurídica ao abrigo do Regulamento eIDAS e Legislação Nacional de Assinatura Eletrónica.</p>
+    </div>
+</div>
+{% endblock %}
