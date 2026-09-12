@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}Painel Principal - LearnCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Plataforma de Cursos & E-Learning 🎥</h2>
+    <p>Bem-vindo ao LearnCraft AI. Visão geral dos cursos, streaming de videoaulas, alunos e certificações.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-secondary" onclick="exportData('csv')">📥 Exportar Relatório (CSV)</button>
+    <a href="/courses" class="btn btn-primary">➕ Publicar Curso</a>
+  </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon red">📚</div>
+    <div class="stat-info">
+      <h3 id="stat-courses">0</h3>
+      <p>Cursos Publicados</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon violet">👥</div>
+    <div class="stat-info">
+      <h3 id="stat-students">0</h3>
+      <p>Alunos Inscritos</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon emerald">📖</div>
+    <div class="stat-info">
+      <h3 id="stat-lessons">0</h3>
+      <p>Lições Criadas</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon sky">🎓</div>
+    <div class="stat-info">
+      <h3 id="stat-certificates">0</h3>
+      <p>Certificados Emitidos</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon amber">💶</div>
+    <div class="stat-info">
+      <h3 id="stat-revenue">0.00 €</h3>
+      <p>Receita em Inscrições</p>
+    </div>
+  </div>
+</div>
+
+<!-- Courses Table -->
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📚 Catálogo de Cursos em Destaque</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="dash-search" onkeyup="filterTable('dash-search', 'dash-courses-table')" placeholder="Pesquisar por curso, categoria ou instrutor...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="dash-courses-table">
+      <thead>
+        <tr>
+          <th>Curso</th>
+          <th>Categoria</th>
+          <th>Nível</th>
+          <th>Duração Total</th>
+          <th>Nº de Lições</th>
+          <th>Preço (€)</th>
+          <th>Instrutor Responsável</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody id="dash-courses-body">
+        <tr><td colspan="8" style="text-align:center;">A carregar cursos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Activity Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+  <div class="content-card">
+    <div class="card-header">
+      <div class="card-title">📈 Progresso Recente de Alunos</div>
+    </div>
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>Curso</th>
+            <th>Progresso</th>
+          </tr>
+        </thead>
+        <tbody id="dash-progress-body">
+          <tr><td colspan="3" style="text-align:center;">A carregar...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="card-header">
+      <div class="card-title">🎓 Últimos Certificados Emitidos</div>
+    </div>
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>Curso</th>
+            <th>Código Único</th>
+          </tr>
+        </thead>
+        <tbody id="dash-certs-body">
+          <tr><td colspan="3" style="text-align:center;">A carregar...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadDashboardData();
+});
+
+async function loadDashboardData() {
+  // Stats
+  try {
+    const res = await fetch('/api/stats');
+    const stats = await res.json();
+    document.getElementById('stat-courses').innerText = stats.total_courses;
+    document.getElementById('stat-students').innerText = stats.total_students;
+    document.getElementById('stat-lessons').innerText = stats.total_lessons;
+    document.getElementById('stat-certificates').innerText = stats.issued_certificates;
+    document.getElementById('stat-revenue').innerText = stats.total_revenue.toFixed(2) + ' €';
+  } catch (e) {
+    console.error('Erro ao carregar estatísticas:', e);
+  }
+
+  loadDashboardCourses();
+  loadDashboardProgress();
+  loadDashboardCertificates();
+}
+
+async function loadDashboardCourses() {
+  const tbody = document.getElementById('dash-courses-body');
+  try {
+    const res = await fetch('/api/courses');
+    const courses = await res.json();
+    if (courses.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum curso publicado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = courses.map(c => `
+      <tr>
+        <td><strong>${c.thumbnail_emoji} ${c.title}</strong></td>
+        <td><span class="badge badge-em-curso">${c.category}</span></td>
+        <td>${c.level}</td>
+        <td>${c.total_duration_min} min</td>
+        <td><strong>${c.lessons_count} lições</strong></td>
+        <td><strong style="color:var(--primary);">${c.price.toFixed(2)} €</strong></td>
+        <td>${c.instructor_name}</td>
+        <td><span class="badge badge-publicado">${c.status}</span></td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Erro ao carregar cursos.</td></tr>';
+  }
+}
+
+async function loadDashboardProgress() {
+  const tbody = document.getElementById('dash-progress-body');
+  try {
+    const res = await fetch('/api/progress');
+    const progress = await res.json();
+    const list = progress.slice(0, 5);
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Sem progresso registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(p => `
+      <tr>
+        <td><strong>${p.user_name}</strong></td>
+        <td><small>${p.course_title}</small></td>
+        <td><strong style="color:var(--accent);">${p.completion_pct.toFixed(0)}%</strong></td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Erro ao carregar progresso.</td></tr>';
+  }
+}
+
+async function loadDashboardCertificates() {
+  const tbody = document.getElementById('dash-certs-body');
+  try {
+    const res = await fetch('/api/certificates');
+    const certs = await res.json();
+    const list = certs.slice(0, 5);
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Sem certificados emitidos.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(c => `
+      <tr>
+        <td><strong>${c.user_name}</strong></td>
+        <td><small>${c.course_title}</small></td>
+        <td><code>${c.certificate_code}</code></td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Erro ao carregar certificados.</td></tr>';
+  }
+}
+</script>
+{% endblock %}

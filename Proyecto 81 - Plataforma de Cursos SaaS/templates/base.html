@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}LearnCraft AI SaaS{% endblock %} - Plataforma de Cursos E-Learning</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">🎥</div>
+        <div class="sidebar-title">
+          <h1>LearnCraft AI</h1>
+          <span>SaaS E-Learning</span>
+        </div>
+      </div>
+
+      <ul class="nav-list">
+        <li class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+          <a href="/">
+            <span class="nav-icon">📊</span>
+            <span>Painel Principal</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'courses' %}active{% endif %}">
+          <a href="/courses">
+            <span class="nav-icon">📚</span>
+            <span>Cursos & Catálogo</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'lessons' %}active{% endif %}">
+          <a href="/lessons">
+            <span class="nav-icon">📖</span>
+            <span>Lições & Módulos</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'videos' %}active{% endif %}">
+          <a href="/videos">
+            <span class="nav-icon">🎬</span>
+            <span>Vídeos & Streaming</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'users' %}active{% endif %}">
+          <a href="/users">
+            <span class="nav-icon">👥</span>
+            <span>Utilizadores & Alunos</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'progress' %}active{% endif %}">
+          <a href="/progress">
+            <span class="nav-icon">📈</span>
+            <span>Progresso de Aulas</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'certificates' %}active{% endif %}">
+          <a href="/certificates">
+            <span class="nav-icon">🎓</span>
+            <span>Certificados Digitais</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'payments' %}active{% endif %}">
+          <a href="/payments">
+            <span class="nav-icon">💳</span>
+            <span>Pagamentos & Inscrições</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <strong>LearnCraft AI Stream</strong>
+        <span>Versão 4.0 - Portugal</span>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/learn.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

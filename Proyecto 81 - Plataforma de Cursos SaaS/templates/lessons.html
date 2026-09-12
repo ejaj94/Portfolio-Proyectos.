@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Lições & Módulos - LearnCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Estrutura de Módulos & Lições 📖</h2>
+    <p>Organização curricular dos cursos, ordenação de capítulos e conteúdos de pré-visualização gratuita.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateLessonModal()">➕ Criar Nova Lição</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📖 Lista de Lições Registadas</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="lesson-search" onkeyup="filterTable('lesson-search', 'lessons-table')" placeholder="Pesquisar por lição, módulo ou curso...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="lessons-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Curso</th>
+          <th>Módulo</th>
+          <th>Ordem</th>
+          <th>Título da Lição</th>
+          <th>Duração (min)</th>
+          <th>Pré-visualização Grátis</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="lessons-tbody">
+        <tr><td colspan="8" style="text-align:center;">A carregar lições...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Criar Lição -->
+<div class="modal-overlay" id="modal-lesson">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Adicionar Nova Lição ao Curso</h3>
+      <button class="modal-close" onclick="closeModal('modal-lesson')">&times;</button>
+    </div>
+    <form id="form-lesson" onsubmit="handleCreateLesson(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="ls-course-select">Curso *</label>
+            <select id="ls-course-select" required>
+              <option value="">A carregar cursos...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="ls-title">Título da Lição *</label>
+            <input type="text" id="ls-title" placeholder="Ex: Introdução ao Desenvolvmento Web Moderno com Python" required>
+          </div>
+
+          <div class="form-group">
+            <label for="ls-module">Número do Módulo *</label>
+            <input type="number" id="ls-module" min="1" value="1" required>
+          </div>
+
+          <div class="form-group">
+            <label for="ls-order">Ordem na Sequência *</label>
+            <input type="number" id="ls-order" min="1" value="1" required>
+          </div>
+
+          <div class="form-group">
+            <label for="ls-duration">Duração (Minutos) *</label>
+            <input type="number" id="ls-duration" min="1" value="25" required>
+          </div>
+
+          <div class="form-group">
+            <label for="ls-preview">Acesso Gratuito / Preview *</label>
+            <select id="ls-preview" required>
+              <option value="0">Não (Exclusivo para Alunos)</option>
+              <option value="1">Sim (Pré-visualização Grátis)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-lesson')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Lição</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadLessons();
+});
+
+async function loadLessons() {
+  const tbody = document.getElementById('lessons-tbody');
+  try {
+    const res = await fetch('/api/lessons');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhuma lição registada.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(l => `
+      <tr>
+        <td>#${l.id}</td>
+        <td><code>${l.course_title}</code></td>
+        <td><strong>Módulo ${l.module_number}</strong></td>
+        <td>#${l.lesson_order}</td>
+        <td><strong>${l.title}</strong></td>
+        <td>${l.duration_min} min</td>
+        <td>${l.is_free_preview ? '<span class="badge badge-publicado">Sim (Grátis)</span>' : '<span class="badge badge-em-curso">Reservado</span>'}</td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/lessons', ${l.id}, loadLessons)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Erro ao carregar lições.</td></tr>';
+  }
+}
+
+function openCreateLessonModal() {
+  loadCoursesSelect('ls-course-select');
+  openModal('modal-lesson');
+}
+
+async function handleCreateLesson(e) {
+  e.preventDefault();
+  const payload = {
+    course_id: document.getElementById('ls-course-select').value,
+    title: document.getElementById('ls-title').value,
+    module_number: document.getElementById('ls-module').value,
+    lesson_order: document.getElementById('ls-order').value,
+    duration_min: document.getElementById('ls-duration').value,
+    is_free_preview: document.getElementById('ls-preview').value === '1'
+  };
+
+  try {
+    const res = await fetch('/api/lessons/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-lesson');
+      document.getElementById('form-lesson').reset();
+      loadLessons();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

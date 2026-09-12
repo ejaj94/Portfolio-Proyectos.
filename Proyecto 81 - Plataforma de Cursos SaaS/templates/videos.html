@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Vídeos & Streaming - LearnCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Vídeos & Videoaulas em Streaming 🎬</h2>
+    <p>Gestão de ficheiros de vídeo, servidores CDN, transmissão em HLS / MP4 1080p/4K e métricas de reprodução.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateVideoModal()">➕ Associar Novo Vídeo</button>
+  </div>
+</div>
+
+<!-- Video Stream Player Preview Card -->
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>🎬 Reprodutor de Vídeo HD (Simulador HLS / Adaptive Streaming)</span>
+    </div>
+  </div>
+  <div class="video-player-container" id="video-preview-box">
+    <div style="text-align: center; padding: 2rem;">
+      <div class="video-play-btn" onclick="simulateVideoPlay()">▶</div>
+      <h3 style="margin-top: 1rem; font-size: 1.2rem;" id="player-title">Selecione um vídeo abaixo para iniciar a reprodução...</h3>
+      <p style="font-size: 0.85rem; color: #A1A1AA; margin-top: 0.4rem;" id="player-subtitle">Servidor CDN LearnCraft Stream - 1080p Full HD HLS</p>
+    </div>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📹 Repositório de Ficheiros de Vídeo</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="video-search" onkeyup="filterTable('video-search', 'videos-table')" placeholder="Pesquisar por título de vídeo, curso ou qualidade...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="videos-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Curso</th>
+          <th>Lição</th>
+          <th>Título do Vídeo</th>
+          <th>Qualidade / Resolução</th>
+          <th>Formato Stream</th>
+          <th>Visualizações</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="videos-tbody">
+        <tr><td colspan="8" style="text-align:center;">A carregar vídeos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Associar Vídeo -->
+<div class="modal-overlay" id="modal-video">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Associar Novo Ficheiro de Vídeo</h3>
+      <button class="modal-close" onclick="closeModal('modal-video')">&times;</button>
+    </div>
+    <form id="form-video" onsubmit="handleCreateVideo(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="vd-lesson-select">Lição / Capítulo *</label>
+            <select id="vd-lesson-select" required>
+              <option value="">A carregar lições...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="vd-title">Título do Vídeo *</label>
+            <input type="text" id="vd-title" placeholder="Ex: Videoaula 1.1: Visão Geral do Ecossistema Python" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="vd-url">URL CDN do Vídeo / Stream HLS *</label>
+            <input type="text" id="vd-url" placeholder="Ex: https://cdn.learncraft.pt/videos/py101_01.mp4" required>
+          </div>
+
+          <div class="form-group">
+            <label for="vd-quality">Qualidade de Vídeo *</label>
+            <select id="vd-quality" required>
+              <option value="1080p Full HD">1080p Full HD</option>
+              <option value="4K Ultra HD">4K Ultra HD</option>
+              <option value="720p HD">720p HD</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="vd-res">Resolução *</label>
+            <select id="vd-res" required>
+              <option value="1920x1080">1920x1080</option>
+              <option value="3840x2160">3840x2160</option>
+              <option value="1280x720">1280x720</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="vd-stream">Protocolo de Streaming *</label>
+            <select id="vd-stream" required>
+              <option value="HLS / MP4">HLS / Adaptive Bitrate MP4</option>
+              <option value="DASH / WebM">MPEG-DASH / WebM</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-video')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Vídeo</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadVideos();
+});
+
+async function loadVideos() {
+  const tbody = document.getElementById('videos-tbody');
+  try {
+    const res = await fetch('/api/videos');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum vídeo registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(v => `
+      <tr>
+        <td>#${v.id}</td>
+        <td><code>${v.course_title}</code></td>
+        <td><small>${v.lesson_title}</small></td>
+        <td><strong>🎬 ${v.video_title}</strong></td>
+        <td><span class="badge badge-publicado">${v.video_quality} (${v.resolution})</span></td>
+        <td><code>${v.stream_type}</code></td>
+        <td><strong>${v.views_count} visualizações</strong></td>
+        <td>
+          <button class="btn btn-sm btn-primary" onclick="previewVideo('${v.video_title.replace(/'/g, "\\'")}', '${v.video_quality}')">▶ Ver Vídeo</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/videos', ${v.id}, loadVideos)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Erro ao carregar vídeos.</td></tr>';
+  }
+}
+
+function previewVideo(title, quality) {
+  document.getElementById('player-title').innerText = title;
+  document.getElementById('player-subtitle').innerText = `A transmitir em ${quality} através do CDN LearnCraft AI Stream`;
+  showToast(`A carregar vídeo: ${title}`, 'info');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function simulateVideoPlay() {
+  showToast('A iniciar transmissão de videoaula HD...', 'success');
+}
+
+function openCreateVideoModal() {
+  loadLessonsSelect('vd-lesson-select');
+  openModal('modal-video');
+}
+
+async function handleCreateVideo(e) {
+  e.preventDefault();
+  const payload = {
+    lesson_id: document.getElementById('vd-lesson-select').value,
+    video_title: document.getElementById('vd-title').value,
+    video_url: document.getElementById('vd-url').value,
+    video_quality: document.getElementById('vd-quality').value,
+    resolution: document.getElementById('vd-res').value,
+    stream_type: document.getElementById('vd-stream').value
+  };
+
+  try {
+    const res = await fetch('/api/videos/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-video');
+      document.getElementById('form-video').reset();
+      loadVideos();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

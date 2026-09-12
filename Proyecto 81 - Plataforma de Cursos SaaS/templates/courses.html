@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Cursos & Catálogo - LearnCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Catálogo de Cursos & Programas 📚</h2>
+    <p>Gestão de conteúdos e-learning, precificação, categorias e instrutores do curso.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateCourseModal()">➕ Publicar Novo Curso</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📚 Cursos Disponíveis na Plataforma</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="course-search" onkeyup="filterTable('course-search', 'courses-table')" placeholder="Pesquisar por título, categoria, nível ou instrutor...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="courses-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título do Curso</th>
+          <th>Categoria</th>
+          <th>Nível</th>
+          <th>Duração Total</th>
+          <th>Preço (€)</th>
+          <th>Instrutor Responsável</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="courses-tbody">
+        <tr><td colspan="9" style="text-align:center;">A carregar catálogo de cursos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Publicar Curso -->
+<div class="modal-overlay" id="modal-course">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Publicar Novo Curso E-Learning</h3>
+      <button class="modal-close" onclick="closeModal('modal-course')">&times;</button>
+    </div>
+    <form id="form-course" onsubmit="handleCreateCourse(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="cr-title">Título do Curso *</label>
+            <input type="text" id="cr-title" placeholder="Ex: Masterclass Full-Stack Python & Flask" required>
+          </div>
+
+          <div class="form-group">
+            <label for="cr-category">Categoria *</label>
+            <select id="cr-category" required>
+              <option value="Desenvolvimento Web">Desenvolvimento Web</option>
+              <option value="Design & Multimédia">Design & Multimédia</option>
+              <option value="Inteligência Artificial">Inteligência Artificial</option>
+              <option value="Marketing & Vendas">Marketing & Vendas</option>
+              <option value="Negócios & Gestão">Negócios & Gestão</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="cr-level">Nível Académico *</label>
+            <select id="cr-level" required>
+              <option value="Iniciante">Iniciante</option>
+              <option value="Intermédio">Intermédio</option>
+              <option value="Avançado">Avançado</option>
+              <option value="Todos os Níveis">Todos os Níveis</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="cr-duration">Duração (Minutos Totais) *</label>
+            <input type="number" id="cr-duration" placeholder="Ex: 360" required>
+          </div>
+
+          <div class="form-group">
+            <label for="cr-price">Preço / Propina (€) *</label>
+            <input type="number" step="0.01" id="cr-price" placeholder="Ex: 149.00" required>
+          </div>
+
+          <div class="form-group">
+            <label for="cr-emoji">Ícone Emoji *</label>
+            <input type="text" id="cr-emoji" value="🎥" required>
+          </div>
+
+          <div class="form-group">
+            <label for="cr-status">Estado *</label>
+            <select id="cr-status" required>
+              <option value="Publicado">Publicado</option>
+              <option value="Rascunho">Rascunho</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="cr-instructor-select">Instrutor / Formador *</label>
+            <select id="cr-instructor-select" required>
+              <option value="">A carregar instrutores...</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-course')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Publicar Curso</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadCourses();
+});
+
+async function loadCourses() {
+  const tbody = document.getElementById('courses-tbody');
+  try {
+    const res = await fetch('/api/courses');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Nenhum curso registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(c => `
+      <tr>
+        <td>#${c.id}</td>
+        <td><strong>${c.thumbnail_emoji} ${c.title}</strong></td>
+        <td><span class="badge badge-em-curso">${c.category}</span></td>
+        <td>${c.level}</td>
+        <td>${c.total_duration_min} min</td>
+        <td><strong style="color:var(--primary);">${c.price.toFixed(2)} €</strong></td>
+        <td>${c.instructor_name}</td>
+        <td><span class="badge badge-publicado">${c.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/courses', ${c.id}, loadCourses)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Erro ao carregar catálogo.</td></tr>';
+  }
+}
+
+function openCreateCourseModal() {
+  loadUsersSelect('cr-instructor-select', 'Instrutor');
+  openModal('modal-course');
+}
+
+async function handleCreateCourse(e) {
+  e.preventDefault();
+  const payload = {
+    title: document.getElementById('cr-title').value,
+    category: document.getElementById('cr-category').value,
+    level: document.getElementById('cr-level').value,
+    total_duration_min: document.getElementById('cr-duration').value,
+    price: document.getElementById('cr-price').value,
+    thumbnail_emoji: document.getElementById('cr-emoji').value,
+    status: document.getElementById('cr-status').value,
+    instructor_id: document.getElementById('cr-instructor-select').value
+  };
+
+  try {
+    const res = await fetch('/api/courses/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-course');
+      document.getElementById('form-course').reset();
+      loadCourses();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

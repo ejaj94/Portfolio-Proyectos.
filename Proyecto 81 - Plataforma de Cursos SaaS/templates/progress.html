@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}Progresso de Aulas - LearnCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Progresso de Aprendizagem & Conclusão 📈</h2>
+    <p>Monitorização do avanço dos alunos nas videoaulas, minutagem assistida e estado de conclusão dos capítulos.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateProgressModal()">➕ Registar Progresso de Aluno</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📈 Acompanhamento de Frequência das Lições</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="prog-search" onkeyup="filterTable('prog-search', 'progress-table')" placeholder="Pesquisar por aluno, curso ou lição...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="progress-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Aluno</th>
+          <th>Curso</th>
+          <th>Lição Atual</th>
+          <th>Percentagem Concluída (%)</th>
+          <th>Último Timestamp</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="progress-tbody">
+        <tr><td colspan="8" style="text-align:center;">A carregar progresso...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Registar Progresso -->
+<div class="modal-overlay" id="modal-progress">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Registar Progresso de Aprendizagem</h3>
+      <button class="modal-close" onclick="closeModal('modal-progress')">&times;</button>
+    </div>
+    <form id="form-progress" onsubmit="handleCreateProgress(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="pr-user-select">Aluno *</label>
+            <select id="pr-user-select" required>
+              <option value="">A carregar alunos...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="pr-course-select">Curso *</label>
+            <select id="pr-course-select" required>
+              <option value="">A carregar cursos...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="pr-lesson-select">Lição Assistida *</label>
+            <select id="pr-lesson-select" required>
+              <option value="">A carregar lições...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="pr-pct">Percentagem Concluída (0-100%) *</label>
+            <input type="number" step="1" min="0" max="100" id="pr-pct" value="100" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pr-time">Ponto de Reprodução (MM:SS) *</label>
+            <input type="text" id="pr-time" value="25:00" required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-progress')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Progresso</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadProgress();
+});
+
+async function loadProgress() {
+  const tbody = document.getElementById('progress-tbody');
+  try {
+    const res = await fetch('/api/progress');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum registo de progresso.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(p => `
+      <tr>
+        <td>#${p.id}</td>
+        <td><strong>${p.user_name}</strong></td>
+        <td><code>${p.course_title}</code></td>
+        <td><small>${p.lesson_title}</small></td>
+        <td><strong style="color:var(--accent); font-size:1.05rem;">${p.completion_pct.toFixed(0)}%</strong></td>
+        <td><code>⏱️ ${p.last_watched_timestamp}</code></td>
+        <td><span class="badge badge-${p.status.toLowerCase().replace(' ', '-')}">${p.status}</span></td>
+        <td>
+          ${p.completion_pct < 100 ? `<button class="btn btn-sm btn-success" onclick="markCompleted(${p.id})">Concluir 100%</button>` : ''}
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/progress', ${p.id}, loadProgress)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Erro ao carregar progresso.</td></tr>';
+  }
+}
+
+function openCreateProgressModal() {
+  loadUsersSelect('pr-user-select', 'Aluno');
+  loadCoursesSelect('pr-course-select');
+  loadLessonsSelect('pr-lesson-select');
+  openModal('modal-progress');
+}
+
+async function markCompleted(id) {
+  try {
+    const res = await fetch(`/api/progress/update/${id}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({completion_pct: 100.0})
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadProgress();
+    }
+  } catch (e) {
+    showToast('Erro ao atualizar progresso.', 'error');
+  }
+}
+
+async function handleCreateProgress(e) {
+  e.preventDefault();
+  const pct = parseFloat(document.getElementById('pr-pct').value);
+  const payload = {
+    user_id: document.getElementById('pr-user-select').value,
+    course_id: document.getElementById('pr-course-select').value,
+    lesson_id: document.getElementById('pr-lesson-select').value,
+    completion_pct: pct,
+    last_watched_timestamp: document.getElementById('pr-time').value,
+    status: pct >= 100.0 ? 'Concluído' : 'Em Curso'
+  };
+
+  try {
+    const res = await fetch('/api/progress/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-progress');
+      document.getElementById('form-progress').reset();
+      loadProgress();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

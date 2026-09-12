@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Utilizadores & Alunos - LearnCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Gestão de Utilizadores & Estudantes 👥</h2>
+    <p>Diretório de alunos matriculados, formadores certificados e administradores do sistema.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openModal('modal-user')">➕ Criar Novo Utilizador</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>👥 Diretório de Utilizadores Registados</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="user-search" onkeyup="filterTable('user-search', 'users-table')" placeholder="Pesquisar por nome, email, NIF ou função...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="users-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome Completo</th>
+          <th>Email</th>
+          <th>Função / Role</th>
+          <th>NIF Fiscal</th>
+          <th>Telemóvel</th>
+          <th>Data Registo</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="users-tbody">
+        <tr><td colspan="9" style="text-align:center;">A carregar utilizadores...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Criar Utilizador -->
+<div class="modal-overlay" id="modal-user">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Criar Novo Utilizador</h3>
+      <button class="modal-close" onclick="closeModal('modal-user')">&times;</button>
+    </div>
+    <form id="form-user" onsubmit="handleCreateUser(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="us-name">Nome Completo *</label>
+            <input type="text" id="us-name" placeholder="Ex: Gonçalo Afonso Mendes" required>
+          </div>
+
+          <div class="form-group">
+            <label for="us-email">Endereço de Email *</label>
+            <input type="email" id="us-email" placeholder="Ex: goncalo@email.pt" required>
+          </div>
+
+          <div class="form-group">
+            <label for="us-role">Função / Role *</label>
+            <select id="us-role" required>
+              <option value="Aluno">Aluno / Estudante</option>
+              <option value="Instrutor">Instrutor / Formador</option>
+              <option value="Administrador">Administrador</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="us-nif">NIF Fiscal *</label>
+            <input type="text" id="us-nif" placeholder="Ex: 254987111" required>
+          </div>
+
+          <div class="form-group">
+            <label for="us-phone">Telemóvel *</label>
+            <input type="text" id="us-phone" placeholder="Ex: +351 918 765 432" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="us-status">Estado *</label>
+            <select id="us-status" required>
+              <option value="Ativo">Ativo</option>
+              <option value="Inativo">Inativo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-user')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Utilizador</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadUsers();
+});
+
+async function loadUsers() {
+  const tbody = document.getElementById('users-tbody');
+  try {
+    const res = await fetch('/api/users');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Nenhum utilizador registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(u => `
+      <tr>
+        <td>#${u.id}</td>
+        <td><strong>${u.name}</strong></td>
+        <td><a href="mailto:${u.email}">${u.email}</a></td>
+        <td><span class="badge badge-${u.role.toLowerCase()}">${u.role}</span></td>
+        <td><code>${u.nif}</code></td>
+        <td>${u.phone}</td>
+        <td>${u.joined_date ? u.joined_date.substring(0,10) : '2026-09-01'}</td>
+        <td><span class="badge badge-ativo">${u.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/users', ${u.id}, loadUsers)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Erro ao carregar utilizadores.</td></tr>';
+  }
+}
+
+async function handleCreateUser(e) {
+  e.preventDefault();
+  const payload = {
+    name: document.getElementById('us-name').value,
+    email: document.getElementById('us-email').value,
+    role: document.getElementById('us-role').value,
+    nif: document.getElementById('us-nif').value,
+    phone: document.getElementById('us-phone').value,
+    status: document.getElementById('us-status').value
+  };
+
+  try {
+    const res = await fetch('/api/users/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-user');
+      document.getElementById('form-user').reset();
+      loadUsers();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}Pagamentos & Inscrições - LearnCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Pagamentos & Inscrições nos Cursos 💳</h2>
+    <p>Histórico de transações de compra de cursos, faturação com NIF, pagamentos por MB WAY e Cartão.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreatePaymentModal()">➕ Processar Novo Pagamento</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>💳 Histórico de Vendas e Inscrições</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="pay-search" onkeyup="filterTable('pay-search', 'payments-table')" placeholder="Pesquisar por aluno, NIF, curso ou transação...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="payments-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Aluno</th>
+          <th>NIF Fiscal</th>
+          <th>Curso Adquirido</th>
+          <th>Valor Pago (€)</th>
+          <th>Data Compra</th>
+          <th>Método de Pagamento</th>
+          <th>ID Transação</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="payments-tbody">
+        <tr><td colspan="10" style="text-align:center;">A carregar pagamentos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Processar Pagamento -->
+<div class="modal-overlay" id="modal-payment">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Processar Inscrição & Pagamento de Curso</h3>
+      <button class="modal-close" onclick="closeModal('modal-payment')">&times;</button>
+    </div>
+    <form id="form-payment" onsubmit="handleCreatePayment(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="pm-user-select">Aluno Comprador *</label>
+            <select id="pm-user-select" required>
+              <option value="">A carregar alunos...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="pm-course-select">Curso Adquirido *</label>
+            <select id="pm-course-select" required>
+              <option value="">A carregar cursos...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="pm-amount">Valor Liquidado (€) *</label>
+            <input type="number" step="0.01" id="pm-amount" placeholder="Ex: 149.00" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pm-date">Data de Pagamento *</label>
+            <input type="date" id="pm-date" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="pm-method">Método de Pagamento *</label>
+            <select id="pm-method" required>
+              <option value="MB WAY">MB WAY</option>
+              <option value="Multibanco">Multibanco (Referência PT)</option>
+              <option value="Cartão de Crédito">Cartão de Crédito (Visa / Mastercard)</option>
+              <option value="PayPal">PayPal</option>
+              <option value="Transferência Bancária">Transferência Bancária</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-payment')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Confirmar Inscrição & Emitir Fatura</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadPayments();
+});
+
+async function loadPayments() {
+  const tbody = document.getElementById('payments-tbody');
+  try {
+    const res = await fetch('/api/payments');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">Nenhum pagamento registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(p => `
+      <tr>
+        <td>#${p.id}</td>
+        <td><strong>${p.user_name}</strong></td>
+        <td><code>${p.user_nif}</code></td>
+        <td><strong>${p.course_title}</strong></td>
+        <td><strong style="color:var(--primary);">${p.amount.toFixed(2)} €</strong></td>
+        <td>${p.payment_date}</td>
+        <td><code>${p.payment_method}</code></td>
+        <td><small style="color:var(--accent); font-weight:bold;">${p.transaction_id}</small></td>
+        <td><span class="badge badge-concluído">${p.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/payments', ${p.id}, loadPayments)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; color:red;">Erro ao carregar pagamentos.</td></tr>';
+  }
+}
+
+function openCreatePaymentModal() {
+  loadUsersSelect('pm-user-select', 'Aluno');
+  loadCoursesSelect('pm-course-select');
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('pm-date').value = today;
+  openModal('modal-payment');
+}
+
+async function handleCreatePayment(e) {
+  e.preventDefault();
+  const payload = {
+    user_id: document.getElementById('pm-user-select').value,
+    course_id: document.getElementById('pm-course-select').value,
+    amount: document.getElementById('pm-amount').value,
+    payment_date: document.getElementById('pm-date').value,
+    payment_method: document.getElementById('pm-method').value,
+    status: 'Concluído'
+  };
+
+  try {
+    const res = await fetch('/api/payments/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(`${data.message} Transação: ${data.transaction_id}`, 'success');
+      closeModal('modal-payment');
+      document.getElementById('form-payment').reset();
+      loadPayments();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

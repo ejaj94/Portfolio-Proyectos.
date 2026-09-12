@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Certificados Digitais - LearnCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    ## Emissão de Certificados Digitais 🎓
+    <p>Certificação profissional de conclusão de cursos, verificação por hash único e emissão de diplomas.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateCertificateModal()">🎓 Emitir Novo Certificado</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>🎓 Registro de Diplomas & Certificados Emitidos</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="cert-search" onkeyup="filterTable('cert-search', 'certs-table')" placeholder="Pesquisar por aluno, código de certificado ou curso...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="certs-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Aluno</th>
+          <th>NIF Fiscal</th>
+          <th>Curso Concluído</th>
+          <th>Código Único de Autenticidade</th>
+          <th>Data Emissão</th>
+          <th>Nota Final (%)</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="certs-tbody">
+        <tr><td colspan="9" style="text-align:center;">A carregar certificados...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Emitir Certificado -->
+<div class="modal-overlay" id="modal-certificate">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Emitir Certificado Digital de Conclusão</h3>
+      <button class="modal-close" onclick="closeModal('modal-certificate')">&times;</button>
+    </div>
+    <form id="form-certificate" onsubmit="handleCreateCertificate(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="ct-user-select">Aluno Concluinto *</label>
+            <select id="ct-user-select" required>
+              <option value="">A carregar alunos...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="ct-course-select">Curso Concluído *</label>
+            <select id="ct-course-select" required>
+              <option value="">A carregar cursos...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="ct-date">Data de Emissão *</label>
+            <input type="date" id="ct-date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="ct-grade">Classificação Final (%) *</label>
+            <input type="number" step="0.1" min="0" max="100" id="ct-grade" value="98.5" required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-certificate')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Gerar Certificado com Hash</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadCertificates();
+});
+
+async function loadCertificates() {
+  const tbody = document.getElementById('certs-tbody');
+  try {
+    const res = await fetch('/api/certificates');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Nenhum certificado emitido.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(c => `
+      <tr>
+        <td>#${c.id}</td>
+        <td><strong>${c.user_name}</strong></td>
+        <td><code>${c.user_nif}</code></td>
+        <td><strong>${c.course_title}</strong></td>
+        <td><code style="color:var(--accent); font-weight:bold;">${c.certificate_code}</code></td>
+        <td>${c.issue_date}</td>
+        <td><strong>${c.grade_achieved.toFixed(1)}%</strong></td>
+        <td><span class="badge badge-válido">${c.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-secondary" onclick="downloadDiploma('${c.certificate_code}')">📄 PDF</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/certificates', ${c.id}, loadCertificates)">Revogar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Erro ao carregar certificados.</td></tr>';
+  }
+}
+
+function downloadDiploma(code) {
+  showToast(`A gerar documento PDF autêntico para o certificado ${code}...`, 'success');
+}
+
+function openCreateCertificateModal() {
+  loadUsersSelect('ct-user-select', 'Aluno');
+  loadCoursesSelect('ct-course-select');
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('ct-date').value = today;
+  openModal('modal-certificate');
+}
+
+async function handleCreateCertificate(e) {
+  e.preventDefault();
+  const payload = {
+    user_id: document.getElementById('ct-user-select').value,
+    course_id: document.getElementById('ct-course-select').value,
+    issue_date: document.getElementById('ct-date').value,
+    grade_achieved: document.getElementById('ct-grade').value
+  };
+
+  try {
+    const res = await fetch('/api/certificates/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(`${data.message} Código: ${data.code}`, 'success');
+      closeModal('modal-certificate');
+      document.getElementById('form-certificate').reset();
+      loadCertificates();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}
