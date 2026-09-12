@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | ClinicCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-hospital" style="color: var(--sapphire-blue);"></i> Painel Executivo da Clínica</h1>
+        <p class="page-subtitle">Acompanhamento de marcações diárias, pacientes, atos médicos e receita financeira acumulada.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <button onclick="document.getElementById('modal-create-appointment').style.display='flex'" class="btn-sm btn-primary">
+            <i class="fa-solid fa-plus"></i> Agendar Cita
+        </button>
+        <button onclick="document.getElementById('modal-create-payment').style.display='flex'" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-receipt"></i> Emitir Factura
+        </button>
+        <a href="/api/export/csv" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+    </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-regular fa-calendar-check"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ today_appts }}</div>
+            <div class="stat-label">Citas Médicas Hoje</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #EFF6FF; color: var(--sapphire-blue);">
+            <i class="fa-solid fa-coins"></i>
+        </div>
+        <div>
+            <div class="stat-val">€{{ total_revenue }}</div>
+            <div class="stat-label">Receita Faturada</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #ECFDF5; color: var(--emerald-green);">
+            <i class="fa-solid fa-hospital-user"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ total_patients }}</div>
+            <div class="stat-label">Pacientes Registados</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #FEF2F2; color: var(--coral-accent);">
+            <i class="fa-solid fa-user-doctor"></i>
+        </div>
+        <div>
+            <div class="stat-val">{{ active_professionals }}</div>
+            <div class="stat-label">Corpo Médico Ativo</div>
+        </div>
+    </div>
+</div>
+
+<!-- Grid Layout: Today's Appointments & Recent Payments -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Today's Appointments Table -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-regular fa-clock" style="color: var(--sapphire-blue);"></i> Consultas Agendadas para Hoje
+            </h2>
+            <a href="/appointments" style="font-size: 0.85rem; color: var(--sapphire-blue); font-weight: 800; text-decoration: none;">Ver Todas &rarr;</a>
+        </div>
+
+        {% if not today_appts_list %}
+            <div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                <i class="fa-regular fa-calendar" style="font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.4;"></i>
+                <p>Nenhuma consulta médica agendada para o dia de hoje.</p>
+            </div>
+        {% else %}
+            <div style="overflow-x: auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Horário</th>
+                            <th>Código Cita</th>
+                            <th>Paciente</th>
+                            <th>Médico / Especialidade</th>
+                            <th>Subsistema</th>
+                            <th>Valor</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in today_appts_list %}
+                        <tr>
+                            <td style="font-weight: 800; color: var(--sapphire-blue);">{{ a.appointment_time }}</td>
+                            <td style="font-family: monospace; font-size: 0.85rem; font-weight: 700;">{{ a.appointment_code }}</td>
+                            <td style="font-weight: 700; color: var(--text-dark);">{{ a.patient_name }}</td>
+                            <td>
+                                <div style="font-weight: 600;">{{ a.professional_name }}</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted);">{{ a.specialty }}</div>
+                            </td>
+                            <td>
+                                <span class="badge" style="background: #F1F5F9; color: var(--text-dark);">{{ a.insurance }}</span>
+                            </td>
+                            <td style="font-weight: 800; color: var(--text-dark);">€{{ "%.2f"|format(a.fee) }}</td>
+                            <td>
+                                {% if a.status == 'Realizada' %}
+                                    <span class="badge badge-done"><i class="fa-solid fa-check"></i> Realizada</span>
+                                {% elif a.status == 'Confirmada' %}
+                                    <span class="badge badge-confirmed"><i class="fa-solid fa-check-circle"></i> Confirmada</span>
+                                {% else %}
+                                    <span class="badge badge-waiting"><i class="fa-regular fa-clock"></i> Em Espera</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Recent Payments Feed -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-file-invoice-dollar" style="color: var(--emerald-green);"></i> Faturação Recente
+            </h2>
+            <a href="/payments" style="font-size: 0.8rem; color: var(--sapphire-blue); font-weight: 800; text-decoration: none;">Ver Faturas &rarr;</a>
+        </div>
+
+        {% if not recent_payments %}
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <i class="fa-solid fa-receipt" style="font-size: 2rem; color: var(--emerald-green); margin-bottom: 0.5rem;"></i>
+                <p style="font-size: 0.9rem;">Sem registos de faturação recentes.</p>
+            </div>
+        {% else %}
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                {% for py in recent_payments %}
+                <div style="background: var(--bg-light); border: 1px solid var(--border-color); padding: 0.85rem; border-radius: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span style="font-weight: 800; color: var(--sapphire-blue); font-size: 0.85rem;">{{ py.invoice_code }}</span>
+                        <span class="badge" style="font-size: 0.72rem; padding: 0.15rem 0.45rem; background: {% if py.status == 'Pago' %}#ECFDF5; color: var(--emerald-green);{% else %}#FFFBEB; color: var(--amber-warning);{% endif %}">
+                            {{ py.status }}
+                        </span>
+                    </div>
+                    <div style="font-weight: 700; font-size: 0.9rem; margin-top: 0.25rem; color: var(--text-dark);">{{ py.patient_name }}</div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem;">
+                        <span>Método: <strong>{{ py.payment_method }}</strong></span>
+                        <span style="font-weight: 900; color: var(--text-dark);">€{{ "%.2f"|format(py.amount) }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal: Agendar Cita -->
+<div id="modal-create-appointment" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-regular fa-calendar-plus" style="color: var(--sapphire-blue);"></i> Agendar Nova Cita Médica
+            </h3>
+            <button onclick="document.getElementById('modal-create-appointment').style.display='none'" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">&times;</button>
+        </div>
+        <form id="create-appointment-form">
+            <div class="form-group">
+                <label>Paciente</label>
+                <select id="appt-patient-id" required>
+                    <option value="">-- Selecionar Paciente --</option>
+                    {% for pat in patients_list %}
+                    <option value="{{ pat.id }}">{{ pat.name }} (NIF: {{ pat.nif }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Profissional Médico</label>
+                <select id="appt-professional-id" required>
+                    <option value="">-- Selecionar Médico --</option>
+                    {% for prof in professionals_list %}
+                    <option value="{{ prof.id }}">{{ prof.name }} ({{ prof.specialty }}) - {{ "%.0f"|format(prof.consultation_fee) }}€</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label>Data da Cita</label>
+                    <input type="date" id="appt-date" required>
+                </div>
+                <div class="form-group">
+                    <label>Horário</label>
+                    <input type="text" id="appt-time" placeholder="Ex: 10:30" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Motivo da Consulta / Sintomas Inicial</label>
+                <textarea id="appt-reason" rows="2" placeholder="Descreva brevemente o motivo..." required></textarea>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
+                <button type="button" onclick="document.getElementById('modal-create-appointment').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary">Confirmar Agendamento</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Emitir Factura -->
+<div id="modal-create-payment" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
+                <i class="fa-solid fa-receipt" style="color: var(--sapphire-blue);"></i> Emitir Factura / Recibo
+            </h3>
+            <button onclick="document.getElementById('modal-create-payment').style.display='none'" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">&times;</button>
+        </div>
+        <form id="create-payment-form">
+            <div class="form-group">
+                <label>Cita Médica Relacionada</label>
+                <select id="pay-appointment-id" required>
+                    <option value="">-- Selecionar Cita --</option>
+                    {% for appt in appointments_list %}
+                    <option value="{{ appt.id }}">{{ appt.appointment_code }} - {{ appt.patient_name }} ({{ "%.0f"|format(appt.fee) }}€)</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label>Valor (€)</label>
+                    <input type="number" step="0.01" id="pay-amount" value="75.00" required>
+                </div>
+                <div class="form-group">
+                    <label>Método de Pagamento</label>
+                    <select id="pay-method">
+                        <option value="MB WAY">MB WAY</option>
+                        <option value="Multibanco">Multibanco</option>
+                        <option value="Cartão">Cartão de Crédito/Débito</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Estado do Pagamento</label>
+                <select id="pay-status">
+                    <option value="Pago" selected>Pago</option>
+                    <option value="Pendente">Pendente</option>
+                </select>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
+                <button type="button" onclick="document.getElementById('modal-create-payment').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
+                <button type="submit" class="btn-sm btn-primary">Emitir Factura</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
