@@ -7,6 +7,9 @@ from datetime import datetime, date
 from flask import Flask, render_template, request, jsonify, Response, redirect, url_for
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(PROJECT_DIR, 'realtycraft.db')
 

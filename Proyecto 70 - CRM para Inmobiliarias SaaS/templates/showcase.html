@@ -1,24 +1,20 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EJAJ TECH - Presentation Showcase (Blanco Neón Diapositivas)</title>
-    <!-- FontAwesome 6 Icons -->
+    <title>EJAJ TECH - Showcase Dia 70 Blanco Neón Edition (Projetos 61 a 70)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --neon-white: #ffffff;
+            --white-glow: 0 0 25px rgba(255, 255, 255, 0.6);
+            --text-glow: 0 0 10px rgba(255, 255, 255, 0.8);
+            --border-neon: rgba(255, 255, 255, 0.45);
             --bg-void: #000000;
-            --card-cyber: #0a0a0a;
-            --panel-cyber: #121212;
-            --border-white: rgba(255, 255, 255, 0.35);
-            --glow-white: 0 0 25px rgba(255, 255, 255, 0.4);
-            --glow-text: 0 0 10px rgba(255, 255, 255, 0.7);
+            --card-cyber: #060606;
+            --panel-cyber: #0d0d0d;
             --text-bright: #ffffff;
             --text-dim: #a1a1aa;
         }
@@ -26,15 +22,16 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-void);
             background-image: 
-                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.04) 0%, transparent 70%),
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 70%),
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 100% 100%, 30px 30px, 30px 30px;
             color: var(--text-bright);
             padding: 1.5rem;
+            line-height: 1.5;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -45,12 +42,12 @@
         .showcase-container {
             width: 100%;
             max-width: 960px;
-            background: rgba(10, 10, 10, 0.95);
+            background: rgba(6, 6, 6, 0.95);
             backdrop-filter: blur(16px);
-            border: 2px solid var(--border-white);
+            border: 2px solid var(--neon-white);
             border-radius: 24px;
             padding: 1.75rem;
-            box-shadow: var(--glow-white);
+            box-shadow: var(--white-glow), inset 0 0 25px rgba(255, 255, 255, 0.08);
             position: relative;
         }
 
@@ -59,7 +56,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.25);
             padding-bottom: 1.25rem;
             margin-bottom: 1.25rem;
             flex-wrap: wrap;
@@ -73,8 +70,8 @@
         }
 
         .icon-badge {
-            width: 50px;
-            height: 50px;
+            width: 52px;
+            height: 52px;
             border-radius: 14px;
             background: #ffffff;
             color: #000000;
@@ -82,16 +79,16 @@
             align-items: center;
             justify-content: center;
             font-size: 1.6rem;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
             flex-shrink: 0;
         }
 
         .header-main-text h2 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.35rem;
+            font-size: 1.4rem;
             font-weight: 900;
             color: var(--neon-white);
-            text-shadow: var(--glow-text);
+            text-shadow: var(--text-glow);
             margin: 0;
             letter-spacing: 0.5px;
         }
@@ -99,197 +96,223 @@
         .header-main-text p {
             font-size: 0.85rem;
             color: var(--text-dim);
-            font-weight: 500;
-        }
-
-        .host-link-btn {
-            background: #171717;
-            border: 1px solid var(--border-white);
-            color: #ffffff;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
             font-weight: 700;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
         }
 
-        .host-link-btn:hover {
+        .milestone-pill {
             background: #ffffff;
             color: #000000;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 0.85rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
         }
 
-        /* Progress Bar */
-        .progress-container {
+        /* AutoPlay Progress Bar */
+        .progress-bar-container {
             width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
-        .progress-bar {
+        .progress-bar-fill {
             height: 100%;
-            width: 7.69%;
+            width: 10%;
             background: #ffffff;
             box-shadow: 0 0 10px #ffffff;
             transition: width 0.3s ease;
         }
 
-        /* Slide Viewport */
-        .slide-viewport {
-            min-height: 440px;
-            position: relative;
-        }
-
-        .slide {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.35s ease-in-out;
-        }
-
-        .slide.active {
-            display: block;
-            opacity: 1;
-        }
-
-        /* Slide Card Formatting */
-        .slide-card {
+        /* Slide Project Card */
+        .project-slide-card {
             background: var(--panel-cyber);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 18px;
-            padding: 2rem;
-            min-height: 440px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-radius: 20px;
+            padding: 1.75rem;
+            min-height: 400px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-shadow: inset 0 0 25px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.08);
         }
 
-        .slide-header {
+        .card-top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            margin-bottom: 1rem;
         }
 
-        .slide-tag {
+        .day-badge {
+            background: #ffffff;
+            color: #000000;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: #ffffff;
+            font-weight: 900;
+            font-size: 0.85rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .category-tag {
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+            border: 1px solid var(--border-neon);
+            font-size: 0.78rem;
+            font-weight: 800;
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
-            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        .slide-num {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--text-dim);
-        }
-
         .slide-title {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 900;
-            color: #ffffff;
-            margin-bottom: 1rem;
-            line-height: 1.25;
+            color: #FFFFFF;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
         }
 
-        .slide-body {
-            font-size: 1.02rem;
-            line-height: 1.7;
-            color: #e4e4e7;
-            flex: 1;
-        }
-
-        .slide-highlight-box {
-            background: rgba(255, 255, 255, 0.05);
-            border-left: 4px solid #ffffff;
-            padding: 1rem 1.25rem;
-            border-radius: 8px;
-            margin-top: 1.25rem;
+        .slide-desc {
             font-size: 0.95rem;
-            color: #ffffff;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
         }
 
-        .project-meta-grid {
+        /* Highlights Grid inside slide */
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1.25rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.85rem;
+            margin-bottom: 1.25rem;
         }
 
-        .meta-item {
-            background: #000000;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 0.85rem;
-            border-radius: 12px;
-            font-size: 0.88rem;
+        .feature-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.85rem;
+            color: #f4f4f5;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
 
-        .meta-item strong {
+        .feature-item i {
             color: #ffffff;
-            display: block;
-            font-weight: 700;
-            margin-bottom: 0.2rem;
+            font-size: 1rem;
         }
 
-        /* Controls Footer */
+        .tech-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .tech-pills {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tech-pill {
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+        }
+
+        .port-btn {
+            background: #ffffff;
+            color: #000000;
+            font-weight: 800;
+            font-size: 0.82rem;
+            padding: 0.45rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
+        }
+
+        .port-btn:hover {
+            background: #e4e4e7;
+            transform: scale(1.04);
+        }
+
+        /* Nav Controls Footer */
         .controls-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
             flex-wrap: wrap;
             gap: 1rem;
         }
 
-        .nav-btn {
-            background: #171717;
-            border: 1px solid var(--border-white);
+        .btn-action {
+            background: #121212;
+            border: 2px solid var(--neon-white);
             color: #ffffff;
             padding: 0.65rem 1.4rem;
             border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.9rem;
+            font-weight: 800;
+            font-size: 0.88rem;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             transition: all 0.2s;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
-        .nav-btn:hover:not(:disabled) {
+        .btn-action:hover:not(:disabled) {
             background: #ffffff;
             color: #000000;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
         }
 
-        .nav-btn:disabled {
-            opacity: 0.3;
+        .btn-action:disabled {
+            opacity: 0.35;
             cursor: not-allowed;
         }
 
-        .dots-container {
-            display: flex;
-            gap: 0.4rem;
-            flex-wrap: wrap;
+        .counter-badge {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 900;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
         }
 
-        .dot {
+        .dots-bar {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .dot-item {
             width: 10px;
             height: 10px;
             border-radius: 50%;
@@ -298,17 +321,50 @@
             transition: all 0.2s;
         }
 
-        .dot.active {
+        .dot-item.active {
             background: #ffffff;
-            box-shadow: 0 0 8px #ffffff;
+            box-shadow: 0 0 10px #ffffff;
             transform: scale(1.3);
         }
 
+        /* Speech Container */
+        .speech-box {
+            background: rgba(13, 13, 13, 0.9);
+            border: 2px solid var(--neon-white);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            box-shadow: var(--white-glow);
+        }
+
+        .speech-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .speech-text p {
+            font-size: 0.92rem;
+            line-height: 1.65;
+            color: #e4e4e7;
+            margin-bottom: 0.85rem;
+        }
+
+        .speech-text p:last-child {
+            margin-bottom: 0;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
         @media (max-width: 768px) {
-            body { padding: 0.75rem; }
+            .features-grid { grid-template-columns: 1fr; }
             .showcase-container { padding: 1.25rem; }
-            .slide-title { font-size: 1.4rem; }
-            .slide-card { min-height: 480px; padding: 1.25rem; }
+            .slide-title { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -319,329 +375,301 @@
     <!-- Top Header -->
     <div class="top-header">
         <div class="header-title-box">
-            <div class="icon-badge"><i class="fa-solid fa-crown"></i></div>
+            <div class="icon-badge"><i class="fa-solid fa-bolt"></i></div>
             <div class="header-main-text">
-                <h2>EJAJ TECH &bull; SHOWCASE SLIDES</h2>
-                <p>Manifiesto Social & Últimos 10 Proyectos (74 a 83)</p>
+                <h2>EJAJ TECH SHOWCASE DIA 70</h2>
+                <p>Recorrido Oficial por los Últimos 10 Proyectos (61 a 70)</p>
             </div>
         </div>
-        <a href="http://localhost:6970" target="_blank" class="host-link-btn">
-            <i class="fa-solid fa-globe"></i> HOST: http://localhost:6970
-        </a>
+        <div class="milestone-pill">
+            <i class="fa-solid fa-crown"></i> DIA 70 &bull; BLANCO NEÓN
+        </div>
     </div>
 
     <!-- Progress Bar -->
-    <div class="progress-container">
-        <div class="progress-bar" id="progressBar"></div>
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progressFill"></div>
     </div>
 
-    <!-- Slide Viewport -->
-    <div class="slide-viewport">
+    <!-- Project Slides Viewport -->
+    <div id="slidesContainer">
 
-        <!-- SLIDE 1: Cover Manifesto -->
-        <div class="slide active" data-slide="1">
-            <div class="slide-card">
+        <!-- PROYECTO 61 (Dia 61) -->
+        <div class="slide-item" data-index="1">
+            <div class="project-slide-card">
                 <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Diapositiva 01</span>
-                        <span class="slide-num">01 / 13</span>
+                    <div class="card-top-bar">
+                        <span class="day-badge">PROYECTO 61</span>
+                        <span class="category-tag">Sign Craft AI &bull; Porta 6927</span>
                     </div>
-                    <h1 class="slide-title">NO VENDEMOS SOFTWARE.<br>ENSEÑAMOS A CONSTRUIRLO.</h1>
-                    <div class="slide-body">
-                        <p>
-                            En <strong>EJAJ TECH</strong> la misión es clara: democratizar el conocimiento de la programación, compartiendo soluciones reales de forma 100% gratuita con la sociedad.
-                        </p>
-                        <div class="slide-highlight-box">
-                            <i class="fa-solid fa-heart text-white"></i> "Queremos enseñar al mundo lo hermoso de la programación: que con práctica constante y pasión noble, sí se puede cambiar y mejorar el mundo."
-                        </div>
+                    <h2 class="slide-title"><i class="fa-solid fa-signature"></i> FirmaCraft AI - Gestor de Assinaturas SaaS</h2>
+                    <p class="slide-desc">Plataforma empresarial de assinaturas digitais e contratos com validação por código hash inviolável, upload de PDFs, envio por email e auditoria documental em 100% pt-PT.</p>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fa-solid fa-pen-nib"></i> Assinatura Digital Touch/Canvas</div>
+                        <div class="feature-item"><i class="fa-solid fa-shield-halved"></i> Hash Único de Autenticidade</div>
+                        <div class="feature-item"><i class="fa-solid fa-file-pdf"></i> Geração & Leitura PDF</div>
+                        <div class="feature-item"><i class="fa-solid fa-envelope"></i> Notificação por Email</div>
                     </div>
                 </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Costo para la Sociedad</strong> 0€ (100% Grátis)</div>
-                    <div class="meta-item"><strong>Compromiso</strong> Formación & Práctica</div>
-                    <div class="meta-item"><strong>Impacto</strong> Social & Humano</div>
+                <div class="tech-footer">
+                    <div class="tech-pills">
+                        <span class="tech-pill">Flask</span>
+                        <span class="tech-pill">SQLite</span>
+                        <span class="tech-pill">Canvas Signature</span>
+                    </div>
+                    <a href="http://localhost:6927" target="_blank" class="port-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Porta 6927</a>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 2: La Filosofía EJAJ Tech -->
-        <div class="slide" data-slide="2">
-            <div class="slide-card">
+        <!-- PROYECTO 62 (Dia 62) -->
+        <div class="slide-item" data-index="2" style="display:none;">
+            <div class="project-slide-card">
                 <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Filosofía & Manifiesto</span>
-                        <span class="slide-num">02 / 13</span>
+                    <div class="card-top-bar">
+                        <span class="day-badge">PROYECTO 62</span>
+                        <span class="category-tag">Maintain Craft AI &bull; Porta 6929</span>
                     </div>
-                    <h2 class="slide-title">HUMILDAD, PRÁCTICA Y VOCACIÓN</h2>
-                    <div class="slide-body">
-                        <p>
-                            Creemos que el conocimiento no pertenece a quien lo guarda, sino a la sociedad que lo utiliza para superarse. Cada proyecto que desarrollamos es una lección abierta paso a paso.
-                        </p>
-                        <div class="slide-highlight-box">
-                            <i class="fa-solid fa-code"></i> La práctica vence cualquier obstáculo. Cuando aprendes a resolver problemas con código, tienes el poder de transformar tu realidad.
-                        </div>
+                    <h2 class="slide-title"><i class="fa-solid fa-screwdriver-wrench"></i> MaintCraft AI - Gestão de Manutenção</h2>
+                    <p class="slide-desc">Sistema de controlo de manutenção industrial e predial, gestão de equipamentos, ordens de trabalho preventivas e corretivas, técnicos credenciados e custos operacionais.</p>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fa-solid fa-list-check"></i> Ordens de Trabalho (OT)</div>
+                        <div class="feature-item"><i class="fa-solid fa-boxes-stacked"></i> Inventário de Equipamentos</div>
+                        <div class="feature-item"><i class="fa-solid fa-user-gear"></i> Gestão de Técnicos</div>
+                        <div class="feature-item"><i class="fa-solid fa-euro-sign"></i> Análise de Custos & Prazos</div>
                     </div>
                 </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Pilares</strong> Humildad & Vocación</div>
-                    <div class="meta-item"><strong>Metodología</strong> Aprender Construyendo</div>
-                    <div class="meta-item"><strong>Comunidad</strong> @ejajtech</div>
+                <div class="tech-footer">
+                    <div class="tech-pills">
+                        <span class="tech-pill">Python</span>
+                        <span class="tech-pill">Flask REST</span>
+                        <span class="tech-pill">Chart.js</span>
+                    </div>
+                    <a href="http://localhost:6929" target="_blank" class="port-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Porta 6929</a>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 3: Proyecto 74 -->
-        <div class="slide" data-slide="3">
-            <div class="slide-card">
+        <!-- PROYECTO 63 (Dia 63) -->
+        <div class="slide-item" data-index="3" style="display:none;">
+            <div class="project-slide-card">
                 <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Proyecto 74</span>
-                        <span class="slide-num">03 / 13</span>
+                    <div class="card-top-bar">
+                        <span class="day-badge">PROYECTO 63</span>
+                        <span class="category-tag">Medi Care Phone App &bull; Porta 6930</span>
                     </div>
-                    <h2 class="slide-title">✍️ GESTOR DE ASSINATURAS & CONTRATOS</h2>
-                    <div class="slide-body">
-                        <p>
-                            Plataforma <strong>FirmaCraft AI SaaS</strong> para assinaturas digitais com certificado hash inviolável, upload de PDFs, envio por email e auditoria completa de contratos em pt-PT.
-                        </p>
+                    <h2 class="slide-title"><i class="fa-solid fa-mobile-screen-button"></i> MedicaCraft AI - App Citas Médicas</h2>
+                    <p class="slide-desc">Aplicação mobile-first para marcação de consultas médicas, especialidades, catálogo de clínicos, notificações de medicação e histórico de pacientes em formato smartphone UI.</p>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fa-solid fa-mobile-screen"></i> Smartphone UI Viewport</div>
+                        <div class="feature-item"><i class="fa-solid fa-calendar-check"></i> Agendamento de Consultas</div>
+                        <div class="feature-item"><i class="fa-solid fa-user-doctor"></i> Especialidades & Médicos</div>
+                        <div class="feature-item"><i class="fa-solid fa-bell"></i> Lembretes de Receitas</div>
                     </div>
                 </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Porta</strong> 6927</div>
-                    <div class="meta-item"><strong>Tecnologia</strong> Flask + Canvas Signature</div>
-                    <div class="meta-item"><strong>Recursos</strong> Contratos & Hash QR</div>
+                <div class="tech-footer">
+                    <div class="tech-pills">
+                        <span class="tech-pill">Mobile UI</span>
+                        <span class="tech-pill">Flask</span>
+                        <span class="tech-pill">SQLite</span>
+                    </div>
+                    <a href="http://localhost:6930" target="_blank" class="port-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Porta 6930</a>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 4: Proyecto 75 -->
-        <div class="slide" data-slide="4">
-            <div class="slide-card">
+        <!-- PROYECTO 64 (Dia 64) -->
+        <div class="slide-item" data-index="4" style="display:none;">
+            <div class="project-slide-card">
                 <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Proyecto 75</span>
-                        <span class="slide-num">04 / 13</span>
+                    <div class="card-top-bar">
+                        <span class="day-badge">PROYECTO 64</span>
+                        <span class="category-tag">Clinic Craft AI &bull; Porta 6931</span>
                     </div>
-                    <h2 class="slide-title">🛡️ PORTAL DE GARANTIAS & ASSISTÊNCIA</h2>
-                    <div class="slide-body">
-                        <p>
-                            Plataforma <strong>GarantiaCraft AI SaaS</strong> para gestão de apólices, pedidos de reparação técnica, acompanhamento por código RMA e triagem de avarias com SLA.
-                        </p>
+                    <h2 class="slide-title"><i class="fa-solid fa-hospital"></i> ClinicaCraft AI - Gestor de Clínica</h2>
+                    <p class="slide-desc">Plataforma clínica completa para controlo de prontuários de pacientes, atos médicos, documentos de receitas, agendamento de consultas, pagamentos e faturação de tratamentos.</p>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fa-solid fa-notes-medical"></i> Prontuário Clínico Único</div>
+                        <div class="feature-item"><i class="fa-solid fa-credit-card"></i> Faturação & Pagamentos</div>
+                        <div class="feature-item"><i class="fa-solid fa-stethoscope"></i> Ficha de Atos Médicos</div>
+                        <div class="feature-item"><i class="fa-solid fa-chart-pie"></i> Dashboard Financeiro</div>
                     </div>
                 </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Porta</strong> 6928</div>
-                    <div class="meta-item"><strong>Tecnologia</strong> Python + SQLite</div>
-                    <div class="meta-item"><strong>Recursos</strong> Ticket RMA & Validade</div>
+                <div class="tech-footer">
+                    <div class="tech-pills">
+                        <span class="tech-pill">Flask SaaS</span>
+                        <span class="tech-pill">SQLite</span>
+                        <span class="tech-pill">Export CSV</span>
+                    </div>
+                    <a href="http://localhost:6931" target="_blank" class="port-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Porta 6931</a>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 5: Proyecto 76 -->
-        <div class="slide" data-slide="5">
-            <div class="slide-card">
+        <!-- PROYECTO 65 (Dia 65) -->
+        <div class="slide-item" data-index="5" style="display:none;">
+            <div class="project-slide-card">
                 <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Proyecto 76</span>
-                        <span class="slide-num">05 / 13</span>
+                    <div class="card-top-bar">
+                        <span class="day-badge">PROYECTO 65</span>
+                        <span class="category-tag">Warranty Craft AI &bull; Porta 6928</span>
                     </div>
-                    <h2 class="slide-title">🔧 SISTEMA DE MANUTENÇÃO & ORDENS DE TRABALHO</h2>
-                    <div class="slide-body">
-                        <p>
-                            Plataforma <strong>MaintCraft AI SaaS</strong> para controlo de equipamentos industriais, técnicos credenciados, incidências críticas y custos operacionais em pt-PT.
-                        </p>
+                    <h2 class="slide-title"><i class="fa-solid fa-shield-heart"></i> GarantiaCraft AI - Portal de Garantias</h2>
+                    <p class="slide-desc">Portal para registo e controlo de garantias de produtos, pedidos de assistência técnica, emissão de tickets RMA e acompanhamento do estado de reparação em tempo real.</p>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fa-solid fa-ticket"></i> Tickets RMA de Reparação</div>
+                        <div class="feature-item"><i class="fa-solid fa-clock-history"></i> SLA & Controlo de Prazos</div>
+                        <div class="feature-item"><i class="fa-solid fa-box"></i> Consulta por Número de Série</div>
+                        <div class="feature-item"><i class="fa-solid fa-file-invoice"></i> Certificado de Garantia</div>
                     </div>
                 </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Porta</strong> 6929</div>
-                    <div class="meta-item"><strong>Tecnologia</strong> Flask REST API</div>
-                    <div class="meta-item"><strong>Recursos</strong> Manutenção Preventiva</div>
+                <div class="tech-footer">
+                    <div class="tech-pills">
+                        <span class="tech-pill">Python</span>
+                        <span class="tech-pill">Flask API</span>
+                        <span class="tech-pill">RMA Tracker</span>
+                    </div>
+                    <a href="http://localhost:6928" target="_blank" class="port-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Porta 6928</a>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 6: Proyecto 77 -->
-        <div class="slide" data-slide="6">
-            <div class="slide-card">
+        <!-- PROYECTO 66 (Dia 66) -->
+        <div class="slide-item" data-index="6" style="display:none;">
+            <div class="project-slide-card">
                 <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Proyecto 77</span>
-                        <span class="slide-num">06 / 13</span>
+                    <div class="card-top-bar">
+                        <span class="day-badge">PROYECTO 66</span>
+                        <span class="category-tag">Vet Craft AI &bull; Porta 6932</span>
                     </div>
-                    <h2 class="slide-title">🩺 APP DE CITAS MÉDICAS & HORÁRIOS</h2>
-                    <div class="slide-body">
-                        <p>
-                            Plataforma mobile-friendly <strong>MedicaCraft AI SaaS</strong> para agendamento de consultas médicas, especialidades, corpo clínico e notificações de receitas.
-                        </p>
+                    <h2 class="slide-title"><i class="fa-solid fa-paw"></i> VetiCraft AI - Sistema para Veterinários</h2>
+                    <p class="slide-desc">Plataforma para clínicas veterinárias com registo de animais de estimação, fichas clínicas de vacinação e desparasitação, tutores/donos, consultas e tratamentos médicos.</p>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fa-solid fa-dog"></i> Ficha Clínica do Animal</div>
+                        <div class="feature-item"><i class="fa-solid fa-syringe"></i> Booster de Vacinas & Alertas</div>
+                        <div class="feature-item"><i class="fa-solid fa-users"></i> Diretório de Tutores</div>
+                        <div class="feature-item"><i class="fa-solid fa-notes-medical"></i> Planos de Tratamento</div>
                     </div>
                 </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Porta</strong> 6930</div>
-                    <div class="meta-item"><strong>Tecnologia</strong> Mobile Viewport Layout</div>
-                    <div class="meta-item"><strong>Recursos</strong> Histórico & Especialidades</div>
+                <div class="tech-footer">
+                    <div class="tech-pills">
+                        <span class="tech-pill">Flask</span>
+                        <span class="tech-pill">SQLite DB</span>
+                        <span class="tech-pill">Vet Records</span>
+                    </div>
+                    <a href="http://localhost:6932" target="_blank" class="port-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Porta 6932</a>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 7: Proyecto 78 -->
-        <div class="slide" data-slide="7">
-            <div class="slide-card">
+        <!-- PROYECTO 67 (Dia 67) -->
+        <div class="slide-item" data-index="7" style="display:none;">
+            <div class="project-slide-card">
                 <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Proyecto 78</span>
-                        <span class="slide-num">07 / 13</span>
+                    <div class="card-top-bar">
+                        <span class="day-badge">PROYECTO 67</span>
+                        <span class="category-tag">Academy Craft AI &bull; Porta 6933</span>
                     </div>
-                    <h2 class="slide-title">🏥 GESTOR DE CLÍNICA & CONSULTAS</h2>
-                    <div class="slide-body">
-                        <p>
-                            Plataforma clínica completa <strong>ClinicaCraft AI SaaS</strong> com prontuário clínico, atos médicos, documentos de receita, pagamentos e faturação de tratamentos.
-                        </p>
+                    <h2 class="slide-title"><i class="fa-solid fa-graduation-cap"></i> AcademiaCraft AI - Sistema para Academias</h2>
+                    <p class="slide-desc">Sistema de gestão escolar para institutos e academias: controlo de alunos, professores, disciplinas, presenças por aula, propinas e pauta oficial de qualificações académicas.</p>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fa-solid fa-school"></i> Gestão de Turmas & Cursos</div>
+                        <div class="feature-item"><i class="fa-solid fa-clipboard-user"></i> Controlo de Presenças</div>
+                        <div class="feature-item"><i class="fa-solid fa-file-signature"></i> Pauta de Notas & Exames</div>
+                        <div class="feature-item"><i class="fa-solid fa-receipt"></i> Pagamento de Propinas</div>
                     </div>
                 </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Porta</strong> 6931</div>
-                    <div class="meta-item"><strong>Tecnologia</strong> Flask + Chart Metrics</div>
-                    <div class="meta-item"><strong>Recursos</strong> Prontuário & Pagamentos</div>
+                <div class="tech-footer">
+                    <div class="tech-pills">
+                        <span class="tech-pill">Flask</span>
+                        <span class="tech-pill">SQLite</span>
+                        <span class="tech-pill">Academic Engine</span>
+                    </div>
+                    <a href="http://localhost:6933" target="_blank" class="port-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Porta 6933</a>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 8: Proyecto 79 -->
-        <div class="slide" data-slide="8">
-            <div class="slide-card">
+        <!-- PROYECTO 68 (Dia 68) -->
+        <div class="slide-item" data-index="8" style="display:none;">
+            <div class="project-slide-card">
                 <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Proyecto 79</span>
-                        <span class="slide-num">08 / 13</span>
+                    <div class="card-top-bar">
+                        <span class="day-badge">PROYECTO 68</span>
+                        <span class="category-tag">Learn Craft AI &bull; Porta 6934</span>
                     </div>
-                    <h2 class="slide-title">🐶 SISTEMA PARA VETERINÁRIOS & MASCOTAS</h2>
-                    <div class="slide-body">
-                        <p>
-                            Plataforma <strong>VetiCraft AI SaaS</strong> para fichas de animais de estimação, vacinação, desparasitação, donos/tutores e plano de tratamentos clínicos.
-                        </p>
+                    <h2 class="slide-title"><i class="fa-solid fa-video"></i> CursoCraft AI - Plataforma de Cursos</h2>
+                    <p class="slide-desc">Plataforma LMS para publicação de cursos online, leitor de vídeo com lições estruturadas, acompanhamento do progresso do aluno e emissão automática de certificados.</p>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fa-solid fa-circle-play"></i> Leitor de Vídeo & Lições</div>
+                        <div class="feature-item"><i class="fa-solid fa-chart-line"></i> Progresso % do Aluno</div>
+                        <div class="feature-item"><i class="fa-solid fa-book-open"></i> Módulos & Conteúdos</div>
+                        <div class="feature-item"><i class="fa-solid fa-certificate"></i> Certificado de Conclusão</div>
                     </div>
                 </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Porta</strong> 6932</div>
-                    <div class="meta-item"><strong>Tecnologia</strong> Python + SQLite</div>
-                    <div class="meta-item"><strong>Recursos</strong> Vacinas & Lembretes</div>
+                <div class="tech-footer">
+                    <div class="tech-pills">
+                        <span class="tech-pill">Flask LMS</span>
+                        <span class="tech-pill">Video Player</span>
+                        <span class="tech-pill">Progress Tracker</span>
+                    </div>
+                    <a href="http://localhost:6934" target="_blank" class="port-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Porta 6934</a>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 9: Proyecto 80 -->
-        <div class="slide" data-slide="9">
-            <div class="slide-card">
+        <!-- PROYECTO 69 (Dia 69) -->
+        <div class="slide-item" data-index="9" style="display:none;">
+            <div class="project-slide-card">
                 <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Proyecto 80</span>
-                        <span class="slide-num">09 / 13</span>
+                    <div class="card-top-bar">
+                        <span class="day-badge">PROYECTO 69</span>
+                        <span class="category-tag">Certi Craft AI &bull; Porta 6935</span>
                     </div>
-                    <h2 class="slide-title">🎓 SISTEMA PARA ACADEMIAS & ALUNOS</h2>
-                    <div class="slide-body">
-                        <p>
-                            Plataforma <strong>AcademiaCraft AI SaaS</strong> para gestão de turmas, propinas, presenças por aula, corpo docente e pauta de qualificações académicas.
-                        </p>
+                    <h2 class="slide-title"><i class="fa-solid fa-award"></i> CertiCraft AI - Gerador de Certificados</h2>
+                    <p class="slide-desc">Plataforma para automação de diplomas e certificados digitais com modelos visuais elegantes, geração de código QR dinâmico, código hash inviolável e portal público de verificação.</p>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fa-solid fa-qrcode"></i> QR Code Dinâmico</div>
+                        <div class="feature-item"><i class="fa-solid fa-shield-check"></i> Portal de Validação Pública</div>
+                        <div class="feature-item"><i class="fa-solid fa-palette"></i> Plantillas Visuais EJAJ</div>
+                        <div class="feature-item"><i class="fa-solid fa-file-pdf"></i> Emissão PDF em Alta Resolução</div>
                     </div>
                 </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Porta</strong> 6933</div>
-                    <div class="meta-item"><strong>Tecnologia</strong> Flask + Export CSV</div>
-                    <div class="meta-item"><strong>Recursos</strong> Pauta de Notas & Propinas</div>
+                <div class="tech-footer">
+                    <div class="tech-pills">
+                        <span class="tech-pill">Flask</span>
+                        <span class="tech-pill">QR Generator</span>
+                        <span class="tech-pill">PDF Engine</span>
+                    </div>
+                    <a href="http://localhost:6935" target="_blank" class="port-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Porta 6935</a>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 10: Proyecto 81 -->
-        <div class="slide" data-slide="10">
-            <div class="slide-card">
+        <!-- PROYECTO 70 (Dia 70) -->
+        <div class="slide-item" data-index="10" style="display:none;">
+            <div class="project-slide-card">
                 <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Proyecto 81</span>
-                        <span class="slide-num">10 / 13</span>
+                    <div class="card-top-bar">
+                        <span class="day-badge">PROYECTO 70</span>
+                        <span class="category-tag">Event Craft AI &bull; Porta 6936 / Host 6970</span>
                     </div>
-                    <h2 class="slide-title">🎥 PLATAFORMA DE CURSOS & VÍDEOS</h2>
-                    <div class="slide-body">
-                        <p>
-                            Plataforma LMS <strong>CursoCraft AI SaaS</strong> com leitor de vídeos, módulos de lições, progresso do aluno por percentagem e emissão de certificados finais.
-                        </p>
-                    </div>
-                </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Porta</strong> 6934</div>
-                    <div class="meta-item"><strong>Tecnologia</strong> Flask LMS + Video Player</div>
-                    <div class="meta-item"><strong>Recursos</strong> Progresso & Aulas</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 11: Proyecto 82 -->
-        <div class="slide" data-slide="11">
-            <div class="slide-card">
-                <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Proyecto 82</span>
-                        <span class="slide-num">11 / 13</span>
-                    </div>
-                    <h2 class="slide-title">🏆 SISTEMA DE CERTIFICADOS & DIPLOMAS</h2>
-                    <div class="slide-body">
-                        <p>
-                            Plataforma <strong>CertiCraft AI SaaS</strong> para emissão de diplomas digitais com modelos visuais, código único inviolável, QR Code e validação pública.
-                        </p>
+                    <h2 class="slide-title"><i class="fa-solid fa-ticket-simple"></i> EventCraft AI - App de Eventos & Bilheteira</h2>
+                    <p class="slide-desc">Plataforma SaaS de gestão de eventos, bilheteira digital, controlo de acessos por QR Code com leitor laser em tempo real, diretório de organizadores e métricas de lotação dos recintos.</p>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fa-solid fa-calendar-days"></i> Catálogo de Eventos & Espetáculos</div>
+                        <div class="feature-item"><i class="fa-solid fa-ticket"></i> Bilheteira Digital & Lugares</div>
+                        <div class="feature-item"><i class="fa-solid fa-qrcode"></i> Leitor Check-in Live QR</div>
+                        <div class="feature-item"><i class="fa-solid fa-chart-pie"></i> Monitor de Lotação em Tempo Real</div>
                     </div>
                 </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Porta</strong> 6935</div>
-                    <div class="meta-item"><strong>Tecnologia</strong> QR Generator + PDF</div>
-                    <div class="meta-item"><strong>Recursos</strong> Autenticidade & Portal</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 12: Proyecto 83 -->
-        <div class="slide" data-slide="12">
-            <div class="slide-card">
-                <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Proyecto 83</span>
-                        <span class="slide-num">12 / 13</span>
+                <div class="tech-footer">
+                    <div class="tech-pills">
+                        <span class="tech-pill">Flask SaaS</span>
+                        <span class="tech-pill">Neon Theme</span>
+                        <span class="tech-pill">Live QR Check-in</span>
                     </div>
-                    <h2 class="slide-title">🎟️ APP DE EVENTOS & BILHETEIRA SAAS</h2>
-                    <div class="slide-body">
-                        <p>
-                            Plataforma <strong>EventCraft AI SaaS</strong> para bilheteira digital, controlo de acessos por QR Code à entrada do recinto e estatísticas de lotação em tempo real.
-                        </p>
-                    </div>
-                </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Porta</strong> 6936</div>
-                    <div class="meta-item"><strong>Tecnologia</strong> Neon Purple Theme + QR</div>
-                    <div class="meta-item"><strong>Recursos</strong> Check-in Live & Lotação</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 13: Locutor & Manifiesto Final -->
-        <div class="slide" data-slide="13">
-            <div class="slide-card">
-                <div>
-                    <div class="slide-header">
-                        <span class="slide-tag">Manifiesto & Locutor</span>
-                        <span class="slide-num">13 / 13</span>
-                    </div>
-                    <h2 class="slide-title">🎙️ EL DISCURSO OFICIAL DE EJAJ TECH</h2>
-                    <div class="slide-body">
-                        <p style="font-size:0.95rem; line-height:1.6; color:#e4e4e7;">
-                            ¿Alguna vez te has preguntado cuánto talento en el mundo se queda en la sombra simplemente por no tener acceso a la oportunidad adecuada? Hoy llegamos al hito del <strong>Proyecto 70</strong>, una meta que no mide ventas ni beneficios económicos, sino el poder transformador del conocimiento compartido de forma totalmente gratuita por la familia de <strong>EJAJ TECH</strong>. 🚀✨
-                        </p>
-                        <div class="slide-highlight-box">
-                            Si deseas aprender a programar desde cero o necesitas orientación para impulsar tus proyectos de forma 100% gratuita, síguenos en <strong>@ejajtech</strong> y envía la palabra <strong>"AJUDA"</strong> a nuestro WhatsApp o mensaje directo.
-                        </div>
-                    </div>
-                </div>
-                <div class="project-meta-grid">
-                    <div class="meta-item"><strong>Redes</strong> @ejajtech</div>
-                    <div class="meta-item"><strong>Palabra Clave</strong> "AJUDA"</div>
-                    <div class="meta-item"><strong>Asesoría</strong> 100% Gratuita</div>
+                    <a href="http://localhost:6970" target="_blank" class="port-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Host 6970</a>
                 </div>
             </div>
         </div>
@@ -650,80 +678,132 @@
 
     <!-- Controls Footer -->
     <div class="controls-footer">
-        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>
+        <button class="btn-action" id="prevBtn" onclick="changeSlide(-1)" disabled>
             <i class="fa-solid fa-chevron-left"></i> Anterior
         </button>
 
-        <div class="dots-container" id="dotsContainer">
-            <!-- Generated via JS -->
-        </div>
+        <div class="dots-bar" id="dotsBar"></div>
 
-        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
-            Siguiente <i class="fa-solid fa-chevron-right"></i>
+        <div class="counter-badge" id="counterBadge">01 / 10</div>
+
+        <button class="btn-action" id="autoBtn" onclick="toggleAutoPlay()">
+            <i class="fa-solid fa-play" id="autoIcon"></i> AutoPlay
         </button>
+
+        <button class="btn-action" id="nextBtn" onclick="changeSlide(1)">
+            Próximo <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Speech Card -->
+    <div class="speech-box">
+        <div class="speech-title">
+            <i class="fa-solid fa-microphone-lines"></i> EJAJ TECH MANIFESTO &bull; DISCURSO DO LOCUTOR
+        </div>
+        <div class="speech-text">
+            <p>
+                ¿Alguna vez te has preguntado cuánto talento en el mundo se queda en la sombra simplemente por no tener acceso a la oportunidad adecuada? Hoy llegamos al hito del <strong>Proyecto 70</strong>, una meta que no mide ventas ni beneficios económicos, sino el poder transformador del conocimiento compartido de forma totalmente gratuita por la familia de <strong>EJAJ TECH</strong>. 🚀✨
+            </p>
+            <p>
+                En <strong>EJAJ TECH</strong> no buscamos vender proyectos de software ni encerrar el saber detrás de licencias costosas. Nuestra verdadera vocación es abrir las puertas de par en par, enseñar a cada persona a construir sus propias herramientas y demostrar lo hermoso y humano que es el arte de la programación cuando se pone al servicio de la sociedad.
+            </p>
+            <p>
+                Creemos firmemente que, con práctica constante, humildad y dedicación, la programación no es solo una profesión: es una fuerza capaz de sanar realidades, optimizar clínicas, conectar personas, impulsar la educación y crear un impacto positivo que trasciende fronteras. Cada línea de código que enseñamos es una semilla de esperanza para el futuro.
+            </p>
+            <p>
+                Proyecto desarrollado con pasión y compromiso por EJAJ TECH. Si deseas aprender a programar desde cero, entender cómo se construyen estos sistemas o necesitas orientación para impulsar tus proyectos de forma 100% gratuita, síguenos en <strong>@ejajtech</strong> y envía la palabra <strong>"AJUDA"</strong> a nuestro WhatsApp o mensaje directo. Te enseñaremos con todo el corazón cómo lograrlo sin costo alguno.
+            </p>
+        </div>
     </div>
 
 </div>
 
 <script>
-    let currentSlide = 1;
-    const totalSlides = 13;
+    let currentIndex = 1;
+    const totalSlides = 10;
+    let autoPlayInterval = null;
 
     function initDots() {
-        const container = document.getElementById('dotsContainer');
-        container.innerHTML = '';
+        const bar = document.getElementById('dotsBar');
+        bar.innerHTML = '';
         for (let i = 1; i <= totalSlides; i++) {
             const dot = document.createElement('div');
-            dot.className = `dot ${i === 1 ? 'active' : ''}`;
+            dot.className = `dot-item ${i === 1 ? 'active' : ''}`;
             dot.onclick = () => goToSlide(i);
-            container.appendChild(dot);
+            bar.appendChild(dot);
         }
     }
 
-    function updateSlide() {
-        document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
-        const activeSlide = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
-        if (activeSlide) activeSlide.classList.add('active');
+    function updateView() {
+        document.querySelectorAll('.slide-item').forEach(el => {
+            el.style.display = 'none';
+        });
 
-        // Progress bar
-        const pct = (currentSlide / totalSlides) * 100;
-        document.getElementById('progressBar').style.width = pct + '%';
+        const activeSlide = document.querySelector(`.slide-item[data-index="${currentIndex}"]`);
+        if (activeSlide) activeSlide.style.display = 'block';
 
-        // Nav buttons
-        document.getElementById('prevBtn').disabled = (currentSlide === 1);
-        document.getElementById('nextBtn').disabled = (currentSlide === totalSlides);
+        // Update progress bar
+        const pct = (currentIndex / totalSlides) * 100;
+        document.getElementById('progressFill').style.width = pct + '%';
 
-        // Dots
-        document.querySelectorAll('.dot').forEach((d, idx) => {
-            if (idx + 1 === currentSlide) d.classList.add('active');
-            else d.classList.remove('active');
+        // Update counter
+        document.getElementById('counterBadge').innerText = `${currentIndex < 10 ? '0' + currentIndex : currentIndex} / 10`;
+
+        // Update Nav buttons
+        document.getElementById('prevBtn').disabled = (currentIndex === 1);
+        document.getElementById('nextBtn').disabled = (currentIndex === totalSlides);
+
+        // Update Dots
+        document.querySelectorAll('.dot-item').forEach((dot, idx) => {
+            if (idx + 1 === currentIndex) dot.classList.add('active');
+            else dot.classList.remove('active');
         });
     }
 
     function changeSlide(dir) {
-        currentSlide += dir;
-        if (currentSlide < 1) currentSlide = 1;
-        if (currentSlide > totalSlides) currentSlide = totalSlides;
-        updateSlide();
+        currentIndex += dir;
+        if (currentIndex < 1) currentIndex = 1;
+        if (currentIndex > totalSlides) currentIndex = totalSlides;
+        updateView();
     }
 
     function goToSlide(num) {
-        currentSlide = num;
-        updateSlide();
+        currentIndex = num;
+        updateView();
     }
 
-    // Keyboard Navigation
+    function toggleAutoPlay() {
+        const icon = document.getElementById('autoIcon');
+        const btn = document.getElementById('autoBtn');
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+            icon.className = 'fa-solid fa-play';
+            btn.style.background = '#121212';
+        } else {
+            autoPlayInterval = setInterval(() => {
+                if (currentIndex >= totalSlides) currentIndex = 1;
+                else currentIndex++;
+                updateView();
+            }, 3500);
+            icon.className = 'fa-solid fa-pause';
+            btn.style.background = '#ffffff';
+            btn.style.color = '#000000';
+        }
+    }
+
+    // Keyboard Arrow Keys
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight' || e.key === 'Space') {
-            if (currentSlide < totalSlides) changeSlide(1);
+            if (currentIndex < totalSlides) changeSlide(1);
         } else if (e.key === 'ArrowLeft') {
-            if (currentSlide > 1) changeSlide(-1);
+            if (currentIndex > 1) changeSlide(-1);
         }
     });
 
     document.addEventListener('DOMContentLoaded', () => {
         initDots();
-        updateSlide();
+        updateView();
     });
 </script>
 
