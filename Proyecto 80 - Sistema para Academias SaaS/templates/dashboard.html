@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% block title %}Painel Principal - AcademyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Gestão de Academias & Centros de Estudo 🎓</h2>
+    <p>Bem-vindo ao AcademyCraft AI. Visão geral dos cursos, alunos inscritos e atividades do dia.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-secondary" onclick="exportData('csv')">📥 Exportar Dados (CSV)</button>
+    <a href="/students" class="btn btn-primary">➕ Matricular Aluno</a>
+  </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon indigo">👨‍🎓</div>
+    <div class="stat-info">
+      <h3 id="stat-students">0</h3>
+      <p>Alunos Ativos</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon orange">👨‍🏫</div>
+    <div class="stat-info">
+      <h3 id="stat-teachers">0</h3>
+      <p>Professores / Formadores</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon emerald">📚</div>
+    <div class="stat-info">
+      <h3 id="stat-courses">0</h3>
+      <p>Cursos Ativos</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon sky">🏫</div>
+    <div class="stat-info">
+      <h3 id="stat-classes">0</h3>
+      <p>Aulas Agendadas</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon amber">💶</div>
+    <div class="stat-info">
+      <h3 id="stat-revenue">0.00 €</h3>
+      <p>Receita em Propinas</p>
+    </div>
+  </div>
+</div>
+
+<!-- Upcoming Classes Table -->
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>🏫 Próximas Aulas Agendadas</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="dash-search" onkeyup="filterTable('dash-search', 'dash-classes-table')" placeholder="Pesquisar por aula, curso, professor ou sala...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="dash-classes-table">
+      <thead>
+        <tr>
+          <th>Curso</th>
+          <th>Título da Aula / Sumário</th>
+          <th>Sala</th>
+          <th>Data & Horário</th>
+          <th>Professor</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="dash-classes-body">
+        <tr><td colspan="7" style="text-align:center;">A carregar aulas...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Activity Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+  <div class="content-card">
+    <div class="card-header">
+      <div class="card-title">📝 Últimas Avaliações & Notas (Escala 0-20)</div>
+    </div>
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>Avaliação</th>
+            <th>Nota</th>
+          </tr>
+        </thead>
+        <tbody id="dash-grades-body">
+          <tr><td colspan="3" style="text-align:center;">A carregar...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="card-header">
+      <div class="card-title">💳 Propinas e Pagamentos Pendentes</div>
+    </div>
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>Curso</th>
+            <th>Valor</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="dash-payments-body">
+          <tr><td colspan="4" style="text-align:center;">A carregar...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadDashboardData();
+});
+
+async function loadDashboardData() {
+  // Stats
+  try {
+    const res = await fetch('/api/stats');
+    const stats = await res.json();
+    document.getElementById('stat-students').innerText = stats.total_students;
+    document.getElementById('stat-teachers').innerText = stats.total_teachers;
+    document.getElementById('stat-courses').innerText = stats.active_courses;
+    document.getElementById('stat-classes').innerText = stats.upcoming_classes;
+    document.getElementById('stat-revenue').innerText = stats.total_revenue.toFixed(2) + ' €';
+  } catch (e) {
+    console.error('Erro ao carregar estatísticas:', e);
+  }
+
+  // Classes
+  loadDashboardClasses();
+  loadDashboardGrades();
+  loadDashboardPayments();
+}
+
+async function loadDashboardClasses() {
+  const tbody = document.getElementById('dash-classes-body');
+  try {
+    const res = await fetch('/api/classes');
+    const classes = await res.json();
+    if (classes.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhuma aula agendada.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = classes.map(cl => `
+      <tr>
+        <td><strong>${cl.course_code}</strong><br><small style="color:#64748B;">${cl.course_name}</small></td>
+        <td><strong>${cl.title}</strong></td>
+        <td><code>${cl.room}</code></td>
+        <td>${cl.class_date}<br><small>${cl.start_time} - ${cl.end_time}</small></td>
+        <td>${cl.teacher_name}</td>
+        <td><span class="badge badge-${cl.status.toLowerCase()}">${cl.status}</span></td>
+        <td>
+          ${cl.status === 'Agendada' ? `<button class="btn btn-sm btn-success" onclick="markClassConcluded(${cl.id})">Concluir Aula</button>` : ''}
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">Erro ao carregar aulas.</td></tr>';
+  }
+}
+
+async function markClassConcluded(id) {
+  try {
+    const res = await fetch(`/api/classes/update-status/${id}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({status: 'Concluída'})
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadDashboardClasses();
+    }
+  } catch (e) {
+    showToast('Erro ao atualizar aula.', 'error');
+  }
+}
+
+async function loadDashboardGrades() {
+  const tbody = document.getElementById('dash-grades-body');
+  try {
+    const res = await fetch('/api/grades');
+    const grades = await res.json();
+    const list = grades.slice(0, 5);
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Sem avaliações registadas.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(g => `
+      <tr>
+        <td><strong>${g.student_name}</strong></td>
+        <td>${g.evaluation_name}</td>
+        <td><strong style="color:var(--primary); font-size:1.05rem;">${g.score.toFixed(1)} / ${g.max_score.toFixed(0)}</strong></td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Erro ao carregar notas.</td></tr>';
+  }
+}
+
+async function loadDashboardPayments() {
+  const tbody = document.getElementById('dash-payments-body');
+  try {
+    const res = await fetch('/api/payments');
+    const payments = await res.json();
+    const pending = payments.filter(p => p.status === 'Pendente').slice(0, 5);
+    if (pending.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Sem propinas pendentes.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = pending.map(p => `
+      <tr>
+        <td><strong>${p.student_name}</strong></td>
+        <td>${p.course_name}</td>
+        <td><strong>${p.amount.toFixed(2)} €</strong></td>
+        <td><button class="btn btn-sm btn-success" onclick="markPaymentPaid(${p.id})">Liquidar</button></td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Erro ao carregar pagamentos.</td></tr>';
+  }
+}
+
+async function markPaymentPaid(id) {
+  try {
+    const res = await fetch(`/api/payments/update-status/${id}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({status: 'Pago'})
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadDashboardData();
+    }
+  } catch (e) {
+    showToast('Erro ao atualizar pagamento.', 'error');
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Aulas & Sumários - AcademyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Horários de Aulas & Sumários 🏫</h2>
+    <p>Agendamento de sessões de formação, atribuição de salas e registo de sumários letivos.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateClassModal()">➕ Agendar Nova Aula</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>🏫 Agenda de Aulas Letivas</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="class-search" onkeyup="filterTable('class-search', 'classes-table')" placeholder="Pesquisar por curso, sumário, sala ou professor...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="classes-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Curso</th>
+          <th>Título da Aula / Sumário</th>
+          <th>Sala</th>
+          <th>Data</th>
+          <th>Horário</th>
+          <th>Professor</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="classes-tbody">
+        <tr><td colspan="9" style="text-align:center;">A carregar agenda de aulas...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Agendar Aula -->
+<div class="modal-overlay" id="modal-class">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Agendar Nova Aula Letiva</h3>
+      <button class="modal-close" onclick="closeModal('modal-class')">&times;</button>
+    </div>
+    <form id="form-class" onsubmit="handleCreateClass(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="cl-course-select">Curso / Módulo *</label>
+            <select id="cl-course-select" required>
+              <option value="">A carregar cursos...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="cl-title">Título da Aula *</label>
+            <input type="text" id="cl-title" placeholder="Ex: Introdução a Funções e Parâmetros em Python" required>
+          </div>
+
+          <div class="form-group">
+            <label for="cl-room">Sala / Laboratório *</label>
+            <input type="text" id="cl-room" placeholder="Ex: Sala 101 - Computadores" required>
+          </div>
+
+          <div class="form-group">
+            <label for="cl-date">Data da Aula *</label>
+            <input type="date" id="cl-date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="cl-start">Hora de Início *</label>
+            <input type="time" id="cl-start" required>
+          </div>
+
+          <div class="form-group">
+            <label for="cl-end">Hora de Fim *</label>
+            <input type="time" id="cl-end" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="cl-summary">Sumário da Aula / Conteúdo Letivo</label>
+            <textarea id="cl-summary" rows="3" placeholder="Resumo dos temas lecionados, exercícios e trabalhos de casa..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-class')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Confirmar Agendamento</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadClasses();
+});
+
+async function loadClasses() {
+  const tbody = document.getElementById('classes-tbody');
+  try {
+    const res = await fetch('/api/classes');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Nenhuma aula agendada.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(cl => `
+      <tr>
+        <td>#${cl.id}</td>
+        <td><strong>${cl.course_code}</strong></td>
+        <td><strong>${cl.title}</strong><br><small style="color:#64748B;">${cl.summary || '-'}</small></td>
+        <td><code>${cl.room}</code></td>
+        <td>${cl.class_date}</td>
+        <td>${cl.start_time} - ${cl.end_time}</td>
+        <td>${cl.teacher_name}</td>
+        <td><span class="badge badge-${cl.status.toLowerCase()}">${cl.status}</span></td>
+        <td>
+          ${cl.status === 'Agendada' ? `<button class="btn btn-sm btn-success" onclick="updateClassState(${cl.id}, 'Concluída')">Concluir</button>` : ''}
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/classes', ${cl.id}, loadClasses)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Erro ao carregar aulas.</td></tr>';
+  }
+}
+
+function openCreateClassModal() {
+  loadCoursesSelect('cl-course-select');
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('cl-date').value = today;
+  document.getElementById('cl-start').value = '18:00';
+  document.getElementById('cl-end').value = '20:00';
+  openModal('modal-class');
+}
+
+async function updateClassState(id, status) {
+  try {
+    const res = await fetch(`/api/classes/update-status/${id}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({status})
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadClasses();
+    }
+  } catch (e) {
+    showToast('Erro ao atualizar aula.', 'error');
+  }
+}
+
+async function handleCreateClass(e) {
+  e.preventDefault();
+  const payload = {
+    course_id: document.getElementById('cl-course-select').value,
+    title: document.getElementById('cl-title').value,
+    room: document.getElementById('cl-room').value,
+    class_date: document.getElementById('cl-date').value,
+    start_time: document.getElementById('cl-start').value,
+    end_time: document.getElementById('cl-end').value,
+    summary: document.getElementById('cl-summary').value
+  };
+
+  try {
+    const res = await fetch('/api/classes/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-class');
+      document.getElementById('form-class').reset();
+      loadClasses();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

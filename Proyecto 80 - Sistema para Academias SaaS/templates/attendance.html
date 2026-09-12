@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}Assiduidade & Presenças - AcademyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Registo de Assiduidade & Presenças 📋</h2>
+    <p>Controlo de presenças dos alunos, faltas justificadas e injustificadas por aula e curso.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateAttendanceModal()">➕ Registar Presença / Falta</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📋 Histórico de Presenças nas Aulas</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="att-search" onkeyup="filterTable('att-search', 'att-table')" placeholder="Pesquisar por aluno, aula, curso ou estado...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="att-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Aluno</th>
+          <th>Aula / Sumário</th>
+          <th>Curso</th>
+          <th>Data</th>
+          <th>Estado de Assiduidade</th>
+          <th>Observações</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="att-tbody">
+        <tr><td colspan="8" style="text-align:center;">A carregar assiduidade...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Registar Presença -->
+<div class="modal-overlay" id="modal-attendance">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Registar Presença / Falta de Aluno</h3>
+      <button class="modal-close" onclick="closeModal('modal-attendance')">&times;</button>
+    </div>
+    <form id="form-attendance" onsubmit="handleCreateAttendance(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="att-class-select">Aula / Sumário *</label>
+            <select id="att-class-select" required>
+              <option value="">A carregar aulas...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="att-student-select">Aluno *</label>
+            <select id="att-student-select" required>
+              <option value="">A carregar alunos...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="att-status">Estado de Presença *</label>
+            <select id="att-status" required>
+              <option value="Presente">Presente</option>
+              <option value="Falta Justificada">Falta Justificada</option>
+              <option value="Falta Injustificada">Falta Injustificada</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="att-notes">Observações / Justificação</label>
+            <textarea id="att-notes" rows="2" placeholder="Motivo da falta, atestado médico apresentado..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-attendance')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Assiduidade</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadAttendance();
+});
+
+async function loadAttendance() {
+  const tbody = document.getElementById('att-tbody');
+  try {
+    const res = await fetch('/api/attendance');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum registo de assiduidade.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(a => `
+      <tr>
+        <td>#${a.id}</td>
+        <td><strong>${a.student_name}</strong></td>
+        <td>${a.class_title}</td>
+        <td><code>${a.course_name}</code></td>
+        <td>${a.class_date}</td>
+        <td><span class="badge badge-${a.status.toLowerCase().replace(' ', '-')}">${a.status}</span></td>
+        <td><small>${a.notes || '-'}</small></td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/attendance', ${a.id}, loadAttendance)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Erro ao carregar assiduidade.</td></tr>';
+  }
+}
+
+function openCreateAttendanceModal() {
+  loadClassesSelect('att-class-select');
+  loadStudentsSelect('att-student-select');
+  openModal('modal-attendance');
+}
+
+async function handleCreateAttendance(e) {
+  e.preventDefault();
+  const payload = {
+    class_id: document.getElementById('att-class-select').value,
+    student_id: document.getElementById('att-student-select').value,
+    status: document.getElementById('att-status').value,
+    notes: document.getElementById('att-notes').value
+  };
+
+  try {
+    const res = await fetch('/api/attendance/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-attendance');
+      document.getElementById('form-attendance').reset();
+      loadAttendance();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

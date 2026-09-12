@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Alumnos & Estudantes - AcademyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Diretório de Alunos & Estudantes 👨‍🎓</h2>
+    <p>Gestão de matriculados, contactos de encarregados de educação e dados fiscais (NIF).</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openModal('modal-student')">➕ Matricular Novo Aluno</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>👨‍🎓 Lista de Alunos Matriculados</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="student-search" onkeyup="filterTable('student-search', 'students-table')" placeholder="Pesquisar por nome, NIF, email ou encarregado...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="students-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome Completo</th>
+          <th>Contacto / Email</th>
+          <th>NIF</th>
+          <th>Data Nascimento</th>
+          <th>Encarregado de Educação</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="students-tbody">
+        <tr><td colspan="8" style="text-align:center;">A carregar lista de alunos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Matricular Aluno -->
+<div class="modal-overlay" id="modal-student">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Matricular Novo Aluno / Estudante</h3>
+      <button class="modal-close" onclick="closeModal('modal-student')">&times;</button>
+    </div>
+    <form id="form-student" onsubmit="handleCreateStudent(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="st-name">Nome Completo do Aluno *</label>
+            <input type="text" id="st-name" placeholder="Ex: Tomás Afonso Ferreira" required>
+          </div>
+
+          <div class="form-group">
+            <label for="st-email">Endereço de Email *</label>
+            <input type="email" id="st-email" placeholder="Ex: tomas@estudante.pt" required>
+          </div>
+
+          <div class="form-group">
+            <label for="st-phone">Telemóvel / Contacto *</label>
+            <input type="text" id="st-phone" placeholder="Ex: +351 919 876 543" required>
+          </div>
+
+          <div class="form-group">
+            <label for="st-nif">NIF (Número de Contribuinte) *</label>
+            <input type="text" id="st-nif" placeholder="Ex: 254987123" required>
+          </div>
+
+          <div class="form-group">
+            <label for="st-birth">Data de Nascimento *</label>
+            <input type="date" id="st-birth" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="st-guardian">Encarregado de Educação (Mãe/Pai/Tutor) *</label>
+            <input type="text" id="st-guardian" placeholder="Ex: Fernando Ferreira / Encarregado Autónomo" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="st-notes">Observações de Frequência / Necessidades Especiais</label>
+            <textarea id="st-notes" rows="2" placeholder="Preparação para exames, horários preferenciais..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-student')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Confirmar Matrícula</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadStudents();
+});
+
+async function loadStudents() {
+  const tbody = document.getElementById('students-tbody');
+  try {
+    const res = await fetch('/api/students');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum aluno registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(s => `
+      <tr>
+        <td>#${s.id}</td>
+        <td><strong>${s.name}</strong></td>
+        <td>${s.phone}<br><small><a href="mailto:${s.email}">${s.email}</a></small></td>
+        <td><code>${s.nif}</code></td>
+        <td>${s.birth_date}</td>
+        <td>${s.guardian_name || 'Próprio'}</td>
+        <td><span class="badge badge-ativo">${s.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/students', ${s.id}, loadStudents)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Erro ao carregar alunos.</td></tr>';
+  }
+}
+
+async function handleCreateStudent(e) {
+  e.preventDefault();
+  const payload = {
+    name: document.getElementById('st-name').value,
+    email: document.getElementById('st-email').value,
+    phone: document.getElementById('st-phone').value,
+    nif: document.getElementById('st-nif').value,
+    birth_date: document.getElementById('st-birth').value,
+    guardian_name: document.getElementById('st-guardian').value,
+    notes: document.getElementById('st-notes').value
+  };
+
+  try {
+    const res = await fetch('/api/students/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-student');
+      document.getElementById('form-student').reset();
+      loadStudents();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro de ligação ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

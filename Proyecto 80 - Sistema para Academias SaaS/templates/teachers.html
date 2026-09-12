@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Professores & Formadores - AcademyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Corpo Docente & Formadores 👨‍🏫</h2>
+    <p>Gestão de professores, qualificações académicas, valores horários e disciplinas ministradas.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openModal('modal-teacher')">➕ Cadastrar Professor</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>👨‍🏫 Lista de Professores & Formadores</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="teacher-search" onkeyup="filterTable('teacher-search', 'teachers-table')" placeholder="Pesquisar por nome, qualificação, NIF ou email...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="teachers-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome do Professor</th>
+          <th>Qualificação Académica</th>
+          <th>Contacto / Email</th>
+          <th>NIF</th>
+          <th>Valor Hora (€/h)</th>
+          <th>Observações</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="teachers-tbody">
+        <tr><td colspan="8" style="text-align:center;">A carregar professores...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Cadastrar Professor -->
+<div class="modal-overlay" id="modal-teacher">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Cadastrar Novo Professor / Formador</h3>
+      <button class="modal-close" onclick="closeModal('modal-teacher')">&times;</button>
+    </div>
+    <form id="form-teacher" onsubmit="handleCreateTeacher(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="tc-name">Nome Completo *</label>
+            <input type="text" id="tc-name" placeholder="Ex: Prof. Dra. Maria Inês Barreto" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="tc-qual">Qualificação Académica / Habilitações *</label>
+            <input type="text" id="tc-qual" placeholder="Ex: Doutoramento em Matemática Aplicada (ULisboa)" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tc-email">Endereço de Email *</label>
+            <input type="email" id="tc-email" placeholder="Ex: m.barreto@academia.pt" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tc-phone">Telemóvel / Contacto *</label>
+            <input type="text" id="tc-phone" placeholder="Ex: +351 913 245 876" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tc-nif">NIF Fiscal *</label>
+            <input type="text" id="tc-nif" placeholder="Ex: 219847109" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tc-rate">Valor Hora (€/h) *</label>
+            <input type="number" step="0.5" id="tc-rate" placeholder="Ex: 35.00" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="tc-notes">Notas & Especialidades</label>
+            <textarea id="tc-notes" rows="2" placeholder="Experiência em exames nacionais, certificações..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-teacher')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Professor</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadTeachers();
+});
+
+async function loadTeachers() {
+  const tbody = document.getElementById('teachers-tbody');
+  try {
+    const res = await fetch('/api/teachers');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum professor registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(t => `
+      <tr>
+        <td>#${t.id}</td>
+        <td><strong>${t.name}</strong></td>
+        <td>${t.qualification}</td>
+        <td>${t.phone}<br><small><a href="mailto:${t.email}">${t.email}</a></small></td>
+        <td><code>${t.nif}</code></td>
+        <td><strong>${t.hourly_rate.toFixed(2)} €/h</strong></td>
+        <td><small>${t.notes || '-'}</small></td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/teachers', ${t.id}, loadTeachers)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Erro ao carregar professores.</td></tr>';
+  }
+}
+
+async function handleCreateTeacher(e) {
+  e.preventDefault();
+  const payload = {
+    name: document.getElementById('tc-name').value,
+    qualification: document.getElementById('tc-qual').value,
+    email: document.getElementById('tc-email').value,
+    phone: document.getElementById('tc-phone').value,
+    nif: document.getElementById('tc-nif').value,
+    hourly_rate: document.getElementById('tc-rate').value,
+    notes: document.getElementById('tc-notes').value
+  };
+
+  try {
+    const res = await fetch('/api/teachers/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-teacher');
+      document.getElementById('form-teacher').reset();
+      loadTeachers();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro de ligação ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}
