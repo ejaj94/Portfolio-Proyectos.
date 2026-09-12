@@ -15,10 +15,15 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
+@app.route('/showcase')
+def showcase():
+    return render_template('showcase.html')
+
 @app.route('/')
 def dashboard():
     conn = get_db()
     cursor = conn.cursor()
+
 
     # Metrics Calculations
     cursor.execute("SELECT COUNT(*) as cnt FROM properties WHERE status = 'Disponível'")
@@ -460,5 +465,6 @@ def api_export_realty(fmt):
         )
 
 if __name__ == '__main__':
-    print("[Starting] EJAJ TECH - RealtyCraft AI SaaS na porta 6923...")
-    app.run(host='127.0.0.1', port=6923, debug=False, use_reloader=False)
+    print("[Starting] EJAJ TECH - RealtyCraft AI SaaS na porta 6970...")
+    app.run(host='127.0.0.1', port=6970, debug=False, use_reloader=False)
+
