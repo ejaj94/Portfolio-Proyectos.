@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Lembretes & Alertas - VetCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Lembretes & Alertas Automáticos 🔔</h2>
+    <p>Notificações por SMS e WhatsApp para vacinas caducadas, desparasitações e revisões clínicas.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateReminderModal()">➕ Criar Lembrete Automático</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>🔔 Gestão de Alertas ao Cliente</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="rem-search" onkeyup="filterTable('rem-search', 'rem-table')" placeholder="Pesquisar por assunto, animal ou dono...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="rem-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Animal</th>
+          <th>Proprietário & Contacto</th>
+          <th>Título do Lembrete</th>
+          <th>Tipo</th>
+          <th>Data Limite</th>
+          <th>Canal Notificação</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="rem-tbody">
+        <tr><td colspan="9" style="text-align:center;">A carregar lembretes...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Criar Lembrete -->
+<div class="modal-overlay" id="modal-reminder">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Agendar Lembrete Automático</h3>
+      <button class="modal-close" onclick="closeModal('modal-reminder')">&times;</button>
+    </div>
+    <form id="form-reminder" onsubmit="handleCreateReminder(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="rem-pet-select">Animal de Estimação *</label>
+            <select id="rem-pet-select" required>
+              <option value="">A carregar animais...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="rem-title">Título do Lembrete / Assunto *</label>
+            <input type="text" id="rem-title" placeholder="Ex: Reforço de Vacina Antirrábica, Desparasitação Externa" required>
+          </div>
+
+          <div class="form-group">
+            <label for="rem-type">Tipo de Alerta *</label>
+            <select id="rem-type" required>
+              <option value="Vacina">Vacina</option>
+              <option value="Desparasitação">Desparasitação</option>
+              <option value="Consulta">Consulta</option>
+              <option value="Exame">Exame</option>
+              <option value="Tratamento">Tratamento</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="rem-channel">Canal de Notificação *</label>
+            <select id="rem-channel" required>
+              <option value="SMS / WhatsApp">SMS / WhatsApp</option>
+              <option value="Email">Email</option>
+              <option value="Chamada">Chamada Telefónica</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="rem-target-date">Data Prevista para Disparo *</label>
+            <input type="date" id="rem-target-date" required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-reminder')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Ativar Lembrete</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadReminders();
+});
+
+async function loadReminders() {
+  const tbody = document.getElementById('rem-tbody');
+  try {
+    const res = await fetch('/api/reminders');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Nenhum lembrete registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(r => `
+      <tr>
+        <td>#${r.id}</td>
+        <td><strong>${r.pet_name}</strong></td>
+        <td>${r.owner_name}<br><small style="color:#64748B;">📞 ${r.owner_phone}</small></td>
+        <td><strong>${r.title}</strong></td>
+        <td><span class="badge badge-em-curso">${r.reminder_type}</span></td>
+        <td><strong>${r.target_date}</strong></td>
+        <td><code>${r.sent_channel}</code></td>
+        <td><span class="badge badge-${r.status.toLowerCase()}">${r.status}</span></td>
+        <td>
+          ${r.status === 'Pendente' ? `<button class="btn btn-sm btn-primary" onclick="sendReminderAlert(${r.id}, loadReminders)">🚀 Disparar Notificação</button>` : ''}
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/reminders', ${r.id}, loadReminders)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Erro ao carregar lembretes.</td></tr>';
+  }
+}
+
+function openCreateReminderModal() {
+  loadPetsSelect('rem-pet-select');
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('rem-target-date').value = today;
+  openModal('modal-reminder');
+}
+
+async function handleCreateReminder(e) {
+  e.preventDefault();
+  const payload = {
+    pet_id: document.getElementById('rem-pet-select').value,
+    title: document.getElementById('rem-title').value,
+    reminder_type: document.getElementById('rem-type').value,
+    sent_channel: document.getElementById('rem-channel').value,
+    target_date: document.getElementById('rem-target-date').value
+  };
+
+  try {
+    const res = await fetch('/api/reminders/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-reminder');
+      document.getElementById('form-reminder').reset();
+      loadReminders();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

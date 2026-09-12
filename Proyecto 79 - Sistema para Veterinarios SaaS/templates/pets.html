@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Animais de Estimação - VetCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Fichas de Animais de Estimação 🐶🐱</h2>
+    <p>Gestão de pacientes veterinários, registo de microchip e dados biométricos.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreatePetModal()">➕ Registar Novo Animal</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>🐾 Lista de Animais Pacientes</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="pets-search" onkeyup="filterTable('pets-search', 'pets-table')" placeholder="Pesquisar por nome, microchip, espécie ou dono...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="pets-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome do Animal</th>
+          <th>Espécie & Raça</th>
+          <th>Idade (Anos)</th>
+          <th>Peso (kg)</th>
+          <th>Microchip ID</th>
+          <th>Proprietário</th>
+          <th>Observações</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="pets-tbody">
+        <tr><td colspan="9" style="text-align:center;">A carregar lista de animais...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Criar Animal -->
+<div class="modal-overlay" id="modal-pet">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Registar Novo Animal de Estimação</h3>
+      <button class="modal-close" onclick="closeModal('modal-pet')">&times;</button>
+    </div>
+    <form id="form-pet" onsubmit="handleCreatePet(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="pet-owner-select">Proprietário (Dono) *</label>
+            <select id="pet-owner-select" required>
+              <option value="">A carregar proprietários...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="pet-name">Nome do Animal *</label>
+            <input type="text" id="pet-name" placeholder="Ex: Bobby, Thor, Mia" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pet-species">Espécie *</label>
+            <select id="pet-species" required>
+              <option value="Cão">Cão</option>
+              <option value="Gato">Gato</option>
+              <option value="Coelho">Coelho</option>
+              <option value="Ave">Ave</option>
+              <option value="Répteis">Répteis</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="pet-breed">Raça *</label>
+            <input type="text" id="pet-breed" placeholder="Ex: Rafeiro do Alentejo, Europeu Comum" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pet-gender">Género *</label>
+            <select id="pet-gender" required>
+              <option value="Macho">Macho</option>
+              <option value="Fêmea">Fêmea</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="pet-age">Idade (Anos) *</label>
+            <input type="number" step="0.1" id="pet-age" placeholder="Ex: 2.5" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pet-weight">Peso (kg) *</label>
+            <input type="number" step="0.1" id="pet-weight" placeholder="Ex: 14.2" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="pet-microchip">Microchip ID (15 dígitos) *</label>
+            <input type="text" id="pet-microchip" placeholder="Ex: 620098100998811" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="pet-notes">Observações Clínicas / Dieta</label>
+            <textarea id="pet-notes" rows="3" placeholder="Alergias, comportamento, medicação habitual..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-pet')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Ficha do Animal</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadPets();
+});
+
+async function loadPets() {
+  const tbody = document.getElementById('pets-tbody');
+  try {
+    const res = await fetch('/api/pets');
+    const pets = await res.json();
+    if (pets.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Nenhum animal registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = pets.map(p => `
+      <tr>
+        <td>#${p.id}</td>
+        <td><strong>${p.name}</strong> (${p.gender})</td>
+        <td>${p.species} - <em>${p.breed}</em></td>
+        <td>${p.age_years} anos</td>
+        <td>${p.weight_kg} kg</td>
+        <td><code>${p.microchip_id}</code></td>
+        <td><strong>${p.owner_name}</strong><br><small style="color:#64748B;">📞 ${p.owner_phone}</small></td>
+        <td><small>${p.notes || '-'}</small></td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/pets', ${p.id}, loadPets)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Erro ao carregar lista de animais.</td></tr>';
+  }
+}
+
+function openCreatePetModal() {
+  loadOwnersSelect('pet-owner-select');
+  openModal('modal-pet');
+}
+
+async function handleCreatePet(e) {
+  e.preventDefault();
+  const payload = {
+    owner_id: document.getElementById('pet-owner-select').value,
+    name: document.getElementById('pet-name').value,
+    species: document.getElementById('pet-species').value,
+    breed: document.getElementById('pet-breed').value,
+    gender: document.getElementById('pet-gender').value,
+    age_years: document.getElementById('pet-age').value,
+    weight_kg: document.getElementById('pet-weight').value,
+    microchip_id: document.getElementById('pet-microchip').value,
+    notes: document.getElementById('pet-notes').value
+  };
+
+  try {
+    const res = await fetch('/api/pets/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-pet');
+      document.getElementById('form-pet').reset();
+      loadPets();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro de ligação ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

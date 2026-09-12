@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Tratamentos & Cuidados - VetCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Tratamentos & Receitas Médicas 💊</h2>
+    <p>Acompanhamento terapêutico, posologia, prescrições de medicamentos e custos de tratamento.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateTreatmentModal()">➕ Registar Novo Tratamento</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>💊 Planos de Tratamento Ativos e Concluídos</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="treat-search" onkeyup="filterTable('treat-search', 'treat-table')" placeholder="Pesquisar por diagnóstico, fármaco ou animal...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="treat-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Animal</th>
+          <th>Proprietário</th>
+          <th>Diagnóstico</th>
+          <th>Prescrição Fármacos</th>
+          <th>Dosagem / Posologia</th>
+          <th>Período</th>
+          <th>Custo (€)</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="treat-tbody">
+        <tr><td colspan="10" style="text-align:center;">A carregar tratamentos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Criar Tratamento -->
+<div class="modal-overlay" id="modal-treatment">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Registar Novo Tratamento Médico</h3>
+      <button class="modal-close" onclick="closeModal('modal-treatment')">&times;</button>
+    </div>
+    <form id="form-treatment" onsubmit="handleCreateTreatment(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="treat-pet-select">Animal de Estimação *</label>
+            <select id="treat-pet-select" required>
+              <option value="">A carregar animais...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="treat-diagnosis">Diagnóstico Clínico *</label>
+            <input type="text" id="treat-diagnosis" placeholder="Ex: Otite Externa Bilateral, Dermatite Atópica" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="treat-prescription">Prescrição Médica / Fármacos *</label>
+            <input type="text" id="treat-prescription" placeholder="Ex: Ciprofloxacina gota + Oclacitinib 16mg" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="treat-dosage">Posologia / Instruções de Tomada *</label>
+            <input type="text" id="treat-dosage" placeholder="Ex: 1 comprimido de 12/12h durante 10 dias" required>
+          </div>
+
+          <div class="form-group">
+            <label for="treat-start">Data de Início *</label>
+            <input type="date" id="treat-start" required>
+          </div>
+
+          <div class="form-group">
+            <label for="treat-end">Data de Fim Prevista *</label>
+            <input type="date" id="treat-end" required>
+          </div>
+
+          <div class="form-group">
+            <label for="treat-cost">Custo Total (€) *</label>
+            <input type="number" step="0.01" id="treat-cost" placeholder="Ex: 45.50" required>
+          </div>
+
+          <div class="form-group">
+            <label for="treat-status">Estado *</label>
+            <select id="treat-status" required>
+              <option value="Em Curso">Em Curso</option>
+              <option value="Concluído">Concluído</option>
+              <option value="Interrompido">Interrompido</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-treatment')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Tratamento</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadTreatments();
+});
+
+async function loadTreatments() {
+  const tbody = document.getElementById('treat-tbody');
+  try {
+    const res = await fetch('/api/treatments');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">Nenhum tratamento registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(t => `
+      <tr>
+        <td>#${t.id}</td>
+        <td><strong>${t.pet_name}</strong> <small>(${t.pet_species})</small></td>
+        <td>${t.owner_name}</td>
+        <td><strong>${t.diagnosis}</strong></td>
+        <td>${t.prescription}</td>
+        <td><small>${t.dosage}</small></td>
+        <td>${t.start_date} à ${t.end_date}</td>
+        <td><strong>${t.cost.toFixed(2)} €</strong></td>
+        <td><span class="badge badge-${t.status.toLowerCase().replace(' ', '-')}">${t.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-success" onclick="updateTreatmentStatus(${t.id}, 'Concluído')">Concluir</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/treatments', ${t.id}, loadTreatments)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; color:red;">Erro ao carregar tratamentos.</td></tr>';
+  }
+}
+
+function openCreateTreatmentModal() {
+  loadPetsSelect('treat-pet-select');
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('treat-start').value = today;
+  openModal('modal-treatment');
+}
+
+async function updateTreatmentStatus(id, status) {
+  try {
+    const res = await fetch(`/api/treatments/update-status/${id}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({status})
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadTreatments();
+    }
+  } catch (e) {
+    showToast('Erro ao atualizar tratamento.', 'error');
+  }
+}
+
+async function handleCreateTreatment(e) {
+  e.preventDefault();
+  const payload = {
+    pet_id: document.getElementById('treat-pet-select').value,
+    diagnosis: document.getElementById('treat-diagnosis').value,
+    prescription: document.getElementById('treat-prescription').value,
+    dosage: document.getElementById('treat-dosage').value,
+    start_date: document.getElementById('treat-start').value,
+    end_date: document.getElementById('treat-end').value,
+    cost: document.getElementById('treat-cost').value,
+    status: document.getElementById('treat-status').value
+  };
+
+  try {
+    const res = await fetch('/api/treatments/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-treatment');
+      document.getElementById('form-treatment').reset();
+      loadTreatments();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro de ligação ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

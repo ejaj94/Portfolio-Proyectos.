@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}Marcações Veterinárias - VetCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Agenda de Marcações Veterinárias 📅</h2>
+    <p>Agendamento de consultas médicas, vacinação, cirurgia e exames diagnósticos.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateApptModal()">➕ Agendar Nova Consulta</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📅 Lista de Consultas Agendadas</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="appt-search" onkeyup="filterTable('appt-search', 'appt-table')" placeholder="Pesquisar por animal, veterinário ou data...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="appt-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Animal</th>
+          <th>Proprietário</th>
+          <th>Médico Veterinário</th>
+          <th>Data & Hora</th>
+          <th>Motivo</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="appt-tbody">
+        <tr><td colspan="8" style="text-align:center;">A carregar agendamentos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Criar Marcação -->
+<div class="modal-overlay" id="modal-appt">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Agendar Consulta Veterinária</h3>
+      <button class="modal-close" onclick="closeModal('modal-appt')">&times;</button>
+    </div>
+    <form id="form-appt" onsubmit="handleCreateAppt(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="appt-pet-select">Animal de Estimação *</label>
+            <select id="appt-pet-select" required>
+              <option value="">A carregar animais...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="appt-vet">Médico Veterinário *</label>
+            <select id="appt-vet" required>
+              <option value="Dra. Mariana Costa (Vet)">Dra. Mariana Costa (Vet)</option>
+              <option value="Dr. Ricardo Alvear (Vet)">Dr. Ricardo Alvear (Vet)</option>
+              <option value="Dr. Tiago Henriques (Vet)">Dr. Tiago Henriques (Vet)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="appt-date">Data da Consulta *</label>
+            <input type="date" id="appt-date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="appt-time">Hora *</label>
+            <input type="time" id="appt-time" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="appt-reason">Motivo da Consulta *</label>
+            <input type="text" id="appt-reason" placeholder="Ex: Consulta Geral, Vacinação Antirrábica, Ecografia" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="appt-notes">Instruções / Preparação prévia</label>
+            <textarea id="appt-notes" rows="2" placeholder="Jejum pré-operatório, recolha de amostra..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-appt')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Confirmar Agendamento</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadAppointmentsPage();
+});
+
+async function loadAppointmentsPage() {
+  const tbody = document.getElementById('appt-tbody');
+  try {
+    const res = await fetch('/api/appointments');
+    const appts = await res.json();
+    if (appts.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhuma consulta agendada.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = appts.map(a => `
+      <tr>
+        <td>#${a.id}</td>
+        <td><strong>${a.pet_name}</strong> <small>(${a.pet_species})</small></td>
+        <td>${a.owner_name}<br><small style="color:#64748B;">📞 ${a.owner_phone}</small></td>
+        <td>${a.vet_name}</td>
+        <td><strong>${a.date}</strong> às ${a.time}</td>
+        <td>${a.reason}</td>
+        <td><span class="badge badge-${a.status.toLowerCase().replace(' ', '-')}">${a.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-secondary" onclick="changeApptStatus(${a.id}, 'Confirmada')">Confirmar</button>
+          <button class="btn btn-sm btn-success" onclick="changeApptStatus(${a.id}, 'Concluída')">Concluir</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/appointments', ${a.id}, loadAppointmentsPage)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Erro ao carregar agendamentos.</td></tr>';
+  }
+}
+
+function openCreateApptModal() {
+  loadPetsSelect('appt-pet-select');
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('appt-date').value = today;
+  document.getElementById('appt-time').value = '10:00';
+  openModal('modal-appt');
+}
+
+async function changeApptStatus(id, status) {
+  try {
+    const res = await fetch(`/api/appointments/update-status/${id}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({status})
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadAppointmentsPage();
+    }
+  } catch (e) {
+    showToast('Erro ao alterar estado.', 'error');
+  }
+}
+
+async function handleCreateAppt(e) {
+  e.preventDefault();
+  const payload = {
+    pet_id: document.getElementById('appt-pet-select').value,
+    vet_name: document.getElementById('appt-vet').value,
+    date: document.getElementById('appt-date').value,
+    time: document.getElementById('appt-time').value,
+    reason: document.getElementById('appt-reason').value,
+    notes: document.getElementById('appt-notes').value
+  };
+
+  try {
+    const res = await fetch('/api/appointments/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-appt');
+      document.getElementById('form-appt').reset();
+      loadAppointmentsPage();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao contactar servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

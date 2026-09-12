@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico Clínico - VetCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Histórico Clínico Veterinário 📋</h2>
+    <p>Registo detalhado de ocorrências médicas, sintomatologia, diagnósticos e custos de consulta.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateHistoryModal()">➕ Nova Ficha de Consulta</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📋 Histórico de Atendimentos Veterinários</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="hist-search" onkeyup="filterTable('hist-search', 'hist-table')" placeholder="Pesquisar por sintoma, diagnóstico, animal ou veterinário...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="hist-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Animal</th>
+          <th>Proprietário</th>
+          <th>Data Consulta</th>
+          <th>Sintomas Apresentados</th>
+          <th>Diagnóstico Final</th>
+          <th>Médico Veterinário</th>
+          <th>Custo (€)</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="hist-tbody">
+        <tr><td colspan="9" style="text-align:center;">A carregar histórico clínico...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Criar Ficha Clínica -->
+<div class="modal-overlay" id="modal-history">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Nova Ficha Clínica Veterinária</h3>
+      <button class="modal-close" onclick="closeModal('modal-history')">&times;</button>
+    </div>
+    <form id="form-history" onsubmit="handleCreateHistory(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="hist-pet-select">Animal de Estimação *</label>
+            <select id="hist-pet-select" required>
+              <option value="">A carregar animais...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="hist-date">Data da Atendimento *</label>
+            <input type="date" id="hist-date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="hist-vet">Médico Veterinário *</label>
+            <input type="text" id="hist-vet" value="Dra. Mariana Costa" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="hist-symptoms">Sintomas Observados *</label>
+            <textarea id="hist-symptoms" rows="2" placeholder="Ex: Claudicação na pata posterior, febre, falta de apetite" required></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="hist-diagnosis">Diagnóstico & Conduta Médica *</label>
+            <textarea id="hist-diagnosis" rows="2" placeholder="Ex: Entorse articular ligeira, prescrita repouso e anti-inflamatório" required></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="hist-cost">Custo Total do Atendimento (€) *</label>
+            <input type="number" step="0.01" id="hist-cost" placeholder="Ex: 65.00" required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-history')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar no Histórico</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadHistory();
+});
+
+async function loadHistory() {
+  const tbody = document.getElementById('hist-tbody');
+  try {
+    const res = await fetch('/api/history');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Nenhum registo clínico encontrado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(h => `
+      <tr>
+        <td>#${h.id}</td>
+        <td><strong>${h.pet_name}</strong> <small>(${h.pet_species})</small></td>
+        <td>${h.owner_name}</td>
+        <td>${h.visit_date}</td>
+        <td><small>${h.symptoms}</small></td>
+        <td><strong>${h.diagnosis}</strong></td>
+        <td>${h.vet_signature}</td>
+        <td><strong>${h.total_cost.toFixed(2)} €</strong></td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/history', ${h.id}, loadHistory)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Erro ao carregar histórico.</td></tr>';
+  }
+}
+
+function openCreateHistoryModal() {
+  loadPetsSelect('hist-pet-select');
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('hist-date').value = today;
+  openModal('modal-history');
+}
+
+async function handleCreateHistory(e) {
+  e.preventDefault();
+  const payload = {
+    pet_id: document.getElementById('hist-pet-select').value,
+    visit_date: document.getElementById('hist-date').value,
+    vet_signature: document.getElementById('hist-vet').value,
+    symptoms: document.getElementById('hist-symptoms').value,
+    diagnosis: document.getElementById('hist-diagnosis').value,
+    total_cost: document.getElementById('hist-cost').value
+  };
+
+  try {
+    const res = await fetch('/api/history/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-history');
+      document.getElementById('form-history').reset();
+      loadHistory();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

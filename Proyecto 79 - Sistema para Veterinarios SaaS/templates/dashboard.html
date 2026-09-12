@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block title %}Painel Principal - VetCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Painel de Gestão Veterinária 🐾</h2>
+    <p>Bem-vindo ao VetCraft AI. Visão geral da atividade clínica e pacientes do dia.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-secondary" onclick="exportData('csv')">📥 Exportar Dados (CSV)</button>
+    <a href="/appointments" class="btn btn-primary">➕ Nova Marcação</a>
+  </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon navy">🐶</div>
+    <div class="stat-info">
+      <h3 id="stat-pets">0</h3>
+      <p>Animais Registados</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon orange">👤</div>
+    <div class="stat-info">
+      <h3 id="stat-owners">0</h3>
+      <p>Proprietários Ativos</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon emerald">📅</div>
+    <div class="stat-info">
+      <h3 id="stat-appointments">0</h3>
+      <p>Marcações Ativas</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon amber">🔔</div>
+    <div class="stat-info">
+      <h3 id="stat-reminders">0</h3>
+      <p>Lembretes Pendentes</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon rose">💉</div>
+    <div class="stat-info">
+      <h3 id="stat-vaccines">0</h3>
+      <p>Vacinas Expiradas</p>
+    </div>
+  </div>
+</div>
+
+<!-- Appointments Card -->
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📅 Próximas Marcações Veterinárias</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="dashboard-search" onkeyup="filterTable('dashboard-search', 'dashboard-appt-table')" placeholder="Pesquisar por animal, proprietário ou veterinário...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="dashboard-appt-table">
+      <thead>
+        <tr>
+          <th>Animal</th>
+          <th>Proprietário</th>
+          <th>Veterinário</th>
+          <th>Data & Hora</th>
+          <th>Motivo da Consulta</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="dashboard-appt-body">
+        <tr><td colspan="7" style="text-align:center;">A carregar marcações...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Recent Activity Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+  <div class="content-card">
+    <div class="card-header">
+      <div class="card-title">💊 Tratamentos em Curso</div>
+    </div>
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Animal</th>
+            <th>Diagnóstico</th>
+            <th>Custo</th>
+          </tr>
+        </thead>
+        <tbody id="dashboard-treatments-body">
+          <tr><td colspan="3" style="text-align:center;">A carregar...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="card-header">
+      <div class="card-title">🔔 Lembretes Automáticos Pendentes</div>
+    </div>
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Animal</th>
+            <th>Assunto</th>
+            <th>Data Limite</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="dashboard-reminders-body">
+          <tr><td colspan="4" style="text-align:center;">A carregar...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  // Load Stats
+  try {
+    const res = await fetch('/api/stats');
+    const stats = await res.json();
+    document.getElementById('stat-pets').innerText = stats.total_pets;
+    document.getElementById('stat-owners').innerText = stats.total_owners;
+    document.getElementById('stat-appointments').innerText = stats.active_appointments;
+    document.getElementById('stat-reminders').innerText = stats.pending_reminders;
+    document.getElementById('stat-vaccines').innerText = stats.expired_vaccines;
+  } catch (e) {
+    console.error('Erro ao carregar estatísticas:', e);
+  }
+
+  // Load Appointments Table
+  loadDashboardAppointments();
+  loadDashboardTreatments();
+  loadDashboardReminders();
+});
+
+async function loadDashboardAppointments() {
+  const tbody = document.getElementById('dashboard-appt-body');
+  try {
+    const res = await fetch('/api/appointments');
+    const appts = await res.json();
+    if (appts.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhuma marcação registada.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = appts.map(a => `
+      <tr>
+        <td><strong>${a.pet_name}</strong> <small style="color:#64748B;">(${a.pet_species})</small></td>
+        <td>${a.owner_name} <br><small style="color:#64748B;">${a.owner_phone}</small></td>
+        <td>${a.vet_name}</td>
+        <td>${a.date} às ${a.time}</td>
+        <td>${a.reason}</td>
+        <td><span class="badge badge-${a.status.toLowerCase().replace(' ', '-')}">${a.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-secondary" onclick="updateApptStatus(${a.id}, 'Confirmada')">Confirmar</button>
+          <button class="btn btn-sm btn-success" onclick="updateApptStatus(${a.id}, 'Concluída')">Concluir</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">Erro ao carregar marcações.</td></tr>';
+  }
+}
+
+async function updateApptStatus(id, newStatus) {
+  try {
+    const res = await fetch(`/api/appointments/update-status/${id}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({status: newStatus})
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadDashboardAppointments();
+    }
+  } catch (e) {
+    showToast('Erro ao atualizar marcação.', 'error');
+  }
+}
+
+async function loadDashboardTreatments() {
+  const tbody = document.getElementById('dashboard-treatments-body');
+  try {
+    const res = await fetch('/api/treatments');
+    const treatments = await res.json();
+    const active = treatments.filter(t => t.status === 'Em Curso').slice(0, 5);
+    if (active.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Sem tratamentos ativos.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = active.map(t => `
+      <tr>
+        <td><strong>${t.pet_name}</strong></td>
+        <td>${t.diagnosis}</td>
+        <td><strong>${t.cost.toFixed(2)} €</strong></td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Erro ao carregar tratamentos.</td></tr>';
+  }
+}
+
+async function loadDashboardReminders() {
+  const tbody = document.getElementById('dashboard-reminders-body');
+  try {
+    const res = await fetch('/api/reminders');
+    const reminders = await res.json();
+    const pending = reminders.filter(r => r.status === 'Pendente').slice(0, 5);
+    if (pending.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Sem lembretes pendentes.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = pending.map(r => `
+      <tr>
+        <td><strong>${r.pet_name}</strong></td>
+        <td>${r.title}</td>
+        <td>${r.target_date}</td>
+        <td><button class="btn btn-sm btn-primary" onclick="sendReminderAlert(${r.id}, loadDashboardReminders)">Notificar</button></td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Erro ao carregar lembretes.</td></tr>';
+  }
+}
+</script>
+{% endblock %}

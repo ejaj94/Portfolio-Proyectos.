@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Proprietários - VetCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Diretório de Proprietários 👤</h2>
+    <p>Gestão de clientes, contactos de emergência, moradas e NIF em Portugal.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openModal('modal-owner')">➕ Registar Proprietário</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>👤 Lista de Clientes e Proprietários</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="owners-search" onkeyup="filterTable('owners-search', 'owners-table')" placeholder="Pesquisar por nome, NIF, email ou telefone...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="owners-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome Completo</th>
+          <th>Contacto Telefónico</th>
+          <th>Email</th>
+          <th>Morada</th>
+          <th>NIF</th>
+          <th>Notas</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="owners-tbody">
+        <tr><td colspan="8" style="text-align:center;">A carregar lista de proprietários...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Criar Proprietário -->
+<div class="modal-overlay" id="modal-owner">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Registar Novo Proprietário</h3>
+      <button class="modal-close" onclick="closeModal('modal-owner')">&times;</button>
+    </div>
+    <form id="form-owner" onsubmit="handleCreateOwner(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="owner-name">Nome Completo *</label>
+            <input type="text" id="owner-name" placeholder="Ex: Dra. Sofia Mendonça, João Ribeiro" required>
+          </div>
+
+          <div class="form-group">
+            <label for="owner-phone">Telefone / Telemóvel *</label>
+            <input type="text" id="owner-phone" placeholder="Ex: +351 912 345 678" required>
+          </div>
+
+          <div class="form-group">
+            <label for="owner-nif">NIF (Número de Contribuinte) *</label>
+            <input type="text" id="owner-nif" placeholder="Ex: 239847102" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="owner-email">Endereço de Email *</label>
+            <input type="email" id="owner-email" placeholder="Ex: cliente@email.pt" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="owner-address">Morada Completa *</label>
+            <input type="text" id="owner-address" placeholder="Ex: Av. da Liberdade, 102, Lisboa" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="owner-notes">Notas do Cliente</label>
+            <textarea id="owner-notes" rows="2" placeholder="Preferências de contacto, plano de saúde associado..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-owner')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Proprietário</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadOwners();
+});
+
+async function loadOwners() {
+  const tbody = document.getElementById('owners-tbody');
+  try {
+    const res = await fetch('/api/owners');
+    const owners = await res.json();
+    if (owners.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum proprietário registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = owners.map(o => `
+      <tr>
+        <td>#${o.id}</td>
+        <td><strong>${o.name}</strong></td>
+        <td><code>${o.phone}</code></td>
+        <td><a href="mailto:${o.email}">${o.email}</a></td>
+        <td>${o.address}</td>
+        <td><code>${o.nif}</code></td>
+        <td><small>${o.notes || '-'}</small></td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/owners', ${o.id}, loadOwners)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Erro ao carregar proprietários.</td></tr>';
+  }
+}
+
+async function handleCreateOwner(e) {
+  e.preventDefault();
+  const payload = {
+    name: document.getElementById('owner-name').value,
+    phone: document.getElementById('owner-phone').value,
+    email: document.getElementById('owner-email').value,
+    address: document.getElementById('owner-address').value,
+    nif: document.getElementById('owner-nif').value,
+    notes: document.getElementById('owner-notes').value
+  };
+
+  try {
+    const res = await fetch('/api/owners/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-owner');
+      document.getElementById('form-owner').reset();
+      loadOwners();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao contactar servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

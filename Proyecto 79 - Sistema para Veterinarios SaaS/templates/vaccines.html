@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Boletim de Vacinação - VetCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Boletim Sanitário & Vacinação 💉</h2>
+    <p>Controlo de lotes de vacinas, datas de administração e caducidade de imunizações.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openCreateVaccineModal()">➕ Registar Vacina Administrada</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>💉 Histórico de Vacinas Registadas</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="vaccine-search" onkeyup="filterTable('vaccine-search', 'vaccine-table')" placeholder="Pesquisar por vacina, lote, animal ou veterinário...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="vaccine-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Animal</th>
+          <th>Proprietário</th>
+          <th>Vacina / Imunização</th>
+          <th>Nº de Lote</th>
+          <th>Data Aplicação</th>
+          <th>Próximo Reforço</th>
+          <th>Veterinário</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="vaccine-tbody">
+        <tr><td colspan="10" style="text-align:center;">A carregar boletins de vacinação...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Criar Vacina -->
+<div class="modal-overlay" id="modal-vaccine">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Registar Nova Vacina</h3>
+      <button class="modal-close" onclick="closeModal('modal-vaccine')">&times;</button>
+    </div>
+    <form id="form-vaccine" onsubmit="handleCreateVaccine(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="vac-pet-select">Animal de Estimação *</label>
+            <select id="vac-pet-select" required>
+              <option value="">A carregar animais...</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="vac-name">Nome da Vacina *</label>
+            <input type="text" id="vac-name" placeholder="Ex: Nobivac DHPPi + Lepto, Purevax RCP" required>
+          </div>
+
+          <div class="form-group">
+            <label for="vac-batch">Número de Lote *</label>
+            <input type="text" id="vac-batch" placeholder="Ex: BATCH-PT-9842" required>
+          </div>
+
+          <div class="form-group">
+            <label for="vac-vet">Veterinário Responsável *</label>
+            <input type="text" id="vac-vet" value="Dra. Mariana Costa" required>
+          </div>
+
+          <div class="form-group">
+            <label for="vac-admin-date">Data de Aplicação *</label>
+            <input type="date" id="vac-admin-date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="vac-due-date">Data Próximo Reforço *</label>
+            <input type="date" id="vac-due-date" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="vac-status">Estado Sanitário *</label>
+            <select id="vac-status" required>
+              <option value="Válida">Válida</option>
+              <option value="Expirada">Expirada</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="vac-notes">Observações</label>
+            <textarea id="vac-notes" rows="2" placeholder="Reações, local de injeção..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-vaccine')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Vacina no Boletim</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadVaccines();
+});
+
+async function loadVaccines() {
+  const tbody = document.getElementById('vaccine-tbody');
+  try {
+    const res = await fetch('/api/vaccines');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">Nenhuma vacina registada.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(v => `
+      <tr>
+        <td>#${v.id}</td>
+        <td><strong>${v.pet_name}</strong> <small>(${v.pet_species})</small></td>
+        <td>${v.owner_name}</td>
+        <td><strong>${v.vaccine_name}</strong></td>
+        <td><code>${v.batch_number}</code></td>
+        <td>${v.admin_date}</td>
+        <td><strong>${v.next_due_date}</strong></td>
+        <td>${v.vet_name}</td>
+        <td><span class="badge badge-${v.status.toLowerCase()}">${v.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/vaccines', ${v.id}, loadVaccines)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; color:red;">Erro ao carregar vacinas.</td></tr>';
+  }
+}
+
+function openCreateVaccineModal() {
+  loadPetsSelect('vac-pet-select');
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('vac-admin-date').value = today;
+  openModal('modal-vaccine');
+}
+
+async function handleCreateVaccine(e) {
+  e.preventDefault();
+  const payload = {
+    pet_id: document.getElementById('vac-pet-select').value,
+    vaccine_name: document.getElementById('vac-name').value,
+    batch_number: document.getElementById('vac-batch').value,
+    vet_name: document.getElementById('vac-vet').value,
+    admin_date: document.getElementById('vac-admin-date').value,
+    next_due_date: document.getElementById('vac-due-date').value,
+    status: document.getElementById('vac-status').value,
+    notes: document.getElementById('vac-notes').value
+  };
+
+  try {
+    const res = await fetch('/api/vaccines/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-vaccine');
+      document.getElementById('form-vaccine').reset();
+      loadVaccines();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

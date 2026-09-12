@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}VetCraft AI SaaS{% endblock %} - Gestão Veterinária Inteligente</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">🐾</div>
+        <div class="sidebar-title">
+          <h1>VetCraft AI</h1>
+          <span>SaaS Veterinário</span>
+        </div>
+      </div>
+
+      <ul class="nav-list">
+        <li class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+          <a href="/">
+            <span class="nav-icon">📊</span>
+            <span>Painel Principal</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'pets' %}active{% endif %}">
+          <a href="/pets">
+            <span class="nav-icon">🐶</span>
+            <span>Animais</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'owners' %}active{% endif %}">
+          <a href="/owners">
+            <span class="nav-icon">👤</span>
+            <span>Proprietários</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'appointments' %}active{% endif %}">
+          <a href="/appointments">
+            <span class="nav-icon">📅</span>
+            <span>Marcações</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'vaccines' %}active{% endif %}">
+          <a href="/vaccines">
+            <span class="nav-icon">💉</span>
+            <span>Vacinação</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'treatments' %}active{% endif %}">
+          <a href="/treatments">
+            <span class="nav-icon">💊</span>
+            <span>Tratamentos</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'reminders' %}active{% endif %}">
+          <a href="/reminders">
+            <span class="nav-icon">🔔</span>
+            <span>Lembretes</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'history' %}active{% endif %}">
+          <a href="/history">
+            <span class="nav-icon">📋</span>
+            <span>Histórico Clínico</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <strong>Clínica VetCraft AI</strong>
+        <span>Versão 2.4 - Portugal</span>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/vet.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
