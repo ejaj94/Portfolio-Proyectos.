@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Painel Principal - CertiCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Sistema de Certificados & Diplomas Digitais 🏆</h2>
+    <p>Bem-vindo ao CertiCraft AI. Emissão com código QR, hash de verificação e download em PDF.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-secondary" onclick="exportData('csv')">📥 Exportar Dados (CSV)</button>
+    <a href="/certificates" class="btn btn-primary">➕ Emitir Certificado</a>
+  </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon purple">📜</div>
+    <div class="stat-info">
+      <h3 id="stat-valid">0</h3>
+      <p>Certificados Válidos</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon magenta">👤</div>
+    <div class="stat-info">
+      <h3 id="stat-recipients">0</h3>
+      <p>Formandos Registados</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon gold">🎨</div>
+    <div class="stat-info">
+      <h3 id="stat-templates">0</h3>
+      <p>Modelos Ativos</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon emerald">🔍</div>
+    <div class="stat-info">
+      <h3 id="stat-verifications">0</h3>
+      <p>Verificações Realizadas</p>
+    </div>
+  </div>
+</div>
+
+<!-- Certificate Preview Badge Component -->
+<div class="certificate-preview-box">
+  <div class="certificate-seal">🎖️</div>
+  <h2 style="font-family:'Playfair Display', serif; font-size: 2rem; color: var(--primary); font-weight: 700;">DIPLOMA DE EXCELÊNCIA ACADÉMICA</h2>
+  <p style="color: #64748B; margin-top: 0.5rem; font-size: 0.95rem;">Certificamos que o formando abaixo identificado concluiu com distinção a formação profissional.</p>
+  <div style="margin: 1.5rem 0; padding: 1rem; background: rgba(124, 58, 237, 0.05); border-radius: 12px;">
+    <h3 style="font-size: 1.4rem; color: var(--accent); font-weight: 800;" id="preview-name">Dra. Sofia Maria Mendonça</h3>
+    <p style="font-size: 1rem; font-weight: 600; color: var(--text-main); margin-top: 0.3rem;" id="preview-course">Pós-Graduação em Gestão de Projetos & Inteligência Artificial</p>
+  </div>
+  <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <small style="color: #64748B; display: block;">Código de Autenticidade Único:</small>
+      <code style="font-weight: bold; color: var(--primary); font-size: 1rem;" id="preview-code">CERT-2026-PT-984210</code>
+    </div>
+    <div>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=CERT-2026-PT-984210" alt="Código QR" style="border-radius: 8px; border: 1px solid #E2E8F0;">
+    </div>
+  </div>
+</div>
+
+<!-- Recent Certificates Table -->
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📜 Certificados Emitidos Recentemente</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="dash-search" onkeyup="filterTable('dash-search', 'dash-certs-table')" placeholder="Pesquisar por formando, curso ou código...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="dash-certs-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Formando / NOME</th>
+          <th>NIF</th>
+          <th>Curso / Formação</th>
+          <th>Código de Verificação Único</th>
+          <th>Data Emissão</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="dash-certs-body">
+        <tr><td colspan="8" style="text-align:center;">A carregar certificados...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadDashboardData();
+});
+
+async function loadDashboardData() {
+  // Stats
+  try {
+    const res = await fetch('/api/stats');
+    const stats = await res.json();
+    document.getElementById('stat-valid').innerText = stats.valid_certificates;
+    document.getElementById('stat-recipients').innerText = stats.total_recipients;
+    document.getElementById('stat-templates').innerText = stats.active_templates;
+    document.getElementById('stat-verifications').innerText = stats.total_verifications;
+  } catch (e) {
+    console.error('Erro ao carregar estatísticas:', e);
+  }
+
+  loadDashboardCertificates();
+}
+
+async function loadDashboardCertificates() {
+  const tbody = document.getElementById('dash-certs-body');
+  try {
+    const res = await fetch('/api/certificates');
+    const certs = await res.json();
+    if (certs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum certificado emitido.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = certs.map(c => `
+      <tr>
+        <td>#${c.id}</td>
+        <td><strong>${c.recipient_name}</strong></td>
+        <td><code>${c.recipient_nif}</code></td>
+        <td>${c.course_title}</td>
+        <td><code style="color:var(--primary); font-weight:bold;">${c.verification_code}</code></td>
+        <td>${c.issue_date}</td>
+        <td><span class="badge badge-válido">${c.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-secondary" onclick="downloadPDF('${c.verification_code}')">📄 PDF</button>
+          <a href="/verify?code=${c.verification_code}" class="btn btn-sm btn-primary">🔍 Validar</a>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Erro ao carregar certificados.</td></tr>';
+  }
+}
+</script>
+{% endblock %}

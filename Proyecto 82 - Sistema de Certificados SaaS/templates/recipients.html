@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Formandos & Nomes - CertiCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Diretório de Formandos & Nomes 👤</h2>
+    <p>Cadastramento de diplomados, empresas parceiras, dados fiscais (NIF) e contactos.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openModal('modal-recipient')">➕ Cadastrar Formando</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>👤 Lista de Formandos & Destinatários</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="recip-search" onkeyup="filterTable('recip-search', 'recipients-table')" placeholder="Pesquisar por nome, NIF, email ou empresa...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="recipients-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome Completo (Impresso no Diploma)</th>
+          <th>Email</th>
+          <th>NIF Fiscal</th>
+          <th>Telemóvel</th>
+          <th>Organização / Empresa</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="recipients-tbody">
+        <tr><td colspan="7" style="text-align:center;">A carregar formandos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Cadastrar Formando -->
+<div class="modal-overlay" id="modal-recipient">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Cadastrar Novo Formando</h3>
+      <button class="modal-close" onclick="closeModal('modal-recipient')">&times;</button>
+    </div>
+    <form id="form-recipient" onsubmit="handleCreateRecipient(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="rc-name">Nome Completo (Tal como figurará no certificado) *</label>
+            <input type="text" id="rc-name" placeholder="Ex: Dra. Sofia Maria Mendonça" required>
+          </div>
+
+          <div class="form-group">
+            <label for="rc-email">Endereço de Email *</label>
+            <input type="email" id="rc-email" placeholder="Ex: sofia@empresa.pt" required>
+          </div>
+
+          <div class="form-group">
+            <label for="rc-nif">NIF Fiscal *</label>
+            <input type="text" id="rc-nif" placeholder="Ex: 239847109" required>
+          </div>
+
+          <div class="form-group">
+            <label for="rc-phone">Telemóvel *</label>
+            <input type="text" id="rc-phone" placeholder="Ex: +351 912 345 678" required>
+          </div>
+
+          <div class="form-group">
+            <label for="rc-org">Organização / Empresa *</label>
+            <input type="text" id="rc-org" placeholder="Ex: TechCorp Portugal / Particular" required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-recipient')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Formando</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadRecipients();
+});
+
+async function loadRecipients() {
+  const tbody = document.getElementById('recipients-tbody');
+  try {
+    const res = await fetch('/api/recipients');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhum formando registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(r => `
+      <tr>
+        <td>#${r.id}</td>
+        <td><strong>${r.full_name}</strong></td>
+        <td><a href="mailto:${r.email}">${r.email}</a></td>
+        <td><code>${r.nif}</code></td>
+        <td>${r.phone}</td>
+        <td>${r.organization}</td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/recipients', ${r.id}, loadRecipients)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">Erro ao carregar formandos.</td></tr>';
+  }
+}
+
+async function handleCreateRecipient(e) {
+  e.preventDefault();
+  const payload = {
+    full_name: document.getElementById('rc-name').value,
+    email: document.getElementById('rc-email').value,
+    nif: document.getElementById('rc-nif').value,
+    phone: document.getElementById('rc-phone').value,
+    organization: document.getElementById('rc-org').value
+  };
+
+  try {
+    const res = await fetch('/api/recipients/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-recipient');
+      document.getElementById('form-recipient').reset();
+      loadRecipients();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}

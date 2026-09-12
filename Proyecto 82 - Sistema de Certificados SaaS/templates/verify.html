@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Validação de Código & QR - CertiCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Portal de Validação de Certificados 🔍</h2>
+    <p>Verificação pública de autenticidade através do código único ou leitura de QR Code.</p>
+  </div>
+</div>
+
+<!-- Search Verification Bar -->
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>🔍 Introduzir Código de Verificação ou Hash</span>
+    </div>
+  </div>
+  <form onsubmit="handleVerifyCode(event)" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+    <input type="text" id="verify-input-code" style="flex:1; padding:0.85rem 1.25rem; font-size:1.1rem; border-radius:10px; border:2px solid var(--primary); outline:none;" placeholder="Ex: CERT-2026-PT-984210" required>
+    <button type="submit" class="btn btn-primary" style="padding:0.85rem 2rem; font-size:1rem;">🔍 Validar Autenticidade</button>
+  </form>
+</div>
+
+<!-- Result Display Area -->
+<div class="content-card" id="verify-result-card" style="display: none;">
+  <div class="card-header">
+    <div class="card-title">
+      <span id="verify-badge"></span>
+    </div>
+  </div>
+  <div id="verify-result-content"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get('code');
+  if (code) {
+    document.getElementById('verify-input-code').value = code;
+    fetchVerification(code);
+  }
+});
+
+function handleVerifyCode(e) {
+  e.preventDefault();
+  const code = document.getElementById('verify-input-code').value.trim();
+  if (code) {
+    fetchVerification(code);
+  }
+}
+
+async function fetchVerification(code) {
+  const card = document.getElementById('verify-result-card');
+  const badge = document.getElementById('verify-badge');
+  const content = document.getElementById('verify-result-content');
+
+  card.style.display = 'block';
+  content.innerHTML = '<p style="text-align:center; padding:1.5rem;">A consultar registos de certificação...</p>';
+
+  try {
+    const res = await fetch(`/api/certificates/verify/${encodeURIComponent(code)}`);
+    const data = await res.json();
+    if (data.valid) {
+      const c = data.certificate;
+      badge.innerHTML = '<span class="badge badge-sucesso" style="font-size:1.1rem; padding:0.5rem 1.2rem;">✅ CERTIFICADO AUTÊNTICO E VÁLIDO</span>';
+      content.innerHTML = `
+        <div style="background: linear-gradient(135deg, #FFFFFF 0%, #FAF5FF 100%); border: 3px double var(--gold); border-radius: 14px; padding: 2rem; margin-top: 1rem;">
+          <h2 style="font-family:'Playfair Display', serif; font-size: 1.8rem; color: var(--primary); font-weight:700; margin-bottom: 0.5rem;">${c.course_title}</h2>
+          <p style="font-size: 1.2rem; color: var(--text-main); font-weight: 600;">Emitido em nome de: <span style="color:var(--accent); font-weight:800;">${c.recipient_name}</span> (NIF: ${c.recipient_nif})</p>
+          <hr style="margin: 1rem 0; border: none; border-top: 1px solid #E2E8F0;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; text-align: left; font-size: 0.95rem;">
+            <div><strong>Código de Autenticidade:</strong> <br><code>${c.verification_code}</code></div>
+            <div><strong>Data de Emissão:</strong> <br>${c.issue_date}</div>
+            <div><strong>Validade:</strong> <br>${c.expiry_date || 'Sem Validade'}</div>
+            <div><strong>Aproveitamento Final:</strong> <br><strong style="color:var(--primary);">${c.grade_achieved.toFixed(1)}%</strong></div>
+            <div><strong>Entidade Emissora:</strong> <br>${c.issuer_name} (${c.issuer_title})</div>
+          </div>
+        </div>
+      `;
+      showToast('Certificado validado com sucesso!', 'success');
+    } else {
+      badge.innerHTML = '<span class="badge badge-revogado" style="font-size:1.1rem; padding:0.5rem 1.2rem;">❌ CERTIFICADO INVÁLIDO OU REVOGADO</span>';
+      content.innerHTML = `<p style="color:red; font-size:1.1rem; text-align:center; padding:1.5rem;">${data.message}</p>`;
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    badge.innerHTML = '<span class="badge badge-revogado">ERRO DE LIGAÇÃO</span>';
+    content.innerHTML = '<p style="color:red; text-align:center;">Erro ao ligar ao servidor de validação.</p>';
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}CertiCraft AI SaaS{% endblock %} - Sistema de Certificados & Diplomas Digitais</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">🏆</div>
+        <div class="sidebar-title">
+          <h1>CertiCraft AI</h1>
+          <span>SaaS Certificação</span>
+        </div>
+      </div>
+
+      <ul class="nav-list">
+        <li class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+          <a href="/">
+            <span class="nav-icon">📊</span>
+            <span>Painel Principal</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'certificates' %}active{% endif %}">
+          <a href="/certificates">
+            <span class="nav-icon">📜</span>
+            <span>Criar & Ver Certificados</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'templates' %}active{% endif %}">
+          <a href="/templates">
+            <span class="nav-icon">🎨</span>
+            <span>Modelos Visuais</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'recipients' %}active{% endif %}">
+          <a href="/recipients">
+            <span class="nav-icon">👤</span>
+            <span>Formando / Nomes</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'verify' %}active{% endif %}">
+          <a href="/verify">
+            <span class="nav-icon">🔍</span>
+            <span>Validação Código & QR</span>
+          </a>
+        </li>
+        <li class="nav-item {% if active_page == 'history' %}active{% endif %}">
+          <a href="/history">
+            <span class="nav-icon">📋</span>
+            <span>Histórico de Emissões</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <strong>CertiCraft AI Validador</strong>
+        <span>Versão 5.0 - Portugal</span>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/certi.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

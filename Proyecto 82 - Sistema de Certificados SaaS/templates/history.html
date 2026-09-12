@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico de Verificações - CertiCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Histórico de Validações & Auditoria 📋</h2>
+    <p>Registo de auditoria de consultas de autenticidade efetuadas por empregadores e entidades terceiras.</p>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📋 Registos de Auditoria de Verificação</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="hist-search" onkeyup="filterTable('hist-search', 'history-table')" placeholder="Pesquisar por código, formando ou endereço IP...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="history-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Formando</th>
+          <th>Código do Certificado</th>
+          <th>Data & Hora de Validação</th>
+          <th>IP de Origem</th>
+          <th>Resultado</th>
+          <th>Observações</th>
+        </tr>
+      </thead>
+      <tbody id="history-tbody">
+        <tr><td colspan="7" style="text-align:center;">A carregar histórico...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadLogs();
+});
+
+async function loadLogs() {
+  const tbody = document.getElementById('history-tbody');
+  try {
+    const res = await fetch('/api/verification_logs');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhum registo de auditoria encontrado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(l => `
+      <tr>
+        <td>#${l.id}</td>
+        <td><strong>${l.recipient_name}</strong></td>
+        <td><code style="color:var(--primary); font-weight:bold;">${l.verification_code}</code></td>
+        <td>${l.verification_date}</td>
+        <td><code>${l.verified_by_ip}</code></td>
+        <td>${l.is_valid ? '<span class="badge badge-sucesso">Válido</span>' : '<span class="badge badge-revogado">Inválido</span>'}</td>
+        <td><small>${l.notes || '-'}</small></td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">Erro ao carregar histórico.</td></tr>';
+  }
+}
+</script>
+{% endblock %}

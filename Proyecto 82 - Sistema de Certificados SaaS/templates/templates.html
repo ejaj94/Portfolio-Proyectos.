@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}Modelos & Plantillas - CertiCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="page-header">
+    <h2>Modelos & Plantillas de Certificados 🎨</h2>
+    <p>Personalização de molduras, fontes tipográficas, assinaturas digitais e temas visuais.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="openModal('modal-template')">➕ Criar Novo Modelo</button>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header">
+    <div class="card-title">
+      <span>🎨 Modelos Visuais de Diplomas</span>
+    </div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="tmpl-search" onkeyup="filterTable('tmpl-search', 'templates-table')" placeholder="Pesquisar por modelo, categoria ou emissor...">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="custom-table" id="templates-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título do Modelo</th>
+          <th>Categoria</th>
+          <th>Tema de Cores</th>
+          <th>Estilo de Fonte</th>
+          <th>Estilo de Moldura</th>
+          <th>Emissor Responsável</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="templates-tbody">
+        <tr><td colspan="9" style="text-align:center;">A carregar modelos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Criar Modelo -->
+<div class="modal-overlay" id="modal-template">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Criar Novo Modelo Visual</h3>
+      <button class="modal-close" onclick="closeModal('modal-template')">&times;</button>
+    </div>
+    <form id="form-template" onsubmit="handleCreateTemplate(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="tp-title">Título do Modelo *</label>
+            <input type="text" id="tp-title" placeholder="Ex: Diploma de Excelência Executiva" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tp-category">Categoria *</label>
+            <select id="tp-category" required>
+              <option value="Executivo & Pós-Graduação">Executivo & Pós-Graduação</option>
+              <option value="Formação Profissional">Formação Profissional</option>
+              <option value="Eventos & Seminários">Eventos & Seminários</option>
+              <option value="Certificação Técnica">Certificação Técnica</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="tp-theme">Esquema de Cores *</label>
+            <select id="tp-theme" required>
+              <option value="Púrpura & Dourado">Púrpura & Dourado</option>
+              <option value="Magenta Moderno">Magenta Moderno</option>
+              <option value="Violeta & Azul">Violeta & Azul</option>
+              <option value="Esmeralda & Verde">Esmeralda & Verde</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="tp-font">Estilo de Fonte *</label>
+            <select id="tp-font" required>
+              <option value="Serif Elegant (Clássica)">Serif Elegant (Clássica)</option>
+              <option value="Inter Clean (Moderna)">Inter Clean (Moderna)</option>
+              <option value="Playfair Serif (Diplomática)">Playfair Serif (Diplomática)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="tp-border">Moldura / Borda *</label>
+            <select id="tp-border" required>
+              <option value="Moldura Real Dourada">Moldura Real Dourada</option>
+              <option value="Borda Geométrica Minimalista">Borda Geométrica Minimalista</option>
+              <option value="Borda Suave Dupla">Borda Suave Dupla</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="tp-issuer-name">Nome do Signatário / Emissor *</label>
+            <input type="text" id="tp-issuer-name" placeholder="Ex: Prof. Dr. Alexandre Fontes" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tp-issuer-title">Cargo do Emissor *</label>
+            <input type="text" id="tp-issuer-title" placeholder="Ex: Diretor Pedagógico" required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-template')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Modelo</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  loadTemplates();
+});
+
+async function loadTemplates() {
+  const tbody = document.getElementById('templates-tbody');
+  try {
+    const res = await fetch('/api/templates');
+    const list = await res.json();
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Nenhum modelo registado.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(t => `
+      <tr>
+        <td>#${t.id}</td>
+        <td><strong>${t.title}</strong></td>
+        <td><span class="badge badge-sucesso">${t.category}</span></td>
+        <td><code>${t.background_theme}</code></td>
+        <td>${t.font_style}</td>
+        <td>${t.border_style}</td>
+        <td>${t.issuer_name}<br><small style="color:#64748B;">${t.issuer_title}</small></td>
+        <td><span class="badge badge-ativo">${t.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteItem('/api/templates', ${t.id}, loadTemplates)">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Erro ao carregar modelos.</td></tr>';
+  }
+}
+
+async function handleCreateTemplate(e) {
+  e.preventDefault();
+  const payload = {
+    title: document.getElementById('tp-title').value,
+    category: document.getElementById('tp-category').value,
+    background_theme: document.getElementById('tp-theme').value,
+    font_style: document.getElementById('tp-font').value,
+    border_style: document.getElementById('tp-border').value,
+    issuer_name: document.getElementById('tp-issuer-name').value,
+    issuer_title: document.getElementById('tp-issuer-title').value,
+    status: 'Ativo'
+  };
+
+  try {
+    const res = await fetch('/api/templates/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      closeModal('modal-template');
+      document.getElementById('form-template').reset();
+      loadTemplates();
+    } else {
+      showToast(data.message, 'error');
+    }
+  } catch (err) {
+    showToast('Erro ao ligar ao servidor.', 'error');
+  }
+}
+</script>
+{% endblock %}
