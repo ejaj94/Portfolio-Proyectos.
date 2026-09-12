@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Historial de Intervenções | MaintainCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-clock-rotate-left" style="color: var(--safety-orange);"></i> Historial de Intervenções & Audit Trail</h1>
+        <p class="page-subtitle">Registo auditável de relatórios de serviço, peças de reposição instaladas e validações de técnicos.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Voltar ao Dashboard
+        </a>
+    </div>
+</div>
+
+<!-- History Log Table -->
+<div class="table-card">
+    {% if not logs %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <i class="fa-regular fa-clock" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+            <h3 style="font-size: 1.1rem; color: var(--text-dark);">Nenhum registo de intervenção</h3>
+            <p style="font-size: 0.9rem; margin-top: 0.25rem;">O historial técnico será preenchido à medida que as ordens de trabalho forem atualizadas.</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Data & Hora</th>
+                        <th>Referência (OT / INC)</th>
+                        <th>Ação Registada</th>
+                        <th>Técnico Responsável</th>
+                        <th>Peças / Consumíveis Utilizados</th>
+                        <th>Custo (€)</th>
+                        <th>Notas de Intervenção</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; white-space: nowrap;">
+                            <i class="fa-regular fa-calendar-check" style="color: var(--safety-orange);"></i> {{ log.timestamp }}
+                        </td>
+                        <td style="font-weight: 900;">
+                            {% if log.order_code %}
+                                <span style="color: var(--safety-orange);">{{ log.order_code }}</span>
+                            {% elif log.incident_code %}
+                                <span style="color: var(--crimson-alert);">{{ log.incident_code }}</span>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge" style="background: #FFF7ED; color: var(--safety-orange); font-weight: 800;">
+                                {{ log.action }}
+                            </span>
+                        </td>
+                        <td style="font-weight: 600;">
+                            <i class="fa-solid fa-user-gear" style="color: var(--technical-blue);"></i> {{ log.technician }}
+                        </td>
+                        <td style="font-size: 0.85rem;">{{ log.parts_used if log.parts_used else 'N/A' }}</td>
+                        <td style="font-weight: 800; color: var(--text-dark);">
+                            {% if log.cost > 0 %}€{{ "%.2f"|format(log.cost) }}{% else %}-{% endif %}
+                        </td>
+                        <td style="font-size: 0.88rem; color: var(--text-dark);">
+                            {{ log.notes if log.notes else '-' }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

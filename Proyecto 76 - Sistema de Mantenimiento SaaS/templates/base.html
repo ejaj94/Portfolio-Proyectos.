@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MaintainCraft AI - Gestão de Mantenimiento & Manutenção Industrial SaaS{% endblock %}</title>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- App Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar-main">
+        <a href="/" class="brand-title">
+            <i class="fa-solid fa-gear" style="color: var(--safety-orange);"></i>
+            <span>MaintainCraft AI</span>
+        </a>
+        <nav class="nav-links">
+            <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
+            <a href="/equipment" class="nav-link {% if request.path == '/equipment' %}active{% endif %}">
+                <i class="fa-solid fa-industry"></i> Equipos
+            </a>
+            <a href="/technicians" class="nav-link {% if request.path == '/technicians' %}active{% endif %}">
+                <i class="fa-solid fa-user-gear"></i> Técnicos
+            </a>
+            <a href="/maintenances" class="nav-link {% if request.path == '/maintenances' %}active{% endif %}">
+                <i class="fa-solid fa-screwdriver-wrench"></i> Mantenimientos
+            </a>
+            <a href="/incidents" class="nav-link {% if request.path == '/incidents' %}active{% endif %}">
+                <i class="fa-solid fa-triangle-exclamation"></i> Incidencias
+            </a>
+            <a href="/calendar" class="nav-link {% if request.path == '/calendar' %}active{% endif %}">
+                <i class="fa-solid fa-calendar-days"></i> Calendario
+            </a>
+            <a href="/costs" class="nav-link {% if request.path == '/costs' %}active{% endif %}">
+                <i class="fa-solid fa-coins"></i> Costes
+            </a>
+            <a href="/history" class="nav-link {% if request.path == '/history' %}active{% endif %}">
+                <i class="fa-solid fa-clock-rotate-left"></i> Historial
+            </a>
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20Tenho%20interesse%20no%20MaintainCraft%20AI" target="_blank" class="btn-whatsapp-header">
+                <i class="fa-brands fa-whatsapp"></i> Falar com Arquiteto
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <main class="page-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <p>MaintainCraft AI SaaS &copy; 2026 &bull; Plataforma de Mantenimiento & Gestão Industrial por <strong>EJAJ TECH</strong></p>
+        <p style="margin-top: 0.4rem; font-size: 0.85rem;">
+            Founder & Lead Architect: <strong>Enmanuel Jimenez</strong> &bull; Siga-nos: <strong>@ejajtech</strong> &bull; WhatsApp Directo: <strong>+351 911 151 993</strong> (Envie "AJUDA")
+        </p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/maintenance.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

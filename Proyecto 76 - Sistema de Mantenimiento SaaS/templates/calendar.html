@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Calendário de Manutenções | MaintainCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-calendar-days" style="color: var(--safety-orange);"></i> Cronograma & Calendário de Manutenções</h1>
+        <p class="page-subtitle">Visualização temporal de ordens de trabalho agendadas, intervenções preventivas e paragens de fábrica.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Voltar ao Dashboard
+        </a>
+    </div>
+</div>
+
+<!-- Calendar Timeline Cards -->
+<div class="table-card">
+    <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--text-dark); display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fa-solid fa-timeline" style="color: var(--safety-orange);"></i> Linha Temporal de Intervenções Agendadas
+    </h2>
+
+    {% if not events %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <i class="fa-regular fa-calendar-xmark" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+            <p>Nenhuma manutenção agendada no calendário.</p>
+        </div>
+    {% else %}
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            {% for evt in events %}
+            <div style="background: var(--bg-light); border: 1px solid var(--border-color); border-left: 5px solid {% if evt.type == 'Preventiva' %}var(--technical-blue){% elif evt.type == 'Corretiva' %}var(--crimson-alert){% else %}#9333EA{% endif %}; border-radius: 14px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 1.25rem;">
+                    <div style="background: white; border: 1px solid var(--border-color); padding: 0.75rem 1rem; border-radius: 12px; text-align: center; min-width: 100px;">
+                        <i class="fa-regular fa-calendar" style="color: var(--safety-orange); font-size: 1.1rem; margin-bottom: 0.2rem;"></i>
+                        <div style="font-weight: 900; font-size: 0.95rem; color: var(--text-dark);">{{ evt.scheduled_date }}</div>
+                    </div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="font-weight: 900; color: var(--safety-orange); font-size: 0.9rem;">{{ evt.order_code }}</span>
+                            <span>&bull;</span>
+                            <span style="font-weight: 800; color: var(--text-dark); font-size: 1.05rem;">{{ evt.equipment_name }}</span>
+                            <span style="font-family: monospace; font-size: 0.8rem; color: var(--text-muted);">({{ evt.equipment_code }})</span>
+                        </div>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.25rem;">{{ evt.description }}</p>
+                        <div style="display: flex; gap: 1rem; font-size: 0.82rem; margin-top: 0.4rem; color: var(--text-dark);">
+                            <span><i class="fa-solid fa-user-gear" style="color: var(--text-muted);"></i> <strong>Técnico:</strong> {{ evt.technician_name }}</span>
+                            <span><i class="fa-regular fa-clock" style="color: var(--text-muted);"></i> <strong>Estimado:</strong> {{ evt.estimated_hours }}h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;">
+                    {% if evt.type == 'Preventiva' %}
+                        <span class="badge badge-preventive"><i class="fa-solid fa-shield"></i> Preventiva</span>
+                    {% elif evt.type == 'Corretiva' %}
+                        <span class="badge badge-corrective"><i class="fa-solid fa-wrench"></i> Corretiva</span>
+                    {% else %}
+                        <span class="badge badge-predictive"><i class="fa-solid fa-chart-line"></i> Preditiva</span>
+                    {% endif %}
+
+                    {% if evt.status == 'Concluído' %}
+                        <span class="badge badge-completed"><i class="fa-solid fa-check"></i> Concluído</span>
+                    {% elif evt.status == 'Em Execução' %}
+                        <span class="badge badge-running"><i class="fa-solid fa-spinner fa-spin"></i> Em Execução</span>
+                    {% else %}
+                        <span class="badge badge-scheduled"><i class="fa-regular fa-clock"></i> Agendado</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
