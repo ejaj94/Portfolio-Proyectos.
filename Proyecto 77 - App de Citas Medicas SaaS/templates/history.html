@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Historial Médico | MediCare AI Mobile SaaS{% endblock %}
+
+{% block content %}
+<div>
+    <h2 style="font-size: 1.15rem; font-weight: 900; color: var(--deep-navy);">Historial Médico & Receitas</h2>
+    <p style="font-size: 0.78rem; color: var(--text-muted);">Diagnósticos registados e prescrições médicas.</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 0.85rem; margin-top: 0.5rem;">
+    {% if not records %}
+        <div class="mobile-card" style="text-align: center; padding: 2rem;">
+            <i class="fa-solid fa-notes-medical" style="font-size: 2rem; color: var(--text-muted); margin-bottom: 0.5rem;"></i>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Nenhum historial médico concluído.</p>
+        </div>
+    {% else %}
+        {% for rec in records %}
+        <div class="mobile-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <div>
+                    <span style="font-size: 0.72rem; font-weight: 900; color: var(--emergency-red);">CITA: {{ rec.appointment_code }}</span>
+                    <h3 style="font-size: 0.95rem; font-weight: 800; color: var(--deep-navy); margin-top: 0.1rem;">{{ rec.doctor_name }}</h3>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">{{ rec.specialty_name }} &bull; Paciente: {{ rec.patient_name }}</div>
+                </div>
+                <span class="badge-confirmed" style="font-size: 0.7rem;"><i class="fa-solid fa-file-prescription"></i> Receita</span>
+            </div>
+
+            <div style="background: var(--soft-red-bg); border: 1px solid var(--border-red); padding: 0.65rem 0.85rem; border-radius: 12px; font-size: 0.8rem; margin-bottom: 0.5rem;">
+                <strong style="color: var(--emergency-red);">Diagnóstico Médico:</strong>
+                <p style="color: var(--text-dark); margin-top: 0.15rem;">{{ rec.diagnosis }}</p>
+            </div>
+
+            <div style="background: var(--bg-mobile-body); padding: 0.65rem 0.85rem; border-radius: 12px; font-size: 0.78rem; display: flex; flex-direction: column; gap: 0.3rem;">
+                <div><strong style="color: var(--deep-navy);">Prescrição:</strong> {{ rec.prescription }}</div>
+                {% if rec.notes %}
+                <div><strong style="color: var(--text-muted);">Observações:</strong> {{ rec.notes }}</div>
+                {% endif %}
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.4rem; text-align: right;">
+                <i class="fa-regular fa-clock"></i> Consultado em {{ rec.created_at }}
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Início | MediCare AI Mobile SaaS{% endblock %}
+
+{% block content %}
+<!-- Next Upcoming Appointment Banner -->
+{% if next_appt %}
+<div class="upcoming-card">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; opacity: 0.9; letter-spacing: 0.5px;">Próxima Cita Médica</span>
+            <h3 style="margin-top: 0.1rem;">{{ next_appt.doctor_name }}</h3>
+            <p>{{ next_appt.specialty_name }} &bull; {{ next_appt.patient_name }}</p>
+        </div>
+        <span class="badge-confirmed" style="background: rgba(255,255,255,0.2); color: white; border: none;">
+            <i class="fa-solid fa-check-circle"></i> Confirmada
+        </span>
+    </div>
+    <div class="upcoming-details">
+        <div>
+            <i class="fa-regular fa-calendar" style="margin-right: 0.35rem;"></i>
+            <strong>{{ next_appt.appointment_date }}</strong>
+        </div>
+        <div>
+            <i class="fa-regular fa-clock" style="margin-right: 0.35rem;"></i>
+            <strong>{{ next_appt.appointment_time }}</strong>
+        </div>
+        <div>
+            <i class="fa-solid fa-euro-sign" style="margin-right: 0.2rem;"></i>
+            <strong>{{ "%.0f"|format(next_appt.fee) }}€</strong>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="mobile-card" style="text-align: center; padding: 1.25rem;">
+    <i class="fa-solid fa-user-doctor" style="font-size: 2rem; color: var(--emergency-red); margin-bottom: 0.5rem;"></i>
+    <h3 style="font-size: 1rem; font-weight: 800; color: var(--deep-navy);">Sem consultas agendadas</h3>
+    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Agende uma consulta médica de rotina em segundos.</p>
+</div>
+{% endif %}
+
+<!-- Quick Action Button -->
+<button onclick="document.getElementById('modal-book-appt').style.display='flex'" class="btn-mobile-primary">
+    <i class="fa-solid fa-calendar-plus"></i> Agendar Cita Médica
+</button>
+
+<!-- Specialties Section -->
+<div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <h3 style="font-size: 0.95rem; font-weight: 800; color: var(--deep-navy);">Especialidades Médicas</h3>
+        <a href="/specialties" style="font-size: 0.75rem; color: var(--emergency-red); font-weight: 800; text-decoration: none;">Ver Todas &rarr;</a>
+    </div>
+    <div class="specialty-mobile-grid">
+        {% for spec in specialties %}
+        <a href="/doctors?specialty_id={{ spec.id }}" class="specialty-item">
+            <div class="specialty-icon-box">
+                <i class="fa-solid {{ spec.icon }}"></i>
+            </div>
+            <span class="specialty-name">{{ spec.name }}</span>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Top Doctors Section -->
+<div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <h3 style="font-size: 0.95rem; font-weight: 800; color: var(--deep-navy);">Médicos em Destaque</h3>
+        <a href="/doctors" style="font-size: 0.75rem; color: var(--emergency-red); font-weight: 800; text-decoration: none;">Ver Todos &rarr;</a>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        {% for doc in top_doctors %}
+        <div class="doctor-mobile-card">
+            <div class="doctor-avatar">
+                <i class="fa-solid fa-user-doctor"></i>
+            </div>
+            <div class="doctor-info">
+                <div class="doctor-name">{{ doc.name }}</div>
+                <div class="doctor-spec">{{ doc.specialty_name }}</div>
+                <div class="doctor-rating">
+                    <i class="fa-solid fa-star"></i> {{ doc.rating }} &bull; {{ "%.0f"|format(doc.consultation_fee) }}€ / Consulta
+                </div>
+            </div>
+            <button onclick="openBookForDoctor({{ doc.id }}, '{{ doc.name }}')" class="btn-mobile-secondary">
+                Agendar
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal: Agendar Cita Médica -->
+<div id="modal-book-appt" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 900; color: var(--deep-navy);">
+                <i class="fa-solid fa-calendar-plus" style="color: var(--emergency-red);"></i> Agendar Nova Cita
+            </h3>
+            <button onclick="document.getElementById('modal-book-appt').style.display='none'" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">&times;</button>
+        </div>
+        <form id="book-appointment-form">
+            <div class="form-group">
+                <label>Paciente</label>
+                <select id="book-patient-id" required>
+                    <option value="">-- Selecionar Paciente --</option>
+                    {% for pat in patients_list %}
+                    <option value="{{ pat.id }}">{{ pat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Médico Especialista</label>
+                <select id="book-doctor-id" required>
+                    <option value="">-- Selecionar Médico --</option>
+                    {% for doc in doctors_list %}
+                    <option value="{{ doc.id }}">{{ doc.name }} ({{ doc.specialty_name }}) - {{ "%.0f"|format(doc.consultation_fee) }}€</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                <div class="form-group">
+                    <label>Data da Consulta</label>
+                    <input type="date" id="book-date" required>
+                </div>
+                <div class="form-group">
+                    <label>Horário</label>
+                    <select id="book-time" required>
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:30">11:30</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:30">15:30</option>
+                        <option value="17:00">17:00</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Motivo da Consulta / Sintomas</label>
+                <textarea id="book-reason" rows="2" placeholder="Descreva brevemente o motivo da consulta..." required></textarea>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+                <button type="button" onclick="document.getElementById('modal-book-appt').style.display='none'" class="btn-mobile-secondary">Cancelar</button>
+                <button type="submit" class="btn-mobile-primary" style="width: auto; padding: 0.6rem 1.2rem;">Confirmar Cita</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function openBookForDoctor(docId, docName) {
+    document.getElementById('book-doctor-id').value = docId;
+    document.getElementById('modal-book-appt').style.display = 'flex';
+}
+</script>
+{% endblock %}

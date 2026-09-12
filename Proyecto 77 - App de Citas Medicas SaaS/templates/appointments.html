@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block title %}Minhas Citas Médicas | MediCare AI Mobile SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.15rem; font-weight: 900; color: var(--deep-navy);">Gestão de Citas Médicas</h2>
+        <p style="font-size: 0.78rem; color: var(--text-muted);">Consultas agendadas e histórico de agendamentos.</p>
+    </div>
+    <button onclick="document.getElementById('modal-book-appt-page').style.display='flex'" class="btn-mobile-secondary" style="font-size: 0.75rem; padding: 0.4rem 0.7rem;">
+        <i class="fa-solid fa-plus"></i> Nova Cita
+    </button>
+</div>
+
+<!-- Status Filter Pills -->
+<div style="display: flex; gap: 0.4rem; overflow-x: auto; padding-bottom: 0.25rem; margin-top: 0.25rem;">
+    <a href="/appointments" class="btn-mobile-secondary" style="font-size: 0.72rem; padding: 0.35rem 0.65rem; white-space: nowrap; {% if not selected_status %}background: var(--emergency-red); color: white; border: none;{% endif %}">Todas</a>
+    <a href="/appointments?status=Confirmada" class="btn-mobile-secondary" style="font-size: 0.72rem; padding: 0.35rem 0.65rem; white-space: nowrap; {% if selected_status == 'Confirmada' %}background: var(--emergency-red); color: white; border: none;{% endif %}">Confirmadas</a>
+    <a href="/appointments?status=Concluída" class="btn-mobile-secondary" style="font-size: 0.72rem; padding: 0.35rem 0.65rem; white-space: nowrap; {% if selected_status == 'Concluída' %}background: var(--emergency-red); color: white; border: none;{% endif %}">Concluídas</a>
+    <a href="/appointments?status=Cancelada" class="btn-mobile-secondary" style="font-size: 0.72rem; padding: 0.35rem 0.65rem; white-space: nowrap; {% if selected_status == 'Cancelada' %}background: var(--emergency-red); color: white; border: none;{% endif %}">Canceladas</a>
+</div>
+
+<!-- Appointments List -->
+<div style="display: flex; flex-direction: column; gap: 0.85rem; margin-top: 0.5rem;">
+    {% if not appointments %}
+        <div class="mobile-card" style="text-align: center; padding: 2rem;">
+            <i class="fa-regular fa-calendar-xmark" style="font-size: 2rem; color: var(--text-muted); margin-bottom: 0.5rem;"></i>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Nenhuma consulta médica encontrada.</p>
+        </div>
+    {% else %}
+        {% for appt in appointments %}
+        <div class="mobile-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <div>
+                    <span style="font-size: 0.72rem; font-weight: 900; color: var(--emergency-red);">{{ appt.appointment_code }}</span>
+                    <h3 style="font-size: 0.98rem; font-weight: 800; color: var(--deep-navy); margin-top: 0.1rem;">{{ appt.doctor_name }}</h3>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">{{ appt.specialty_name }} &bull; Paciente: <strong>{{ appt.patient_name }}</strong></div>
+                </div>
+                {% if appt.status == 'Confirmada' %}
+                    <span class="badge-confirmed"><i class="fa-solid fa-check-circle"></i> Confirmada</span>
+                {% elif appt.status == 'Concluída' %}
+                    <span class="badge-confirmed" style="background: #EFF6FF; color: #1D4ED8; border-color: #BFDBFE;"><i class="fa-solid fa-check-double"></i> Concluída</span>
+                {% else %}
+                    <span class="badge-pending" style="background: #FEF2F2; color: #DC2626; border-color: #FECACA;"><i class="fa-solid fa-xmark"></i> Cancelada</span>
+                {% endif %}
+            </div>
+
+            <div style="background: var(--bg-mobile-body); padding: 0.65rem 0.85rem; border-radius: 12px; font-size: 0.78rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem;">
+                <div>
+                    <i class="fa-regular fa-calendar" style="color: var(--emergency-red);"></i> {{ appt.appointment_date }} &bull; {{ appt.appointment_time }}
+                </div>
+                <div style="font-weight: 900; color: var(--deep-navy);">
+                    {{ "%.0f"|format(appt.fee) }}€
+                </div>
+            </div>
+
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                <strong>Motivo:</strong> {{ appt.reason }}
+            </div>
+
+            {% if appt.status == 'Confirmada' %}
+            <div style="display: flex; gap: 0.5rem;">
+                <button onclick="updateAppointmentStatus({{ appt.id }}, 'Concluída')" class="btn-mobile-primary" style="font-size: 0.78rem; padding: 0.45rem;">
+                    Concluir Consulta
+                </button>
+                <button onclick="updateAppointmentStatus({{ appt.id }}, 'Cancelada')" class="btn-mobile-secondary" style="font-size: 0.78rem; padding: 0.45rem; color: var(--emergency-red);">
+                    Cancelar
+                </button>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Modal: Agendar Cita na Página -->
+<div id="modal-book-appt-page" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 900; color: var(--deep-navy);">
+                <i class="fa-solid fa-calendar-plus" style="color: var(--emergency-red);"></i> Agendar Nova Cita
+            </h3>
+            <button onclick="document.getElementById('modal-book-appt-page').style.display='none'" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">&times;</button>
+        </div>
+        <form id="book-appointment-form-page">
+            <div class="form-group">
+                <label>Paciente</label>
+                <select id="book-page-patient-id" required>
+                    <option value="">-- Selecionar Paciente --</option>
+                    {% for pat in patients_list %}
+                    <option value="{{ pat.id }}">{{ pat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Médico Especialista</label>
+                <select id="book-page-doctor-id" required>
+                    <option value="">-- Selecionar Médico --</option>
+                    {% for doc in doctors_list %}
+                    <option value="{{ doc.id }}">{{ doc.name }} ({{ doc.specialty_name }}) - {{ "%.0f"|format(doc.consultation_fee) }}€</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                <div class="form-group">
+                    <label>Data da Consulta</label>
+                    <input type="date" id="book-page-date" required>
+                </div>
+                <div class="form-group">
+                    <label>Horário</label>
+                    <select id="book-page-time" required>
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:30">11:30</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:30">15:30</option>
+                        <option value="17:00">17:00</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Motivo da Consulta</label>
+                <textarea id="book-page-reason" rows="2" placeholder="Descreva os sintomas..." required></textarea>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+                <button type="button" onclick="document.getElementById('modal-book-appt-page').style.display='none'" class="btn-mobile-secondary">Cancelar</button>
+                <button type="submit" class="btn-mobile-primary" style="width: auto; padding: 0.6rem 1.2rem;">Confirmar Cita</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const pageBookForm = document.getElementById('book-appointment-form-page');
+    if (pageBookForm) {
+        pageBookForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const payload = {
+                patient_id: document.getElementById('book-page-patient-id').value,
+                doctor_id: document.getElementById('book-page-doctor-id').value,
+                appointment_date: document.getElementById('book-page-date').value,
+                appointment_time: document.getElementById('book-page-time').value,
+                reason: document.getElementById('book-page-reason').value
+            };
+
+            fetch('/api/appointment/book', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ ' + data.message);
+                    window.location.reload();
+                } else {
+                    alert('⚠️ ' + data.message);
+                }
+            })
+            .catch(err => alert('❌ Erro ao agendar consulta.'));
+        });
+    }
+});
+</script>
+{% endblock %}

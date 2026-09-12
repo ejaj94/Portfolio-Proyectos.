@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Notificações | MediCare AI Mobile SaaS{% endblock %}
+
+{% block content %}
+<div>
+    <h2 style="font-size: 1.15rem; font-weight: 900; color: var(--deep-navy);">Notificações & Lembretes</h2>
+    <p style="font-size: 0.78rem; color: var(--text-muted);">Alertas de consultas, lembretes e confirmações.</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+    {% if not notifications %}
+        <div class="mobile-card" style="text-align: center; padding: 2rem;">
+            <i class="fa-regular fa-bell-slash" style="font-size: 2rem; color: var(--text-muted); margin-bottom: 0.5rem;"></i>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Nenhuma notificação recente.</p>
+        </div>
+    {% else %}
+        {% for notif in notifications %}
+        <div class="mobile-card" style="{% if notif.is_read == 0 %}border-left: 4px solid var(--emergency-red); background: #FFFBFB;{% endif %}">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="font-weight: 800; font-size: 0.9rem; color: var(--deep-navy);">{{ notif.title }}</div>
+                <span class="badge-pending" style="font-size: 0.68rem; padding: 0.15rem 0.4rem;">{{ notif.type }}</span>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">{{ notif.message }}</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; font-size: 0.72rem; color: var(--text-muted);">
+                <span><i class="fa-regular fa-clock"></i> {{ notif.timestamp }}</span>
+                {% if notif.is_read == 0 %}
+                <button onclick="markNotificationRead({{ notif.id }})" style="background: none; border: none; color: var(--emergency-red); font-weight: 800; cursor: pointer; font-size: 0.72rem;">
+                    Marcar como Lida
+                </button>
+                {% else %}
+                <span style="color: var(--emerald-green); font-weight: 700;"><i class="fa-solid fa-check"></i> Lida</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

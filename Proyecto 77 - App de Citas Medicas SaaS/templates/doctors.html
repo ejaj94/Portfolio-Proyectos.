@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Médicos & Especialistas | MediCare AI Mobile SaaS{% endblock %}
+
+{% block content %}
+<div>
+    <h2 style="font-size: 1.15rem; font-weight: 900; color: var(--deep-navy);">Médicos Especialistas</h2>
+    <p style="font-size: 0.78rem; color: var(--text-muted);">Corpo clínico e agendamento de consultas.</p>
+</div>
+
+<!-- Specialty Filter Pills -->
+<div style="display: flex; gap: 0.4rem; overflow-x: auto; padding-bottom: 0.25rem; margin-top: 0.25rem;">
+    <a href="/doctors" class="btn-mobile-secondary" style="font-size: 0.72rem; padding: 0.35rem 0.65rem; white-space: nowrap; {% if not selected_spec %}background: var(--emergency-red); color: white; border: none;{% endif %}">Todos</a>
+    {% for spec in specialties %}
+    <a href="/doctors?specialty_id={{ spec.id }}" class="btn-mobile-secondary" style="font-size: 0.72rem; padding: 0.35rem 0.65rem; white-space: nowrap; {% if selected_spec == spec.id|string %}background: var(--emergency-red); color: white; border: none;{% endif %}">
+        {{ spec.name }}
+    </a>
+    {% endfor %}
+</div>
+
+<!-- Doctors List -->
+<div style="display: flex; flex-direction: column; gap: 0.85rem; margin-top: 0.5rem;">
+    {% for doc in doctors %}
+    <div class="mobile-card" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; gap: 0.85rem; align-items: center;">
+            <div class="doctor-avatar">
+                <i class="fa-solid {{ doc.specialty_icon }}"></i>
+            </div>
+            <div style="flex: 1;">
+                <div style="font-size: 1rem; font-weight: 900; color: var(--deep-navy);">{{ doc.name }}</div>
+                <div style="font-size: 0.78rem; font-weight: 800; color: var(--emergency-red);">{{ doc.specialty_name }} &bull; CRM: {{ doc.crm_license }}</div>
+                <div style="font-size: 0.75rem; color: #F59E0B; font-weight: 800; display: flex; align-items: center; gap: 0.25rem; margin-top: 0.1rem;">
+                    <i class="fa-solid fa-star"></i> {{ doc.rating }} / 5.0 Rating Excelente
+                </div>
+            </div>
+        </div>
+
+        <div style="background: var(--bg-mobile-body); padding: 0.65rem 0.85rem; border-radius: 12px; font-size: 0.78rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <i class="fa-solid fa-location-dot" style="color: var(--emergency-red);"></i> {{ doc.location }}
+            </div>
+            <div style="font-weight: 900; color: var(--deep-navy); font-size: 0.9rem;">
+                {{ "%.0f"|format(doc.consultation_fee) }}€
+            </div>
+        </div>
+
+        <a href="/appointments?doc_id={{ doc.id }}" onclick="openBookForDoctor({{ doc.id }}, '{{ doc.name }}'); return false;" class="btn-mobile-primary">
+            <i class="fa-regular fa-calendar-check"></i> Agendar Consulta
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

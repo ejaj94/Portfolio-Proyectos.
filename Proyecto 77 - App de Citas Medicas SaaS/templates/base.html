@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}MediCare AI - App de Citas Médicas SaaS{% endblock %}</title>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- App Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <!-- Smartphone Mockup Bezel -->
+    <div class="phone-mockup-wrapper">
+        <!-- Dynamic Island / Camera Notch -->
+        <div class="phone-notch">
+            <div class="notch-camera"></div>
+        </div>
+
+        <!-- Phone Inner Screen -->
+        <div class="phone-screen">
+            <!-- iOS Status Bar -->
+            <div class="mobile-status-bar">
+                <span>9:41</span>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <i class="fa-solid fa-signal" style="font-size: 0.7rem;"></i>
+                    <i class="fa-solid fa-wifi" style="font-size: 0.7rem;"></i>
+                    <i class="fa-solid fa-battery-full" style="font-size: 0.85rem; color: var(--emergency-red);"></i>
+                </div>
+            </div>
+
+            <!-- Mobile App Header -->
+            <header class="mobile-app-header">
+                <a href="/" class="brand-mobile">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    <span>MediCare AI</span>
+                </a>
+                <a href="/notifications" class="icon-badge-btn" title="Notificações">
+                    <i class="fa-regular fa-bell"></i>
+                    {% if unread_notifications and unread_notifications > 0 %}
+                    <span class="badge-count">{{ unread_notifications }}</span>
+                    {% endif %}
+                </a>
+            </header>
+
+            <!-- Scrollable Content Area -->
+            <main class="mobile-scroll-content">
+                {% block content %}{% endblock %}
+            </main>
+
+            <!-- Mobile Bottom Navigation Bar -->
+            <nav class="mobile-bottom-nav">
+                <a href="/" class="nav-tab {% if request.path == '/' %}active{% endif %}">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Início</span>
+                </a>
+                <a href="/appointments" class="nav-tab {% if request.path == '/appointments' %}active{% endif %}">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Citas</span>
+                </a>
+                <a href="/doctors" class="nav-tab {% if request.path == '/doctors' or request.path == '/specialties' %}active{% endif %}">
+                    <i class="fa-solid fa-user-doctor"></i>
+                    <span>Médicos</span>
+                </a>
+                <a href="/notifications" class="nav-tab {% if request.path == '/notifications' %}active{% endif %}">
+                    <i class="fa-solid fa-bell"></i>
+                    <span>Alertas</span>
+                </a>
+                <a href="/history" class="nav-tab {% if request.path == '/history' or request.path == '/patients' %}active{% endif %}">
+                    <i class="fa-solid fa-file-medical"></i>
+                    <span>Historial</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Desktop Floating Info Card (Outside Phone) -->
+    <div class="desktop-side-bar">
+        <div style="font-weight: 800; font-size: 1rem; color: #FFFFFF; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-mobile-screen-button" style="color: var(--emergency-red);"></i> Mobile Layout View
+        </div>
+        <p style="color: #CBD5E1; font-size: 0.8rem;">
+            Experiência 100% nativa tipo ecrã de telemóvel para marcação de citas médicas.
+        </p>
+        <div style="display: flex; gap: 0.5rem; margin-top: 0.25rem;">
+            <a href="/api/export/csv" class="btn-mobile-secondary" style="font-size: 0.75rem; width: 100%; text-align: center;">
+                <i class="fa-solid fa-file-csv"></i> Exportar CSV
+            </a>
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20Tenho%20interesse%20no%20MediCare%20AI" target="_blank" 
+               style="background: #25D366; color: white; border-radius: 10px; font-weight: 800; padding: 0.5rem; font-size: 0.75rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.35rem; width: 100%;">
+                <i class="fa-brands fa-whatsapp"></i> Falar
+            </a>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/medicare.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Especialidades Médicas | MediCare AI Mobile SaaS{% endblock %}
+
+{% block content %}
+<div>
+    <h2 style="font-size: 1.15rem; font-weight: 900; color: var(--deep-navy);">Especialidades Médicas</h2>
+    <p style="font-size: 0.78rem; color: var(--text-muted);">Cuidados de saúde especializados disponíveis na rede MediCare.</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 0.85rem; margin-top: 0.5rem;">
+    {% for spec in specialties %}
+    <a href="/doctors?specialty_id={{ spec.id }}" class="mobile-card" style="display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit;">
+        <div class="specialty-icon-box" style="width: 50px; height: 50px; font-size: 1.3rem;">
+            <i class="fa-solid {{ spec.icon }}"></i>
+        </div>
+        <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 1rem; font-weight: 800; color: var(--deep-navy);">{{ spec.name }}</h3>
+                <span class="badge-confirmed" style="font-size: 0.7rem;">{{ spec.doctor_count }} Médico(s)</span>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem;">{{ spec.description }}</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}
