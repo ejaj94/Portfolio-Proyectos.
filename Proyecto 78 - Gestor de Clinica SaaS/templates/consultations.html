@@ -5,7 +5,7 @@
 {% block content %}
 <div class="page-header">
     <div>
-        <h1 class="page-title"><i class="fa-solid fa-stethoscope" style="color: var(--sapphire-blue);"></i> Actos Médicos & Consultas Clínicas</h1>
+        <h1 class="page-title"><i class="fa-solid fa-stethoscope" style="color: var(--sapphire-blue);"></i> Atos Médicos & Consultas Clínicas</h1>
         <p class="page-subtitle">Registo de anamnese, diagnósticos ICD-10, prescrição eletrónica de medicamentos e sinais vitais.</p>
     </div>
     <div style="display: flex; gap: 0.75rem;">
@@ -24,7 +24,7 @@
         <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
             <i class="fa-solid fa-file-prescription" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
             <h3 style="font-size: 1.1rem; color: var(--text-dark);">Nenhuma consulta clínica registada</h3>
-            <p style="font-size: 0.9rem; margin-top: 0.25rem;">Registe o relatório médico e prescrição após a realização da cita.</p>
+            <p style="font-size: 0.9rem; margin-top: 0.25rem;">Registe o relatório médico e prescrição após a realização da consulta.</p>
         </div>
     {% else %}
         <div style="overflow-x: auto;">
@@ -32,7 +32,7 @@
                 <thead>
                     <tr>
                         <th>Data & Hora</th>
-                        <th>Cita Relacionada</th>
+                        <th>Marcação Origem</th>
                         <th>Paciente</th>
                         <th>Médico Responsável</th>
                         <th>Diagnóstico Clínico</th>
@@ -78,15 +78,15 @@
     <div class="modal-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
             <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
-                <i class="fa-solid fa-notes-medical" style="color: var(--sapphire-blue);"></i> Registar Acto Médico / Consulta
+                <i class="fa-solid fa-notes-medical" style="color: var(--sapphire-blue);"></i> Registar Ato Médico / Consulta
             </h3>
             <button onclick="document.getElementById('modal-create-consultation').style.display='none'" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">&times;</button>
         </div>
         <form id="create-consultation-form">
             <div class="form-group">
-                <label>Cita Médica</label>
+                <label>Marcação de Consulta</label>
                 <select id="cons-appointment-id" required>
-                    <option value="">-- Selecionar Cita --</option>
+                    <option value="">-- Selecionar Marcação --</option>
                     {% for appt in appointments_list %}
                     <option value="{{ appt.id }}">{{ appt.appointment_code }} - {{ appt.patient_name }} com {{ appt.professional_name }}</option>
                     {% endfor %}

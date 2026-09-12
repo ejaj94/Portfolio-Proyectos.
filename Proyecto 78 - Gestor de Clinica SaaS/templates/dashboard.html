@@ -6,14 +6,14 @@
 <div class="page-header">
     <div>
         <h1 class="page-title"><i class="fa-solid fa-hospital" style="color: var(--sapphire-blue);"></i> Painel Executivo da Clínica</h1>
-        <p class="page-subtitle">Acompanhamento de marcações diárias, pacientes, atos médicos e receita financeira acumulada.</p>
+        <p class="page-subtitle">Acompanhamento de consultas diárias, pacientes, actos médicos e receita financeira acumulada.</p>
     </div>
     <div style="display: flex; gap: 0.75rem;">
         <button onclick="document.getElementById('modal-create-appointment').style.display='flex'" class="btn-sm btn-primary">
-            <i class="fa-solid fa-plus"></i> Agendar Cita
+            <i class="fa-solid fa-plus"></i> Agendar Consulta
         </button>
         <button onclick="document.getElementById('modal-create-payment').style.display='flex'" class="btn-sm btn-secondary">
-            <i class="fa-solid fa-receipt"></i> Emitir Factura
+            <i class="fa-solid fa-receipt"></i> Emitir Fatura
         </button>
         <a href="/api/export/csv" class="btn-sm btn-secondary">
             <i class="fa-solid fa-file-csv"></i> Exportar CSV
@@ -29,7 +29,7 @@
         </div>
         <div>
             <div class="stat-val">{{ today_appts }}</div>
-            <div class="stat-label">Citas Médicas Hoje</div>
+            <div class="stat-label">Consultas Agendadas Hoje</div>
         </div>
     </div>
 
@@ -86,7 +86,7 @@
                     <thead>
                         <tr>
                             <th>Horário</th>
-                            <th>Código Cita</th>
+                            <th>Código Consulta</th>
                             <th>Paciente</th>
                             <th>Médico / Especialidade</th>
                             <th>Subsistema</th>
@@ -161,12 +161,12 @@
     </div>
 </div>
 
-<!-- Modal: Agendar Cita -->
+<!-- Modal: Agendar Consulta -->
 <div id="modal-create-appointment" class="modal-overlay" style="display: none;">
     <div class="modal-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
             <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
-                <i class="fa-regular fa-calendar-plus" style="color: var(--sapphire-blue);"></i> Agendar Nova Cita Médica
+                <i class="fa-regular fa-calendar-plus" style="color: var(--sapphire-blue);"></i> Agendar Nova Consulta Médica
             </h3>
             <button onclick="document.getElementById('modal-create-appointment').style.display='none'" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">&times;</button>
         </div>
@@ -191,7 +191,7 @@
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                 <div class="form-group">
-                    <label>Data da Cita</label>
+                    <label>Data da Consulta</label>
                     <input type="date" id="appt-date" required>
                 </div>
                 <div class="form-group">
@@ -200,7 +200,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>Motivo da Consulta / Sintomas Inicial</label>
+                <label>Motivo da Consulta / Sintomas Iniciais</label>
                 <textarea id="appt-reason" rows="2" placeholder="Descreva brevemente o motivo..." required></textarea>
             </div>
             <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
@@ -211,20 +211,20 @@
     </div>
 </div>
 
-<!-- Modal: Emitir Factura -->
+<!-- Modal: Emitir Fatura -->
 <div id="modal-create-payment" class="modal-overlay" style="display: none;">
     <div class="modal-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
             <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
-                <i class="fa-solid fa-receipt" style="color: var(--sapphire-blue);"></i> Emitir Factura / Recibo
+                <i class="fa-solid fa-receipt" style="color: var(--sapphire-blue);"></i> Emitir Fatura / Recibo
             </h3>
             <button onclick="document.getElementById('modal-create-payment').style.display='none'" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">&times;</button>
         </div>
         <form id="create-payment-form">
             <div class="form-group">
-                <label>Cita Médica Relacionada</label>
+                <label>Consulta Médica Relacionada</label>
                 <select id="pay-appointment-id" required>
-                    <option value="">-- Selecionar Cita --</option>
+                    <option value="">-- Selecionar Consulta --</option>
                     {% for appt in appointments_list %}
                     <option value="{{ appt.id }}">{{ appt.appointment_code }} - {{ appt.patient_name }} ({{ "%.0f"|format(appt.fee) }}€)</option>
                     {% endfor %}
@@ -254,7 +254,7 @@
             </div>
             <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
                 <button type="button" onclick="document.getElementById('modal-create-payment').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
-                <button type="submit" class="btn-sm btn-primary">Emitir Factura</button>
+                <button type="submit" class="btn-sm btn-primary">Emitir Fatura</button>
             </div>
         </form>
     </div>

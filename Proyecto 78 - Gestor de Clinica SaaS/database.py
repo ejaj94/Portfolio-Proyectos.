@@ -43,7 +43,7 @@ def init_db():
     );
     """)
 
-    # 3. Appointments Table (Citas)
+    # 3. Appointments Table (Marcações / Consultas)
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS appointments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -61,7 +61,7 @@ def init_db():
     );
     """)
 
-    # 4. Consultations Table (Consultas Clínicas)
+    # 4. Consultations Table (Consultas Clínicas / Atos Médicos)
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS consultations (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -93,7 +93,7 @@ def init_db():
     );
     """)
 
-    # 6. Payments Table (Pagos & Faturação)
+    # 6. Payments Table (Pagamentos & Faturação)
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS payments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -139,10 +139,10 @@ def init_db():
 
     # Seed Appointments
     appts_data = [
-        ("CIT-2026-701", 1, 1, today.strftime("%Y-%m-%d"), "09:30", "Confirmada", "Consulta de avaliação geral e exames de rotina.", 75.0, now_str),
-        ("CIT-2026-702", 2, 2, today.strftime("%Y-%m-%d"), "11:00", "Confirmada", "Eletrocardiograma e rastreio de hipertensão.", 90.0, now_str),
-        ("CIT-2026-703", 3, 3, (today + timedelta(days=2)).strftime("%Y-%m-%d"), "15:00", "Confirmada", "Avaliação articular de joelho pós-lesão desportiva.", 85.0, now_str),
-        ("CIT-2026-704", 4, 1, (today - timedelta(days=3)).strftime("%Y-%m-%d"), "14:30", "Realizada", "Consulta de seguimento de tratamento bronquítico.", 75.0, (today - timedelta(days=4)).strftime("%Y-%m-%d %H:%M"))
+        ("CNS-2026-701", 1, 1, today.strftime("%Y-%m-%d"), "09:30", "Confirmada", "Consulta de avaliação geral e exames de rotina.", 75.0, now_str),
+        ("CNS-2026-702", 2, 2, today.strftime("%Y-%m-%d"), "11:00", "Confirmada", "Eletrocardiograma e rastreio de hipertensão.", 90.0, now_str),
+        ("CNS-2026-703", 3, 3, (today + timedelta(days=2)).strftime("%Y-%m-%d"), "15:00", "Confirmada", "Avaliação articular de joelho pós-lesão desportiva.", 85.0, now_str),
+        ("CNS-2026-704", 4, 1, (today - timedelta(days=3)).strftime("%Y-%m-%d"), "14:30", "Realizada", "Consulta de seguimento de tratamento bronquítico.", 75.0, (today - timedelta(days=4)).strftime("%Y-%m-%d %H:%M"))
     ]
     cursor.executemany("""
     INSERT INTO appointments (appointment_code, patient_id, professional_id, appointment_date, appointment_time, status, reason, fee, created_at)
@@ -182,7 +182,7 @@ def init_db():
 
     conn.commit()
     conn.close()
-    print("[Database OK] cliniccraft.db criada e populada com sucesso.")
+    print("[Database OK] maintaincraft.db / cliniccraft.db re-populada em Português de Portugal.")
 
 if __name__ == '__main__':
     init_db()

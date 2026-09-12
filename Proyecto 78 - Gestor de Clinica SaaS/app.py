@@ -251,7 +251,7 @@ def api_create_appointment():
         reason = data.get('reason', '').strip()
 
         if not patient_id or not professional_id or not appt_date or not appt_time:
-            return jsonify({'success': False, 'message': 'Preencha o paciente, médico, data e hora.'}), 400
+            return jsonify({'success': False, 'message': 'Preencha o paciente, médico, data e hora da marcação.'}), 400
 
         conn = get_db()
         cursor = conn.cursor()
@@ -263,7 +263,7 @@ def api_create_appointment():
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
         cursor.execute("SELECT COUNT(*) as cnt FROM appointments")
         code_num = cursor.fetchone()['cnt'] + 705
-        appt_code = f"CIT-2026-{code_num}"
+        appt_code = f"CNS-2026-{code_num}"
 
         cursor.execute("""
         INSERT INTO appointments (appointment_code, patient_id, professional_id, appointment_date, appointment_time, status, reason, fee, created_at)
@@ -273,7 +273,7 @@ def api_create_appointment():
         conn.commit()
         conn.close()
 
-        return jsonify({'success': True, 'message': f'Cita médica "{appt_code}" agendada com sucesso!'})
+        return jsonify({'success': True, 'message': f'Marcação de consulta "{appt_code}" registada com sucesso!'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
 
@@ -289,7 +289,7 @@ def api_update_appointment_status(appt_id):
         conn.commit()
         conn.close()
 
-        return jsonify({'success': True, 'message': f'Estado da cita alterado para "{new_status}".'})
+        return jsonify({'success': True, 'message': f'Estado da consulta alterado para "{new_status}".'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
 
@@ -304,7 +304,7 @@ def api_create_consultation():
         vitals = data.get('vitals', 'Sinais vitais normais').strip()
 
         if not appointment_id or not diagnosis or not symptoms:
-            return jsonify({'success': False, 'message': 'Selecione a cita e preencha sintomas e diagnóstico.'}), 400
+            return jsonify({'success': False, 'message': 'Selecione a marcação e preencha os sintomas e o diagnóstico.'}), 400
 
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
         conn = get_db()
@@ -315,7 +315,7 @@ def api_create_consultation():
 
         if not a_row:
             conn.close()
-            return jsonify({'success': False, 'message': 'Cita não encontrada.'}), 400
+            return jsonify({'success': False, 'message': 'Marcação não encontrada.'}), 400
 
         cursor.execute("""
         INSERT INTO consultations (appointment_id, patient_id, professional_id, diagnosis, symptoms, prescription, vitals, consultation_date)
@@ -327,7 +327,7 @@ def api_create_consultation():
         conn.commit()
         conn.close()
 
-        return jsonify({'success': True, 'message': 'Consulta clínica registada e cita marcada como Realizada!'})
+        return jsonify({'success': True, 'message': 'Consulta clínica registada e marcação alterada para Realizada!'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
 
@@ -344,7 +344,7 @@ def api_create_patient():
         blood_type = data.get('blood_type', 'O+').strip()
 
         if not name or not nif or not email:
-            return jsonify({'success': False, 'message': 'Preencha o nome, NIF e email.'}), 400
+            return jsonify({'success': False, 'message': 'Preencha o nome, NIF e email do paciente.'}), 400
 
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
         conn = get_db()
@@ -378,7 +378,7 @@ def api_create_professional():
         fee = float(data.get('consultation_fee', 70.0))
 
         if not name or not specialty or not license_no:
-            return jsonify({'success': False, 'message': 'Preencha o nome, especialidade e nº de cédula.'}), 400
+            return jsonify({'success': False, 'message': 'Preencha o nome, especialidade e nº de cédula profissional.'}), 400
 
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
         conn = get_db()
@@ -392,7 +392,7 @@ def api_create_professional():
         conn.commit()
         conn.close()
 
-        return jsonify({'success': True, 'message': f'Profissional "{name}" cadastrado com sucesso!'})
+        return jsonify({'success': True, 'message': f'Profissional médico "{name}" registado com sucesso!'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
 
@@ -438,7 +438,7 @@ def api_create_payment():
         status = data.get('status', 'Pago').strip()
 
         if not appointment_id:
-            return jsonify({'success': False, 'message': 'Selecione a cita médica.'}), 400
+            return jsonify({'success': False, 'message': 'Selecione a consulta médica.'}), 400
 
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
         conn = get_db()
@@ -460,7 +460,7 @@ def api_create_payment():
         conn.commit()
         conn.close()
 
-        return jsonify({'success': True, 'message': f'Factura "{inv_code}" emitida com sucesso!'})
+        return jsonify({'success': True, 'message': f'Fatura "{inv_code}" emitida com sucesso!'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
 
@@ -489,7 +489,7 @@ def api_export_data(fmt):
     else:  # CSV
         output = io.StringIO()
         writer = csv.writer(output)
-        writer.writerow(['Código Cita', 'Paciente', 'NIF', 'Profissional', 'Especialidade', 'Data', 'Hora', 'Valor (€)', 'Estado'])
+        writer.writerow(['Código Consulta', 'Paciente', 'NIF', 'Profissional', 'Especialidade', 'Data', 'Hora', 'Valor (€)', 'Estado'])
         for r in rows:
             writer.writerow([r['appointment_code'], r['patient_name'], r['nif'], r['professional_name'], r['specialty'], r['appointment_date'], r['appointment_time'], r['fee'], r['status']])
 

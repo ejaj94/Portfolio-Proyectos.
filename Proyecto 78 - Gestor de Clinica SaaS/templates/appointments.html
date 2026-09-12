@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Citas Médicas | ClinicCraft AI SaaS{% endblock %}
+{% block title %}Marcações & Consultas | ClinicCraft AI SaaS{% endblock %}
 
 {% block content %}
 <div class="page-header">
     <div>
-        <h1 class="page-title"><i class="fa-regular fa-calendar-check" style="color: var(--sapphire-blue);"></i> Gestão de Citas Médicas</h1>
+        <h1 class="page-title"><i class="fa-regular fa-calendar-check" style="color: var(--sapphire-blue);"></i> Gestão de Marcações & Consultas</h1>
         <p class="page-subtitle">Marcação de consultas, controlo de agenda de atendimento e estados de comparência.</p>
     </div>
     <div style="display: flex; gap: 0.75rem;">
         <button onclick="document.getElementById('modal-create-appointment-page').style.display='flex'" class="btn-sm btn-primary">
-            <i class="fa-solid fa-plus"></i> Agendar Cita
+            <i class="fa-solid fa-plus"></i> Agendar Consulta
         </button>
         <a href="/api/export/csv" class="btn-sm btn-secondary">
             <i class="fa-solid fa-file-csv"></i> Exportar CSV
@@ -23,7 +23,7 @@
     <form method="GET" action="/appointments" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">
         <div style="display: flex; gap: 0.5rem; align-items: center; flex: 1; min-width: 280px;">
             <div style="position: relative; width: 100%;">
-                <input type="text" name="q" value="{{ search_q }}" placeholder="Pesquisar por Código Cita, Paciente ou Médico..." 
+                <input type="text" name="q" value="{{ search_q }}" placeholder="Pesquisar por Código Consulta, Paciente ou Médico..." 
                        style="width: 100%; padding: 0.65rem 1rem 0.65rem 2.5rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem;">
                 <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
             </div>
@@ -49,7 +49,7 @@
     {% if not appointments %}
         <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
             <i class="fa-regular fa-folder-open" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
-            <h3 style="font-size: 1.1rem; color: var(--text-dark);">Nenhuma cita médica encontrada</h3>
+            <h3 style="font-size: 1.1rem; color: var(--text-dark);">Nenhuma marcação de consulta encontrada</h3>
             <p style="font-size: 0.9rem; margin-top: 0.25rem;">Tente ajustar os filtros ou pesquisar por outro termo.</p>
         </div>
     {% else %}
@@ -57,7 +57,7 @@
             <table class="custom-table">
                 <thead>
                     <tr>
-                        <th>Código Cita</th>
+                        <th>Código Consulta</th>
                         <th>Paciente</th>
                         <th>Médico Especialista</th>
                         <th>Data & Hora</th>
@@ -96,7 +96,7 @@
                                     <button onclick="updateAppointmentStatus({{ a.id }}, 'Realizada')" class="btn-sm btn-primary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" title="Marcar como Realizada">
                                         <i class="fa-solid fa-check"></i> Concluir
                                     </button>
-                                    <button onclick="updateAppointmentStatus({{ a.id }}, 'Cancelada')" class="btn-sm btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" title="Cancelar Cita">
+                                    <button onclick="updateAppointmentStatus({{ a.id }}, 'Cancelada')" class="btn-sm btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" title="Cancelar Consulta">
                                         <i class="fa-solid fa-xmark"></i> Cancelar
                                     </button>
                                 {% else %}
@@ -112,12 +112,12 @@
     {% endif %}
 </div>
 
-<!-- Modal: Agendar Cita na Página -->
+<!-- Modal: Agendar Consulta na Página -->
 <div id="modal-create-appointment-page" class="modal-overlay" style="display: none;">
     <div class="modal-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
             <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
-                <i class="fa-regular fa-calendar-plus" style="color: var(--sapphire-blue);"></i> Agendar Nova Cita Médica
+                <i class="fa-regular fa-calendar-plus" style="color: var(--sapphire-blue);"></i> Agendar Nova Consulta Médica
             </h3>
             <button onclick="document.getElementById('modal-create-appointment-page').style.display='none'" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">&times;</button>
         </div>
@@ -142,7 +142,7 @@
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                 <div class="form-group">
-                    <label>Data da Cita</label>
+                    <label>Data da Consulta</label>
                     <input type="date" id="appt-page-date" required>
                 </div>
                 <div class="form-group">
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('⚠️ ' + data.message);
                 }
             })
-            .catch(err => alert('❌ Erro ao agendar cita.'));
+            .catch(err => alert('❌ Erro ao agendar consulta.'));
         });
     }
 });

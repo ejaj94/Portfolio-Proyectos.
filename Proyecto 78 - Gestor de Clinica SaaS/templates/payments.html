@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Pagos & Faturação | ClinicCraft AI SaaS{% endblock %}
+{% block title %}Pagamentos & Faturação | ClinicCraft AI SaaS{% endblock %}
 
 {% block content %}
 <div class="page-header">
     <div>
-        <h1 class="page-title"><i class="fa-solid fa-file-invoice-dollar" style="color: var(--sapphire-blue);"></i> Pagos, Faturação & Caixa</h1>
-        <p class="page-subtitle">Emissão de facturas/recibos de atos médicos, controlo de transações e métodos de pagamento.</p>
+        <h1 class="page-title"><i class="fa-solid fa-file-invoice-dollar" style="color: var(--sapphire-blue);"></i> Pagamentos, Faturação & Caixa</h1>
+        <p class="page-subtitle">Emissão de faturas/recibos de atos médicos, controlo de transações e métodos de pagamento.</p>
     </div>
     <div style="display: flex; gap: 0.75rem;">
         <button onclick="document.getElementById('modal-create-payment-page').style.display='flex'" class="btn-sm btn-primary">
-            <i class="fa-solid fa-receipt"></i> Emitir Factura
+            <i class="fa-solid fa-receipt"></i> Emitir Fatura
         </button>
         <a href="/api/export/csv" class="btn-sm btn-secondary">
             <i class="fa-solid fa-file-csv"></i> Exportar CSV
@@ -23,7 +23,7 @@
     {% if not payments %}
         <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
             <i class="fa-solid fa-receipt" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
-            <h3 style="font-size: 1.1rem; color: var(--text-dark);">Nenhuma factura registada</h3>
+            <h3 style="font-size: 1.1rem; color: var(--text-dark);">Nenhuma fatura registada</h3>
             <p style="font-size: 0.9rem; margin-top: 0.25rem;">Registe recebimentos de consultas e atos de enfermagem.</p>
         </div>
     {% else %}
@@ -31,8 +31,8 @@
             <table class="custom-table">
                 <thead>
                     <tr>
-                        <th>Nº Factura</th>
-                        <th>Cita Origem</th>
+                        <th>Nº Fatura</th>
+                        <th>Consulta Origem</th>
                         <th>Paciente</th>
                         <th>NIF Fiscal</th>
                         <th>Método de Pagamento</th>
@@ -70,20 +70,20 @@
     {% endif %}
 </div>
 
-<!-- Modal: Emitir Factura na Página -->
+<!-- Modal: Emitir Fatura na Página -->
 <div id="modal-create-payment-page" class="modal-overlay" style="display: none;">
     <div class="modal-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
             <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark);">
-                <i class="fa-solid fa-receipt" style="color: var(--sapphire-blue);"></i> Emitir Factura / Recibo
+                <i class="fa-solid fa-receipt" style="color: var(--sapphire-blue);"></i> Emitir Fatura / Recibo
             </h3>
             <button onclick="document.getElementById('modal-create-payment-page').style.display='none'" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">&times;</button>
         </div>
         <form id="create-payment-form-page">
             <div class="form-group">
-                <label>Cita Médica Relacionada</label>
+                <label>Consulta Médica Relacionada</label>
                 <select id="pay-page-appointment-id" required>
-                    <option value="">-- Selecionar Cita --</option>
+                    <option value="">-- Selecionar Consulta --</option>
                     {% for appt in appointments_list %}
                     <option value="{{ appt.id }}">{{ appt.appointment_code }} - {{ appt.patient_name }} ({{ "%.0f"|format(appt.fee) }}€)</option>
                     {% endfor %}
@@ -113,7 +113,7 @@
             </div>
             <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
                 <button type="button" onclick="document.getElementById('modal-create-payment-page').style.display='none'" class="btn-sm btn-secondary">Cancelar</button>
-                <button type="submit" class="btn-sm btn-primary">Emitir Factura</button>
+                <button type="submit" class="btn-sm btn-primary">Emitir Fatura</button>
             </div>
         </form>
     </div>
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('⚠️ ' + data.message);
                 }
             })
-            .catch(err => alert('❌ Erro ao emitir factura.'));
+            .catch(err => alert('❌ Erro ao emitir fatura.'));
         });
     }
 });

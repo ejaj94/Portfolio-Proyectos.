@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('⚠️ ' + data.message);
                 }
             })
-            .catch(err => alert('❌ Erro ao agendar cita médica.'));
+            .catch(err => alert('❌ Erro ao agendar consulta médica.'));
         });
     }
 
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('⚠️ ' + data.message);
                 }
             })
-            .catch(err => alert('❌ Erro ao emitir factura.'));
+            .catch(err => alert('❌ Erro ao emitir fatura.'));
         });
     }
 });
@@ -203,5 +203,5 @@ function updateAppointmentStatus(apptId, newStatus) {
             alert('⚠️ ' + data.message);
         }
     })
-    .catch(err => alert('❌ Erro ao atualizar cita.'));
+    .catch(err => alert('❌ Erro ao atualizar consulta.'));
 }
