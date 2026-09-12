@@ -18,14 +18,16 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
+@app.route('/')
 @app.route('/showcase')
 def showcase():
     return render_template('showcase.html')
 
-@app.route('/')
+@app.route('/crm')
 def dashboard():
     conn = get_db()
     cursor = conn.cursor()
+
 
 
     # Metrics Calculations
