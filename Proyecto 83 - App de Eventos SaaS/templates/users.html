@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Participantes & Utilizadores &bull; EventCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">
+            <i class="fa-solid fa-users text-secondary"></i> Participantes & Utilizadores
+        </h1>
+        <p class="page-subtitle">Diretório de compradores de bilhetes e congressistas registados</p>
+    </div>
+</div>
+
+<div class="content-card">
+    <div class="table-controls">
+        <div class="search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="searchUsers" placeholder="Pesquisar por nome ou email..." onkeyup="filterTable('searchUsers', 'usersTableBody')">
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome do Participante</th>
+                    <th>Email</th>
+                    <th>Telemóvel</th>
+                    <th>Bilhetes Comprados</th>
+                    <th>Data Registo</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody">
+                <!-- Loaded via JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

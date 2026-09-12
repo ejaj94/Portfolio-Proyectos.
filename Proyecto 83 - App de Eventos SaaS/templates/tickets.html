@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Bilhetes & Entradas &bull; EventCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">
+            <i class="fa-solid fa-ticket text-secondary"></i> Bilhetes Emitidos & Entradas Digitales
+        </h1>
+        <p class="page-subtitle">Consulte e gira todos os bilhetes de entrada com verificação QR</p>
+    </div>
+    <div>
+        <a href="/api/export/tickets" class="btn btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Exportar Bilhetes CSV
+        </a>
+    </div>
+</div>
+
+<div class="content-card">
+    <div class="table-controls">
+        <div class="search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="searchTickets" placeholder="Pesquisar por código, participante ou evento..." onkeyup="filterTable('searchTickets', 'ticketsTableBody')">
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Código Bilhete</th>
+                    <th>Evento & Data</th>
+                    <th>Participante</th>
+                    <th>Lugar / Cadeira</th>
+                    <th>Preço Pago</th>
+                    <th>Estado Check-in</th>
+                    <th>Ação QR</th>
+                </tr>
+            </thead>
+            <tbody id="ticketsTableBody">
+                <!-- Loaded via JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EventCraft AI SaaS - Gestão de Eventos & Bilheteira{% endblock %}</title>
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand-logo">
+                <i class="fa-solid fa-ticket-simple"></i> EventCraft AI
+            </a>
+            <ul class="nav-links">
+                <li class="nav-item">
+                    <a href="/" class="{% if active_page == 'dashboard' %}active{% endif %}">
+                        <i class="fa-solid fa-chart-pie"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/events" class="{% if active_page == 'events' %}active{% endif %}">
+                        <i class="fa-solid fa-calendar-days"></i> Eventos & Espetáculos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tickets" class="{% if active_page == 'tickets' %}active{% endif %}">
+                        <i class="fa-solid fa-ticket"></i> Bilhetes & Entradas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/checkin" class="{% if active_page == 'checkin' %}active{% endif %}">
+                        <i class="fa-solid fa-qrcode"></i> Check-in & Acesso
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/organizers" class="{% if active_page == 'organizers' %}active{% endif %}">
+                        <i class="fa-solid fa-building"></i> Organizadores
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/users" class="{% if active_page == 'users' %}active{% endif %}">
+                        <i class="fa-solid fa-users"></i> Participantes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/stats" class="{% if active_page == 'stats' %}active{% endif %}">
+                        <i class="fa-solid fa-chart-line"></i> Estatísticas & Lotação
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Generic Modals Placeholders -->
+    <!-- Buy Ticket Modal -->
+    <div class="modal-overlay" id="buyTicketModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-ticket text-secondary"></i> Emitir Bilhete de Entrada</h3>
+                <button class="modal-close" onclick="closeModal('buyTicketModal')">&times;</button>
+            </div>
+            <form onsubmit="submitBuyTicket(event)">
+                <input type="hidden" id="buyEventId">
+                <div class="form-group">
+                    <label>Evento Selecionado</label>
+                    <div id="buyEventTitle" style="font-weight:700; color:#a855f7; font-size:1.1rem;">-</div>
+                </div>
+                <div class="form-group">
+                    <label>Preço do Bilhete</label>
+                    <div id="buyEventPrice" style="font-weight:700; color:#ec4899; font-size:1.2rem;">-</div>
+                </div>
+                <div class="form-group">
+                    <label for="buyUserId">Participante / Comprador</label>
+                    <select id="buyUserId" class="form-control" required>
+                        <option value="1">Diogo Silva (diogo.silva@techportugal.pt)</option>
+                        <option value="2">Inês Santos (ines.santos@lisboamusic.pt)</option>
+                        <option value="3">Miguel Ferreira (miguel.ferreira@startup.pt)</option>
+                        <option value="4">Beatriz Costa (beatriz.costa@design.pt)</option>
+                        <option value="5">Rodrigo Mendes (rodrigo.mendes@business.pt)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="buySeatNumber">Lugar / Cadeira (Opcional)</label>
+                    <input type="text" id="buySeatNumber" class="form-control" placeholder="Ex: Filas 12 - Cadeira 04">
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('buyTicketModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Confirmar Emissão</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div class="modal-overlay" id="qrModal">
+        <div class="modal-box" style="text-align:center;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-qrcode text-secondary"></i> Passaporte Digital do Bilhete</h3>
+                <button class="modal-close" onclick="closeModal('qrModal')">&times;</button>
+            </div>
+            <h4 id="modalQRTitle" style="margin-bottom:0.4rem; font-size:1.2rem; color:#fff;">-</h4>
+            <p id="modalQRUser" style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.25rem;">-</p>
+            <div id="qrImageContainer" style="margin-bottom:1.25rem;"></div>
+            <div style="background:rgba(15,23,42,0.6); padding:0.75rem; border-radius:10px; border:1px solid var(--border);">
+                <small class="text-muted">Código Único de Autenticidade:</small>
+                <div id="modalQRCode" style="font-weight:800; font-family:monospace; font-size:1.2rem; color:#a855f7; letter-spacing:1px;">-</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 EventCraft AI SaaS &bull; Plataforma Profissional de Eventos & Bilheteira &bull; Todos os direitos reservados</p>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/events.js') }}"></script>
+</body>
+</html>
