@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Garantias & Apólices | WarrantyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-shield-halved" style="color: var(--industrial-amber);"></i> Gestão de Garantias & Apólices</h1>
+        <p class="page-subtitle">Consulte, filtre e monitorize todas as apólices de garantia e prazos de validade ativos.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Voltar ao Dashboard
+        </a>
+        <a href="/api/export/csv" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+    </div>
+</div>
+
+<!-- Filters Bar -->
+<div class="table-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+    <form method="GET" action="/warranties" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex: 1; min-width: 280px;">
+            <div style="position: relative; width: 100%;">
+                <input type="text" name="q" value="{{ search_q }}" placeholder="Pesquisar por Código, Nº Série, Cliente ou Produto..." 
+                       style="width: 100%; padding: 0.65rem 1rem 0.65rem 2.5rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem;">
+                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+            </div>
+            <button type="submit" class="btn-sm btn-primary" style="padding: 0.65rem 1.2rem;">Pesquisar</button>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">Filtrar por Estado:</span>
+            <a href="/warranties{% if search_q %}?q={{ search_q }}{% endif %}" 
+               class="btn-sm {% if not selected_status %}btn-primary{% else %}btn-secondary{% endif %}" style="font-size: 0.8rem; padding: 0.4rem 0.85rem;">Todos</a>
+            <a href="/warranties?status=Ativa{% if search_q %}&q={{ search_q }}{% endif %}" 
+               class="btn-sm {% if selected_status == 'Ativa' %}btn-primary{% else %}btn-secondary{% endif %}" style="font-size: 0.8rem; padding: 0.4rem 0.85rem;">Ativas</a>
+            <a href="/warranties?status=Prestes a Expirar{% if search_q %}&q={{ search_q }}{% endif %}" 
+               class="btn-sm {% if selected_status == 'Prestes a Expirar' %}btn-primary{% else %}btn-secondary{% endif %}" style="font-size: 0.8rem; padding: 0.4rem 0.85rem;">Prestes a Expirar</a>
+            <a href="/warranties?status=Expirada{% if search_q %}&q={{ search_q }}{% endif %}" 
+               class="btn-sm {% if selected_status == 'Expirada' %}btn-primary{% else %}btn-secondary{% endif %}" style="font-size: 0.8rem; padding: 0.4rem 0.85rem;">Expiradas</a>
+        </div>
+    </form>
+</div>
+
+<!-- Warranties Table -->
+<div class="table-card">
+    {% if not warranties %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <i class="fa-regular fa-folder-open" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+            <h3 style="font-size: 1.1rem; color: var(--text-dark);">Nenhuma garantia encontrada</h3>
+            <p style="font-size: 0.9rem; margin-top: 0.25rem;">Tente ajustar os termos de pesquisa ou filtros aplicados.</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Código Garantia</th>
+                        <th>Empresa / Cliente</th>
+                        <th>Produto / Marca</th>
+                        <th>Nº Série</th>
+                        <th>Data Compra</th>
+                        <th>Expiração</th>
+                        <th>Dias Restantes</th>
+                        <th>Estado</th>
+                        <th style="text-align: right;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for w in warranties %}
+                    <tr>
+                        <td style="font-weight: 800; color: var(--industrial-amber);">{{ w.warranty_code }}</td>
+                        <td>
+                            <div style="font-weight: 700; color: var(--text-dark);">{{ w.company_name }}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ w.contact_name }}</div>
+                        </td>
+                        <td>
+                            <div style="font-weight: 600;">{{ w.product_name }}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ w.brand }} &bull; {{ w.model_code }}</div>
+                        </td>
+                        <td><code style="background: var(--bg-light); padding: 0.2rem 0.4rem; border-radius: 4px; font-weight: 700;">{{ w.serial_number }}</code></td>
+                        <td>{{ w.purchase_date }}</td>
+                        <td style="font-weight: 600;">{{ w.expiration_date }}</td>
+                        <td>
+                            {% if w.days_left > 60 %}
+                                <span style="color: var(--emerald-green); font-weight: 800;"><i class="fa-solid fa-circle-check"></i> {{ w.days_left }} dias</span>
+                            {% elif w.days_left > 0 %}
+                                <span style="color: #B45309; font-weight: 800;"><i class="fa-solid fa-triangle-exclamation"></i> {{ w.days_left }} dias</span>
+                            {% else %}
+                                <span style="color: var(--crimson-alert); font-weight: 800;"><i class="fa-solid fa-circle-xmark"></i> Expirou há {{ w.days_left | abs }} dias</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if w.status == 'Ativa' %}
+                                <span class="badge badge-active"><i class="fa-solid fa-shield-halved"></i> Ativa</span>
+                            {% elif w.status == 'Prestes a Expirar' %}
+                                <span class="badge badge-expiring"><i class="fa-solid fa-hourglass-half"></i> Prestes a Expirar</span>
+                            {% else %}
+                                <span class="badge badge-expired"><i class="fa-solid fa-circle-xmark"></i> Expirada</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <a href="/warranty/{{ w.id }}" class="btn-sm btn-secondary" style="font-size: 0.8rem; padding: 0.35rem 0.7rem;">
+                                <i class="fa-solid fa-eye"></i> Detalhes
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

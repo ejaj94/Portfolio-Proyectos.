@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogo de Produtos | WarrantyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-boxes-stacked" style="color: var(--industrial-amber);"></i> Catálogo de Produtos & Modelos</h1>
+        <p class="page-subtitle">Lista de equipamentos registados no sistema com prazos de garantia standard configurados.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Voltar ao Dashboard
+        </a>
+    </div>
+</div>
+
+<!-- Products Grid / Cards -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    {% for p in products %}
+    <div class="table-card" style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem;">
+                <div>
+                    <span style="font-size: 0.75rem; font-weight: 800; color: var(--tool-blue); text-transform: uppercase; letter-spacing: 0.5px;">{{ p.category }}</span>
+                    <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-dark); margin-top: 0.1rem;">{{ p.product_name }}</h3>
+                </div>
+                <span class="badge" style="background: var(--soft-amber-bg); color: var(--industrial-amber); font-weight: 800; font-size: 0.85rem;">
+                    <i class="fa-solid fa-shield"></i> {{ p.default_warranty_months }} Meses
+                </span>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; font-size: 0.88rem; margin-bottom: 1.25rem; color: var(--text-muted);">
+                <span><strong>Marca:</strong> {{ p.brand }}</span>
+                <span>&bull;</span>
+                <span><strong>Modelo:</strong> <code style="background: var(--bg-light); padding: 0.1rem 0.35rem; border-radius: 4px; font-weight: 700; color: var(--text-dark);">{{ p.model_code }}</code></span>
+            </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-color); pt-3; padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+                <i class="fa-solid fa-file-signature" style="color: var(--industrial-amber);"></i> {{ p.registered_warranties }} Apólice(s) Ativa(s)
+            </div>
+            <a href="/warranties?q={{ p.product_name }}" class="btn-sm btn-secondary" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">
+                Ver Garantias
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

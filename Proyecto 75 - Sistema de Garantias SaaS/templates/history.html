@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Histórico Técnico | WarrantyCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-clock-rotate-left" style="color: var(--industrial-amber);"></i> Histórico Técnico & Audit Log</h1>
+        <p class="page-subtitle">Registo cronológico e auditável de todas as intervenções, alterações de estado e ações de manutenção executadas.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/" class="btn-sm btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Voltar ao Dashboard
+        </a>
+    </div>
+</div>
+
+<!-- History Log Timeline / Table -->
+<div class="table-card">
+    {% if not logs %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <i class="fa-regular fa-clock" style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+            <h3 style="font-size: 1.1rem; color: var(--text-dark);">Nenhum registo de intervenção técnica</h3>
+            <p style="font-size: 0.9rem; margin-top: 0.25rem;">O histórico de logs técnicos será preenchido à medida que os chamados RMA forem atualizados.</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Data & Hora</th>
+                        <th>Incidência RMA</th>
+                        <th>Garantia</th>
+                        <th>Produto</th>
+                        <th>Ação Executada</th>
+                        <th>Técnico Responsável</th>
+                        <th>Notas de Intervenção</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; white-space: nowrap;">
+                            <i class="fa-regular fa-calendar-check" style="color: var(--industrial-amber);"></i> {{ log.timestamp }}
+                        </td>
+                        <td style="font-weight: 900; color: var(--crimson-alert);">{{ log.incident_code }}</td>
+                        <td style="font-weight: 800; color: var(--industrial-amber);">{{ log.warranty_code }}</td>
+                        <td style="font-weight: 600;">{{ log.product_name }}</td>
+                        <td>
+                            <span class="badge" style="background: #FFFBEB; color: #B45309; font-weight: 800;">
+                                {{ log.action }}
+                            </span>
+                        </td>
+                        <td style="font-weight: 600;">
+                            <i class="fa-solid fa-user-gear" style="color: var(--tool-blue);"></i> {{ log.technician }}
+                        </td>
+                        <td style="font-size: 0.88rem; color: var(--text-dark);">
+                            {{ log.notes if log.notes else '-' }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
