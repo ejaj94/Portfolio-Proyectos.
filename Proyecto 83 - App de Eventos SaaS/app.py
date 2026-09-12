@@ -13,6 +13,10 @@ app = Flask(__name__)
 init_db()
 
 # --- Page Routes ---
+@app.route('/showcase')
+def showcase():
+    return render_template('showcase.html', active_page='showcase')
+
 @app.route('/')
 def dashboard():
     return render_template('dashboard.html', active_page='dashboard')
