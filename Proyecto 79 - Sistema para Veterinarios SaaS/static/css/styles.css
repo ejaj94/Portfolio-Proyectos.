@@ -46,6 +46,7 @@ body {
   height: 100vh;
   z-index: 100;
   box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+}
 
 .sidebar-header {
   display: flex;
@@ -88,6 +89,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+}
 
 .nav-item a {
   display: flex;
@@ -356,6 +358,7 @@ body {
   font-weight: 600;
   color: #475569;
   border-bottom: 1px solid var(--border);
+}
 
 .custom-table td {
   padding: 0.95rem 1rem;
@@ -444,6 +447,7 @@ body {
   font-size: 1.4rem;
   cursor: pointer;
   opacity: 0.8;
+}
 
 .modal-close:hover {
   opacity: 1;
