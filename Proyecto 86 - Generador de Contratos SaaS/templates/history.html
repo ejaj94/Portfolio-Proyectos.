@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico & Registro Auditável - ContractCraft AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-clock-rotate-left" style="color: var(--primary); margin-right: 0.5rem;"></i>Histórico & Auditoria Criptográfica
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Consulte todos os contratos gerados, estado legal de assinatura e hashes de verificação SHA-256 incorruptíveis.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/api/export/csv" class="btn-primary-action" style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); text-decoration: none;">
+            <i class="fa-solid fa-file-csv" style="color: var(--emerald);"></i> Exportar CSV
+        </a>
+        <a href="/api/export/json" class="btn-primary-action" style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); text-decoration: none;" target="_blank">
+            <i class="fa-solid fa-code" style="color: var(--primary);"></i> Exportar JSON
+        </a>
+    </div>
+</div>
+
+<!-- Search & Filter Bar -->
+<div class="card-box" style="margin-bottom: 1.5rem; padding: 1rem 1.5rem;">
+    <div style="display: flex; gap: 1rem; align-items: center;">
+        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+        <input type="text" id="searchHistory" onkeyup="filterHistory()" placeholder="Pesquisar por Código CTR, Cliente, Título ou Hash SHA256..." style="width: 100%; border: none; outline: none; font-size: 0.95rem; font-weight: 500; background: transparent; color: var(--text-main);">
+    </div>
+</div>
+
+<!-- History Table Card -->
+<div class="card-box" style="padding: 0; overflow: hidden;">
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+                <tr style="background: var(--bg-light); border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <th style="padding: 1rem 1.25rem;">Código</th>
+                    <th style="padding: 1rem 1.25rem;">Título do Documento</th>
+                    <th style="padding: 1rem 1.25rem;">Cliente / NIF</th>
+                    <th style="padding: 1rem 1.25rem;">Modelo Origem</th>
+                    <th style="padding: 1rem 1.25rem;">Estado</th>
+                    <th style="padding: 1rem 1.25rem;">Assinatura SHA-256</th>
+                    <th style="padding: 1rem 1.25rem;">Data Emissão</th>
+                    <th style="padding: 1rem 1.25rem; text-align: right;">Ações</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.75rem; font-weight: 600;">A carregar registo de contratos...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Audit Modal -->
+<div id="auditModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(5px); z-index: 999; justify-content: center; align-items: center;">
+    <div style="background: var(--bg-card); width: 100%; max-width: 580px; border-radius: 20px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15); margin: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-certificate" style="color: var(--emerald);"></i> Certificado de Integridade Criptográfica
+            </h3>
+            <button onclick="closeAuditModal()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div id="auditContent" style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
+            <!-- Dynamic Audit Details -->
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <button onclick="closeAuditModal()" class="btn-primary-action" style="background: var(--bg-light); color: var(--text-main); border: 1px solid var(--border);">Fechar</button>
+            <button onclick="alert('Certificado descarregado com sucesso!')" class="btn-primary-action"><i class="fa-solid fa-download"></i> Baixar Comprovativo</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let allContracts = [];
+
+    async function loadHistory() {
+        try {
+            const res = await fetch('/api/contracts');
+            allContracts = await res.json();
+            renderTable(allContracts);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function renderTable(contracts) {
+        const tbody = document.getElementById('historyTableBody');
+        if (!contracts || contracts.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-folder-open fa-3x" style="margin-bottom: 1rem;"></i>
+                        <h4 style="font-weight: 700; color: var(--text-main);">Nenhum contrato registado</h4>
+                        <p style="font-size: 0.85rem;">Gere o primeiro contrato no menu 'Gerador'.</p>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = contracts.map(c => `
+            <tr style="border-bottom: 1px solid var(--border); transition: background 0.15s ease;">
+                <td style="padding: 1rem 1.25rem; font-weight: 800; color: var(--primary); font-family: monospace;">${c.contract_code}</td>
+                <td style="padding: 1rem 1.25rem; font-weight: 700; color: var(--text-main);">${c.title}</td>
+                <td style="padding: 1rem 1.25rem;">
+                    <div style="font-weight: 600; color: var(--text-main);">${c.client_name}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">NIF: ${c.nif_tax}</div>
+                </td>
+                <td style="padding: 1rem 1.25rem; color: var(--text-muted); font-size: 0.85rem;">${c.template_title}</td>
+                <td style="padding: 1rem 1.25rem;">
+                    <span class="badge badge-emerald"><i class="fa-solid fa-check-circle"></i> ${c.status}</span>
+                </td>
+                <td style="padding: 1rem 1.25rem; font-family: monospace; font-size: 0.75rem; color: var(--text-muted); font-weight: 600;" title="${c.hash_signature}">
+                    ${c.hash_signature.substring(0, 18)}...
+                </td>
+                <td style="padding: 1rem 1.25rem; color: var(--text-muted); font-size: 0.85rem;">${c.created_at}</td>
+                <td style="padding: 1rem 1.25rem; text-align: right;">
+                    <button onclick='viewAudit(${JSON.stringify(c)})' class="btn-primary-action" style="padding: 0.35rem 0.65rem; font-size: 0.75rem; background: rgba(79, 70, 229, 0.1); color: var(--primary); border: 1px solid rgba(79, 70, 229, 0.2);">
+                        <i class="fa-solid fa-shield-halved"></i> Auditoria
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function filterHistory() {
+        const q = document.getElementById('searchHistory').value.toLowerCase();
+        const filtered = allContracts.filter(c => 
+            c.contract_code.toLowerCase().includes(q) ||
+            c.title.toLowerCase().includes(q) ||
+            c.client_name.toLowerCase().includes(q) ||
+            c.nif_tax.toLowerCase().includes(q) ||
+            c.hash_signature.toLowerCase().includes(q)
+        );
+        renderTable(filtered);
+    }
+
+    function viewAudit(contract) {
+        const content = document.getElementById('auditContent');
+        content.innerHTML = `
+            <div style="background: var(--bg-light); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border);">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Código de Registro</span>
+                        <strong style="font-size: 1.1rem; color: var(--primary); font-family: monospace;">${contract.contract_code}</strong>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Validação Jurídica</span>
+                        <span class="badge badge-emerald"><i class="fa-solid fa-check-circle"></i> Válido & Incorruptível</span>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 0.85rem;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Entidade Contraparte</span>
+                    <strong style="color: var(--text-main);">${contract.client_name} (NIF ${contract.nif_tax})</strong>
+                </div>
+
+                <div style="margin-bottom: 0.85rem;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Assinatura Criptográfica SHA-256</span>
+                    <div style="background: #ffffff; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border); font-family: monospace; font-size: 0.8rem; color: var(--primary); word-break: break-all;">
+                        ${contract.hash_signature}
+                    </div>
+                </div>
+
+                <div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Data e Hora de Registo</span>
+                    <span style="color: var(--text-main); font-weight: 600;">${contract.created_at} (Servidor Seguro UTC+0)</span>
+                </div>
+            </div>
+            
+            <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; text-align: center;">
+                <i class="fa-solid fa-lock" style="color: var(--emerald);"></i> Documento selado de acordo com as especificações de integridade da plataforma EJAJ TECH SaaS.
+            </div>
+        `;
+        document.getElementById('auditModal').style.display = 'flex';
+    }
+
+    function closeAuditModal() {
+        document.getElementById('auditModal').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', loadHistory);
+</script>
+{% endblock %}

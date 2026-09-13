@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}ContractCraft AI SaaS - Apresentação & EJAJ TECH Showcase{% endblock %}
+
+{% block content %}
+<!-- Hero Showcase Header -->
+<div style="background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%); border-radius: 24px; padding: 3.5rem 2.5rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 20px 40px rgba(79, 70, 229, 0.2); position: relative; overflow: hidden;">
+    <div style="position: relative; z-index: 2; max-width: 850px;">
+        <span class="badge" style="background: rgba(255,255,255,0.2); color: #ffffff; font-weight: 700; font-size: 0.85rem; padding: 0.4rem 1rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem; display: inline-block;">
+            <i class="fa-solid fa-sparkles"></i> EJAJ TECH LegalTech SaaS Platform
+        </span>
+        <h1 style="font-size: 2.8rem; font-weight: 900; line-height: 1.15; margin-bottom: 1.25rem; letter-spacing: -1px;">
+            ContractCraft AI — Automação Contratual & Assinaturas Criptográficas SHA-256
+        </h1>
+        <p style="font-size: 1.15rem; opacity: 0.95; line-height: 1.6; font-weight: 500; margin-bottom: 2rem;">
+            Uma solução inovadora concebida para transformar a criação, gestão e validação legal de contratos. Substitua a burocracia manual por um ecossistema inteligente alimentado por variáveis dinâmicas, verificação de NIF/NIPC e rastreabilidade digital incorruptível.
+        </p>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="/" class="btn-primary-action" style="background: #ffffff; color: var(--primary); font-weight: 800; font-size: 1rem; padding: 0.85rem 1.75rem; text-decoration: none; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                <i class="fa-solid fa-rocket"></i> Explorar Plataforma SaaS
+            </a>
+            <a href="/generate" class="btn-primary-action" style="background: rgba(255,255,255,0.15); color: #ffffff; font-weight: 700; font-size: 1rem; padding: 0.85rem 1.75rem; text-decoration: none; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3);">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar Contrato Demo
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Architecture & Value Proposition -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+    <div class="card-box">
+        <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(79, 70, 229, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+            <i class="fa-solid fa-lightbulb"></i>
+        </div>
+        <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.85rem;">
+            A Nossa Visão Positivista
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1rem;">
+            Desenvolvido pela <strong>EJAJ TECH</strong> sob a liderança do Lead Architect <strong>Enmanuel Jimenez</strong>, o ContractCraft AI reflete a nossa convicção profunda no poder da tecnologia para simplificar a vida profissional, eliminar atritos burocráticos e impulsionar a segurança jurídica em todas as transações empresariais.
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65;">
+            Acreditamos que cada minuto poupado na redação contratual é um minuto investido em inovação, crescimento e impacto positivo na sociedade.
+        </p>
+    </div>
+
+    <div class="card-box">
+        <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(16, 185, 129, 0.1); color: var(--emerald); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.85rem;">
+            Segurança & Selo SHA-256
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1rem;">
+            Cada contrato emitido pelo sistema passa por um algoritmo de hashing SHA-256 de alta precisão. O resultado é uma assinatura criptográfica única associada à combinação exata das partes, data e minuta legal.
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65;">
+            Isto garante rastreabilidade total, conformidade auditável e verificação instantânea de não-adulteração.
+        </p>
+    </div>
+</div>
+
+<!-- Key Features Grid -->
+<div style="margin-bottom: 3rem;">
+    <div style="text-align: center; max-width: 700px; margin: 0 auto 2.5rem auto;">
+        <h2 style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+            Funcionalidades Principais do SaaS
+        </h2>
+        <p style="color: var(--text-muted); font-size: 1rem;">
+            Módulos concebidos para cobrir todo o ciclo de vida contratual, da elaboração à auditoria.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <div class="card-box">
+            <i class="fa-solid fa-scroll fa-2x" style="color: var(--primary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Catálogo de Minutas Legais</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Modelos de contrato pré-aprovados para Prestação de Serviços, Emprego, Acordos de Confidencialidade (NDA) e Arrendamento Comercial, prontos para utilização.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-address-book fa-2x" style="color: var(--secondary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Directório de Entidades & NIF</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Gestão centralizada de clientes individuais e empresas, com validação de número de identificação fiscal (NIF/NIPC) e moradas fiscais.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-sliders fa-2x" style="color: var(--accent-gold); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Variáveis Dinâmicas & Live Preview</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Substituição em tempo real de tags de contrato (valores, prazos, condições) com antevisão gráfica em formato de documento oficial.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-certificate fa-2x" style="color: var(--emerald); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Emissão com Hash SHA-256</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Geração de código único de rastreio e emissão instantânea de certificados digitais de autenticidade para garantir a integridade dos acordos.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-chart-line fa-2x" style="color: var(--primary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Analytics & Exportação CSV/JSON</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Painel executivo com métricas de volume de emissão, distribuição por tipologia e exportação de dados em formatos standard para contabilidade.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-shield-halved fa-2x" style="color: var(--secondary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Audit Trail & Arquivo Digital</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Histórico imutável de todos os documentos emitidos com consulta instantânea de metadados, hora de selagem e estado jurídico.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Tech Stack Card -->
+<div class="card-box" style="margin-bottom: 3rem;">
+    <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fa-solid fa-code" style="color: var(--primary);"></i> Arquitetura Tecnológica
+    </h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Backend Engine</strong>
+            <span style="font-size: 0.85rem; color: var(--primary); font-weight: 700;">Python & Flask REST API</span>
+        </div>
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Base de Dados</strong>
+            <span style="font-size: 0.85rem; color: var(--secondary); font-weight: 700;">SQLite3 Persistente</span>
+        </div>
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Criptografia</strong>
+            <span style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">SHA-256 Hash Digest</span>
+        </div>
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Frontend Design</strong>
+            <span style="font-size: 0.85rem; color: var(--accent-gold); font-weight: 700;">HTML5 / CSS3 / Vanilla JS</span>
+        </div>
+    </div>
+</div>
+
+<!-- EJAJ TECH Callout Footer -->
+<div style="text-align: center; background: #ffffff; border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+    <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.75rem;">
+        EJAJ TECH — Inovação, Confiança e Propósito
+    </h3>
+    <p style="color: var(--text-muted); font-size: 1rem; max-width: 700px; margin: 0 auto 1.5rem auto; line-height: 1.6;">
+        Sob a orientação visionária do Lead Architect Enmanuel Jimenez, continuamos a edificar ferramentas de software de elite que capacitam profissionais e empresas a alcançar novos patamares de excelência.
+    </p>
+    <a href="/" class="btn-primary-action" style="font-size: 1rem; padding: 0.85rem 2rem; display: inline-flex;">
+        <i class="fa-solid fa-arrow-right"></i> Aceder ao Dashboard Principal
+    </a>
+</div>
+{% endblock %}

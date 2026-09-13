@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Estatísticas & Analytics - ContractCraft AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-chart-pie" style="color: var(--primary); margin-right: 0.5rem;"></i>Métricas & Analytics de Emissão
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Relatórios executivos de eficiência operacional legal, estatísticas de utilização e exportação de dados em tempo real.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/api/export/csv" class="btn-primary-action" style="background: var(--emerald); color: white; border: none; text-decoration: none;">
+            <i class="fa-solid fa-download"></i> Baixar Relatório CSV
+        </a>
+    </div>
+</div>
+
+<!-- Main Metrics Grid -->
+<div class="stats-grid-top">
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(79, 70, 229, 0.1); color: var(--primary);">
+            <i class="fa-solid fa-file-signature"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="statContracts">--</div>
+            <div class="stat-card-lbl">Contratos Emitidos</div>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--emerald);">
+            <i class="fa-solid fa-certificate"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="statSigned">--</div>
+            <div class="stat-card-lbl">Com Selo SHA-256</div>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(217, 119, 6, 0.1); color: var(--accent-gold);">
+            <i class="fa-solid fa-layer-group"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="statTemplates">--</div>
+            <div class="stat-card-lbl">Minutas Ativas</div>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(14, 165, 233, 0.1); color: var(--secondary);">
+            <i class="fa-solid fa-building-user"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="statClients">--</div>
+            <div class="stat-card-lbl">Clientes Registados</div>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem;">
+    <!-- Category Distribution -->
+    <div class="card-box">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-chart-column" style="color: var(--primary);"></i> Distribuição por Tipo de Contrato
+        </h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">
+                    <span>Prestação de Serviços Tec.</span>
+                    <span style="color: var(--primary);">45%</span>
+                </div>
+                <div style="height: 10px; background: var(--bg-light); border-radius: 20px; overflow: hidden;">
+                    <div style="width: 45%; height: 100%; background: var(--primary); border-radius: 20px;"></div>
+                </div>
+            </div>
+
+            <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">
+                    <span>Acordos de Confidencialidade (NDA)</span>
+                    <span style="color: var(--secondary);">30%</span>
+                </div>
+                <div style="height: 10px; background: var(--bg-light); border-radius: 20px; overflow: hidden;">
+                    <div style="width: 30%; height: 100%; background: var(--secondary); border-radius: 20px;"></div>
+                </div>
+            </div>
+
+            <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">
+                    <span>Contratos de Trabalho</span>
+                    <span style="color: var(--accent-gold);">15%</span>
+                </div>
+                <div style="height: 10px; background: var(--bg-light); border-radius: 20px; overflow: hidden;">
+                    <div style="width: 15%; height: 100%; background: var(--accent-gold); border-radius: 20px;"></div>
+                </div>
+            </div>
+
+            <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">
+                    <span>Arrendamento & Parcerias</span>
+                    <span style="color: var(--emerald);">10%</span>
+                </div>
+                <div style="height: 10px; background: var(--bg-light); border-radius: 20px; overflow: hidden;">
+                    <div style="width: 10%; height: 100%; background: var(--emerald); border-radius: 20px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export & Integration Hub -->
+    <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-cloud-arrow-down" style="color: var(--emerald);"></i> Central de Exportação & APIs
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                Exporte todo o histórico de auditoria legal para integração com ERPs, departamentos de contabilidade ou arquivo jurídico externo.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: var(--bg-light); border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fa-solid fa-file-csv fa-2x" style="color: var(--emerald);"></i>
+                        <div>
+                            <strong style="display: block; font-size: 0.9rem; color: var(--text-main);">Ficheiro CSV Completo</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Compatível com Excel, Google Sheets e ERPs</span>
+                        </div>
+                    </div>
+                    <a href="/api/export/csv" class="btn-primary-action" style="font-size: 0.8rem; padding: 0.4rem 0.85rem; text-decoration: none;">Download CSV</a>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: var(--bg-light); border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fa-solid fa-code fa-2x" style="color: var(--primary);"></i>
+                        <div>
+                            <strong style="display: block; font-size: 0.9rem; color: var(--text-main);">Endpoint REST JSON API</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Integração nativa para Webhooks e SaaS</span>
+                        </div>
+                    </div>
+                    <a href="/api/export/json" target="_blank" class="btn-primary-action" style="font-size: 0.8rem; padding: 0.4rem 0.85rem; text-decoration: none; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border);">Abrir JSON</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+            <i class="fa-solid fa-shield-halved" style="color: var(--emerald);"></i> Conformidade RGPD e Normas de Assinatura Eletrónica da União Europeia.
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadStats() {
+        try {
+            const res = await fetch('/api/stats');
+            const data = await res.json();
+            document.getElementById('statContracts').innerText = data.total_contracts;
+            document.getElementById('statSigned').innerText = data.signed_contracts;
+            document.getElementById('statTemplates').innerText = data.total_templates;
+            document.getElementById('statClients').innerText = data.total_clients;
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadStats);
+</script>
+{% endblock %}

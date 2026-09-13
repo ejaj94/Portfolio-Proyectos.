@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}Gerador de Contratos - ContractCraft AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+        <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--primary); margin-right: 0.5rem;"></i>Gerador Inteligente de Contratos
+    </h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Selecione o modelo legal, associe a entidade jurídica, personalize as variáveis e emita um documento assinado com selo SHA-256.
+    </p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+    <!-- Form Panel -->
+    <div class="card-box">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Parâmetros do Documento
+        </h3>
+
+        <form id="generateForm" onsubmit="generateContract(event)">
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">1. Selecionar Modelo Legal *</label>
+                    <select id="selectTemplate" required onchange="onTemplateChange()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; background: var(--bg-card); outline: none; font-weight: 600;">
+                        <option value="">-- Escolha um Modelo Legal --</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">2. Selecionar Cliente / Contraparte *</label>
+                    <select id="selectClient" required onchange="updatePreview()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; background: var(--bg-card); outline: none; font-weight: 600;">
+                        <option value="">-- Escolha um Cliente Registo --</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Título Personalizado do Contrato</label>
+                    <input type="text" id="contractTitle" placeholder="Ex: Contrato Prestação Serviços - Projeto Alfa 2026" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;" onkeyup="updatePreview()">
+                </div>
+
+                <!-- Dynamic Variables Container -->
+                <div id="dynamicVarsContainer" style="border-top: 1px solid var(--border); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.85rem;">
+                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">Variáveis de Preenchimento Dinâmico</span>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Selecione um modelo para carregar os campos configuráveis.</p>
+                </div>
+
+                <div style="border-top: 1px solid var(--border); padding-top: 1.25rem; display: flex; justify-content: flex-end;">
+                    <button type="submit" id="btnSubmit" class="btn-primary-action" style="width: 100%; justify-content: center; padding: 0.85rem; font-size: 1rem;">
+                        <i class="fa-solid fa-signature"></i> Gerar & Emitir Assinatura Digital SHA-256
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Live Preview Panel -->
+    <div class="card-box" style="position: sticky; top: 90px; background: #ffffff; border: 1px solid #cbd5e1; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+            <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-file-contract" style="color: var(--primary);"></i> Antevisão Legal em Tempo Real
+            </h3>
+            <span class="badge badge-indigo" style="font-size: 0.7rem;"><i class="fa-solid fa-eye"></i> Live Draft</span>
+        </div>
+
+        <!-- Paper representation -->
+        <div id="contractPreviewBox" style="background: #fafafa; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; min-height: 420px; max-height: 520px; overflow-y: auto; font-family: 'Times New Roman', serif; font-size: 0.95rem; line-height: 1.6; color: #1e293b; white-space: pre-wrap;">
+Selecione um modelo e um cliente à esquerda para pré-visualizar a minuta legal gerada em tempo real...
+        </div>
+
+        <div id="signatureStampBox" style="margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(16, 185, 129, 0.08); border: 1px dashed var(--emerald); border-radius: 10px; display: none;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <strong style="color: #065f46; font-size: 0.85rem;"><i class="fa-solid fa-circle-check"></i> Contrato Assinado & Selado</strong>
+                    <p id="hashStampText" style="font-size: 0.75rem; color: #047857; font-family: monospace; margin-top: 0.2rem;"></p>
+                </div>
+                <button onclick="downloadPdfMock()" class="btn-primary-action" style="font-size: 0.75rem; padding: 0.4rem 0.75rem; background: var(--emerald);">
+                    <i class="fa-solid fa-file-pdf"></i> Baixar PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let templates = [];
+    let clients = [];
+    let currentTemplate = null;
+
+    async function initPage() {
+        try {
+            const [tRes, cRes] = await Promise.all([
+                fetch('/api/templates'),
+                fetch('/api/clients')
+            ]);
+            templates = await tRes.json();
+            clients = await cRes.json();
+
+            populateDropdowns();
+
+            // Check URL query parameters
+            const params = new URLSearchParams(window.location.search);
+            const preTemplateId = params.get('template_id');
+            const preClientId = params.get('client_id');
+
+            if (preTemplateId) {
+                document.getElementById('selectTemplate').value = preTemplateId;
+                onTemplateChange();
+            }
+            if (preClientId) {
+                document.getElementById('selectClient').value = preClientId;
+                updatePreview();
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function populateDropdowns() {
+        const tSelect = document.getElementById('selectTemplate');
+        tSelect.innerHTML = '<option value="">-- Escolha um Modelo Legal --</option>' +
+            templates.map(t => `<option value="${t.id}">${t.title} (${t.category})</option>`).join('');
+
+        const cSelect = document.getElementById('selectClient');
+        cSelect.innerHTML = '<option value="">-- Escolha um Cliente Registo --</option>' +
+            clients.map(c => `<option value="${c.id}">${c.name} - ${c.company_name || 'Particular'} (NIF: ${c.nif_tax})</option>`).join('');
+    }
+
+    function onTemplateChange() {
+        const tId = document.getElementById('selectTemplate').value;
+        currentTemplate = templates.find(t => t.id == tId);
+        
+        const varsContainer = document.getElementById('dynamicVarsContainer');
+        if (!currentTemplate) {
+            varsContainer.innerHTML = '<p style="font-size: 0.8rem; color: var(--text-muted);">Selecione um modelo para carregar os campos configuráveis.</p>';
+            updatePreview();
+            return;
+        }
+
+        // Extract variable tags like {{VALOR}}, {{PRAZO}} etc.
+        const tags = (currentTemplate.variable_tags || '').split(',').map(s => s.trim()).filter(s => s);
+        
+        let html = '<span style="font-size: 0.85rem; font-weight: 700; color: var(--primary);"><i class="fa-solid fa-sliders"></i> Preencher Parâmetros Específicos:</span>';
+        
+        if (tags.length === 0) {
+            html += '<p style="font-size: 0.8rem; color: var(--text-muted);">Este modelo não necessita de variáveis adicionais.</p>';
+        } else {
+            tags.forEach(tag => {
+                const varName = tag.replace(/[\{\}]/g, '');
+                html += `
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">${varName}</label>
+                        <input type="text" class="dyn-var-input" data-tag="${tag}" placeholder="Ex: Informação para ${varName}" style="width: 100%; padding: 0.6rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; outline: none;" onkeyup="updatePreview()">
+                    </div>
+                `;
+            });
+        }
+
+        varsContainer.innerHTML = html;
+        updatePreview();
+    }
+
+    function updatePreview() {
+        const previewBox = document.getElementById('contractPreviewBox');
+        const tId = document.getElementById('selectTemplate').value;
+        const cId = document.getElementById('selectClient').value;
+
+        if (!tId) {
+            previewBox.innerText = 'Selecione um modelo e um cliente à esquerda para pré-visualizar a minuta legal gerada em tempo real...';
+            return;
+        }
+
+        const template = templates.find(t => t.id == tId);
+        const client = clients.find(c => c.id == cId);
+
+        let content = template.content_text;
+
+        // Replace client info if available
+        if (client) {
+            content = content.replace(/\{\{NOME_CLIENTE\}\}/g, client.name);
+            content = content.replace(/\{\{NIF\}\}/g, client.nif_tax);
+            content = content.replace(/\{\{EMPRESA\}\}/g, client.company_name || 'N/A');
+            content = content.replace(/\{\{MORADA\}\}/g, client.address || 'N/A');
+            content = content.replace(/\{\{EMAIL\}\}/g, client.email || 'N/A');
+        }
+
+        // Replace dynamic inputs
+        const inputs = document.querySelectorAll('.dyn-var-input');
+        inputs.forEach(input => {
+            const tag = input.getAttribute('data-tag');
+            const val = input.value || `[${input.placeholder.replace('Ex: Informação para ', '')}]`;
+            const regex = new RegExp(tag.replace(/[\{\}]/g, '\\$&'), 'g');
+            content = content.replace(regex, val);
+        });
+
+        // Set date default if {{DATA_ATUAL}} present
+        const dateNow = new Date().toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' });
+        content = content.replace(/\{\{DATA_ATUAL\}\}/g, dateNow);
+
+        previewBox.innerText = content;
+    }
+
+    async function generateContract(e) {
+        e.preventDefault();
+        const template_id = document.getElementById('selectTemplate').value;
+        const client_id = document.getElementById('selectClient').value;
+        const title = document.getElementById('contractTitle').value;
+
+        if (!template_id || !client_id) {
+            alert('Por favor selecione um Modelo e um Cliente!');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/contracts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ template_id, client_id, title })
+            });
+
+            const data = await res.json();
+            if (res.ok && data.success) {
+                const stampBox = document.getElementById('signatureStampBox');
+                const stampText = document.getElementById('hashStampText');
+                stampText.innerText = `Código: ${data.code} | Hash SHA256: ${data.hash}`;
+                stampBox.style.display = 'block';
+                
+                alert(`Contrato ${data.code} emitido e assinado digitalmente com sucesso!`);
+            } else {
+                alert(data.message || 'Erro ao gerar contrato.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro de ligação ao servidor.');
+        }
+    }
+
+    function downloadPdfMock() {
+        alert('O download do PDF certificado com hash auditável foi iniciado!');
+    }
+
+    document.addEventListener('DOMContentLoaded', initPage);
+</script>
+{% endblock %}

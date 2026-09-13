@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}Clientes & Entidades - ContractCraft AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-users" style="color: var(--primary); margin-right: 0.5rem;"></i>Directório de Clientes & Entidades
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Registe e gira empresas, clientes individuais e contrapartes contratuais com validação legal de NIF/NIPC.
+        </p>
+    </div>
+    <button onclick="openClientModal()" class="btn-primary-action">
+        <i class="fa-solid fa-user-plus"></i> Novo Cliente / Empresa
+    </button>
+</div>
+
+<!-- Search & Filter Bar -->
+<div class="card-box" style="margin-bottom: 1.5rem; padding: 1rem 1.5rem;">
+    <div style="display: flex; gap: 1rem; align-items: center;">
+        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+        <input type="text" id="searchClient" onkeyup="filterClients()" placeholder="Pesquisar por nome, NIF ou empresa..." style="width: 100%; border: none; outline: none; font-size: 0.95rem; font-weight: 500; background: transparent; color: var(--text-main);">
+    </div>
+</div>
+
+<!-- Clients Grid -->
+<div id="clientsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+    <div style="text-align: center; padding: 3rem; color: var(--text-muted); grid-column: 1/-1;">
+        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+        <p style="margin-top: 0.75rem; font-weight: 600;">A carregar directório de clientes...</p>
+    </div>
+</div>
+
+<!-- Modal: Novo Cliente -->
+<div id="clientModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(5px); z-index: 999; justify-content: center; align-items: center;">
+    <div style="background: var(--bg-card); width: 100%; max-width: 540px; border-radius: 20px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15); margin: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+                <i class="fa-solid fa-address-card" style="color: var(--primary);"></i> Novo Registo de Cliente
+            </h3>
+            <button onclick="closeClientModal()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <form id="clientForm" onsubmit="submitClient(event)">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Nome Completo / Representante Legal *</label>
+                    <input type="text" id="clientName" required placeholder="Ex: Dr. Ricardo Santos" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; outline: none; font-size: 0.9rem;">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">NIF / NIPC Fiscal *</label>
+                        <input type="text" id="clientNif" required placeholder="Ex: 509823411" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; outline: none; font-size: 0.9rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Empresa / Razão Social</label>
+                        <input type="text" id="clientCompany" placeholder="Ex: TechVentures Lda." style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; outline: none; font-size: 0.9rem;">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Email Corporativo</label>
+                        <input type="email" id="clientEmail" placeholder="contacto@empresa.pt" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; outline: none; font-size: 0.9rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Contacto Telefónico</label>
+                        <input type="text" id="clientPhone" placeholder="+351 912 345 678" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; outline: none; font-size: 0.9rem;">
+                    </div>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Morada Completa & Sede Fiscal</label>
+                    <input type="text" id="clientAddress" placeholder="Av. da Liberdade 120, 1000-045 Lisboa" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; outline: none; font-size: 0.9rem;">
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button type="button" onclick="closeClientModal()" style="padding: 0.75rem 1.25rem; border: 1px solid var(--border); border-radius: 10px; background: transparent; font-weight: 600; cursor: pointer;">Cancelar</button>
+                <button type="submit" class="btn-primary-action">Guardar Cliente</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    let allClients = [];
+
+    async function loadClients() {
+        try {
+            const res = await fetch('/api/clients');
+            allClients = await res.json();
+            renderClients(allClients);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function renderClients(clients) {
+        const grid = document.getElementById('clientsGrid');
+        if (!clients || clients.length === 0) {
+            grid.innerHTML = `
+                <div class="card-box" style="text-align: center; padding: 3rem; grid-column: 1/-1;">
+                    <i class="fa-solid fa-users-slash fa-3x" style="color: var(--text-muted); margin-bottom: 1rem;"></i>
+                    <h4 style="font-weight: 700; color: var(--text-main);">Nenhum cliente encontrado</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Registe o seu primeiro cliente para iniciar a emissão de contratos.</p>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = clients.map(c => `
+            <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+                <div>
+                    <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(79, 70, 229, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem;">
+                                ${c.name.substring(0,2).toUpperCase()}
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main);">${c.name}</h3>
+                                <p style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">${c.company_name || 'Particular / ENI'}</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-indigo" style="font-size: 0.75rem;"><i class="fa-solid fa-id-card"></i> NIF ${c.nif_tax}</span>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+                        <div><i class="fa-solid fa-envelope" style="width: 18px; color: var(--primary);"></i> ${c.email || 'Não especificado'}</div>
+                        <div><i class="fa-solid fa-phone" style="width: 18px; color: var(--primary);"></i> ${c.phone || 'Não especificado'}</div>
+                        <div><i class="fa-solid fa-location-dot" style="width: 18px; color: var(--primary);"></i> ${c.address || 'Não especificada'}</div>
+                    </div>
+                </div>
+
+                <div style="padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-shield-halved" style="color: var(--emerald);"></i> Verificado</span>
+                    <a href="/generate?client_id=${c.id}" class="btn-primary-action" style="font-size: 0.8rem; padding: 0.4rem 0.85rem; text-decoration: none;">
+                        <i class="fa-solid fa-file-signature"></i> Gerar Contrato
+                    </a>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function filterClients() {
+        const query = document.getElementById('searchClient').value.toLowerCase();
+        const filtered = allClients.filter(c => 
+            c.name.toLowerCase().includes(query) ||
+            c.nif_tax.toLowerCase().includes(query) ||
+            (c.company_name && c.company_name.toLowerCase().includes(query))
+        );
+        renderClients(filtered);
+    }
+
+    function openClientModal() {
+        document.getElementById('clientModal').style.display = 'flex';
+    }
+
+    function closeClientModal() {
+        document.getElementById('clientModal').style.display = 'none';
+        document.getElementById('clientForm').reset();
+    }
+
+    async function submitClient(e) {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('clientName').value,
+            nif_tax: document.getElementById('clientNif').value,
+            company_name: document.getElementById('clientCompany').value,
+            email: document.getElementById('clientEmail').value,
+            phone: document.getElementById('clientPhone').value,
+            address: document.getElementById('clientAddress').value
+        };
+
+        try {
+            const res = await fetch('/api/clients', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                closeClientModal();
+                loadClients();
+            } else {
+                alert(result.message || 'Erro ao guardar cliente.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro na ligação ao servidor.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadClients);
+</script>
+{% endblock %}

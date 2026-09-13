@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Modelos de Contrato — ContractCraft AI SaaS{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <div>
+        <h2 style="font-size:1.8rem; font-weight:800; color:var(--text-main);">Minutas & Modelos Jurídicos Padrão</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Biblioteca de minutas legais pré-configuradas com substituição dinâmica de variáveis.</p>
+    </div>
+    <button class="btn-primary" onclick="openNewTemplateModal()"><i class="fa-solid fa-plus-circle"></i> Adicionar Novo Modelo</button>
+</div>
+
+<div id="fullTemplatesGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:1.5rem;">
+    <!-- JS populates -->
+</div>
+
+<!-- Modal Create Template -->
+<div class="modal-overlay" id="newTemplateModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-file-contract" style="color:var(--primary);"></i> Novo Modelo de Contrato</h3>
+            <span class="close-modal" onclick="closeNewTemplateModal()">&times;</span>
+        </div>
+        <form id="newTemplateForm" onsubmit="submitNewTemplate(event)">
+            <div class="form-group">
+                <label>Título do Modelo</label>
+                <input type="text" class="form-control" id="tTitle" required placeholder="Ex: Contrato de Licenciamento de Marca">
+            </div>
+            <div class="form-group">
+                <label>Categoria Jurídica</label>
+                <input type="text" class="form-control" id="tCategory" required placeholder="Ex: Propriedade Intelectual">
+            </div>
+            <div class="form-group">
+                <label>Descrição Curta</label>
+                <input type="text" class="form-control" id="tDesc" required placeholder="Explique o propósito deste contrato...">
+            </div>
+            <div class="form-group">
+                <label>Variáveis de Substituição (separadas por vírgula)</label>
+                <input type="text" class="form-control" id="tTags" required placeholder="{{NOME}}, {{NIF}}, {{VALOR}}">
+            </div>
+            <div class="form-group">
+                <label>Texto Completo da Minuta Legal</label>
+                <textarea class="form-control" id="tContent" rows="5" required placeholder="Pelo presente instrumento juridico..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:1rem;">
+                <i class="fa-solid fa-save"></i> Guardar Minuta Padrão
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    async function loadFullTemplates() {
+        const res = await fetch('/api/templates');
+        const templates = await res.json();
+        const grid = document.getElementById('fullTemplatesGrid');
+        grid.innerHTML = '';
+
+        templates.forEach(t => {
+            const card = document.createElement('div');
+            card.style = `
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                padding: 1.5rem;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            `;
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem;">
+                    <span style="background:rgba(79,70,229,0.08); color:var(--primary); font-size:0.75rem; font-weight:700; padding:0.3rem 0.8rem; border-radius:20px; border:1px solid rgba(79,70,229,0.2);">
+                        ${t.category}
+                    </span>
+                    <span style="color:var(--text-muted); font-size:0.8rem; font-weight:600;">ID #${t.id}</span>
+                </div>
+                <h4 style="font-size:1.15rem; font-weight:800; margin-bottom:0.5rem; color:var(--text-main);">${t.title}</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.6; margin-bottom:1rem;">
+                    ${t.description}
+                </p>
+                <div style="background:#f8fafc; padding:0.6rem 0.8rem; border-radius:8px; border:1px solid #e2e8f0; font-size:0.78rem; color:#475569; font-weight:700;">
+                    <i class="fa-solid fa-tags" style="color:var(--primary);"></i> ${t.variable_tags}
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function openNewTemplateModal() { document.getElementById('newTemplateModal').style.display = 'flex'; }
+    function closeNewTemplateModal() { document.getElementById('newTemplateModal').style.display = 'none'; }
+
+    async function submitNewTemplate(e) {
+        e.preventDefault();
+        const payload = {
+            title: document.getElementById('tTitle').value,
+            category: document.getElementById('tCategory').value,
+            description: document.getElementById('tDesc').value,
+            variable_tags: document.getElementById('tTags').value,
+            content_text: document.getElementById('tContent').value
+        };
+
+        const res = await fetch('/api/templates', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+            closeNewTemplateModal();
+            loadFullTemplates();
+        } else {
+            alert(data.message);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadFullTemplates);
+</script>
+{% endblock %}

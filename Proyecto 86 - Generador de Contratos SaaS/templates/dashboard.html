@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — ContractCraft AI Gerador de Contratos SaaS{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <div>
+        <h2 style="font-size:1.8rem; font-weight:800; color:var(--text-main);">Painel Executivo de Gestão Contratual</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Plataforma automatizada para emissão de minutas legais, validação por código hash e arquivo de assinaturas.</p>
+    </div>
+    <a href="/generate" class="btn-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Gerar Novo Contrato</a>
+</div>
+
+<!-- Top Stats Bar -->
+<div class="stats-grid-top">
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-file-signature"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statTotalContracts">0</h3>
+            <p>Contratos Emitidos</p>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-shield-check" style="color:var(--emerald);"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statSignedContracts">0</h3>
+            <p>Assinados & Válidos</p>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-file-contract"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statTotalTemplates">0</h3>
+            <p>Minutas Legais Padrão</p>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-users"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statTotalClients">0</h3>
+            <p>Clientes & Partes Registadas</p>
+        </div>
+    </div>
+</div>
+
+<!-- Templates Showcase Grid -->
+<h3 style="font-size:1.3rem; font-weight:800; margin-bottom:1.25rem; color:var(--text-main);"><i class="fa-solid fa-file-lines" style="color:var(--primary);"></i> Modelos de Contratos Disponíveis</h3>
+
+<div id="templatesGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:1.5rem; margin-bottom:2.5rem;">
+    <!-- JS populates -->
+</div>
+
+<!-- Recent Contracts Table Section -->
+<div style="background:var(--bg-card); border:1px solid var(--border); border-radius:18px; padding:1.5rem; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
+    <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; color:var(--text-main);">
+        <span><i class="fa-solid fa-clock-rotate-left" style="color:var(--primary);"></i> Últimos Contratos Gerados & Assinados</span>
+        <a href="/history" style="color:var(--primary); font-size:0.85rem; text-decoration:none; font-weight:700;">Ver Histórico Completo →</a>
+    </h3>
+
+    <div class="data-table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Título do Documento</th>
+                    <th>Cliente / Outorgante</th>
+                    <th>NIF</th>
+                    <th>Estado Jurídico</th>
+                    <th>Hash de Validação</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody id="recentContractsTable">
+                <!-- JS populates -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function loadStats() {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        document.getElementById('statTotalContracts').innerText = data.total_contracts;
+        document.getElementById('statSignedContracts').innerText = data.signed_contracts;
+        document.getElementById('statTotalTemplates').innerText = data.total_templates;
+        document.getElementById('statTotalClients').innerText = data.total_clients;
+    }
+
+    async function loadTemplates() {
+        const res = await fetch('/api/templates');
+        const templates = await res.json();
+        const grid = document.getElementById('templatesGrid');
+        grid.innerHTML = '';
+
+        templates.forEach(t => {
+            const card = document.createElement('div');
+            card.style = `
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                padding: 1.5rem;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+                display: flex; flex-direction: column; justify-content: space-between;
+            `;
+            card.innerHTML = `
+                <div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem;">
+                        <span style="background:rgba(79,70,229,0.08); color:var(--primary); font-size:0.75rem; font-weight:700; padding:0.3rem 0.8rem; border-radius:20px; border:1px solid rgba(79,70,229,0.2);">
+                            ${t.category}
+                        </span>
+                        <span style="color:var(--text-muted); font-size:0.8rem; font-weight:600;"><i class="fa-solid fa-code"></i> Minuta Padrão</span>
+                    </div>
+                    <h4 style="font-size:1.15rem; font-weight:800; margin-bottom:0.5rem; color:var(--text-main);">${t.title}</h4>
+                    <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.6; margin-bottom:1rem;">
+                        ${t.description}
+                    </p>
+                    <div style="background:#f8fafc; padding:0.6rem 0.8rem; border-radius:8px; border:1px solid #e2e8f0; font-size:0.78rem; color:#475569; font-weight:700; margin-bottom:1.25rem;">
+                        <i class="fa-solid fa-tags" style="color:var(--primary);"></i> Variáveis: ${t.variable_tags}
+                    </div>
+                </div>
+                <div>
+                    <a href="/generate" class="btn-primary" style="width:100%; justify-content:center;">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Usar Este Modelo
+                    </a>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    async function loadRecentContracts() {
+        const res = await fetch('/api/contracts');
+        const contracts = await res.json();
+        const tbody = document.getElementById('recentContractsTable');
+        tbody.innerHTML = '';
+
+        contracts.slice(0, 5).forEach(c => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="font-weight:700; color:var(--primary);">${c.contract_code}</td>
+                <td style="font-weight:700; color:var(--text-main);">${c.title}</td>
+                <td><i class="fa-solid fa-building" style="color:var(--text-muted);"></i> ${c.client_name}</td>
+                <td style="color:var(--text-muted); font-weight:600;">${c.nif_tax}</td>
+                <td><span style="background:rgba(16,185,129,0.1); color:var(--emerald); padding:0.25rem 0.65rem; border-radius:6px; font-size:0.8rem; font-weight:700;"><i class="fa-solid fa-circle-check"></i> ${c.status}</span></td>
+                <td style="font-family:monospace; font-size:0.78rem; color:#64748b;">${c.hash_signature}</td>
+                <td style="color:var(--text-muted); font-size:0.8rem;">${c.created_at}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadStats();
+        loadTemplates();
+        loadRecentContracts();
+    });
+</script>
+{% endblock %}
