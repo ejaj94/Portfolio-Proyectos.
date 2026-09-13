@@ -1,64 +1,68 @@
 {% extends "base.html" %}
 
-{% block title %}Subscritores & Leitores - Subscribed AI{% endblock %}
+{% block page_title %}CRM de Leitores & Audiência{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
     <div>
-        <h2 class="serif-heading" style="font-size: 2.2rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.25rem;">
-            <i class="fa-solid fa-users" style="color: var(--primary); margin-right: 0.5rem;"></i>Gestão de Subscritores & Leitores
+        <span class="badge-pill badge-emerald" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-address-card"></i> Gestão de Audiência</span>
+        <h2 class="serif-heading" style="font-size: 2.2rem; font-weight: 900; color: var(--text-ink); line-height: 1.1;">
+            CRM de Leitores & Subscritores
         </h2>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">
-            Administre a sua base de dados de leitores, acompanhe o nível de fidelização (Tier) e as taxas de abertura individuais.
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+            Diretório de leitores com acompanhamento de retenção, pontuação de engagement e níveis de subscrição.
         </p>
     </div>
-    <button onclick="openSubModal()" class="btn-editorial">
-        <i class="fa-solid fa-user-plus"></i> Novo Subscritor
+    <button onclick="openSubModal()" class="btn-pill-primary">
+        <i class="fa-solid fa-user-plus"></i> Novo Leitor
     </button>
 </div>
 
-<!-- Subscribers Table Card -->
-<div class="card-editorial">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-        <div style="display: flex; gap: 0.5rem;">
-            <button onclick="filterTier('all')" class="badge badge-terracota" style="cursor: pointer; padding: 0.45rem 0.9rem;">Todos</button>
-            <button onclick="filterTier('VIP')" class="badge badge-gold" style="cursor: pointer; padding: 0.45rem 0.9rem;"><i class="fa-solid fa-crown"></i> VIP</button>
-            <button onclick="filterTier('Premium')" class="badge badge-emerald" style="cursor: pointer; padding: 0.45rem 0.9rem;"><i class="fa-solid fa-star"></i> Premium</button>
-            <button onclick="filterTier('Gratuito')" class="badge badge-gray" style="cursor: pointer; padding: 0.45rem 0.9rem;">Gratuito</button>
-        </div>
-        <span class="badge badge-gray" id="subCountBadge">0 Leitores</span>
+<!-- Controls Bar: Filter Pills & Search Input -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; background: var(--bg-card); padding: 1.25rem 1.5rem; border-radius: 16px; border: 1px solid var(--border);">
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <button onclick="filterTier('all')" class="btn-ghost active" id="btn-sub-all" style="padding: 0.4rem 1rem; font-size: 0.82rem;">Todos os Leitores</button>
+        <button onclick="filterTier('VIP')" class="btn-ghost" id="btn-sub-VIP" style="padding: 0.4rem 1rem; font-size: 0.82rem;"><i class="fa-solid fa-crown" style="color: var(--gold);"></i> VIP Exclusive</button>
+        <button onclick="filterTier('Premium')" class="btn-ghost" id="btn-sub-Premium" style="padding: 0.4rem 1rem; font-size: 0.82rem;"><i class="fa-solid fa-star" style="color: var(--secondary);"></i> Premium</button>
+        <button onclick="filterTier('Gratuito')" class="btn-ghost" id="btn-sub-Gratuito" style="padding: 0.4rem 1rem; font-size: 0.82rem;">Gratuito</button>
     </div>
 
-    <div style="overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left;">
-            <thead>
-                <tr style="border-bottom: 2px solid var(--border); font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
-                    <th style="padding: 0.85rem 1rem;">Nome do Leitor</th>
-                    <th style="padding: 0.85rem 1rem;">Endereço de E-mail</th>
-                    <th style="padding: 0.85rem 1rem;">Nível (Tier)</th>
-                    <th style="padding: 0.85rem 1rem;">Estado</th>
-                    <th style="padding: 0.85rem 1rem;">Taxa Abertura</th>
-                    <th style="padding: 0.85rem 1rem;">Inscrição</th>
-                </tr>
-            </thead>
-            <tbody id="subscribersTableBody" style="font-size: 0.9rem;">
-                <tr>
-                    <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
-                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-                        <p style="margin-top: 0.5rem;">A carregar subscritores...</p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <input type="text" id="subSearchInput" oninput="searchSubscribers()" placeholder="Procurar por nome ou e-mail..." style="padding: 0.55rem 1rem; border: 1px solid var(--border); border-radius: 50px; font-size: 0.85rem; outline: none; width: 240px; background: var(--bg-ivory);">
+        <span class="badge-pill badge-gray" id="subCountBadge">0 Registos</span>
     </div>
 </div>
 
+<!-- NEW EDITORIAL LEDGER TABLE -->
+<div style="overflow-x: auto;">
+    <table class="editorial-ledger-table">
+        <thead>
+            <tr>
+                <th>Leitor</th>
+                <th>Contacto E-mail</th>
+                <th>Nível (Tier)</th>
+                <th>Estado</th>
+                <th>Engagement (Abertura)</th>
+                <th>Data Inscrição</th>
+            </tr>
+        </thead>
+        <tbody id="subscribersTableBody">
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                    <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                    <p style="margin-top: 0.5rem;">A carregar registo de leitores...</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 <!-- Modal: Novo Subscritor -->
-<div id="subModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(26, 25, 23, 0.6); backdrop-filter: blur(5px); z-index: 999; justify-content: center; align-items: center; padding: 1rem;">
-    <div style="background: var(--bg-card); width: 100%; max-width: 500px; border-radius: 16px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+<div id="subModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(26, 25, 23, 0.6); backdrop-filter: blur(6px); z-index: 999; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: var(--bg-card); width: 100%; max-width: 500px; border-radius: 20px; padding: 2rem; border: 2px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h3 class="serif-heading" style="font-size: 1.3rem; font-weight: 800; color: var(--text-ink);">
-                <i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> Inscrever Novo Leitor
+            <h3 class="serif-heading" style="font-size: 1.35rem; font-weight: 800; color: var(--text-ink);">
+                <i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> Cadastrar Novo Leitor
             </h3>
             <button onclick="closeSubModal()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
         </div>
@@ -67,15 +71,15 @@
             <div style="display: flex; flex-direction: column; gap: 1rem;">
                 <div>
                     <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Nome Completo *</label>
-                    <input type="text" id="sName" required placeholder="Ex: Maria Santos" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none;">
+                    <input type="text" id="sName" required placeholder="Ex: Rodrigo Mendes" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
                 </div>
                 <div>
                     <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Endereço de E-mail *</label>
-                    <input type="email" id="sEmail" required placeholder="Ex: maria.santos@empresa.pt" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none;">
+                    <input type="email" id="sEmail" required placeholder="Ex: rodrigo.mendes@investor.pt" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
                 </div>
                 <div>
                     <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Nível de Subscrição (Tier) *</label>
-                    <select id="sTier" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none; background: #fff;">
+                    <select id="sTier" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none; background: #fff;">
                         <option value="Gratuito">Gratuito</option>
                         <option value="Premium">Premium</option>
                         <option value="VIP">VIP Exclusive</option>
@@ -84,8 +88,8 @@
             </div>
 
             <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
-                <button type="button" onclick="closeSubModal()" style="padding: 0.75rem 1.25rem; border: 1px solid var(--border); border-radius: 8px; background: transparent; font-weight: 600; cursor: pointer;">Cancelar</button>
-                <button type="submit" class="btn-editorial">Guardar Subscritor</button>
+                <button type="button" onclick="closeSubModal()" style="padding: 0.75rem 1.25rem; border: 1px solid var(--border); border-radius: 10px; background: transparent; font-weight: 600; cursor: pointer;">Cancelar</button>
+                <button type="submit" class="btn-pill-primary">Guardar Leitor</button>
             </div>
         </form>
     </div>
@@ -110,39 +114,61 @@
         renderSubscribers();
     }
 
+    function searchSubscribers() {
+        renderSubscribers();
+    }
+
     function renderSubscribers() {
         const tbody = document.getElementById('subscribersTableBody');
+        const search = (document.getElementById('subSearchInput').value || '').toLowerCase();
+        
         let filtered = subscribersArray;
 
         if (currentTier !== 'all') {
             filtered = subscribersArray.filter(s => s.tier === currentTier);
         }
 
+        if (search) {
+            filtered = filtered.filter(s => s.name.toLowerCase().includes(search) || s.email.toLowerCase().includes(search));
+        }
+
         document.getElementById('subCountBadge').innerText = filtered.length + ' Leitores';
 
         if (!filtered || filtered.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">Nenhum subscritor encontrado.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">Nenhum leitor encontrado.</td></tr>`;
             return;
         }
 
         tbody.innerHTML = filtered.map(s => {
-            const tierBadge = s.tier === 'VIP' ? '<span class="badge badge-gold"><i class="fa-solid fa-crown"></i> VIP</span>'
-                : (s.tier === 'Premium' ? '<span class="badge badge-emerald"><i class="fa-solid fa-star"></i> Premium</span>'
-                : '<span class="badge badge-gray">Gratuito</span>');
+            const initials = s.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 
-            const statusBadge = s.status === 'Ativo' ? '<span style="color: var(--secondary); font-weight: 700;"><i class="fa-solid fa-circle" style="font-size: 0.6rem;"></i> Ativo</span>'
+            const tierBadge = s.tier === 'VIP' ? '<span class="badge-pill badge-gold"><i class="fa-solid fa-crown"></i> VIP</span>'
+                : (s.tier === 'Premium' ? '<span class="badge-pill badge-emerald"><i class="fa-solid fa-star"></i> Premium</span>'
+                : '<span class="badge-pill badge-gray">Gratuito</span>');
+
+            const statusBadge = s.status === 'Ativo' ? '<span style="color: var(--secondary); font-weight: 700;"><i class="fa-solid fa-circle" style="font-size: 0.5rem; vertical-align: middle; margin-right: 0.3rem;"></i> Ativo</span>'
                 : '<span style="color: var(--gold); font-weight: 700;"><i class="fa-solid fa-clock"></i> Pendente</span>';
 
             return `
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 1rem;">
-                        <strong style="color: var(--text-ink); font-family: 'Playfair Display', serif;">${s.name}</strong>
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div class="reader-avatar">${initials}</div>
+                            <strong style="color: var(--text-ink); font-family: 'Playfair Display', serif; font-size: 0.95rem;">${s.name}</strong>
+                        </div>
                     </td>
-                    <td style="padding: 1rem; color: var(--text-muted);">${s.email}</td>
-                    <td style="padding: 1rem;">${tierBadge}</td>
-                    <td style="padding: 1rem;">${statusBadge}</td>
-                    <td style="padding: 1rem; font-weight: 800; color: var(--primary);">${s.open_rate}%</td>
-                    <td style="padding: 1rem; font-size: 0.82rem; color: var(--text-muted);">${s.subscribed_at}</td>
+                    <td style="color: var(--text-muted); font-size: 0.88rem;">${s.email}</td>
+                    <td>${tierBadge}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="flex: 1; height: 6px; background: #eae5de; border-radius: 10px; overflow: hidden; max-width: 100px;">
+                                <div style="width: ${s.open_rate}%; height: 100%; background: var(--primary); border-radius: 10px;"></div>
+                            </div>
+                            <span style="font-weight: 800; color: var(--primary); font-size: 0.82rem;">${s.open_rate}%</span>
+                        </div>
+                    </td>
+                    <td style="font-size: 0.82rem; color: var(--text-muted);">${s.subscribed_at}</td>
                 </tr>
             `;
         }).join('');
@@ -176,7 +202,7 @@
                 closeSubModal();
                 loadSubscribersPage();
             } else {
-                alert(result.message || 'Erro ao inscrever leitor.');
+                alert(result.message || 'Erro ao cadastrar leitor.');
             }
         } catch (err) {
             console.error(err);

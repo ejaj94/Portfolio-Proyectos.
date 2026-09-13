@@ -10,15 +10,17 @@
         :root {
             --bg-ivory: #faf8f5;
             --bg-card: #ffffff;
+            --bg-sidebar: #f2ece4;
             --primary: #c85a32; /* Terracota Editorial */
             --primary-glow: rgba(200, 90, 50, 0.15);
             --secondary: #1b4332; /* Esmeralda Profundo */
             --secondary-glow: rgba(27, 67, 50, 0.12);
             --gold: #d97706;
-            --border: #e8e4df;
-            --border-hover: #d6d0c7;
+            --border: #e2dad0;
+            --border-hover: #cbd0c7;
             --text-ink: #1a1917;
             --text-muted: #64748b;
+            --sidebar-width: 260px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,259 +31,417 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
         }
 
-        h1, h2, h3, .serif-heading {
+        h1, h2, h3, h4, .serif-heading {
             font-family: 'Playfair Display', Georgia, serif;
         }
 
-        /* Editorial Header Navbar */
-        .navbar {
+        /* --- NEW LAYOUT: Editorial Vertical Sidebar --- */
+        .app-sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            border-right: 2px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 1.5rem 1rem;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-ink);
+            padding: 0.5rem 0.5rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--secondary);
+            color: var(--bg-ivory);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 12px var(--secondary-glow);
+        }
+
+        .sidebar-brand-text h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-ink);
+            line-height: 1.1;
+        }
+
+        .sidebar-brand-text p {
+            font-size: 0.7rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex: 1;
+        }
+
+        .sidebar-menu-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 800;
+            padding: 0.75rem 0.75rem 0.35rem;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-link {
+            color: var(--text-ink);
+            text-decoration: none;
+            padding: 0.7rem 0.9rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(200, 90, 50, 0.08);
+            color: var(--primary);
+        }
+
+        .sidebar-link.active {
+            background: var(--primary);
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .sidebar-link.active i {
+            color: #ffffff !important;
+        }
+
+        .sidebar-footer-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* --- NEW LAYOUT: Main Content Wrapper --- */
+        .app-main {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .app-topbar {
             background: rgba(250, 248, 245, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 2px solid var(--border);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
             padding: 1rem 2.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 90;
         }
 
-        .brand-box {
-            display: flex;
-            align-items: center;
-            gap: 0.85rem;
-            text-decoration: none;
-            color: var(--text-ink);
-        }
-
-        .brand-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            background: var(--secondary);
-            color: var(--bg-ivory);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            box-shadow: 0 4px 12px var(--secondary-glow);
-            border: 1px solid rgba(27, 67, 50, 0.3);
-        }
-
-        .brand-text h1 {
-            font-size: 1.35rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: var(--text-ink);
-            line-height: 1.1;
-        }
-
-        .brand-text p {
-            font-size: 0.72rem;
-            color: var(--primary);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 0.4rem;
-            list-style: none;
-        }
-
-        .nav-link-item {
+        .topbar-breadcrumb {
+            font-size: 0.9rem;
             color: var(--text-muted);
-            text-decoration: none;
-            padding: 0.6rem 1rem;
-            border-radius: 8px;
-            font-size: 0.88rem;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            transition: all 0.2s ease;
         }
 
-        .nav-link-item:hover, .nav-link-item.active {
-            color: var(--primary);
-            background: rgba(200, 90, 50, 0.08);
-            border: 1px solid rgba(200, 90, 50, 0.2);
+        .topbar-breadcrumb strong {
+            color: var(--text-ink);
         }
 
-        .nav-link-item.active {
-            font-weight: 700;
-            color: var(--primary);
-            box-shadow: 0 2px 6px rgba(200, 90, 50, 0.08);
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
-        /* Container Main */
-        .main-container {
-            max-width: 1280px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
+        .content-container {
+            padding: 2.5rem;
+            max-width: 1350px;
             width: 100%;
+            margin: 0 auto;
             flex: 1;
         }
 
-        /* Editorial Cards */
-        .card-editorial {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.75rem;
-            box-shadow: 0 4px 20px rgba(26, 25, 23, 0.03);
-            transition: all 0.2s ease;
-        }
-
-        .card-editorial:hover {
-            border-color: var(--border-hover);
-        }
-
-        /* Primary Editorial Button */
-        .btn-editorial {
+        /* --- NEW BUTTON STYLES --- */
+        /* Tactile Pill Button */
+        .btn-pill-primary {
             background: var(--primary);
             color: #ffffff;
             font-weight: 700;
-            padding: 0.75rem 1.35rem;
-            border-radius: 8px;
+            padding: 0.65rem 1.4rem;
+            border-radius: 50px;
             border: none;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px var(--primary-glow);
-            font-size: 0.9rem;
+            box-shadow: 0 4px 14px var(--primary-glow);
+            font-size: 0.88rem;
             text-decoration: none;
         }
 
-        .btn-editorial:hover {
+        .btn-pill-primary:hover {
             background: #b24d29;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(200, 90, 50, 0.3);
         }
 
-        .btn-secondary-editorial {
+        .btn-pill-secondary {
             background: var(--secondary);
             color: #ffffff;
             font-weight: 700;
-            padding: 0.75rem 1.35rem;
-            border-radius: 8px;
+            padding: 0.65rem 1.4rem;
+            border-radius: 50px;
             border: none;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px var(--secondary-glow);
-            font-size: 0.9rem;
+            box-shadow: 0 4px 14px var(--secondary-glow);
+            font-size: 0.88rem;
             text-decoration: none;
         }
 
-        .btn-secondary-editorial:hover {
-            background: #143326;
-            transform: translateY(-1px);
+        .btn-pill-secondary:hover {
+            background: #122c21;
+            transform: translateY(-2px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-ink);
+            border: 1px solid var(--border);
+            padding: 0.65rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(200, 90, 50, 0.05);
+        }
+
+        /* --- NEW TABLE STYLE: Editorial Ledger Table --- */
+        .editorial-ledger-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+            text-align: left;
+        }
+
+        .editorial-ledger-table th {
+            padding: 0.85rem 1.25rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+
+        .editorial-ledger-table td {
+            padding: 1.1rem 1.25rem;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .editorial-ledger-table tr td:first-child {
+            border-left: 1px solid var(--border);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .editorial-ledger-table tr td:last-child {
+            border-right: 1px solid var(--border);
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .editorial-ledger-table tr:hover td {
+            background: #ffffff;
+            border-color: var(--primary);
         }
 
         /* Badges */
-        .badge {
+        .badge-pill {
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            padding: 0.35rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.78rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
         }
 
-        .badge-terracota { background: rgba(200, 90, 50, 0.1); color: var(--primary); border: 1px solid rgba(200, 90, 50, 0.2); }
-        .badge-emerald { background: rgba(27, 67, 50, 0.1); color: var(--secondary); border: 1px solid rgba(27, 67, 50, 0.2); }
-        .badge-gold { background: rgba(217, 119, 6, 0.1); color: var(--gold); border: 1px solid rgba(217, 119, 6, 0.2); }
-        .badge-gray { background: #f1f5f9; color: var(--text-muted); border: 1px solid var(--border); }
+        .badge-terracota { background: rgba(200, 90, 50, 0.12); color: var(--primary); border: 1px solid rgba(200, 90, 50, 0.25); }
+        .badge-emerald { background: rgba(27, 67, 50, 0.12); color: var(--secondary); border: 1px solid rgba(27, 67, 50, 0.25); }
+        .badge-gold { background: rgba(217, 119, 6, 0.12); color: var(--gold); border: 1px solid rgba(217, 119, 6, 0.25); }
+        .badge-gray { background: #eae5de; color: var(--text-muted); border: 1px solid var(--border); }
+
+        /* Reader Avatar Circle */
+        .reader-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+        }
 
         /* Footer */
-        .footer {
-            border-top: 2px solid var(--border);
-            padding: 2rem;
-            text-align: center;
-            font-size: 0.88rem;
+        .app-footer {
+            border-top: 1px solid var(--border);
+            padding: 1.5rem 2.5rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             background: var(--bg-ivory);
-            margin-top: 3rem;
+            text-align: center;
         }
-
-        .footer strong { color: var(--secondary); }
     </style>
 </head>
 <body>
 
-    <!-- Top Navbar -->
-    <nav class="navbar">
-        <a href="/" class="brand-box">
-            <div class="brand-icon">
-                <i class="fa-solid fa-newspaper"></i>
+    <!-- NEW VERTICAL SIDEBAR LAYOUT -->
+    <aside class="app-sidebar">
+        <div>
+            <a href="/" class="sidebar-brand">
+                <div class="sidebar-brand-icon">
+                    <i class="fa-solid fa-newspaper"></i>
+                </div>
+                <div class="sidebar-brand-text">
+                    <h1>Subscribed AI</h1>
+                    <p>Editorial Publishing</p>
+                </div>
+            </a>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-category">Menu Principal</li>
+                <li>
+                    <a href="/" class="sidebar-link {% if active_page == 'dashboard' %}active{% endif %}">
+                        <i class="fa-solid fa-chart-pie" style="color: var(--primary);"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="/issues" class="sidebar-link {% if active_page == 'issues' %}active{% endif %}">
+                        <i class="fa-solid fa-feather" style="color: var(--secondary);"></i> Edições & Timeline
+                    </a>
+                </li>
+                <li>
+                    <a href="/editor" class="sidebar-link {% if active_page == 'editor' %}active{% endif %}">
+                        <i class="fa-solid fa-pen-nib" style="color: var(--gold);"></i> Redator Visual
+                    </a>
+                </li>
+
+                <li class="sidebar-menu-category">Gestão de Leitores</li>
+                <li>
+                    <a href="/subscribers" class="sidebar-link {% if active_page == 'subscribers' %}active{% endif %}">
+                        <i class="fa-solid fa-users" style="color: var(--secondary);"></i> CRM de Leitores
+                    </a>
+                </li>
+                <li>
+                    <a href="/templates_page" class="sidebar-link {% if active_page == 'templates_page' %}active{% endif %}">
+                        <i class="fa-solid fa-layer-group" style="color: var(--primary);"></i> Plantillas
+                    </a>
+                </li>
+                <li>
+                    <a href="/stats" class="sidebar-link {% if active_page == 'stats' %}active{% endif %}">
+                        <i class="fa-solid fa-chart-line" style="color: var(--gold);"></i> Analytics & Export
+                    </a>
+                </li>
+
+                <li class="sidebar-menu-category">Apresentação</li>
+                <li>
+                    <a href="/showcase" class="sidebar-link {% if active_page == 'showcase' %}active{% endif %}">
+                        <i class="fa-solid fa-star" style="color: var(--primary);"></i> Showcase
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer-card">
+            <span class="badge-pill badge-terracota" style="margin-bottom: 0.35rem;"><i class="fa-solid fa-bolt"></i> Sistema Ativo</span>
+            <p style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Subscribed AI v2.4</p>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <div class="app-main">
+        <!-- Top Status Bar -->
+        <header class="app-topbar">
+            <div class="topbar-breadcrumb">
+                <i class="fa-solid fa-house" style="color: var(--primary);"></i>
+                <span>Publicação</span> / <strong>{% block page_title %}Dashboard Editorial{% endblock %}</strong>
             </div>
-            <div class="brand-text">
-                <h1>Subscribed AI</h1>
-                <p>Publicação Editorial & Newsletter</p>
+
+            <div class="topbar-actions">
+                <a href="/editor" class="btn-pill-primary">
+                    <i class="fa-solid fa-plus"></i> Escrever Edição
+                </a>
+                <a href="/subscribers" class="btn-ghost">
+                    <i class="fa-solid fa-user-plus"></i> Adicionar Leitor
+                </a>
             </div>
-        </a>
+        </header>
 
-        <ul class="nav-links">
-            <li>
-                <a href="/" class="nav-link-item {% if active_page == 'dashboard' %}active{% endif %}">
-                    <i class="fa-solid fa-gauge-high"></i> Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="/issues" class="nav-link-item {% if active_page == 'issues' %}active{% endif %}">
-                    <i class="fa-solid fa-feather"></i> Edições
-                </a>
-            </li>
-            <li>
-                <a href="/editor" class="nav-link-item {% if active_page == 'editor' %}active{% endif %}">
-                    <i class="fa-solid fa-pen-nib"></i> Redator Visual
-                </a>
-            </li>
-            <li>
-                <a href="/subscribers" class="nav-link-item {% if active_page == 'subscribers' %}active{% endif %}">
-                    <i class="fa-solid fa-users"></i> Subscritores
-                </a>
-            </li>
-            <li>
-                <a href="/templates_page" class="nav-link-item {% if active_page == 'templates_page' %}active{% endif %}">
-                    <i class="fa-solid fa-layer-group"></i> Plantillas
-                </a>
-            </li>
-            <li>
-                <a href="/stats" class="nav-link-item {% if active_page == 'stats' %}active{% endif %}">
-                    <i class="fa-solid fa-chart-line"></i> Estatísticas
-                </a>
-            </li>
-            <li>
-                <a href="/showcase" class="nav-link-item {% if active_page == 'showcase' %}active{% endif %}">
-                    <i class="fa-solid fa-star"></i> Showcase
-                </a>
-            </li>
-        </ul>
-    </nav>
+        <!-- Dynamic Content Body -->
+        <main class="content-container">
+            {% block content %}{% endblock %}
+        </main>
 
-    <!-- Main Container -->
-    <main class="main-container">
-        {% block content %}{% endblock %}
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p><strong>Subscribed AI</strong> — Plataforma de Newsletter & Publicação Editorial. Desenvolvido por <strong>EJAJ TECH</strong> & Enmanuel Jimenez (@ejajtech).</p>
-    </footer>
+        <!-- App Footer -->
+        <footer class="app-footer">
+            <p><strong>Subscribed AI</strong> — Plataforma de Newsletter & Publicação Editorial. Desenvolvido por <strong>EJAJ TECH</strong> & Enmanuel Jimenez (@ejajtech).</p>
+        </footer>
+    </div>
 
 </body>
 </html>

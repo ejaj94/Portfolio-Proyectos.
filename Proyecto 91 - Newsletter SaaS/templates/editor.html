@@ -1,88 +1,100 @@
 {% extends "base.html" %}
 
-{% block title %}Redator Visual de Newsletter - Subscribed AI{% endblock %}
+{% block page_title %}Redator Visual de Conteúdos{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
     <div>
-        <h2 class="serif-heading" style="font-size: 2.2rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.25rem;">
-            <i class="fa-solid fa-pen-nib" style="color: var(--primary); margin-right: 0.5rem;"></i>Redator Visual & Editor de Edições
+        <span class="badge-pill badge-gold" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-pen-nib"></i> Estúdio de Redação</span>
+        <h2 class="serif-heading" style="font-size: 2.2rem; font-weight: 900; color: var(--text-ink); line-height: 1.1;">
+            Redator Visual & Estúdio Editorial
         </h2>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">
-            Componha edições com formatação profissional, insira variáveis de personalização e veja a pré-visualização ao vivo.
-        </p>
     </div>
+
     <div style="display: flex; gap: 0.75rem;">
-        <button type="button" onclick="handleSave('save')" class="btn-editorial" style="background: var(--text-muted);">
-            <i class="fa-solid fa-floppy-disk"></i> Guardar Rascunho
+        <button type="button" onclick="handleSave('save')" class="btn-ghost">
+            <i class="fa-solid fa-floppy-disk"></i> Rascunho
         </button>
-        <button type="button" onclick="handleSave('publish')" class="btn-editorial">
+        <button type="button" onclick="handleSave('publish')" class="btn-pill-primary">
             <i class="fa-solid fa-paper-plane"></i> Publicar Agora
         </button>
     </div>
 </div>
 
-<!-- Editor & Live Preview Split Screen -->
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem;">
-    <!-- Left Column: Form & Inputs -->
-    <div class="card-editorial">
-        <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1.25rem; color: var(--text-ink);">
-            Configuração da Edição
+<!-- NEW 3-PANE INTEGRATED EDITOR LAYOUT -->
+<div style="display: grid; grid-template-columns: 260px 1fr 380px; gap: 1.5rem; align-items: start;">
+
+    <!-- PANE 1: Configuration & Template Picker Sidebar -->
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 1.25rem;">
+        <h3 class="serif-heading" style="font-size: 1.1rem; font-weight: 800; color: var(--text-ink); margin-bottom: 1rem;">
+            <i class="fa-solid fa-gear" style="color: var(--primary); margin-right: 0.35rem;"></i>Definições
         </h3>
 
         <form id="editorForm" onsubmit="event.preventDefault()">
             <div style="display: flex; flex-direction: column; gap: 1rem;">
                 <div>
-                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Título da Edição *</label>
-                    <input type="text" id="edTitle" required placeholder="Ex: Edição #104 — O Impacto da Web3 nas Notícias" oninput="updateLivePreview()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none;">
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Assunto da Newsletter (Subject Line) *</label>
-                    <input type="text" id="edSubject" required placeholder="Ex: 📰 Descubra as 5 grandes tendências do jornalismo digital..." oninput="updateLivePreview()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none;">
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Carregar de Plantilla (Opcional)</label>
-                    <select id="edTemplate" onchange="applyTemplate()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none; background: #fff;">
-                        <option value="">Selecione um modelo pré-definido...</option>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Carregar Plantilla</label>
+                    <select id="edTemplate" onchange="applyTemplate()" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.82rem; outline: none; background: #fff;">
+                        <option value="">Selecione um modelo...</option>
                     </select>
                 </div>
 
-                <!-- Insert Tags Bar -->
-                <div>
-                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Inserir Variáveis de Personalização</label>
-                    <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                        <button type="button" onclick="insertTag('{{name}}')" class="badge badge-terracota" style="cursor: pointer;"><i class="fa-solid fa-plus"></i> {{name}}</button>
-                        <button type="button" onclick="insertTag('{{issue_number}}')" class="badge badge-emerald" style="cursor: pointer;"><i class="fa-solid fa-plus"></i> {{issue_number}}</button>
-                        <button type="button" onclick="insertTag('{{unsubscribe_link}}')" class="badge badge-gold" style="cursor: pointer;"><i class="fa-solid fa-plus"></i> {{unsubscribe_link}}</button>
-                    </div>
-                </div>
+                <hr style="border: none; border-top: 1px solid var(--border);" />
 
+                <!-- Palette of Insertable Variables -->
                 <div>
-                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Conteúdo da Newsletter (HTML / Rich Text) *</label>
-                    <textarea id="edContent" rows="12" required oninput="updateLivePreview()" placeholder="Escreva o conteúdo da sua newsletter aqui..." style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.88rem; font-family: monospace; outline: none; resize: vertical;"></textarea>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.5rem;">Variáveis de Texto</label>
+                    <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                        <button type="button" onclick="insertTag('{{name}}')" class="btn-ghost" style="font-size: 0.78rem; padding: 0.4rem 0.75rem; justify-content: space-between;">
+                            <span>{{name}}</span> <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <button type="button" onclick="insertTag('{{issue_number}}')" class="btn-ghost" style="font-size: 0.78rem; padding: 0.4rem 0.75rem; justify-content: space-between;">
+                            <span>{{issue_number}}</span> <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <button type="button" onclick="insertTag('{{unsubscribe_link}}')" class="btn-ghost" style="font-size: 0.78rem; padding: 0.4rem 0.75rem; justify-content: space-between;">
+                            <span>{{unsubscribe_link}}</span> <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>
     </div>
 
-    <!-- Right Column: Live Reader Preview -->
-    <div class="card-editorial" style="display: flex; flex-direction: column;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
-            <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; color: var(--text-ink);">
-                <i class="fa-solid fa-eye" style="color: var(--secondary); margin-right: 0.35rem;"></i>Pré-visualização do Leitor
-            </h3>
-            <span class="badge badge-emerald"><i class="fa-solid fa-rotate"></i> Atualização ao Vivo</span>
+    <!-- PANE 2: Main Composition Workspace -->
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+        <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.35rem; text-transform: uppercase;">Título da Edição</label>
+            <input type="text" id="edTitle" required placeholder="Edição #104 — Título principal da publicação..." oninput="updateLivePreview()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 1.1rem; outline: none; font-family: 'Playfair Display', serif; font-weight: 800; color: var(--text-ink);">
         </div>
 
-        <div id="livePreviewContainer" style="flex: 1; min-height: 450px; background: var(--bg-ivory); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; overflow-y: auto; color: var(--text-ink);">
-            <div style="text-align: center; color: var(--text-muted); margin-top: 5rem;">
-                <i class="fa-solid fa-feather fa-3x" style="margin-bottom: 1rem; opacity: 0.5;"></i>
-                <p>O conteúdo formatado da newsletter aparecerá aqui em tempo real.</p>
+        <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.35rem; text-transform: uppercase;">Assunto do E-mail (Subject Line)</label>
+            <input type="text" id="edSubject" required placeholder="Assunto chamativo para a caixa de entrada..." oninput="updateLivePreview()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+        </div>
+
+        <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.35rem; text-transform: uppercase;">Corpo da Edição (HTML / Rich Text)</label>
+            <textarea id="edContent" rows="16" required oninput="updateLivePreview()" placeholder="Escreva o conteúdo da edição em HTML ou texto formatado..." style="width: 100%; padding: 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.88rem; font-family: monospace; outline: none; resize: vertical; line-height: 1.5;"></textarea>
+        </div>
+    </div>
+
+    <!-- PANE 3: Reader Device Simulator -->
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 1.25rem; display: flex; flex-direction: column; height: 100%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+            <h4 class="serif-heading" style="font-size: 1rem; font-weight: 800; color: var(--text-ink);">
+                <i class="fa-solid fa-mobile-screen" style="color: var(--secondary); margin-right: 0.35rem;"></i>Simulador de Leitor
+            </h4>
+            <span class="badge-pill badge-emerald" style="font-size: 0.7rem;">Live Reader</span>
+        </div>
+
+        <div id="livePreviewContainer" style="flex: 1; min-height: 480px; background: var(--bg-ivory); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; overflow-y: auto; color: var(--text-ink);">
+            <div style="text-align: center; color: var(--text-muted); margin-top: 6rem;">
+                <i class="fa-solid fa-feather fa-2x" style="margin-bottom: 0.75rem; opacity: 0.5;"></i>
+                <p style="font-size: 0.85rem;">Escreva no workspace para pré-visualizar a edição.</p>
             </div>
         </div>
     </div>
+
 </div>
 
 <script>
@@ -136,26 +148,25 @@
         const container = document.getElementById('livePreviewContainer');
         if (!content.trim()) {
             container.innerHTML = `
-                <div style="text-align: center; color: var(--text-muted); margin-top: 5rem;">
-                    <i class="fa-solid fa-feather fa-3x" style="margin-bottom: 1rem; opacity: 0.5;"></i>
-                    <p>Escreva no formulário para visualizar a newsletter.</p>
+                <div style="text-align: center; color: var(--text-muted); margin-top: 6rem;">
+                    <i class="fa-solid fa-feather fa-2x" style="margin-bottom: 0.75rem; opacity: 0.5;"></i>
+                    <p style="font-size: 0.85rem;">Escreva no workspace para pré-visualizar a edição.</p>
                 </div>
             `;
             return;
         }
 
-        // Render preview replacing tags with mock reader info
         let rendered = content
             .replace(/\{\{name\}\}/g, 'Sofia Duarte')
             .replace(/\{\{issue_number\}\}/g, '104')
             .replace(/\{\{unsubscribe_link\}\}/g, '#');
 
         container.innerHTML = `
-            <div style="border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                <h2 style="font-family: 'Playfair Display', serif; color: var(--text-ink); margin-bottom: 0.3rem;">${title}</h2>
-                <p style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">Assunto: ${subject}</p>
+            <div style="border-bottom: 1px solid var(--border); padding-bottom: 0.85rem; margin-bottom: 1.25rem;">
+                <h3 style="font-family: 'Playfair Display', serif; color: var(--text-ink); margin-bottom: 0.25rem; font-size: 1.1rem;">${title}</h3>
+                <p style="font-size: 0.78rem; color: var(--text-muted); font-style: italic;">${subject}</p>
             </div>
-            <div>${rendered}</div>
+            <div style="font-size: 0.85rem;">${rendered}</div>
         `;
     }
 

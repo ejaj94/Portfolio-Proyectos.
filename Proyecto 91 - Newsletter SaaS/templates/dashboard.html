@@ -1,134 +1,137 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard Editorial - Subscribed AI{% endblock %}
+{% block page_title %}Dashboard & Linha do Tempo Editorial{% endblock %}
 
 {% block content %}
-<!-- Welcome & Quick Action Banner -->
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+<!-- Top Header Welcome -->
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
     <div>
-        <span class="badge badge-terracota" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-newspaper"></i> Edição & Curadoria</span>
-        <h2 class="serif-heading" style="font-size: 2.2rem; color: var(--text-ink); font-weight: 800;">
-            Painel de Controlo Editorial
+        <span class="badge-pill badge-terracota" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-feather"></i> Publicação Ativa</span>
+        <h2 class="serif-heading" style="font-size: 2.2rem; color: var(--text-ink); font-weight: 900; line-height: 1.1;">
+            Painel Geral & Linha do Tempo Editorial
         </h2>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">
-            Acompanhe o crescimento da sua publicação, edições ativas e o nível de engagement dos seus subscritores.
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+            Acompanhe o lançamento de edições, o envolvimento dos leitores e a redação em tempo real.
         </p>
     </div>
+
     <div style="display: flex; gap: 0.75rem;">
-        <a href="/editor" class="btn-editorial">
-            <i class="fa-solid fa-pen-nib"></i> Escrever Nova Edição
+        <a href="/editor" class="btn-pill-primary">
+            <i class="fa-solid fa-pen-nib"></i> Nova Edição
         </a>
-        <a href="/subscribers" class="btn-secondary-editorial">
-            <i class="fa-solid fa-user-plus"></i> Novo Subscritor
+        <a href="/stats" class="btn-ghost">
+            <i class="fa-solid fa-chart-line"></i> Relatório Completo
         </a>
     </div>
 </div>
 
-<!-- Executive Metric Badges -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
-    <div class="card-editorial" style="display: flex; align-items: center; gap: 1.25rem;">
-        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(200, 90, 50, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
-            <i class="fa-solid fa-users"></i>
-        </div>
-        <div>
-            <div id="dashTotalSubs" style="font-size: 1.7rem; font-weight: 800; color: var(--text-ink); font-family: 'Playfair Display', serif;">0</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Subscritores Ativos</div>
-        </div>
-    </div>
+<!-- Split Structure: Left = Editorial Timeline & Fast Composer / Right = KPI Bar & Reader Leaderboard -->
+<div style="display: grid; grid-template-columns: 1.8fr 1fr; gap: 2rem;">
 
-    <div class="card-editorial" style="display: flex; align-items: center; gap: 1.25rem;">
-        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(27, 67, 50, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
-            <i class="fa-solid fa-paper-plane"></i>
-        </div>
-        <div>
-            <div id="dashPubIssues" style="font-size: 1.7rem; font-weight: 800; color: var(--text-ink); font-family: 'Playfair Display', serif;">0</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Edições Publicadas</div>
-        </div>
-    </div>
+    <!-- LEFT COLUMN: Timeline & Fast Draft Composer -->
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
 
-    <div class="card-editorial" style="display: flex; align-items: center; gap: 1.25rem;">
-        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(217, 119, 6, 0.1); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
-            <i class="fa-solid fa-envelope-open-text"></i>
-        </div>
-        <div>
-            <div id="dashAvgOpen" style="font-size: 1.7rem; font-weight: 800; color: var(--text-ink); font-family: 'Playfair Display', serif;">0.0%</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Taxa Média de Abertura</div>
-        </div>
-    </div>
+        <!-- Quick Inline Draft Composer Card -->
+        <div style="background: var(--bg-card); border: 2px solid var(--border); border-radius: 20px; padding: 1.75rem; box-shadow: 0 4px 20px rgba(26,25,23,0.04); position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--primary);"></div>
+                    <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; color: var(--text-ink);">Redator Rápido de Edições</h3>
+                </div>
+                <span class="badge-pill badge-emerald"><i class="fa-solid fa-bolt"></i> Auto-Save Rascunho</span>
+            </div>
 
-    <div class="card-editorial" style="display: flex; align-items: center; gap: 1.25rem;">
-        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(200, 90, 50, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
-            <i class="fa-solid fa-crown"></i>
-        </div>
-        <div>
-            <div id="dashVipSubs" style="font-size: 1.7rem; font-weight: 800; color: var(--text-ink); font-family: 'Playfair Display', serif;">0</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Subscritores VIP</div>
-        </div>
-    </div>
-</div>
+            <form id="dashQuickForm" onsubmit="submitQuickDraft(event)">
+                <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                    <input type="text" id="qdTitle" required placeholder="Título da Edição (Ex: Edição #104 — O Futuro dos Conteúdos)" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none; font-family: 'Playfair Display', serif; font-weight: 700;">
+                    
+                    <input type="text" id="qdSubject" required placeholder="Assunto do E-mail (Subject line impactante...)" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.88rem; outline: none;">
+                    
+                    <textarea id="qdContent" rows="3" required placeholder="Escreva aqui uma prévia ou introdução da edição..." style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.88rem; font-family: monospace; outline: none; resize: vertical;"></textarea>
 
-<!-- Recent Issues & Quick Launcher Layout -->
-<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.75rem;">
-    <!-- Main Column: Recent Issues -->
-    <div class="card-editorial">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h3 class="serif-heading" style="font-size: 1.35rem; color: var(--text-ink); font-weight: 800;">
-                <i class="fa-solid fa-newspaper" style="color: var(--primary); margin-right: 0.4rem;"></i>Últimas Edições da Newsletter
-            </h3>
-            <a href="/issues" style="font-size: 0.85rem; color: var(--primary); font-weight: 700; text-decoration: none;">Ver Todas →</a>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                        <a href="/editor" style="font-size: 0.82rem; color: var(--primary); font-weight: 700; text-decoration: none;">Abrir no Redator Visual Completo →</a>
+                        <button type="submit" class="btn-pill-primary" style="padding: 0.55rem 1.25rem; font-size: 0.85rem;">
+                            <i class="fa-solid fa-paper-plane"></i> Publicar Edição Agora
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
 
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                <thead>
-                    <tr style="border-bottom: 2px solid var(--border); font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
-                        <th style="padding: 0.75rem 0.5rem;"># Edição</th>
-                        <th style="padding: 0.75rem 0.5rem;">Título da Publicação</th>
-                        <th style="padding: 0.75rem 0.5rem;">Estado</th>
-                        <th style="padding: 0.75rem 0.5rem;">Leitores</th>
-                        <th style="padding: 0.75rem 0.5rem;">Abertura</th>
-                    </tr>
-                </thead>
-                <tbody id="dashIssuesBody" style="font-size: 0.9rem;">
-                    <tr>
-                        <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">
-                            <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-                            <p style="margin-top: 0.5rem;">A carregar edições...</p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+        <!-- Editorial Issue Timeline -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(26,25,23,0.03);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem;">
+                <h3 class="serif-heading" style="font-size: 1.35rem; font-weight: 800; color: var(--text-ink);">
+                    <i class="fa-solid fa-timeline" style="color: var(--secondary); margin-right: 0.4rem;"></i>Linha do Tempo de Publicações
+                </h3>
+                <a href="/issues" style="font-size: 0.85rem; color: var(--secondary); font-weight: 700; text-decoration: none;">Ver Todas as Edições →</a>
+            </div>
 
-    <!-- Side Column: Fast Actions & Editor Info -->
-    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-        <!-- Card: Rapid Editor -->
-        <div class="card-editorial" style="background: linear-gradient(135deg, #ffffff 0%, #faf8f5 100%); border-left: 4px solid var(--primary);">
-            <span class="badge badge-terracota" style="margin-bottom: 0.5rem;">Redator Rápido</span>
-            <h4 class="serif-heading" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text-ink);">Nova Edição em Rascunho</h4>
-            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">
-                Escreva ou utilize uma das nossas plantillas jornalísticas para comunicar com a sua audiência hoje.
-            </p>
-            <a href="/editor" class="btn-editorial" style="width: 100%; justify-content: center;">
-                <i class="fa-solid fa-plus-circle"></i> Abrir Editor de Conteúdo
-            </a>
-        </div>
-
-        <!-- Card: Recent Subscribers Preview -->
-        <div class="card-editorial">
-            <h4 class="serif-heading" style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-ink);">
-                <i class="fa-solid fa-user-check" style="color: var(--secondary); margin-right: 0.35rem;"></i>Novos Subscritores
-            </h4>
-            <div id="recentSubscribersList" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                <div style="color: var(--text-muted); font-size: 0.85rem;">A carregar leitores...</div>
+            <!-- Vertical Timeline Component -->
+            <div id="timelineContainer" style="position: relative; padding-left: 1.75rem; border-left: 2px solid var(--border); display: flex; flex-direction: column; gap: 1.75rem;">
+                <div style="color: var(--text-muted); font-size: 0.85rem;">A carregar linha do tempo...</div>
             </div>
         </div>
+
     </div>
+
+    <!-- RIGHT COLUMN: Metrics Stack & Reader Leaderboard -->
+    <div style="display: flex; flex-direction: column; gap: 1.75rem;">
+
+        <!-- Vertical KPI Cards Stack -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Subscritores Ativos</span>
+                    <div id="dashSubs" style="font-size: 1.8rem; font-weight: 900; color: var(--text-ink); font-family: 'Playfair Display', serif;">0</div>
+                </div>
+                <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(200,90,50,0.12); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+            </div>
+
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Taxa Média de Abertura</span>
+                    <div id="dashOpen" style="font-size: 1.8rem; font-weight: 900; color: var(--secondary); font-family: 'Playfair Display', serif;">0.0%</div>
+                </div>
+                <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(27,67,50,0.12); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                </div>
+            </div>
+
+            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Membros VIP Exclusive</span>
+                    <div id="dashVip" style="font-size: 1.8rem; font-weight: 900; color: var(--gold); font-family: 'Playfair Display', serif;">0</div>
+                </div>
+                <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(217,119,6,0.12); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Reader Leaderboard Card -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 1.75rem; box-shadow: 0 4px 20px rgba(26,25,23,0.03);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <h4 class="serif-heading" style="font-size: 1.15rem; font-weight: 800; color: var(--text-ink);">
+                    <i class="fa-solid fa-trophy" style="color: var(--gold); margin-right: 0.35rem;"></i>Leitores Mais Ativos
+                </h4>
+                <a href="/subscribers" style="font-size: 0.8rem; color: var(--primary); font-weight: 700; text-decoration: none;">Ver CRM</a>
+            </div>
+
+            <div id="readerLeaderboardList" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="font-size: 0.85rem; color: var(--text-muted);">A carregar ranking...</div>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 <script>
-    async function loadDashboard() {
+    async function loadDashboardView() {
         try {
             const [statsRes, issuesRes, subsRes] = await Promise.all([
                 fetch('/api/stats'),
@@ -140,59 +143,111 @@
             const issues = await issuesRes.json();
             const subs = await subsRes.json();
 
-            document.getElementById('dashTotalSubs').innerText = stats.total_subscribers;
-            document.getElementById('dashPubIssues').innerText = stats.published_issues;
-            document.getElementById('dashAvgOpen').innerText = stats.avg_open_rate + '%';
-            document.getElementById('dashVipSubs').innerText = stats.vip_subscribers;
+            document.getElementById('dashSubs').innerText = stats.total_subscribers;
+            document.getElementById('dashOpen').innerText = stats.avg_open_rate + '%';
+            document.getElementById('dashVip').innerText = stats.vip_subscribers;
 
-            // Render Recent Issues
-            const issuesBody = document.getElementById('dashIssuesBody');
+            // Render Timeline
+            const timeline = document.getElementById('timelineContainer');
             if (!issues || issues.length === 0) {
-                issuesBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">Nenhuma edição registada.</td></tr>`;
+                timeline.innerHTML = `<div style="color: var(--text-muted); font-size: 0.85rem;">Nenhuma edição registada.</div>`;
             } else {
-                issuesBody.innerHTML = issues.slice(0, 5).map(i => {
-                    const statusBadge = i.status === 'Publicado' ? '<span class="badge badge-emerald"><i class="fa-solid fa-check"></i> Publicado</span>'
-                        : (i.status === 'Programado' ? '<span class="badge badge-gold"><i class="fa-solid fa-clock"></i> Programado</span>'
-                        : '<span class="badge badge-gray"><i class="fa-solid fa-pen"></i> Rascunho</span>');
+                timeline.innerHTML = issues.map(i => {
+                    const isPub = i.status === 'Publicado';
+                    const isProg = i.status === 'Programado';
+                    const dotColor = isPub ? 'var(--secondary)' : (isProg ? 'var(--gold)' : 'var(--text-muted)');
+                    const badgeClass = isPub ? 'badge-emerald' : (isProg ? 'badge-gold' : 'badge-gray');
 
                     const rec = i.recipients_count || 0;
                     const op = i.opens_count || 0;
-                    const openPct = rec > 0 ? ((op / rec) * 100).toFixed(1) + '%' : '0.0%';
+                    const pct = rec > 0 ? ((op / rec) * 100).toFixed(1) + '%' : '0.0%';
 
                     return `
-                        <tr style="border-bottom: 1px solid var(--border);">
-                            <td style="padding: 0.85rem 0.5rem; font-weight: 800; color: var(--primary);">#${i.issue_number}</td>
-                            <td style="padding: 0.85rem 0.5rem;">
-                                <strong style="color: var(--text-ink); font-family: 'Playfair Display', serif;">${i.title}</strong>
-                            </td>
-                            <td style="padding: 0.85rem 0.5rem;">${statusBadge}</td>
-                            <td style="padding: 0.85rem 0.5rem; font-weight: 700;">${rec}</td>
-                            <td style="padding: 0.85rem 0.5rem; font-weight: 800; color: var(--secondary);">${openPct}</td>
-                        </tr>
+                        <div style="position: relative;">
+                            <!-- Dot Pin -->
+                            <div style="position: absolute; left: -2.35rem; top: 0.2rem; width: 18px; height: 18px; border-radius: 50%; background: ${dotColor}; border: 3px solid var(--bg-card); box-shadow: 0 0 0 2px ${dotColor};"></div>
+                            
+                            <div style="background: var(--bg-ivory); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                    <div>
+                                        <span class="badge-pill badge-terracota" style="font-size: 0.72rem;">Edição #${i.issue_number}</span>
+                                        <h4 class="serif-heading" style="font-size: 1.15rem; font-weight: 800; color: var(--text-ink); margin-top: 0.35rem;">${i.title}</h4>
+                                    </div>
+                                    <span class="badge-pill ${badgeClass}">${i.status}</span>
+                                </div>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">${i.subject}</p>
+                                
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 0.6rem;">
+                                    <span>Leitores: <strong style="color: var(--text-ink);">${rec}</strong></span>
+                                    <span>Taxa Abertura: <strong style="color: var(--secondary);">${pct}</strong></span>
+                                    <a href="/issues" style="color: var(--primary); font-weight: 700; text-decoration: none;">Ver Detalhes →</a>
+                                </div>
+                            </div>
+                        </div>
                     `;
                 }).join('');
             }
 
-            // Render Recent Subscribers
-            const subsContainer = document.getElementById('recentSubscribersList');
+            // Render Reader Leaderboard
+            const lbContainer = document.getElementById('readerLeaderboardList');
             if (!subs || subs.length === 0) {
-                subsContainer.innerHTML = `<div style="font-size: 0.85rem; color: var(--text-muted);">Sem subscritores.</div>`;
+                lbContainer.innerHTML = `<div style="font-size: 0.85rem; color: var(--text-muted);">Sem subscritores.</div>`;
             } else {
-                subsContainer.innerHTML = subs.slice(0, 4).map(s => `
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
-                        <div>
-                            <strong style="font-size: 0.88rem; color: var(--text-ink); block;">${s.name}</strong>
-                            <span style="font-size: 0.75rem; color: var(--text-muted);">${s.email}</span>
+                lbContainer.innerHTML = subs.slice(0, 5).map(s => {
+                    const initials = s.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                    const tierBadge = s.tier === 'VIP' ? 'badge-gold' : (s.tier === 'Premium' ? 'badge-emerald' : 'badge-gray');
+
+                    return `
+                        <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-ivory); padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--border);">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div class="reader-avatar">${initials}</div>
+                                <div>
+                                    <strong style="font-size: 0.88rem; color: var(--text-ink); font-family: 'Playfair Display', serif; display: block;">${s.name}</strong>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">${s.email}</span>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <span class="badge-pill ${tierBadge}" style="font-size: 0.7rem; margin-bottom: 0.2rem;">${s.tier}</span>
+                                <div style="font-size: 0.78rem; font-weight: 800; color: var(--primary);">${s.open_rate}% Abertura</div>
+                            </div>
                         </div>
-                        <span class="badge ${s.tier === 'VIP' ? 'badge-gold' : 'badge-emerald'}" style="font-size: 0.7rem;">${s.tier}</span>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
         } catch (e) {
             console.error(e);
         }
     }
 
-    document.addEventListener('DOMContentLoaded', loadDashboard);
+    async function submitQuickDraft(e) {
+        e.preventDefault();
+        const data = {
+            title: document.getElementById('qdTitle').value,
+            subject: document.getElementById('qdSubject').value,
+            content_html: document.getElementById('qdContent').value,
+            action: 'publish'
+        };
+
+        try {
+            const res = await fetch('/api/issues', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                alert(result.message);
+                document.getElementById('dashQuickForm').reset();
+                loadDashboardView();
+            } else {
+                alert(result.message || 'Erro ao publicar edição.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro ao ligar ao servidor.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadDashboardView);
 </script>
 {% endblock %}
