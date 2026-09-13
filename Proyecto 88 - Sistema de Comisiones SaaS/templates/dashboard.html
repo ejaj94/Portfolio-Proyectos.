@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - ComisiCraft AI SaaS{% endblock %}
+
+{% block content %}
+<!-- Top Metrics Grid -->
+<div class="stats-grid-top">
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(217, 119, 6, 0.1); color: var(--primary);">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="kpiSalespeople">--</div>
+            <div class="stat-card-lbl">Vendedores Ativos</div>
+        </div>
+    </div>
+
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--secondary);">
+            <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="kpiVolume">-- €</div>
+            <div class="stat-card-lbl">Volume de Vendas</div>
+        </div>
+    </div>
+
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(79, 70, 229, 0.1); color: var(--indigo);">
+            <i class="fa-solid fa-coins"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="kpiCommissions">-- €</div>
+            <div class="stat-card-lbl">Comissões Liquidadas</div>
+        </div>
+    </div>
+
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(14, 165, 233, 0.1); color: #0ea5e9;">
+            <i class="fa-solid fa-percent"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="kpiAvgRate">--%</div>
+            <div class="stat-card-lbl">Taxa Média de Comissão</div>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; align-items: start;">
+    <!-- Top Sellers Ranking Card -->
+    <div class="card-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-trophy" style="color: var(--primary);"></i> Top Performers do Mês
+            </h3>
+            <span class="badge badge-gold"><i class="fa-solid fa-crown"></i> Leaderboard</span>
+        </div>
+
+        <div id="topRankingsList" style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                <p style="margin-top: 0.5rem;">A carregar rankings...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registo Rápido de Venda -->
+    <div class="card-box">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-plus-circle" style="color: var(--secondary);"></i> Registar Nova Venda
+        </h3>
+
+        <form id="quickSaleForm" onsubmit="submitQuickSale(event)">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Vendedor Responsável *</label>
+                    <select id="qsSalesperson" required style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; background: #fff; outline: none; font-weight: 600;">
+                        <option value="">-- Selecione o Vendedor --</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Nome do Cliente *</label>
+                        <input type="text" id="qsClient" required placeholder="Ex: TechCorp Lda." style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Valor da Venda (€) *</label>
+                        <input type="number" id="qsAmount" required step="0.01" min="1" placeholder="Ex: 12500" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Categoria do Produto</label>
+                        <input type="text" id="qsCategory" placeholder="Ex: SaaS / Licenciamento" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Período Contábil</label>
+                        <input type="text" id="qsPeriod" value="Setembro 2026" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary-action" style="margin-top: 0.5rem; width: 100%; justify-content: center; padding: 0.85rem;">
+                    <i class="fa-solid fa-calculator"></i> Lançar Venda & Calcular Comissão
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Recent Sales Table -->
+<div class="card-box">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-list-check" style="color: var(--primary);"></i> Últimas Vendas Registadas
+        </h3>
+        <a href="/sales" class="btn-primary-action" style="background: var(--bg-light); color: var(--text-main); border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; padding: 0.4rem 0.85rem;">
+            Ver Todas <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+                <tr style="background: var(--bg-light); border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">
+                    <th style="padding: 0.85rem 1rem;">Vendedor</th>
+                    <th style="padding: 0.85rem 1rem;">Cliente</th>
+                    <th style="padding: 0.85rem 1rem;">Categoria</th>
+                    <th style="padding: 0.85rem 1rem;">Valor Venda</th>
+                    <th style="padding: 0.85rem 1rem;">Taxa %</th>
+                    <th style="padding: 0.85rem 1rem;">Comissão €</th>
+                    <th style="padding: 0.85rem 1rem;">Data</th>
+                </tr>
+            </thead>
+            <tbody id="recentSalesTbody">
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.5rem;">A carregar dados...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function initDashboard() {
+        await Promise.all([loadStats(), loadRankings(), loadSalespeople(), loadRecentSales()]);
+    }
+
+    async function loadStats() {
+        try {
+            const res = await fetch('/api/stats');
+            const data = await res.json();
+            document.getElementById('kpiSalespeople').innerText = data.total_salespeople;
+            document.getElementById('kpiVolume').innerText = data.total_sales_volume.toLocaleString('pt-PT') + ' €';
+            document.getElementById('kpiCommissions').innerText = data.total_commissions_paid.toLocaleString('pt-PT') + ' €';
+            document.getElementById('kpiAvgRate').innerText = data.avg_commission_rate + '%';
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function loadRankings() {
+        try {
+            const res = await fetch('/api/rankings');
+            const data = await res.json();
+            const list = document.getElementById('topRankingsList');
+            if (!data || data.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color: var(--text-muted);">Nenhum vendedor encontrado.</p>';
+                return;
+            }
+
+            const badges = ['🥇', '🥈', '🥉'];
+            const top3 = data.slice(0, 3);
+
+            list.innerHTML = top3.map((sp, idx) => `
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1rem; background: var(--bg-light); border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.4rem;">${badges[idx] || (idx+1)}</span>
+                        <div>
+                            <strong style="display: block; color: var(--text-main); font-size: 0.95rem;">${sp.name}</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${sp.role} (${sp.tier_level})</span>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <strong style="color: var(--primary); font-size: 1rem; display: block;">${sp.total_sales_volume.toLocaleString('pt-PT')} €</strong>
+                        <span style="font-size: 0.75rem; color: var(--secondary); font-weight: 700;">+ ${sp.total_commissions.toLocaleString('pt-PT')} € comissão</span>
+                    </div>
+                </div>
+            `).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function loadSalespeople() {
+        try {
+            const res = await fetch('/api/salespeople');
+            const data = await res.json();
+            const sel = document.getElementById('qsSalesperson');
+            sel.innerHTML = '<option value="">-- Selecione o Vendedor --</option>' +
+                data.map(sp => `<option value="${sp.id}">${sp.name} (${sp.tier_level})</option>`).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function loadRecentSales() {
+        try {
+            const res = await fetch('/api/sales');
+            const data = await res.json();
+            const tbody = document.getElementById('recentSalesTbody');
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem;">Nenhuma venda registada.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.slice(0, 5).map(s => `
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.85rem 1rem; font-weight: 700; color: var(--text-main);">${s.salesperson_name}</td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-muted);">${s.client_name}</td>
+                    <td style="padding: 0.85rem 1rem;"><span class="badge badge-indigo">${s.product_category}</span></td>
+                    <td style="padding: 0.85rem 1rem; font-weight: 700; color: var(--text-main);">${s.amount.toFixed(2)} €</td>
+                    <td style="padding: 0.85rem 1rem;"><span class="badge badge-emerald">${s.commission_rate}%</span></td>
+                    <td style="padding: 0.85rem 1rem; font-weight: 800; color: var(--primary);">${s.commission_amount.toFixed(2)} €</td>
+                    <td style="padding: 0.85rem 1rem; font-size: 0.8rem; color: var(--text-muted);">${s.sale_date}</td>
+                </tr>
+            `).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function submitQuickSale(e) {
+        e.preventDefault();
+        const data = {
+            salesperson_id: document.getElementById('qsSalesperson').value,
+            client_name: document.getElementById('qsClient').value,
+            amount: parseFloat(document.getElementById('qsAmount').value) || 0,
+            product_category: document.getElementById('qsCategory').value || 'Geral',
+            period_name: document.getElementById('qsPeriod').value || 'Setembro 2026'
+        };
+
+        try {
+            const res = await fetch('/api/sales', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                alert(`Venda registada com sucesso! Comissão gerada: ${result.commission_amount} €`);
+                document.getElementById('quickSaleForm').reset();
+                initDashboard();
+            } else {
+                alert(result.message || 'Erro ao registar venda.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro de ligação ao servidor.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
+</script>
+{% endblock %}

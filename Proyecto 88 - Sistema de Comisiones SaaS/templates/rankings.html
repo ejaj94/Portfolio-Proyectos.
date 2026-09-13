@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Rankings & Performance - ComisiCraft AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-trophy" style="color: var(--primary); margin-right: 0.5rem;"></i>Tabela de Liderança Comercial (Rankings)
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Classificação em tempo real da equipa por faturação gerada, cumprimento de metas e comissões ganhas.
+        </p>
+    </div>
+    <span class="badge badge-gold" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+        <i class="fa-solid fa-crown"></i> Período: Setembro 2026
+    </span>
+</div>
+
+<!-- Podium Top 3 Highlight Cards -->
+<div id="podiumContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div style="text-align: center; padding: 3rem; color: var(--text-muted); grid-column: 1/-1;">
+        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+        <p style="margin-top: 0.75rem; font-weight: 600;">A carregar pódio comercial...</p>
+    </div>
+</div>
+
+<!-- Detailed Leaderboard Table -->
+<div class="card-box">
+    <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fa-solid fa-list-ol" style="color: var(--secondary);"></i> Classificação Geral da Equipa
+    </h3>
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+                <tr style="background: var(--bg-light); border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">
+                    <th style="padding: 1rem 1.25rem;">Posição</th>
+                    <th style="padding: 1rem 1.25rem;">Vendedor</th>
+                    <th style="padding: 1rem 1.25rem;">Nível</th>
+                    <th style="padding: 1rem 1.25rem;">Nº de Negócios</th>
+                    <th style="padding: 1rem 1.25rem;">Volume Faturado</th>
+                    <th style="padding: 1rem 1.25rem;">Cumprimento Meta</th>
+                    <th style="padding: 1rem 1.25rem;">Comissões Ganhas</th>
+                </tr>
+            </thead>
+            <tbody id="rankingsTableBody">
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.75rem; font-weight: 600;">A carregar classificação...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function loadRankingsPage() {
+        try {
+            const res = await fetch('/api/rankings');
+            const rankings = await res.json();
+            renderPodium(rankings);
+            renderTable(rankings);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function renderPodium(rankings) {
+        const container = document.getElementById('podiumContainer');
+        if (!rankings || rankings.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
+
+        const top3 = rankings.slice(0, 3);
+        const medals = ['🥇 1º Lugar', '🥈 2º Lugar', '🥉 3º Lugar'];
+        const colors = ['var(--primary)', 'var(--secondary)', 'var(--indigo)'];
+
+        container.innerHTML = top3.map((r, i) => `
+            <div class="card-box" style="text-align: center; position: relative; border-top: 4px solid ${colors[i]};">
+                <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">${medals[i].split(' ')[0]}</div>
+                <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">${r.name}</h3>
+                <span class="badge badge-gold" style="margin-bottom: 1rem; font-size: 0.75rem;">${r.role}</span>
+
+                <div style="background: var(--bg-light); padding: 1rem; border-radius: 12px; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.88rem;">
+                    <div>Volume Total: <strong style="color: var(--text-main);">${r.total_sales_volume.toLocaleString('pt-PT')} €</strong></div>
+                    <div>Meta Atingida: <strong style="color: var(--secondary);">${r.target_achievement}%</strong></div>
+                    <div>Comissão: <strong style="color: var(--primary);">${r.total_commissions.toLocaleString('pt-PT')} €</strong></div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderTable(rankings) {
+        const tbody = document.getElementById('rankingsTableBody');
+        if (!rankings || rankings.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem;">Sem dados de vendas registados.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = rankings.map(r => `
+            <tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 1rem 1.25rem; font-weight: 800; font-size: 1.1rem; color: var(--primary);">#${r.rank}</td>
+                <td style="padding: 1rem 1.25rem;">
+                    <strong style="color: var(--text-main); display: block;">${r.name}</strong>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">${r.role}</span>
+                </td>
+                <td style="padding: 1rem 1.25rem;"><span class="badge badge-indigo">${r.tier_level}</span></td>
+                <td style="padding: 1rem 1.25rem; font-weight: 700; color: var(--text-main);">${r.total_deals} fechos</td>
+                <td style="padding: 1rem 1.25rem; font-weight: 800; color: var(--text-main);">${r.total_sales_volume.toLocaleString('pt-PT')} €</td>
+                <td style="padding: 1rem 1.25rem;">
+                    <span class="badge ${r.target_achievement >= 100 ? 'badge-emerald' : 'badge-gold'}">${r.target_achievement}%</span>
+                </td>
+                <td style="padding: 1rem 1.25rem; font-weight: 900; color: var(--primary);">${r.total_commissions.toLocaleString('pt-PT')} €</td>
+            </tr>
+        `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadRankingsPage);
+</script>
+{% endblock %}

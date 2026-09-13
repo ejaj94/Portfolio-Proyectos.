@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics & Exportação - ComisiCraft AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-chart-pie" style="color: var(--primary); margin-right: 0.5rem;"></i>Métricas & Exportação de Comissões
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Análise de rentabilidade de vendas, rácios de comissionamento e exportação de dados contábeis.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/api/export/csv" class="btn-primary-action" style="background: var(--primary); color: white; border: none; text-decoration: none;">
+            <i class="fa-solid fa-download"></i> Baixar Ficheiro CSV
+        </a>
+    </div>
+</div>
+
+<!-- Main Metrics Grid -->
+<div class="stats-grid-top">
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(217, 119, 6, 0.1); color: var(--primary);">
+            <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="stVolume">-- €</div>
+            <div class="stat-card-lbl">Faturação Total</div>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--secondary);">
+            <i class="fa-solid fa-money-bill-transfer"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="stCommissions">-- €</div>
+            <div class="stat-card-lbl">Comissões Geradas</div>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(79, 70, 229, 0.1); color: var(--indigo);">
+            <i class="fa-solid fa-percent"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="stAvgRate">--%</div>
+            <div class="stat-card-lbl">Comissão Média %</div>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(14, 165, 233, 0.1); color: #0ea5e9;">
+            <i class="fa-solid fa-handshake"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="stDeals">--</div>
+            <div class="stat-card-lbl">Contratos Fechados</div>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem;">
+    <!-- Category Distribution -->
+    <div class="card-box">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-chart-column" style="color: var(--primary);"></i> Vendas por Categoria de Produto
+        </h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">
+                    <span>Software SaaS & Cloud</span>
+                    <span style="color: var(--primary);">48%</span>
+                </div>
+                <div style="height: 10px; background: var(--bg-light); border-radius: 20px; overflow: hidden;">
+                    <div style="width: 48%; height: 100%; background: var(--primary); border-radius: 20px;"></div>
+                </div>
+            </div>
+
+            <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">
+                    <span>Licenciamento Enterprise</span>
+                    <span style="color: var(--secondary);">32%</span>
+                </div>
+                <div style="height: 10px; background: var(--bg-light); border-radius: 20px; overflow: hidden;">
+                    <div style="width: 32%; height: 100%; background: var(--secondary); border-radius: 20px;"></div>
+                </div>
+            </div>
+
+            <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">
+                    <span>Serviços de Integração & Suporte</span>
+                    <span style="color: var(--indigo);">20%</span>
+                </div>
+                <div style="height: 10px; background: var(--bg-light); border-radius: 20px; overflow: hidden;">
+                    <div style="width: 20%; height: 100%; background: var(--indigo); border-radius: 20px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export & Integration Hub -->
+    <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-cloud-arrow-down" style="color: var(--primary);"></i> Central de Exportação & APIs
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                Exporte todo o histórico de vendas e liquidação de comissões para auditoria financeira ou integração com software de faturação.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: var(--bg-light); border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fa-solid fa-file-csv fa-2x" style="color: var(--primary);"></i>
+                        <div>
+                            <strong style="display: block; font-size: 0.9rem; color: var(--text-main);">Relatório CSV Completo</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Compatível com Excel, Primavera e SAF-T</span>
+                        </div>
+                    </div>
+                    <a href="/api/export/csv" class="btn-primary-action" style="font-size: 0.8rem; padding: 0.4rem 0.85rem; text-decoration: none;">Download CSV</a>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: var(--bg-light); border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fa-solid fa-code fa-2x" style="color: var(--indigo);"></i>
+                        <div>
+                            <strong style="display: block; font-size: 0.9rem; color: var(--text-main);">Endpoint REST JSON API</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Integração nativa para Webhooks e SaaS</span>
+                        </div>
+                    </div>
+                    <a href="/api/export/json" target="_blank" class="btn-primary-action" style="font-size: 0.8rem; padding: 0.4rem 0.85rem; text-decoration: none; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border);">Abrir JSON</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+            <i class="fa-solid fa-shield-halved" style="color: var(--secondary);"></i> Em conformidade com a legislação laboral e retenções de IRS/Segurança Social em Portugal.
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadStatsPage() {
+        try {
+            const res = await fetch('/api/stats');
+            const data = await res.json();
+            document.getElementById('stVolume').innerText = data.total_sales_volume.toLocaleString('pt-PT') + ' €';
+            document.getElementById('stCommissions').innerText = data.total_commissions_paid.toLocaleString('pt-PT') + ' €';
+            document.getElementById('stAvgRate').innerText = data.avg_commission_rate + '%';
+            document.getElementById('stDeals').innerText = data.total_sales_count;
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadStatsPage);
+</script>
+{% endblock %}

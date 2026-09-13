@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}ComisiCraft AI SaaS - Apresentação & EJAJ TECH Showcase{% endblock %}
+
+{% block content %}
+<!-- Hero Showcase Header -->
+<div style="background: linear-gradient(135deg, #d97706 0%, #10b981 100%); border-radius: 24px; padding: 3.5rem 2.5rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 20px 40px rgba(217, 119, 6, 0.2); position: relative; overflow: hidden;">
+    <div style="position: relative; z-index: 2; max-width: 850px;">
+        <span class="badge" style="background: rgba(255,255,255,0.2); color: #ffffff; font-weight: 700; font-size: 0.85rem; padding: 0.4rem 1rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem; display: inline-block;">
+            <i class="fa-solid fa-sparkles"></i> EJAJ TECH SalesTech SaaS Platform
+        </span>
+        <h1 style="font-size: 2.8rem; font-weight: 900; line-height: 1.15; margin-bottom: 1.25rem; letter-spacing: -1px;">
+            ComisiCraft AI — Gestão Inteligente de Comissões & Performance Comercial
+        </h1>
+        <p style="font-size: 1.15rem; opacity: 0.95; line-height: 1.6; font-weight: 500; margin-bottom: 2rem;">
+            Uma solução corporativa inovadora concebida para automatizar o cálculo de comissões, incentivar a força de vendas com escalões de incentivo e gerar relatórios de liquidação transparentes em tempo real.
+        </p>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="/" class="btn-primary-action" style="background: #ffffff; color: var(--primary); font-weight: 800; font-size: 1rem; padding: 0.85rem 1.75rem; text-decoration: none; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                <i class="fa-solid fa-rocket"></i> Explorar Plataforma SaaS
+            </a>
+            <a href="/rankings" class="btn-primary-action" style="background: rgba(255,255,255,0.15); color: #ffffff; font-weight: 700; font-size: 1rem; padding: 0.85rem 1.75rem; text-decoration: none; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3);">
+                <i class="fa-solid fa-trophy"></i> Ver Leaderboard Comercial
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Architecture & Positivist Philosophy -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+    <div class="card-box">
+        <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(217, 119, 6, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+            <i class="fa-solid fa-lightbulb"></i>
+        </div>
+        <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.85rem;">
+            A Nossa Visão Positivista
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1rem;">
+            Desenvolvido pela <strong>EJAJ TECH</strong> sob a liderança do Lead Architect <strong>Enmanuel Jimenez</strong>, o ComisiCraft AI nasce da convicção de que recompensar o talento e a dedicação das equipas comerciais é o caminho mais rápido para impulsionar o crescimento de qualquer organização.
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65;">
+            Comissões claras, justas e calculadas em tempo real inspiram a excelência e transformam esforços em resultados concretos para a sociedade.
+        </p>
+    </div>
+
+    <div class="card-box">
+        <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(16, 185, 129, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.85rem;">
+            Automatização & Retenções Fiscais
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1rem;">
+            Elimine erros de cálculo manual e conflitos de comissão. O sistema atribui escalões dinâmicos de percentagem por volume de faturação e calcula estimativas de retenção na fonte.
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65;">
+            Emissão instantânea de extratos individuais por período com exportação total em CSV e JSON.
+        </p>
+    </div>
+</div>
+
+<!-- Key Features Grid -->
+<div style="margin-bottom: 3rem;">
+    <div style="text-align: center; max-width: 700px; margin: 0 auto 2.5rem auto;">
+        <h2 style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+            Funcionalidades Principais do SaaS
+        </h2>
+        <p style="color: var(--text-muted); font-size: 1rem;">
+            Um ecossistema robusto para gerir vendedores, vendas, escalões e liquidações de comissões.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <div class="card-box">
+            <i class="fa-solid fa-users-gear fa-2x" style="color: var(--primary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Directório de Vendedores & Metas</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Registo detalhado da equipa comercial com niveis Tier (Junior, Pleno, Senior), salários base e metas de faturação mensal.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-cart-shopping fa-2x" style="color: var(--secondary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Lançamento de Vendas & Clientes</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Registo de fechos de negócios associados a clientes, categorias de produtos e atribuição direta a vendedores.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-percent fa-2x" style="color: var(--indigo); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Escalões Dinâmicos de Porcentagem</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Regras automáticas de comissionamento em função do volume faturado e bónus fixos de superação de objetivos.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-trophy fa-2x" style="color: var(--primary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Rankings & Leaderboard</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Tabela de liderança com pódio visual dos top 3 vendedores do mês e indicador de percentagem de meta atingida.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-receipt fa-2x" style="color: var(--secondary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Liquidação & Recibos por Período</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Extratos consolidados de comissão bruta, deduções fiscais estimadas e valor líquido total a pagar na folha de vencimento.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-file-csv fa-2x" style="color: var(--indigo); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Exportação CSV & API RESTful</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Relatórios em CSV para contabilidade e endpoints RESTful JSON para integração nativa com ERPs e CRMs.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Tech Stack Card -->
+<div class="card-box" style="margin-bottom: 3rem;">
+    <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fa-solid fa-code" style="color: var(--primary);"></i> Arquitetura Tecnológica
+    </h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Backend Framework</strong>
+            <span style="font-size: 0.85rem; color: var(--primary); font-weight: 700;">Python 3 & Flask REST Engine</span>
+        </div>
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Base de Dados</strong>
+            <span style="font-size: 0.85rem; color: var(--secondary); font-weight: 700;">SQLite3 Persistente</span>
+        </div>
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Motor de Regras</strong>
+            <span style="font-size: 0.85rem; color: var(--indigo); font-weight: 700;">Cálculo de Tiers & Comissões</span>
+        </div>
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Frontend Design</strong>
+            <span style="font-size: 0.85rem; color: var(--primary); font-weight: 700;">HTML5 / CSS3 Light Theme</span>
+        </div>
+    </div>
+</div>
+
+<!-- EJAJ TECH Callout Footer -->
+<div style="text-align: center; background: #ffffff; border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+    <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.75rem;">
+        EJAJ TECH — Inovação, Reconhecimento e Prosperidade
+    </h3>
+    <p style="color: var(--text-muted); font-size: 1rem; max-width: 700px; margin: 0 auto 1.5rem auto; line-height: 1.6;">
+        Sob a orientação visionária do Lead Architect Enmanuel Jimenez, desenvolvemos soluções tecnológicas que recompensam o mérito, incentivam a produtividade e geram valor sustentável.
+    </p>
+    <a href="/" class="btn-primary-action" style="font-size: 1rem; padding: 0.85rem 2rem; display: inline-flex;">
+        <i class="fa-solid fa-arrow-right"></i> Aceder ao Dashboard Principal
+    </a>
+</div>
+{% endblock %}

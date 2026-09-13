@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Extratos de Comissões - ComisiCraft AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-money-bill-wave" style="color: var(--primary); margin-right: 0.5rem;"></i>Extrato & Liquidação de Comissões
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Decomposição de ganhos brutos, deduções fiscais estimadas e valor líquido acumulado a pagar por vendedor.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/api/export/csv" class="btn-primary-action" style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); text-decoration: none;">
+            <i class="fa-solid fa-file-csv" style="color: var(--primary);"></i> Exportar Ficheiro CSV
+        </a>
+    </div>
+</div>
+
+<!-- Commission Rules Tiers Card -->
+<div class="card-box" style="margin-bottom: 2rem;">
+    <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fa-solid fa-layer-group" style="color: var(--secondary);"></i> Tabela de Escalões de Porcentagens & Bónus
+    </h3>
+
+    <div id="rulesTierContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+        <div style="text-align: center; padding: 2rem; color: var(--text-muted); grid-column: 1/-1;">
+            <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+            <p style="margin-top: 0.5rem;">A carregar regras de comissão...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Statement Cards by Salesperson -->
+<div class="card-box">
+    <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fa-solid fa-receipt" style="color: var(--primary);"></i> Processamento de Vencimentos & Comissões (Setembro 2026)
+    </h3>
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+                <tr style="background: var(--bg-light); border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">
+                    <th style="padding: 1rem 1.25rem;">Vendedor</th>
+                    <th style="padding: 1rem 1.25rem;">Salário Base</th>
+                    <th style="padding: 1rem 1.25rem;">Volume Faturado</th>
+                    <th style="padding: 1rem 1.25rem;">Comissão Bruta</th>
+                    <th style="padding: 1rem 1.25rem;">Retenção Est. (25%)</th>
+                    <th style="padding: 1rem 1.25rem;">Total Líquido a Pagar</th>
+                    <th style="padding: 1rem 1.25rem; text-align: right;">Ação</th>
+                </tr>
+            </thead>
+            <tbody id="statementsTbody">
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.75rem; font-weight: 600;">A processar extratos...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function initCommissionsPage() {
+        await Promise.all([loadRules(), loadStatements()]);
+    }
+
+    async function loadRules() {
+        try {
+            const res = await fetch('/api/rules');
+            const data = await res.json();
+            const container = document.getElementById('rulesTierContainer');
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-muted);">Sem regras de comissão configuradas.</p>';
+                return;
+            }
+
+            container.innerHTML = data.map(r => `
+                <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: var(--text-main); font-size: 0.95rem;">${r.rule_name}</strong>
+                        <span class="badge badge-emerald" style="font-size: 0.85rem;">${r.commission_rate}%</span>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">${r.description || ''}</p>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-top: 1px dashed var(--border); padding-top: 0.5rem;">
+                        <span>Bónus Fixo: <strong style="color: var(--primary);">${r.bonus_amount.toFixed(2)} €</strong></span>
+                        <span>Até: <strong>${r.max_amount > 900000 ? 'Sem Limite' : r.max_amount.toLocaleString('pt-PT') + ' €'}</strong></span>
+                    </div>
+                </div>
+            `).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function loadStatements() {
+        try {
+            const res = await fetch('/api/salespeople');
+            const salespeople = await res.json();
+            const tbody = document.getElementById('statementsTbody');
+
+            if (!salespeople || salespeople.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem;">Sem vendedores registados.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = salespeople.map(sp => {
+                const grossComm = sp.total_commissions;
+                const estTax = grossComm * 0.25;
+                const netComm = grossComm - estTax;
+                const totalPayout = sp.base_salary + netComm;
+
+                return `
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 1rem 1.25rem;">
+                            <strong style="display: block; color: var(--text-main);">${sp.name}</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${sp.role}</span>
+                        </td>
+                        <td style="padding: 1rem 1.25rem; font-weight: 600; color: var(--text-main);">${sp.base_salary.toFixed(2)} €</td>
+                        <td style="padding: 1rem 1.25rem; font-weight: 600; color: var(--text-muted);">${sp.total_sales_amount.toLocaleString('pt-PT')} €</td>
+                        <td style="padding: 1rem 1.25rem; font-weight: 800; color: var(--primary);">${grossComm.toFixed(2)} €</td>
+                        <td style="padding: 1rem 1.25rem; color: #ef4444; font-size: 0.85rem;">- ${estTax.toFixed(2)} €</td>
+                        <td style="padding: 1rem 1.25rem; font-weight: 900; color: var(--secondary); font-size: 1.05rem;">${totalPayout.toFixed(2)} €</td>
+                        <td style="padding: 1rem 1.25rem; text-align: right;">
+                            <button onclick="alert('Recibo de comissão para ${sp.name} gerado com sucesso!')" class="btn-primary-action" style="padding: 0.35rem 0.65rem; font-size: 0.75rem;">
+                                <i class="fa-solid fa-file-pdf"></i> Recibo
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initCommissionsPage);
+</script>
+{% endblock %}
