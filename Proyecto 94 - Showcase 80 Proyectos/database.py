@@ -4,30 +4,30 @@ import json
 PROJECTS_DATA = [
     {
         "id": 71,
-        "number": "Proyecto 71",
+        "number": "Projeto 71",
         "title": "Crowdfunding & Mecenato SaaS",
         "name": "Fund Craft AI",
         "icon": "fa-solid fa-hand-holding-heart",
         "tagline": "Plataforma de Financiamento Coletivo, Angariação de Fundos & Recompensas",
         "features": [
             "Gestão de Campanhas de Crowdfunding",
-            "Níveis de Recompensas & Donativos",
+            "Níveis de Recompensas & Doações",
             "Barra de Progresso & Metas Financeiras",
-            "Painel de Apoiadores (Backers)",
+            "Painel de Apoiantes (Backers)",
             "Disparo Automático de Notificações"
         ],
         "technologies": ["Python Flask", "SQLite3", "JavaScript ES6", "HTML5 & CSS Grid", "FontAwesome 6"]
     },
     {
         "id": 72,
-        "number": "Proyecto 72",
-        "title": "Sistema de Donações ❤️",
+        "number": "Projeto 72",
+        "title": "Sistema de Doações ❤️",
         "name": "Donation Craft AI",
         "icon": "fa-solid fa-heart",
         "tagline": "Gestão de Causas Sociais, Doadores Recorrentes & Objetivos de Impacto",
         "features": [
             "Registo & Gestão de Doadores VIP",
-            "Campanhas de Arrecadação com Metas",
+            "Campanhas de Angariação com Metas",
             "Histórico Transacional & Recibos",
             "Dashboard de Progresso Financeiro",
             "Filtros de Causas & Categorias"
@@ -36,13 +36,13 @@ PROJECTS_DATA = [
     },
     {
         "id": 73,
-        "number": "Proyecto 73",
-        "title": "Generador de Contratos 📑",
+        "number": "Projeto 73",
+        "title": "Gerador de Contratos 📑",
         "name": "Contract Craft AI",
         "icon": "fa-solid fa-file-signature",
         "tagline": "Automação de Contratos Legais, Modelos Dinâmicos & Assinatura Digital",
         "features": [
-            "Catálogo de Plantilhas Jurídicas",
+            "Catálogo de Modelos Jurídicos",
             "Substituição Dinâmica de Variáveis",
             "Gestão de Clientes & Partes",
             "Exportação em Formato PDF & HTML",
@@ -52,7 +52,7 @@ PROJECTS_DATA = [
     },
     {
         "id": 74,
-        "number": "Proyecto 74",
+        "number": "Projeto 74",
         "title": "Calculadora de Preços & Margens 💶",
         "name": "Price Master AI",
         "icon": "fa-solid fa-calculator",
@@ -68,45 +68,45 @@ PROJECTS_DATA = [
     },
     {
         "id": 75,
-        "number": "Proyecto 75",
+        "number": "Projeto 75",
         "title": "Sistema de Comissões & Vendas 💰",
         "name": "Comissões Pro AI",
         "icon": "fa-solid fa-money-bill-trend-up",
         "tagline": "Gestão de Vendedores, Cálculo de Comissões, Hierarquias & Rankings",
         "features": [
-            "Cadastro de Equipa de Vendedores",
+            "Registo de Equipa de Vendedores",
             "Registo de Vendas por Período",
             "Cálculo de Escalões de Percentagem",
-            "Leaderboard & Ranking de Performance",
+            "Tabela de Classificação & Ranking de Desempenho",
             "Relatórios de Pagamento de Comissões"
         ],
         "technologies": ["Python Flask", "SQLite3", "CSS Grid Layout", "JavaScript ES6", "FontAwesome"]
     },
     {
         "id": 76,
-        "number": "Proyecto 76",
-        "title": "Lead Generator & Landing Page 🚀",
+        "number": "Projeto 76",
+        "title": "Gerador de Leads & Landing Page 🚀",
         "name": "Lead Pulse AI",
         "icon": "fa-solid fa-rocket",
         "tagline": "Captura de Leads, Formulários Inteligentes & Funil de Conversão",
         "features": [
             "Landing Page de Alta Conversão",
             "Formulários Dinâmicos de Captura",
-            "Gestão de Estados de Lead (Funil)",
-            "Seguimento & Automação de E-mails",
+            "Gestão de Etapas de Lead (Funil)",
+            "Acompanhamento & Automação de E-mails",
             "Dashboard de Taxa de Conversão"
         ],
         "technologies": ["Python", "Flask REST API", "SQLite3", "CSS Glassmorphism", "ChartJS Visuals"]
     },
     {
         "id": 77,
-        "number": "Proyecto 77",
+        "number": "Projeto 77",
         "title": "Email Marketing SaaS 📧",
         "name": "Mail Craft AI",
         "icon": "fa-solid fa-envelope-open-text",
         "tagline": "Plataforma de E-mail Marketing, Listas de Distribuição & Campanhas",
         "features": [
-            "Gestão de Subscritores & Tags",
+            "Gestão de Subscritores & Etiquetas",
             "Listas Segmentadas por Perfil",
             "Disparo & Agendamento de Campanhas",
             "Catálogo de Modelos Responsivos",
@@ -116,29 +116,29 @@ PROJECTS_DATA = [
     },
     {
         "id": 78,
-        "number": "Proyecto 78",
+        "number": "Projeto 78",
         "title": "Sistema de Newsletter Editorial 📰",
         "name": "Subscribed AI",
         "icon": "fa-solid fa-newspaper",
-        "tagline": "Publicação Editorial, Tiers de Leitor, Redator Visual & Timeline",
+        "tagline": "Publicação Editorial, Níveis de Leitor, Redator Visual & Cronologia",
         "features": [
-            "Redator Visual em 3 Painéis + Preview",
-            "Subscritores por Tiers (Gratuito, Premium, VIP)",
+            "Redator Visual em 3 Painéis + Pré-visualização",
+            "Subscritores por Níveis (Gratuito, Premium, VIP)",
             "Linha do Tempo Cronológica de Edições",
-            "Editorial Ledger Tables com Avatars",
-            "Relatórios de Entregabilidade & Export"
+            "Tabelas Editoriais com Avatares",
+            "Relatórios de Entregabilidade & Exportação"
         ],
         "technologies": ["Python 3.11", "Flask", "SQLite3", "Google Fonts Playfair Display", "Sidebar UI Design"]
     },
     {
         "id": 79,
-        "number": "Proyecto 79",
+        "number": "Projeto 79",
         "title": "Web Analytics & Métricas 📈",
         "name": "Pulse Analytics AI",
         "icon": "fa-solid fa-chart-line",
         "tagline": "Monitorização de Tráfego Web em Tempo Real & Métricas de Audiência",
         "features": [
-            "Ticker Ativo de Visitantes Online em Direto",
+            "Indicador Ativo de Visitantes Online em Direto",
             "Gráficos Temporais SVG de Sessões",
             "Distribuição Geográfica por Países",
             "Desempenho por URL Path & Dispositivos",
@@ -148,17 +148,17 @@ PROJECTS_DATA = [
     },
     {
         "id": 80,
-        "number": "Proyecto 80",
-        "title": "Heatmap Web & Behavior Analytics 🔥",
+        "number": "Projeto 80",
+        "title": "Heatmap Web & Analytics de Comportamento 🔥",
         "name": "Hot Trace AI",
         "icon": "fa-solid fa-fire",
-        "tagline": "Mapas de Calor Espaciais, Profundidade de Scroll & Zonas Calientes",
+        "tagline": "Mapas de Calor Espaciais, Profundidade de Scroll & Zonas Quentes",
         "features": [
             "Mapa Espacial de Coordenadas de Clique (X/Y)",
             "Profundidade de Scroll (25%, 50%, 75%, 100%)",
-            "Matriz de Zonas Calientes (Hotspot Score)",
+            "Matriz de Zonas Quentes (Hotspot Score)",
             "Gravações de Sessões de Utilizadores",
-            "Canvas Térmico Interativo com Overlay"
+            "Canvas Térmico Interativo com Camada Sobreposta"
         ],
         "technologies": ["Python Flask", "SQLite3 Spatial Store", "Thermal CSS Glow Canvas", "JetBrains Mono Font", "REST API"]
     }
