@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>80 Proyectos en 80 Días — Showcase Tecnológico | EJAJ TECH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-deep: #0b192c;
+            --blue-royal: #1e3a8a;
+            --blue-sapphire: #1d4ed8;
+            --blue-sky: #38bdf8;
+            --blue-ice: #e0f2fe;
+            --marble-white: #ffffff;
+            --marble-bg: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --shadow-marble: 0 20px 50px rgba(14, 165, 233, 0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            position: relative;
+            background: #0f172a;
+        }
+
+        /* --- ANIMATED MARBLE BLUE & WHITE BACKGROUND --- */
+        .marble-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1;
+            background: radial-gradient(circle at 20% 20%, #e0f2fe 0%, #38bdf8 30%, #1d4ed8 70%, #0b192c 100%);
+            background-size: 200% 200%;
+            animation: marbleFlow 18s ease infinite alternate;
+        }
+
+        @keyframes marbleFlow {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 100%; }
+        }
+
+        /* Floating Light Particles / Orbs */
+        .marble-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+            animation: particleFloat 12s infinite ease-in-out alternate;
+        }
+
+        .particle-1 { width: 300px; height: 300px; top: -50px; left: -50px; animation-duration: 16s; }
+        .particle-2 { width: 450px; height: 450px; bottom: -100px; right: -80px; animation-duration: 22s; }
+        .particle-3 { width: 200px; height: 200px; top: 40%; right: 15%; animation-duration: 14s; }
+
+        @keyframes particleFloat {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate(40px, -60px) scale(1.1) rotate(180deg); }
+            100% { transform: translate(-30px, 40px) scale(0.95) rotate(360deg); }
+        }
+
+        /* --- MAIN CAROUSEL WRAPPER --- */
+        .showcase-app {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Navbar */
+        .showcase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-marble);
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--blue-royal), var(--blue-sky));
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
+        }
+
+        .brand-text h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--blue-deep);
+            line-height: 1.1;
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            color: var(--blue-sapphire);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 6-Second Timer Progress Bar Container */
+        .timer-bar-wrapper {
+            position: relative;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1.5rem 0 0;
+        }
+
+        .timer-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--blue-sapphire), var(--blue-sky));
+            border-radius: 10px;
+        }
+
+        .timer-active .timer-bar-fill {
+            animation: fillTimer 6s linear infinite;
+        }
+
+        @keyframes fillTimer {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Slide Container Card */
+        .slide-card-container {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 28px;
+            padding: 3rem;
+            box-shadow: var(--shadow-marble);
+            margin: 1.5rem 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-item {
+            display: none;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .slide-item.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Slide Content Structure */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1.5rem;
+        }
+
+        .slide-title-box h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: var(--blue-deep);
+            line-height: 1.1;
+        }
+
+        .slide-title-box p {
+            font-size: 1.05rem;
+            color: var(--blue-sapphire);
+            font-weight: 600;
+            margin-top: 0.35rem;
+        }
+
+        .slide-badge {
+            background: rgba(29, 78, 216, 0.1);
+            color: var(--blue-sapphire);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            border: 1px solid rgba(29, 78, 216, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .slide-body-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+
+        .section-box {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .section-box h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--blue-deep);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .feature-item {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .feature-item i {
+            color: var(--blue-sapphire);
+            font-size: 1rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .tech-pill {
+            background: var(--blue-ice);
+            color: var(--blue-royal);
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 0.45rem 0.95rem;
+            border-radius: 50px;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        /* Bottom Controls Bar */
+        .showcase-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-marble);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .ctrl-btn {
+            background: #ffffff;
+            color: var(--blue-deep);
+            border: 1px solid #cbd5e1;
+            padding: 0.6rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .ctrl-btn:hover {
+            background: var(--blue-sapphire);
+            color: #ffffff;
+            border-color: var(--blue-sapphire);
+            transform: translateY(-2px);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--blue-sapphire);
+            width: 32px;
+            border-radius: 10px;
+        }
+
+        .footer-credits {
+            text-align: center;
+            font-size: 0.88rem;
+            color: var(--blue-deep);
+            font-weight: 700;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MARBLE BLUE & WHITE ANIMATED BACKGROUND -->
+    <div class="marble-bg">
+        <div class="marble-particle particle-1"></div>
+        <div class="marble-particle particle-2"></div>
+        <div class="marble-particle particle-3"></div>
+    </div>
+
+    <!-- MAIN SHOWCASE APPLICATION -->
+    <div class="showcase-app">
+        
+        <!-- Header Navbar -->
+        <header class="showcase-header">
+            <div class="brand-box">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-gem"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>80 Proyectos en 80 Días</h1>
+                    <p>Showcase Tecnológico • EJAJ TECH</p>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span class="slide-badge"><i class="fa-solid fa-clock"></i> Transição Automática: 6s</span>
+                <button id="pausePlayBtn" onclick="togglePause()" class="ctrl-btn">
+                    <i class="fa-solid fa-pause"></i> Pausar
+                </button>
+            </div>
+        </header>
+
+        <!-- 6-Second Timer Bar -->
+        <div class="timer-bar-wrapper timer-active" id="timerWrapper">
+            <div class="timer-bar-fill"></div>
+        </div>
+
+        <!-- Slide Presentation Card -->
+        <div class="slide-card-container">
+            {% for p in projects %}
+            <div class="slide-item {% if loop.first %}active{% endif %}" data-index="{{ loop.index0 }}">
+                <!-- Slide Header -->
+                <div class="slide-header">
+                    <div class="slide-title-box">
+                        <span class="slide-badge" style="margin-bottom: 0.5rem;">
+                            <i class="{{ p.icon }}"></i> {{ p.number }} — {{ p.title }}
+                        </span>
+                        <h2>{{ p.name }}</h2>
+                        <p>{{ p.tagline }}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 2.2rem; font-family: 'Playfair Display', serif; font-weight: 900; color: var(--blue-sapphire);">
+                            #{{ p.id }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Slide Body Grid -->
+                <div class="slide-body-grid">
+                    <!-- Left Section: Features -->
+                    <div class="section-box">
+                        <h3><i class="fa-solid fa-list-check" style="color: var(--blue-sapphire);"></i> Funcionalidades Principais</h3>
+                        <ul class="features-list">
+                            {% for f in p.features %}
+                            <li class="feature-item">
+                                <i class="fa-solid fa-circle-check"></i> {{ f }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <!-- Right Section: Tech Stack -->
+                    <div class="section-box">
+                        <h3><i class="fa-solid fa-microchip" style="color: var(--blue-royal);"></i> Tecnologias Utilizadas</h3>
+                        <div class="tech-tags">
+                            {% for t in p.technologies %}
+                            <span class="tech-pill"><i class="fa-solid fa-code"></i> {{ t }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid #e2e8f0; text-align: center;">
+                            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Status do Sistema:</span>
+                            <div style="font-weight: 800; color: #10b981; font-size: 0.95rem; margin-top: 0.25rem;">
+                                <i class="fa-solid fa-circle-check"></i> 100% Funcional & Testado
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Bottom Controls & Dots Bar -->
+        <footer class="showcase-controls">
+            <button onclick="prevSlide()" class="ctrl-btn">
+                <i class="fa-solid fa-arrow-left"></i> Anterior
+            </button>
+
+            <!-- Slide Dots Indicator (1 to 10) -->
+            <div class="slide-dots" id="dotsContainer">
+                {% for p in projects %}
+                <div class="dot {% if loop.first %}active{% endif %}" onclick="goToSlide({{ loop.index0 }})"></div>
+                {% endfor %}
+            </div>
+
+            <button onclick="nextSlide()" class="ctrl-btn">
+                Próximo <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </footer>
+
+        <!-- Credits Banner -->
+        <div class="footer-credits">
+            Desenvolvido por <strong>EJAJ TECH</strong> & Lead Architect Enmanuel Jimenez (@ejajtech).
+        </div>
+
+    </div>
+
+    <!-- CAROUSEL SCRIPT (6-SECOND AUTOPLAY) -->
+    <script>
+        const totalSlides = {{ projects|length }};
+        let currentIndex = 0;
+        let isPaused = false;
+        let slideInterval = null;
+        const TIMER_DURATION = 6000; // 6 seconds
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.slide-item');
+            const dots = document.querySelectorAll('.dot');
+
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+
+            currentIndex = (index + totalSlides) % totalSlides;
+
+            slides[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
+
+            resetTimerAnimation();
+        }
+
+        function nextSlide() {
+            showSlide(currentIndex + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentIndex - 1);
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+        }
+
+        function resetTimerAnimation() {
+            const wrapper = document.getElementById('timerWrapper');
+            wrapper.classList.remove('timer-active');
+            void wrapper.offsetWidth; // trigger reflow
+            if (!isPaused) {
+                wrapper.classList.add('timer-active');
+            }
+        }
+
+        function startAutoplay() {
+            if (slideInterval) clearInterval(slideInterval);
+            slideInterval = setInterval(() => {
+                if (!isPaused) {
+                    nextSlide();
+                }
+            }, TIMER_DURATION);
+            resetTimerAnimation();
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            const btn = document.getElementById('pausePlayBtn');
+            const wrapper = document.getElementById('timerWrapper');
+
+            if (isPaused) {
+                btn.innerHTML = '<i class="fa-solid fa-play"></i> Reproduzir';
+                wrapper.classList.remove('timer-active');
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-pause"></i> Pausar';
+                wrapper.classList.add('timer-active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            startAutoplay();
+        });
+    </script>
+</body>
+</html>
