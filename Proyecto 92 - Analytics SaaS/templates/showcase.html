@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block page_title %}Showcase Tecnológico & Arquitetura Visual{% endblock %}
+
+{% block content %}
+<!-- Hero Showcase Banner -->
+<div class="cyber-card" style="background: linear-gradient(135deg, #121929 0%, #0d1322 100%); padding: 3.5rem 2.5rem; text-align: center; border: 1px solid var(--border-glow); margin-bottom: 2.5rem; position: relative; overflow: hidden;">
+    <span class="pill-badge pill-cyan" style="margin-bottom: 1.25rem; padding: 0.45rem 1.2rem; font-size: 0.85rem;">
+        <i class="fa-solid fa-chart-line"></i> PLATAFORMA DE WEB ANALYTICS & MÉTRICAS EM TEMPO REAL
+    </span>
+    <h1 style="font-size: 2.8rem; font-weight: 900; color: var(--text-main); line-height: 1.15; margin-bottom: 1rem;">
+        PulseAnalytics AI <span style="color: var(--primary-cyan);">Metrics SaaS</span>
+    </h1>
+    <p style="font-size: 1.15rem; color: var(--text-muted); max-width: 840px; margin: 0 auto 2rem; line-height: 1.6; font-weight: 500;">
+        Plataforma completa de Web Analytics para monitorização em tempo real de visitas, utilizadores únicos, países de origem, dispositivos técnicos, páginas mais visitadas e fontes de aquisição de tráfego.
+    </p>
+
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/" class="btn-cyber-cyan" style="font-size: 1rem; padding: 0.85rem 1.8rem;">
+            <i class="fa-solid fa-gauge-high"></i> Dashboard Principal
+        </a>
+        <a href="/pages_sources" class="btn-cyber-outline" style="font-size: 1rem; padding: 0.85rem 1.8rem;">
+            <i class="fa-solid fa-link"></i> Páginas & Fontes
+        </a>
+    </div>
+</div>
+
+<!-- Features Showcase Grid -->
+<div style="margin-bottom: 3rem;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="font-size: 2rem; font-weight: 900; color: var(--text-main); margin-bottom: 0.5rem;">
+            Módulos & Capacidades do Sistema
+        </h2>
+        <p style="color: var(--text-muted); font-size: 1rem;">
+            Construído com tecnologia de ponta para oferecer máxima visibilidade sobre o tráfego web.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <!-- Feature 1 -->
+        <div class="cyber-card">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(6,182,212,0.15); color: var(--primary-cyan); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+                Visitantes em Tempo Real (Live Pulse)
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                Ticker ativo com contagem de utilizadores online no momento, pulso de atividade e latência ultra reduzida.
+            </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="cyber-card">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(16,185,129,0.15); color: var(--emerald); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+                Sessões & Utilizadores Únicos
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                Monitorização contínua de sessões diárias, retenção de utilizadores retornados e taxa de rejeição (Bounce Rate).
+            </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="cyber-card">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(139,92,246,0.15); color: var(--violet); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+                <i class="fa-solid fa-earth-americas"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+                Análise Geográfica por País
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                Ranking visual de tráfego internacional por bandeiras, percentagem de share e volume de acessos globais.
+            </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="cyber-card">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(245,158,11,0.15); color: var(--amber); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+                <i class="fa-solid fa-laptop"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+                Stack Técnico & Dispositivos
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                Distribuição percentual entre Desktop, Telemóvel e Tablet, além de métricas de Sistemas Operacionais e Navegadores.
+            </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="cyber-card">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(6,182,212,0.15); color: var(--primary-cyan); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+                <i class="fa-solid fa-link"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+                Páginas Populares & Fontes
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                Desempenho por URL Path, tempo médio de permanência na página e canais de aquisição (Google, Redes Sociais, Direto).
+            </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="cyber-card">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(16,185,129,0.15); color: var(--emerald); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+                <i class="fa-solid fa-file-export"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+                Gráficos & Exportação CSV / JSON
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                Gráfico temporal interativo SVG e relatórios descarregáveis em formato CSV e JSON para auditorias externas.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

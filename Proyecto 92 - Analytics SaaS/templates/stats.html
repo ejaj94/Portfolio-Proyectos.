@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block page_title %}Relatórios & Exportação de Dados{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="pill-badge pill-cyan" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-file-export"></i> Relatórios Executivos</span>
+        <h2 style="font-size: 2.2rem; font-weight: 900; color: var(--text-main); line-height: 1.1;">
+            Relatórios & Exportação de Dados
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+            Descarregue relatórios consolidados em formato CSV ou JSON para auditoria e integração com ferramentas de BI.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/api/export/csv" class="btn-cyber-cyan">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+        <a href="/api/export/json" class="btn-cyber-outline">
+            <i class="fa-solid fa-file-code"></i> Exportar JSON
+        </a>
+    </div>
+</div>
+
+<!-- Executive Summary Badges -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+    <div class="cyber-card">
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Amostra de Tráfego</div>
+        <div id="summaryVisits" class="mono" style="font-size: 1.8rem; font-weight: 800; color: var(--primary-cyan); margin: 0.4rem 0;">0</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Sessões Registadas</div>
+    </div>
+
+    <div class="cyber-card">
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Visualizações Totais</div>
+        <div id="summaryPageviews" class="mono" style="font-size: 1.8rem; font-weight: 800; color: var(--emerald); margin: 0.4rem 0;">0</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Hits em Páginas</div>
+    </div>
+
+    <div class="cyber-card">
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Retenção & Qualidade</div>
+        <div id="summaryBounce" class="mono" style="font-size: 1.8rem; font-weight: 800; color: var(--violet); margin: 0.4rem 0;">0.0%</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Média de Rejeição</div>
+    </div>
+
+    <div class="cyber-card">
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Duração de Sessão</div>
+        <div id="summaryDuration" class="mono" style="font-size: 1.8rem; font-weight: 800; color: var(--amber); margin: 0.4rem 0;">0m 0s</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Tempo no Site</div>
+    </div>
+</div>
+
+<!-- Consolidated Data Table -->
+<div class="cyber-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+            <i class="fa-solid fa-table" style="color: var(--primary-cyan); margin-right: 0.4rem;"></i>Visão Consolidada dos Dados Analytics
+        </h3>
+        <span class="pill-badge pill-cyan">Live Audit Ready</span>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="cyber-table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Visitas</th>
+                    <th>Únicos</th>
+                    <th>Pageviews</th>
+                    <th>Bounce Rate</th>
+                    <th>Duração Média</th>
+                </tr>
+            </thead>
+            <tbody id="statsExportBody">
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.5rem;">A carregar dados do relatório...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function loadStatsPage() {
+        try {
+            const [sRes, tRes] = await Promise.all([
+                fetch('/api/stats'),
+                fetch('/api/traffic_chart')
+            ]);
+
+            const stats = await sRes.json();
+            const traffic = await tRes.json();
+
+            document.getElementById('summaryVisits').innerText = stats.total_visits.toLocaleString();
+            document.getElementById('summaryPageviews').innerText = stats.total_pageviews.toLocaleString();
+            document.getElementById('summaryBounce').innerText = stats.avg_bounce_rate + '%';
+            document.getElementById('summaryDuration').innerText = stats.avg_duration_str;
+
+            const tbody = document.getElementById('statsExportBody');
+            tbody.innerHTML = traffic.map(d => {
+                const mins = Math.floor(d.avg_duration_sec / 60);
+                const secs = d.avg_duration_sec % 60;
+                return `
+                    <tr>
+                        <td style="font-weight: 800; color: var(--primary-cyan);" class="mono">${d.date_str}</td>
+                        <td style="font-weight: 700;">${d.visits.toLocaleString()}</td>
+                        <td style="font-weight: 700; color: var(--emerald);" class="mono">${d.unique_visitors.toLocaleString()}</td>
+                        <td style="font-weight: 700; color: var(--violet);">${d.pageviews.toLocaleString()}</td>
+                        <td>
+                            <span class="pill-badge pill-coral">${d.bounce_rate}%</span>
+                        </td>
+                        <td class="mono" style="color: var(--text-muted);">${mins}m ${secs}s</td>
+                    </tr>
+                `;
+            }).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadStatsPage);
+</script>
+{% endblock %}

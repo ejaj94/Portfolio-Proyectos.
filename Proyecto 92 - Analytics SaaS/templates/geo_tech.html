@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block page_title %}Países & Dispositivos{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="pill-badge pill-violet" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-earth-americas"></i> Demografia & Tecnologia</span>
+        <h2 style="font-size: 2.2rem; font-weight: 900; color: var(--text-main); line-height: 1.1;">
+            Geografia & Dispositivos Técnicos
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+            Origem geográfica dos visitantes e distribuição de sistemas operacionais, dispositivos e navegadores.
+        </p>
+    </div>
+</div>
+
+<!-- Split View: Left = Countries Breakdown / Right = Tech Stack Grid -->
+<div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem;">
+    
+    <!-- LEFT COLUMN: Countries Rank -->
+    <div class="cyber-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+                <i class="fa-solid fa-globe" style="color: var(--primary-cyan); margin-right: 0.4rem;"></i>Distribuição por País
+            </h3>
+            <span class="pill-badge pill-cyan" id="countryCountBadge">7 Países</span>
+        </div>
+
+        <div id="countriesList" style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">A carregar países...</div>
+        </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Devices, OS & Browsers Stack -->
+    <div style="display: flex; flex-direction: column; gap: 1.75rem;">
+        
+        <!-- Devices Card -->
+        <div class="cyber-card">
+            <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 1rem;">
+                <i class="fa-solid fa-laptop" style="color: var(--emerald); margin-right: 0.35rem;"></i>Tipo de Dispositivo
+            </h4>
+            <div id="devicesList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <div style="font-size: 0.85rem; color: var(--text-muted);">A carregar dispositivos...</div>
+            </div>
+        </div>
+
+        <!-- Browsers & OS Card -->
+        <div class="cyber-card">
+            <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 1rem;">
+                <i class="fa-solid fa-window-restore" style="color: var(--violet); margin-right: 0.35rem;"></i>Sistemas & Navegadores
+            </h4>
+            <div id="techStackList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <div style="font-size: 0.85rem; color: var(--text-muted);">A carregar navegadores...</div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    async function loadGeoTechPage() {
+        try {
+            const [cRes, dRes] = await Promise.all([
+                fetch('/api/countries'),
+                fetch('/api/devices')
+            ]);
+
+            const countries = await cRes.json();
+            const tech = await dRes.json();
+
+            // Render Countries
+            const cContainer = document.getElementById('countriesList');
+            document.getElementById('countryCountBadge').innerText = countries.length + ' Países';
+
+            cContainer.innerHTML = countries.map(c => `
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1.1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <span style="font-size: 1.3rem;">${c.flag_emoji}</span>
+                            <strong style="font-size: 0.95rem; color: var(--text-main);">${c.country_name}</strong>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="mono" style="font-weight: 800; color: var(--primary-cyan); font-size: 0.9rem;">${c.visitors_count.toLocaleString()}</span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 0.3rem;">(${c.traffic_share_pct}%)</span>
+                        </div>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden;">
+                        <div style="width: ${c.traffic_share_pct}%; height: 100%; background: linear-gradient(90deg, var(--primary-cyan), var(--emerald)); border-radius: 10px;"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Devices
+            const devContainer = document.getElementById('devicesList');
+            devContainer.innerHTML = (tech.Device || []).map(d => `
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+                    <span style="font-size: 0.88rem; color: var(--text-main); font-weight: 600;">${d.name}</span>
+                    <span class="mono" style="font-size: 0.88rem; font-weight: 800; color: var(--emerald);">${d.share_pct}%</span>
+                </div>
+            `).join('');
+
+            // Render Tech (OS & Browsers)
+            const techContainer = document.getElementById('techStackList');
+            const combined = [...(tech.OS || []), ...(tech.Browser || []).slice(0, 4)];
+            techContainer.innerHTML = combined.map(t => `
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">${t.name}</span>
+                    <span class="mono" style="font-size: 0.85rem; font-weight: 800; color: var(--violet);">${t.share_pct}%</span>
+                </div>
+            `).join('');
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadGeoTechPage);
+</script>
+{% endblock %}

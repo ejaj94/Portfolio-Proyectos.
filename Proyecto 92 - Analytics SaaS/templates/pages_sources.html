@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block page_title %}Páginas & Fontes de Tráfego{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="pill-badge pill-cyan" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-link"></i> Conteúdo & Aquisição</span>
+        <h2 style="font-size: 2.2rem; font-weight: 900; color: var(--text-main); line-height: 1.1;">
+            Páginas de Destino & Fontes de Tráfego
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+            Desempenho detalhado por URL, tempo de permanência e canais de aquisição de tráfego.
+        </p>
+    </div>
+</div>
+
+<!-- Top Pages Full Table -->
+<div class="cyber-card" style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+            <i class="fa-solid fa-file-code" style="color: var(--primary-cyan); margin-right: 0.4rem;"></i>Desempenho de Páginas (Top URLs)
+        </h3>
+        <span class="pill-badge pill-cyan" id="pageCountBadge">0 Páginas</span>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="cyber-table">
+            <thead>
+                <tr>
+                    <th>URL Path</th>
+                    <th>Título da Página</th>
+                    <th>Visualizações</th>
+                    <th>Únicas</th>
+                    <th>Tempo Médio</th>
+                    <th>Taxa Saída</th>
+                </tr>
+            </thead>
+            <tbody id="fullPagesBody">
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.5rem;">A carregar páginas...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Traffic Acquisition Channels Table -->
+<div class="cyber-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+            <i class="fa-solid fa-share-nodes" style="color: var(--violet); margin-right: 0.4rem;"></i>Canais de Aquisição & Conversão
+        </h3>
+        <span class="pill-badge pill-violet" id="sourcesCountBadge">0 Canais</span>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="cyber-table">
+            <thead>
+                <tr>
+                    <th>Canal de Entrada</th>
+                    <th>Domínio de Referência</th>
+                    <th>Visitas</th>
+                    <th>Taxa de Conversão</th>
+                </tr>
+            </thead>
+            <tbody id="fullSourcesBody">
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.5rem;">A carregar fontes...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function loadPagesSourcesPage() {
+        try {
+            const [pRes, sRes] = await Promise.all([
+                fetch('/api/pages'),
+                fetch('/api/sources')
+            ]);
+
+            const pages = await pRes.json();
+            const sources = await sRes.json();
+
+            // Render Pages
+            const pBody = document.getElementById('fullPagesBody');
+            document.getElementById('pageCountBadge').innerText = pages.length + ' Páginas';
+
+            pBody.innerHTML = pages.map(p => {
+                const mins = Math.floor(p.avg_time_sec / 60);
+                const secs = p.avg_time_sec % 60;
+                return `
+                    <tr>
+                        <td style="font-weight: 800; color: var(--primary-cyan);" class="mono">${p.page_path}</td>
+                        <td style="color: var(--text-main); font-weight: 600;">${p.page_title}</td>
+                        <td style="font-weight: 800;" class="mono">${p.pageviews.toLocaleString()}</td>
+                        <td style="color: var(--emerald); font-weight: 700;" class="mono">${p.unique_views.toLocaleString()}</td>
+                        <td class="mono" style="color: var(--text-muted);">${mins}m ${secs}s</td>
+                        <td>
+                            <span class="pill-badge pill-coral">${p.exit_rate}%</span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Render Sources
+            const sBody = document.getElementById('fullSourcesBody');
+            document.getElementById('sourcesCountBadge').innerText = sources.length + ' Canais';
+
+            sBody.innerHTML = sources.map(s => `
+                <tr>
+                    <td style="font-weight: 800; color: var(--text-main);">${s.channel_name}</td>
+                    <td style="color: var(--text-muted);" class="mono">${s.referrer_domain}</td>
+                    <td style="font-weight: 800; color: var(--violet);" class="mono">${s.visits.toLocaleString()}</td>
+                    <td>
+                        <span class="pill-badge pill-emerald">${s.conversion_rate}% CR</span>
+                    </td>
+                </tr>
+            `).join('');
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPagesSourcesPage);
+</script>
+{% endblock %}
