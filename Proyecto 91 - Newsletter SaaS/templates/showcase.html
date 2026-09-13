@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Subscribed AI - Plataforma de Newsletter & Publicação Editorial | Showcase Tecnológico{% endblock %}
+
+{% block content %}
+<!-- Hero Showcase Banner -->
+<div class="card-editorial" style="background: linear-gradient(135deg, #ffffff 0%, #faf8f5 50%, #f4f0e8 100%); padding: 3.5rem 2.5rem; text-align: center; border: 2px solid var(--border); margin-bottom: 2.5rem; position: relative; overflow: hidden;">
+    <div class="badge badge-terracota" style="margin-bottom: 1.25rem; padding: 0.45rem 1.2rem; font-size: 0.85rem;">
+        <i class="fa-solid fa-feather"></i> PLATAFORMA EDITORIAL DE PUBLICAÇÃO & NEWSLETTERS
+    </div>
+    <h1 class="serif-heading" style="font-size: 2.8rem; font-weight: 900; color: var(--text-ink); line-height: 1.15; margin-bottom: 1rem; letter-spacing: -0.5px;">
+        Subscribed AI <span style="color: var(--primary);">Editorial SaaS</span>
+    </h1>
+    <p style="font-size: 1.15rem; color: var(--text-muted); max-width: 820px; margin: 0 auto 2rem; line-height: 1.6; font-weight: 500;">
+        Plataforma moderna de curadoria de conteúdos, gestão de subscritores por níveis (Tier Gratuito, Premium e VIP), redator visual com pré-visualização ao vivo, biblioteca de plantillas jornalísticas e métricas analíticas de entregabilidade.
+    </p>
+
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/" class="btn-editorial" style="font-size: 1rem; padding: 0.85rem 1.8rem;">
+            <i class="fa-solid fa-gauge-high"></i> Dashboard Editorial
+        </a>
+        <a href="/editor" class="btn-secondary-editorial" style="font-size: 1rem; padding: 0.85rem 1.8rem;">
+            <i class="fa-solid fa-pen-nib"></i> Redator Visual
+        </a>
+    </div>
+</div>
+
+<!-- Key Features Showcase Grid -->
+<div style="margin-bottom: 3rem;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 class="serif-heading" style="font-size: 2rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.5rem;">
+            Funcionalidades de Publicação de Classe Mundial
+        </h2>
+        <p style="color: var(--text-muted); font-size: 1rem;">
+            Arquitetura desenhada para newsletters de autor, publicações independentes e equipas de curadoria.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <!-- Feature 1 -->
+        <div class="card-editorial" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(200, 90, 50, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.6rem;">
+                    Gestão de Subscritores & Tiers
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Segmentação por planos de fidelização (Gratuito, Premium e VIP Exclusive), acompanhamento de taxas de abertura individuais e datas de subscrição.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <a href="/subscribers" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    Explorar Subscritores <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="card-editorial" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(27, 67, 50, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-feather"></i>
+                </div>
+                <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.6rem;">
+                    Catálogo de Edições & Publicação
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Histórico numerado de publicações, controlo de rascunhos, agendamentos cronológicos e leitor de pré-visualização integrado.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <a href="/issues" style="color: var(--secondary); font-weight: 700; text-decoration: none; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    Ver Edições <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="card-editorial" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(217, 119, 6, 0.1); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-pen-nib"></i>
+                </div>
+                <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.6rem;">
+                    Redator Visual & Live Preview
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Editor com suporte a HTML limpo, inserção com 1-clique de variáveis dinâmicas (`{{name}}`, `{{issue_number}}`) e pré-visualização imediata.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <a href="/editor" style="color: var(--gold); font-weight: 700; text-decoration: none; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    Abrir Redator Visual <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="card-editorial" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(200, 90, 50, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.6rem;">
+                    Biblioteca de Plantillas Jornalísticas
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Modelos prontos a usar para Digest Semanal, Relatórios Deep Dive VIP e Comunicados Flash com design responsivo.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <a href="/templates_page" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    Ver Plantillas <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="card-editorial" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(27, 67, 50, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.6rem;">
+                    Analytics & Entregabilidade
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Dashboard analítico com métricas globais de abertura e clique, relatórios por edição e exportação em ficheiros CSV e JSON.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <a href="/stats" style="color: var(--secondary); font-weight: 700; text-decoration: none; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    Ver Analytics <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="card-editorial" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(217, 119, 6, 0.1); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-building-columns"></i>
+                </div>
+                <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.6rem;">
+                    Design Editorial Inovador
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Estética vintage-contemporânea com paleta Marfim Macio (`#faf8f5`), Terracota e Esmeralda, distanciando-se dos dashboards convencionais.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <span class="badge badge-gold"><i class="fa-solid fa-palette"></i> Editorial Elegante</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

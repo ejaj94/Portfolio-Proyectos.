@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Subscribed AI — Plataforma de Newsletter & Publicação Editorial{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-ivory: #faf8f5;
+            --bg-card: #ffffff;
+            --primary: #c85a32; /* Terracota Editorial */
+            --primary-glow: rgba(200, 90, 50, 0.15);
+            --secondary: #1b4332; /* Esmeralda Profundo */
+            --secondary-glow: rgba(27, 67, 50, 0.12);
+            --gold: #d97706;
+            --border: #e8e4df;
+            --border-hover: #d6d0c7;
+            --text-ink: #1a1917;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-ivory);
+            color: var(--text-ink);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, .serif-heading {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        /* Editorial Header Navbar */
+        .navbar {
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 2px solid var(--border);
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            text-decoration: none;
+            color: var(--text-ink);
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--secondary);
+            color: var(--bg-ivory);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 12px var(--secondary-glow);
+            border: 1px solid rgba(27, 67, 50, 0.3);
+        }
+
+        .brand-text h1 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-ink);
+            line-height: 1.1;
+        }
+
+        .brand-text p {
+            font-size: 0.72rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.4rem;
+            list-style: none;
+        }
+
+        .nav-link-item {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link-item:hover, .nav-link-item.active {
+            color: var(--primary);
+            background: rgba(200, 90, 50, 0.08);
+            border: 1px solid rgba(200, 90, 50, 0.2);
+        }
+
+        .nav-link-item.active {
+            font-weight: 700;
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(200, 90, 50, 0.08);
+        }
+
+        /* Container Main */
+        .main-container {
+            max-width: 1280px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Editorial Cards */
+        .card-editorial {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 20px rgba(26, 25, 23, 0.03);
+            transition: all 0.2s ease;
+        }
+
+        .card-editorial:hover {
+            border-color: var(--border-hover);
+        }
+
+        /* Primary Editorial Button */
+        .btn-editorial {
+            background: var(--primary);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 0.75rem 1.35rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px var(--primary-glow);
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .btn-editorial:hover {
+            background: #b24d29;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary-editorial {
+            background: var(--secondary);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 0.75rem 1.35rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px var(--secondary-glow);
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .btn-secondary-editorial:hover {
+            background: #143326;
+            transform: translateY(-1px);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-terracota { background: rgba(200, 90, 50, 0.1); color: var(--primary); border: 1px solid rgba(200, 90, 50, 0.2); }
+        .badge-emerald { background: rgba(27, 67, 50, 0.1); color: var(--secondary); border: 1px solid rgba(27, 67, 50, 0.2); }
+        .badge-gold { background: rgba(217, 119, 6, 0.1); color: var(--gold); border: 1px solid rgba(217, 119, 6, 0.2); }
+        .badge-gray { background: #f1f5f9; color: var(--text-muted); border: 1px solid var(--border); }
+
+        /* Footer */
+        .footer {
+            border-top: 2px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            background: var(--bg-ivory);
+            margin-top: 3rem;
+        }
+
+        .footer strong { color: var(--secondary); }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <a href="/" class="brand-box">
+            <div class="brand-icon">
+                <i class="fa-solid fa-newspaper"></i>
+            </div>
+            <div class="brand-text">
+                <h1>Subscribed AI</h1>
+                <p>Publicação Editorial & Newsletter</p>
+            </div>
+        </a>
+
+        <ul class="nav-links">
+            <li>
+                <a href="/" class="nav-link-item {% if active_page == 'dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-gauge-high"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="/issues" class="nav-link-item {% if active_page == 'issues' %}active{% endif %}">
+                    <i class="fa-solid fa-feather"></i> Edições
+                </a>
+            </li>
+            <li>
+                <a href="/editor" class="nav-link-item {% if active_page == 'editor' %}active{% endif %}">
+                    <i class="fa-solid fa-pen-nib"></i> Redator Visual
+                </a>
+            </li>
+            <li>
+                <a href="/subscribers" class="nav-link-item {% if active_page == 'subscribers' %}active{% endif %}">
+                    <i class="fa-solid fa-users"></i> Subscritores
+                </a>
+            </li>
+            <li>
+                <a href="/templates_page" class="nav-link-item {% if active_page == 'templates_page' %}active{% endif %}">
+                    <i class="fa-solid fa-layer-group"></i> Plantillas
+                </a>
+            </li>
+            <li>
+                <a href="/stats" class="nav-link-item {% if active_page == 'stats' %}active{% endif %}">
+                    <i class="fa-solid fa-chart-line"></i> Estatísticas
+                </a>
+            </li>
+            <li>
+                <a href="/showcase" class="nav-link-item {% if active_page == 'showcase' %}active{% endif %}">
+                    <i class="fa-solid fa-star"></i> Showcase
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>Subscribed AI</strong> — Plataforma de Newsletter & Publicação Editorial. Desenvolvido por <strong>EJAJ TECH</strong> & Enmanuel Jimenez (@ejajtech).</p>
+    </footer>
+
+</body>
+</html>

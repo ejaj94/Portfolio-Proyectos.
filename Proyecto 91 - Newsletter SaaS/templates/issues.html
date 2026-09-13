@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Edições de Newsletter - Subscribed AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 class="serif-heading" style="font-size: 2.2rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-feather" style="color: var(--primary); margin-right: 0.5rem;"></i>Edições & Publicações
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Catálogo histórico de edições publicadas, rascunhos em preparação e agendamentos futuros.
+        </p>
+    </div>
+    <a href="/editor" class="btn-editorial">
+        <i class="fa-solid fa-pen-nib"></i> Escrever Nova Edição
+    </a>
+</div>
+
+<!-- Status Filter Pills -->
+<div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+    <button onclick="filterStatus('all')" class="issue-filter active" id="btn-status-all" style="padding: 0.55rem 1.1rem; border-radius: 8px; border: 1px solid var(--primary); background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
+        Todas as Edições
+    </button>
+    <button onclick="filterStatus('Publicado')" class="issue-filter" id="btn-status-Publicado" style="padding: 0.55rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+        <i class="fa-solid fa-circle-check" style="color: var(--secondary); margin-right: 0.35rem;"></i>Publicadas
+    </button>
+    <button onclick="filterStatus('Programado')" class="issue-filter" id="btn-status-Programado" style="padding: 0.55rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+        <i class="fa-solid fa-clock" style="color: var(--gold); margin-right: 0.35rem;"></i>Programadas
+    </button>
+    <button onclick="filterStatus('Rascunho')" class="issue-filter" id="btn-status-Rascunho" style="padding: 0.55rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+        <i class="fa-solid fa-pen" style="color: var(--text-muted); margin-right: 0.35rem;"></i>Rascunhos
+    </button>
+</div>
+
+<!-- Issues Grid -->
+<div id="issuesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.5rem;">
+    <div style="text-align: center; padding: 3rem; color: var(--text-muted); grid-column: 1/-1;">
+        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+        <p style="margin-top: 0.75rem; font-weight: 600;">A carregar edições...</p>
+    </div>
+</div>
+
+<!-- Preview Issue Modal -->
+<div id="issuePreviewModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(26, 25, 23, 0.6); backdrop-filter: blur(6px); z-index: 999; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: var(--bg-card); width: 100%; max-width: 720px; max-height: 90vh; border-radius: 16px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+            <div>
+                <span id="prevIssueNum" class="badge badge-terracota" style="margin-bottom: 0.3rem;">#00</span>
+                <h3 id="prevIssueTitle" class="serif-heading" style="font-size: 1.35rem; font-weight: 800; color: var(--text-ink);">Visualizar Edição</h3>
+            </div>
+            <button onclick="closeIssuePreview()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div id="prevIssueBody" style="flex: 1; overflow-y: auto; background: var(--bg-ivory); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; color: var(--text-ink);">
+            <!-- Render HTML -->
+        </div>
+
+        <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <button onclick="closeIssuePreview()" style="padding: 0.75rem 1.25rem; border: 1px solid var(--border); border-radius: 8px; background: transparent; font-weight: 600; cursor: pointer;">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let issuesArray = [];
+    let currentStatus = 'all';
+
+    async function loadIssuesPage() {
+        try {
+            const res = await fetch('/api/issues');
+            issuesArray = await res.json();
+            renderIssues();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function filterStatus(st) {
+        currentStatus = st;
+        document.querySelectorAll('.issue-filter').forEach(btn => {
+            btn.style.background = 'var(--bg-card)';
+            btn.style.color = 'var(--text-muted)';
+            btn.style.borderColor = 'var(--border)';
+        });
+        const activeBtn = document.getElementById('btn-status-' + st);
+        if (activeBtn) {
+            activeBtn.style.background = 'var(--primary)';
+            activeBtn.style.color = '#ffffff';
+            activeBtn.style.borderColor = 'var(--primary)';
+        }
+        renderIssues();
+    }
+
+    function renderIssues() {
+        const grid = document.getElementById('issuesGrid');
+        let filtered = issuesArray;
+        if (currentStatus !== 'all') {
+            filtered = issuesArray.filter(i => i.status === currentStatus);
+        }
+
+        if (!filtered || filtered.length === 0) {
+            grid.innerHTML = `
+                <div class="card-editorial" style="text-align: center; padding: 3rem; grid-column: 1/-1;">
+                    <i class="fa-solid fa-folder-open fa-3x" style="color: var(--text-muted); margin-bottom: 1rem;"></i>
+                    <h4 class="serif-heading" style="font-weight: 800; color: var(--text-ink);">Nenhuma edição encontrada nesta categoria</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Escreva uma nova edição para a sua comunidade.</p>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = filtered.map(i => {
+            const statusBadge = i.status === 'Publicado' ? '<span class="badge badge-emerald"><i class="fa-solid fa-check"></i> Publicado</span>'
+                : (i.status === 'Programado' ? '<span class="badge badge-gold"><i class="fa-solid fa-clock"></i> Programado</span>'
+                : '<span class="badge badge-gray"><i class="fa-solid fa-pen"></i> Rascunho</span>');
+
+            const rec = i.recipients_count || 0;
+            const op = i.opens_count || 0;
+            const openPct = rec > 0 ? ((op / rec) * 100).toFixed(1) + '%' : '0.0%';
+
+            const publishAction = i.status !== 'Publicado' ? `
+                <button onclick="publishIssueNow(${i.id})" class="btn-secondary-editorial" style="font-size: 0.8rem; padding: 0.45rem 0.85rem;">
+                    <i class="fa-solid fa-paper-plane"></i> Publicar
+                </button>
+            ` : '';
+
+            return `
+                <div class="card-editorial" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                            <span class="badge badge-terracota">Edição #${i.issue_number}</span>
+                            ${statusBadge}
+                        </div>
+
+                        <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.4rem; line-height: 1.3;">
+                            ${i.title}
+                        </h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                            <i class="fa-solid fa-envelope" style="color: var(--primary); margin-right: 0.3rem;"></i> ${i.subject}
+                        </p>
+
+                        <div style="background: var(--bg-ivory); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem; max-height: 80px; overflow: hidden;">
+                            ${i.preview_text || 'Sem resumo disponível.'}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem;">
+                            <span>Leitores: <strong>${rec}</strong></span>
+                            <span>Abertura: <strong style="color: var(--secondary);">${openPct}</strong></span>
+                        </div>
+
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="previewIssue(${i.id})" style="flex: 1; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; background: #fff; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                                <i class="fa-solid fa-eye" style="color: var(--secondary);"></i> Ler
+                            </button>
+                            ${publishAction}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function previewIssue(id) {
+        const issue = issuesArray.find(i => i.id === id);
+        if (!issue) return;
+        document.getElementById('prevIssueNum').innerText = '#' + issue.issue_number;
+        document.getElementById('prevIssueTitle').innerText = issue.title;
+        document.getElementById('prevIssueBody').innerHTML = issue.content_html;
+        document.getElementById('issuePreviewModal').style.display = 'flex';
+    }
+
+    function closeIssuePreview() {
+        document.getElementById('issuePreviewModal').style.display = 'none';
+    }
+
+    async function publishIssueNow(id) {
+        if (!confirm('Deseja publicar esta edição imediatamente para todos os subscritores?')) return;
+        try {
+            const res = await fetch(`/api/issues/${id}/publish`, { method: 'POST' });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                alert(result.message);
+                loadIssuesPage();
+            } else {
+                alert(result.message || 'Erro ao publicar edição.');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Erro ao ligar ao servidor.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadIssuesPage);
+</script>
+{% endblock %}

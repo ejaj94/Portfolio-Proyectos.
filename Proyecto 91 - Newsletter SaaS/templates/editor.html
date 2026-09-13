@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Redator Visual de Newsletter - Subscribed AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 class="serif-heading" style="font-size: 2.2rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-pen-nib" style="color: var(--primary); margin-right: 0.5rem;"></i>Redator Visual & Editor de Edições
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Componha edições com formatação profissional, insira variáveis de personalização e veja a pré-visualização ao vivo.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <button type="button" onclick="handleSave('save')" class="btn-editorial" style="background: var(--text-muted);">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Rascunho
+        </button>
+        <button type="button" onclick="handleSave('publish')" class="btn-editorial">
+            <i class="fa-solid fa-paper-plane"></i> Publicar Agora
+        </button>
+    </div>
+</div>
+
+<!-- Editor & Live Preview Split Screen -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem;">
+    <!-- Left Column: Form & Inputs -->
+    <div class="card-editorial">
+        <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1.25rem; color: var(--text-ink);">
+            Configuração da Edição
+        </h3>
+
+        <form id="editorForm" onsubmit="event.preventDefault()">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Título da Edição *</label>
+                    <input type="text" id="edTitle" required placeholder="Ex: Edição #104 — O Impacto da Web3 nas Notícias" oninput="updateLivePreview()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Assunto da Newsletter (Subject Line) *</label>
+                    <input type="text" id="edSubject" required placeholder="Ex: 📰 Descubra as 5 grandes tendências do jornalismo digital..." oninput="updateLivePreview()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Carregar de Plantilla (Opcional)</label>
+                    <select id="edTemplate" onchange="applyTemplate()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none; background: #fff;">
+                        <option value="">Selecione um modelo pré-definido...</option>
+                    </select>
+                </div>
+
+                <!-- Insert Tags Bar -->
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Inserir Variáveis de Personalização</label>
+                    <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                        <button type="button" onclick="insertTag('{{name}}')" class="badge badge-terracota" style="cursor: pointer;"><i class="fa-solid fa-plus"></i> {{name}}</button>
+                        <button type="button" onclick="insertTag('{{issue_number}}')" class="badge badge-emerald" style="cursor: pointer;"><i class="fa-solid fa-plus"></i> {{issue_number}}</button>
+                        <button type="button" onclick="insertTag('{{unsubscribe_link}}')" class="badge badge-gold" style="cursor: pointer;"><i class="fa-solid fa-plus"></i> {{unsubscribe_link}}</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Conteúdo da Newsletter (HTML / Rich Text) *</label>
+                    <textarea id="edContent" rows="12" required oninput="updateLivePreview()" placeholder="Escreva o conteúdo da sua newsletter aqui..." style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.88rem; font-family: monospace; outline: none; resize: vertical;"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Right Column: Live Reader Preview -->
+    <div class="card-editorial" style="display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+            <h3 class="serif-heading" style="font-size: 1.25rem; font-weight: 800; color: var(--text-ink);">
+                <i class="fa-solid fa-eye" style="color: var(--secondary); margin-right: 0.35rem;"></i>Pré-visualização do Leitor
+            </h3>
+            <span class="badge badge-emerald"><i class="fa-solid fa-rotate"></i> Atualização ao Vivo</span>
+        </div>
+
+        <div id="livePreviewContainer" style="flex: 1; min-height: 450px; background: var(--bg-ivory); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; overflow-y: auto; color: var(--text-ink);">
+            <div style="text-align: center; color: var(--text-muted); margin-top: 5rem;">
+                <i class="fa-solid fa-feather fa-3x" style="margin-bottom: 1rem; opacity: 0.5;"></i>
+                <p>O conteúdo formatado da newsletter aparecerá aqui em tempo real.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let templatesList = [];
+
+    async function initEditor() {
+        try {
+            const res = await fetch('/api/templates');
+            templatesList = await res.json();
+            
+            const select = document.getElementById('edTemplate');
+            templatesList.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.id;
+                opt.textContent = `${t.title} (${t.category})`;
+                select.appendChild(opt);
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function applyTemplate() {
+        const id = document.getElementById('edTemplate').value;
+        if (!id) return;
+        const t = templatesList.find(item => item.id == id);
+        if (t) {
+            document.getElementById('edTitle').value = t.title;
+            document.getElementById('edSubject').value = t.header_subtitle || t.title;
+            document.getElementById('edContent').value = t.content_html;
+            updateLivePreview();
+        }
+    }
+
+    function insertTag(tag) {
+        const textarea = document.getElementById('edContent');
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = textarea.value;
+        textarea.value = text.substring(0, start) + tag + text.substring(end);
+        textarea.focus();
+        textarea.selectionEnd = start + tag.length;
+        updateLivePreview();
+    }
+
+    function updateLivePreview() {
+        const title = document.getElementById('edTitle').value || 'Título da Edição';
+        const subject = document.getElementById('edSubject').value || 'Assunto da Newsletter';
+        const content = document.getElementById('edContent').value;
+
+        const container = document.getElementById('livePreviewContainer');
+        if (!content.trim()) {
+            container.innerHTML = `
+                <div style="text-align: center; color: var(--text-muted); margin-top: 5rem;">
+                    <i class="fa-solid fa-feather fa-3x" style="margin-bottom: 1rem; opacity: 0.5;"></i>
+                    <p>Escreva no formulário para visualizar a newsletter.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Render preview replacing tags with mock reader info
+        let rendered = content
+            .replace(/\{\{name\}\}/g, 'Sofia Duarte')
+            .replace(/\{\{issue_number\}\}/g, '104')
+            .replace(/\{\{unsubscribe_link\}\}/g, '#');
+
+        container.innerHTML = `
+            <div style="border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h2 style="font-family: 'Playfair Display', serif; color: var(--text-ink); margin-bottom: 0.3rem;">${title}</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">Assunto: ${subject}</p>
+            </div>
+            <div>${rendered}</div>
+        `;
+    }
+
+    async function handleSave(action) {
+        const title = document.getElementById('edTitle').value;
+        const subject = document.getElementById('edSubject').value;
+        const content_html = document.getElementById('edContent').value;
+        const template_id = document.getElementById('edTemplate').value;
+
+        if (!title || !subject || !content_html) {
+            alert('Preencha o título, assunto e conteúdo da newsletter!');
+            return;
+        }
+
+        const data = {
+            title,
+            subject,
+            content_html,
+            template_id: template_id || null,
+            action: action
+        };
+
+        try {
+            const res = await fetch('/api/issues', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                alert(result.message);
+                window.location.href = '/issues';
+            } else {
+                alert(result.message || 'Erro ao guardar edição.');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Erro de ligação ao servidor.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initEditor);
+</script>
+{% endblock %}

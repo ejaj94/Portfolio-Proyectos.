@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Editorial - Subscribed AI{% endblock %}
+
+{% block content %}
+<!-- Welcome & Quick Action Banner -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="badge badge-terracota" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-newspaper"></i> Edição & Curadoria</span>
+        <h2 class="serif-heading" style="font-size: 2.2rem; color: var(--text-ink); font-weight: 800;">
+            Painel de Controlo Editorial
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Acompanhe o crescimento da sua publicação, edições ativas e o nível de engagement dos seus subscritores.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/editor" class="btn-editorial">
+            <i class="fa-solid fa-pen-nib"></i> Escrever Nova Edição
+        </a>
+        <a href="/subscribers" class="btn-secondary-editorial">
+            <i class="fa-solid fa-user-plus"></i> Novo Subscritor
+        </a>
+    </div>
+</div>
+
+<!-- Executive Metric Badges -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
+    <div class="card-editorial" style="display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(200, 90, 50, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        <div>
+            <div id="dashTotalSubs" style="font-size: 1.7rem; font-weight: 800; color: var(--text-ink); font-family: 'Playfair Display', serif;">0</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Subscritores Ativos</div>
+        </div>
+    </div>
+
+    <div class="card-editorial" style="display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(27, 67, 50, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <div>
+            <div id="dashPubIssues" style="font-size: 1.7rem; font-weight: 800; color: var(--text-ink); font-family: 'Playfair Display', serif;">0</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Edições Publicadas</div>
+        </div>
+    </div>
+
+    <div class="card-editorial" style="display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(217, 119, 6, 0.1); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <i class="fa-solid fa-envelope-open-text"></i>
+        </div>
+        <div>
+            <div id="dashAvgOpen" style="font-size: 1.7rem; font-weight: 800; color: var(--text-ink); font-family: 'Playfair Display', serif;">0.0%</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Taxa Média de Abertura</div>
+        </div>
+    </div>
+
+    <div class="card-editorial" style="display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(200, 90, 50, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <i class="fa-solid fa-crown"></i>
+        </div>
+        <div>
+            <div id="dashVipSubs" style="font-size: 1.7rem; font-weight: 800; color: var(--text-ink); font-family: 'Playfair Display', serif;">0</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Subscritores VIP</div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Issues & Quick Launcher Layout -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.75rem;">
+    <!-- Main Column: Recent Issues -->
+    <div class="card-editorial">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 class="serif-heading" style="font-size: 1.35rem; color: var(--text-ink); font-weight: 800;">
+                <i class="fa-solid fa-newspaper" style="color: var(--primary); margin-right: 0.4rem;"></i>Últimas Edições da Newsletter
+            </h3>
+            <a href="/issues" style="font-size: 0.85rem; color: var(--primary); font-weight: 700; text-decoration: none;">Ver Todas →</a>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--border); font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
+                        <th style="padding: 0.75rem 0.5rem;"># Edição</th>
+                        <th style="padding: 0.75rem 0.5rem;">Título da Publicação</th>
+                        <th style="padding: 0.75rem 0.5rem;">Estado</th>
+                        <th style="padding: 0.75rem 0.5rem;">Leitores</th>
+                        <th style="padding: 0.75rem 0.5rem;">Abertura</th>
+                    </tr>
+                </thead>
+                <tbody id="dashIssuesBody" style="font-size: 0.9rem;">
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                            <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                            <p style="margin-top: 0.5rem;">A carregar edições...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Side Column: Fast Actions & Editor Info -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <!-- Card: Rapid Editor -->
+        <div class="card-editorial" style="background: linear-gradient(135deg, #ffffff 0%, #faf8f5 100%); border-left: 4px solid var(--primary);">
+            <span class="badge badge-terracota" style="margin-bottom: 0.5rem;">Redator Rápido</span>
+            <h4 class="serif-heading" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text-ink);">Nova Edição em Rascunho</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">
+                Escreva ou utilize uma das nossas plantillas jornalísticas para comunicar com a sua audiência hoje.
+            </p>
+            <a href="/editor" class="btn-editorial" style="width: 100%; justify-content: center;">
+                <i class="fa-solid fa-plus-circle"></i> Abrir Editor de Conteúdo
+            </a>
+        </div>
+
+        <!-- Card: Recent Subscribers Preview -->
+        <div class="card-editorial">
+            <h4 class="serif-heading" style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-ink);">
+                <i class="fa-solid fa-user-check" style="color: var(--secondary); margin-right: 0.35rem;"></i>Novos Subscritores
+            </h4>
+            <div id="recentSubscribersList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <div style="color: var(--text-muted); font-size: 0.85rem;">A carregar leitores...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadDashboard() {
+        try {
+            const [statsRes, issuesRes, subsRes] = await Promise.all([
+                fetch('/api/stats'),
+                fetch('/api/issues'),
+                fetch('/api/subscribers')
+            ]);
+
+            const stats = await statsRes.json();
+            const issues = await issuesRes.json();
+            const subs = await subsRes.json();
+
+            document.getElementById('dashTotalSubs').innerText = stats.total_subscribers;
+            document.getElementById('dashPubIssues').innerText = stats.published_issues;
+            document.getElementById('dashAvgOpen').innerText = stats.avg_open_rate + '%';
+            document.getElementById('dashVipSubs').innerText = stats.vip_subscribers;
+
+            // Render Recent Issues
+            const issuesBody = document.getElementById('dashIssuesBody');
+            if (!issues || issues.length === 0) {
+                issuesBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">Nenhuma edição registada.</td></tr>`;
+            } else {
+                issuesBody.innerHTML = issues.slice(0, 5).map(i => {
+                    const statusBadge = i.status === 'Publicado' ? '<span class="badge badge-emerald"><i class="fa-solid fa-check"></i> Publicado</span>'
+                        : (i.status === 'Programado' ? '<span class="badge badge-gold"><i class="fa-solid fa-clock"></i> Programado</span>'
+                        : '<span class="badge badge-gray"><i class="fa-solid fa-pen"></i> Rascunho</span>');
+
+                    const rec = i.recipients_count || 0;
+                    const op = i.opens_count || 0;
+                    const openPct = rec > 0 ? ((op / rec) * 100).toFixed(1) + '%' : '0.0%';
+
+                    return `
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 0.85rem 0.5rem; font-weight: 800; color: var(--primary);">#${i.issue_number}</td>
+                            <td style="padding: 0.85rem 0.5rem;">
+                                <strong style="color: var(--text-ink); font-family: 'Playfair Display', serif;">${i.title}</strong>
+                            </td>
+                            <td style="padding: 0.85rem 0.5rem;">${statusBadge}</td>
+                            <td style="padding: 0.85rem 0.5rem; font-weight: 700;">${rec}</td>
+                            <td style="padding: 0.85rem 0.5rem; font-weight: 800; color: var(--secondary);">${openPct}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Render Recent Subscribers
+            const subsContainer = document.getElementById('recentSubscribersList');
+            if (!subs || subs.length === 0) {
+                subsContainer.innerHTML = `<div style="font-size: 0.85rem; color: var(--text-muted);">Sem subscritores.</div>`;
+            } else {
+                subsContainer.innerHTML = subs.slice(0, 4).map(s => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+                        <div>
+                            <strong style="font-size: 0.88rem; color: var(--text-ink); block;">${s.name}</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${s.email}</span>
+                        </div>
+                        <span class="badge ${s.tier === 'VIP' ? 'badge-gold' : 'badge-emerald'}" style="font-size: 0.7rem;">${s.tier}</span>
+                    </div>
+                `).join('');
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadDashboard);
+</script>
+{% endblock %}

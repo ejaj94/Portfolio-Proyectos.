@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}Plantillas de Newsletter - Subscribed AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 class="serif-heading" style="font-size: 2.2rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-layer-group" style="color: var(--primary); margin-right: 0.5rem;"></i>Catálogo de Plantillas Editoriais
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Selecione estruturas pré-desenhadas para acelerar a redação das suas edições periódicas.
+        </p>
+    </div>
+    <button onclick="openTemplateModal()" class="btn-editorial">
+        <i class="fa-solid fa-plus-circle"></i> Nova Plantilla
+    </button>
+</div>
+
+<!-- Templates Grid -->
+<div id="templatesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+    <div style="text-align: center; padding: 3rem; color: var(--text-muted); grid-column: 1/-1;">
+        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+        <p style="margin-top: 0.75rem; font-weight: 600;">A carregar catálogo de plantillas...</p>
+    </div>
+</div>
+
+<!-- Modal Preview Template -->
+<div id="templatePreviewModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(26, 25, 23, 0.6); backdrop-filter: blur(6px); z-index: 999; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: var(--bg-card); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 16px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+            <div>
+                <h3 id="prevTmpTitle" class="serif-heading" style="font-size: 1.3rem; font-weight: 800; color: var(--text-ink);">Pré-visualização</h3>
+                <p id="prevTmpSub" style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;"></p>
+            </div>
+            <button onclick="closeTemplatePreview()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div id="prevTmpBody" style="flex: 1; overflow-y: auto; background: var(--bg-ivory); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; color: var(--text-ink);">
+            <!-- Render HTML -->
+        </div>
+
+        <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <button onclick="closeTemplatePreview()" style="padding: 0.75rem 1.25rem; border: 1px solid var(--border); border-radius: 8px; background: transparent; font-weight: 600; cursor: pointer;">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Criar Plantilla -->
+<div id="templateModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(26, 25, 23, 0.6); backdrop-filter: blur(6px); z-index: 999; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: var(--bg-card); width: 100%; max-width: 650px; border-radius: 16px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 class="serif-heading" style="font-size: 1.3rem; font-weight: 800; color: var(--text-ink);">
+                <i class="fa-solid fa-plus-circle" style="color: var(--primary);"></i> Criar Nova Plantilla
+            </h3>
+            <button onclick="closeTemplateModal()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <form id="templateForm" onsubmit="submitTemplate(event)">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Nome da Plantilla *</label>
+                        <input type="text" id="tTitle" required placeholder="Ex: Entrevista de Fundo Editorial" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Categoria *</label>
+                        <select id="tCategory" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none; background: #fff;">
+                            <option value="Digest">Digest Semanal</option>
+                            <option value="Deep Dive">Deep Dive</option>
+                            <option value="Notícias">Notícias</option>
+                            <option value="Entrevistas">Entrevistas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Subtítulo de Cabeçalho Recomendado</label>
+                    <input type="text" id="tSub" placeholder="Ex: Edição Especial com convidados da indústria" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-ink); margin-bottom: 0.35rem;">Conteúdo HTML da Plantilla *</label>
+                    <textarea id="tContent" rows="6" required placeholder="<div style='font-family: Georgia, serif;'><h2>Olá {{name}}</h2><p>Conteúdo da plantilla...</p></div>" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.88rem; font-family: monospace; outline: none; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button type="button" onclick="closeTemplateModal()" style="padding: 0.75rem 1.25rem; border: 1px solid var(--border); border-radius: 8px; background: transparent; font-weight: 600; cursor: pointer;">Cancelar</button>
+                <button type="submit" class="btn-editorial">Guardar Plantilla</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    let templatesArray = [];
+
+    async function loadTemplatesPage() {
+        try {
+            const res = await fetch('/api/templates');
+            templatesArray = await res.json();
+            renderTemplates();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function renderTemplates() {
+        const grid = document.getElementById('templatesGrid');
+        if (!templatesArray || templatesArray.length === 0) {
+            grid.innerHTML = `
+                <div class="card-editorial" style="text-align: center; padding: 3rem; grid-column: 1/-1;">
+                    <i class="fa-solid fa-folder-open fa-3x" style="color: var(--text-muted); margin-bottom: 1rem;"></i>
+                    <h4 class="serif-heading" style="font-weight: 800; color: var(--text-ink);">Nenhuma plantilla disponível</h4>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = templatesArray.map(t => {
+            const catBadge = t.category === 'Deep Dive' ? 'badge-gold' : (t.category === 'Digest' ? 'badge-terracota' : 'badge-emerald');
+
+            return `
+                <div class="card-editorial" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                            <span class="badge ${catBadge}">${t.category}</span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${t.created_at || 'Sistema'}</span>
+                        </div>
+
+                        <h3 class="serif-heading" style="font-size: 1.2rem; font-weight: 800; color: var(--text-ink); margin-bottom: 0.4rem;">
+                            ${t.title}
+                        </h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); font-style: italic; margin-bottom: 1rem;">
+                            ${t.header_subtitle || 'Sem subtítulo'}
+                        </p>
+
+                        <div style="background: var(--bg-ivory); border: 1px dashed var(--border); border-radius: 8px; padding: 0.85rem; max-height: 100px; overflow: hidden; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+                            ${escapeHtml(t.content_html.substring(0, 140))}...
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button onclick="previewTemplate(${t.id})" style="flex: 1; padding: 0.55rem; border: 1px solid var(--border); border-radius: 8px; background: #fff; font-size: 0.82rem; font-weight: 700; color: var(--text-ink); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                            <i class="fa-solid fa-eye" style="color: var(--secondary);"></i> Ver Layout
+                        </button>
+                        <a href="/editor" class="btn-editorial" style="flex: 1.2; font-size: 0.82rem; padding: 0.55rem; justify-content: center;">
+                            <i class="fa-solid fa-pen"></i> Usar Plantilla
+                        </a>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function previewTemplate(id) {
+        const t = templatesArray.find(item => item.id === id);
+        if (!t) return;
+        document.getElementById('prevTmpTitle').innerText = t.title;
+        document.getElementById('prevTmpSub').innerText = t.header_subtitle || '';
+        document.getElementById('prevTmpBody').innerHTML = t.content_html;
+        document.getElementById('templatePreviewModal').style.display = 'flex';
+    }
+
+    function closeTemplatePreview() {
+        document.getElementById('templatePreviewModal').style.display = 'none';
+    }
+
+    function openTemplateModal() {
+        document.getElementById('templateModal').style.display = 'flex';
+    }
+
+    function closeTemplateModal() {
+        document.getElementById('templateModal').style.display = 'none';
+        document.getElementById('templateForm').reset();
+    }
+
+    async function submitTemplate(e) {
+        e.preventDefault();
+        const data = {
+            title: document.getElementById('tTitle').value,
+            category: document.getElementById('tCategory').value,
+            header_subtitle: document.getElementById('tSub').value,
+            content_html: document.getElementById('tContent').value
+        };
+
+        try {
+            const res = await fetch('/api/templates', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                closeTemplateModal();
+                loadTemplatesPage();
+            } else {
+                alert(result.message || 'Erro ao guardar plantilla.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro de ligação ao servidor.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadTemplatesPage);
+</script>
+{% endblock %}
