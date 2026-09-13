@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Demonstração & Captura - LeadCraft AI{% endblock %}
+
+{% block content %}
+<!-- Landing Page Hero -->
+<div style="background: linear-gradient(135deg, #2563eb 0%, #10b981 100%); border-radius: 24px; padding: 4rem 2.5rem; color: #ffffff; margin-bottom: 3rem; box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2); position: relative; overflow: hidden;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
+        <div>
+            <span class="badge" style="background: rgba(255,255,255,0.2); color: #ffffff; font-weight: 700; font-size: 0.85rem; padding: 0.4rem 1rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem; display: inline-block;">
+                <i class="fa-solid fa-sparkles"></i> Plataforma SaaS de Geração de Leads
+            </span>
+            <h1 style="font-size: 2.8rem; font-weight: 900; line-height: 1.15; margin-bottom: 1.25rem; letter-spacing: -1px;">
+                Transforme Visitantes em Clientes Finais com LeadCraft AI
+            </h1>
+            <p style="font-size: 1.1rem; opacity: 0.95; line-height: 1.6; font-weight: 500; margin-bottom: 2rem;">
+                A solução inteligente da EJAJ TECH concebida para capturar contacto de decisores, pontuar leads automaticamente (Lead Scoring) e acelerar o fecho de contratos comerciais.
+            </p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.9rem; opacity: 0.95;">
+                <div><i class="fa-solid fa-check-circle"></i> Captura Inteligente</div>
+                <div><i class="fa-solid fa-check-circle"></i> Funil Automático</div>
+                <div><i class="fa-solid fa-check-circle"></i> Lead Score Instantâneo</div>
+            </div>
+        </div>
+
+        <!-- Capture Form Card -->
+        <div style="background: #ffffff; color: var(--text-main); border-radius: 20px; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+            <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.35rem;">
+                Solicitar Demonstração Gratuita
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.25rem;">
+                Preencha os seus dados para receber um diagnóstico de crescimento para a sua empresa.
+            </p>
+
+            <form id="publicLandingForm" onsubmit="submitPublicForm(event)">
+                <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.2rem;">Nome Completo *</label>
+                        <input type="text" id="plName" required placeholder="Ex: Dr. Bernardo Costa" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.2rem;">Email Profissional *</label>
+                        <input type="email" id="plEmail" required placeholder="bernardo@empresa.pt" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; outline: none;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.2rem;">Telefone</label>
+                            <input type="text" id="plPhone" placeholder="+351 912 345 678" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; outline: none;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.2rem;">Empresa</label>
+                            <input type="text" id="plCompany" placeholder="Ex: Grupo Alfa SA" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; outline: none;">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.2rem;">Tamanho da Equipa</label>
+                            <select id="plTeamSize" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; outline: none; background: #fff;">
+                                <option value="1-10">1 a 10 colaboradores</option>
+                                <option value="10-50" selected>10 a 50 colaboradores</option>
+                                <option value="50-200">50 a 200 colaboradores</option>
+                                <option value="200+">Mais de 200 colaboradores</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.2rem;">Interesse Principal</label>
+                            <select id="plInterest" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; outline: none; background: #fff;">
+                                <option value="Transformação Digital">Transformação Digital</option>
+                                <option value="Software SaaS">Software SaaS</option>
+                                <option value="Automação Legal">Automação Legal</option>
+                                <option value="Consultoria TI">Consultoria TI</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary-action" style="margin-top: 0.5rem; width: 100%; justify-content: center; padding: 0.85rem; font-size: 0.95rem;">
+                        <i class="fa-solid fa-rocket"></i> Enviar Pedido de Demonstração
+                    </button>
+                </div>
+            </form>
+
+            <div id="landingSuccessBox" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--secondary); border-radius: 10px; color: #047857; text-align: center; font-size: 0.88rem;">
+                <i class="fa-solid fa-circle-check fa-2x" style="margin-bottom: 0.5rem; display: block;"></i>
+                <strong style="display: block; font-size: 1rem;">Pedido Registado com Sucesso!</strong>
+                <p id="successMessageText" style="margin-top: 0.25rem;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Benefits Grid -->
+<div style="margin-bottom: 3rem;">
+    <div style="text-align: center; max-width: 700px; margin: 0 auto 2.5rem auto;">
+        <h2 style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+            Porquê Escolher o LeadCraft AI?
+        </h2>
+        <p style="color: var(--text-muted); font-size: 1rem;">
+            Aumente a eficiência comercial da sua empresa com tecnologia de ponta desenvolvida pela EJAJ TECH.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <div class="card-box">
+            <i class="fa-solid fa-bullseye fa-2x" style="color: var(--primary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">Lead Scoring em Tempo Real</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6;">Pontuação automática de leads com base no perfil da empresa, tamanho da equipa e dados de contacto.</p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-diagram-project fa-2x" style="color: var(--secondary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">Pipeline Kanban Visual</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6;">Organização intuitiva de estados desde 'Novo Lead' até 'Convertido' para acompanhar cada oportunidade.</p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-envelope-circle-check fa-2x" style="color: var(--indigo); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">E-mail Nurturing Automático</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6;">Modelos pré-configurados de e-mail para nutrição automática e agendamento de reuniões comerciais.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function submitPublicForm(e) {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('plName').value,
+            email: document.getElementById('plEmail').value,
+            phone: document.getElementById('plPhone').value,
+            company: document.getElementById('plCompany').value,
+            team_size: document.getElementById('plTeamSize').value,
+            interest_area: document.getElementById('plInterest').value,
+            source: 'Landing Page Pública'
+        };
+
+        try {
+            const res = await fetch('/api/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+            if (res.ok && result.success) {
+                document.getElementById('publicLandingForm').style.display = 'none';
+                const successBox = document.getElementById('landingSuccessBox');
+                document.getElementById('successMessageText').innerText = `Muito obrigado, ${data.name}! O seu pedido foi registado com Lead Score de ${result.lead_score} pontos. Entraremos em contacto brevemente!`;
+                successBox.style.display = 'block';
+            } else {
+                alert(result.message || 'Erro ao submeter pedido.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro de ligação ao servidor.');
+        }
+    }
+</script>
+{% endblock %}

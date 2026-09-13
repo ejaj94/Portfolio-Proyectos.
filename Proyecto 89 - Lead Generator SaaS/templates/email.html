@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Automação de E-mail - LeadCraft AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+        <i class="fa-solid fa-envelope-open-text" style="color: var(--primary); margin-right: 0.5rem;"></i>Central de Automação de E-mail & Nutrição
+    </h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Envie comunicações personalizadas com substituição de tags e nutra a sua base de dados até ao fecho da venda.
+    </p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+    <!-- Send Email Panel -->
+    <div class="card-box">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-paper-plane" style="color: var(--primary);"></i> Disparar E-mail Personalizado
+        </h3>
+
+        <form id="sendEmailForm" onsubmit="triggerSendEmail(event)">
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">1. Selecionar Lead Destinatário *</label>
+                    <select id="sendLead" required onchange="updateEmailPreview()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; background: #fff; outline: none; font-weight: 600;">
+                        <option value="">-- Escolha o Lead --</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">2. Selecionar Modelo de E-mail *</label>
+                    <select id="sendTemplate" required onchange="updateEmailPreview()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; background: #fff; outline: none; font-weight: 600;">
+                        <option value="">-- Escolha o Modelo --</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary-action" style="margin-top: 0.5rem; width: 100%; justify-content: center; padding: 0.85rem;">
+                    <i class="fa-solid fa-paper-plane"></i> Enviar E-mail & Registar no Histórico
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Live Email Preview Box -->
+    <div class="card-box" style="position: sticky; top: 90px; background: #ffffff;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-eye" style="color: var(--primary);"></i> Antevisão da Mensagem
+            </h3>
+            <span class="badge badge-emerald"><i class="fa-solid fa-check"></i> Tags Processadas</span>
+        </div>
+
+        <div id="emailPreviewBox" style="background: #fafafa; border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; font-size: 0.9rem; line-height: 1.6; color: var(--text-main); min-height: 240px; white-space: pre-wrap;">
+Selecione o Lead e o Modelo de E-mail à esquerda para pré-visualizar a mensagem gerada com substituição dinâmica de tags...
+        </div>
+    </div>
+</div>
+
+<!-- Email Templates List -->
+<div class="card-box" style="margin-top: 2rem;">
+    <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fa-solid fa-layer-group" style="color: var(--secondary);"></i> Modelos de E-mail Pré-Configurados
+    </h3>
+
+    <div id="templatesGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem;">
+        <div style="text-align: center; padding: 2rem; color: var(--text-muted); grid-column: 1/-1;">
+            <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+            <p style="margin-top: 0.5rem;">A carregar modelos...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    let emailLeads = [];
+    let emailTemplates = [];
+
+    async function initEmailPage() {
+        try {
+            const [leadsRes, tmplRes] = await Promise.all([
+                fetch('/api/leads'),
+                fetch('/api/email_templates')
+            ]);
+            emailLeads = await leadsRes.json();
+            emailTemplates = await tmplRes.json();
+
+            populateDropdowns();
+            renderTemplatesList();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function populateDropdowns() {
+        const lSel = document.getElementById('sendLead');
+        lSel.innerHTML = '<option value="">-- Escolha o Lead --</option>' +
+            emailLeads.map(l => `<option value="${l.id}">${l.name} (${l.email})</option>`).join('');
+
+        const tSel = document.getElementById('sendTemplate');
+        tSel.innerHTML = '<option value="">-- Escolha o Modelo --</option>' +
+            emailTemplates.map(t => `<option value="${t.id}">${t.subject} (${t.category})</option>`).join('');
+    }
+
+    function renderTemplatesList() {
+        const grid = document.getElementById('templatesGrid');
+        grid.innerHTML = emailTemplates.map(t => `
+            <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 12px; border: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <strong style="color: var(--text-main); font-size: 0.95rem;">${t.subject}</strong>
+                    <span class="badge badge-indigo" style="font-size: 0.75rem;">${t.category}</span>
+                </div>
+                <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; white-space: pre-wrap;">${t.body_text}</p>
+            </div>
+        `).join('');
+    }
+
+    function updateEmailPreview() {
+        const lId = document.getElementById('sendLead').value;
+        const tId = document.getElementById('sendTemplate').value;
+        const previewBox = document.getElementById('emailPreviewBox');
+
+        if (!lId || !tId) {
+            previewBox.innerText = 'Selecione o Lead e o Modelo de E-mail à esquerda para pré-visualizar a mensagem gerada com substituição dinâmica de tags...';
+            return;
+        }
+
+        const lead = emailLeads.find(l => l.id == lId);
+        const tmpl = emailTemplates.find(t => t.id == tId);
+
+        let body = tmpl.body_text.replace(/\{\{NOME\}\}/g, lead.name).replace(/\{\{EMPRESA\}\}/g, lead.company || 'sua empresa');
+        previewBox.innerText = `Para: ${lead.name} <${lead.email}>\nAssunto: ${tmpl.subject}\n\n${body}`;
+    }
+
+    async function triggerSendEmail(e) {
+        e.preventDefault();
+        const lead_id = document.getElementById('sendLead').value;
+        const template_id = document.getElementById('sendTemplate').value;
+
+        try {
+            const res = await fetch('/api/email/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lead_id, template_id })
+            });
+
+            const result = await res.json();
+            if (res.ok && result.success) {
+                alert(result.message);
+            } else {
+                alert(result.message || 'Erro ao enviar email.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro na ligação.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initEmailPage);
+</script>
+{% endblock %}
