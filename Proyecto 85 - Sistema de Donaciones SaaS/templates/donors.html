@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Donantes — DonaCraft AI Sistema de Donaciones SaaS{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <div>
+        <h2 style="font-size:1.8rem; font-weight:800;">Diretório de Dadores & Benfeitores</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Lista de beneméritos, patronos e membros solidários registados no DonaCraft AI.</p>
+    </div>
+</div>
+
+<div id="donorsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem;">
+    <!-- JS populates -->
+</div>
+
+<script>
+    async function loadDonors() {
+        const res = await fetch('/api/donors');
+        const donors = await res.json();
+        const grid = document.getElementById('donorsGrid');
+        grid.innerHTML = '';
+
+        donors.forEach(d => {
+            const card = document.createElement('div');
+            card.style = `
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                padding: 1.5rem;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            `;
+            card.innerHTML = `
+                <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1rem;">
+                    <div style="width:50px; height:50px; border-radius:50%; background:linear-gradient(135deg, var(--primary), var(--secondary)); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:1.2rem;">
+                        ${d.name.charAt(0)}
+                    </div>
+                    <div>
+                        <h4 style="font-size:1.1rem; font-weight:800; color:#fff;">${d.name}</h4>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">${d.email}</p>
+                    </div>
+                </div>
+                <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+                    <p style="margin-bottom:0.3rem;"><i class="fa-solid fa-phone" style="color:var(--primary);"></i> ${d.phone}</p>
+                    <p><i class="fa-solid fa-medal" style="color:var(--accent-gold);"></i> Estatuto: <strong>${d.donor_tier}</strong></p>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border); padding-top:0.8rem; font-size:0.85rem; font-weight:700;">
+                    <span>Total Doado:</span>
+                    <span style="color:var(--primary); font-size:1rem;">€ ${d.total_donated.toFixed(2)}</span>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadDonors);
+</script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Donaciones — DonaCraft AI Sistema de Donaciones SaaS{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <div>
+        <h2 style="font-size:1.8rem; font-weight:800;">Registo Geral de Doações</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Lista de todas as contribuições financeiras destinadas às causas solidárias.</p>
+    </div>
+    <div style="display:flex; gap:0.75rem;">
+        <a href="/api/export/csv" class="btn-primary" style="background:#2e223f; border:1px solid var(--border); shadow:none;"><i class="fa-solid fa-file-csv"></i> Exportar CSV</a>
+        <a href="/api/export/json" target="_blank" class="btn-primary" style="background:#2e223f; border:1px solid var(--border); shadow:none;"><i class="fa-solid fa-code"></i> API JSON</a>
+    </div>
+</div>
+
+<div class="data-table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Doador</th>
+                <th>E-mail</th>
+                <th>Campanha Apoiada</th>
+                <th>Valor (€)</th>
+                <th>Método de Pagamento</th>
+                <th>Data & Hora</th>
+            </tr>
+        </thead>
+        <tbody id="fullDonationsTable">
+            <!-- JS populates -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    async function loadFullDonations() {
+        const res = await fetch('/api/donations');
+        const donations = await res.json();
+        const tbody = document.getElementById('fullDonationsTable');
+        tbody.innerHTML = '';
+
+        donations.forEach(d => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="color:var(--text-muted); font-weight:700;">#DON-${d.id}</td>
+                <td style="font-weight:700; color:#fff;"><i class="fa-solid fa-user-circle" style="color:var(--primary);"></i> ${d.donor_name}</td>
+                <td style="color:var(--text-muted);">${d.donor_email}</td>
+                <td style="color:#fff; font-weight:700;">${d.campaign_title}</td>
+                <td style="color:var(--primary); font-weight:800; font-size:1rem;">€ ${d.amount.toFixed(2)}</td>
+                <td><span style="background:rgba(225,29,72,0.15); color:var(--secondary); padding:0.3rem 0.7rem; border-radius:6px; font-size:0.8rem; font-weight:700;">${d.payment_method}</span></td>
+                <td style="color:var(--text-muted); font-size:0.8rem;">${d.created_at}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadFullDonations);
+</script>
+{% endblock %}

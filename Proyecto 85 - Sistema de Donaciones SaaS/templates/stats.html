@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Estatísticas — DonaCraft AI Sistema de Donaciones SaaS{% endblock %}
+
+{% block content %}
+<div style="margin-bottom:1.5rem;">
+    <h2 style="font-size:1.8rem; font-weight:800;">Análise & Métricas de Impacto Solidário</h2>
+    <p style="color:var(--text-muted); font-size:0.9rem;">Relatórios de desempenho humanitário, alocação de fundos e taxa de conclusão de metas.</p>
+</div>
+
+<div class="stats-grid-top" style="margin-bottom:2rem;">
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+        <div class="stat-card-text">
+            <h3 id="stRaised">€ 0.00</h3>
+            <p>Capital Solidário Transacionado</p>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-award"></i></div>
+        <div class="stat-card-text">
+            <h3 id="stSuccessRate">88%</h3>
+            <p>Taxa de Cumprimento de Metas</p>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-receipt"></i></div>
+        <div class="stat-card-text">
+            <h3 id="stAvgDonation">€ 720.00</h3>
+            <p>Ticket Médio por Doação</p>
+        </div>
+    </div>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:18px; padding:1.5rem;">
+        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1rem;"><i class="fa-solid fa-chart-pie" style="color:var(--primary);"></i> Alocação por Categoria de Causa</h3>
+        <ul style="list-style:none; line-height:2.2; font-size:0.9rem; color:var(--text-muted);">
+            <li style="display:flex; justify-content:space-between;"><span>🏥 Saúde & Emergência Médica</span> <strong style="color:#fff;">42%</strong></li>
+            <li style="display:flex; justify-content:space-between;"><span>🍞 Apoio Humanitário & Social</span> <strong style="color:#fff;">30%</strong></li>
+            <li style="display:flex; justify-content:space-between;"><span>🐾 Proteção Animal</span> <strong style="color:#fff;">16%</strong></li>
+            <li style="display:flex; justify-content:space-between;"><span>🎓 Educação & Igualdade</span> <strong style="color:#fff;">12%</strong></li>
+        </ul>
+    </div>
+
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:18px; padding:1.5rem;">
+        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1rem;"><i class="fa-solid fa-shield-halved" style="color:var(--secondary);"></i> Transparência & Certificação</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.6; margin-bottom:1rem;">
+            O DonaCraft AI garante a rastreabilidade total de cada doação efetuada. Todas as campanhas passam por um processo de verificação institucional prévia.
+        </p>
+        <span style="background:rgba(225,29,72,0.15); color:var(--secondary); padding:0.4rem 0.8rem; border-radius:8px; font-weight:700; font-size:0.8rem;">
+            <i class="fa-solid fa-check-double"></i> Sistema Solidário Auditado
+        </span>
+    </div>
+</div>
+
+<script>
+    async function loadStatsPage() {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        document.getElementById('stRaised').innerText = '€ ' + data.total_raised.toLocaleString('pt-PT', {minimumFractionDigits: 2});
+    }
+
+    document.addEventListener('DOMContentLoaded', loadStatsPage);
+</script>
+{% endblock %}

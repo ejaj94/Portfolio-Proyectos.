@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — DonaCraft AI Sistema de Donaciones SaaS{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <div>
+        <h2 style="font-size:1.8rem; font-weight:800;">Painel Executivo de Gestão de Doações</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Visão integrada e em tempo real das campanhas solidárias, doações recebidas e progresso de metas.</p>
+    </div>
+    <button class="btn-primary" onclick="openNewCampaignModal()"><i class="fa-solid fa-plus-circle"></i> Criar Nova Campanha Solidária</button>
+</div>
+
+<!-- Top Stats Bar -->
+<div class="stats-grid-top">
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-euro-sign"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statTotalRaised">€ 0.00</h3>
+            <p>Total Angariado</p>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-bullhorn"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statActiveCampaigns">0</h3>
+            <p>Campanhas Ativas</p>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-heart"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statTotalDonations">0</h3>
+            <p>Doações Efetuadas</p>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-users"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statTotalDonors">0</h3>
+            <p>Comunidade de Dadores</p>
+        </div>
+    </div>
+</div>
+
+<!-- Active Campaigns Showcase Grid -->
+<h3 style="font-size:1.3rem; font-weight:800; margin-bottom:1.25rem;"><i class="fa-solid fa-fire" style="color:var(--primary);"></i> Campanhas Humanitárias & Sociais em Destaque</h3>
+
+<div id="campaignsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:1.5rem; margin-bottom:2.5rem;">
+    <!-- JS populates -->
+</div>
+
+<!-- Recent Donations Table Section -->
+<div style="background:var(--bg-card); border:1px solid var(--border); border-radius:18px; padding:1.5rem;">
+    <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+        <span><i class="fa-solid fa-list-check" style="color:var(--primary);"></i> Últimas Doações & Contribuições Solidárias</span>
+        <a href="/donations" style="color:var(--primary); font-size:0.85rem; text-decoration:none; font-weight:700;">Ver Todas →</a>
+    </h3>
+
+    <div class="data-table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Doador</th>
+                    <th>Campanha Apoiada</th>
+                    <th>Valor do Apoio</th>
+                    <th>Método</th>
+                    <th>Data & Hora</th>
+                </tr>
+            </thead>
+            <tbody id="recentDonationsTable">
+                <!-- JS populates -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Create Campaign -->
+<div class="modal-overlay" id="newCampaignModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-bullhorn" style="color:var(--primary);"></i> Lançar Nova Campanha Solidária</h3>
+            <span class="close-modal" onclick="closeNewCampaignModal()">&times;</span>
+        </div>
+        <form id="newCampaignForm" onsubmit="submitNewCampaign(event)">
+            <div class="form-group">
+                <label>Título da Campanha</label>
+                <input type="text" class="form-control" id="cTitle" required placeholder="Ex: Fundo de Apoio Infantil">
+            </div>
+            <div class="form-group">
+                <label>Categoria da Causa</label>
+                <select class="form-control" id="cCategory">
+                    <option value="Apoio Humanitário & Social">Apoio Humanitário & Social</option>
+                    <option value="Proteção Animal">Proteção Animal</option>
+                    <option value="Educação & Igualdade">Educação & Igualdade</option>
+                    <option value="Saúde & Emergência Médica">Saúde & Emergência Médica</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Meta Financial (€)</label>
+                <input type="number" step="100" class="form-control" id="cGoal" required placeholder="Ex: 20000">
+            </div>
+            <div class="form-group">
+                <label>Descrição Detalhada da Causa</label>
+                <textarea class="form-control" id="cDesc" rows="3" required placeholder="Explique o objetivo humanitário e a aplicação dos fundos..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Data Limite</label>
+                <input type="date" class="form-control" id="cEndDate" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:1rem;">
+                <i class="fa-solid fa-paper-plane"></i> Publicar Campanha no DonaCraft
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Donate -->
+<div class="modal-overlay" id="donateModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-heart" style="color:var(--primary);"></i> Efetuar Doação Solidária</h3>
+            <span class="close-modal" onclick="closeDonateModal()">&times;</span>
+        </div>
+        <form id="donateForm" onsubmit="submitDonate(event)">
+            <input type="hidden" id="dCampaignId">
+            <div class="form-group">
+                <label>Campanha Selecionada</label>
+                <input type="text" class="form-control" id="dCampaignTitle" readonly style="opacity:0.7;">
+            </div>
+            <div class="form-group">
+                <label>Nome do Doador</label>
+                <input type="text" class="form-control" id="dDonorName" required placeholder="Ex: Dra. Beatriz Mendes">
+            </div>
+            <div class="form-group">
+                <label>E-mail de Contacto</label>
+                <input type="email" class="form-control" id="dDonorEmail" required placeholder="Ex: beatriz@exemplo.pt">
+            </div>
+            <div class="form-group">
+                <label>Valor da Doação (€)</label>
+                <input type="number" step="5" min="5" class="form-control" id="dAmount" required placeholder="Ex: 50">
+            </div>
+            <div class="form-group">
+                <label>Método de Pagamento</label>
+                <select class="form-control" id="dMethod">
+                    <option value="MBWay">MBWay</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Transferência Bancária">Transferência Bancária</option>
+                    <option value="PayPal / Stripe">PayPal / Stripe</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Nota ou Mensagem Solidária (Opcional)</label>
+                <input type="text" class="form-control" id="dNote" placeholder="Ex: Força nesta nobre causa!">
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:1rem;">
+                <i class="fa-solid fa-lock"></i> Confirmar Doação Segura
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    async function loadStats() {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        document.getElementById('statTotalRaised').innerText = '€ ' + data.total_raised.toLocaleString('pt-PT', {minimumFractionDigits: 2});
+        document.getElementById('statActiveCampaigns').innerText = data.active_campaigns;
+        document.getElementById('statTotalDonations').innerText = data.total_donations;
+        document.getElementById('statTotalDonors').innerText = data.total_donors;
+    }
+
+    async function loadCampaigns() {
+        const res = await fetch('/api/campaigns');
+        const campaigns = await res.json();
+        const grid = document.getElementById('campaignsGrid');
+        grid.innerHTML = '';
+
+        campaigns.forEach(c => {
+            const card = document.createElement('div');
+            card.style = `
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                overflow: hidden;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                display: flex; flex-direction: column; justify-content: space-between;
+            `;
+            card.innerHTML = `
+                <div>
+                    <div style="height:170px; background:url('${c.image_url}') center/cover no-repeat; position:relative;">
+                        <span style="position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.75); color:#fff; font-size:0.75rem; font-weight:700; padding:0.3rem 0.8rem; border-radius:20px; backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.2);">
+                            ${c.cause_category}
+                        </span>
+                        <span style="position:absolute; bottom:12px; left:12px; background:${c.status === 'Concluída' ? 'var(--emerald)' : 'var(--primary)'}; color:#fff; font-size:0.75rem; font-weight:800; padding:0.25rem 0.75rem; border-radius:8px;">
+                            ${c.status}
+                        </span>
+                    </div>
+                    <div style="padding:1.25rem;">
+                        <h4 style="font-size:1.15rem; font-weight:800; margin-bottom:0.4rem; color:#fff;">${c.title}</h4>
+                        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5; margin-bottom:1.25rem; height:3.8em; overflow:hidden;">
+                            ${c.description}
+                        </p>
+
+                        <!-- Progress Bar -->
+                        <div style="margin-bottom:0.5rem;">
+                            <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; margin-bottom:0.3rem;">
+                                <span>€ ${c.raised_amount.toLocaleString('pt-PT')} angariados</span>
+                                <span style="color:var(--primary);">${c.progress_pct}%</span>
+                            </div>
+                            <div style="width:100%; height:8px; background:#2e223f; border-radius:10px; overflow:hidden;">
+                                <div style="width:${c.progress_pct}%; height:100%; background:linear-gradient(90deg, var(--primary), var(--secondary)); border-radius:10px;"></div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted); font-weight:600;">
+                            <span>Meta: € ${c.goal_amount.toLocaleString('pt-PT')}</span>
+                            <span><i class="fa-regular fa-clock"></i> Fim: ${c.end_date}</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:1.25rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.2);">
+                    <button class="btn-primary" style="width:100%; justify-content:center;" onclick="openDonateModal(${c.id}, '${c.title.replace(/'/g, "\\'")}')">
+                        <i class="fa-solid fa-heart"></i> Fazer Doação Agora
+                    </button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    async function loadDonations() {
+        const res = await fetch('/api/donations');
+        const donations = await res.json();
+        const tbody = document.getElementById('recentDonationsTable');
+        tbody.innerHTML = '';
+
+        donations.slice(0, 5).forEach(d => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="font-weight:700;"><i class="fa-solid fa-user-circle" style="color:var(--primary);"></i> ${d.donor_name}</td>
+                <td style="color:#fff; font-weight:600;">${d.campaign_title}</td>
+                <td style="color:var(--primary); font-weight:800;">€ ${d.amount.toFixed(2)}</td>
+                <td><span style="background:rgba(225,29,72,0.15); color:var(--secondary); padding:0.25rem 0.6rem; border-radius:6px; font-size:0.78rem; font-weight:700;">${d.payment_method}</span></td>
+                <td style="color:var(--text-muted); font-size:0.8rem;">${d.created_at}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function openNewCampaignModal() { document.getElementById('newCampaignModal').style.display = 'flex'; }
+    function closeNewCampaignModal() { document.getElementById('newCampaignModal').style.display = 'none'; }
+
+    function openDonateModal(id, title) {
+        document.getElementById('dCampaignId').value = id;
+        document.getElementById('dCampaignTitle').value = title;
+        document.getElementById('donateModal').style.display = 'flex';
+    }
+    function closeDonateModal() { document.getElementById('donateModal').style.display = 'none'; }
+
+    async function submitNewCampaign(e) {
+        e.preventDefault();
+        const payload = {
+            title: document.getElementById('cTitle').value,
+            cause_category: document.getElementById('cCategory').value,
+            goal_amount: document.getElementById('cGoal').value,
+            description: document.getElementById('cDesc').value,
+            end_date: document.getElementById('cEndDate').value
+        };
+
+        const res = await fetch('/api/campaigns', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+            closeNewCampaignModal();
+            loadCampaigns();
+            loadStats();
+        } else {
+            alert(data.message);
+        }
+    }
+
+    async function submitDonate(e) {
+        e.preventDefault();
+        const payload = {
+            campaign_id: document.getElementById('dCampaignId').value,
+            donor_name: document.getElementById('dDonorName').value,
+            donor_email: document.getElementById('dDonorEmail').value,
+            amount: document.getElementById('dAmount').value,
+            payment_method: document.getElementById('dMethod').value,
+            note: document.getElementById('dNote').value
+        };
+
+        const res = await fetch('/api/donations', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+            closeDonateModal();
+            loadCampaigns();
+            loadStats();
+            loadDonations();
+        } else {
+            alert(data.message);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadStats();
+        loadCampaigns();
+        loadDonations();
+    });
+</script>
+{% endblock %}

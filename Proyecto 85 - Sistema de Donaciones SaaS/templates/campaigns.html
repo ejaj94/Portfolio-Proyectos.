@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Campañas — DonaCraft AI Sistema de Donaciones SaaS{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <div>
+        <h2 style="font-size:1.8rem; font-weight:800;">Catálogo de Campanhas Solidárias</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Explore as causas ativas de apoio humanitário, saúde, proteção animal e inclusão social.</p>
+    </div>
+</div>
+
+<div id="fullCampaignsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:1.5rem;">
+    <!-- JS populates -->
+</div>
+
+<script>
+    async function loadFullCampaigns() {
+        const res = await fetch('/api/campaigns');
+        const campaigns = await res.json();
+        const grid = document.getElementById('fullCampaignsGrid');
+        grid.innerHTML = '';
+
+        campaigns.forEach(c => {
+            const card = document.createElement('div');
+            card.style = `
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                overflow: hidden;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                display: flex; flex-direction: column; justify-content: space-between;
+            `;
+            card.innerHTML = `
+                <div>
+                    <div style="height:180px; background:url('${c.image_url}') center/cover no-repeat; position:relative;">
+                        <span style="position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.75); color:#fff; font-size:0.75rem; font-weight:700; padding:0.3rem 0.8rem; border-radius:20px; backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.2);">
+                            ${c.cause_category}
+                        </span>
+                        <span style="position:absolute; bottom:12px; left:12px; background:${c.status === 'Concluída' ? 'var(--emerald)' : 'var(--primary)'}; color:#fff; font-size:0.75rem; font-weight:800; padding:0.25rem 0.75rem; border-radius:8px;">
+                            ${c.status}
+                        </span>
+                    </div>
+                    <div style="padding:1.25rem;">
+                        <h4 style="font-size:1.2rem; font-weight:800; margin-bottom:0.4rem; color:#fff;">${c.title}</h4>
+                        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5; margin-bottom:1.25rem;">
+                            ${c.description}
+                        </p>
+
+                        <div style="margin-bottom:0.5rem;">
+                            <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; margin-bottom:0.3rem;">
+                                <span>€ ${c.raised_amount.toLocaleString('pt-PT')} angariados</span>
+                                <span style="color:var(--primary);">${c.progress_pct}%</span>
+                            </div>
+                            <div style="width:100%; height:8px; background:#2e223f; border-radius:10px; overflow:hidden;">
+                                <div style="width:${c.progress_pct}%; height:100%; background:linear-gradient(90deg, var(--primary), var(--secondary)); border-radius:10px;"></div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted); font-weight:600;">
+                            <span>Meta: € ${c.goal_amount.toLocaleString('pt-PT')}</span>
+                            <span><i class="fa-regular fa-clock"></i> Fim: ${c.end_date}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadFullCampaigns);
+</script>
+{% endblock %}
