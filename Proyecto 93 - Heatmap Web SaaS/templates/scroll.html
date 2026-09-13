@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block page_title %}Profundidade de Scroll (Scroll Heatmaps){% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="pill-tag pill-amber" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-arrows-up-down"></i> Visual Fold Lines</span>
+        <h2 style="font-size: 2.2rem; font-weight: 900; color: var(--text-main); line-height: 1.1;">
+            Profundidade de Scroll & Quebras de Leitura
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+            Analise até onde os utilizadores navegam verticalmente em cada página (25%, 50%, 75% e 100%).
+        </p>
+    </div>
+</div>
+
+<!-- Scroll Depth Cards Grid -->
+<div id="scrollCardsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+    <div style="text-align: center; padding: 3rem; color: var(--text-muted); grid-column: 1/-1;">
+        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+        <p style="margin-top: 0.75rem; font-weight: 600;">A carregar métricas de scroll...</p>
+    </div>
+</div>
+
+<script>
+    async function loadScrollPage() {
+        try {
+            const res = await fetch('/api/scroll');
+            const data = await res.json();
+            
+            const grid = document.getElementById('scrollCardsGrid');
+            if (!data || data.length === 0) {
+                grid.innerHTML = `<div class="thermal-card" style="grid-column: 1/-1; text-align: center;">Sem dados de scroll.</div>`;
+                return;
+            }
+
+            grid.innerHTML = data.map(s => `
+                <div class="thermal-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                        <div>
+                            <strong style="color: var(--cool-cyan); font-family: monospace; font-size: 1rem;" class="mono">${s.page_path}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Profundidade Média: <strong style="color: var(--primary-orange);">${s.avg_scroll_depth}%</strong></div>
+                        </div>
+                        <span class="pill-tag pill-fire"><i class="fa-solid fa-fire"></i> Hot Fold</span>
+                    </div>
+
+                    <!-- Fold Lines Meters -->
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                <span>Topo da Página (25%)</span>
+                                <strong class="mono" style="color: var(--emerald);">${s.depth_25_pct}% dos leitores</strong>
+                            </div>
+                            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden;">
+                                <div style="width: ${s.depth_25_pct}%; height: 100%; background: var(--emerald);"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                <span>Meio da Página (50%)</span>
+                                <strong class="mono" style="color: var(--cool-cyan);">${s.depth_50_pct}% dos leitores</strong>
+                            </div>
+                            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden;">
+                                <div style="width: ${s.depth_50_pct}%; height: 100%; background: var(--cool-cyan);"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                <span>Dobra Inferior (75%)</span>
+                                <strong class="mono" style="color: var(--thermal-amber);">${s.depth_75_pct}% dos leitores</strong>
+                            </div>
+                            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden;">
+                                <div style="width: ${s.depth_75_pct}%; height: 100%; background: var(--thermal-amber);"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                <span>Rodapé Final (100%)</span>
+                                <strong class="mono" style="color: var(--primary-crimson);">${s.depth_100_pct}% dos leitores</strong>
+                            </div>
+                            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden;">
+                                <div style="width: ${s.depth_100_pct}%; height: 100%; background: var(--primary-crimson);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadScrollPage);
+</script>
+{% endblock %}

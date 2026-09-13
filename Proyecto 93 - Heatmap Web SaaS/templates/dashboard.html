@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block page_title %}Dashboard Térmico & Mapas de Calor{% endblock %}
+
+{% block content %}
+<!-- Top Welcome -->
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="pill-tag pill-fire" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-fire"></i> Visual Behavior Tracking</span>
+        <h2 style="font-size: 2.2rem; font-weight: 900; color: var(--text-main); line-height: 1.1;">
+            Dashboard de Mapas de Calor (Heatmaps)
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+            Análise visual da densidade espacial de cliques, profundidade de scroll e zonas quentes.
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/clicks" class="btn-thermal-fire">
+            <i class="fa-solid fa-hand-pointer"></i> Mapa de Cliques
+        </a>
+        <a href="/scroll" class="btn-thermal-ghost">
+            <i class="fa-solid fa-arrows-up-down"></i> Profundidade Scroll
+        </a>
+    </div>
+</div>
+
+<!-- Executive Metric Cards Bar -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+    <div class="thermal-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Cliques Rastreados</span>
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(239,68,68,0.15); color: var(--primary-crimson); display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-hand-pointer"></i>
+            </div>
+        </div>
+        <div id="cardClicks" class="mono" style="font-size: 1.8rem; font-weight: 800; color: var(--text-main);">0</div>
+        <span class="pill-tag pill-fire" style="margin-top: 0.5rem; font-size: 0.7rem;"><i class="fa-solid fa-fire"></i> Densidade Alta</span>
+    </div>
+
+    <div class="thermal-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Scroll Médio de Página</span>
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(249,115,22,0.15); color: var(--primary-orange); display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-arrows-up-down"></i>
+            </div>
+        </div>
+        <div id="cardScroll" class="mono" style="font-size: 1.8rem; font-weight: 800; color: var(--primary-orange);">0.0%</div>
+        <span class="pill-tag pill-orange" style="margin-top: 0.5rem; font-size: 0.7rem;"><i class="fa-solid fa-align-center"></i> Dobra de Página</span>
+    </div>
+
+    <div class="thermal-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Sessões Gravadas</span>
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(234,179,8,0.15); color: var(--thermal-amber); display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-users"></i>
+            </div>
+        </div>
+        <div id="cardSessions" class="mono" style="font-size: 1.8rem; font-weight: 800; color: var(--thermal-amber);">0</div>
+        <span class="pill-tag pill-amber" style="margin-top: 0.5rem; font-size: 0.7rem;"><i class="fa-solid fa-video"></i> Interações Reais</span>
+    </div>
+
+    <div class="thermal-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Página Mais Quente</span>
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(6,182,212,0.15); color: var(--cool-cyan); display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-globe"></i>
+            </div>
+        </div>
+        <div id="cardTopPage" style="font-size: 1.1rem; font-weight: 800; color: var(--cool-cyan); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">-</div>
+        <span class="pill-tag pill-cyan" style="margin-top: 0.5rem; font-size: 0.7rem;"><i class="fa-solid fa-fire"></i> /landing-page</span>
+    </div>
+</div>
+
+<!-- Interactive Heatmap Thermal Canvas Overlay -->
+<div class="thermal-card" style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+                <i class="fa-solid fa-fire-flame-curved" style="color: var(--primary-crimson); margin-right: 0.4rem;"></i>Simulador de Mapa Térmico ao Vivo
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Camada visual de intensidade de cliques na landing page</p>
+        </div>
+        
+        <div style="display: flex; gap: 0.75rem; align-items: center; font-size: 0.82rem; font-weight: 700;">
+            <span style="color: var(--primary-crimson); display: flex; align-items: center; gap: 0.35rem;"><i class="fa-solid fa-circle"></i> Quente (Hot)</span>
+            <span style="color: var(--primary-orange); display: flex; align-items: center; gap: 0.35rem;"><i class="fa-solid fa-circle"></i> Médio (Warm)</span>
+            <span style="color: var(--cool-cyan); display: flex; align-items: center; gap: 0.35rem;"><i class="fa-solid fa-circle"></i> Frio (Cool)</span>
+        </div>
+    </div>
+
+    <!-- Web Page Mockup Frame with Thermal Hotspots -->
+    <div style="background: #27272a; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; position: relative;">
+        <!-- Browser Header Bar -->
+        <div style="background: #18181b; padding: 0.65rem 1rem; display: flex; align-items: center; gap: 0.75rem; border-bottom: 1px solid var(--border);">
+            <div style="display: flex; gap: 0.35rem;">
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></div>
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b;"></div>
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></div>
+            </div>
+            <div style="background: #0c0a09; padding: 0.25rem 1rem; border-radius: 6px; font-size: 0.78rem; color: var(--text-muted); font-family: monospace; width: 300px;">
+                https://empresa.pt/landing-page
+            </div>
+        </div>
+
+        <!-- Canvas Body with Heatmap Overlay -->
+        <div id="heatmapContainer" style="position: relative; height: 380px; background: linear-gradient(180deg, #18181b 0%, #0c0a09 100%); padding: 2rem; overflow: hidden;">
+            <!-- Simulated Landing Page Layout -->
+            <div style="max-width: 700px; margin: 0 auto; text-align: center;">
+                <span class="pill-tag pill-orange" style="margin-bottom: 0.5rem;">SaaS Innovation</span>
+                <h2 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 0.75rem;">Aumente a Conversão do seu Produto</h2>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">Acompanhe interações visuais e otimize a experiência dos seus utilizadores.</p>
+                
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
+                    <button class="btn-thermal-fire" style="pointer-events: none;">Começar Teste Grátis</button>
+                    <button class="btn-thermal-ghost" style="pointer-events: none;">Ver Planos</button>
+                </div>
+            </div>
+
+            <!-- Thermal Hotspots Dots Overlay -->
+            <div id="hotspotDotsOverlay"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Split Grid: Hotspots Leaderboard & Monitored Pages -->
+<div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.75rem;">
+    <!-- Left: Hotspots Leaderboard -->
+    <div class="thermal-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);">
+                <i class="fa-solid fa-fire" style="color: var(--primary-crimson); margin-right: 0.4rem;"></i>Zonas Mais Clicadas (Element Leaderboard)
+            </h3>
+            <a href="/hotzones" style="font-size: 0.8rem; color: var(--primary-orange); font-weight: 700; text-decoration: none;">Ver Zonas →</a>
+        </div>
+
+        <div id="hotspotsList" style="display: flex; flex-direction: column; gap: 0.85rem;">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">A carregar zonas quentes...</div>
+        </div>
+    </div>
+
+    <!-- Right: Monitored Pages -->
+    <div class="thermal-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);">
+                <i class="fa-solid fa-globe" style="color: var(--cool-cyan); margin-right: 0.4rem;"></i>Páginas com Maior Densidade
+            </h3>
+            <a href="/pages" style="font-size: 0.8rem; color: var(--cool-cyan); font-weight: 700; text-decoration: none;">Ver Todas →</a>
+        </div>
+
+        <div id="pagesList" style="display: flex; flex-direction: column; gap: 0.85rem;">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">A carregar páginas...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadDashboard() {
+        try {
+            const [statsRes, clicksRes, hotRes, pagesRes] = await Promise.all([
+                fetch('/api/stats'),
+                fetch('/api/clicks'),
+                fetch('/api/hotzones'),
+                fetch('/api/pages')
+            ]);
+
+            const stats = await statsRes.json();
+            const clicks = await clicksRes.json();
+            const hotzones = await hotRes.json();
+            const pages = await pagesRes.json();
+
+            // Populate KPI Cards
+            document.getElementById('cardClicks').innerText = stats.total_clicks.toLocaleString();
+            document.getElementById('cardScroll').innerText = stats.avg_scroll_pct + '%';
+            document.getElementById('cardSessions').innerText = stats.total_sessions.toLocaleString();
+            document.getElementById('cardTopPage').innerText = stats.top_page_title;
+
+            // Render Thermal Dots in Overlay Frame
+            renderThermalDots(clicks);
+
+            // Render Hotspots Leaderboard
+            const hotContainer = document.getElementById('hotspotsList');
+            hotContainer.innerHTML = hotzones.map(h => `
+                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--border);">
+                    <div>
+                        <strong style="font-size: 0.88rem; color: var(--text-main); font-family: monospace;" class="mono">${h.target_element}</strong>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Coordenadas Médias: (${h.avg_x.toFixed(1)}%, ${h.avg_y.toFixed(0)}px)</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="mono" style="font-weight: 800; color: var(--primary-crimson); font-size: 0.95rem;">${h.click_count} cliques</span>
+                        <span class="pill-tag pill-fire" style="font-size: 0.68rem; margin-left: 0.3rem;">🔥 Hotspot</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Monitored Pages List
+            const pagesContainer = document.getElementById('pagesList');
+            pagesContainer.innerHTML = pages.slice(0, 5).map(p => `
+                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+                    <div>
+                        <strong style="font-size: 0.88rem; color: var(--cool-cyan); font-family: monospace;" class="mono">${p.page_path}</strong>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">${p.page_title}</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="mono" style="font-weight: 800; color: var(--primary-orange);">${p.total_clicks.toLocaleString()} cliques</span>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">${p.avg_scroll_pct}% scroll</div>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function renderThermalDots(clicks) {
+        const overlay = document.getElementById('hotspotDotsOverlay');
+        if (!clicks || clicks.length === 0) return;
+
+        overlay.innerHTML = clicks.slice(0, 35).map(c => {
+            const glowColor = c.pos_y_px < 400 ? 'rgba(239, 68, 68, 0.6)' : (c.pos_y_px < 800 ? 'rgba(249, 115, 22, 0.6)' : 'rgba(6, 182, 212, 0.6)');
+            const size = Math.floor(Math.random() * 20) + 24;
+
+            return `
+                <div style="position: absolute; left: ${c.pos_x_pct}%; top: ${c.pos_y_px % 320}px; width: ${size}px; height: ${size}px; border-radius: 50%; background: radial-gradient(circle, ${glowColor} 0%, rgba(0,0,0,0) 70%); transform: translate(-50%, -50%); pointer-events: none; filter: blur(2px);"></div>
+            `;
+        }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadDashboard);
+</script>
+{% endblock %}

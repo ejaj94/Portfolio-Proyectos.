@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HotTrace AI — Visual Heatmap & User Behavior Analytics{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-obsidian: #0c0a09;
+            --bg-card: #18181b;
+            --bg-card-hover: #27272a;
+            --bg-sidebar: #121215;
+            --border: #27272a;
+            --primary-orange: #f97316; /* Thermal Orange */
+            --primary-crimson: #ef4444; /* Flame Red */
+            --primary-glow: rgba(249, 115, 22, 0.25);
+            --thermal-amber: #eab308;
+            --cool-cyan: #06b6d4;
+            --emerald: #10b981;
+            --text-main: #fafafa;
+            --text-muted: #a1a1aa;
+            --sidebar-width: 250px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-obsidian);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Sidebar Nav */
+        .app-sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 1.5rem 1rem;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-main);
+            padding: 0.5rem 0.5rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-crimson), var(--primary-orange));
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .brand-text h1 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.1;
+        }
+
+        .brand-text p {
+            font-size: 0.7rem;
+            color: var(--primary-orange);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex: 1;
+        }
+
+        .sidebar-category {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 800;
+            padding: 0.75rem 0.75rem 0.35rem;
+        }
+
+        .sidebar-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.7rem 0.9rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-link.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(249, 115, 22, 0.2));
+            border: 1px solid rgba(249, 115, 22, 0.4);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .sidebar-link.active i {
+            color: var(--primary-orange) !important;
+        }
+
+        .sidebar-status-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* App Main Area */
+        .app-main {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .app-topbar {
+            background: rgba(18, 18, 21, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .topbar-thermal-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(249, 115, 22, 0.15);
+            color: var(--primary-orange);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            font-size: 0.85rem;
+            font-weight: 800;
+        }
+
+        .content-container {
+            padding: 2.5rem;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        /* Thermal Cards */
+        .thermal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+
+        .thermal-card:hover {
+            border-color: var(--primary-orange);
+        }
+
+        /* Buttons */
+        .btn-thermal-fire {
+            background: linear-gradient(135deg, var(--primary-crimson), var(--primary-orange));
+            color: #ffffff;
+            font-weight: 800;
+            padding: 0.65rem 1.3rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 15px var(--primary-glow);
+            font-size: 0.88rem;
+            text-decoration: none;
+        }
+
+        .btn-thermal-fire:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 22px rgba(249, 115, 22, 0.4);
+        }
+
+        .btn-thermal-ghost {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 0.65rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-thermal-ghost:hover {
+            border-color: var(--primary-orange);
+            color: var(--primary-orange);
+        }
+
+        /* Pills */
+        .pill-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pill-fire { background: rgba(239, 68, 68, 0.15); color: var(--primary-crimson); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .pill-orange { background: rgba(249, 115, 22, 0.15); color: var(--primary-orange); border: 1px solid rgba(249, 115, 22, 0.3); }
+        .pill-amber { background: rgba(234, 179, 8, 0.15); color: var(--thermal-amber); border: 1px solid rgba(234, 179, 8, 0.3); }
+        .pill-cyan { background: rgba(6, 182, 212, 0.15); color: var(--cool-cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
+
+        /* Tables */
+        .thermal-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+            text-align: left;
+        }
+
+        .thermal-table th {
+            padding: 0.85rem 1.25rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+
+        .thermal-table td {
+            padding: 1rem 1.25rem;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .thermal-table tr td:first-child {
+            border-left: 1px solid var(--border);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .thermal-table tr td:last-child {
+            border-right: 1px solid var(--border);
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .thermal-table tr:hover td {
+            background: var(--bg-card-hover);
+            border-color: var(--primary-orange);
+        }
+
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 1.5rem 2.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: var(--bg-obsidian);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Nav -->
+    <aside class="app-sidebar">
+        <div>
+            <a href="/" class="sidebar-brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>HotTrace AI</h1>
+                    <p>Heatmap Web SaaS</p>
+                </div>
+            </a>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-category">Monitorização Térmica</li>
+                <li>
+                    <a href="/" class="sidebar-link {% if active_page == 'dashboard' %}active{% endif %}">
+                        <i class="fa-solid fa-fire-flame-curved" style="color: var(--primary-crimson);"></i> Dashboard Térmico
+                    </a>
+                </li>
+                <li>
+                    <a href="/clicks" class="sidebar-link {% if active_page == 'clicks' %}active{% endif %}">
+                        <i class="fa-solid fa-hand-pointer" style="color: var(--primary-orange);"></i> Mapa de Cliques
+                    </a>
+                </li>
+                <li>
+                    <a href="/scroll" class="sidebar-link {% if active_page == 'scroll' %}active{% endif %}">
+                        <i class="fa-solid fa-arrows-up-down" style="color: var(--thermal-amber);"></i> Profundidade Scroll
+                    </a>
+                </li>
+
+                <li class="sidebar-category">Zonas & Páginas</li>
+                <li>
+                    <a href="/hotzones" class="sidebar-link {% if active_page == 'hotzones' %}active{% endif %}">
+                        <i class="fa-solid fa-border-top-left" style="color: var(--primary-crimson);"></i> Zonas Calientes
+                    </a>
+                </li>
+                <li>
+                    <a href="/pages" class="sidebar-link {% if active_page == 'pages' %}active{% endif %}">
+                        <i class="fa-solid fa-globe" style="color: var(--cool-cyan);"></i> Páginas Monitorizadas
+                    </a>
+                </li>
+                <li>
+                    <a href="/users" class="sidebar-link {% if active_page == 'users' %}active{% endif %}">
+                        <i class="fa-solid fa-users" style="color: var(--emerald);"></i> Sessões de Utilizadores
+                    </a>
+                </li>
+
+                <li class="sidebar-category">Relatórios</li>
+                <li>
+                    <a href="/stats" class="sidebar-link {% if active_page == 'stats' %}active{% endif %}">
+                        <i class="fa-solid fa-file-export" style="color: var(--primary-orange);"></i> Relatórios & Export
+                    </a>
+                </li>
+                <li>
+                    <a href="/showcase" class="sidebar-link {% if active_page == 'showcase' %}active{% endif %}">
+                        <i class="fa-solid fa-star" style="color: var(--thermal-amber);"></i> Showcase
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-status-box">
+            <span class="pill-tag pill-fire" style="margin-bottom: 0.35rem;"><i class="fa-solid fa-fire"></i> Heatmap Tracker</span>
+            <p style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Porta 6946</p>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+        <header class="app-topbar">
+            <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">
+                <i class="fa-solid fa-fire" style="color: var(--primary-orange); margin-right: 0.5rem;"></i>
+                Behavior Analytics / <strong style="color: var(--text-main);">{% block page_title %}Dashboard Térmico{% endblock %}</strong>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="topbar-thermal-badge">
+                    <i class="fa-solid fa-fire-flame-curved"></i> <span id="topbarHotspotVal">🔥 Alta Intensidade</span>
+                </div>
+                <a href="/stats" class="btn-thermal-ghost" style="font-size: 0.8rem; padding: 0.4rem 0.9rem;">
+                    <i class="fa-solid fa-download"></i> Exportar Dados
+                </a>
+            </div>
+        </header>
+
+        <main class="content-container">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="footer">
+            <p><strong>HotTrace AI</strong> — Plataforma de Heatmaps Web & Análise Comportamental. Desenvolvido por <strong>EJAJ TECH</strong> & Enmanuel Jimenez (@ejajtech).</p>
+        </footer>
+    </div>
+
+</body>
+</html>

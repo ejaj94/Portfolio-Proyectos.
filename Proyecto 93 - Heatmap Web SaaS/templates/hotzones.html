@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block page_title %}Zonas Calientes (Hotspots Matrix){% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="pill-tag pill-fire" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-border-top-left"></i> Matriz de Densidade</span>
+        <h2 style="font-size: 2.2rem; font-weight: 900; color: var(--text-main); line-height: 1.1;">
+            Zonas Calientes & Elementos de Alta Intensidade
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+            Matriz de zonas térmicas classificadas por nível de atração de cliques e atenção visual.
+        </p>
+    </div>
+</div>
+
+<!-- Hotzones Table Card -->
+<div class="thermal-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+            <i class="fa-solid fa-fire-flame-curved" style="color: var(--primary-crimson); margin-right: 0.4rem;"></i>Ranking de Zonas Térmicas
+        </h3>
+        <span class="pill-tag pill-fire" id="hotCountBadge">0 Zonas Registadas</span>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="thermal-table">
+            <thead>
+                <tr>
+                    <th>Elemento Interativo</th>
+                    <th>Cliques Acumulados</th>
+                    <th>Coordenada X Médio</th>
+                    <th>Coordenada Y Médio</th>
+                    <th>Nível Térmico</th>
+                </tr>
+            </thead>
+            <tbody id="hotzonesTableBody">
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.5rem;">A carregar matriz de zonas...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function loadHotzonesPage() {
+        try {
+            const res = await fetch('/api/hotzones');
+            const data = await res.json();
+            
+            const tbody = document.getElementById('hotzonesTableBody');
+            document.getElementById('hotCountBadge').innerText = data.length + ' Zonas Registadas';
+
+            if (!data || data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">Sem zonas quentes registadas.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map(h => {
+                const thermalBadge = h.click_count > 15 ? '<span class="pill-tag pill-fire"><i class="fa-solid fa-fire"></i> 🔥 Alta (Hot)</span>'
+                    : (h.click_count > 8 ? '<span class="pill-tag pill-orange"><i class="fa-solid fa-bolt"></i> ⚡ Média (Warm)</span>'
+                    : '<span class="pill-tag pill-cyan"><i class="fa-solid fa-snowflake"></i> ❄️ Baixa (Cool)</span>');
+
+                return `
+                    <tr>
+                        <td>
+                            <strong style="color: var(--primary-orange); font-family: monospace; font-size: 0.95rem;" class="mono">${h.target_element}</strong>
+                        </td>
+                        <td style="font-weight: 800; color: var(--text-main);" class="mono">${h.click_count} cliques</td>
+                        <td style="color: var(--cool-cyan);" class="mono">${h.avg_x.toFixed(1)}%</td>
+                        <td style="color: var(--thermal-amber);" class="mono">${h.avg_y.toFixed(0)} px</td>
+                        <td>${thermalBadge}</td>
+                    </tr>
+                `;
+            }).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadHotzonesPage);
+</script>
+{% endblock %}

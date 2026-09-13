@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block page_title %}Mapa de Cliques Espaciais{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="pill-tag pill-fire" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-hand-pointer"></i> Coordenadas Espaciais</span>
+        <h2 style="font-size: 2.2rem; font-weight: 900; color: var(--text-main); line-height: 1.1;">
+            Mapa de Cliques & Interações Espaciais
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+            Registo exato das coordenadas de clique dos utilizadores nos elementos interativos do site.
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 0.5rem;">
+        <button onclick="filterDevice('all')" class="btn-thermal-ghost active" id="btn-dev-all" style="padding: 0.4rem 1rem; font-size: 0.82rem;">Todos os Dispositivos</button>
+        <button onclick="filterDevice('Desktop')" class="btn-thermal-ghost" id="btn-dev-Desktop" style="padding: 0.4rem 1rem; font-size: 0.82rem;"><i class="fa-solid fa-laptop"></i> Desktop</button>
+        <button onclick="filterDevice('Mobile')" class="btn-thermal-ghost" id="btn-dev-Mobile" style="padding: 0.4rem 1rem; font-size: 0.82rem;"><i class="fa-solid fa-mobile-screen"></i> Mobile</button>
+    </div>
+</div>
+
+<!-- Click Log Table -->
+<div class="thermal-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+            <i class="fa-solid fa-list-check" style="color: var(--primary-orange); margin-right: 0.4rem;"></i>Eventos de Clique Registados
+        </h3>
+        <span class="pill-tag pill-orange" id="clicksCountBadge">0 Eventos</span>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="thermal-table">
+            <thead>
+                <tr>
+                    <th>Elemento Alvo</th>
+                    <th>Página</th>
+                    <th>Coordenada X (%)</th>
+                    <th>Coordenada Y (px)</th>
+                    <th>Dispositivo</th>
+                    <th>Registo</th>
+                </tr>
+            </thead>
+            <tbody id="clicksTableBody">
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.5rem;">A carregar mapa de cliques...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let clicksArray = [];
+    let currentDevice = 'all';
+
+    async function loadClicksPage() {
+        try {
+            const res = await fetch('/api/clicks');
+            clicksArray = await res.json();
+            renderClicks();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function filterDevice(dev) {
+        currentDevice = dev;
+        renderClicks();
+    }
+
+    function renderClicks() {
+        const tbody = document.getElementById('clicksTableBody');
+        let filtered = clicksArray;
+
+        if (currentDevice !== 'all') {
+            filtered = clicksArray.filter(c => c.device_type === currentDevice);
+        }
+
+        document.getElementById('clicksCountBadge').innerText = filtered.length + ' Eventos';
+
+        if (!filtered || filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">Sem eventos de clique para este filtro.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(c => {
+            const devBadge = c.device_type === 'Desktop' ? 'pill-cyan' : (c.device_type === 'Mobile' ? 'pill-amber' : 'pill-orange');
+
+            return `
+                <tr>
+                    <td>
+                        <strong style="color: var(--primary-orange); font-family: monospace;" class="mono">${c.target_element}</strong>
+                    </td>
+                    <td style="color: var(--text-muted);" class="mono">${c.page_path}</td>
+                    <td style="font-weight: 800; color: var(--cool-cyan);" class="mono">${c.pos_x_pct}%</td>
+                    <td style="font-weight: 800; color: var(--thermal-amber);" class="mono">${c.pos_y_px} px</td>
+                    <td>
+                        <span class="pill-tag ${devBadge}">${c.device_type}</span>
+                    </td>
+                    <td style="font-size: 0.82rem; color: var(--text-muted);">${c.timestamp}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadClicksPage);
+</script>
+{% endblock %}

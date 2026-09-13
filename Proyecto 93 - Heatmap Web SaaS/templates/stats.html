@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block page_title %}Relatórios & Exportação Térmica{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="pill-tag pill-fire" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-file-export"></i> Dados Auditáveis</span>
+        <h2 style="font-size: 2.2rem; font-weight: 900; color: var(--text-main); line-height: 1.1;">
+            Relatórios & Exportação de Dados Térmicos
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+            Exporte métricas espaciais de mapa de calor e relatórios comportamentais em formato CSV e JSON.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/api/export/csv" class="btn-thermal-fire">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+        <a href="/api/export/json" class="btn-thermal-ghost">
+            <i class="fa-solid fa-file-code"></i> Exportar JSON
+        </a>
+    </div>
+</div>
+
+<!-- Consolidated Heatmap Summary Table -->
+<div class="thermal-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+            <i class="fa-solid fa-table" style="color: var(--primary-orange); margin-right: 0.4rem;"></i>Relatório Consolidado de Páginas & Interações
+        </h3>
+        <span class="pill-tag pill-fire">Heatmap Data Ready</span>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="thermal-table">
+            <thead>
+                <tr>
+                    <th>URL Path</th>
+                    <th>Título da Página</th>
+                    <th>Cliques Totais</th>
+                    <th>Scroll Médio</th>
+                    <th>Sessões Gravadas</th>
+                    <th>Score Térmico</th>
+                </tr>
+            </thead>
+            <tbody id="statsExportBody">
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.5rem;">A carregar dados do relatório...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function loadStatsPage() {
+        try {
+            const res = await fetch('/api/pages');
+            const pages = await res.json();
+
+            const tbody = document.getElementById('statsExportBody');
+            tbody.innerHTML = pages.map(p => `
+                <tr>
+                    <td style="font-weight: 800; color: var(--cool-cyan);" class="mono">${p.page_path}</td>
+                    <td style="color: var(--text-main); font-weight: 600;">${p.page_title}</td>
+                    <td style="font-weight: 800; color: var(--primary-orange);" class="mono">${p.total_clicks.toLocaleString()}</td>
+                    <td style="color: var(--emerald);" class="mono">${p.avg_scroll_pct}%</td>
+                    <td style="color: var(--text-muted);">${p.total_sessions.toLocaleString()}</td>
+                    <td>
+                        <span class="pill-tag pill-fire">${p.hotspot_score} pts 🔥</span>
+                    </td>
+                </tr>
+            `).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadStatsPage);
+</script>
+{% endblock %}
