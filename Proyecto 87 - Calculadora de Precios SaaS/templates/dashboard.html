@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - PriceCraft AI SaaS{% endblock %}
+
+{% block content %}
+<!-- Top Metrics Grid -->
+<div class="stats-grid-top">
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--primary);">
+            <i class="fa-solid fa-calculator"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="kpiSimulations">--</div>
+            <div class="stat-card-lbl">Simulações Efetuadas</div>
+        </div>
+    </div>
+
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(79, 70, 229, 0.1); color: var(--secondary);">
+            <i class="fa-solid fa-percent"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="kpiAvgMargin">--%</div>
+            <div class="stat-card-lbl">Margem Média Bruta</div>
+        </div>
+    </div>
+
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(14, 165, 233, 0.1); color: var(--accent-blue);">
+            <i class="fa-solid fa-euro-sign"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="kpiRevenue">-- €</div>
+            <div class="stat-card-lbl">Volume de Faturação</div>
+        </div>
+    </div>
+
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(217, 119, 6, 0.1); color: var(--accent-gold);">
+            <i class="fa-solid fa-sack-dollar"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="kpiProfit">-- €</div>
+            <div class="stat-card-lbl">Lucro Líquido Total</div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Interactive Grid -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; align-items: start;">
+    <!-- Fast Simulator Widget -->
+    <div class="card-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-bolt" style="color: var(--primary);"></i> Simulador Rápido de Preços
+            </h3>
+            <span class="badge badge-emerald"><i class="fa-solid fa-bolt-lightning"></i> Em Tempo Real</span>
+        </div>
+
+        <form id="fastForm" oninput="calculateFast()">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Custo de Matérias (€)</label>
+                        <input type="number" id="fBaseCost" value="100" step="0.01" min="0" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 10px; font-weight: 600; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Mão-de-Obra Directa (€)</label>
+                        <input type="number" id="fLaborCost" value="50" step="0.01" min="0" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 10px; font-weight: 600; outline: none;">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Custos Indiretos / Overhead (€)</label>
+                        <input type="number" id="fOverhead" value="20" step="0.01" min="0" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 10px; font-weight: 600; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Margem Desejada (%)</label>
+                        <input type="number" id="fMargin" value="40" step="0.1" min="0" max="99" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 10px; font-weight: 600; outline: none;">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Desconto Comercial (%)</label>
+                        <input type="number" id="fDiscount" value="5" step="0.1" min="0" max="100" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 10px; font-weight: 600; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Taxa de IVA (%)</label>
+                        <select id="fVat" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 10px; font-weight: 600; outline: none; background: #fff;">
+                            <option value="23" selected>23% (Taxa Normal Continental)</option>
+                            <option value="13">13% (Taxa Intermédia)</option>
+                            <option value="6">6% (Taxa Reduzida)</option>
+                            <option value="0">0% (Isento - Artº 53º RIVA)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Live Results Card -->
+    <div class="card-box" style="background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); border: 1px solid var(--border-hover);">
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-receipt" style="color: var(--primary);"></i> Decomposição do Preço Final
+        </h3>
+
+        <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--border);">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Custo Total Acumulado:</span>
+                <strong style="font-size: 1rem; color: var(--text-main);" id="resTotalCost">170,00 €</strong>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--border);">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Markup Aplicado sobre Custo:</span>
+                <span class="badge badge-indigo" id="resMarkup">66.67%</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--border);">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Preço Base (Sem IVA/Desc.):</span>
+                <strong style="font-size: 1rem; color: var(--text-main);" id="resRawPrice">283,33 €</strong>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--border);">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Preço Líquido Venda (S/ IVA):</span>
+                <strong style="font-size: 1.1rem; color: var(--secondary);" id="resPriceBeforeTax">269,17 €</strong>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--border);">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Valor do IVA Acelerado:</span>
+                <span style="font-size: 0.95rem; color: var(--accent-gold); font-weight: 700;" id="resVatAmount">61,91 €</span>
+            </div>
+
+            <div style="padding: 1rem; background: var(--primary); color: #fff; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);">
+                <div>
+                    <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; opacity: 0.9;">Preço Final ao Consumidor</span>
+                    <h2 style="font-size: 1.6rem; font-weight: 900; line-height: 1.1;" id="resFinalPrice">331,08 €</h2>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 0.75rem; font-weight: 700; opacity: 0.9; display: block;">Lucro Líquido Real</span>
+                    <strong style="font-size: 1.2rem; font-weight: 800;" id="resNetProfit">99,17 €</strong>
+                </div>
+            </div>
+
+            <button onclick="saveFastCalculation()" class="btn-primary-action" style="margin-top: 0.5rem; width: 100%; justify-content: center;">
+                <i class="fa-solid fa-floppy-disk"></i> Guardar Simulação no Histórico
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Calculations Table -->
+<div class="card-box">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-clock-rotate-left" style="color: var(--primary);"></i> Últimas Simulações Guardadas
+        </h3>
+        <a href="/history" class="btn-primary-action" style="background: var(--bg-light); color: var(--text-main); border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; padding: 0.4rem 0.85rem;">
+            Ver Todas <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+                <tr style="background: var(--bg-light); border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">
+                    <th style="padding: 0.85rem 1rem;">Título</th>
+                    <th style="padding: 0.85rem 1rem;">Custo Total</th>
+                    <th style="padding: 0.85rem 1rem;">Margem %</th>
+                    <th style="padding: 0.85rem 1rem;">Desconto</th>
+                    <th style="padding: 0.85rem 1rem;">Preço c/ IVA</th>
+                    <th style="padding: 0.85rem 1rem;">Lucro Líquido</th>
+                    <th style="padding: 0.85rem 1rem;">Data</th>
+                </tr>
+            </thead>
+            <tbody id="dashCalcsTbody">
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.5rem;">A carregar dados...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function initDashboard() {
+        await Promise.all([loadStats(), loadCalcs()]);
+        calculateFast();
+    }
+
+    async function loadStats() {
+        try {
+            const res = await fetch('/api/stats');
+            const data = await res.json();
+            document.getElementById('kpiSimulations').innerText = data.total_simulations;
+            document.getElementById('kpiAvgMargin').innerText = data.avg_margin + '%';
+            document.getElementById('kpiRevenue').innerText = data.total_revenue.toLocaleString('pt-PT') + ' €';
+            document.getElementById('kpiProfit').innerText = data.total_profit.toLocaleString('pt-PT') + ' €';
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function loadCalcs() {
+        try {
+            const res = await fetch('/api/calculations');
+            const data = await res.json();
+            const tbody = document.getElementById('dashCalcsTbody');
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem; color: var(--text-muted);">Nenhuma simulação efetuada ainda.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.slice(0, 5).map(c => `
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.85rem 1rem; font-weight: 700; color: var(--text-main);">${c.title}</td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-muted);">${c.total_cost.toFixed(2)} €</td>
+                    <td style="padding: 0.85rem 1rem;"><span class="badge badge-emerald">${c.margin_percent}%</span></td>
+                    <td style="padding: 0.85rem 1rem; color: var(--text-muted);">${c.discount_percent}%</td>
+                    <td style="padding: 0.85rem 1rem; font-weight: 800; color: var(--primary);">${c.final_price.toFixed(2)} €</td>
+                    <td style="padding: 0.85rem 1rem; font-weight: 800; color: var(--secondary);">${c.net_profit.toFixed(2)} €</td>
+                    <td style="padding: 0.85rem 1rem; font-size: 0.8rem; color: var(--text-muted);">${c.created_at}</td>
+                </tr>
+            `).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function calculateFast() {
+        const baseCost = parseFloat(document.getElementById('fBaseCost').value) || 0;
+        const laborCost = parseFloat(document.getElementById('fLaborCost').value) || 0;
+        const overhead = parseFloat(document.getElementById('fOverhead').value) || 0;
+        let margin = parseFloat(document.getElementById('fMargin').value) || 0;
+        const discount = parseFloat(document.getElementById('fDiscount').value) || 0;
+        const vatRate = parseFloat(document.getElementById('fVat').value) || 0;
+
+        if (margin >= 100) margin = 99.9;
+
+        const totalCost = baseCost + laborCost + overhead;
+        const rawPrice = totalCost / (1 - (margin / 100.0));
+        const grossProfit = rawPrice - totalCost;
+        const markup = totalCost > 0 ? (grossProfit / totalCost * 100.0) : 0;
+
+        const priceBeforeTax = rawPrice * (1 - (discount / 100.0));
+        const vatAmount = priceBeforeTax * (vatRate / 100.0);
+        const finalPrice = priceBeforeTax + vatAmount;
+        const netProfit = priceBeforeTax - totalCost;
+
+        document.getElementById('resTotalCost').innerText = totalCost.toFixed(2) + ' €';
+        document.getElementById('resMarkup').innerText = markup.toFixed(2) + '%';
+        document.getElementById('resRawPrice').innerText = rawPrice.toFixed(2) + ' €';
+        document.getElementById('resPriceBeforeTax').innerText = priceBeforeTax.toFixed(2) + ' €';
+        document.getElementById('resVatAmount').innerText = vatAmount.toFixed(2) + ' € (' + vatRate + '%)';
+        document.getElementById('resFinalPrice').innerText = finalPrice.toFixed(2) + ' €';
+        document.getElementById('resNetProfit').innerText = netProfit.toFixed(2) + ' €';
+    }
+
+    async function saveFastCalculation() {
+        const base_cost = parseFloat(document.getElementById('fBaseCost').value) || 0;
+        const labor_cost = parseFloat(document.getElementById('fLaborCost').value) || 0;
+        const overhead_cost = parseFloat(document.getElementById('fOverhead').value) || 0;
+        const margin_percent = parseFloat(document.getElementById('fMargin').value) || 0;
+        const discount_percent = parseFloat(document.getElementById('fDiscount').value) || 0;
+        const vat_rate = parseFloat(document.getElementById('fVat').value) || 0;
+
+        const data = {
+            title: `Simulação Rápida (${margin_percent}% Margem)`,
+            base_cost,
+            labor_cost,
+            overhead_cost,
+            margin_percent,
+            discount_percent,
+            vat_rate
+        };
+
+        try {
+            const res = await fetch('/api/calculations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                alert('Simulação guardada com sucesso no histórico!');
+                initDashboard();
+            } else {
+                alert(result.message || 'Erro ao guardar simulação.');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Erro de ligação.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
+</script>
+{% endblock %}

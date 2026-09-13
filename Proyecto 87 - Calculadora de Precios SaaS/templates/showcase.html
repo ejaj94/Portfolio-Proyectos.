@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}PriceCraft AI SaaS - Apresentação & EJAJ TECH Showcase{% endblock %}
+
+{% block content %}
+<!-- Hero Showcase Header -->
+<div style="background: linear-gradient(135deg, #10b981 0%, #4f46e5 100%); border-radius: 24px; padding: 3.5rem 2.5rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2); position: relative; overflow: hidden;">
+    <div style="position: relative; z-index: 2; max-width: 850px;">
+        <span class="badge" style="background: rgba(255,255,255,0.2); color: #ffffff; font-weight: 700; font-size: 0.85rem; padding: 0.4rem 1rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem; display: inline-block;">
+            <i class="fa-solid fa-sparkles"></i> EJAJ TECH FinancialTech SaaS Platform
+        </span>
+        <h1 style="font-size: 2.8rem; font-weight: 900; line-height: 1.15; margin-bottom: 1.25rem; letter-spacing: -1px;">
+            PriceCraft AI — Calculadora Inteligente de Preços, Margens & IVA
+        </h1>
+        <p style="font-size: 1.15rem; opacity: 0.95; line-height: 1.6; font-weight: 500; margin-bottom: 2rem;">
+            Uma solução inovadora concebida para revolucionar a engenharia financeira e a precificação comercial de empresas. Calcule custos de matérias, mão-de-obra, overhead, margens brutas, descontos e IVA com máxima precisão e rentabilidade garantida.
+        </p>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="/" class="btn-primary-action" style="background: #ffffff; color: var(--primary); font-weight: 800; font-size: 1rem; padding: 0.85rem 1.75rem; text-decoration: none; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                <i class="fa-solid fa-rocket"></i> Explorar Plataforma SaaS
+            </a>
+            <a href="/calculator" class="btn-primary-action" style="background: rgba(255,255,255,0.15); color: #ffffff; font-weight: 700; font-size: 1rem; padding: 0.85rem 1.75rem; text-decoration: none; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3);">
+                <i class="fa-solid fa-calculator"></i> Abrir Calculadora Avançada
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Architecture & Positivist Philosophy -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+    <div class="card-box">
+        <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(16, 185, 129, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+            <i class="fa-solid fa-lightbulb"></i>
+        </div>
+        <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.85rem;">
+            A Nossa Visão Positivista
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1rem;">
+            Desenvolvido pela <strong>EJAJ TECH</strong> sob a liderança do Lead Architect <strong>Enmanuel Jimenez</strong>, o PriceCraft AI baseia-se na convicção de que a tecnologia de precificação precisa permite a qualquer empreendedor proteger as suas margens de lucro, eliminar o risco de prejuízo velado e escalar com saúde financeira.
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65;">
+            Acreditamos que preços justos e transparentes criam um ecossistema económico sustentável e próspero para criadores e clientes.
+        </p>
+    </div>
+
+    <div class="card-box">
+        <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(79, 70, 229, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+            <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.85rem;">
+            Engenharia de Margens & IVA
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1rem;">
+            A nossa fórmula matemática diferencia com rigor o Markup (sobre custo) da Margem de Lucro Bruta (sobre receita), prevenindo distorções comuns no cálculo comercial.
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65;">
+            Integração nativa de escalões de IVA portugueses (23%, 13%, 6%, 0%) com decomposição em tempo real.
+        </p>
+    </div>
+</div>
+
+<!-- Key Features Grid -->
+<div style="margin-bottom: 3rem;">
+    <div style="text-align: center; max-width: 700px; margin: 0 auto 2.5rem auto;">
+        <h2 style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+            Funcionalidades Principais do SaaS
+        </h2>
+        <p style="color: var(--text-muted); font-size: 1rem;">
+            Ferramentas completas para cobrir toda a cadeia de formação de preço de produtos e serviços.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <div class="card-box">
+            <i class="fa-solid fa-coins fa-2x" style="color: var(--primary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Decomposição Detalhada de Custos</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Somatório estruturado de matérias-primas, custos de mão-de-obra por hora e despesas operacionais indiretas (Overhead).
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-percent fa-2x" style="color: var(--secondary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Cálculo Dinâmico de Margem & Markup</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Conversão instantânea entre Margem Bruta Alvo e Markup percentual com antevisão de lucro bruto em Euros.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-receipt fa-2x" style="color: var(--accent-gold); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Motor de IVA & Descontos Comerciais</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Simulação de descontos de volume e aplicação exata de taxas de IVA (23%, 13%, 6%, 0%) com separação transparente.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-box-open fa-2x" style="color: var(--emerald); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Catálogo Integrado de Produtos</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Registo centralizado de serviços e produtos com definição de unidades e custos padrão reutilizáveis.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-clock-rotate-left fa-2x" style="color: var(--primary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Histórico & Fichas Técnicas</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Arquivo completo de orçamentos e simulações com consulta instantânea da decomposição financeira.
+            </p>
+        </div>
+
+        <div class="card-box">
+            <i class="fa-solid fa-file-csv fa-2x" style="color: var(--secondary); margin-bottom: 1rem;"></i>
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Exportação CSV & API RESTful</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                Download imediato de relatórios em CSV e disponibilização de endpoint JSON para integração com ERPs.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Tech Stack Card -->
+<div class="card-box" style="margin-bottom: 3rem;">
+    <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fa-solid fa-code" style="color: var(--primary);"></i> Arquitetura Tecnológica
+    </h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Backend Framework</strong>
+            <span style="font-size: 0.85rem; color: var(--primary); font-weight: 700;">Python 3 & Flask Engine</span>
+        </div>
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Base de Dados</strong>
+            <span style="font-size: 0.85rem; color: var(--secondary); font-weight: 700;">SQLite3 Persistente</span>
+        </div>
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Motor de Precificação</strong>
+            <span style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">Algoritmo em Tempo Real</span>
+        </div>
+        <div style="padding: 1.25rem; background: var(--bg-light); border-radius: 14px; border: 1px solid var(--border);">
+            <strong style="display: block; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Interface UI/UX</strong>
+            <span style="font-size: 0.85rem; color: var(--accent-gold); font-weight: 700;">HTML5 Light Theme / Vanilla JS</span>
+        </div>
+    </div>
+</div>
+
+<!-- EJAJ TECH Callout Footer -->
+<div style="text-align: center; background: #ffffff; border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+    <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.75rem;">
+        EJAJ TECH — Tecnologia com Propósito e Excelência
+    </h3>
+    <p style="color: var(--text-muted); font-size: 1rem; max-width: 700px; margin: 0 auto 1.5rem auto; line-height: 1.6;">
+        Sob a liderança visionária do Lead Architect Enmanuel Jimenez, continuamos a criar ferramentas de software que impulsionam negócios, promovem o rigor e constroem um futuro de prosperidade.
+    </p>
+    <a href="/" class="btn-primary-action" style="font-size: 1rem; padding: 0.85rem 2rem; display: inline-flex;">
+        <i class="fa-solid fa-arrow-right"></i> Aceder ao Dashboard Principal
+    </a>
+</div>
+{% endblock %}

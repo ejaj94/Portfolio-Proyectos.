@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico de Simulações - PriceCraft AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-clock-rotate-left" style="color: var(--primary); margin-right: 0.5rem;"></i>Histórico de Precificações & Orçamentos
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Consulte todas as propostas comerciais simuladas, a decomposição de margens e exporte ficheiros auditáveis.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/api/export/csv" class="btn-primary-action" style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); text-decoration: none;">
+            <i class="fa-solid fa-file-csv" style="color: var(--primary);"></i> Exportar CSV
+        </a>
+        <a href="/api/export/json" class="btn-primary-action" style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); text-decoration: none;" target="_blank">
+            <i class="fa-solid fa-code" style="color: var(--secondary);"></i> Exportar JSON
+        </a>
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div class="card-box" style="margin-bottom: 1.5rem; padding: 1rem 1.5rem;">
+    <div style="display: flex; gap: 1rem; align-items: center;">
+        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+        <input type="text" id="searchCalc" onkeyup="filterCalcs()" placeholder="Pesquisar por título de simulação ou produto..." style="width: 100%; border: none; outline: none; font-size: 0.95rem; font-weight: 500; background: transparent; color: var(--text-main);">
+    </div>
+</div>
+
+<!-- History Table Card -->
+<div class="card-box" style="padding: 0; overflow: hidden;">
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+                <tr style="background: var(--bg-light); border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">
+                    <th style="padding: 1rem 1.25rem;">ID</th>
+                    <th style="padding: 1rem 1.25rem;">Título da Simulação</th>
+                    <th style="padding: 1rem 1.25rem;">Custo Total</th>
+                    <th style="padding: 1rem 1.25rem;">Margem / Markup</th>
+                    <th style="padding: 1rem 1.25rem;">Desconto</th>
+                    <th style="padding: 1rem 1.25rem;">Preço c/ IVA</th>
+                    <th style="padding: 1rem 1.25rem;">Lucro Líquido</th>
+                    <th style="padding: 1rem 1.25rem;">Data Emissão</th>
+                    <th style="padding: 1rem 1.25rem; text-align: right;">Detalhes</th>
+                </tr>
+            </thead>
+            <tbody id="calcsTableBody">
+                <tr>
+                    <td colspan="9" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.75rem; font-weight: 600;">A carregar histórico...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div id="calcModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(5px); z-index: 999; justify-content: center; align-items: center;">
+    <div style="background: var(--bg-card); width: 100%; max-width: 580px; border-radius: 20px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15); margin: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-file-invoice" style="color: var(--primary);"></i> Ficha Técnica de Precificação
+            </h3>
+            <button onclick="closeCalcModal()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div id="calcModalContent" style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
+            <!-- Dynamic Content -->
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <button onclick="closeCalcModal()" class="btn-primary-action" style="background: var(--bg-light); color: var(--text-main); border: 1px solid var(--border);">Fechar</button>
+            <button onclick="alert('Relatório de simulação impresso com sucesso!')" class="btn-primary-action"><i class="fa-solid fa-print"></i> Imprimir Orçamento</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let allCalcs = [];
+
+    async function loadHistory() {
+        try {
+            const res = await fetch('/api/calculations');
+            allCalcs = await res.json();
+            renderTable(allCalcs);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function renderTable(calcs) {
+        const tbody = document.getElementById('calcsTableBody');
+        if (!calcs || calcs.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="9" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-receipt fa-3x" style="margin-bottom: 1rem;"></i>
+                        <h4 style="font-weight: 700; color: var(--text-main);">Nenhuma simulação registada</h4>
+                        <p style="font-size: 0.85rem;">Utilize a Calculadora para guardar o primeiro orçamento.</p>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = calcs.map(c => `
+            <tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 1rem 1.25rem; font-weight: 800; color: var(--primary);">#${c.id}</td>
+                <td style="padding: 1rem 1.25rem; font-weight: 700; color: var(--text-main);">${c.title}</td>
+                <td style="padding: 1rem 1.25rem; color: var(--text-muted);">${c.total_cost.toFixed(2)} €</td>
+                <td style="padding: 1rem 1.25rem;">
+                    <span class="badge badge-emerald">${c.margin_percent}% Margem</span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">(${c.markup_percent}% Markup)</span>
+                </td>
+                <td style="padding: 1rem 1.25rem; color: var(--text-muted);">${c.discount_percent}%</td>
+                <td style="padding: 1rem 1.25rem; font-weight: 800; color: var(--primary);">${c.final_price.toFixed(2)} €</td>
+                <td style="padding: 1rem 1.25rem; font-weight: 800; color: var(--secondary);">${c.net_profit.toFixed(2)} €</td>
+                <td style="padding: 1rem 1.25rem; color: var(--text-muted); font-size: 0.85rem;">${c.created_at}</td>
+                <td style="padding: 1rem 1.25rem; text-align: right;">
+                    <button onclick='viewDetails(${JSON.stringify(c)})' class="btn-primary-action" style="padding: 0.35rem 0.65rem; font-size: 0.75rem; background: rgba(16, 185, 129, 0.1); color: var(--primary); border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <i class="fa-solid fa-eye"></i> Ficha
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function filterCalcs() {
+        const q = document.getElementById('searchCalc').value.toLowerCase();
+        const filtered = allCalcs.filter(c => 
+            c.title.toLowerCase().includes(q) ||
+            (c.product_name && c.product_name.toLowerCase().includes(q))
+        );
+        renderTable(filtered);
+    }
+
+    function viewDetails(c) {
+        const content = document.getElementById('calcModalContent');
+        content.innerHTML = `
+            <div style="background: var(--bg-light); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Simulação #${c.id}</span>
+                        <strong style="font-size: 1.1rem; color: var(--text-main);">${c.title}</strong>
+                    </div>
+                    <span class="badge badge-emerald"><i class="fa-solid fa-check"></i> Calculado</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                    <div>Custos Diretos/Hardware: <strong>${c.base_cost.toFixed(2)} €</strong></div>
+                    <div>Mão-de-Obra: <strong>${c.labor_cost.toFixed(2)} €</strong></div>
+                    <div>Overhead / Indiretos: <strong>${c.overhead_cost.toFixed(2)} €</strong></div>
+                    <div>Custo Total: <strong style="color: var(--primary);">${c.total_cost.toFixed(2)} €</strong></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; font-size: 0.85rem; border-top: 1px dashed var(--border); padding-top: 0.75rem;">
+                    <div>Margem de Lucro Bruta: <strong style="color: var(--emerald);">${c.margin_percent}%</strong></div>
+                    <div>Markup sobre Custo: <strong>${c.markup_percent}%</strong></div>
+                    <div>Desconto Aplicado: <strong>${c.discount_percent}%</strong></div>
+                    <div>Lucro Bruto Un.: <strong>${c.gross_profit.toFixed(2)} €</strong></div>
+                </div>
+
+                <div style="background: #ffffff; padding: 1rem; border-radius: 10px; border: 1px solid var(--border); margin-top: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                        <span>Preço Sem IVA:</span>
+                        <strong>${c.price_before_tax.toFixed(2)} €</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.35rem;">
+                        <span>Valor do IVA (${c.vat_rate}%):</span>
+                        <strong style="color: var(--accent-gold);">${c.vat_amount.toFixed(2)} €</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 800; color: var(--primary); border-top: 1px solid var(--border); padding-top: 0.5rem; margin-top: 0.35rem;">
+                        <span>Preço Final ao Consumidor:</span>
+                        <span>${c.final_price.toFixed(2)} €</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById('calcModal').style.display = 'flex';
+    }
+
+    function closeCalcModal() {
+        document.getElementById('calcModal').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', loadHistory);
+</script>
+{% endblock %}

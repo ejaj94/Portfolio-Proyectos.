@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Calculadora Avançada - PriceCraft AI{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+        <i class="fa-solid fa-calculator" style="color: var(--primary); margin-right: 0.5rem;"></i>Calculadora Avançada de Precificação
+    </h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Estruture custos diretos, horas de trabalho, margem de lucro operacional e impostos para obter o preço de venda ótimo.
+    </p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+    <!-- Inputs Card -->
+    <div class="card-box">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Parâmetros de Custo & Margem
+        </h3>
+
+        <form id="advCalcForm" oninput="runAdvCalculation()" onsubmit="saveAdvCalculation(event)">
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Associar Produto do Catálogo (Opcional)</label>
+                    <select id="advSelectProduct" onchange="onAdvProductSelect()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; background: var(--bg-card); outline: none; font-weight: 600;">
+                        <option value="">-- Inserir Valores Personalizados --</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Título da Simulação / Orçamento *</label>
+                    <input type="text" id="advTitle" required placeholder="Ex: Proposta Comercial Cliente X - Servidores Cloud" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                </div>
+
+                <div style="border-top: 1px solid var(--border); padding-top: 1rem;">
+                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary); display: block; margin-bottom: 0.75rem;"><i class="fa-solid fa-layer-group"></i> Estrutura de Custos</span>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Custo de Matérias/Hardware (€)</label>
+                            <input type="number" id="advBaseCost" value="500" step="0.01" min="0" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; outline: none; font-weight: 600;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Horas de Trabalho Estimadas</label>
+                            <input type="number" id="advHours" value="10" step="0.5" min="0" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; outline: none; font-weight: 600;">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Custo/Hora de Mão-de-Obra (€/h)</label>
+                            <input type="number" id="advHourlyRate" value="35" step="0.01" min="0" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; outline: none; font-weight: 600;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Custos Indiretos / Overhead (€)</label>
+                            <input type="number" id="advOverhead" value="150" step="0.01" min="0" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; outline: none; font-weight: 600;">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid var(--border); padding-top: 1rem;">
+                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--secondary); display: block; margin-bottom: 0.75rem;"><i class="fa-solid fa-chart-line"></i> Margem, Desconto e IVA</span>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Margem de Lucro Alvo (%)</label>
+                            <input type="number" id="advMargin" value="40" step="0.1" min="0" max="99" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; outline: none; font-weight: 600;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Desconto Concedido (%)</label>
+                            <input type="number" id="advDiscount" value="0" step="0.1" min="0" max="100" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; outline: none; font-weight: 600;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Taxa de IVA Aplicável</label>
+                        <select id="advVatRate" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; outline: none; font-weight: 600; background: #fff;">
+                            <option value="23" selected>23% - Continental Portugal</option>
+                            <option value="13">13% - Taxa Intermédia</option>
+                            <option value="6">6% - Taxa Reduzida</option>
+                            <option value="0">0% - Isenção de IVA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary-action" style="margin-top: 1rem; width: 100%; justify-content: center; padding: 0.85rem;">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar Proposta & Simulação
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Live Preview Card -->
+    <div class="card-box" style="position: sticky; top: 90px; background: #ffffff;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-file-invoice-dollar" style="color: var(--primary);"></i> Resumo de Rentabilidade
+            </h3>
+            <span class="badge badge-indigo"><i class="fa-solid fa-chart-pie"></i> Análise Financeira</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <!-- Breakdown Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                <div style="padding: 0.85rem; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border);">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Mão-de-Obra Total</span>
+                    <strong style="font-size: 1rem; color: var(--text-main);" id="outLaborTotal">350,00 €</strong>
+                </div>
+                <div style="padding: 0.85rem; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border);">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Custo Total Produtivo</span>
+                    <strong style="font-size: 1rem; color: var(--text-main);" id="outTotalCost">1.000,00 €</strong>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                <div style="padding: 0.85rem; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border);">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Markup sobre Custo</span>
+                    <strong style="font-size: 1rem; color: var(--secondary);" id="outMarkup">66.67 %</strong>
+                </div>
+                <div style="padding: 0.85rem; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border);">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Lucro Bruto Un.</span>
+                    <strong style="font-size: 1rem; color: var(--emerald);" id="outGrossProfit">666,67 €</strong>
+                </div>
+            </div>
+
+            <!-- Big Final Price Highlight -->
+            <div style="padding: 1.25rem; background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <span style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700; opacity: 0.9;">Preço Final Venda (c/ IVA)</span>
+                        <h2 style="font-size: 2rem; font-weight: 900; line-height: 1;" id="outFinalPrice">2.050,00 €</h2>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 0.75rem; font-weight: 700; opacity: 0.9;">Lucro Líquido Real</span>
+                        <div style="font-size: 1.25rem; font-weight: 800;" id="outNetProfit">666,67 €</div>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.2); display: flex; justify-content: space-between; font-size: 0.8rem; opacity: 0.95;">
+                    <span>S/ IVA: <strong id="outPriceNoTax">1.666,67 €</strong></span>
+                    <span>IVA (<span id="outVatRateText">23%</span>): <strong id="outVatVal">383,33 €</strong></span>
+                </div>
+            </div>
+
+            <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; text-align: center;">
+                <i class="fa-solid fa-circle-check" style="color: var(--primary);"></i> Modelo de precificação validado para garantir rentabilidade operacional sem perdas no IVA.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let catalogProducts = [];
+
+    async function initAdvCalc() {
+        try {
+            const res = await fetch('/api/products');
+            catalogProducts = await res.json();
+
+            const sel = document.getElementById('advSelectProduct');
+            sel.innerHTML = '<option value="">-- Inserir Valores Personalizados --</option>' +
+                catalogProducts.map(p => `<option value="${p.id}">${p.name} (${p.category}) - Custo: ${p.total_cost}€</option>`).join('');
+            
+            runAdvCalculation();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function onAdvProductSelect() {
+        const id = document.getElementById('advSelectProduct').value;
+        if (!id) return;
+        const p = catalogProducts.find(x => x.id == id);
+        if (p) {
+            document.getElementById('advTitle').value = p.name + ' - Proposta';
+            document.getElementById('advBaseCost').value = p.base_cost;
+            document.getElementById('advHourlyRate').value = p.labor_cost;
+            document.getElementById('advHours').value = 1;
+            document.getElementById('advOverhead').value = p.overhead_cost;
+            document.getElementById('advMargin').value = p.target_margin_percent;
+            runAdvCalculation();
+        }
+    }
+
+    function runAdvCalculation() {
+        const baseCost = parseFloat(document.getElementById('advBaseCost').value) || 0;
+        const hours = parseFloat(document.getElementById('advHours').value) || 0;
+        const hourlyRate = parseFloat(document.getElementById('advHourlyRate').value) || 0;
+        const overhead = parseFloat(document.getElementById('advOverhead').value) || 0;
+        let margin = parseFloat(document.getElementById('advMargin').value) || 0;
+        const discount = parseFloat(document.getElementById('advDiscount').value) || 0;
+        const vatRate = parseFloat(document.getElementById('advVatRate').value) || 0;
+
+        if (margin >= 100) margin = 99.9;
+
+        const laborTotal = hours * hourlyRate;
+        const totalCost = baseCost + laborTotal + overhead;
+
+        const rawPrice = totalCost / (1 - (margin / 100.0));
+        const grossProfit = rawPrice - totalCost;
+        const markup = totalCost > 0 ? (grossProfit / totalCost * 100.0) : 0;
+
+        const priceBeforeTax = rawPrice * (1 - (discount / 100.0));
+        const vatAmount = priceBeforeTax * (vatRate / 100.0);
+        const finalPrice = priceBeforeTax + vatAmount;
+        const netProfit = priceBeforeTax - totalCost;
+
+        document.getElementById('outLaborTotal').innerText = laborTotal.toFixed(2) + ' €';
+        document.getElementById('outTotalCost').innerText = totalCost.toFixed(2) + ' €';
+        document.getElementById('outMarkup').innerText = markup.toFixed(2) + ' %';
+        document.getElementById('outGrossProfit').innerText = grossProfit.toFixed(2) + ' €';
+        document.getElementById('outFinalPrice').innerText = finalPrice.toFixed(2) + ' €';
+        document.getElementById('outNetProfit').innerText = netProfit.toFixed(2) + ' €';
+        document.getElementById('outPriceNoTax').innerText = priceBeforeTax.toFixed(2) + ' €';
+        document.getElementById('outVatVal').innerText = vatAmount.toFixed(2) + ' €';
+        document.getElementById('outVatRateText').innerText = vatRate + '%';
+    }
+
+    async function saveAdvCalculation(e) {
+        e.preventDefault();
+        const product_id = document.getElementById('advSelectProduct').value || null;
+        const title = document.getElementById('advTitle').value || 'Simulação Personalizada';
+        const base_cost = parseFloat(document.getElementById('advBaseCost').value) || 0;
+        const hours = parseFloat(document.getElementById('advHours').value) || 0;
+        const hourlyRate = parseFloat(document.getElementById('advHourlyRate').value) || 0;
+        const labor_cost = hours * hourlyRate;
+        const overhead_cost = parseFloat(document.getElementById('advOverhead').value) || 0;
+        const margin_percent = parseFloat(document.getElementById('advMargin').value) || 0;
+        const discount_percent = parseFloat(document.getElementById('advDiscount').value) || 0;
+        const vat_rate = parseFloat(document.getElementById('advVatRate').value) || 0;
+
+        const data = {
+            product_id,
+            title,
+            base_cost,
+            labor_cost,
+            overhead_cost,
+            margin_percent,
+            discount_percent,
+            vat_rate
+        };
+
+        try {
+            const res = await fetch('/api/calculations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                alert('Proposta guardada com sucesso no histórico!');
+                window.location.href = '/history';
+            } else {
+                alert(result.message || 'Erro ao guardar simulação.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro de ligação ao servidor.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initAdvCalc);
+</script>
+{% endblock %}
