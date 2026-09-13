@@ -381,7 +381,6 @@
             </div>
 
             <div style="display: flex; align-items: center; gap: 1rem;">
-                <span class="slide-badge"><i class="fa-solid fa-clock"></i> Transição Automática: 6s</span>
                 <button id="pausePlayBtn" onclick="togglePause()" class="ctrl-btn">
                     <i class="fa-solid fa-pause"></i> Pausar
                 </button>
@@ -400,11 +399,8 @@
                 <!-- Slide Header -->
                 <div class="slide-header">
                     <div class="slide-title-box">
-                        <span class="slide-badge" style="margin-bottom: 0.5rem;">
-                            <i class="{{ p.icon }}"></i> {{ p.number }} — {{ p.title }}
-                        </span>
                         <h2>{{ p.name }}</h2>
-                        <p>{{ p.tagline }}</p>
+                        <p>{{ p.title }} • {{ p.tagline }}</p>
                     </div>
                     <div style="text-align: right;">
                         <span style="font-size: 2.2rem; font-family: 'Playfair Display', serif; font-weight: 900; color: var(--blue-sapphire);">
