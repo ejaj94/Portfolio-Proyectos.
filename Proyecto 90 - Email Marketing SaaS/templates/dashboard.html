@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - MailCraft AI SaaS{% endblock %}
+
+{% block content %}
+<!-- Top Metrics Grid -->
+<div class="stats-grid-top">
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(244, 63, 94, 0.1); color: var(--primary);">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="dashContacts">--</div>
+            <div class="stat-card-lbl">Contactos Ativos</div>
+        </div>
+    </div>
+
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(6, 182, 212, 0.1); color: var(--secondary);">
+            <i class="fa-solid fa-layer-group"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="dashLists">--</div>
+            <div class="stat-card-lbl">Listas Segmentadas</div>
+        </div>
+    </div>
+
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(139, 92, 246, 0.1); color: var(--indigo);">
+            <i class="fa-solid fa-envelope-open"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="dashOpenRate">--%</div>
+            <div class="stat-card-lbl">Taxa de Abertura Média</div>
+        </div>
+    </div>
+
+    <div class="stat-card-mini">
+        <div class="stat-card-icon" style="background: rgba(217, 119, 6, 0.1); color: var(--accent-gold);">
+            <i class="fa-solid fa-mouse-pointer"></i>
+        </div>
+        <div>
+            <div class="stat-card-val" id="dashClickRate">--%</div>
+            <div class="stat-card-lbl">Taxa de Clique (CTR)</div>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; align-items: start;">
+    <!-- Performance Overview -->
+    <div class="card-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-chart-line" style="color: var(--primary);"></i> Desempenho Global de Envios
+            </h3>
+            <span class="badge badge-cyan"><i class="fa-solid fa-bolt"></i> Tempo Real</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 700; margin-bottom: 0.35rem;">
+                    <span>Entregabilidade Estimada</span>
+                    <span style="color: var(--secondary);">99.2%</span>
+                </div>
+                <div style="height: 10px; background: var(--bg-light); border-radius: 10px; overflow: hidden;">
+                    <div style="width: 99.2%; height: 100%; background: var(--secondary); border-radius: 10px;"></div>
+                </div>
+            </div>
+
+            <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 700; margin-bottom: 0.35rem;">
+                    <span>Taxa de Abertura (Unique Opens)</span>
+                    <span style="color: var(--primary);">75.0%</span>
+                </div>
+                <div style="height: 10px; background: var(--bg-light); border-radius: 10px; overflow: hidden;">
+                    <div style="width: 75%; height: 100%; background: var(--primary); border-radius: 10px;"></div>
+                </div>
+            </div>
+
+            <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 700; margin-bottom: 0.35rem;">
+                    <span>Taxa de Clique nos Links (CTR)</span>
+                    <span style="color: var(--indigo);">45.0%</span>
+                </div>
+                <div style="height: 10px; background: var(--bg-light); border-radius: 10px; overflow: hidden;">
+                    <div style="width: 45%; height: 100%; background: var(--indigo); border-radius: 10px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Campaign Launcher -->
+    <div class="card-box">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-paper-plane" style="color: var(--secondary);"></i> Envio Rápido de Campanha
+        </h3>
+
+        <form id="quickCampForm" onsubmit="submitQuickCamp(event)">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Nome da Campanha *</label>
+                    <input type="text" id="qcName" required placeholder="Ex: Promoção Exclusiva de Outono 2026" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Assunto do E-mail *</label>
+                    <input type="text" id="qcSubject" required placeholder="Ex: Descubra as novas vantagens do seu plano SaaS!" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Lista de Distribuição Alvo *</label>
+                        <select id="qcList" required style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; background: #fff; outline: none;">
+                            <option value="">-- Selecione a Lista --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Modelo / Template</label>
+                        <select id="qcTemplate" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; background: #fff; outline: none;">
+                            <option value="">-- Opcional --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary-action" style="margin-top: 0.5rem; width: 100%; justify-content: center; padding: 0.85rem;">
+                    <i class="fa-solid fa-paper-plane"></i> Criar & Disparar Campanha
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Recent Campaigns Table -->
+<div class="card-box">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-bullhorn" style="color: var(--primary);"></i> Campanhas Recentes & Estatísticas de Aberturas
+        </h3>
+        <a href="/campaigns" class="btn-primary-action" style="background: var(--bg-light); color: var(--text-main); border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; padding: 0.4rem 0.85rem;">
+            Ver Todas <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+                <tr style="background: var(--bg-light); border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">
+                    <th style="padding: 0.85rem 1rem;">Campanha</th>
+                    <th style="padding: 0.85rem 1rem;">Lista Alvo</th>
+                    <th style="padding: 0.85rem 1rem;">Estado</th>
+                    <th style="padding: 0.85rem 1rem;">Enviados</th>
+                    <th style="padding: 0.85rem 1rem;">Aberturas (Rate %)</th>
+                    <th style="padding: 0.85rem 1rem;">Cliques (CTR %)</th>
+                    <th style="padding: 0.85rem 1rem; text-align: right;">Ação</th>
+                </tr>
+            </thead>
+            <tbody id="recentCampsTbody">
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.5rem;">A carregar campanhas...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function initDashboard() {
+        await Promise.all([loadStats(), loadLists(), loadTemplates(), loadCampaigns()]);
+    }
+
+    async function loadStats() {
+        try {
+            const res = await fetch('/api/stats');
+            const data = await res.json();
+            document.getElementById('dashContacts').innerText = data.total_contacts;
+            document.getElementById('dashLists').innerText = data.total_lists;
+            document.getElementById('dashOpenRate').innerText = data.avg_open_rate + '%';
+            document.getElementById('dashClickRate').innerText = data.avg_click_rate + '%';
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function loadLists() {
+        try {
+            const res = await fetch('/api/lists');
+            const data = await res.json();
+            const sel = document.getElementById('qcList');
+            sel.innerHTML = '<option value="">-- Selecione a Lista --</option>' +
+                data.map(l => `<option value="${l.id}">${l.name} (${l.member_count} membros)</option>`).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function loadTemplates() {
+        try {
+            const res = await fetch('/api/templates');
+            const data = await res.json();
+            const sel = document.getElementById('qcTemplate');
+            sel.innerHTML = '<option value="">-- Opcional --</option>' +
+                data.map(t => `<option value="${t.id}">${t.title}</option>`).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function loadCampaigns() {
+        try {
+            const res = await fetch('/api/campaigns');
+            const data = await res.json();
+            const tbody = document.getElementById('recentCampsTbody');
+
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem;">Nenhuma campanha criada ainda.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.slice(0, 5).map(c => {
+                const openPct = (c.recipients_count > 0 ? (c.opens_count / c.recipients_count * 100) : 0).toFixed(1);
+                const clickPct = (c.recipients_count > 0 ? (c.clicks_count / c.recipients_count * 100) : 0).toFixed(1);
+                let badgeClass = 'badge-coral';
+                if (c.status === 'Enviada') badgeClass = 'badge-cyan';
+                else if (c.status === 'Programada') badgeClass = 'badge-indigo';
+
+                return `
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 0.85rem 1rem;">
+                            <strong style="display: block; color: var(--text-main);">${c.name}</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${c.subject}</span>
+                        </td>
+                        <td style="padding: 0.85rem 1rem;"><span class="badge badge-indigo">${c.list_name || 'Geral'}</span></td>
+                        <td style="padding: 0.85rem 1rem;"><span class="badge ${badgeClass}">${c.status}</span></td>
+                        <td style="padding: 0.85rem 1rem; font-weight: 700; color: var(--text-main);">${c.recipients_count} envios</td>
+                        <td style="padding: 0.85rem 1rem;">
+                            <strong style="color: var(--primary);">${c.opens_count}</strong> <span style="font-size: 0.75rem; color: var(--text-muted);">(${openPct}%)</span>
+                        </td>
+                        <td style="padding: 0.85rem 1rem;">
+                            <strong style="color: var(--secondary);">${c.clicks_count}</strong> <span style="font-size: 0.75rem; color: var(--text-muted);">(${clickPct}%)</span>
+                        </td>
+                        <td style="padding: 0.85rem 1rem; text-align: right;">
+                            ${c.status !== 'Enviada' ? `
+                                <button onclick="sendCampaignNow(${c.id})" class="btn-primary-action" style="padding: 0.35rem 0.65rem; font-size: 0.75rem;">
+                                    <i class="fa-solid fa-paper-plane"></i> Disparar
+                                </button>
+                            ` : `<span style="font-size: 0.8rem; color: var(--secondary); font-weight:700;"><i class="fa-solid fa-check"></i> Enviado</span>`}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function submitQuickCamp(e) {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('qcName').value,
+            subject: document.getElementById('qcSubject').value,
+            list_id: document.getElementById('qcList').value,
+            template_id: document.getElementById('qcTemplate').value || null
+        };
+
+        try {
+            const res = await fetch('/api/campaigns', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                alert('Campanha criada com sucesso!');
+                document.getElementById('quickCampForm').reset();
+                initDashboard();
+            } else {
+                alert(result.message || 'Erro ao criar campanha.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro de ligação.');
+        }
+    }
+
+    async function sendCampaignNow(id) {
+        try {
+            const res = await fetch(`/api/campaigns/${id}/send`, { method: 'POST' });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                alert(result.message);
+                initDashboard();
+            } else {
+                alert(result.message || 'Erro ao disparar campanha.');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Erro de ligação.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
+</script>
+{% endblock %}

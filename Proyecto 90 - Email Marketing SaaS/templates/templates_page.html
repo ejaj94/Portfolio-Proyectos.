@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}Modelos de E-mail - MailCraft AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--primary); margin-right: 0.5rem;"></i>Catálogo de Modelos & Drag-and-Drop Editor
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Selecione ou crie estruturas de e-mail responsivas, otimizadas para conversão e entregabilidade direta na caixa de entrada.
+        </p>
+    </div>
+    <button onclick="openTemplateModal()" class="btn-primary-action">
+        <i class="fa-solid fa-plus-circle"></i> Criar Novo Modelo
+    </button>
+</div>
+
+<!-- Category Filters -->
+<div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+    <button onclick="filterCategory('all')" class="filter-btn active" id="btn-cat-all" style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--primary); background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
+        Todos os Modelos
+    </button>
+    <button onclick="filterCategory('Vendas')" class="filter-btn" id="btn-cat-Vendas" style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+        <i class="fa-solid fa-bag-shopping" style="color: var(--primary); margin-right: 0.35rem;"></i>Vendas & Promocional
+    </button>
+    <button onclick="filterCategory('Newsletter')" class="filter-btn" id="btn-cat-Newsletter" style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+        <i class="fa-solid fa-newspaper" style="color: var(--secondary); margin-right: 0.35rem;"></i>Newsletters
+    </button>
+    <button onclick="filterCategory('Onboarding')" class="filter-btn" id="btn-cat-Onboarding" style="padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+        <i class="fa-solid fa-user-astronaut" style="color: var(--indigo); margin-right: 0.35rem;"></i>Onboarding & Boas-Vindas
+    </button>
+</div>
+
+<!-- Templates Grid -->
+<div id="templatesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+    <div style="text-align: center; padding: 3rem; color: var(--text-muted); grid-column: 1/-1;">
+        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+        <p style="margin-top: 0.75rem; font-weight: 600;">A carregar catálogo de modelos...</p>
+    </div>
+</div>
+
+<!-- Modal Preview Template -->
+<div id="previewModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 999; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: var(--bg-card); width: 100%; max-width: 700px; max-height: 90vh; border-radius: 20px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+            <div>
+                <h3 id="prevTitle" style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">Pré-visualização</h3>
+                <p id="prevSubject" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 0.2rem;"></p>
+            </div>
+            <button onclick="closePreviewModal()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div id="prevBody" style="flex: 1; overflow-y: auto; background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; color: var(--text-main);">
+            <!-- Render HTML -->
+        </div>
+
+        <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <button onclick="closePreviewModal()" style="padding: 0.75rem 1.25rem; border: 1px solid var(--border); border-radius: 10px; background: transparent; font-weight: 600; cursor: pointer;">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Criar Modelo -->
+<div id="templateModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); z-index: 999; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: var(--bg-card); width: 100%; max-width: 650px; border-radius: 20px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15); margin: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+                <i class="fa-solid fa-plus-circle" style="color: var(--primary);"></i> Criar Novo Modelo de E-mail
+            </h3>
+            <button onclick="closeTemplateModal()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <form id="templateForm" onsubmit="submitTemplate(event)">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Nome do Modelo *</label>
+                        <input type="text" id="tTitle" required placeholder="Ex: Lançamento de Produto Q4" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Categoria *</label>
+                        <select id="tCategory" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none; background: #fff;">
+                            <option value="Vendas">Vendas & Promocional</option>
+                            <option value="Newsletter">Newsletter</option>
+                            <option value="Onboarding">Onboarding</option>
+                            <option value="Eventos">Eventos & Webinars</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Assunto Padrão Recomendado *</label>
+                    <input type="text" id="tSubject" required placeholder="Ex: 🚀 Descubra a nova funcionalidade exclusiva para a sua empresa!" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Conteúdo HTML / Rich Text *</label>
+                    <textarea id="tContent" rows="6" required placeholder="<div style='font-family: sans-serif;'><h2 style='color: #f43f5e;'>Olá {{name}}!</h2><p>Temos novidades incríveis...</p></div>" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.88rem; font-family: monospace; outline: none; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button type="button" onclick="closeTemplateModal()" style="padding: 0.75rem 1.25rem; border: 1px solid var(--border); border-radius: 10px; background: transparent; font-weight: 600; cursor: pointer;">Cancelar</button>
+                <button type="submit" class="btn-primary-action">Guardar Modelo</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    let templatesArray = [];
+    let activeCategory = 'all';
+
+    async function loadTemplatesPage() {
+        try {
+            const res = await fetch('/api/templates');
+            templatesArray = await res.json();
+            renderTemplates();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function filterCategory(cat) {
+        activeCategory = cat;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.style.background = 'var(--bg-card)';
+            btn.style.color = 'var(--text-muted)';
+            btn.style.borderColor = 'var(--border)';
+        });
+        const activeBtn = document.getElementById('btn-cat-' + cat);
+        if (activeBtn) {
+            activeBtn.style.background = 'var(--primary)';
+            activeBtn.style.color = '#ffffff';
+            activeBtn.style.borderColor = 'var(--primary)';
+        }
+        renderTemplates();
+    }
+
+    function renderTemplates() {
+        const grid = document.getElementById('templatesGrid');
+        let filtered = templatesArray;
+        if (activeCategory !== 'all') {
+            filtered = templatesArray.filter(t => t.category.toLowerCase() === activeCategory.toLowerCase());
+        }
+
+        if (!filtered || filtered.length === 0) {
+            grid.innerHTML = `
+                <div class="card-box" style="text-align: center; padding: 3rem; grid-column: 1/-1;">
+                    <i class="fa-solid fa-folder-open fa-3x" style="color: var(--text-muted); margin-bottom: 1rem;"></i>
+                    <h4 style="font-weight: 700; color: var(--text-main);">Nenhum modelo encontrado nesta categoria</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Crie um novo modelo ou selecione outra categoria.</p>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = filtered.map(t => {
+            const badgeClass = t.category === 'Vendas' ? 'badge-rose' : (t.category === 'Newsletter' ? 'badge-cyan' : 'badge-amber');
+            return `
+                <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                            <span class="badge ${badgeClass}"><i class="fa-solid fa-tag"></i> ${t.category}</span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${t.created_at || 'Sistema'}</span>
+                        </div>
+                        
+                        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.4rem;">${t.title}</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-bottom: 1rem; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                            <i class="fa-solid fa-envelope" style="color: var(--primary); margin-right: 0.3rem;"></i> ${t.subject_default}
+                        </p>
+
+                        <div style="background: #f8fafc; border: 1px dashed var(--border); border-radius: 12px; padding: 1rem; max-height: 120px; overflow: hidden; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+                            ${escapeHtml(t.content_html.substring(0, 150))}...
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button onclick="previewTemplate(${t.id})" style="flex: 1; padding: 0.55rem; border: 1px solid var(--border); border-radius: 10px; background: #fff; font-size: 0.85rem; font-weight: 700; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                            <i class="fa-solid fa-eye" style="color: var(--secondary);"></i> Visualizar
+                        </button>
+                        <a href="/campaigns?template_id=${t.id}" class="btn-primary-action" style="flex: 1.2; text-decoration: none; font-size: 0.85rem; padding: 0.55rem; justify-content: center;">
+                            <i class="fa-solid fa-paper-plane"></i> Usar Modelo
+                        </a>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function previewTemplate(id) {
+        const t = templatesArray.find(item => item.id === id);
+        if (!t) return;
+        document.getElementById('prevTitle').innerText = t.title;
+        document.getElementById('prevSubject').innerText = 'Assunto: ' + t.subject_default;
+        document.getElementById('prevBody').innerHTML = t.content_html;
+        document.getElementById('previewModal').style.display = 'flex';
+    }
+
+    function closePreviewModal() {
+        document.getElementById('previewModal').style.display = 'none';
+    }
+
+    function openTemplateModal() {
+        document.getElementById('templateModal').style.display = 'flex';
+    }
+
+    function closeTemplateModal() {
+        document.getElementById('templateModal').style.display = 'none';
+        document.getElementById('templateForm').reset();
+    }
+
+    async function submitTemplate(e) {
+        e.preventDefault();
+        const data = {
+            title: document.getElementById('tTitle').value,
+            category: document.getElementById('tCategory').value,
+            subject_default: document.getElementById('tSubject').value,
+            content_html: document.getElementById('tContent').value
+        };
+
+        try {
+            const res = await fetch('/api/templates', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                closeTemplateModal();
+                loadTemplatesPage();
+            } else {
+                alert(result.message || 'Erro ao criar modelo.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro de ligação ao servidor.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadTemplatesPage);
+</script>
+{% endblock %}

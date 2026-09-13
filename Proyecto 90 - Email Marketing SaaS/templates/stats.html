@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Estatísticas & Analytics - MailCraft AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-chart-line" style="color: var(--primary); margin-right: 0.5rem;"></i>Relatórios & Analytics Avançados
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Métricas de desempenho em tempo real, entregabilidade, taxa de abertura (OR) e taxa de clique (CTR) por campanha.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/api/export/csv" class="btn-primary-action" style="background: var(--secondary); text-decoration: none; font-size: 0.88rem;">
+            <i class="fa-solid fa-file-csv"></i> Exportar CSV
+        </a>
+        <a href="/api/export/json" class="btn-primary-action" style="background: var(--indigo); text-decoration: none; font-size: 0.88rem;">
+            <i class="fa-solid fa-file-code"></i> Exportar JSON
+        </a>
+    </div>
+</div>
+
+<!-- Detailed Metrics Bar -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+    <div class="card-box" style="display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 50px; height: 50px; border-radius: 14px; background: rgba(244, 63, 94, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <div>
+            <div id="statTotalSent" style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">0</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">E-mails Disparados</div>
+        </div>
+    </div>
+
+    <div class="card-box" style="display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 50px; height: 50px; border-radius: 14px; background: rgba(6, 182, 212, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <i class="fa-solid fa-envelope-open-text"></i>
+        </div>
+        <div>
+            <div id="statTotalOpens" style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">0</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">Aberturas Totais</div>
+        </div>
+    </div>
+
+    <div class="card-box" style="display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 50px; height: 50px; border-radius: 14px; background: rgba(139, 92, 246, 0.1); color: var(--indigo); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <i class="fa-solid fa-mouse-pointer"></i>
+        </div>
+        <div>
+            <div id="statTotalClicks" style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">0</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">Cliques Registados</div>
+        </div>
+    </div>
+
+    <div class="card-box" style="display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 50px; height: 50px; border-radius: 14px; background: rgba(217, 119, 6, 0.1); color: var(--accent-gold); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <div>
+            <div id="statOpenRate" style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">0.0%</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">Taxa Média de Abertura</div>
+        </div>
+    </div>
+</div>
+
+<!-- Performance Table -->
+<div class="card-box">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main);">
+            <i class="fa-solid fa-table" style="color: var(--secondary); margin-right: 0.4rem;"></i>Desempenho por Campanha
+        </h3>
+        <span class="badge badge-cyan" id="campaignCountBadge">0 Campanhas</span>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--border); font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
+                    <th style="padding: 0.85rem 1rem;">Campanha</th>
+                    <th style="padding: 0.85rem 1rem;">Lista Alvo</th>
+                    <th style="padding: 0.85rem 1rem;">Estado</th>
+                    <th style="padding: 0.85rem 1rem;">Destinatários</th>
+                    <th style="padding: 0.85rem 1rem;">Aberturas</th>
+                    <th style="padding: 0.85rem 1rem;">Taxa Abertura</th>
+                    <th style="padding: 0.85rem 1rem;">Cliques</th>
+                    <th style="padding: 0.85rem 1rem;">Taxa Clique</th>
+                </tr>
+            </thead>
+            <tbody id="statsTableBody" style="font-size: 0.9rem;">
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.5rem;">A carregar dados analíticos...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function loadStatsPage() {
+        try {
+            const [cRes, sRes] = await Promise.all([
+                fetch('/api/campaigns'),
+                fetch('/api/stats')
+            ]);
+
+            const campaigns = await cRes.json();
+            const globalStats = await sRes.json();
+
+            // Populate top cards
+            document.getElementById('statOpenRate').innerText = globalStats.avg_open_rate + '%';
+            
+            let totRec = 0, totOp = 0, totCl = 0;
+            campaigns.forEach(c => {
+                if (c.status === 'Enviada') {
+                    totRec += (c.recipients_count || 0);
+                    totOp += (c.opens_count || 0);
+                    totCl += (c.clicks_count || 0);
+                }
+            });
+
+            document.getElementById('statTotalSent').innerText = totRec.toLocaleString();
+            document.getElementById('statTotalOpens').innerText = totOp.toLocaleString();
+            document.getElementById('statTotalClicks').innerText = totCl.toLocaleString();
+            document.getElementById('campaignCountBadge').innerText = campaigns.length + ' Campanhas';
+
+            renderStatsTable(campaigns);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function renderStatsTable(campaigns) {
+        const tbody = document.getElementById('statsTableBody');
+        if (!campaigns || campaigns.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                        Nenhuma campanha registada até ao momento.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = campaigns.map(c => {
+            const rec = c.recipients_count || 0;
+            const op = c.opens_count || 0;
+            const cl = c.clicks_count || 0;
+
+            const openRate = rec > 0 ? ((op / rec) * 100).toFixed(1) : '0.0';
+            const clickRate = rec > 0 ? ((cl / rec) * 100).toFixed(1) : '0.0';
+
+            const statusBadge = c.status === 'Enviada' ? '<span class="badge badge-rose"><i class="fa-solid fa-check"></i> Enviada</span>'
+                : (c.status === 'Programada' ? '<span class="badge badge-amber"><i class="fa-solid fa-clock"></i> Programada</span>'
+                : '<span class="badge badge-gray"><i class="fa-solid fa-pen"></i> Rascunho</span>');
+
+            return `
+                <tr style="border-bottom: 1px solid var(--border); transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+                    <td style="padding: 1rem;">
+                        <strong style="color: var(--text-main); display: block;">${c.name}</strong>
+                        <span style="font-size: 0.78rem; color: var(--text-muted);">${c.subject}</span>
+                    </td>
+                    <td style="padding: 1rem; color: var(--text-muted); font-weight: 600;">${c.list_name || 'Geral'}</td>
+                    <td style="padding: 1rem;">${statusBadge}</td>
+                    <td style="padding: 1rem; font-weight: 700;">${rec}</td>
+                    <td style="padding: 1rem; font-weight: 700; color: var(--secondary);">${op}</td>
+                    <td style="padding: 1rem;">
+                        <span style="font-weight: 800; color: var(--primary);">${openRate}%</span>
+                    </td>
+                    <td style="padding: 1rem; font-weight: 700; color: var(--indigo);">${cl}</td>
+                    <td style="padding: 1rem;">
+                        <span style="font-weight: 800; color: var(--secondary);">${clickRate}%</span>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadStatsPage);
+</script>
+{% endblock %}

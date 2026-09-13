@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Contactos & Subscritores - MailCraft AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-address-book" style="color: var(--primary); margin-right: 0.5rem;"></i>Directório de Contactos & Subscritores
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Gira a sua audiência, adicione novos destinatários e associe contactos a listas de distribuição segmentadas.
+        </p>
+    </div>
+    <button onclick="openContactModal()" class="btn-primary-action">
+        <i class="fa-solid fa-user-plus"></i> Adicionar Contacto
+    </button>
+</div>
+
+<!-- Search Bar -->
+<div class="card-box" style="margin-bottom: 1.5rem; padding: 1rem 1.5rem;">
+    <div style="display: flex; gap: 1rem; align-items: center;">
+        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+        <input type="text" id="searchContacts" onkeyup="filterContacts()" placeholder="Pesquisar por nome, email, empresa ou tags..." style="width: 100%; border: none; outline: none; font-size: 0.95rem; font-weight: 500; background: transparent; color: var(--text-main);">
+    </div>
+</div>
+
+<!-- Contacts Table Card -->
+<div class="card-box" style="padding: 0; overflow: hidden;">
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+                <tr style="background: var(--bg-light); border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">
+                    <th style="padding: 1rem 1.25rem;">Subscritor</th>
+                    <th style="padding: 1rem 1.25rem;">Empresa</th>
+                    <th style="padding: 1rem 1.25rem;">Etiquetas (Tags)</th>
+                    <th style="padding: 1rem 1.25rem;">Estado</th>
+                    <th style="padding: 1rem 1.25rem;">Data Subscrição</th>
+                </tr>
+            </thead>
+            <tbody id="contactsTbody">
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.75rem; font-weight: 600;">A carregar contactos...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal: Novo Contacto -->
+<div id="contactModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(5px); z-index: 999; justify-content: center; align-items: center;">
+    <div style="background: var(--bg-card); width: 100%; max-width: 540px; border-radius: 20px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15); margin: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+                <i class="fa-solid fa-user-check" style="color: var(--primary);"></i> Novo Contacto / Subscritor
+            </h3>
+            <button onclick="closeContactModal()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <form id="contactForm" onsubmit="submitContact(event)">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Nome Completo *</label>
+                    <input type="text" id="cName" required placeholder="Ex: Dra. Helena Matos" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Email *</label>
+                        <input type="email" id="cEmail" required placeholder="helena@empresa.pt" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Empresa</label>
+                        <input type="text" id="cCompany" placeholder="Ex: Matos & Silva Lda" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                    </div>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Etiquetas / Tags (separadas por vírgula)</label>
+                    <input type="text" id="cTags" placeholder="Ex: VIP, Cliente, Newsletter" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Adicionar a Listas de Distribuição</label>
+                    <div id="cListsCheckboxes" style="display: flex; flex-direction: column; gap: 0.5rem; max-height: 120px; overflow-y: auto; background: var(--bg-light); padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border);">
+                        <!-- Dynamic Checkboxes -->
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button type="button" onclick="closeContactModal()" style="padding: 0.75rem 1.25rem; border: 1px solid var(--border); border-radius: 10px; background: transparent; font-weight: 600; cursor: pointer;">Cancelar</button>
+                <button type="submit" class="btn-primary-action">Guardar Contacto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    let contactsList = [];
+    let listsAvailable = [];
+
+    async function loadContactsPage() {
+        try {
+            const [cRes, lRes] = await Promise.all([
+                fetch('/api/contacts'),
+                fetch('/api/lists')
+            ]);
+            contactsList = await cRes.json();
+            listsAvailable = await lRes.json();
+
+            renderContactsTable(contactsList);
+            populateListCheckboxes();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function renderContactsTable(list) {
+        const tbody = document.getElementById('contactsTbody');
+        if (!list || list.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-address-book fa-3x" style="margin-bottom: 1rem;"></i>
+                        <h4 style="font-weight: 700; color: var(--text-main);">Nenhum contacto registado</h4>
+                        <p style="font-size: 0.85rem;">Adicione o primeiro subscritor à sua base de dados.</p>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = list.map(c => `
+            <tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 1rem 1.25rem;">
+                    <strong style="display: block; color: var(--text-main); font-size: 0.95rem;">${c.name}</strong>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">${c.email}</span>
+                </td>
+                <td style="padding: 1rem 1.25rem; color: var(--text-muted); font-weight: 600;">${c.company || 'N/A'}</td>
+                <td style="padding: 1rem 1.25rem;">
+                    ${(c.tags || 'Lead').split(',').map(t => `<span class="badge badge-indigo" style="margin-right: 0.25rem; font-size: 0.75rem;">${t.trim()}</span>`).join('')}
+                </td>
+                <td style="padding: 1rem 1.25rem;"><span class="badge badge-cyan"><i class="fa-solid fa-circle-check"></i> ${c.status}</span></td>
+                <td style="padding: 1rem 1.25rem; color: var(--text-muted); font-size: 0.85rem;">${c.subscribed_at}</td>
+            </tr>
+        `).join('');
+    }
+
+    function filterContacts() {
+        const q = document.getElementById('searchContacts').value.toLowerCase();
+        const filtered = contactsList.filter(c => 
+            c.name.toLowerCase().includes(q) ||
+            c.email.toLowerCase().includes(q) ||
+            (c.company && c.company.toLowerCase().includes(q)) ||
+            (c.tags && c.tags.toLowerCase().includes(q))
+        );
+        renderContactsTable(filtered);
+    }
+
+    function populateListCheckboxes() {
+        const container = document.getElementById('cListsCheckboxes');
+        if (!listsAvailable || listsAvailable.length === 0) {
+            container.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted);">Nenhuma lista criada ainda.</span>';
+            return;
+        }
+
+        container.innerHTML = listsAvailable.map(l => `
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
+                <input type="checkbox" value="${l.id}" class="chk-list-item"> ${l.name} (${l.member_count} membros)
+            </label>
+        `).join('');
+    }
+
+    function openContactModal() {
+        document.getElementById('contactModal').style.display = 'flex';
+    }
+
+    function closeContactModal() {
+        document.getElementById('contactModal').style.display = 'none';
+        document.getElementById('contactForm').reset();
+    }
+
+    async function submitContact(e) {
+        e.preventDefault();
+        const selectedLists = Array.from(document.querySelectorAll('.chk-list-item:checked')).map(el => el.value);
+
+        const data = {
+            name: document.getElementById('cName').value,
+            email: document.getElementById('cEmail').value,
+            company: document.getElementById('cCompany').value,
+            tags: document.getElementById('cTags').value || 'Subscritor',
+            list_ids: selectedLists
+        };
+
+        try {
+            const res = await fetch('/api/contacts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                closeContactModal();
+                loadContactsPage();
+            } else {
+                alert(result.message || 'Erro ao guardar contacto.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro de ligação ao servidor.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadContactsPage);
+</script>
+{% endblock %}

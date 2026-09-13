@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Listas de Distribuição - MailCraft AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-layer-group" style="color: var(--primary); margin-right: 0.5rem;"></i>Listas de Distribuição Segmentadas
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Agrupe contactos por interesse, tipo de cliente ou nível de interação para envios altamente direcionados.
+        </p>
+    </div>
+    <button onclick="openListModal()" class="btn-primary-action">
+        <i class="fa-solid fa-folder-plus"></i> Criar Nova Lista
+    </button>
+</div>
+
+<!-- Lists Grid -->
+<div id="listsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+    <div style="text-align: center; padding: 3rem; color: var(--text-muted); grid-column: 1/-1;">
+        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+        <p style="margin-top: 0.75rem; font-weight: 600;">A carregar listas...</p>
+    </div>
+</div>
+
+<!-- Modal: Nova Lista -->
+<div id="listModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(5px); z-index: 999; justify-content: center; align-items: center;">
+    <div style="background: var(--bg-card); width: 100%; max-width: 500px; border-radius: 20px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.15); margin: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+                <i class="fa-solid fa-folder-plus" style="color: var(--primary);"></i> Criar Nova Lista Alvo
+            </h3>
+            <button onclick="closeListModal()" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <form id="listForm" onsubmit="submitList(event)">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Nome da Lista *</label>
+                    <input type="text" id="lName" required placeholder="Ex: Clientes VIP Enterprise" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Descrição da Audiência</label>
+                    <textarea id="lDescription" rows="3" placeholder="Descreva o propósito ou os critérios de inclusão desta lista..." style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; outline: none; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button type="button" onclick="closeListModal()" style="padding: 0.75rem 1.25rem; border: 1px solid var(--border); border-radius: 10px; background: transparent; font-weight: 600; cursor: pointer;">Cancelar</button>
+                <button type="submit" class="btn-primary-action">Guardar Lista</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    let listsArray = [];
+
+    async function loadListsPage() {
+        try {
+            const res = await fetch('/api/lists');
+            listsArray = await res.json();
+            renderLists(listsArray);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function renderLists(lists) {
+        const grid = document.getElementById('listsGrid');
+        if (!lists || lists.length === 0) {
+            grid.innerHTML = `
+                <div class="card-box" style="text-align: center; padding: 3rem; grid-column: 1/-1;">
+                    <i class="fa-solid fa-folder-open fa-3x" style="color: var(--text-muted); margin-bottom: 1rem;"></i>
+                    <h4 style="font-weight: 700; color: var(--text-main);">Nenhuma lista de distribuição</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Crie a primeira lista para segmentar os seus contactos.</p>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = lists.map(l => `
+            <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);">${l.name}</h3>
+                        <span class="badge badge-cyan" style="font-size: 0.85rem;"><i class="fa-solid fa-users"></i> ${l.member_count} membros</span>
+                    </div>
+
+                    <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">
+                        ${l.description || 'Sem descrição.'}
+                    </p>
+                </div>
+
+                <div style="padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Criada em: ${l.created_at}</span>
+                    <a href="/campaigns?list_id=${l.id}" class="btn-primary-action" style="font-size: 0.8rem; padding: 0.4rem 0.85rem; text-decoration: none;">
+                        <i class="fa-solid fa-paper-plane"></i> Enviar Campanha
+                    </a>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function openListModal() {
+        document.getElementById('listModal').style.display = 'flex';
+    }
+
+    function closeListModal() {
+        document.getElementById('listModal').style.display = 'none';
+        document.getElementById('listForm').reset();
+    }
+
+    async function submitList(e) {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('lName').value,
+            description: document.getElementById('lDescription').value
+        };
+
+        try {
+            const res = await fetch('/api/lists', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok && result.success) {
+                closeListModal();
+                loadListsPage();
+            } else {
+                alert(result.message || 'Erro ao criar lista.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro de ligação ao servidor.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadListsPage);
+</script>
+{% endblock %}

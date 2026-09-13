@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}MailCraft AI - E-mail Marketing & Automação SaaS | Showcase Tecnológico{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="card-box" style="background: linear-gradient(135deg, #ffffff 0%, #fff5f7 50%, #f0fdfa 100%); padding: 3.5rem 2.5rem; text-align: center; border: 1px solid var(--border); margin-bottom: 2.5rem; position: relative; overflow: hidden;">
+    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(244, 63, 94, 0.1); color: var(--primary); padding: 0.4rem 1.1rem; border-radius: 50px; font-weight: 800; font-size: 0.85rem; margin-bottom: 1.25rem; border: 1px solid rgba(244, 63, 94, 0.2);">
+        <i class="fa-solid fa-gem"></i> PLATAFORMA ENTERPRISE DE EMAIL MARKETING & AUTOMAÇÃO
+    </div>
+    <h1 style="font-size: 2.8rem; font-weight: 900; color: var(--text-main); line-height: 1.15; margin-bottom: 1rem; letter-spacing: -1px;">
+        MailCraft AI <span style="background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SaaS Edition</span>
+    </h1>
+    <p style="font-size: 1.15rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2rem; line-height: 1.6; font-weight: 500;">
+        Plataforma completa de alto desempenho para gestão de audiências, segmentação inteligente de contactos, criação de campanhas personalizadas, catálogo de modelos HTML e análises preditivas de entregabilidade.
+    </p>
+
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/" class="btn-primary-action" style="font-size: 1rem; padding: 0.85rem 1.8rem; text-decoration: none;">
+            <i class="fa-solid fa-gauge-high"></i> Aceder ao Dashboard Principal
+        </a>
+        <a href="/campaigns" class="btn-primary-action" style="background: var(--secondary); font-size: 1rem; padding: 0.85rem 1.8rem; text-decoration: none;">
+            <i class="fa-solid fa-paper-plane"></i> Central de Campanhas
+        </a>
+    </div>
+</div>
+
+<!-- Key Features Showcase Grid -->
+<div style="margin-bottom: 3rem;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+            Funcionalidades de Classe Mundial
+        </h2>
+        <p style="color: var(--text-muted); font-size: 1rem;">
+            Engenharia de software moderna desenhada para impulsionar o ROI de comunicação da sua marca.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <!-- Feature 1 -->
+        <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 16px; background: rgba(244, 63, 94, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-users-gear"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.6rem;">
+                    Gestão Centralizada de Contactos
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Diretório unificado com suporte a etiquetas dinâmicas (Tags), histórico de subscrições, estado de ativação e atribuição multi-lista instantânea.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <a href="/contacts" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    Explorar Contactos <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 16px; background: rgba(6, 182, 212, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.6rem;">
+                    Segmentação por Listas
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Agrupamento de subscritores por critérios demográficos, comportamento de compra ou etapa do funil de vendas para mensagens cirúrgicas.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <a href="/lists" style="color: var(--secondary); font-weight: 700; text-decoration: none; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    Gerir Listas <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 16px; background: rgba(139, 92, 246, 0.1); color: var(--indigo); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.6rem;">
+                    Central de Campanhas & Disparo
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Motor de disparo direto com simulação em tempo real, suporte a agendamento temporal e vinculação inteligente de modelos predefinidos.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <a href="/campaigns" style="color: var(--indigo); font-weight: 700; text-decoration: none; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    Ver Campanhas <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 16px; background: rgba(217, 119, 6, 0.1); color: var(--accent-gold); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.6rem;">
+                    Catálogo de Modelos Responsivos
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Biblioteca com filtros por categoria (Vendas, Newsletters, Onboarding) e modal interativo para edição e teste de código HTML.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <a href="/templates_page" style="color: var(--accent-gold); font-weight: 700; text-decoration: none; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    Ver Modelos <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 16px; background: rgba(244, 63, 94, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.6rem;">
+                    Métricas de Conversão (OR & CTR)
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Dashboard analítico com contagem de aberturas, taxa de clique única, gráfico estatístico e relatórios descarregáveis em CSV e JSON.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <a href="/stats" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    Aceder aos Analytics <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="card-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="width: 56px; height: 56px; border-radius: 16px; background: rgba(6, 182, 212, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem;">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.6rem;">
+                    Arquitetura Robusta & Escalável
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+                    Construído sobre o microframework Flask, SQLite estruturado e interface otimizada com CSS variables para respostas hiperrápidas.
+                </p>
+            </div>
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <span class="badge badge-cyan"><i class="fa-solid fa-code"></i> RESTful API Ready</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
