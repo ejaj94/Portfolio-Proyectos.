@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — FundCraft AI Crowdfunding SaaS{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <div>
+        <h2 style="font-size:1.8rem; font-weight:800;">Painel Executivo de Crowdfunding</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Visão geral das campanhas de financiamento coletivo e angariação em tempo real.</p>
+    </div>
+    <button class="btn-primary" onclick="openNewProjectModal()"><i class="fa-solid fa-plus-circle"></i> Criar Nova Campanha</button>
+</div>
+
+<!-- Top Stats Bar -->
+<div class="stats-grid-top">
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-euro-sign"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statTotalRaised">€ 0.00</h3>
+            <p>Total Angariado</p>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-rocket"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statActiveProjects">0</h3>
+            <p>Campanhas Ativas</p>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statTotalDonations">0</h3>
+            <p>Doações Efetuadas</p>
+        </div>
+    </div>
+    <div class="stat-card-mini">
+        <div class="stat-card-icon"><i class="fa-solid fa-users"></i></div>
+        <div class="stat-card-text">
+            <h3 id="statTotalUsers">0</h3>
+            <p>Comunidade de Apoiantes</p>
+        </div>
+    </div>
+</div>
+
+<!-- Projects Cards Showcase Grid -->
+<h3 style="font-size:1.3rem; font-weight:800; margin-bottom:1.25rem;"><i class="fa-solid fa-fire text-secondary"></i> Projetos em Destaque</h3>
+
+<div id="projectsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:1.5rem; margin-bottom:2.5rem;">
+    <!-- JS will populate project cards -->
+</div>
+
+<!-- Recent Donations Section -->
+<div style="background:var(--bg-card); border:1px solid var(--border); border-radius:18px; padding:1.5rem;">
+    <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+        <span><i class="fa-solid fa-list-check" style="color:var(--primary);"></i> Últimas Doações & Apoios Recebidos</span>
+        <a href="/donations" style="color:var(--primary); font-size:0.85rem; text-decoration:none; font-weight:700;">Ver Todas →</a>
+    </h3>
+
+    <div class="data-table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Doador</th>
+                    <th>Projeto</th>
+                    <th>Valor do Apoio</th>
+                    <th>Recompensa</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody id="recentDonationsTable">
+                <!-- JS will populate -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Create Project -->
+<div class="modal-overlay" id="newProjectModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-rocket" style="color:var(--primary);"></i> Lançar Nova Campanha</h3>
+            <span class="close-modal" onclick="closeNewProjectModal()">&times;</span>
+        </div>
+        <form id="newProjectForm" onsubmit="submitNewProject(event)">
+            <div class="form-group">
+                <label>Título do Projeto</label>
+                <input type="text" class="form-control" id="pTitle" required placeholder="Ex: Central Solar Comunitária">
+            </div>
+            <div class="form-group">
+                <label>Nome do Criador / Entidade</label>
+                <input type="text" class="form-control" id="pCreator" required placeholder="Ex: Associação EcoVerde">
+            </div>
+            <div class="form-group">
+                <label>Categoria</label>
+                <select class="form-control" id="pCategory">
+                    <option value="Tecnologia & Inovação">Tecnologia & Inovação</option>
+                    <option value="Mobilidade Urbana">Mobilidade Urbana</option>
+                    <option value="Educação Social">Educação Social</option>
+                    <option value="Cinema & Artes">Cinema & Artes</option>
+                    <option value="Sustentabilidade">Sustentabilidade</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Objetivo Financeiro (€)</label>
+                <input type="number" step="100" class="form-control" id="pGoal" required placeholder="Ex: 15000">
+            </div>
+            <div class="form-group">
+                <label>Descrição do Projeto</label>
+                <textarea class="form-control" id="pDesc" rows="3" required placeholder="Explique o impacto social e técnico do projeto..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Data Limite</label>
+                <input type="date" class="form-control" id="pEndDate" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:1rem;">
+                <i class="fa-solid fa-paper-plane"></i> Publicar Projeto no FundCraft
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Donate -->
+<div class="modal-overlay" id="donateModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-heart" style="color:#ef4444;"></i> Efetuar Apoio / Doação</h3>
+            <span class="close-modal" onclick="closeDonateModal()">&times;</span>
+        </div>
+        <form id="donateForm" onsubmit="submitDonate(event)">
+            <input type="hidden" id="dProjectId">
+            <div class="form-group">
+                <label>Projeto Selecionado</label>
+                <input type="text" class="form-control" id="dProjectTitle" readonly style="opacity:0.7;">
+            </div>
+            <div class="form-group">
+                <label>O Seu Nome Completo</label>
+                <input type="text" class="form-control" id="dDonorName" required placeholder="Ex: Ana Silva">
+            </div>
+            <div class="form-group">
+                <label>O Seu E-mail</label>
+                <input type="email" class="form-control" id="dDonorEmail" required placeholder="Ex: ana@exemplo.pt">
+            </div>
+            <div class="form-group">
+                <label>Valor da Contribuição (€)</label>
+                <input type="number" step="10" min="5" class="form-control" id="dAmount" required placeholder="Ex: 50">
+            </div>
+            <div class="form-group">
+                <label>Nível de Recompensa</label>
+                <select class="form-control" id="dReward">
+                    <option value="Apoio Livre (Agradecimento Digital)">Apoio Livre (Agradecimento Digital)</option>
+                    <option value="Patrono Prata (Mencao na Pagina + Kit)">Patrono Prata (Menção na Página + Kit)</option>
+                    <option value="Patrono Ouro (Acesso VIP + Convite Estreia)">Patrono Ouro (Acesso VIP + Convite Estreia)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:1rem; background:linear-gradient(135deg, #10b981, #059669);">
+                <i class="fa-solid fa-lock"></i> Confirmar Doação Inviolável
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    async function loadStats() {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        document.getElementById('statTotalRaised').innerText = '€ ' + data.total_raised.toLocaleString('pt-PT', {minimumFractionDigits: 2});
+        document.getElementById('statActiveProjects').innerText = data.active_projects;
+        document.getElementById('statTotalDonations').innerText = data.total_donations;
+        document.getElementById('statTotalUsers').innerText = data.total_users;
+    }
+
+    async function loadProjects() {
+        const res = await fetch('/api/projects');
+        const projects = await res.json();
+        const grid = document.getElementById('projectsGrid');
+        grid.innerHTML = '';
+
+        projects.forEach(p => {
+            const card = document.createElement('div');
+            card.style = `
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                overflow: hidden;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                display: flex; flex-direction: column; justify-content: space-between;
+            `;
+            card.innerHTML = `
+                <div>
+                    <div style="height:170px; background:url('${p.image_url}') center/cover no-repeat; position:relative;">
+                        <span style="position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.75); color:#fff; font-size:0.75rem; font-weight:700; padding:0.3rem 0.8rem; border-radius:20px; backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.2);">
+                            ${p.category}
+                        </span>
+                        <span style="position:absolute; bottom:12px; left:12px; background:${p.status === 'Financiado' ? '#10b981' : '#3b82f6'}; color:#fff; font-size:0.75rem; font-weight:800; padding:0.25rem 0.75rem; border-radius:8px;">
+                            ${p.status}
+                        </span>
+                    </div>
+                    <div style="padding:1.25rem;">
+                        <h4 style="font-size:1.15rem; font-weight:800; margin-bottom:0.4rem; color:#fff;">${p.title}</h4>
+                        <p style="font-size:0.8rem; color:var(--primary); font-weight:700; margin-bottom:0.75rem;">
+                            <i class="fa-solid fa-user-astronaut"></i> ${p.creator_name}
+                        </p>
+                        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5; margin-bottom:1.25rem; height:3.8em; overflow:hidden;">
+                            ${p.description}
+                        </p>
+
+                        <!-- Progress Bar -->
+                        <div style="margin-bottom:0.5rem;">
+                            <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; margin-bottom:0.3rem;">
+                                <span>€ ${p.raised_amount.toLocaleString('pt-PT')} angariados</span>
+                                <span style="color:var(--primary);">${p.progress_pct}%</span>
+                            </div>
+                            <div style="width:100%; height:8px; background:#1f2937; border-radius:10px; overflow:hidden;">
+                                <div style="width:${p.progress_pct}%; height:100%; background:linear-gradient(90deg, #10b981, #3b82f6); border-radius:10px;"></div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted); font-weight:600;">
+                            <span>Meta: € ${p.goal_amount.toLocaleString('pt-PT')}</span>
+                            <span><i class="fa-regular fa-clock"></i> Fim: ${p.end_date}</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:1.25rem; border-top:1px solid var(--border); background:rgba(0,0,0,0.2);">
+                    <button class="btn-primary" style="width:100%; justify-content:center;" onclick="openDonateModal(${p.id}, '${p.title.replace(/'/g, "\\'")}')">
+                        <i class="fa-solid fa-heart"></i> Apoiar Este Projeto
+                    </button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    async function loadDonations() {
+        const res = await fetch('/api/donations');
+        const donations = await res.json();
+        const tbody = document.getElementById('recentDonationsTable');
+        tbody.innerHTML = '';
+
+        donations.slice(0, 5).forEach(d => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="font-weight:700;"><i class="fa-solid fa-circle-user" style="color:var(--primary);"></i> ${d.donor_name}</td>
+                <td style="color:#fff; font-weight:600;">${d.project_title}</td>
+                <td style="color:var(--primary); font-weight:800;">€ ${d.amount.toFixed(2)}</td>
+                <td><span style="background:rgba(59,130,246,0.15); color:#60a5fa; padding:0.25rem 0.6rem; border-radius:6px; font-size:0.78rem; font-weight:700;">${d.reward_tier}</span></td>
+                <td style="color:var(--text-muted); font-size:0.8rem;">${d.created_at}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function openNewProjectModal() { document.getElementById('newProjectModal').style.display = 'flex'; }
+    function closeNewProjectModal() { document.getElementById('newProjectModal').style.display = 'none'; }
+
+    function openDonateModal(id, title) {
+        document.getElementById('dProjectId').value = id;
+        document.getElementById('dProjectTitle').value = title;
+        document.getElementById('donateModal').style.display = 'flex';
+    }
+    function closeDonateModal() { document.getElementById('donateModal').style.display = 'none'; }
+
+    async function submitNewProject(e) {
+        e.preventDefault();
+        const payload = {
+            title: document.getElementById('pTitle').value,
+            creator_name: document.getElementById('pCreator').value,
+            category: document.getElementById('pCategory').value,
+            goal_amount: document.getElementById('pGoal').value,
+            description: document.getElementById('pDesc').value,
+            end_date: document.getElementById('pEndDate').value
+        };
+
+        const res = await fetch('/api/projects', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+            closeNewProjectModal();
+            loadProjects();
+            loadStats();
+        } else {
+            alert(data.message);
+        }
+    }
+
+    async function submitDonate(e) {
+        e.preventDefault();
+        const payload = {
+            project_id: document.getElementById('dProjectId').value,
+            donor_name: document.getElementById('dDonorName').value,
+            donor_email: document.getElementById('dDonorEmail').value,
+            amount: document.getElementById('dAmount').value,
+            reward_tier: document.getElementById('dReward').value
+        };
+
+        const res = await fetch('/api/donations', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+            closeDonateModal();
+            loadProjects();
+            loadStats();
+            loadDonations();
+        } else {
+            alert(data.message);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadStats();
+        loadProjects();
+        loadDonations();
+    });
+</script>
+{% endblock %}

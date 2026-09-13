@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 84: FundCraft AI SaaS - Plataforma de Crowdfunding & Financiamento Colaborativo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-glow: rgba(16, 185, 129, 0.35);
+            --secondary: #3b82f6;
+            --bg-dark: #090d16;
+            --bg-card: #111827;
+            --border: #1f2937;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --accent-gold: #f59e0b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .showcase-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #34d399, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 780px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+
+        .badge-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge-item {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #34d399;
+        }
+
+        .grid-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.25s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px var(--primary-glow);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .interactive-preview {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-launch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--primary), #059669);
+            color: #fff;
+            padding: 0.9rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1rem;
+            box-shadow: 0 0 20px var(--primary-glow);
+            transition: all 0.2s;
+        }
+
+        .btn-launch:hover {
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body>
+
+<div class="showcase-container">
+    <div class="hero-banner">
+        <h1 class="hero-title">💰 FundCraft AI SaaS - Dia 84</h1>
+        <p class="hero-subtitle">Plataforma SaaS completa de Crowdfunding & Financiamento Colaborativo, gestão de projetos inovadores, metas financeiras em tempo real, acompanhamento de doadores e métricas de angariação.</p>
+        <div class="badge-bar">
+            <span class="badge-item"><i class="fa-solid fa-server"></i> Porta Flask: 6937</span>
+            <span class="badge-item"><i class="fa-solid fa-language"></i> 100% Português de Portugal (pt-PT)</span>
+            <span class="badge-item"><i class="fa-solid fa-palette"></i> Verde Esmeralda & Azul Neon</span>
+            <span class="badge-item"><i class="fa-solid fa-shield-check"></i> Auditoria de Doações</span>
+        </div>
+    </div>
+
+    <div class="grid-features">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-rocket"></i></div>
+            <h3>Projetos & Campanhas</h3>
+            <p>Gestão e publicação de projetos por categorias (Tecnologia, Sustentabilidade, Cinema, Educação) com metas e prazo limite.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-user-astronaut"></i></div>
+            <h3>Criadores & Promotores</h3>
+            <p>Perfil verificado dos empreendedores, biografia, portfólio de projetos ativos e histórico de angariação acumulada.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-bullseye"></i></div>
+            <h3>Objetivos & Metas (€)</h3>
+            <p>Definição de metas financeiras claras com transição automática para estado Financiado assim que atinge a quota.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+            <h3>Doações & Apoios</h3>
+            <p>Sistema de doação inviolável com seleção de níveis de recompensa (Patrono Prata, Ouro, Apoio Livre) e comprovativo digital.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <h3>Progresso em Tempo Real</h3>
+            <p>Barra visual de percentagem angariada (%), indicador de valor em falta e fecho automático da campanha.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-users"></i></div>
+            <h3>Gestão de Membros</h3>
+            <p>Diretório de apoiantes, investidores anjo e patronos frequentes com histórico de contribuições comunitárias.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-chart-pie"></i></div>
+            <h3>Dashboard Executivo</h3>
+            <p>Métricas consolidadas de total angariado, volume de doações, taxa de sucesso de campanhas e exportação em CSV/JSON.</p>
+        </div>
+    </div>
+
+    <div class="interactive-preview">
+        <div class="preview-header">
+            <div>
+                <h2><i class="fa-solid fa-desktop" style="color:var(--primary);"></i> Aplicação Ativa na Porta 6937</h2>
+                <p style="color:var(--text-muted); font-size:0.9rem;">Servidor Flask local a responder em tempo real</p>
+            </div>
+            <a href="/" class="btn-launch">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Painel Principal
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

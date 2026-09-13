@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Projetos — FundCraft AI Crowdfunding SaaS{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <div>
+        <h2 style="font-size:1.8rem; font-weight:800;">Catálogo Geral de Projetos</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Explore e apoie projetos inovadores, causas sociais e iniciativas de tecnologia em Portugal.</p>
+    </div>
+</div>
+
+<div id="fullProjectsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:1.5rem;">
+    <!-- JS populates -->
+</div>
+
+<script>
+    async function loadFullProjects() {
+        const res = await fetch('/api/projects');
+        const projects = await res.json();
+        const grid = document.getElementById('fullProjectsGrid');
+        grid.innerHTML = '';
+
+        projects.forEach(p => {
+            const card = document.createElement('div');
+            card.style = `
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                overflow: hidden;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                display: flex; flex-direction: column; justify-content: space-between;
+            `;
+            card.innerHTML = `
+                <div>
+                    <div style="height:180px; background:url('${p.image_url}') center/cover no-repeat; position:relative;">
+                        <span style="position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.75); color:#fff; font-size:0.75rem; font-weight:700; padding:0.3rem 0.8rem; border-radius:20px; backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.2);">
+                            ${p.category}
+                        </span>
+                        <span style="position:absolute; bottom:12px; left:12px; background:${p.status === 'Financiado' ? '#10b981' : '#3b82f6'}; color:#fff; font-size:0.75rem; font-weight:800; padding:0.25rem 0.75rem; border-radius:8px;">
+                            ${p.status}
+                        </span>
+                    </div>
+                    <div style="padding:1.25rem;">
+                        <h4 style="font-size:1.2rem; font-weight:800; margin-bottom:0.4rem; color:#fff;">${p.title}</h4>
+                        <p style="font-size:0.85rem; color:var(--primary); font-weight:700; margin-bottom:0.75rem;">
+                            <i class="fa-solid fa-user-astronaut"></i> ${p.creator_name}
+                        </p>
+                        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5; margin-bottom:1.25rem;">
+                            ${p.description}
+                        </p>
+
+                        <div style="margin-bottom:0.5rem;">
+                            <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; margin-bottom:0.3rem;">
+                                <span>€ ${p.raised_amount.toLocaleString('pt-PT')} angariados</span>
+                                <span style="color:var(--primary);">${p.progress_pct}%</span>
+                            </div>
+                            <div style="width:100%; height:8px; background:#1f2937; border-radius:10px; overflow:hidden;">
+                                <div style="width:${p.progress_pct}%; height:100%; background:linear-gradient(90deg, #10b981, #3b82f6); border-radius:10px;"></div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted); font-weight:600;">
+                            <span>Meta: € ${p.goal_amount.toLocaleString('pt-PT')}</span>
+                            <span><i class="fa-regular fa-clock"></i> Fim: ${p.end_date}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadFullProjects);
+</script>
+{% endblock %}

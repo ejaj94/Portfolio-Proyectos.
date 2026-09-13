@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Criadores — FundCraft AI Crowdfunding SaaS{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <div>
+        <h2 style="font-size:1.8rem; font-weight:800;">Diretório de Criadores & Promotores</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Empreendedores, investigadores e artistas que lideram projetos na plataforma.</p>
+    </div>
+</div>
+
+<div id="creatorsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem;">
+    <!-- JS populates -->
+</div>
+
+<script>
+    async function loadCreators() {
+        const res = await fetch('/api/creators');
+        const creators = await res.json();
+        const grid = document.getElementById('creatorsGrid');
+        grid.innerHTML = '';
+
+        creators.forEach(c => {
+            const card = document.createElement('div');
+            card.style = `
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                padding: 1.5rem;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            `;
+            card.innerHTML = `
+                <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1rem;">
+                    <div style="width:50px; height:50px; border-radius:50%; background:linear-gradient(135deg, var(--primary), var(--secondary)); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:1.2rem;">
+                        ${c.name.charAt(0)}
+                    </div>
+                    <div>
+                        <h4 style="font-size:1.1rem; font-weight:800; color:#fff;">${c.name}</h4>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">${c.email}</p>
+                    </div>
+                </div>
+                <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5; margin-bottom:1.25rem;">
+                    ${c.bio}
+                </p>
+                <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border); padding-top:0.8rem; font-size:0.8rem; font-weight:700;">
+                    <span><i class="fa-solid fa-folder-open" style="color:var(--primary);"></i> ${c.project_count} Projeto(s)</span>
+                    <span style="color:var(--primary);"><i class="fa-solid fa-award"></i> Criador Verificado</span>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadCreators);
+</script>
+{% endblock %}
