@@ -6292,3 +6292,58 @@ function updateSubscriptionPrice(selectedVal) {
     const btnEl = document.getElementById('w-submit-btn');
     if (btnEl) btnEl.textContent = `📩 Solicitar Inscrição (€${price})`;
 }
+
+/* ==========================================================================
+   COOKIE CONSENT & PRIVACY POLICY MANAGEMENT (GDPR / RGPD COMPLIANT)
+   ========================================================================== */
+function initCookieBanner() {
+    const banner = document.getElementById("cookie-banner");
+    const acceptBtn = document.getElementById("btn-cookie-accept");
+    const essentialBtn = document.getElementById("btn-cookie-essential");
+
+    if (!banner) return;
+
+    const cookieConsent = localStorage.getItem("cookie_consent");
+    if (!cookieConsent) {
+        setTimeout(() => {
+            banner.classList.add("show");
+        }, 1200);
+    }
+
+    if (acceptBtn) {
+        acceptBtn.addEventListener("click", () => {
+            localStorage.setItem("cookie_consent", "accepted");
+            banner.classList.remove("show");
+        });
+    }
+
+    if (essentialBtn) {
+        essentialBtn.addEventListener("click", () => {
+            localStorage.setItem("cookie_consent", "essential");
+            banner.classList.remove("show");
+        });
+    }
+}
+
+function openPrivacyModal() {
+    const modal = document.getElementById("privacy-modal");
+    if (modal) {
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+}
+
+function closePrivacyModal() {
+    const modal = document.getElementById("privacy-modal");
+    if (modal) {
+        modal.classList.remove("active");
+        document.body.style.overflow = "";
+    }
+}
+
+// Automatically initialize cookie consent banner on window load
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCookieBanner);
+} else {
+    initCookieBanner();
+}

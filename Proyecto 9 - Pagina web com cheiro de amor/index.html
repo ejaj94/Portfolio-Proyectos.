@@ -803,20 +803,22 @@
 
           <!-- Column 3: Policy / Info -->
           <div>
-            <h4 class="footer-title" id="footer-info-title">Informações</h4>
+            <h4 class="footer-title" id="footer-info-title">Informações & Legal</h4>
             <ul class="footer-links">
               <li>
-                <a href="https://wa.me/351939636842" target="_blank" id="footer-info-shipping"
-                  >Prazos de Envio</a
-                >
+                <a href="#" onclick="openPrivacyModal(); return false;" id="footer-link-privacy">Política de Privacidade (RGPD)</a>
               </li>
               <li>
-                <a
-                  href="https://wa.me/351939636842"
-                  target="_blank"
-                  id="footer-info-custom"
-                  >Encomendas Especiais</a
-                >
+                <a href="#" onclick="openPrivacyModal(); return false;" id="footer-link-cookies">Política de Cookies</a>
+              </li>
+              <li>
+                <a href="#" onclick="openPrivacyModal(); return false;" id="footer-link-terms">Termos & Condições</a>
+              </li>
+              <li>
+                <a href="https://wa.me/351939636842" target="_blank" id="footer-info-shipping">Prazos de Envio</a>
+              </li>
+              <li>
+                <a href="https://wa.me/351939636842" target="_blank" id="footer-info-custom">Encomendas Especiais</a>
               </li>
             </ul>
           </div>
@@ -826,6 +828,12 @@
             <h4 class="footer-title" id="footer-contact-title">
               Contacto Direto
             </h4>
+            <div class="footer-contact-item">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              <a href="mailto:comcheirodeamor@gmail.com" style="color: inherit; text-decoration: none;">comcheirodeamor@gmail.com</a>
+            </div>
             <div class="footer-contact-item">
               <svg
                 width="18"
@@ -1029,7 +1037,107 @@
       </div>
     </div>
 
+    <!-- ==========================================================================
+       COOKIE CONSENT BANNER (GDPR / RGPD COMPLIANT)
+       ========================================================================== -->
+    <div id="cookie-banner" class="cookie-banner">
+      <div class="cookie-banner-container">
+        <div class="cookie-banner-text">
+          <span>🍪 <strong>Aviso de Cookies & Privacidade (RGPD)</strong></span>
+          <p>
+            Utilizamos cookies essenciais e analíticas para garantir a melhor experiência de navegação no nosso site, em conformidade com o Regulamento Geral de Proteção de Dados (RGPD). Ao continuar a navegar, concorda com a nossa política.
+          </p>
+        </div>
+        <div class="cookie-banner-actions">
+          <button id="btn-cookie-accept" class="btn-cookie btn-cookie-primary">Aceitar Todos</button>
+          <button id="btn-cookie-essential" class="btn-cookie btn-cookie-secondary">Apenas Essenciais</button>
+          <button onclick="openPrivacyModal()" class="btn-cookie btn-cookie-link">Ver Política</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+       PRIVACY POLICY & LEGAL TERMS MODAL
+       ========================================================================== -->
+    <div id="privacy-modal" class="privacy-modal-overlay">
+      <div class="privacy-modal-card">
+        <button class="privacy-modal-close" onclick="closePrivacyModal()" aria-label="Fechar">&times;</button>
+        
+        <div class="privacy-modal-header">
+          <span class="privacy-badge">Conformidade RGPD / GDPR</span>
+          <h3>Política de Privacidade & Termos Legais</h3>
+          <p>Com Cheiro de Amor® — Marca Registada INPI N.º 758901</p>
+        </div>
+
+        <div class="privacy-modal-body">
+          <section class="privacy-section">
+            <h4>1. Responsável pelo Tratamento de Dados</h4>
+            <p>
+              A marca <strong>Com Cheiro de Amor®</strong>, com sede em Faro, Portugal, é a responsável pelo tratamento dos dados pessoais recolhidos através deste website. Para qualquer questão relacionada com a proteção de dados ou exercício dos seus direitos legais, pode contactar-nos através do e-mail oficial: <a href="mailto:comcheirodeamor@gmail.com">comcheirodeamor@gmail.com</a> ou pelo contacto telefónico +351 939 636 842.
+            </p>
+          </section>
+
+          <section class="privacy-section">
+            <h4>2. Recolha e Finalidade dos Dados Pessoais</h4>
+            <p>
+              Os dados pessoais facultados voluntariamente pelo utilizador (nome, e-mail, número de telefone e mensagens) através dos formulários de encomenda, workshops ou contacto direto são utilizados exclusivamente para:
+            </p>
+            <ul>
+              <li>Processamento, confirmação e envio de encomendas artesanais.</li>
+              <li>Inscrição e disponibilização de acessos aos Workshops Online VIP.</li>
+              <li>Apoio ao cliente, esclarecimento de dúvidas e comunicação direta.</li>
+            </ul>
+            <p>Garantimos que os seus dados nunca serão vendidos, cedidos ou partilhados com terceiros para fins publicitários.</p>
+          </section>
+
+          <section class="privacy-section">
+            <h4>3. Base Legal para o Tratamento (RGPD)</h4>
+            <p>
+              O tratamento dos seus dados pessoais é realizado em estrita conformidade com o <strong>Regulamento Geral de Proteção de Dados (Regulamento UE 2016/679)</strong> da União Europeia, fundamentando-se no consentimento explícito do titular dos dados e na execução de diligências pré-contratuais a pedido do utilizador.
+            </p>
+          </section>
+
+          <section class="privacy-section">
+            <h4>4. Política de Cookies</h4>
+            <p>
+              Este website utiliza cookies para otimizar o seu funcionamento. As cookies utilizadas dividem-se em:
+            </p>
+            <ul>
+              <li><strong>Cookies Essenciais:</strong> Necessárias para a navegação, memorização do carrinho de compras e seleção do idioma preferido.</li>
+              <li><strong>Cookies de Funcionalidade:</strong> Permitem memorizar as preferências do utilizador para uma experiência personalizada.</li>
+            </ul>
+            <p>Pode a qualquer momento configurar o seu navegador para recusar ou eliminar as cookies guardadas.</p>
+          </section>
+
+          <section class="privacy-section">
+            <h4>5. Direitos do Titular dos Dados</h4>
+            <p>
+              Nos termos do RGPD, é garantido ao utilizador o direito de:
+            </p>
+            <ul>
+              <li>Solicitar o acesso aos seus dados pessoais guardados.</li>
+              <li>Solicitar a retificação ou atualização de dados incorretos.</li>
+              <li>Solicitar a eliminação total dos seus dados ("Direito ao Esquecimento").</li>
+              <li>Opor-se ao tratamento de dados ou retirar o consentimento a qualquer momento.</li>
+            </ul>
+            <p>Para exercer qualquer um destes direitos, envie o seu pedido por escrito para <a href="mailto:comcheirodeamor@gmail.com">comcheirodeamor@gmail.com</a>.</p>
+          </section>
+
+          <section class="privacy-section">
+            <h4>6. Propriedade Intelectual e Marca Registada</h4>
+            <p>
+              A marca <strong>Com Cheiro de Amor®</strong> encontra-se registada e protegida no INPI (Instituto Nacional da Propriedade Industrial) sob o registo N.º 758901. Todos os conteúdos, logótipos, fotografias de produtos e textos presentes neste site são de propriedade exclusiva, sendo expressamente proibida a sua reprodução sem autorização prévia por escrito.
+            </p>
+          </section>
+        </div>
+
+        <div class="privacy-modal-footer">
+          <button class="btn btn-primary" onclick="closePrivacyModal()">Compreendi e Aceito</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Main Application JavaScript -->
-    <script src="app.js?v=1.0.6"></script>
+    <script src="app.js?v=1.0.7"></script>
   </body>
 </html>
