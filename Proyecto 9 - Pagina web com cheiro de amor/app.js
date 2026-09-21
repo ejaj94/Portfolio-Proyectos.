@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
 {
+        "id": "sache-aromatico-cera-1",
+        "category": "vela",
+        "price": 3.90,
+        "image": "assets/saches_aromaticos.jpg",
+        "qty": 1,
+        "pt": {
+                "name": "Sachê Aromático de Cera Vegetal",
+                "categoryLabel": "COLEÇÃO DE OUTONO / INVERNO • PERFUMADOR DE GAVETA & ARMÁRIO",
+                "aromaBrief": "Elegantes saches suspensos de cera de soja decorados com anís estrelado, rodela de laranja desidratada e folha de ouro.",
+                "description": "Pequenas joias perfumadas para perfumar delicadamente os seus armários, gavetas e espaços especiais! Criados artesanalmente com cera de soja 100% vegetal e fita de cetim elegante, estes saches aromáticos vêm decorados com botânicos verdadeiros: anís estrelado inteiro, rodelas de laranja desidratada e delicados flocos de folha de ouro. Libertam uma fragrância envolvente e duradoura de canela especiada, flor de laranjeira e baunilha.",
+                "aromaProfile": "Canela em Rama, Anís Estrelado, Laranja Doce, Baunilha, Cedro"
+        },
+        "es": {
+                "name": "Sachê Aromático de Cera Vegetal",
+                "categoryLabel": "COLECCIÓN DE OTOÑO / INVIERNO • PERFUMADOR DE ARMARIO Y CAJONES",
+                "aromaBrief": "Elegantes sachets colgantes de cera de soja decorados con anís estrellado, rodaja de naranja deshidratada y pan de oro.",
+                "description": "¡Pequeñas joyas perfumadas para perfumar delicadamente sus armarios, cajones y espacios especiales! Creados artesanalmente con cera de soja 100% vegetal y cinta de satén elegante, estos sachets aromáticos vienen decorados con botánicos reales: anís estrellado entero, rodajas de naranja deshidratada y delicados copos de pan de oro. Liberan una fragancia envolvente y duradera de canela especiada, flor de azahar y vainilla.",
+                "aromaProfile": "Canela en Rama, Anís Estrellado, Naranja Dulce, Vainilla, Cedro"
+        },
+        "en": {
+                "name": "Botanical Wax Sachet",
+                "categoryLabel": "AUTUMN / WINTER COLLECTION • WARDROBE & DRAWER FRESHENER",
+                "aromaBrief": "Handcrafted wax tablet sachet decorated with real star anise, dried orange slice, and gold leaf flakes.",
+                "description": "Scented botanical jewelry for your wardrobe, closets, and drawers! Handcrafted from 100% natural eco-friendly soy wax with a satin ribbon, these botanical wax tablets are infused with high-grade perfume oils and embedded with natural star anise, dried orange slices, and glistening gold leaf flakes. Delivers a long-lasting cozy scent of spiced cinnamon, sweet orange, and vanilla.",
+                "aromaProfile": "Cinnamon Stick, Star Anise, Sweet Orange, Vanilla, Cedarwood"
+        },
+        "fr": {
+                "name": "Sachet Parfumé en Cire Végétale",
+                "categoryLabel": "COLLECTION D'AUTOMNE / HIVER • PARFUM D'ARMOIRE ET TIROIR",
+                "aromaBrief": "Sublimes tablettes de cire parfumée suspendues avec anis étoilé, tranche d'orange séchée et feuille d'or.",
+                "description": "De véritables bijoux parfumés pour embaumer délicatement vos armoires, penderies et tiroirs ! Élaborés à la main en cire de soja végétale avec un ruban de satin, ces sachets aromatiques sont ornés de botaniques séchés : anis étoilé entier, tranches d'orange séchées et éclats de feuille d’or. Ils diffusent un parfum envoûtant de cannelle épicée, orange douce et vanille.",
+                "aromaProfile": "Bâton de Cannelle, Anis Étoilé, Orange Douce, Vanille, Cèdre"
+        }
+},
+{
         "id": "candle-bulldog-frances-1",
         "category": "vaso",
         "price": 16.90,
