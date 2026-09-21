@@ -396,7 +396,6 @@ const PRODUCTS = [
 
 {
         "id": "candle-autumn-bear-1",
-        "candle-autumn-bear-2",
         "category": "vaso",
         "price": 13.9,
         "image": "assets/vela_tabuleiro_ursinho.jpg",
