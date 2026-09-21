@@ -5668,6 +5668,12 @@ document.addEventListener("DOMContentLoaded", () => {
             currentPage = 1;
         }
 
+        // Toggle Coleção de Outono Banner
+        const outonoBanner = document.getElementById("collection-banner-outono");
+        if (outonoBanner) {
+            outonoBanner.style.display = (categoryFilter === "outono") ? "block" : "none";
+        }
+
         let filteredProducts = getFilteredProducts(categoryFilter);
 
         const totalProducts = filteredProducts.length;

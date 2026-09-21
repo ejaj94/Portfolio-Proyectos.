@@ -2443,3 +2443,90 @@ body { top: 0 !important; }
   transform: translate(-50%, -50%) scale(1.08);
   filter: drop-shadow(0 16px 32px rgba(46, 37, 34, 0.22)) brightness(1.04);
 }
+
+/* ==========================================================================
+   COLLECTION BANNER STYLING
+   ========================================================================== */
+.collection-banner-container {
+  margin: 1.5rem 0 2.5rem 0;
+  width: 100%;
+  animation: fadeInDown 0.5s ease-out forwards;
+}
+
+.collection-banner-card {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(46, 37, 34, 0.15);
+  border: 1px solid var(--color-border);
+}
+
+.collection-banner-img {
+  width: 100%;
+  max-height: 440px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.8s ease;
+}
+
+.collection-banner-card:hover .collection-banner-img {
+  transform: scale(1.02);
+}
+
+.collection-banner-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2.5rem;
+  background: linear-gradient(to top, rgba(20, 14, 12, 0.88) 0%, rgba(20, 14, 12, 0.45) 70%, transparent 100%);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.collection-banner-tag {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-accent-gold);
+  background: rgba(212, 175, 55, 0.25);
+  border: 1px solid var(--color-accent-gold);
+  padding: 5px 16px;
+  border-radius: 50px;
+  width: fit-content;
+}
+
+.collection-banner-title {
+  font-family: var(--font-title);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.collection-banner-desc {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 750px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .collection-banner-img {
+    max-height: 280px;
+  }
+  .collection-banner-content {
+    padding: 1.5rem;
+  }
+  .collection-banner-title {
+    font-size: 1.8rem;
+  }
+  .collection-banner-desc {
+    font-size: 0.9rem;
+  }
+}
