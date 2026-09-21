@@ -4977,6 +4977,18 @@ const TRANSLATIONS = {
         en: "Decorative Pieces",
         fr: "Pièces Décoratives"
     },
+    "nav-link-outono": {
+        pt: "Coleção de Outono",
+        es: "Colección de Otoño",
+        en: "Autumn Collection",
+        fr: "Collection d'Automne"
+    },
+    "filter-outono": {
+        pt: "Coleção de Outono",
+        es: "Colección de Otoño",
+        en: "Autumn Collection",
+        fr: "Collection d'Automne"
+    },
     "filter-verao": {
         pt: "Coleção de Verão",
         es: "Colección de Verano",
@@ -5339,6 +5351,21 @@ document.addEventListener("DOMContentLoaded", () => {
     let activeModalProductId = null;
     let activeModalQty = 1;
 
+    // Outono collection product IDs
+    const OUTONO_PRODUCT_IDS = [
+        "candle-cinnamon-1",
+        "candle-abobora-branca-1",
+        "candle-abobora-terracota-1",
+        "candle-leafs-1",
+        "candle-anis-laranja-1",
+        "candle-autumn-bear-1",
+        "candle-cogumelo-1",
+        "candle-carrossel-vinho-1",
+        "candle-carrossel-vinho-tampa-dourada-1",
+        "candle-carrossel-azul-1",
+        "candle-carrossel-branco-1"
+    ];
+
     // Helper function to resolve active filtered products including soaps
     const getFilteredProducts = (category) => {
         if (category === "sabonete") {
@@ -5347,6 +5374,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return PRODUCTS;
         } else if (category === "verao") {
             return PRODUCTS.filter(p => p.id.startsWith("verao-"));
+        } else if (category === "outono") {
+            return PRODUCTS.filter(p => OUTONO_PRODUCT_IDS.includes(p.id) || p.id.startsWith("outono-") || p.category === "outono");
         } else {
             return PRODUCTS.filter(p => p.category === category);
         }
@@ -5371,6 +5400,24 @@ document.addEventListener("DOMContentLoaded", () => {
             const totalPages = Math.ceil(totalProducts / productsPerPage);
             if (currentPage < totalPages) {
                 changePage(currentPage + 1);
+            }
+        });
+    }
+
+    // Nav link for Coleção de Outono
+    const navLinkOutono = document.getElementById("nav-link-outono");
+    if (navLinkOutono) {
+        navLinkOutono.addEventListener("click", (e) => {
+            e.preventDefault();
+            const catalogSection = document.getElementById("catalogo");
+            if (catalogSection) {
+                catalogSection.scrollIntoView({ behavior: "smooth" });
+            }
+            const filterOutonoTab = document.getElementById("filter-outono");
+            if (filterOutonoTab) {
+                setTimeout(() => {
+                    filterOutonoTab.click();
+                }, 100);
             }
         });
     }
@@ -5516,16 +5563,7 @@ document.addEventListener("DOMContentLoaded", () => {
             currentPage = 1;
         }
 
-        let filteredProducts;
-        if (categoryFilter === "sabonete") {
-            filteredProducts = SOAP_GALLERY;
-        } else if (categoryFilter === "all") {
-            filteredProducts = PRODUCTS;
-        } else if (categoryFilter === "verao") {
-            filteredProducts = PRODUCTS.filter(p => p.id.startsWith("verao-"));
-        } else {
-            filteredProducts = PRODUCTS.filter(p => p.category === categoryFilter);
-        }
+        let filteredProducts = getFilteredProducts(categoryFilter);
 
         const totalProducts = filteredProducts.length;
         const totalPages = Math.ceil(totalProducts / productsPerPage);
