@@ -6,7 +6,7 @@ import sqlite3
 from urllib.parse import parse_qs, urlparse
 
 PORT = 8080
-DIRECTORY = r"C:\Users\ANGEL RAFAEL\Desktop\Portfolio de programacion\Proyectos reales\Com cheiro de amor pagina web Stephanie Santos"
+DIRECTORY = r"C:\Users\enman\Desktop\Portfolio de programacion\Proyectos reales\Com cheiro de amor pagina web Stephanie Santos"
 DB_PATH = os.path.join(DIRECTORY, "workshops.db")
 
 def init_db():

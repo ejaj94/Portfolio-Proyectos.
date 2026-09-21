@@ -876,17 +876,24 @@
   
     <!-- WORKSHOP REGISTRATION MODAL -->
     <!-- WORKSHOP REGISTRATION & SUBSCRIPTION MODAL -->
-    <!-- WORKSHOP REGISTRATION & SUBSCRIPTION MODAL -->
     <div id="workshop-modal" class="workshop-modal-overlay">
       <div class="workshop-modal-card">
         <button class="workshop-modal-close" onclick="closeWorkshopModal()" aria-label="Fechar">&times;</button>
         
         <div class="workshop-modal-header">
-          <span class="subscription-badge">Subscrição Mensal</span>
-          <h3>Subscrição Workshop VIP</h3>
-          <p>Acesso ilimitado aos workshops online de Velas & Sabonetes com Stephanie Santos.</p>
+          <span class="subscription-badge">Acesso Vitalício</span>
+          <h3>Workshops Online VIP</h3>
+          <p>Se queres inscrever-te nos meus workshops com acesso vitalício, escreve-me e digo-te como!</p>
           <div class="subscription-price-tag">
-            <span class="currency">€</span><span class="price-val">39.90</span><span class="period"> / mês</span>
+            <span class="currency">€</span><span class="price-val">39.90</span><span class="period"> (Acesso Vitalício)</span>
+          </div>
+        </div>
+
+        <div class="vitalicio-info-box">
+          <div class="vitalicio-info-icon">✨</div>
+          <div class="vitalicio-info-text">
+            <strong>Acesso Vitalício sem Mensalidades</strong>
+            <p>Preenche os teus dados abaixo ou clica no botão do WhatsApp para entrares em contacto direto comigo e receberes todas as informações de inscrição!</p>
           </div>
         </div>
 
@@ -967,64 +974,38 @@
           <div class="workshop-form-group">
             <label for="w-type">Modalidade de Workshop *</label>
             <select id="w-type" class="w-select-full" required onchange="updateSubscriptionPrice(this.value)">
-              <option value="Subscrição Completa Velas & Sabonetes (39.90€/mês)" selected>Subscrição Completa Velas & Sabonetes (39.90€/mês)</option>
-              <option value="Subscrição VIP Velas Aromáticas (24.90€/mês)">Subscrição VIP Velas Aromáticas (24.90€/mês)</option>
-              <option value="Subscrição VIP Sabonetes Artesanais (24.90€/mês)">Subscrição VIP Sabonetes Artesanais (24.90€/mês)</option>
+              <option value="Workshop Completo Velas & Sabonetes (39.90€)" selected>Workshop Completo Velas & Sabonetes — 39.90€ (Acesso Vitalício)</option>
+              <option value="Workshop VIP Velas Aromáticas (24.90€)">Workshop VIP Velas Aromáticas — 24.90€ (Acesso Vitalício)</option>
+              <option value="Workshop VIP Sabonetes Artesanais (24.90€)">Workshop VIP Sabonetes Artesanais — 24.90€ (Acesso Vitalício)</option>
             </select>
           </div>
 
-          <!-- Payment Section Box -->
-          <div class="payment-section-box">
-            <div class="payment-header-row">
-              <h4>Dados de Pagamento Seguro</h4>
-              <div class="payment-card-icons">
-                <span class="card-tag visa">VISA</span>
-                <span class="card-tag mc">Mastercard</span>
-                <span class="card-tag mbway">MB WAY</span>
-              </div>
-            </div>
-
-            <div class="workshop-form-group">
-              <label for="w-card-name">Nome no Cartão *</label>
-              <input type="text" id="w-card-name" required placeholder="Como impresso no cartão">
-            </div>
-
-            <div class="workshop-form-group">
-              <label for="w-card-num">Número do Cartão *</label>
-              <div class="card-input-wrapper">
-                <input type="text" id="w-card-num" required maxlength="19" placeholder="4444 4444 4444 4444" oninput="formatCreditCardNumber(this)">
-                <svg class="lock-icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-              </div>
-            </div>
-
-            <div class="workshop-form-row">
-              <div class="workshop-form-group">
-                <label for="w-card-exp">Validade (MM/AA) *</label>
-                <input type="text" id="w-card-exp" required maxlength="5" placeholder="MM/AA" oninput="formatCardExp(this)">
-              </div>
-
-              <div class="workshop-form-group">
-                <label for="w-card-cvc">CVC / CVV *</label>
-                <input type="password" id="w-card-cvc" required maxlength="4" placeholder="123">
-              </div>
-            </div>
+          <div class="workshop-form-group">
+            <label for="w-notes">Mensagem / Pergunta (Opcional)</label>
+            <textarea id="w-notes" rows="2" placeholder="Gostaria de saber mais sobre o conteúdo, materiais ou acesso..."></textarea>
           </div>
 
-          <button type="submit" class="workshop-btn-submit" id="w-submit-btn">
-            🔒 Subscrever por €39.90 / mês
-          </button>
+          <div class="workshop-action-buttons">
+            <button type="submit" class="workshop-btn-submit" id="w-submit-btn">
+              📩 Solicitar Inscrição (€39.90)
+            </button>
+            <button type="button" class="workshop-btn-whatsapp" onclick="sendWorkshopViaWhatsApp()">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l.399.637-1.144 4.178 4.283-1.121.605.373z"/></svg>
+              💬 Inscrever via WhatsApp
+            </button>
+          </div>
 
           <div class="secure-guarantee-text">
             <svg width="14" height="14" fill="#4CAF50" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-            Pagamento 100% Encriptado e Seguro. Cancele a qualquer momento.
+            Acesso Vitalício Garantido. Contacto direto e personalizado.
           </div>
           
           <div id="w-success-msg" class="registration-success-msg">
-            ✨ Subscrição efetuada com sucesso! Bem-vindo(a) ao Workshop VIP Com Cheiro de Amor!
+            ✨ Pedido enviado com sucesso! Entrarei em contacto contigo muito em breve para te dar os detalhes de acesso vitalício.
           </div>
         </form>
       </div>
-    </div>/div>
+    </div>
 
 </body>
 </html>

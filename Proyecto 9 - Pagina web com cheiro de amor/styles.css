@@ -2250,6 +2250,48 @@ body { top: 0 !important; }
   color: #A0958F;
 }
 
+/* VITALÍCIO INFO BOX */
+.vitalicio-info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background-color: rgba(212, 163, 148, 0.12);
+  border: 1.5px dashed #D4A394;
+  border-radius: 16px;
+  padding: 1.1rem 1.3rem;
+  margin-bottom: 1.5rem;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.vitalicio-info-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.vitalicio-info-text strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+  margin-bottom: 0.25rem;
+}
+
+.vitalicio-info-text p {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* WORKSHOP ACTION BUTTONS */
+.workshop-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
 .workshop-btn-submit {
   width: 100%;
   padding: 1.1rem;
@@ -2262,13 +2304,38 @@ body { top: 0 !important; }
   cursor: pointer;
   box-shadow: 0 8px 25px rgba(212, 163, 148, 0.4);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-top: 0.5rem;
+  margin-top: 0;
   box-sizing: border-box;
 }
 
 .workshop-btn-submit:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 30px rgba(212, 163, 148, 0.5);
+}
+
+.workshop-btn-whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 1.1rem;
+  border: none;
+  border-radius: 50px;
+  background-color: var(--color-whatsapp, #25d366);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.workshop-btn-whatsapp:hover {
+  background-color: var(--color-whatsapp-hover, #20ba5a);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4);
 }
 
 .secure-guarantee-text {
