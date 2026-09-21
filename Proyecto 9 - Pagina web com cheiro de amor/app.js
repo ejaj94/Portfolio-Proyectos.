@@ -5,35 +5,35 @@ const PRODUCTS = [
 {
         "id": "candle-autumn-bear-2",
         "category": "vaso",
-        "price": 13.90,
+        "price": 14.90,
         "image": "assets/vela_autumn_bear_vaso.jpg",
         "qty": 1,
         "pt": {
-                "name": "Vela Autumn Bear no Vaso",
-                "categoryLabel": "COLEÇÃO DE OUTONO • CERÂMICA & GEL 3D",
-                "aromaBrief": "Adorable ursinho em cera 3D com touca tricotada segurando abóbora dourada num prato/copo de vidro cristalino.",
-                "description": "Um encanto irresistível de puro aconchego outonal! Apresentada num gracioso copo/vaso de vidro cristalino de boca larga, a Vela Autumn Bear destaca-se pela sua escultura 3D em cera de soja vegetal de um ursinho de tom malva com touca de lã tricotada, segurando uma abóbora dourada. À sua volta repousam um tronco de madeira e mini abóboras em relevo sobre cera vegetal branca. Perfuma o espaço com um aroma doce e acolhedor de biscoito de canela, xarope de ácer e baunilha.",
+                "name": "Vela Autumn Bear no Vaso Hexagonal",
+                "categoryLabel": "COLEÇÃO DE OUTONO • ESCULTURA 3D EM VASO HEXAGONAL",
+                "aromaBrief": "Ursinho em cera 3D com touca abóbora segurando abóbora dourada com cogumelo e folhas num vaso hexagonal de vidro.",
+                "description": "Um encanto irresistível de puro aconchego outonal! Apresentada num sofisticado vaso hexagonal de vidro cristalino de boca larga, a Vela Autumn Bear destaca-se pela sua escultura 3D em cera de soja vegetal de um ursinho com touca de abóbora, segurando uma mini abóbora dourada. À sua volta repousam um cogumelo esculpido em cera, folhas de outono e mini abóboras sobre cera vegetal cremosa. Perfuma o espaço com um aroma doce e acolhedor de biscoito de canela, xarope de ácer e baunilha.",
                 "aromaProfile": "Biscoito de Canela, Xarope de Ácer (Maple), Abóbora Doce, Baunilha, Noz-Moscada"
         },
         "es": {
-                "name": "Vela Autumn Bear en Vaso",
-                "categoryLabel": "COLECCIÓN DE OTOÑO • CRISTAL Y GEL 3D",
-                "aromaBrief": "Adorable osito en cera 3D con gorrito de lana sujetando calabaza dorada en vaso de vidrio.",
-                "description": "¡Un encanto irresistible de pura calidez otoñal! Presentada en un gracioso vaso de vidrio cristalino de boca ancha, la Vela Autumn Bear destaca por su escultura 3D en cera vegetal de un osito en tono malva con gorrito de lana, sujetando una calabaza dorada. A su alrededor descansan un tronco de madera y mini calabazas en relieve. Perfuma el espacio con un aroma dulce y acogedor de galleta de canela, jarabe de arce y vainilla.",
+                "name": "Vela Autumn Bear en Vaso Hexagonal",
+                "categoryLabel": "COLECCIÓN DE OTOÑO • CRISTAL HEXAGONAL Y GEL 3D",
+                "aromaBrief": "Osito en cera 3D con gorro de calabaza sujetando calabaza dorada con seta y hojas en vaso hexagonal.",
+                "description": "¡Un encanto irresistible de pura calidez otoñal! Presentada en un sofisticado vaso hexagonal de vidrio cristalino de boca ancha, la Vela Autumn Bear destaca por su escultura 3D en cera vegetal de un osito con gorro de calabaza, sujetando una mini calabaza dorada. A su alrededor descansan una seta esculpida en cera, hojas de otoño y mini calabazas sobre cera vegetal cremosa. Perfuma el espacio con un aroma dulce y acogedor de galleta de canela, jarabe de arce y vainilla.",
                 "aromaProfile": "Galleta de Canela, Jarabe de Arce, Calabaza Dulce, Vainilla, Nuez Moscada"
         },
         "en": {
-                "name": "Autumn Bear Glass Dish Candle",
-                "categoryLabel": "AUTUMN COLLECTION • 3D GLASS DISH SCULPTURE",
-                "aromaBrief": "Adorable 3D wax bear wearing a knitted beanie holding a golden pumpkin in a clear glass bowl.",
-                "description": "An irresistible touch of autumn magic and warmth! Poured into a wide clear glass dish, the Autumn Bear Candle showcases a beautifully detailed 3D wax teddy bear wearing a cozy knitted winter beanie while holding a shiny gold pumpkin. Accompanied by a sculpted wood stump and mini wax pumpkins on smooth soy wax. Delivers a cozy aroma of cinnamon cookies, maple syrup, and vanilla.",
+                "name": "Autumn Bear Hexagonal Glass Dish Candle",
+                "categoryLabel": "AUTUMN COLLECTION • 3D HEXAGONAL GLASS SCULPTURE",
+                "aromaBrief": "3D wax bear with pumpkin beanie holding a gold pumpkin accompanied by a mushroom and leaves in a hexagonal glass bowl.",
+                "description": "An irresistible touch of autumn magic and warmth! Poured into a sleek hexagonal clear glass dish, the Autumn Bear Candle showcases a detailed 3D wax teddy bear wearing a pumpkin beanie while holding a shiny gold pumpkin. Accompanied by a hand-molded wax mushroom, autumn leaves, and mini pumpkins on smooth soy wax.",
                 "aromaProfile": "Cinnamon Cookie, Maple Syrup, Sweet Pumpkin, Vanilla, Nutmeg"
         },
         "fr": {
-                "name": "Bougie Autumn Bear en Coupelle Verre",
-                "categoryLabel": "COLLECTION D'AUTOMNE • SCULPTURE 3D EN VERRE",
-                "aromaBrief": "Adorable ourson 3D en cire portant un bonnet tricoté et tenant une citrouille dorée dans une coupelle en verre.",
-                "description": "Une merveille de douceur et de magie automnale ! Présentée dans une élégante coupelle en verre transparent, la bougie Autumn Bear dévoile une sculpture 3D d'un petit ourson coiffé d'un bonnet tricoté et tenant une citrouille dorée. Entouré d'une souche en bois et de mini citrouilles en cire. Diffuse une fragrance gourmande de biscuit à la cannelle, sirop d'érable et vanille.",
+                "name": "Bougie Autumn Bear en Coupelle Hexagonale",
+                "categoryLabel": "COLLECTION D'AUTOMNE • SCULPTURE 3D EN VERRE HEXAGONAL",
+                "aromaBrief": "Ourson 3D en cire portant un bonnet citrouille et tenant une citrouille dorée avec champignon et feuilles dans une coupelle hexagonale.",
+                "description": "Une merveille de douceur et de magie automnale ! Présentée dans une élégante coupelle hexagonale en verre transparent, la bougie Autumn Bear dévoile une sculpture 3D d'un petit ourson coiffé d'un bonnet citrouille et tenant une citrouille dorée. Entouré d'un champignon en cire et de feuilles d'automne.",
                 "aromaProfile": "Biscuit Cannelle, Sirop d'Érable, Citrouille Douce, Vanille, Noix de Muscade"
         }
 },
