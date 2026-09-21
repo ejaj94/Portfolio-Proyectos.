@@ -153,14 +153,14 @@ const PRODUCTS = [
         "image": "assets/vela_abobora_branca.jpg",
         "qty": 1,
         "pt": {
-                "name": "Vela Pote Abóbora Branca & Dourada",
+                "name": "Vela Abóbora Branca & Dourada",
                 "categoryLabel": "COLEÇÃO DE OUTONO • CERÂMICA ARTESANAL",
                 "aromaBrief": "Abóbora cerâmica branca mate com haste banhada a ouro, pavio de madeira e mini abóboras de cera no interior.",
                 "description": "Pura elegância angelical com a alma acolhedora do outono! Esculpida num gracioso pote cerâmico de cor branca mate com detalhes dourados na haste da tampa, esta vela revela no interior uma cera vegetal perfumada ornada com mini abóboras em relevo e um pavio de madeira que estala suavemente ao queimar. Perfuma a casa com o irresistível aroma de tarte de abóbora, baunilha e canela.",
                 "aromaProfile": "Tarte de Abóbora, Baunilha Cremosa, Canela em Rama, Noz-Moscada"
         },
         "es": {
-                "name": "Vela Pote Calabaza Blanca y Dorada",
+                "name": "Vela Abóbora Blanca y Dorada",
                 "categoryLabel": "COLECCIÓN DE OTOÑO • CERÁMICA ARTESANAL",
                 "aromaBrief": "Calabaza cerámica blanca mate con tallo bañado en oro, mecha de madera y mini calabazas de cera.",
                 "description": "¡Pura elegancia angelical con el alma acogedora del otoño! Esculpida en un gracioso frasco cerámico de color blanco mate con detalles dorados en el tallo de la tapa, esta vela revela en su interior cera vegetal perfumada adornada con mini calabazas en relieve y una mecha de madera crujiente.",
@@ -188,14 +188,14 @@ const PRODUCTS = [
         "image": "assets/vela_abobora_terracota.jpg",
         "qty": 1,
         "pt": {
-                "name": "Vela Pote Abóbora Terracota",
+                "name": "Vela Abóbora Terracota",
                 "categoryLabel": "COLEÇÃO DE OUTONO • CERÂMICA ARTESANAL",
                 "aromaBrief": "Abóbora cerâmica em tom terracota quente com haste banhada a ouro e tampa removível.",
                 "description": "A essência mais pura e vibrante da estação das folhas secas! Moldada num rico pote cerâmico de tom terracota artesanal com um pedúnculo/haste dourado, esta vela traz o calor das tardes frias para dentro de casa. A sua queima constante espalha um perfume envolvente de abóbora especiada, cravinho e cardamomo.",
                 "aromaProfile": "Abóbora Especiada, Cravinho, Cardamomo, Açúcar Mascavado, Baunilha"
         },
         "es": {
-                "name": "Vela Pote Calabaza Terracota",
+                "name": "Vela Abóbora Terracota",
                 "categoryLabel": "COLECCIÓN DE OTOÑO • CERÁMICA ARTESANAL",
                 "aromaBrief": "Calabaza cerámica en tono terracota cálido con tallo bañado en oro y tapa removible.",
                 "description": "¡La esencia más pura y vibrante de la estación de las hojas secas! Moldeada en un rico frasco cerámico de tono terracota artesanal con un tallo dorado, esta vela trae el calor de las tardes frías al hogar. Su combustión constante extiende un perfume envolvente de calabaza especiada.",
@@ -296,14 +296,14 @@ const PRODUCTS = [
         "image": "assets/vela_tabuleiro_ursinho.jpg",
         "qty": 1,
         "pt": {
-                "name": "Vela Tabuleiro Autumn Bear",
+                "name": "Vela Autumn Bear",
                 "categoryLabel": "COLEÇÃO DE OUTONO • VELAS DE TABULEIRO",
                 "aromaBrief": "Encantador prato de vidro com cera de soja, ursinho 3D esculpido com gorro de tricot a segurar abóbora.",
                 "description": "A verdadeira definição de doçura e aconchego! Esta vela exclusiva de tabuleiro em vidro transparente apresenta um adorável ursinho esculpido à mão em cera, vestindo um gorrinho de tricot de outono e a segurar uma mini abóbora entre as patinhas, ao lado de um tronco de árvore e pequenas abóboras alaranjadas. Perfuma o espaço com notas doces de castanha assada, canela e baunilha.",
                 "aromaProfile": "Castanha Assada, Canela Quente, Maple Syrup, Baunilha de Outono"
         },
         "es": {
-                "name": "Vela Tablero Autumn Bear",
+                "name": "Vela Autumn Bear",
                 "categoryLabel": "COLECCIÓN DE OTOÑO • VELAS DE TABLERO",
                 "aromaBrief": "Encantador plato de vidrio con cera de soja y osito 3D en relief con gorro de lana sosteniendo calabaza.",
                 "description": "¡La verdadera definición de dulzura y confort! Esta vela exclusiva en plato de vidrio transparente presenta un adorable osito esculpido a mano en cera con su gorrito de punto otoñal sosteniendo una mini calabaza entre sus patitas, junto a un tronco de árbol y calabazas naranja.",
@@ -332,14 +332,14 @@ const PRODUCTS = [
         "image": "assets/vela_cogumelo.jpg",
         "qty": 1,
         "pt": {
-                "name": "Vela Pote Cogumelo em Cerâmica",
+                "name": "Vela Cogumelo",
                 "categoryLabel": "COLEÇÃO DE OUTONO • CERÂMICA ARTESANAL",
                 "aromaBrief": "Encantador pote de cerâmica branca com tampa em chapéu de cogumelo vermelho brilhante e relevo.",
                 "description": "Diretamente de um conto de fadas no coração da floresta de outono! Esta adorável vela artesanal é moldada em cerâmica de alta qualidade, apresentando um corpo suave em branco mate e uma tampa removível em formato de cogumelo vermelho encarnado com textura em relevo. Feita com cera vegetal pura e aromas quentes de pinho, avelã e especiarias, traz um toque mágico e acolhedor à decoração do teu lar.",
                 "aromaProfile": "Avelã Torrada, Pinho Silvestre, Canela Quente, Baunilha de Outono"
         },
         "es": {
-                "name": "Vela Pote Seta en Cerámica",
+                "name": "Vela Cogumelo",
                 "categoryLabel": "COLECCIÓN DE OTOÑO • CERÁMICA ARTESANAL",
                 "aromaBrief": "Encantador frasco de cerámica blanca con tapa en sombrero de seta rojo brillante y relieve.",
                 "description": "¡Directamente de un cuento de hadas en el corazón del bosque otoñal! Esta adorable vela artesanal está moldeada en cerámica de alta calidad, presentando un cuerpo suave en blanco mate y una tapa removible en forma de sombrero de seta rojo con textura en relieve. Elaborada con cera vegetal pura y aromas cálidos de avellana tostada y especias.",
@@ -368,14 +368,14 @@ const PRODUCTS = [
         "image": "assets/vela_carrossel_vinho.jpg",
         "qty": 1,
         "pt": {
-                "name": "Vela Pote Carrossel Vinho & Ouro",
+                "name": "Vela Carrossel Vinho & Ouro",
                 "categoryLabel": "VELAS DE LUXO EM CERÂMICA",
                 "aromaBrief": "Design exclusivo em tom vinho nobre com cavalinhos esculpidos em 3D e topo dourado.",
                 "description": "Uma viagem encantada à nostalgia das feiras clássicas! Esta majestosa vela artesanal é apresentada num pote cerâmico de luxo em tom vinho profundo com cavalinhos em relevo 3D e remate com agulha dourada. Traz um aroma aconchegante de especiarias nobres e madeira para iluminar os teus momentos mais especiais.",
                 "aromaProfile": "Vinho do Porto, Canela, Cravo, Âmbar Dourado, Baunilha Bourbon"
         },
         "es": {
-                "name": "Vela Pote Carrusel Vino y Oro",
+                "name": "Vela Carrusel Vino y Oro",
                 "categoryLabel": "VELAS DE LUJO EN CERÁMICA",
                 "aromaBrief": "Diseño exclusivo en tono vino noble con caballitos esculpidos en 3D y tope dorado.",
                 "description": "¡Un viaje encantado a la nostalgia de los carruseles clásicos! Esta majestuosa vela artesanal se presenta en un recipiente cerámico de lujo en tono vino profundo con caballitos en relieve 3D y tope cónico dorado. Trae un aroma acogedor de especias nobles y madera para iluminar tus momentos especiales.",
@@ -403,14 +403,14 @@ const PRODUCTS = [
         "image": "assets/vela_carrossel_vinho_tampa_dourada.jpg",
         "qty": 1,
         "pt": {
-                "name": "Vela Pote Carrossel Vinho com Tampa Dourada",
+                "name": "Vela Carrossel Vinho c/ Tampa Dourada",
                 "categoryLabel": "VELAS DE LUXO EM CERÂMICA",
                 "aromaBrief": "Corpo cerâmico tom vinho com imponente tampa em dourado metálico integral e cavalinhos em relevo.",
                 "description": "Sofisticação e encanto em estado puro! Com um corpo aveludado em tom vinho bordô e uma tampa cônica inteiramente banhada a ouro metálico, esta vela evoca o brilho e a magia dos carrosséis vitorianos. Um aroma quente e licoroso que envolve a casa num abraço inesquecível.",
                 "aromaProfile": "Amêndoa Dourada, Licor de Cereja, Noz-Moscada, Madeira de Sândalo"
         },
         "es": {
-                "name": "Vela Pote Carrusel Vino con Tapa Dorada",
+                "name": "Vela Carrusel Vino con Tapa Dorada",
                 "categoryLabel": "VELAS DE LUJO EN CERÁMICA",
                 "aromaBrief": "Cuerpo cerámico tono vino con imponente tapa en dorado metálico integral y caballitos en relieve.",
                 "description": "¡Sofisticación y encanto en estado puro! Con un cuerpo terciopelado en tono vino burdeos y una tapa cónica enteramente bañada en oro metálico, esta vela evoca el brillo y la magia de los carruseles victorianos.",
@@ -438,14 +438,14 @@ const PRODUCTS = [
         "image": "assets/vela_carrossel_azul.jpg",
         "qty": 1,
         "pt": {
-                "name": "Vela Pote Carrossel Azul Real",
+                "name": "Vela Carrossel Azul Real",
                 "categoryLabel": "VELAS DE LUXO EM CERÂMICA",
                 "aromaBrief": "Vibrante tom azul cobalto profundo com cavalinhos em 3D, aro e remate cônico dourados.",
                 "description": "A imponência da realeza transformada em chama! Esculpida em cerâmica com acabamento em azul cobalto brilhante, esta peça destaca os cavalinhos em alto relevo e remates banhados a ouro. A sua fragrância combina a serenidade das notas aveludadas com um toque de elegância atemporal.",
                 "aromaProfile": "Orquídea Azul, Alfazema Real, Bergamota, Almíscar Branco, Baunilha"
         },
         "es": {
-                "name": "Vela Pote Carrusel Azul Real",
+                "name": "Vela Carrusel Azul Real",
                 "categoryLabel": "VELAS DE LUJO EN CERÁMICA",
                 "aromaBrief": "Vibrante tono azul cobalto profundo con caballitos en 3D, aro y remate cónico dorados.",
                 "description": "¡La imponencia de la realeza transformada en llama! Esculpida en cerámica brillante color azul cobalto, esta pieza destaca por sus caballitos en alto relieve y remates dorados.",
@@ -473,14 +473,14 @@ const PRODUCTS = [
         "image": "assets/vela_carrossel_branco.jpg",
         "qty": 1,
         "pt": {
-                "name": "Vela Pote Carrossel Branco & Dourado",
+                "name": "Vela Carrossel Branco & Dourado",
                 "categoryLabel": "VELAS DE LUXO EM CERÂMICA",
                 "aromaBrief": "Pura cerâmica branca mate com detalhes esculpidos de cavalinhos e tampa banhada a ouro.",
                 "description": "Uma peça angelical de pura delicadeza! O contraste entre o branco mate cerâmico dos cavalinhos em relevo e o brilho luxuoso da tampa e base douradas cria uma harmonia celestial na decoração. O seu aroma suave de algodão e flor de laranjeira traz paz e pureza a qualquer ambiente.",
                 "aromaProfile": "Flor de Laranjeira, Algodão Doce, Jasmim Branco, Baunilha Suave"
         },
         "es": {
-                "name": "Vela Pote Carrusel Blanco y Dorado",
+                "name": "Vela Carrusel Blanco y Dorado",
                 "categoryLabel": "VELAS DE LUJO EN CERÁMICA",
                 "aromaBrief": "Pura cerámica blanca mate con detalles esculpidos de caballitos y tapa bañada en oro.",
                 "description": "¡Una pieza angelical de pura delicadeza! El contraste entre el blanco mate cerámico de los caballitos en relieve y el brillo lujoso de la tapa y base doradas crea una armonía celestial en tu decoración.",
@@ -509,14 +509,14 @@ const PRODUCTS = [
         image: "assets/vela_coco.jpg",
         qty: 1,
         pt: {
-            name: "Vela de Coco com Flor de Hibisco",
+            name: "Vela Coconut",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Aroma exótico e suave de coco fresco com notas delicadas de flor de hibisco e brisa marinha.",
             description: "Vela artesanal em casca de coco natural com cera 100% vegetal e flor de hibisco em relevo. Queima limpa e perfumada que transforma qualquer espaço num verdadeiro refúgio tropical.",
             aromaProfile: "Coco Tropical, Flor de Hibisco, Brisa Marinha, Baunilha"
         },
         es: {
-            name: "Vela de Coco con Flor de Hibisco",
+            name: "Vela Coconut",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Aroma exótico y suave de coco fresco con notas delicadas de flor de hibisco y brisa marina.",
             description: "Vela artesanal en cáscara de coco natural con cera 100% vegetal y flor de hibisco en relieve. Combustión limpia y perfumada que transforma cualquier espacio en un verdadero refugio tropical.",
@@ -2546,14 +2546,14 @@ const PRODUCTS = [
         image: "assets/pote_carrossel.jpg",
         qty: 1,
         pt: {
-            name: "Pote Carrossel",
+            name: "Vela Carrossel",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante pote artesanal em formato de carrossel vintage com cavalinhos em relevo e tampa bordeaux com ponta dourada.",
             description: "Uma peça decorativa nostálgica e cheia de encanto! Este pote artesanal esculpido em pormenor apresenta cavalinhos de carrossel em relevo 3D ao redor do corpo branco porcelana, coroado por uma tampa com topo bordeaux e remate dourado. Perfeito para guardar joias, pequenos tesouros ou como vela artesanal de destaque.",
             aromaProfile: "Baunilha Vintage, Flor de Algodão, Âmbar Dourado, Almíscar Suave"
         },
         es: {
-            name: "Pote Carrusel",
+            name: "Vela Carrusel",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante tarro artesanal en forma de carrusel vintage con caballitos en relieve y tapa burdeos con remate dorado.",
             description: "¡Una pieza decorativa nostálgica y llena de encanto! Este tarro artesanal esculpido con gran detalle presenta caballitos de carrusel en relieve 3D sobre cuerpo blanco porcelana, coronado por una tapa burdeos con remate dorado. Perfecto para guardar joyas, pequeños tesoros o como pieza decorativa de distinción.",
@@ -2616,14 +2616,14 @@ const PRODUCTS = [
         image: "assets/pote_carrossel_azul.jpg",
         qty: 1,
         pt: {
-            name: "Pote Carrossel Azul",
+            name: "Vela Carrossel Azul",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante pote artesanal em formato de carrossel vintage com cavalinhos em relevo e tampa azul pastel com topo dourado.",
             description: "Uma graciosa peça decorativa cheia de ternura! Este pote artesanal esculpido em pormenor apresenta cavalinhos de carrossel em relevo 3D ao redor do corpo branco porcelana, coroado por uma delicada tampa em tom azul pastel com remate dourado. Perfeito para guardar joias, pequenos tesouros ou como ornamento de destaque.",
             aromaProfile: "Brisa Suave, Flor de Algodão, Baunilha Doce, Almíscar Branco"
         },
         es: {
-            name: "Pote Carrusel Azul",
+            name: "Vela Carrusel Azul",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante tarro artesanal en forma de carrusel vintage con caballitos en relieve y tapa azul pastel con remate dorado.",
             description: "¡Una graciosa pieza decorativa llena de ternura! Este tarro artesanal esculpido con gran detalle presenta caballitos de carrusel en relieve 3D sobre cuerpo blanco porcelana, coronado por una delicada tapa en tono azul pastel con remate dorado. Perfecto para guardar joyas, pequeños tesoros o como pieza decorativa de distinción.",
@@ -2651,14 +2651,14 @@ const PRODUCTS = [
         image: "assets/pote_carrossel_dourado.jpg",
         qty: 1,
         pt: {
-            name: "Pote Carrossel Dourado",
+            name: "Vela Carrossel Dourado",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante pote artesanal em formato de carrossel vintage com cavalinhos em relevo e luxuosa tampa dourada.",
             description: "Uma peça decorativa radiante e cheia de sofisticação! Este pote artesanal esculpido em pormenor apresenta cavalinhos de carrossel em relevo 3D ao redor do corpo branco porcelana, coroado por uma luxuosa tampa em tom dourado reluzente. Perfeito para guardar joias, pequenos tesouros ou como ornamento de destaque.",
             aromaProfile: "Âmbar Real, Flor de Baunilha, Sândalo Nobre, Almíscar Quente"
         },
         es: {
-            name: "Pote Carrusel Dorado",
+            name: "Vela Carrusel Dorado",
             categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante tarro artesanal en forma de carrusel vintage con caballitos en relieve y lujosa tapa dorada.",
             description: "¡Una pieza decorativa radiante y llena de sofisticación! Este tarro artesanal esculpido con gran detalle presenta caballitos de carrusel en relieve 3D sobre cuerpo blanco porcelana, coronado por una lujosa tapa en tono dorado reluciente. Perfecto para guardar joyas, pequeños tesoros o como pieza decorativa de distinción.",
