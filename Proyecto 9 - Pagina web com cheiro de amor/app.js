@@ -510,28 +510,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela de Coco com Flor de Hibisco",
-            categoryLabel: "VELA AROMÁTICA",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Aroma exótico e suave de coco fresco com notas delicadas de flor de hibisco e brisa marinha.",
             description: "Vela artesanal em casca de coco natural com cera 100% vegetal e flor de hibisco em relevo. Queima limpa e perfumada que transforma qualquer espaço num verdadeiro refúgio tropical.",
             aromaProfile: "Coco Tropical, Flor de Hibisco, Brisa Marinha, Baunilha"
         },
         es: {
             name: "Vela de Coco con Flor de Hibisco",
-            categoryLabel: "VELA AROMÁTICA",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Aroma exótico y suave de coco fresco con notas delicadas de flor de hibisco y brisa marina.",
             description: "Vela artesanal en cáscara de coco natural con cera 100% vegetal y flor de hibisco en relieve. Combustión limpia y perfumada que transforma cualquier espacio en un verdadero refugio tropical.",
             aromaProfile: "Coco Tropical, Flor de Hibisco, Brisa Marina, Vainilla"
         },
         en: {
             name: "Coconut & Hibiscus Flower Candle",
-            categoryLabel: "SCENTED CANDLE",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Exotic and gentle aroma of fresh coconut with delicate hibiscus flower and ocean breeze notes.",
             description: "Handcrafted natural coconut shell candle with 100% plant wax and embossed hibiscus flower. Clean and fragrant burn that transforms any space into a tropical paradise.",
             aromaProfile: "Tropical Coconut, Hibiscus Flower, Ocean Breeze, Vanilla"
         },
         fr: {
             name: "Bougie Noix de Coco & Fleur d'Hibiscus",
-            categoryLabel: "BOUGIE PARFUMÉE",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Arôme exotique et doux de noix de coco fraîche avec des notes délicates de fleur d'hibiscus.",
             description: "Bougie artisanale dans une vraie coque de noix de coco naturelle avec de la cire 100% végétale et une fleur d'hibiscus en relief.",
             aromaProfile: "Noix de Coco Tropicale, Fleur d'Hibiscus, Brise Marine, Vanille"
@@ -546,28 +546,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Concha de Ondas",
-            categoryLabel: "Velas Aromáticas Oceânicas em Cerâmica",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Delicada concha de cerâmica com efeito 3D de ondas do mar cristalinas, espuma e conchinhas naturais.",
             description: "Uma obra-prima inspirada na serenidade do oceano! Esta encantadora vela artesanal é apresentada num gracioso prato de cerâmica branca em formato de concha. Composta por cera de gel de alta transparência que recria com perfeição as ondas azuis do mar a rebentar na areia, com espuma branca detalhada, conchas marinhas genuínas e pavio duplo para uma queima harmoniosa. Traz a brisa marinha e a frescura do mar para a sua casa.",
             aromaProfile: "Brisa Marinha, Flor de Sal, Lírio do Vale, Algas Frescas, Almíscar Suave"
         },
         es: {
             name: "Concha de Olas",
-            categoryLabel: "Velas Aromáticas Oceánicas en Cerámica",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Delicada concha de cerámica con efecto 3D de olas del mar cristalinas, espuma y conchitas naturales.",
             description: "¡Una obra maestra inspirada en la serenidad del océano! Esta encantadora vela artesanal se presenta en un gracioso plato de cerámica blanca con forma de concha. Compuesta por cera de gel de alta transparencia que recrea las olas azules del mar rompiendo en la arena, con espuma blanca detallada, conchas marinas genuinas y doble mecha.",
             aromaProfile: "Brisa Marina, Flor de Sal, Lirio del Valle, Algas Frescas, Almizcle Suave"
         },
         en: {
             name: "Ocean Wave Shell Candle",
-            categoryLabel: "Oceanic Ceramic Shell Scented Candle",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Delicate white ceramic shell dish with 3D crystal blue ocean waves, seafoam, and natural shells.",
             description: "An ocean-inspired masterpiece! This charming handcrafted candle is set in a graceful white ceramic shell-shaped dish. Crafted with crystal-clear gel wax mimicking turquoise ocean waves crashing onto sandy shores with detailed white seafoam, genuine seashells, and double cotton wicks for a serene ambiance.",
             aromaProfile: "Ocean Breeze, Sea Salt, Lily of the Valley, Fresh Algae, Soft Musk"
         },
         fr: {
             name: "Coquillage de Vagues",
-            categoryLabel: "Bougie Aromatique Océanique en Céramique",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Délicieux coquillage en céramique avec effet 3D de vagues bleues, écume et coquillages naturels.",
             description: "Une création poétique inspirée par la sérénité de l'océan ! Cette superbe bougie artisanale est coulée dans une élégante coupelle en céramique blanche en forme de coquillage. Composée de cire gel transparente reproduisant les vagues turquoise s'échouant sur le sable.",
             aromaProfile: "Brise Marine, Fleur de Sel, Muguet, Algues Fraîches, Musc Doux"
@@ -581,28 +581,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Ice Coffee",
-            categoryLabel: "Velas Aromáticas Gourmet em Copo de Vidro",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Deliciosa vela gourmet reproduzindo um café gelado cremoso com cubos de gelo em cera de gel.",
             description: "Uma verdadeira tentação para os amantes de café! Esta vela aromática artesanal em copo de vidro curvo recria com um realismo impressionante um autêntico Ice Coffee. Composta por uma camada inferior de leite cremoso em cera de soja, encimada por um rico café aromático e cubos de gelo cristalinos esculpidos em cera de gel transparente. Espalha um perfume irresistível e revigorante de café recém-passado e baunilha.",
             aromaProfile: "Grãos de Café Torrado, Leite de Amêndoa, Baunilha Bourbon, Caramelo Doce"
         },
         es: {
             name: "Vela Ice Coffee",
-            categoryLabel: "Velas Aromáticas Gourmet en Vaso de Cristal",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Deliciosa vela gourmet reproduciendo un café helado cremoso con cubos de hielo en cera de gel.",
             description: "¡Una verdadera tentación para los amantes del café! Esta vela aromática artesanal en vaso de cristal curvo recrea con un realismo impresionante un auténtico Ice Coffee. Compuesta por una capa inferior de leche cremosa en cera de soya, coronada por un rico café aromático y cubos de hielo cristalinos esculpidos en cera de gel transparente. Difunde un perfume irresistible de café recién hecho y vainilla.",
             aromaProfile: "Granos de Café Tostado, Leche de Almendras, Vainilla Bourbon, Caramelo Dulce"
         },
         en: {
             name: "Ice Coffee Candle",
-            categoryLabel: "Gourmet Glass Cup Scented Candle",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Realistic gourmet candle mimicking iced latte with clear gel wax ice cubes.",
             description: "A true temptation for coffee lovers! This handcrafted gourmet scented candle in a curved glass cup realistically replicates an authentic Iced Coffee. Layered with creamy white soy wax milk at the bottom, rich aromatic coffee wax on top, and crystal-clear gel wax ice cubes. Fills your space with an irresistible energizing freshly brewed coffee scent.",
             aromaProfile: "Roasted Coffee Beans, Almond Milk, Bourbon Vanilla, Sweet Caramel"
         },
         fr: {
             name: "Bougie Ice Coffee",
-            categoryLabel: "Bougie Aromatique Gourmande en Verre",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Délicieuse bougie gourmande reproduisant un café glacé avec glaçons en cire gel.",
             description: "Une véritable tentation pour les passionnés de café ! Cette bougie aromatique artisanale en verre reproduit avec un réalisme saisissant un délicieux café glacé. Composée d'une couche de lait crémeux en cire de soja, surmontée d'un café intense et de vrais glaçons transparents en cire gel.",
             aromaProfile: "Grains de Café Torréfié, Lait d'Amande, Vanille Bourbon, Caramel Doux"
@@ -616,28 +616,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Ouriço",
-            categoryLabel: "Velas Aromáticas Decorativas em Copo de Vidro",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Mimoso e sorridente ouriço-cacheiro esculpido em cera rosa num copo de vidro.",
             description: "Encantadora e fofíssima vela aromática artesanal apresentada num copo de vidro transparente com cera vegetal rosa pastel. Destaque para a adorável figura 3D de um ouriço-cacheiro sorridente minuciosamente trabalhado à mão. Uma criação botânica cheia de carisma e ternura que espalha um aroma suave e relaxante pelo ambiente.",
             aromaProfile: "Flor de Amêndoa, Mel Silvestre, Baunilha Suave, Algodão Doce"
         },
         es: {
             name: "Vela Erizo",
-            categoryLabel: "Velas Aromáticas Decorativas en Vaso de Cristal",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Tierno y sonriente erizo esculpido en cera rosa en vaso de cristal.",
             description: "Encantadora y tierna vela aromática artesanal presentada en un vaso de cristal transparente con cera vegetal rosa pastel. Destaca la adorable figura 3D de un erizo sonriente meticulosamente trabajado a mano. Una creación llena de carisma y ternura que esparce un aroma suave y relajante.",
             aromaProfile: "Flor de Almendra, Miel Silvestre, Vainilla Suave, Algodón de Azúcar"
         },
         en: {
             name: "Hedgehog Candle",
-            categoryLabel: "Decorative Glass Cup Scented Candle",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Cute and smiling sculpted soy wax hedgehog in a pastel pink glass cup.",
             description: "Charming handcrafted scented candle presented in a clear glass cup filled with pastel pink soy wax. Featuring an adorable 3D smiling hedgehog sculpted by hand. A charismatic and cozy decorative piece that fills your room with a sweet, calming aroma.",
             aromaProfile: "Almond Blossom, Wild Honey, Soft Vanilla, Sweet Cotton"
         },
         fr: {
             name: "Bougie Hérisson",
-            categoryLabel: "Bougie Aromatique Décorative en Verre",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Mignon petit hérisson souriant sculpté en cire rose dans un verre transparent.",
             description: "Adorable bougie aromatique artisanale coulée dans un verre transparent avec de la cire de soja rose pastel. Mettant en scène un mignon petit hérisson souriant sculpté à la main. Une création originale et chaleureuse qui diffuse un parfum délicat.",
             aromaProfile: "Fleur d'Amande, Miel Sauvage, Vanille Douce, Barbapapa"
@@ -651,28 +651,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Ouriço do Amor",
-            categoryLabel: "Velas Aromáticas Decorativas em Copo de Vidro",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Delicado ouriço-cacheiro rosa a segurar um coração brilhante com a palavra 'LOVE'.",
             description: "Irresistível e apaixonante vela aromática artesanal vertida num elegante copo de vidro transparente. Apresenta um mimoso ouriço-cacheiro esculpido à mão em cera vegetal rosa suave, a abraçar carinhosamente um coração reluzente com a inscrição 'LOVE'. Uma peça repleta de doçura, ternura e amor, perfeita para presentear alguém especial ou encantar qualquer espaço.",
             aromaProfile: "Morango Silvestre, Cereja Doce, Flor de Cerejeira, Baunilha Cremosa"
         },
         es: {
             name: "Vela Erizo del Amor",
-            categoryLabel: "Velas Aromáticas Decorativas en Vaso de Cristal",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Delicado erizo rosa sosteniendo un corazón brillante con la palabra 'LOVE'.",
             description: "Irresistible y apasionante vela aromática artesanal vertida en un elegante vaso de cristal transparente. Muestra un tierno erizo esculpido a mano en cera vegetal rosa suave, abrazando cariñosamente un corazón reluciente con la inscripción 'LOVE'. Una pieza repleta de dulzura y ternura, perfecta para regalar a alguien especial.",
             aromaProfile: "Fresa Silvestre, Cereza Dulce, Flor de Cerezo, Vainilla Cremosa"
         },
         en: {
             name: "Love Hedgehog Candle",
-            categoryLabel: "Decorative Glass Cup Scented Candle",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Delicate dusty pink hedgehog holding a metallic heart embossed with 'LOVE'.",
             description: "An irresistible handcrafted scented candle poured into an elegant clear glass cup. Featuring a sweet dusty pink soy wax hedgehog lovingly hugging a shimmering heart embossed with the word 'LOVE'. A charming gift of sweetness and warmth for someone special.",
             aromaProfile: "Wild Strawberry, Sweet Cherry, Cherry Blossom, Creamy Vanilla"
         },
         fr: {
             name: "Bougie Hérisson d'Amour",
-            categoryLabel: "Bougie Aromatique Décorative en Verre",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Adorable petit hérisson rose tenant un cœur étincelant gravé du mot 'LOVE'.",
             description: "Une irrésistible bougie aromatique artisanale coulée dans un élégant verre transparent. Elle présente un mignon petit hérisson rose sculpté à la main en cire de soja, serrant tendrement un cœur scintillant inscrit 'LOVE'. Un cadeau plein de douceur et de romance.",
             aromaProfile: "Fraise Sauvage, Cerise Douce, Fleur de Cerisier, Vanille Onctueuse"
@@ -686,28 +686,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Urso de Outono",
-            categoryLabel: "Velas Aromáticas Decorativas em Vidro",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Mimoso ursinho com gorro tricotado e abóboras de outono em recipiente de vidro redondo.",
             description: "Encantadora vela aromática artesanal apresentada num recipiente redondo de vidro transparente. Ostenta um adorável ursinho esculpido à mão em cera vegetal vestindo um gorro de lã aconchegante, a segurar uma abóbora dourada de outono, rodeado por um mini tronco de árvore e pequenas abóboras alaranjadas. Uma verdadeira obra-prima decorativa que traz a calidez e a magia das noites aconchegantes de outono.",
             aromaProfile: "Baunilha Especiada, Canela Quente, Abóbora Doce, Madeira de Cedro"
         },
         es: {
             name: "Vela Oso de Otoño",
-            categoryLabel: "Velas Aromáticas Decorativas en Cristal",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantador osito con gorro de lana y calabazas de otoño en recipiente de cristal redondo.",
             description: "Adorable vela aromática artesanal presentada en un recipiente redondo de cristal transparente. Luciendo un tierno osito esculpido a mano en cera vegetal con gorrito de lana, sosteniendo una calabaza dorada de otoño, rodeado de un tronco de madera y mini calabazas anaranjadas. Una verdadera obra maestra decorativa que llena el hogar con la calidez y magia otoñal.",
             aromaProfile: "Vainilla Especiada, Canela Cálida, Calabaza Dulce, Madera de Cedro"
         },
         en: {
             name: "Autumn Bear Candle",
-            categoryLabel: "Decorative Glass Bowl Scented Candle",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Charming teddy bear wearing a knitted beanie with autumn pumpkins in a round glass bowl.",
             description: "An adorable handcrafted scented candle presented in a clear round glass bowl. Featuring a meticulously hand-sculpted soy wax teddy bear wearing a cozy knitted beanie hat, holding a golden pumpkin, nestled alongside a wooden tree stump and mini orange pumpkins. A cozy autumn centerpiece that fills your home with warmth.",
             aromaProfile: "Spiced Vanilla, Warm Cinnamon, Sweet Pumpkin, Cedarwood"
         },
         fr: {
             name: "Bougie Ours d'Automne",
-            categoryLabel: "Bougie Aromatique Décorative en Verre",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Mignon petit ours avec bonnet en tricot et citrouilles d'automne dans une coupelle en verre.",
             description: "Magnifique bougie aromatique artisanale présentée dans une coupelle en verre transparent. Sculptée à la main en cire de soja, elle met en scène un adorable petit ours portant un bonnet tricoté, tenant une citrouille dorée, entouré de petites citrouilles et d'une souche en bois. Une création automnale chaleureuse et réconfortante.",
             aromaProfile: "Vanille Épicée, Cannelle Chaude, Citrouille Douce, Bois de Cèdre"
@@ -721,28 +721,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Cerveja Artesanal",
-            categoryLabel: "Velas Aromáticas Criativas em Vaso & Vidro",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Vela artesanal em caneca de vidro reproduzindo uma cerveja dourada com espuma cremosa.",
             description: "Espetacular e divertida vela aromática artesanal vertida numa verdadeira caneca de vidro para cerveja. Composta por cera vegetal de alta transparência no tom dourado âmbar com efeito de microbolhas, coroada por uma densa e aveludada espuma de cera de soja branca. Uma peça decorativa única, realista e um presente surpreendente com um envolvente aroma quente e aconchegante.",
             aromaProfile: "Lúpulo Suave, Cevada Torrada, Baunilha Bourbon, Caramelo Ambarado"
         },
         es: {
             name: "Vela Cerveza Artesanal",
-            categoryLabel: "Velas Aromáticas Creativas en Vaso & Cristal",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Original vela artesanal en jarra de cristal reproduciendo una cerveza dorada con espuma cremosa.",
             description: "Espectacular y divertida vela aromática artesanal vertida en una auténtica jarra de cristal para cerveza. Compuesta por cera vegetal transparente en tono dorado ámbar con efecto de microburbujas, coronada por una densa y sedosa espuma de cera de soya blanca. Una pieza decorativa única y un regalo sorprendente con un aroma cálido y envolvente.",
             aromaProfile: "Lúpulo Suave, Cebada Tostada, Vainilla Bourbon, Caramelo Ambarino"
         },
         en: {
             name: "Craft Beer Candle",
-            categoryLabel: "Creative Glass Mug Scented Candle",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Original handcrafted candle in a glass beer mug with golden amber wax and fluffy white foam.",
             description: "Spectacular and fun handcrafted scented candle poured into a genuine glass beer tankard. Featuring golden amber gel wax with micro-bubble effects, topped with rich, velvety white soy wax foam. A unique decorative piece and a surprising gift with a warm, cozy scent.",
             aromaProfile: "Mild Hops, Toasted Barley, Bourbon Vanilla, Amber Caramel"
         },
         fr: {
             name: "Bougie Bière Artisanale",
-            categoryLabel: "Bougie Aromatique Créative en Chope",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Superbe bougie artisanale dans une chope en verre reproduisant une bière dorée à la mousse onctueuse.",
             description: "Spectaculaire bougie aromatique artisanale coulée dans une véritable chope à bière en verre. Composée de cire dorée ambrée avec effet microbulles, surmontée d'une mousse généreuse en cire de soja blanche. Une pièce décorative unique et un cadeau original.",
             aromaProfile: "Houblon Doux, Orge Grillé, Vanille Bourbon, Caramel Ambré"
@@ -756,28 +756,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Cactus & Suculentas Mini",
-            categoryLabel: "Velas Aromáticas Decorativas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Mimoso vasinho de cerâmica com mini cactos e suculentas em cera vegetal e laço branco.",
             description: "Encantadora mini vela aromática artesanal apresentada num delicado vasinho de barro decorado com um laço de cetim branco. Composta por um trio de mini cactos e suculentas minuciosamente esculpidos à mão em cera de soja vegetal 100% natural. Perfeita para lembranças de eventos, festas e decoração botânica.",
             aromaProfile: "Jasmim Silvestre, Chá Verde, Erva-Cidreira"
         },
         es: {
             name: "Vela Cactus & Suculentas Mini",
-            categoryLabel: "Velas Aromáticas Decorativas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantadora mini vela con trío de mini suculentas en maceta con lazo blanco.",
             description: "Adorable mini vela aromática artesanal presentada en una delicada macetita de barro decorada con un lazo de satén blanco. Compuesta por un trío de mini suculentas y cactus esculpidos a mano con cera de soya vegetal 100% natural. Una joya botánica especial.",
             aromaProfile: "Jazmín Silvestre, Té Verde, Toronjil"
         },
         en: {
             name: "Mini Cactus & Succulents Candle",
-            categoryLabel: "Decorative Aromatic Candles",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Charming mini candle with a trio of sculpted succulents in a clay pot with a white ribbon.",
             description: "Charming handcrafted aromatic mini candle presented in a delicate terracotta pot wrapped with a graceful white satin ribbon. Featuring a meticulously hand-sculpted trio of mini succulents and cactus in 100% natural soy wax. Ideal for event favors and botanical decor.",
             aromaProfile: "Wild Jasmine, Green Tea, Lemon Balm"
         },
         fr: {
             name: "Mini Bougie Cactus & Succulentes",
-            categoryLabel: "Bougies Aromatiques Décoratives",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Mignonne mini bougie avec trio de succulentes dans un pot en terre cuite avec ruban blanc.",
             description: "Adorable mini bougie aromatique artisanale composée d'un trio de mini succulentes sculptées à la main en cire de soja 100% naturelle, présentée dans un joli pot en terre cuite orné d'un ruban blanc.",
             aromaProfile: "Jasmin Sauvage, Thé Vert, Mélisse"
@@ -791,28 +791,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Cactus Mini",
-            categoryLabel: "Velas Aromáticas Decorativas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Delicada mini vela em formato de cacto verde num vasinho de cerâmica com laço azul.",
             description: "Adorável mini vela aromática artesanal esculpida em formato de cacto esférico verde, apresentada num mimoso vasinho de barro decorado com um elegante laço de cetim azul. Feita à mão com cera vegetal de soja 100% natural, proporcionando um aroma botânico fresco e acolhedor.",
             aromaProfile: "Aloé Vera, Chá Verde, Menta Fresca"
         },
         es: {
             name: "Vela Cactus Mini",
-            categoryLabel: "Velas Aromáticas Decorativas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Delicada mini vela en forma de cactus verde en maceta con lazo azul.",
             description: "Encantadora mini vela aromática artesanal moldeada con la figura de un cactus verde, presentada en una linda macetita decorada con un elegante lazo de satén azul. Elaborada a mano con cera de soya vegetal 100% natural y mecha de algodón.",
             aromaProfile: "Aloe Vera, Té Verde, Menta Fresca"
         },
         en: {
             name: "Mini Cactus Candle",
-            categoryLabel: "Decorative Aromatic Candles",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Delicate mini green cactus candle in a terracotta pot with a blue ribbon bow.",
             description: "Adorable handcrafted aromatic mini candle sculpted in the shape of a green spherical cactus, presented in a charming clay pot wrapped with an elegant blue satin ribbon. Made with 100% natural soy wax for a refreshing botanical scent.",
             aromaProfile: "Aloe Vera, Green Tea, Fresh Mint"
         },
         fr: {
             name: "Mini Bougie Cactus",
-            categoryLabel: "Bougies Aromatiques Décoratives",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Délicate mini bougie cactus vert dans un pot en céramique avec ruban bleu.",
             description: "Superbe mini bougie aromatique artisanale sculptée en forme de cactus vert, présentée dans un joli petit pot en terre cuite orné d'un ruban bleu. Fabriquée à la main avec de la cire de soja 100% naturelle.",
             aromaProfile: "Aloès, Thé Vert, Menthe Fraîche"
@@ -826,28 +826,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Cactus Premium",
-            categoryLabel: "Vela Aromática Premium",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Jardim exuberante de cactos e suculentas em travessa oval grande com cacto saguaro.",
             description: "Excepcional e luxuosa vela aromática apresentada numa travessa oval grande de cerâmica branca, ostentando um verdadeiro minijardim artesanal com um imponente cacto Saguaro 3D e várias suculentas esculpidas em cera vegetal. Com múltiplos pavios para proporcionar um perfume fresco e uma queima impecável.",
             aromaProfile: "Chá Verde, Aloé Vera, Capim-Limão, Botânico Fresco"
         },
         es: {
             name: "Vela Cactus Premium",
-            categoryLabel: "Vela Aromática Premium",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Jardín exuberante de cactus y suculentas en bandeja ovalada grande con cactus saguaro.",
             description: "Excepcional y lujosa vela aromática presentada en una bandeja ovalada grande de cerámica blanca, albergando un verdadero minijardín artesanal con un imponente cactus Saguaro 3D y varias suculentas esculpidos en cera vegetal. Con múltiples mechas para proporcionar un perfume fresco y una combustión impecable.",
             aromaProfile: "Té Verde, Aloe Vera, Hierba Limón, Botánico Fresco"
         },
         en: {
             name: "Premium Cactus Candle",
-            categoryLabel: "Premium Scented Candle",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Lush garden of wax cacti & succulents featuring a 3D saguaro cactus in a large oval tray.",
             description: "An exceptional luxury scented candle in a large white ceramic oval tray, showcasing a handcrafted desert garden featuring a prominent 3D Saguaro cactus and assorted succulents. Designed with multiple wicks for a clean burn and fresh botanical aroma.",
             aromaProfile: "Green Tea, Aloe Vera, Lemongrass, Fresh Botanical"
         },
         fr: {
             name: "Bougie Cactus Premium",
-            categoryLabel: "Bougie Parfumée Premium",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Jardin luxuriant de cactus et succulentes avec grand cactus Saguaro en 3D.",
             description: "Exceptionnelle bougie parfumée haut de gamme présentée dans un grand plateau ovale en céramique blanche, abritant un véritable mini-jardin artisanal avec un majestueux cactus Saguaro 3D et des succulentes en cire.",
             aromaProfile: "Thé Vert, Aloe Vera, Citronnelle, Vivifiant"
@@ -1002,28 +1002,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Oceanium",
-            categoryLabel: "Vela Aromática Premium",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Vela artesanal em taça cerâmica inspirada nas ondas do oceano com conchas e folha de ouro.",
             description: "Uma verdadeira obra de arte inspirada na imensidão do mar e no calor do verão. A vela 'Oceanium' é apresentada numa elegante taça de cerâmica branca, recriando as águas cristalinas do oceano com conchas marinhas naturais, pérolas reluzentes, folhas de ouro e pavios duplos de madeira crepitantes.",
             aromaProfile: "Brisa Marinha, Sal de Maço, Flor de Lótus, Coco e Brisa de Verão"
         },
         es: {
             name: "Vela Oceanium",
-            categoryLabel: "Vela Aromática Premium",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Vela artesanal en cuenco cerámico inspirada en las olas del océano con conchas y pan de oro.",
             description: "Una verdadera obra de arte inspirada en la inmensidad del mar y el calor del verano. La vela 'Oceanium' se presenta en un elegante cuenco de cerámica blanca, recreando las aguas cristalinas del océano con conchas marinas naturales, perlas brillantes, pan de oro y mechas dobles de madera crepitante.",
             aromaProfile: "Brisa Marina, Sal de Mar, Flor de Loto, Coco y Brisa de Verano"
         },
         en: {
             name: "Oceanium Candle",
-            categoryLabel: "Premium Scented Candle",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Handcrafted ceramic candle inspired by ocean waves with shells & gold leaf.",
             description: "A true piece of art inspired by the vast ocean and summer warmth. The 'Oceanium' candle features a large white ceramic bowl capturing crystal-blue ocean waters adorned with real seashells, lustrous pearls, gold leaf flakes, and dual crackling wooden wicks.",
             aromaProfile: "Ocean Breeze, Sea Salt, Lotus Flower, Coconut & Summer Wind"
         },
         fr: {
             name: "Bougie Oceanium",
-            categoryLabel: "Bougie Parfumée Premium",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Bougie artisanale inspirée des vagues de l'océan avec coquillages et feuille d'or.",
             description: "Une véritable œuvre d'art inspirée par la beauté de l'océan et la chaleur de l'été. Présentée dans une grande coupe en céramique blanche, elle récrée des eaux bleu cristal avec de vrais coquillages, des perles, de la feuille d'or et deux mèches en bois crépitantes.",
             aromaProfile: "Brise Marine, Sel de Mer, Fleur de Lotus, Noix de Coco"
@@ -1142,28 +1142,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Coelhinho Fofinho",
-            categoryLabel: "Velas Aromáticas Decorativas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantadora vela artesanal esculpida em formato de coelhinho com orelhinhas rosa.",
             description: "Adorável vela aromática artesanal em formato de coelhinho sentado com detalhes rosados nas orelhas e patinhas. Esculpida à mão com cera vegetal de soja 100% natural e essência delicada. Uma peça encantadora para decorar a casa ou presentear em ocasiões especiais.",
             aromaProfile: "Morango Doce, Flor de Laranjeira, Baunilha"
         },
         es: {
             name: "Vela Conejito Tiernos Detalles",
-            categoryLabel: "Velas Aromáticas Decorativas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantadora vela artesanal moldeada con la figura de un tierno conejito.",
             description: "Adorable vela aromática artesanal moldeada a mano con la figura de un conejito sentado con delicados detalles rosados en sus orejas y patitas. Elaborada con cera de soya vegetal 100% natural y mecha de algodón. Una pieza dulce y entrañable.",
             aromaProfile: "Fresa Dulce, Flor de Azahar, Vainilla"
         },
         en: {
             name: "Cute Bunny Candle",
-            categoryLabel: "Decorative Aromatic Candles",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Charming handcrafted candle sculpted in the shape of a cute bunny with pink ears.",
             description: "Adorable handcrafted aromatic candle sculpted in the shape of a sitting bunny with pink ears and paw pads. Made with 100% natural soy wax, cotton wick, and sweet fragrance. A charming piece for home decor and gifting.",
             aromaProfile: "Sweet Strawberry, Orange Blossom, Vanilla"
         },
         fr: {
             name: "Bougie Petit Lapin Mignon",
-            categoryLabel: "Bougies Aromatiques Décoratives",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Adorable bougie artisanale en forme de petit lapin aux oreilles roses.",
             description: "Adorable bougie aromatique artisanale sculptée à la main en forme de petit lapin assis avec de délicats détails rose pastel sur ses oreilles et pattes. Fabriquée avec de la cire de soja 100% naturelle.",
             aromaProfile: "Fraise Douce, Fleur d'Oranger, Vanille"
@@ -1177,28 +1177,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Cãozinho Fofinho Personalizado",
-            categoryLabel: "Velas Aromáticas Decorativas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Adorável vela artesanal esculpida em formato de cãozinho de estimação.",
             description: "Adorável vela aromática artesanal meticulosamente esculpida à mão em formato de um cãozinho de estimação fofinho. Elaborada com cera de soja vegetal 100% natural, pavio de algodão e essência suave. Perfeita para amantes de animais e como lembrança memorável de estimação.",
             aromaProfile: "Baunilha Aconchegante, Flor de Algodão, Almíscar Suave"
         },
         es: {
             name: "Vela Perrito Lindo Personalizado",
-            categoryLabel: "Velas Aromáticas Decorativas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Adorable vela artesanal moldeada con la figura de un perrito con atuendo.",
             description: "Encantadora vela aromática artesanal moldeada a mano con la figura de un adorable perrito. Elaborada con cera de soya vegetal 100% natural, mecha de algodón y fragancia delicada. Ideal para amantes de las mascotas y como recuerdo especial.",
             aromaProfile: "Vainilla Acogedora, Flor de Algodón, Almizcle Suave"
         },
         en: {
             name: "Custom Cute Puppy Candle",
-            categoryLabel: "Decorative Aromatic Candles",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Charming handcrafted candle sculpted in the shape of a dressed cute puppy.",
             description: "Charming handcrafted aromatic candle meticulously sculpted in the shape of an adorable puppy. Made with 100% natural soy wax, cotton wick, and delicate fragrance. Perfect for pet lovers and memorable decor.",
             aromaProfile: "Cozy Vanilla, Cotton Flower, Soft Musk"
         },
         fr: {
             name: "Bougie Chiot Mignon Personnalisé",
-            categoryLabel: "Bougies Aromatiques Décoratives",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Adorable bougie artisanale sculptée en forme de petit chien habillé.",
             description: "Superbe bougie aromatique artisanale sculptée à la main en forme d'un adorable petit chien. Fabriquée avec de la cire de soja 100% naturelle et mèche en coton. Parfait pour les amoureux des animaux.",
             aromaProfile: "Vanille Douce, Fleur de Coton, Musc Doux"
@@ -1249,28 +1249,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Conjunto Leveza - Conchas do Mar",
-            categoryLabel: "Conjunto de Velas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Conjunto de 2 velas aromáticas em formato de concha em tons pastel.",
             description: "Encantador conjunto 'Leveza' composto por duas velas aromáticas moldadas em formato de conchas marinhas em tons pastel (rosa delicado e azul mar). Traz a brisa suave e a tranquilidade do oceano para a sua casa. (Conjunto por 9,90€, grande individual por 4,90€, pequena individual por 3,90€).",
             aromaProfile: "Brisa Marinha, Sal de Maço, Flor de Lótus, Suave"
         },
         es: {
             name: "Conjunto Leveza - Conchas de Mar",
-            categoryLabel: "Conjunto de Velas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Conjunto de 2 velas aromáticas en forma de concha en tonos pastel.",
             description: "Encantador conjunto 'Leveza' compuesto por dos velas aromáticas moldeadas en forma de conchas marinas en tonos pastel (rosa delicado y azul mar). Aporta la brisa suave y la tranquilidad del océano a tu hogar. (Conjunto por 9,90€, grande individual por 4,90€, pequeña individual por 3,90€).",
             aromaProfile: "Brisa Marina, Flor de Loto, Fresco, Suave"
         },
         en: {
             name: "Leveza Sea Shell Candle Set",
-            categoryLabel: "Candle Set",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Set of 2 pastel sea shell scented candles.",
             description: "Charming 'Leveza' set featuring two handcrafted sea shell scented candles in soft pastel shades (delicate pink and ocean blue). Brings the serene ocean breeze into your home. (Set for €9.90, large individual for €4.90, small individual for €3.90).",
             aromaProfile: "Ocean Breeze, Lotus Flower, Fresh, Gentle"
         },
         fr: {
             name: "Ensemble Leveza - Coquillages",
-            categoryLabel: "Ensemble de Bougies",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Ensemble de 2 bougies coquillages en teintes pastel.",
             description: "Charmant ensemble 'Leveza' composé de deux bougies parfumées en forme de coquillages aux couleurs pastel (rose délicat et bleu mer). (Ensemble à 9,90€, grande seule à 4,90€, petite seule à 3,90€).",
             aromaProfile: "Brise Marine, Fleur de Lotus, Frais, Doux"
@@ -1284,28 +1284,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Conjunto Velas Cão & Gato",
-            categoryLabel: "Conjunto de Velas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Conjunto de 2 velas decorativas aromáticas em formato de cão e gato.",
             description: "Encantador conjunto de duas velas aromáticas artesanais esculpidas em formato de cão e gato. Feitas à mão com cera vegetal e aromas suaves, perfeitas para homenagear os animais de estimação e trazer doçura ao lar. (Disponível em conjunto por 9,90€ ou individualmente por 4,90€ cada).",
             aromaProfile: "Baunilha, Caramelo, Doce, Aconchegante"
         },
         es: {
             name: "Conjunto Velas Perro & Gato",
-            categoryLabel: "Conjunto de Velas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Conjunto de 2 velas decorativas aromáticas en forma de perro y gato.",
             description: "Encantador conjunto de dos velas aromáticas artesanales esculpidas en forma de perro y gato. Hechas a mano con cera vegetal y aromas suaves, perfectas para homenajear a las mascotas y aportar ternura al hogar. (Disponible en conjunto por 9,90€ o individualmente por 4,90€ cada una).",
             aromaProfile: "Vainilla, Caramelo, Dulce, Acogedor"
         },
         en: {
             name: "Dog & Cat Candle Set",
-            categoryLabel: "Candle Set",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Set of 2 decorative scented candles shaped as a dog and a cat.",
             description: "Charming set of two handcrafted scented candles sculpted in the shape of a dog and a cat. Made from natural soy wax with sweet soothing aromas, ideal for pet lovers. (Available as a set for €9.90 or individually for €4.90 each).",
             aromaProfile: "Vanilla, Caramel, Sweet, Cozy"
         },
         fr: {
             name: "Ensemble Bougies Chien & Chat",
-            categoryLabel: "Ensemble de Bougies",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Ensemble de 2 bougies parfumées décoratives en forme de chien et chat.",
             description: "Charmant ensemble de deux bougies parfumées artisanales sculptées en forme de chien et de chat. Fabriquées à la main avec de la cire naturelle et des senteurs douces. (Disponible en ensemble à 9,90€ ou individuellement à 4,90€ chacune).",
             aromaProfile: "Vanille, Caramel, Doux, Chaleureux"
@@ -1480,7 +1480,7 @@ const PRODUCTS = [
         },
         fr: {
             name: "Bougie Citrouille d'Automne",
-            categoryLabel: "Bougie Parfumée'Automne",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Ravissante bougie artisanale dans un contenant en céramique forme citrouille orange avec anis étoilé et mèche en bois.",
             description: "L'esprit chaleureux de l'automne capturé dans une pièce artisanale d'exception ! Moulée dans un élégant contenant en céramique sculpté en forme de citrouille orange avec son couvercle assorti. Sa cire végétale est agrémentée d'une mèche en bois crépitante, d'anis étoilé et de perles délicates pour illuminer vos soirées d'automne.",
             aromaProfile: "Cannelle Chaude, Citrouille Épicée, Vanille Bourbon, Noix de Muscade, Cèdre"
@@ -2335,28 +2335,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Buquê Aquarium",
-            categoryLabel: "Buquê",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantador arranjo floral em tons azul e branco moldado em cera de soja natural.",
             description: "Encantador arranjo floral artesanal em tons azul e branco moldado em cera de soja natural. Apresentado em vaso cerâmico com laço decorativo, combina rosas e flores esculpidas com um aroma fresco e relaxante.",
             aromaProfile: "Cera de Soja 100% Natural, Azul & Branco, Fresco, Relaxante"
         },
         es: {
             name: "Ramo Aquarium",
-            categoryLabel: "Buqué",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantador arreglo floral en tonos azul y blanco moldeado en cera de soja natural.",
             description: "Encantador arreglo floral artesanal en tonos azul y blanco moldeado en cera de soja natural. Presentado en maceta cerámica con lazo decorativo, combina rosas y flores esculpidas con un aroma fresco y relajante.",
             aromaProfile: "Cera de Soja 100% Natural, Azul & Blanco, Fresco, Relajante"
         },
         en: {
             name: "Aquarium Candle Bouquet",
-            categoryLabel: "Bouquet",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Charming blue and white floral arrangement handcrafted from natural soy wax.",
             description: "Charming handcrafted floral arrangement in sea blue and white tones molded from 100% natural soy wax. Presented in a ceramic pot with a decorative bow, featuring sculpted roses and fresh, relaxing floral notes.",
             aromaProfile: "100% Natural Soy Wax, Blue & White, Fresh, Relaxing"
         },
         fr: {
             name: "Bouquet Aquarium",
-            categoryLabel: "Bouquet",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Ravissant arrangement floral bleu et blanc moulé en cire de soja naturelle.",
             description: "Ravissant arrangement floral artisanal aux teintes bleu mer et blanc moulé en cire de soja 100% naturelle. Présenté dans un pot en céramique avec un ruban décoratif, associant roses sculptées et parfum frais et relaxant.",
             aromaProfile: "Cire de Soja 100% Naturelle, Bleu & Blanc, Frais, Relaxant"
@@ -2440,28 +2440,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Buquê na Mala",
-            categoryLabel: "Buquê",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Sofisticado arranjo floral de velas artesanais apresentado numa elegante mala decorativa com corrente dourada.",
             description: "Sofisticado e original arranjo floral artesanal feito com velas em cera de soja pura em tons rosa, roxo e branco. Apresentado numa requintada caixa em formato de mala com asa de corrente dourada, é uma peça de presente inesquecível e ultra charmosa.",
             aromaProfile: "Cera de Soja 100% Natural, Floral Exclusivo, Presente de Luxo"
         },
         es: {
             name: "Ramo en Bolsito",
-            categoryLabel: "Buqué",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Sofisticado arreglo floral de velas artesanales presentado en un elegante bolso decorativo con cadena dorada.",
             description: "Sofisticado y original arreglo floral artesanal elaborado con velas en cera de soja pura en tonos rosa, morado y blanco. Presentado en una exquisita caja en formato de bolsito con asa de cadena dorada, es una pieza de regalo inolvidable y llena de encanto.",
             aromaProfile: "Cera de Soja 100% Natural, Floral Exclusivo, Regalo de Lujo"
         },
         en: {
             name: "Handbag Bouquet",
-            categoryLabel: "Bouquet",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Sophisticated handcrafted candle floral arrangement presented in an elegant gift handbag box with gold chain.",
             description: "Sophisticated and original handcrafted floral arrangement featuring realistic soy wax flower candles in pink, purple, and white tones. Presented in an exquisite handbag gift box with a delicate gold chain handle, perfect for a chic and memorable gift.",
             aromaProfile: "100% Natural Soy Wax, Exclusive Floral, Luxury Gift"
         },
         fr: {
             name: "Bouquet Sac à Main",
-            categoryLabel: "Bouquet",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Arrangement floral artisanal de bougies présenté dans une élégante boîte sac à main avec chaîne dorée.",
             description: "Sophistiqué et original arrangement floral fait main composé de bougies en cire de soja aux teintes rose, violet et blanc. Présenté dans une élégante boîte sac à main avec anse en chaîne dorée, c'est un cadeau d'exception chic et inoubliable.",
             aromaProfile: "Cire de Soja 100% Naturelle, Floral Exclusif, Cadeau de Luxe"
@@ -2512,28 +2512,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Virgem Santa",
-            categoryLabel: "Peças Decorativas e Esculturas Artesanais",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Majestosa cúpula de vidro com imagem da Virgem Santa coroada, envolvida por delicadas rosas.",
             description: "Uma verdadeira obra de arte devocional e decorativa! Esta belíssima peça apresenta uma cúpula de vidro transparente sobre base de madeira natural, abrigando no seu interior a imagem delicadamente detalhada e coroada da Virgem Santa, rodeada por rosas e folhagem verdejante.",
             aromaProfile: "Rosas Brancas, Flor de Lótus, Incenso Suave, Baunilha Angelical"
         },
         es: {
             name: "Virgem Santa",
-            categoryLabel: "Piezas Decorativas y Esculturas Artesanales",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Majestuosa cúpula de cristal con imagen de la Virgen Santa coronada, rodeada de delicadas rosas.",
             description: "¡Una verdadera obra de arte devocional y decorativa! Esta bellísima pieza presenta una cúpula de cristal transparente sobre base de madera natural, albergando en su interior la imagen delicadamente detallada y coronada de la Virgen Santa, rodeada por rosas y follaje verde.",
             aromaProfile: "Rosas Blancas, Flor de Loto, Incienso Suave, Vainilla Angelical"
         },
         en: {
             name: "Virgem Santa",
-            categoryLabel: "Decorative Pieces & Handcrafted Sculptures",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Majestic glass dome featuring a crowned Virgin Mary figurine surrounded by delicate roses.",
             description: "A devotional and decorative masterpiece! This exquisite piece features a clear glass dome atop a natural wooden base, enclosing a finely detailed crowned Virgin Mary statue nestled among soft roses and lush greenery.",
             aromaProfile: "White Roses, Lotus Flower, Soft Incense, Heavenly Vanilla"
         },
         fr: {
             name: "Virgem Santa",
-            categoryLabel: "Pièces Décoratives & Sculptures Artisanales",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Majestueuse cloche en verre abritant la Sainte Vierge couronnée entourée de délicates roses.",
             description: "Une véritable œuvre d'art dévotionnelle et décorative ! Cette création d'une grande élégance présente une cloche en verre sur socle en bois naturel, protégeant en son cœur la figurine de la Sainte Vierge couronnée au milieu de roses et de verdure.",
             aromaProfile: "Roses Blanches, Fleur de Lotus, Encens Doux, Vanille Angélique"
@@ -2547,28 +2547,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Pote Carrossel",
-            categoryLabel: "Peças Decorativas e Porta-Jóias Artesanais",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante pote artesanal em formato de carrossel vintage com cavalinhos em relevo e tampa bordeaux com ponta dourada.",
             description: "Uma peça decorativa nostálgica e cheia de encanto! Este pote artesanal esculpido em pormenor apresenta cavalinhos de carrossel em relevo 3D ao redor do corpo branco porcelana, coroado por uma tampa com topo bordeaux e remate dourado. Perfeito para guardar joias, pequenos tesouros ou como vela artesanal de destaque.",
             aromaProfile: "Baunilha Vintage, Flor de Algodão, Âmbar Dourado, Almíscar Suave"
         },
         es: {
             name: "Pote Carrusel",
-            categoryLabel: "Piezas Decorativas y Joyeros Artesanales",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante tarro artesanal en forma de carrusel vintage con caballitos en relieve y tapa burdeos con remate dorado.",
             description: "¡Una pieza decorativa nostálgica y llena de encanto! Este tarro artesanal esculpido con gran detalle presenta caballitos de carrusel en relieve 3D sobre cuerpo blanco porcelana, coronado por una tapa burdeos con remate dorado. Perfecto para guardar joyas, pequeños tesoros o como pieza decorativa de distinción.",
             aromaProfile: "Vainilla Vintage, Flor de Algodón, Ámbar Dorado, Almizcle Suave"
         },
         en: {
             name: "Carousel Jar",
-            categoryLabel: "Decorative Pieces & Handcrafted Keepsake Jars",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Elegant handcrafted vintage carousel jar featuring 3D embossed horses and a burgundy top with a gold finial.",
             description: "A nostalgic and enchanting decorative masterpiece! Handcrafted with intricate detail, this porcelain-white jar features 3D embossed carousel horses along its body, topped with a rich burgundy canopy lid and a touch of gold. Ideal for holding jewelry, trinkets, or as an eye-catching home accent.",
             aromaProfile: "Vintage Vanilla, Cotton Blossom, Golden Amber, Soft Musk"
         },
         fr: {
             name: "Pot Carrousel",
-            categoryLabel: "Pièces Décoratives & Boîtes à Bijoux Artisanales",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Élégant pot artisanal en forme de carrousel vintage avec chevaux en relief et couvercle bordeaux à pointe dorée.",
             description: "Une création décorative nostalgique et pleine de charme ! Ce pot artisanal aux finitions minutieuses met en scène des chevaux de manège en relief 3D, couronné par un couvercle bordeaux rehaussé d'une touche dorée. Parfait pour ranger bijoux, petits trésors ou sublimer votre décoration.",
             aromaProfile: "Vanille Vintage, Fleur de Coton, Ambre Doré, Musc Doux"
@@ -2582,28 +2582,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Lama",
-            categoryLabel: "Velas Aromáticas em Copo de Vidro",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Adorável e pacífica chama/lama esculpida em cera vegetal num delicado copo de vidro transparente.",
             description: "Uma vela encantadora que transmite paz e doçura! Apresentada num copo de vidro transparente com cera vegetal cremosa, esta vela destaca-se pela figura esculpida à mão de uma mimosinha lama com olhos fechados e selim com brilho. Ideal para criar uma atmosfera aconchegante e serena no seu espaço.",
             aromaProfile: "Flor de Baunilha, Leite de Amêndoa, Algodão Doce, Almíscar Suave"
         },
         es: {
             name: "Vela Llama",
-            categoryLabel: "Velas Aromáticas en Vaso de Cristal",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Adorable y pacífica llama esculpida en cera vegetal en un delicado vaso de cristal transparente.",
             description: "¡Una vela encantadora que transmite paz y dulzura! Presentada en un vaso de cristal transparente con cera vegetal cremosa, esta vela destaca por la figura esculpida a mano de una tierna llamita con ojos cerrados y manta brillante. Ideal para crear una atmósfera acogedora y serena en tu hogar.",
             aromaProfile: "Flor de Vainilla, Leche de Almendras, Algodón de Azúcar, Almizcle Suave"
         },
         en: {
             name: "Llama Candle",
-            categoryLabel: "Scented Candle in Clear Glass Cup",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Sweet handcrafted sleeping llama figurine sculpted in soy wax inside a clear glass cup.",
             description: "A charming scented candle that brings serene sweetness to any space! Set inside a clear glass cup filled with creamy soy wax, featuring a hand-sculpted sleeping llama figurine with glittery details. Perfect for creating a cozy, relaxing ambiance.",
             aromaProfile: "Vanilla Blossom, Almond Milk, Sweet Cotton, Soft Musk"
         },
         fr: {
             name: "Bougie Lama",
-            categoryLabel: "Bougie Parfumée en Verre Transparent",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Adorable petit lama sculpté à la main en cire végétale dans une verrine transparente.",
             description: "Une bougie parfumée empreinte de douceur et de sérénité ! Présentée dans une verrine en verre transparent avec de la cire végétale crémeuse, elle met en scène un mignon petit lama aux yeux fermés avec une selle scintillante. Parfaite pour offrir une ambiance chaleureuse et apaisante.",
             aromaProfile: "Fleur de Vanille, Lait d'Amande, Coton Doux, Musc Apaisant"
@@ -2617,28 +2617,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Pote Carrossel Azul",
-            categoryLabel: "Peças Decorativas e Porta-Jóias Artesanais",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante pote artesanal em formato de carrossel vintage com cavalinhos em relevo e tampa azul pastel com topo dourado.",
             description: "Uma graciosa peça decorativa cheia de ternura! Este pote artesanal esculpido em pormenor apresenta cavalinhos de carrossel em relevo 3D ao redor do corpo branco porcelana, coroado por uma delicada tampa em tom azul pastel com remate dourado. Perfeito para guardar joias, pequenos tesouros ou como ornamento de destaque.",
             aromaProfile: "Brisa Suave, Flor de Algodão, Baunilha Doce, Almíscar Branco"
         },
         es: {
             name: "Pote Carrusel Azul",
-            categoryLabel: "Piezas Decorativas y Joyeros Artesanales",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante tarro artesanal en forma de carrusel vintage con caballitos en relieve y tapa azul pastel con remate dorado.",
             description: "¡Una graciosa pieza decorativa llena de ternura! Este tarro artesanal esculpido con gran detalle presenta caballitos de carrusel en relieve 3D sobre cuerpo blanco porcelana, coronado por una delicada tapa en tono azul pastel con remate dorado. Perfecto para guardar joyas, pequeños tesoros o como pieza decorativa de distinción.",
             aromaProfile: "Brisa Suave, Flor de Algodón, Vainilla Dulce, Almizcle Blanco"
         },
         en: {
             name: "Blue Carousel Jar",
-            categoryLabel: "Decorative Pieces & Handcrafted Keepsake Jars",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Elegant handcrafted vintage carousel jar featuring 3D embossed horses and a pastel blue canopy lid with a gold finial.",
             description: "A charming and graceful decorative centerpiece! Handcrafted with intricate detail, this porcelain-white jar features 3D embossed carousel horses along its body, topped with a soft pastel blue canopy lid and a touch of gold. Ideal for holding jewelry, trinkets, or adding serene elegance to any room.",
             aromaProfile: "Soft Breeze, Cotton Blossom, Sweet Vanilla, White Musk"
         },
         fr: {
             name: "Pot Carrousel Bleu",
-            categoryLabel: "Pièces Décoratives & Boîtes à Bijoux Artisanales",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Élégant pot artisanal en forme de carrousel vintage avec chevaux en relief et couvercle bleu pastel à pointe dorée.",
             description: "Une délicieuse création décorative empreinte de douceur ! Ce pot artisanal aux finitions soignées met en scène des chevaux de manège en relief 3D, couronné par un couvercle bleu pastel rehaussé d'une touche dorée. Parfait pour ranger bijoux, petits trésors ou embellir votre intérieur.",
             aromaProfile: "Brise Douce, Fleur de Coton, Vanille Douce, Musc Blanc"
@@ -2652,28 +2652,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Pote Carrossel Dourado",
-            categoryLabel: "Peças Decorativas e Porta-Jóias Artesanais",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante pote artesanal em formato de carrossel vintage com cavalinhos em relevo e luxuosa tampa dourada.",
             description: "Uma peça decorativa radiante e cheia de sofisticação! Este pote artesanal esculpido em pormenor apresenta cavalinhos de carrossel em relevo 3D ao redor do corpo branco porcelana, coroado por uma luxuosa tampa em tom dourado reluzente. Perfeito para guardar joias, pequenos tesouros ou como ornamento de destaque.",
             aromaProfile: "Âmbar Real, Flor de Baunilha, Sândalo Nobre, Almíscar Quente"
         },
         es: {
             name: "Pote Carrusel Dorado",
-            categoryLabel: "Piezas Decorativas y Joyeros Artesanales",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Elegante tarro artesanal en forma de carrusel vintage con caballitos en relieve y lujosa tapa dorada.",
             description: "¡Una pieza decorativa radiante y llena de sofisticación! Este tarro artesanal esculpido con gran detalle presenta caballitos de carrusel en relieve 3D sobre cuerpo blanco porcelana, coronado por una lujosa tapa en tono dorado reluciente. Perfecto para guardar joyas, pequeños tesoros o como pieza decorativa de distinción.",
             aromaProfile: "Ámbar Real, Flor de Vainilla, Sándalo Noble, Almizcle Cálido"
         },
         en: {
             name: "Gold Carousel Jar",
-            categoryLabel: "Decorative Pieces & Handcrafted Keepsake Jars",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Elegant handcrafted vintage carousel jar featuring 3D embossed horses and a luxurious metallic gold canopy lid.",
             description: "A radiant and sophisticated decorative centerpiece! Handcrafted with intricate detail, this porcelain-white jar features 3D embossed carousel horses along its body, topped with a luxurious metallic gold canopy lid. Ideal for holding jewelry, trinkets, or adding opulent elegance to any room.",
             aromaProfile: "Royal Amber, Vanilla Blossom, Noble Sandalwood, Warm Musk"
         },
         fr: {
             name: "Pot Carrousel Doré",
-            categoryLabel: "Pièces Décoratives & Boîtes à Bijoux Artisanales",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Élégant pot artisanal en forme de carrousel vintage avec chevaux en relief et luxueux couvercle doré.",
             description: "Une superbe création décorative étincelante et raffinée ! Ce pot artisanal aux finitions soignées met en scène des chevaux de manège en relief 3D, couronné par un luxueux couvercle au fini doré brillant. Parfait pour ranger bijoux, petits trésors ou embellir votre intérieur.",
             aromaProfile: "Ambre Royal, Fleur de Vanille, Bois de Santal, Musc Chaud"
@@ -2687,28 +2687,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Blue Sky",
-            categoryLabel: "Velas Aromáticas em Taça de Vidro",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantadora vela aromática em taça de vidro circular com base azul celeste e nuvens brancas esculpidas em relevo.",
             description: "Uma verdadeira obra de arte aromática inspirada num céu límpido e sereno! Apresentada numa elegante taça baixa de vidro transparente, esta vela artesanal combina uma base de cera num vibrante azul celeste com delicadas nuvens brancas tridimensionais esculpidas na superfície. Com múltiplos pavios, proporciona uma iluminação suave e uma fragrância fresca e relaxante que transforma qualquer ambiente num refúgio de paz.",
             aromaProfile: "Brisa Marinha, Algodão Fresco, Flor de Lotus, Suave Baunilha"
         },
         es: {
             name: "Vela Blue Sky",
-            categoryLabel: "Velas Aromáticas en Cuenco de Cristal",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantadora vela aromática en cuenco de cristal circular con base azul celeste y nubes blancas esculpidas en relieve.",
             description: "¡Una verdadera obra de arte aromática inspirada en un cielo despejado y sereno! Presentada en un elegante cuenco bajo de cristal transparente, esta vela artesanal combina una base de cera en un vibrante azul celeste con delicadas nubes blancas tridimensionales esculpidas en la superficie. Con múltiples mechas, proporciona una iluminación suave y una fragancia fresca y relajante que transforma cualquier ambiente en un refugio de paz.",
             aromaProfile: "Brisa Marina, Algodón Fresco, Flor de Loto, Suave Vainilla"
         },
         en: {
             name: "Blue Sky Candle",
-            categoryLabel: "Glass Bowl Scented Candles",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Charming scented candle in a shallow glass bowl featuring a sky-blue wax base and handcrafted 3D white clouds.",
             description: "A breathtaking olfactory centerpiece inspired by a clear and serene sky! Handcrafted in a low clear glass bowl, this artisan candle combines a vibrant sky-blue wax base topped with beautifully sculpted 3D fluffy white clouds. Designed with multiple wicks, it provides a gentle ambient glow and a fresh, calming fragrance that fills your home with tranquil bliss.",
             aromaProfile: "Ocean Breeze, Clean Cotton, Lotus Flower, Soft Vanilla"
         },
         fr: {
             name: "Bougie Blue Sky",
-            categoryLabel: "Bougies Aromatiques en Coupe de Verre",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Raviante bougie parfumée dans une coupe en verre avec une base bleu ciel et de délicats nuages blancs en relief.",
             description: "Une véritable création poétique et parfumée inspirée par un ciel pur et serein ! Façonnée à la main dans une élégante coupe basse en verre transparent, cette bougie artisanale associe une cire bleu ciel éclatante à de délicats nuages blancs sculptés en 3D à la surface. Munie de plusieurs mèches, elle diffuse une lumière douce et un parfum frais et apaisant.",
             aromaProfile: "Brise Marine, Coton Frais, Fleur de Lotus, Douce Vanille"
@@ -2722,28 +2722,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Autumn Bear Hexagonal",
-            categoryLabel: "Velas Aromáticas Especiais e Decorativas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantador Urso de Outono com touca de abóbora em taça hexagonal de vidro com cogumelo, abóboras e folhas de cera.",
             description: "Uma verdadeira obra-prima artesanal que celebra o aconchego do Outono! Apresentada numa sofisticada taça hexagonal de vidro transparente, esta vela traz um adorável ursinho esculpido em cera 3D a usar uma touca de tricot em formato de abóbora. Acompanhado por um cogumelo artesanal, miniaturas de abóbora e folhas secas esculpidas em tons quentes, cria uma atmosfera mágica e perfumada em qualquer ambiente.",
             aromaProfile: "Cacau Quente, Canela em Pau, Baunilha de Outono, Avelã Torrada"
         },
         es: {
             name: "Vela Autumn Bear Hexagonal",
-            categoryLabel: "Velas Aromáticas Especiales y Decorativas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Encantador Oso de Otoño con gorrito de calabaza en cuenco hexagonal de cristal con seta, calabacitas y hojas de cera.",
             description: "¡Una verdadera obra maestra artesanal que celebra la calidez del Otoño! Presentada en un sofisticado cuenco hexagonal de cristal transparente, esta vela presenta un adorable osito esculpido en cera 3D con un gorro de punto en forma de calabaza. Acompañado por una seta artesanal, minicalabazas y hojas secas esculpidas en tonos cálidos, crea una atmósfera mágica y perfumada en cualquier estancia.",
             aromaProfile: "Cacao Caliente, Canela en Rama, Vainilla de Otoño, Avellana Tostada"
         },
         en: {
             name: "Autumn Bear Hexagonal Candle Dish",
-            categoryLabel: "Special & Decorative Scented Candles",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Charming Autumn Teddy Bear wearing a pumpkin beanie in a hexagonal glass dish with handcrafted wax mushroom, pumpkins & fall leaves.",
             description: "A breathtaking handcrafted centerpiece celebrating the cozy vibes of autumn! Set inside a clear hexagonal glass dish, this artisan candle features an adorable 3D wax teddy bear wearing a knitted pumpkin hat and holding a mini pumpkin. Surrounded by a detailed wax mushroom, mini pumpkins, and autumn leaves, it fills your space with warm nostalgic scents.",
             aromaProfile: "Hot Cocoa, Cinnamon Stick, Autumn Vanilla, Toasted Hazelnut"
         },
         fr: {
             name: "Bougie Coupe Hexagonale Autumn Bear",
-            categoryLabel: "Bougies Aromatiques Spéciales et Décoratives",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Adorable Ourson d'Automne avec bonnet citrouille dans une coupe hexagonale en verre avec champignon et citrouilles en cire.",
             description: "Une véritable chef-d'œuvre artisanal célébrant la douceur et le réconfort de l'Automne ! Présentée dans une élégante coupe hexagonale en verre transparent, cette bougie met en scène un adorable ourson en cire 3D coiffé d'un bonnet tricoté citrouille. Entouré d'un champignon féerique, de mini citrouilles et de feuilles d'automne en cire, elle diffuse un parfum enveloppant et chaleureux.",
             aromaProfile: "Chocolat Chaud, Bâton de Canelle, Vanille d'Automne, Noisette Grillée"
@@ -2757,28 +2757,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Bulldog Francês",
-            categoryLabel: "Velas Aromáticas Especiais e Edições Caninas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Adorável escultura artesanal 3D de cão Bulldog Francês sentado em taça de vidro circular.",
             description: "Uma peça absolutamente irresistível para os amantes de animais! Esta vela artesanal de luxo apresenta uma figura hiper-realista em cera 3D de um cachorrinho Bulldog Francês de cor bege com dobrinhas expressivas e orelhas eretas, delicadamente sentado sobre uma base de cera cremosa numa taça de vidro transparente. Um presente memorável e cheio de ternura.",
             aromaProfile: "Amêndoa Doce, Cera de Abelha Natural, Flor de Laranjeira, Almíscar Suave"
         },
         es: {
             name: "Vela Bulldog Francés",
-            categoryLabel: "Velas Aromáticas Especiales y Ediciones Caninas",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Adorable escultura artesanal 3D de perro Bulldog Francés sentado en cuenco de cristal circular.",
             description: "¡Una pieza absolutamente irresistible para los amantes de las mascotas! Esta vela artesanal de lujo presenta una figura hiperrealista en cera 3D de un cachorro Bulldog Francés de color leonado con expresivos pliegues y orejas erguidas, delicadamente sentado sobre una base de cera cremosa en un cuenco de cristal transparente. Un regalo memorable y lleno de ternura.",
             aromaProfile: "Almendra Dulce, Cera de Abeja Natural, Azahar, Almizcle Suave"
         },
         en: {
             name: "French Bulldog Candle Dish",
-            categoryLabel: "Special & Canine Edition Scented Candles",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Adorable handcrafted 3D French Bulldog puppy seated inside a clear circular glass candle dish.",
             description: "An utterly irresistible decorative scented candle for dog lovers! Handcrafted with extraordinary realism, this luxury candle features a 3D wax sculpture of a fawn French Bulldog puppy with expressive wrinkles and iconic bat ears, sitting atop a smooth creamy wax base inside a glass dish. A heartwarming gift that lights up any space with charm.",
             aromaProfile: "Sweet Almond, Natural Beeswax, Orange Blossom, Soft Musk"
         },
         fr: {
             name: "Bougie Coupe Bouledogue Français",
-            categoryLabel: "Bougies Aromatiques Spéciales et Éditions Canines",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Adorable sculpture artisanale 3D de chiot Bouledogue Français assis dans une coupe en verre.",
             description: "Une création irrésistible dédiée aux passionnés d'animaux ! Cette bougie artisanale d'exception met en scène la figurine hyper-réaliste en cire 3D d'un chiot Bouledogue Français couleur fauve avec des plis expressifs et de grandes oreilles droites, délicatement posé sur un lit de cire onctueuse dans une coupe en verre. Un cadeau mémorable et touchant.",
             aromaProfile: "Amande Douce, Cire d'Abeille Naturelle, Fleur d'Oranger, Musc Doux"
@@ -2792,28 +2792,28 @@ const PRODUCTS = [
         qty: 1,
         pt: {
             name: "Vela Piña Colada",
-            categoryLabel: "Velas Aromáticas em Taça de Cóctel",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Refrescante vela aromática em taça de vidro com laço branco e miniaturas de ananás em cera.",
             description: "Uma verdadeira viagem aromática às praias tropicais! Servida numa luxuosa taça de vidro transparente decorada com um gracioso laço acetinado branco, esta vela artesanal recria o famoso cóctel Piña Colada com camadas de cera amarela e cremosa, coroada por adoráveis miniaturas de ananás esculpidas em 3D. Uma peça exótica e vibrante para iluminar os seus momentos de relaxamento.",
             aromaProfile: "Ananás Suculento, Leite de Coco, Rum Suave, Baunilha Tropical"
         },
         es: {
             name: "Vela Piña Colada",
-            categoryLabel: "Velas Aromáticas en Copa de Cóctel",
+            categoryLabel: "Vela Aromática",
             aromaBrief: "Refrescante vela aromática en copa de cristal con lazo blanco y miniaturas de piña en cera.",
             description: "¡Un verdadero viaje aromático a las playas tropicales! Servida en una lujosa copa de cristal transparente decorada con un bonito lazo satinado blanco, esta vela artesanal recrea el famoso cóctel Piña Colada con capas de cera amarilla y cremosa, coronada por adorables miniaturas de piña esculpidas en 3D. Una pieza exótica y vibrante para iluminar tus momentos de relax.",
             aromaProfile: "Piña Jugosa, Leche de Coco, Ron Suave, Vainilla Tropical"
         },
         en: {
             name: "Piña Colada Cocktail Candle",
-            categoryLabel: "Cocktail Glass Scented Candles",
+            categoryLabel: "Scented Candle",
             aromaBrief: "Refreshing scented candle presented in a stems glass bowl with a white ribbon & handcrafted wax pineapples.",
             description: "A tropical sensory getaway in a glass! Presented in a stemmed cocktail glass adorned with a white satin ribbon, this handcrafted candle recreates the iconic Piña Colada with layered creamy yellow wax and detailed 3D pineapple wax miniatures. Featuring multiple wicks, it fills your room with sunny beach vibes and irresistible aromas.",
             aromaProfile: "Juicy Pineapple, Coconut Milk, Smooth Rum, Tropical Vanilla"
         },
         fr: {
             name: "Bougie Piña Colada",
-            categoryLabel: "Bougies Aromatiques en Coupe de Cocktail",
+            categoryLabel: "Bougie Parfumée",
             aromaBrief: "Raffinée bougie parfumée en verre à pied avec ruban blanc et mini ananas sculptés en cire.",
             description: "Une véritable escapade aromatique sous les tropiques ! Présentée dans un élégant verre à cocktail agrémenté d'un nœud en satin blanc, cette bougie artisanale réinvente la célèbre Piña Colada avec des couches de cire jaune crémeuse et de délicieux mini ananas en relief 3D. Une création exotique et lumineuse.",
             aromaProfile: "Ananas Jus, Lait de Coco, Rhum Doux, Vanille Tropicale"
@@ -4777,28 +4777,28 @@ PRODUCTS.push({
     qty: 1,
     pt: {
         name: "Wax Melts de Soja Aromáticos",
-        categoryLabel: "Cera de Soja / Ambientador",
+        categoryLabel: "Vela Aromática",
         aromaBrief: "Wax melts de soja natural e essências para queimadores.",
         description: "Fundidos à mão com cera de soja natural e essências premium. Perfeitos para libertar fragrâncias intensas e contínuas quando derretidos num queimador de essências. Uma alternativa ecológica e prática para perfumar a sua casa.",
         aromaProfile: "Fragrância Intensa, Cera de Soja, Prático"
     },
     es: {
         name: "Wax Melts de Soja Aromáticos",
-        categoryLabel: "Cera de Soja / Ambientador",
+        categoryLabel: "Vela Aromática",
         aromaBrief: "Wax melts de soja natural y esencias para quemadores.",
         description: "Fundidos a mano con cera de soja natural y esencias premium. Perfectos para liberar fragancias intensas y continuas cuando se derriten en un quemador de esencias. Una alternativa ecológica y práctica para perfumar tu hogar.",
         aromaProfile: "Fragancia Intensa, Cera de Soja, Práctico"
     },
     en: {
         name: "Aromatic Melts",
-        categoryLabel: "Soy Wax / Home Fragrance",
+        categoryLabel: "Scented Candle",
         aromaBrief: "Natural soy wax melts and fragrance essences for burners.",
         description: "Hand-poured with natural soy wax and premium fragrance essences. Perfect for releasing intense, continuous scents when melted in a fragrance burner. An eco-friendly and practical alternative to scent your home.",
         aromaProfile: "Intense Scent, Soy Wax, Practical"
     },
     fr: {
         name: "Fondants de Cire de Soja Parfumés",
-        categoryLabel: "Cire de Soja / Parfum de Maison",
+        categoryLabel: "Bougie Parfumée",
         aromaBrief: "Fondants de cire de soja naturelle et essences parfumées pour brûleurs.",
         description: "Fabriqués à la main avec de la cire de soja naturelle et des essences parfumées de qualité. Parfaits pour diffuser des parfums intenses et continus une fois fondus dans un brûle-parfum. Une alternative écologique et pratique.",
         aromaProfile: "Parfum Intense, Cire de Soja, Pratique"
@@ -4813,28 +4813,28 @@ PRODUCTS.push({
     qty: 1,
     pt: {
         name: "Vela Santa",
-        categoryLabel: "Vela Escultural Decorativa",
+        categoryLabel: "Vela Aromática",
         aromaBrief: "Vela artesanal escultural de Nossa Senhora com detalhes dourados e flores secas.",
         description: "Majestosa e devota vela artesanal escultural 'Vela Santa', moldada à mão em cera de soja ecológica em forma da imagem sagrada de Nossa Senhora com coroa e detalhes pintados à mão a ouro. Assenta sobre uma elegante base canelada em gesso ecológico rodeada por delicadas flores secas brancas (gipsófilas). Uma peça cheia de fé, paz e serenidade para abençoar o seu lar ou oferecer como lembrança especial.",
         aromaProfile: "Devoção, Cera de Soja, Detalhes a Ouro, Flores Secas"
     },
     es: {
         name: "Vela Santa",
-        categoryLabel: "Vela Escultórica Decorativa",
+        categoryLabel: "Vela Aromática",
         aromaBrief: "Vela artesanal escultórica de Nuestra Señora con detalles dorados y flores secas.",
         description: "Majestuosa y devota vela artesanal escultórica 'Vela Santa', moldeada a mano con cera de soja ecológica en forma de la sagrada figura de Nuestra Señora con corona y detalles pintados a mano en pan de oro. Reposa sobre una elegante base acanalada de yeso ecológico rodeada por delicadas flores secas blancas (gipsófilas). Una pieza llena de fe, paz y serenidad para bendecir tu hogar o regalar en fechas especiales.",
         aromaProfile: "Devoción, Cera de Soja, Detalles Dorados, Flores Secas"
     },
     en: {
         name: "Vela Santa",
-        categoryLabel: "Decorative Sculptural Candle",
+        categoryLabel: "Scented Candle",
         aromaBrief: "Handcrafted Virgin Mary sculptural candle with gold accents and dried flowers.",
         description: "Exquisite and peaceful handcrafted sculptural 'Vela Santa' candle, hand-poured with eco-friendly soy wax in the sacred image of Our Lady wearing a crown with hand-painted gold mantle accents. Resting on a white scalloped eco-plaster dish surrounded by delicate white dried botanical flowers. A sacred piece of faith, peace, and serenity for your home or as a meaningful gift.",
         aromaProfile: "Devotion, Eco Soy Wax, Gold Accents, Dried Flowers"
     },
     fr: {
         name: "Vela Santa",
-        categoryLabel: "Bougie Sculpturale Décorative",
+        categoryLabel: "Bougie Parfumée",
         aromaBrief: "Bougie sculpturale artisanale de la Sainte Vierge avec détails dorés et fleurs séchées.",
         description: "Majestueuse bougie sculpturale artisanale 'Vela Santa' coulée à la main en cire de soja écologique à l'effigie de la Sainte Vierge couronnée avec détails peints à la main à la dorure. Présentée dans un élégant réceptacle en plâtre écologique bordé de délicates fleurs séchées blanches. Une pièce empreinte de foi, de sérénité et de bénédiction.",
         aromaProfile: "Dévotion, Cire de Soja, Touches Dorées, Fleurs Séchées"
