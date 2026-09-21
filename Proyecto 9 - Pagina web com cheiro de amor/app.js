@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
 {
+        "id": "candle-bulldog-frances-1",
+        "category": "vaso",
+        "price": 16.90,
+        "image": "assets/vela_bulldog_frances.jpg",
+        "qty": 1,
+        "pt": {
+                "name": "Vela Bulldog Francês",
+                "categoryLabel": "COLEÇÃO DE OUTONO • ESCULTURA 3D EM VASO",
+                "aromaBrief": "Adorable escultura 3D de cão Bulldog Francês em cera vegetal descansando sobre vaso de vidro.",
+                "description": "Uma obra-prima irresistível de pura fofura e aconchego! Moldada à mão em cera de soja 100% vegetal biodegradável, a Vela Bulldog Francês apresenta uma ultra-realista escultura 3D de um cachorrinho Bulldog Francês em tons beges quentes, descansando suavemente sobre uma base de cera vegetal num elegante copo de vidro cristalino. Perfuma o ambiente com um aroma reconfortante e suave de baunilha doce, biscoito amanteigado e flor de algodão.",
+                "aromaProfile": "Baunilha Doce, Biscoito Amanteigado, Flor de Algodão, Âmbar Suave"
+        },
+        "es": {
+                "name": "Vela Bulldog Francés",
+                "categoryLabel": "COLECCIÓN DE OTOÑO • ESCULTURA 3D EN VASO",
+                "aromaBrief": "Adorable escultura 3D de perro Bulldog Francés en cera vegetal descansando sobre vaso de vidrio.",
+                "description": "¡Una obra maestra irresistible de pura ternura y calidez! Moldeada a mano en cera de soja 100% vegetal biodegradable, la Vela Bulldog Francés presenta una ultra-realista escultura 3D de un perrito Bulldog Francés en tonos beige cálidos, descansando suavemente sobre una base de cera vegetal en un elegante vaso de vidrio cristalino. Perfuma el ambiente con un aroma reconfortante y suave de vainilla dulce, galleta mantequillosa y flor de algodón.",
+                "aromaProfile": "Vainilla Dulce, Galleta de Mantequilla, Flor de Algodón, Ámbar Suave"
+        },
+        "en": {
+                "name": "French Bulldog Sculpted Candle",
+                "categoryLabel": "AUTUMN COLLECTION • 3D SCULPTED GLASS CANISTER",
+                "aromaBrief": "Adorable 3D French Bulldog pup wax sculpture resting inside a clear glass jar on creamy plant wax.",
+                "description": "An irresistible masterpiece of cozy sweetness and hand-crafted detail! Hand-poured using 100% natural eco-friendly soy wax, the French Bulldog Candle features a hyper-realistic 3D beige Frenchie pup sculpture sitting comfortably inside a clear glass cup on a layer of scented wax. Radiates a comforting aroma of sweet vanilla, butter cookies, and soft cotton blossom.",
+                "aromaProfile": "Sweet Vanilla, Butter Cookie, Cotton Blossom, Soft Amber"
+        },
+        "fr": {
+                "name": "Bougie Sculptée Bouledogue Français",
+                "categoryLabel": "COLLECTION D'AUTOMNE • SCULPTURE 3D EN VERRE",
+                "aromaBrief": "Adorable sculpture 3D de chiot Bouledogue Français en cire végétale reposant dans un verre transparent.",
+                "description": "Une véritable œuvre d'art irrésistible de tendresse et de réconfort ! Coulée à la main en cire de soja 100% végétale et biodégradable, la Bougie Bouledogue Français révèle une sculpture 3D ultra-réaliste d'un mignon petit bouledogue français beige reposant dans un verre transparent. Diffuse une fragrance réconfortante de vanille douce, biscuit beurre et fleur de coton.",
+                "aromaProfile": "Vanille Douce, Biscuit Beurre, Fleur de Coton, Ambre Doux"
+        }
+},
+{
         "id": "candle-carocha-1",
         "category": "vela",
         "price": 6.9,
