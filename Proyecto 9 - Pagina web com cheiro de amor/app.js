@@ -3,6 +3,41 @@
    ========================================================================== */
 const PRODUCTS = [
 {
+        "id": "candle-crucifixo-sao-bento-1",
+        "category": "vaso",
+        "price": 14.90,
+        "image": "assets/vela_cruz_sao_bento.jpg",
+        "qty": 1,
+        "pt": {
+                "name": "Vela Crucifixo São Bento no Vaso de Vidro",
+                "categoryLabel": "COLEÇÃO DE OUTONO • VASO DE VIDRO & GEL COM FOLHAS DE PRATA",
+                "aromaBrief": "Elegante vaso de vidro com cera vegetal cremosa, gel transparente com folhas de prata e medalha de crucifixo metálico.",
+                "description": "Uma peça artesanal única de profunda serenidade, fé e elegância! Apresentada num copo de vidro transparente de alta qualidade, a Vela Crucifixo São Bento combina uma camada superior de cera de soja vegetal 100% natural cremosa com uma base de gel cristalino ornamentado com delicados flocos de folha de prata. No centro destaca-se um trabalhado crucifixo metálico de São Bento em tons prateados e pretos. Difunde uma fragrância suave e envolvente de flor de laranjeira, incenso suave e baunilha.",
+                "aromaProfile": "Flor de Laranjeira, Incenso Suave, Baunilha, Madeira de Âmbar"
+        },
+        "es": {
+                "name": "Vela Crucifijo San Benito en Vaso de Vidrio",
+                "categoryLabel": "COLECCIÓN DE OTOÑO • VASO DE VIDRIO Y GEL CON HOJAS DE PLATA",
+                "aromaBrief": "Elegante vaso de vidrio con cera vegetal cremosa, gel transparente con copos de plata y crucifijo metálico.",
+                "description": "¡Una pieza artesanal única de profunda serenidad, fe y elegancia! Presentada en un vaso de vidrio transparente de alta calidad, la Vela Crucifijo San Benito combina una capa superior de cera de soja vegetal 100% natural cremosa con una base de gel cristalino ornamentado con delicados copos de pan de plata. En el centro destaca un trabajado crucifijo metálico de San Benito en tonos plateados y negros. Difunde una fragancia suave y envolvente de flor de azahar, incienso suave y vainilla.",
+                "aromaProfile": "Flor de Azahar, Incienso Suave, Vainilla, Madera de Ámbar"
+        },
+        "en": {
+                "name": "Saint Benedict Crucifix Glass Jar Candle",
+                "categoryLabel": "AUTUMN COLLECTION • GLASS JAR & SILVER LEAF GEL",
+                "aromaBrief": "Sleek glass jar featuring creamy soy wax on top, silver-flaked clear gel base, and a detailed metal crucifix emblem.",
+                "description": "A unique handcrafted masterpiece of spiritual elegance and cozy ambiance! Poured inside a premium clear glass vessel, the Saint Benedict Crucifix Candle combines a top layer of creamy eco-soy wax with a lower clear gel layer embedded with shimmering silver leaf flakes. Centered on the front is a detailed black-enameled silver metallic Saint Benedict crucifix. Diffuses a serene scent of orange blossom, soft incense, and warm vanilla.",
+                "aromaProfile": "Orange Blossom, Soft Incense, Vanilla, Amberwood"
+        },
+        "fr": {
+                "name": "Bougie Crucifix Saint-Benoît en Verre",
+                "categoryLabel": "COLLECTION D'AUTOMNE • VERRE & GEL FEUILLES D'ARGENT",
+                "aromaBrief": "Vase en verre raffiné avec cire de soja crémeuse, gel transparent à paillettes d'argent et crucifix métallique.",
+                "description": "Une pièce artisanale d'une élégance et d'une sérénité remarquables ! Moulée dans un contenant en verre transparent, la bougie Crucifix Saint-Benoît marie une couche supérieure de cire de soja crémeuse et une base de gel transparent ornée d'éclats de feuille d'argent. Un crucifix métallique en émail noir et argent orne le devant. Offre un parfum doux de fleur d'oranger, encens subtil et vanille.",
+                "aromaProfile": "Fleur d'Oranger, Encens Doux, Vanille, Bois d'Ambre"
+        }
+},
+{
         "id": "candle-autumn-bear-2",
         "category": "vaso",
         "price": 14.90,
