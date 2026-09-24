@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="pt" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DrivePulse Rent-a-Car | Gestão Profissional de Frotas & Alugueres</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        cyber: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        amberGold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        darkBg: '#090d16',
+                        cardDark: '#111827',
+                        borderDark: '#1f2937',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .glow-accent {
+            box-shadow: 0 0 25px -5px rgba(14, 165, 233, 0.35);
+        }
+        .glow-amber {
+            box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.3);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0284c7;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 bg-cardDark/80 backdrop-blur-md border-b border-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyber-600 via-cyber-500 to-amberGold-500 flex items-center justify-center text-white shadow-lg shadow-cyber-500/20">
+                <i class="fa-solid fa-car-side text-lg"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-cyber-100 to-cyber-400 bg-clip-text text-transparent">
+                        DrivePulse
+                    </h1>
+                    <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-cyber-500/20 text-cyber-400 border border-cyber-500/30">
+                        Rent-a-Car OS v2.4
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 font-medium">Gestão de Frotas, Reservas & Vistorias Digitais</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme()" class="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700/50" title="Alternar Modo Escuro/Claro">
+                <i id="themeIcon" class="fa-solid fa-sun text-amberGold-400"></i>
+            </button>
+
+            <!-- Quick Action: Nova Reserva -->
+            <button onclick="openModal('modalNewRental')" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyber-600 to-cyber-500 hover:from-cyber-500 hover:to-cyber-400 text-white font-semibold text-sm shadow-lg shadow-cyber-600/30 transition-all transform hover:-translate-y-0.5">
+                <i class="fa-solid fa-plus"></i>
+                <span>Nova Reserva</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Navigation Tabs -->
+    <div class="bg-cardDark/40 border-b border-borderDark px-4 lg:px-8 py-2 overflow-x-auto">
+        <nav class="flex space-x-1 sm:space-x-2 min-w-max" id="navTabs">
+            <button onclick="switchTab('dashboard')" class="tab-btn active px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all bg-cyber-600 text-white shadow-md">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </button>
+            <button onclick="switchTab('fleet')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-car"></i> Veículos
+            </button>
+            <button onclick="switchTab('availability')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-calendar-check"></i> Disponibilidade
+            </button>
+            <button onclick="switchTab('rentals')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-file-invoice"></i> Reservas
+            </button>
+            <button onclick="switchTab('clients')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-id-card"></i> Clientes
+            </button>
+            <button onclick="switchTab('contracts')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-signature"></i> Contratos
+            </button>
+            <button onclick="switchTab('pricing')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-tags"></i> Preços
+            </button>
+            <button onclick="switchTab('payments')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-credit-card"></i> Pagos
+            </button>
+        </nav>
+    </div>
+
+    <!-- Main Container -->
+    <main class="flex-1 p-4 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+        <!-- TAB 1: DASHBOARD -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+            <!-- KPI Cards Row -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-panel p-4 lg:p-5 rounded-2xl border border-borderDark flex flex-col justify-between hover:border-cyber-500/50 transition-all">
+                    <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                        <span>Frota Ativa</span>
+                        <div class="w-8 h-8 rounded-lg bg-cyber-500/10 flex items-center justify-center text-cyber-400">
+                            <i class="fa-solid fa-car-rear"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="text-3xl font-extrabold text-white" id="kpiTotalFleet">--</div>
+                        <div class="text-xs text-emerald-400 mt-1 flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-circle-check"></i> <span id="kpiAvailableFleet">--</span> disponíveis para aluguer
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-4 lg:p-5 rounded-2xl border border-borderDark flex flex-col justify-between hover:border-amberGold-500/50 transition-all">
+                    <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                        <span>Em Aluguer</span>
+                        <div class="w-8 h-8 rounded-lg bg-amberGold-500/10 flex items-center justify-center text-amberGold-400">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="text-3xl font-extrabold text-white" id="kpiRentedFleet">--</div>
+                        <div class="text-xs text-amberGold-400 mt-1 flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-chart-line"></i> <span id="kpiFleetUtilization">--%</span> taxa de utilização
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-4 lg:p-5 rounded-2xl border border-borderDark flex flex-col justify-between hover:border-emerald-500/50 transition-all">
+                    <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                        <span>Receita Total</span>
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                            <i class="fa-solid fa-euro-sign"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="text-3xl font-extrabold text-emerald-400" id="kpiTotalRevenue">-- €</div>
+                        <div class="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-circle text-[8px] text-cyber-400"></i> Pagamentos faturados
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-4 lg:p-5 rounded-2xl border border-borderDark flex flex-col justify-between hover:border-purple-500/50 transition-all">
+                    <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                        <span>Cauções Retidas</span>
+                        <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="text-3xl font-extrabold text-purple-300" id="kpiActiveDeposits">-- €</div>
+                        <div class="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-lock text-[8px]"></i> Garantia de franquias ativas
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Fleet Status Breakdown (Donut) -->
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark flex flex-col">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-chart-pie text-cyber-400"></i> Distribuição da Frota
+                    </h3>
+                    <div class="relative flex-1 flex items-center justify-center min-h-[240px]">
+                        <canvas id="fleetStatusChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-borderDark text-xs font-medium">
+                        <div class="flex items-center gap-2 text-slate-300">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Disponível
+                        </div>
+                        <div class="flex items-center gap-2 text-slate-300">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amberGold-500"></span> Alugado
+                        </div>
+                        <div class="flex items-center gap-2 text-slate-300">
+                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> Lavagem
+                        </div>
+                        <div class="flex items-center gap-2 text-slate-300">
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Manutenção
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Revenue & Rental Activity -->
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark lg:col-span-2 flex flex-col">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-chart-column text-amberGold-400"></i> Faturação & Atividade Operacional
+                        </h3>
+                        <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700">
+                            Últimos 6 Meses
+                        </span>
+                    </div>
+                    <div class="relative flex-1 min-h-[250px]">
+                        <canvas id="revenueActivityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Operational Alerts (Entregas & Devoluções Hoje) -->
+            <div class="glass-panel p-5 rounded-2xl border border-borderDark">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bell text-cyber-400"></i> Painel de Operações Diárias
+                        </h3>
+                        <p class="text-xs text-slate-400">Entregas de chaves, vistorias e check-outs prioritários</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="switchTab('availability')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-colors border border-slate-700">
+                            Consultar Datas
+                        </button>
+                        <button onclick="openModal('modalNewRental')" class="px-3 py-1.5 rounded-xl bg-cyber-600 hover:bg-cyber-500 text-xs font-semibold text-white transition-colors">
+                            Check-in Rápido
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-cyber-500/10 text-cyber-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-semibold uppercase text-slate-400">Check-ins & Entregas Hoje</div>
+                            <div class="text-xl font-bold text-white mt-0.5"><span id="alertPickups">0</span> Veículos Agendados</div>
+                            <p class="text-xs text-slate-400 mt-0.5">Vistoria de saída e validação de carta de condução</p>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-amberGold-500/10 text-amberGold-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-arrow-down-to-bracket"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-semibold uppercase text-slate-400">Devoluções & Check-outs Hoje</div>
+                            <div class="text-xl font-bold text-white mt-0.5"><span id="alertReturns">0</span> Veículos a Receber</div>
+                            <p class="text-xs text-slate-400 mt-0.5">Inspeção de danos, nível de combustível e KM finais</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: VEÍCULOS (FROTA) -->
+        <section id="tab-fleet" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-car text-cyber-400"></i> Gestão da Frota Automóvel
+                    </h2>
+                    <p class="text-xs text-slate-400">Controlo de estado, quilometragem, combustível e tarifas diárias</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <select id="fleetCategoryFilter" onchange="renderFleet()" class="bg-slate-900 text-slate-200 border border-borderDark text-sm rounded-xl px-3 py-2 outline-none focus:border-cyber-500">
+                        <option value="Todas">Todas as Categorias</option>
+                        <option value="Premium">Premium</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Desportivo">Desportivo</option>
+                        <option value="Elétrico">Elétrico</option>
+                        <option value="Compacto">Compacto</option>
+                        <option value="Sedán">Sedán</option>
+                    </select>
+                    <button onclick="openModal('modalNewVehicle')" class="px-4 py-2 rounded-xl bg-cyber-600 hover:bg-cyber-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                        <i class="fa-solid fa-plus"></i> Novo Veículo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Vehicles Card Grid -->
+            <div id="fleetGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 3: DISPONIBILIDADE -->
+        <section id="tab-availability" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 rounded-2xl border border-borderDark">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-calendar-check text-cyber-400"></i> Motor de Disponibilidade & Cotação
+                </h2>
+                <p class="text-xs text-slate-400 mb-6">Filtre por datas de recolha e entrega para verificar veículos livres sem sobreposição de contratos.</p>
+
+                <form id="formAvailability" onsubmit="event.preventDefault(); searchAvailability();" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Data de Levantamento</label>
+                        <input type="date" id="availStartDate" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-cyber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Data de Devolução</label>
+                        <input type="date" id="availEndDate" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-cyber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Categoria Desejada</label>
+                        <select id="availCategory" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-cyber-500">
+                            <option value="Todas">Todas as Categorias</option>
+                            <option value="Premium">Premium</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Desportivo">Desportivo</option>
+                            <option value="Elétrico">Elétrico</option>
+                            <option value="Compacto">Compacto</option>
+                            <option value="Sedán">Sedán</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyber-600 to-cyber-500 hover:from-cyber-500 hover:to-cyber-400 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyber-600/30 transition-all">
+                            <i class="fa-solid fa-magnifying-glass"></i> Pesquisar Frota
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Availability Results Container -->
+            <div id="availabilityResults" class="space-y-4">
+                <div class="text-center py-12 text-slate-500 text-sm">
+                    <i class="fa-solid fa-calendar-days text-3xl mb-2 text-slate-600"></i>
+                    <p>Selecione as datas acima para pesquisar veículos disponíveis em tempo real.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: RESERVAS -->
+        <section id="tab-rentals" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-file-invoice text-cyber-400"></i> Reservas & Alugueres
+                    </h2>
+                    <p class="text-xs text-slate-400">Histórico de reservas, check-ins, check-outs e vistorias de entrega</p>
+                </div>
+                <button onclick="openModal('modalNewRental')" class="px-4 py-2 rounded-xl bg-cyber-600 hover:bg-cyber-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                    <i class="fa-solid fa-plus"></i> Nova Reserva
+                </button>
+            </div>
+
+            <!-- Rentals Table Container -->
+            <div class="glass-panel rounded-2xl border border-borderDark overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/80 text-xs uppercase font-bold text-slate-400 border-b border-borderDark">
+                            <tr>
+                                <th class="px-5 py-3.5">Código / Veículo</th>
+                                <th class="px-5 py-3.5">Condutor</th>
+                                <th class="px-5 py-3.5">Período / Dias</th>
+                                <th class="px-5 py-3.5">Valores (€)</th>
+                                <th class="px-5 py-3.5">Estado</th>
+                                <th class="px-5 py-3.5">Pagamento</th>
+                                <th class="px-5 py-3.5 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rentalsTableBody" class="divide-y divide-borderDark">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: CLIENTES -->
+        <section id="tab-clients" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-id-card text-cyber-400"></i> Diretório de Clientes & Condutores
+                    </h2>
+                    <p class="text-xs text-slate-400">Registo de cartas de condução, nacionalidades, contactos e histórico</p>
+                </div>
+                <button onclick="openModal('modalNewClient')" class="px-4 py-2 rounded-xl bg-cyber-600 hover:bg-cyber-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                    <i class="fa-solid fa-user-plus"></i> Novo Cliente
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="clientsGrid">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 6: CONTRATOS -->
+        <section id="tab-contracts" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-signature text-cyber-400"></i> Contratos Digitais & Vistorias
+                    </h2>
+                    <p class="text-xs text-slate-400">Geração automática de apólices com registo de quilómetros e combustível de saída/retorno</p>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-borderDark overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/80 text-xs uppercase font-bold text-slate-400 border-b border-borderDark">
+                            <tr>
+                                <th class="px-5 py-3.5">Contrato Nº</th>
+                                <th class="px-5 py-3.5">Reserva / Veículo</th>
+                                <th class="px-5 py-3.5">Condutor</th>
+                                <th class="px-5 py-3.5">Vistoria Saída</th>
+                                <th class="px-5 py-3.5">Vistoria Retorno</th>
+                                <th class="px-5 py-3.5">Cobertura</th>
+                                <th class="px-5 py-3.5 text-right">Data Registo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contractsTableBody" class="divide-y divide-borderDark">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 7: PREÇOS & TARIFAS -->
+        <section id="tab-pricing" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-tags text-cyber-400"></i> Matriz de Tarifas & Regras de Preço
+                    </h2>
+                    <p class="text-xs text-slate-400">Tarifas dinâmicas, multiplicadores sazonais e descontos por longa duração</p>
+                </div>
+                <button onclick="openModal('modalNewPricing')" class="px-4 py-2 rounded-xl bg-cyber-600 hover:bg-cyber-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                    <i class="fa-solid fa-plus"></i> Nova Regra Tarifária
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="pricingGrid">
+                <!-- Rendered dynamically -->
+            </div>
+
+            <!-- Dynamic Pricing Simulator -->
+            <div class="glass-panel p-6 rounded-2xl border border-borderDark">
+                <h3 class="text-base font-bold text-white flex items-center gap-2 mb-3">
+                    <i class="fa-solid fa-calculator text-amberGold-400"></i> Simulador de Orçamento Dinâmico
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Tarifa Base Diária (€)</label>
+                        <input type="number" id="simDaily" value="85" oninput="runPriceSimulator()" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Duração do Aluguer (Dias)</label>
+                        <input type="number" id="simDays" value="5" oninput="runPriceSimulator()" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Temporada / Época</label>
+                        <select id="simSeason" onchange="runPriceSimulator()" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="1.0">Época Baixa / Normal (1.0x)</option>
+                            <option value="1.25">Fim de Semana Veloz (+25%)</option>
+                            <option value="1.45">Época Alta de Verão (+45%)</option>
+                            <option value="0.85">Desconto Long-term (-15%)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-4 p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-slate-400 block">Total Estimado com Taxa Sazonal</span>
+                        <span class="text-2xl font-black text-amberGold-400" id="simResult">425.00 €</span>
+                    </div>
+                    <div class="text-xs text-slate-400 text-right">
+                        <span>Caução recomendada: </span>
+                        <strong class="text-white" id="simDeposit">800.00 €</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 8: PAGAMENTOS -->
+        <section id="tab-payments" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-credit-card text-cyber-400"></i> Registo de Transações & Pagamentos
+                    </h2>
+                    <p class="text-xs text-slate-400">Liquidação de reservas, cauções em retenção e reembolsos</p>
+                </div>
+                <button onclick="openModal('modalNewPayment')" class="px-4 py-2 rounded-xl bg-cyber-600 hover:bg-cyber-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                    <i class="fa-solid fa-money-bill-wave"></i> Registar Pagamento
+                </button>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-borderDark overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/80 text-xs uppercase font-bold text-slate-400 border-b border-borderDark">
+                            <tr>
+                                <th class="px-5 py-3.5">Referência</th>
+                                <th class="px-5 py-3.5">Reserva</th>
+                                <th class="px-5 py-3.5">Cliente</th>
+                                <th class="px-5 py-3.5">Tipo</th>
+                                <th class="px-5 py-3.5">Método</th>
+                                <th class="px-5 py-3.5">Montante</th>
+                                <th class="px-5 py-3.5">Estado</th>
+                                <th class="px-5 py-3.5 text-right">Data</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentsTableBody" class="divide-y divide-borderDark">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-borderDark py-5 px-6 text-center text-xs text-slate-500">
+        <p>DrivePulse Rent-a-Car System &bull; Sistema Profissional Full-Stack desenvolvido com Flask & SQLite &bull; Porto & Lisboa, Portugal</p>
+    </footer>
+
+    <!-- MODAL: NOVA RESERVA -->
+    <div id="modalNewRental" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-xl w-full p-6 space-y-4 my-8 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-plus text-cyber-400"></i> Criar Nova Reserva
+                </h3>
+                <button onclick="closeModal('modalNewRental')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewRental" onsubmit="event.preventDefault(); submitNewRental();" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Veículo</label>
+                        <select id="rentalVehicleSelect" required onchange="calculateRentalTotals()" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-cyber-500">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Cliente / Condutor</label>
+                        <select id="rentalClientSelect" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-cyber-500">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Data de Início</label>
+                        <input type="date" id="rentalStartDate" required onchange="calculateRentalTotals()" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-cyber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Data de Fim</label>
+                        <input type="date" id="rentalEndDate" required onchange="calculateRentalTotals()" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-cyber-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Local de Levantamento</label>
+                        <input type="text" id="rentalPickupLoc" value="Aeroporto de Lisboa" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-cyber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Local de Devolução</label>
+                        <input type="text" id="rentalReturnLoc" value="Aeroporto de Lisboa" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-cyber-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Plano de Seguro</label>
+                        <select id="rentalInsurance" onchange="calculateRentalTotals()" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-cyber-500">
+                            <option value="Básico">Básico (Franquia Integral)</option>
+                            <option value="Cobertura Total (CDW VIP)">Cobertura Total (CDW VIP) (+25€/dia)</option>
+                            <option value="Proteção Pneus & Vidros">Proteção Pneus & Vidros (+10€/dia)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Extras Adicionais</label>
+                        <input type="text" id="rentalExtras" placeholder="GPS, Cadeira Bebé, Condutor Adicional" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-cyber-500">
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs">
+                    <div class="flex justify-between text-slate-400">
+                        <span>Duração:</span>
+                        <strong class="text-white" id="modalRentalDays">1 dia(s)</strong>
+                    </div>
+                    <div class="flex justify-between text-slate-400">
+                        <span>Total Aluguer + Extras:</span>
+                        <strong class="text-cyber-400 text-sm" id="modalRentalTotal">0.00 €</strong>
+                    </div>
+                    <div class="flex justify-between text-slate-400">
+                        <span>Caução Obrigatória (Retenção):</span>
+                        <strong class="text-amberGold-400" id="modalRentalDeposit">0.00 €</strong>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Pagamento Inicial Imediato (€)</label>
+                    <input type="number" id="rentalPaidNow" step="0.01" value="0.00" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-cyber-500">
+                    <span class="text-[11px] text-slate-500">Pode pagar a totalidade, um sinal ou deixar pendente para o balcão.</span>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewRental')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-cyber-600 hover:bg-cyber-500 text-white text-sm font-semibold transition-all shadow-md">
+                        Confirmar e Emitir Contrato
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO VEÍCULO -->
+    <div id="modalNewVehicle" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-lg w-full p-6 space-y-4 my-8 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-car text-cyber-400"></i> Adicionar Veículo à Frota
+                </h3>
+                <button onclick="closeModal('modalNewVehicle')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewVehicle" onsubmit="event.preventDefault(); submitNewVehicle();" class="space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Matrícula</label>
+                        <input type="text" id="vehPlate" placeholder="ex: 55-AB-99" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Categoria</label>
+                        <select id="vehCategory" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Premium">Premium</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Desportivo">Desportivo</option>
+                            <option value="Elétrico">Elétrico</option>
+                            <option value="Compacto">Compacto</option>
+                            <option value="Sedán">Sedán</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Marca</label>
+                        <input type="text" id="vehBrand" placeholder="ex: BMW, Tesla" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Modelo</label>
+                        <input type="text" id="vehModel" placeholder="ex: 320d M Sport" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Ano</label>
+                        <input type="number" id="vehYear" value="2024" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Transmissão</label>
+                        <select id="vehTransmission" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Automático">Automático</option>
+                            <option value="Manual">Manual</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Combustível</label>
+                        <select id="vehFuelType" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Gasolina">Gasolina</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Elétrico">Elétrico</option>
+                            <option value="Híbrido">Híbrido</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Tarifa/Dia (€)</label>
+                        <input type="number" step="0.01" id="vehDailyRate" value="80.00" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">KM Atuais</label>
+                        <input type="number" id="vehMileage" value="12000" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Caução (€)</label>
+                        <input type="number" step="0.01" id="vehDeposit" value="800.00" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Equipamentos & Extras</label>
+                    <input type="text" id="vehFeatures" placeholder="GPS, Teto de abrir, Bancos em pele, Cruise control" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewVehicle')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-cyber-600 hover:bg-cyber-500 text-white text-sm font-semibold transition-all shadow-md">
+                        Registar Veículo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO CLIENTE -->
+    <div id="modalNewClient" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-cyber-400"></i> Registar Novo Cliente
+                </h3>
+                <button onclick="closeModal('modalNewClient')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewClient" onsubmit="event.preventDefault(); submitNewClient();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Nome Completo</label>
+                    <input type="text" id="cliName" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Email</label>
+                        <input type="email" id="cliEmail" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Telefone</label>
+                        <input type="text" id="cliPhone" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Carta de Condução Nº</label>
+                        <input type="text" id="cliLicense" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Validade da Carta</label>
+                        <input type="date" id="cliExpiry" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Nacionalidade</label>
+                        <input type="text" id="cliNationality" value="Portugal" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Tipo de Cliente</label>
+                        <select id="cliType" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Particular">Particular</option>
+                            <option value="VIP">VIP</option>
+                            <option value="Empresa">Empresa</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Notas / Observações</label>
+                    <textarea id="cliNotes" rows="2" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewClient')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-cyber-600 hover:bg-cyber-500 text-white text-sm font-semibold transition-all shadow-md">
+                        Guardar Cliente
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: VISTORIA & CHECK-OUT DE DEVOLUÇÃO -->
+    <div id="modalInspection" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-check text-amberGold-400"></i> Check-out & Vistoria de Retorno
+                </h3>
+                <button onclick="closeModal('modalInspection')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formInspection" onsubmit="event.preventDefault(); submitInspection();" class="space-y-4">
+                <input type="hidden" id="inspRentalId">
+                <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-xs text-slate-300">
+                    <span class="text-slate-500 block mb-1">Reserva Selecionada:</span>
+                    <strong class="text-white text-sm" id="inspRentalCode">ALUG-XXX</strong>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Quilómetros Finais (Odómetro)</label>
+                    <input type="number" id="inspFinalKm" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Nível de Combustível Final (%)</label>
+                    <input type="number" id="inspFinalFuel" min="0" max="100" value="100" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="p-3 rounded-xl bg-cyber-500/10 border border-cyber-500/20 text-xs text-cyber-300">
+                    <i class="fa-solid fa-info-circle mr-1"></i>
+                    O veículo passará imediatamente para o estado <strong>Lavagem</strong> para higienização e posterior libertação.
+                </div>
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalInspection')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-amberGold-500 hover:bg-amberGold-400 text-slate-900 font-bold text-sm transition-all shadow-md">
+                        Concluir Aluguer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: REGISTAR PAGAMENTO -->
+    <div id="modalNewPayment" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-credit-card text-emerald-400"></i> Registar Pagamento
+                </h3>
+                <button onclick="closeModal('modalNewPayment')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewPayment" onsubmit="event.preventDefault(); submitNewPayment();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Reserva Associada</label>
+                    <select id="payRentalSelect" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Montante (€)</label>
+                    <input type="number" step="0.01" id="payAmount" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Tipo de Pagamento</label>
+                        <select id="payType" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Aluguer">Aluguer</option>
+                            <option value="Caução">Caução (Retenção)</option>
+                            <option value="Extras">Extras / Danos</option>
+                            <option value="Extensão">Extensão de Dias</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Método</label>
+                        <select id="payMethod" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="MB Way">MB Way</option>
+                            <option value="Transferência">Transferência</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewPayment')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition-all shadow-md">
+                        Confirmar Pagamento
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVA REGRA DE PREÇO -->
+    <div id="modalNewPricing" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-tags text-cyber-400"></i> Nova Regra Tarifária
+                </h3>
+                <button onclick="closeModal('modalNewPricing')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewPricing" onsubmit="event.preventDefault(); submitNewPricing();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Título da Regra</label>
+                    <input type="text" id="ruleTitle" placeholder="ex: Promoção Férias de Natal" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Categoria Alvo</label>
+                        <select id="ruleCategory" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Todos">Todos</option>
+                            <option value="Premium">Premium</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Desportivo">Desportivo</option>
+                            <option value="Elétrico">Elétrico</option>
+                            <option value="Compacto">Compacto</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Época / Condição</label>
+                        <select id="ruleSeason" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Época Alta">Época Alta</option>
+                            <option value="Época Baixa">Época Baixa</option>
+                            <option value="Fim de Semana">Fim de Semana</option>
+                            <option value="Longa Duração">Longa Duração</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Multiplicador (ex: 1.25 = +25%)</label>
+                        <input type="number" step="0.05" id="ruleMultiplier" value="1.20" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Dias Mínimos</label>
+                        <input type="number" id="ruleMinDays" value="3" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Descrição</label>
+                    <textarea id="ruleDescription" rows="2" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewPricing')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-cyber-600 hover:bg-cyber-500 text-white font-semibold text-sm transition-all shadow-md">
+                        Guardar Regra
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none px-4 py-3 rounded-xl bg-slate-900 border border-borderDark shadow-2xl text-sm font-semibold text-white flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-check-circle text-emerald-400 text-base"></i>
+        <span id="toastMsg">Operação realizada com sucesso!</span>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        // State variables
+        let appState = {
+            vehicles: [],
+            clients: [],
+            rentals: [],
+            contracts: [],
+            pricing: [],
+            payments: [],
+            stats: {}
+        };
+
+        let charts = {
+            fleetDonut: null,
+            revenueBar: null
+        };
+
+        // Theme management
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                icon.classList.remove('fa-sun', 'text-amberGold-400');
+                icon.classList.add('fa-moon', 'text-cyber-600');
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                icon.classList.remove('fa-moon', 'text-cyber-600');
+                icon.classList.add('fa-sun', 'text-amberGold-400');
+            }
+        }
+
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-cyber-600', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-400');
+            });
+
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick')?.includes(tabId));
+            if (activeBtn) {
+                activeBtn.classList.add('bg-cyber-600', 'text-white', 'shadow-md');
+                activeBtn.classList.remove('text-slate-400');
+            }
+        }
+
+        // Modals
+        function openModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.remove('hidden');
+        }
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.add('hidden');
+        }
+
+        // Toast
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const txt = document.getElementById('toastMsg');
+
+            txt.innerText = msg;
+            if (type === 'success') {
+                icon.className = 'fa-solid fa-circle-check text-emerald-400 text-base';
+            } else if (type === 'error') {
+                icon.className = 'fa-solid fa-circle-exclamation text-rose-500 text-base';
+            } else {
+                icon.className = 'fa-solid fa-circle-info text-cyber-400 text-base';
+            }
+
+            t.classList.remove('translate-y-20', 'opacity-0');
+            t.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                t.classList.add('translate-y-20', 'opacity-0');
+                t.classList.remove('translate-y-0', 'opacity-100');
+            }, 3500);
+        }
+
+        // Initialize Dates
+        function initDates() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 3);
+
+            const toISO = d => d.toISOString().split('T')[0];
+            const startStr = toISO(today);
+            const endStr = toISO(tomorrow);
+
+            const sDate = document.getElementById('availStartDate');
+            const eDate = document.getElementById('availEndDate');
+            if (sDate) sDate.value = startStr;
+            if (eDate) eDate.value = endStr;
+
+            const rStart = document.getElementById('rentalStartDate');
+            const rEnd = document.getElementById('rentalEndDate');
+            if (rStart) rStart.value = startStr;
+            if (rEnd) rEnd.value = endStr;
+        }
+
+        // Fetch All Data
+        async function fetchAllData() {
+            try {
+                const [statsRes, vehRes, cliRes, rentRes, contRes, priceRes, payRes] = await Promise.all([
+                    fetch('/api/stats').then(r => r.json()),
+                    fetch('/api/vehicles').then(r => r.json()),
+                    fetch('/api/clients').then(r => r.json()),
+                    fetch('/api/rentals').then(r => r.json()),
+                    fetch('/api/contracts').then(r => r.json()),
+                    fetch('/api/pricing').then(r => r.json()),
+                    fetch('/api/payments').then(r => r.json())
+                ]);
+
+                if (statsRes.success) appState.stats = statsRes.stats;
+                if (vehRes.success) appState.vehicles = vehRes.vehicles;
+                if (cliRes.success) appState.clients = cliRes.clients;
+                if (rentRes.success) appState.rentals = rentRes.rentals;
+                if (contRes.success) appState.contracts = contRes.contracts;
+                if (priceRes.success) appState.pricing = priceRes.pricing;
+                if (payRes.success) appState.payments = payRes.payments;
+
+                renderDashboard();
+                renderFleet();
+                renderRentals();
+                renderClients();
+                renderContracts();
+                renderPricing();
+                renderPayments();
+                populateDropdowns();
+                runPriceSimulator();
+            } catch (err) {
+                console.error("Erro ao carregar dados:", err);
+            }
+        }
+
+        // Render Dashboard
+        function renderDashboard() {
+            const s = appState.stats;
+            document.getElementById('kpiTotalFleet').innerText = s.total_fleet || 0;
+            document.getElementById('kpiAvailableFleet').innerText = s.available_fleet || 0;
+            document.getElementById('kpiRentedFleet').innerText = s.rented_fleet || 0;
+            document.getElementById('kpiFleetUtilization').innerText = `${s.fleet_utilization || 0}%`;
+            document.getElementById('kpiTotalRevenue').innerText = `${(s.total_revenue || 0).toLocaleString('pt-PT', {minimumFractionDigits: 2})} €`;
+            document.getElementById('kpiActiveDeposits').innerText = `${(s.active_deposits || 0).toLocaleString('pt-PT', {minimumFractionDigits: 2})} €`;
+            document.getElementById('alertPickups').innerText = s.today_pickups || 0;
+            document.getElementById('alertReturns').innerText = s.today_returns || 0;
+
+            // Donut Chart
+            const ctxDonut = document.getElementById('fleetStatusChart')?.getContext('2d');
+            if (ctxDonut) {
+                if (charts.fleetDonut) charts.fleetDonut.destroy();
+                charts.fleetDonut = new Chart(ctxDonut, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Disponível', 'Alugado', 'Lavagem', 'Manutenção'],
+                        datasets: [{
+                            data: [s.available_fleet || 0, s.rented_fleet || 0, s.washing_fleet || 0, s.maintenance_fleet || 0],
+                            backgroundColor: ['#10b981', '#f59e0b', '#38bdf8', '#f43f5e'],
+                            borderWidth: 0,
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        cutout: '75%'
+                    }
+                });
+            }
+
+            // Revenue Bar Chart
+            const ctxBar = document.getElementById('revenueActivityChart')?.getContext('2d');
+            if (ctxBar) {
+                if (charts.revenueBar) charts.revenueBar.destroy();
+                charts.revenueBar = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'],
+                        datasets: [
+                            {
+                                label: 'Faturação (€)',
+                                data: [3200, 4800, 7900, 9400, (s.total_revenue || 1400) + 1200, 6100],
+                                backgroundColor: 'rgba(14, 165, 233, 0.85)',
+                                borderRadius: 6,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Alugueres Ativos',
+                                data: [12, 18, 31, 38, (s.rented_fleet || 2) + 10, 24],
+                                type: 'line',
+                                borderColor: '#f59e0b',
+                                backgroundColor: '#f59e0b',
+                                borderWidth: 3,
+                                pointRadius: 4,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                                ticks: { color: '#94a3b8' }
+                            },
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                                ticks: { color: '#94a3b8' }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                grid: { drawOnChartArea: false },
+                                ticks: { color: '#f59e0b' }
+                            }
+                        },
+                        plugins: {
+                            legend: { labels: { color: '#cbd5e1' } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Render Fleet Grid
+        function renderFleet() {
+            const grid = document.getElementById('fleetGrid');
+            const categoryFilter = document.getElementById('fleetCategoryFilter')?.value || 'Todas';
+            if (!grid) return;
+
+            const filtered = categoryFilter === 'Todas' 
+                ? appState.vehicles 
+                : appState.vehicles.filter(v => v.category === categoryFilter);
+
+            grid.innerHTML = filtered.map(v => {
+                let badgeClass = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+                if (v.status === 'Alugado') badgeClass = 'bg-amberGold-500/20 text-amberGold-400 border-amberGold-500/30';
+                if (v.status === 'Lavagem') badgeClass = 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30';
+                if (v.status === 'Manutenção') badgeClass = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+
+                return `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark hover:border-cyber-500/50 transition-all flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div>
+                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${badgeClass} border">
+                                    ${v.status}
+                                </span>
+                                <h3 class="text-base font-bold text-white mt-2 group-hover:text-cyber-400 transition-colors">
+                                    ${v.brand} ${v.model}
+                                </h3>
+                                <p class="text-xs text-slate-400 font-mono tracking-wider">${v.plate} &bull; ${v.category}</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-cyber-400 text-lg shadow-inner">
+                                <i class="fa-solid ${v.image_icon || 'fa-car'}"></i>
+                            </div>
+                        </div>
+
+                        <!-- Specs Grid -->
+                        <div class="grid grid-cols-2 gap-2 text-xs text-slate-300 py-3 border-y border-borderDark my-3">
+                            <div class="flex items-center gap-1.5"><i class="fa-solid fa-gears text-slate-500"></i> ${v.transmission}</div>
+                            <div class="flex items-center gap-1.5"><i class="fa-solid fa-gas-pump text-slate-500"></i> ${v.fuel_type} (${v.fuel_level}%)</div>
+                            <div class="flex items-center gap-1.5"><i class="fa-solid fa-gauge text-slate-500"></i> ${v.mileage.toLocaleString()} km</div>
+                            <div class="flex items-center gap-1.5"><i class="fa-solid fa-users text-slate-500"></i> ${v.seats} Lugares</div>
+                        </div>
+
+                        <p class="text-[11px] text-slate-400 line-clamp-1 mb-3">
+                            <i class="fa-solid fa-check text-emerald-400 mr-1"></i> ${v.features}
+                        </p>
+                    </div>
+
+                    <div>
+                        <div class="flex items-baseline justify-between pt-2 border-t border-borderDark mb-3">
+                            <div>
+                                <span class="text-xs text-slate-500">Diária</span>
+                                <div class="text-lg font-extrabold text-white">${v.daily_rate.toFixed(2)} €<span class="text-xs font-normal text-slate-400">/dia</span></div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs text-slate-500">Caução</span>
+                                <div class="text-xs font-bold text-amberGold-400">${v.deposit.toFixed(2)} €</div>
+                            </div>
+                        </div>
+
+                        <!-- Action Status Buttons -->
+                        <div class="flex gap-2">
+                            <select onchange="updateVehicleStatus(${v.id}, this.value)" class="flex-1 bg-slate-900 border border-borderDark rounded-xl text-xs px-2.5 py-1.5 text-slate-300 outline-none">
+                                <option value="Disponível" ${v.status === 'Disponível' ? 'selected' : ''}>Disponível</option>
+                                <option value="Alugado" ${v.status === 'Alugado' ? 'selected' : ''}>Alugado</option>
+                                <option value="Lavagem" ${v.status === 'Lavagem' ? 'selected' : ''}>Lavagem</option>
+                                <option value="Manutenção" ${v.status === 'Manutenção' ? 'selected' : ''}>Manutenção</option>
+                            </select>
+                            <button onclick="startBookingVehicle(${v.id})" class="px-3 py-1.5 rounded-xl bg-cyber-600 hover:bg-cyber-500 text-white text-xs font-semibold transition-colors">
+                                Reservar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Search Availability
+        async function searchAvailability() {
+            const start = document.getElementById('availStartDate').value;
+            const end = document.getElementById('availEndDate').value;
+            const cat = document.getElementById('availCategory').value;
+            const container = document.getElementById('availabilityResults');
+
+            if (!start || !end) {
+                showToast("Indique as datas de início e devolução.", "error");
+                return;
+            }
+
+            container.innerHTML = `<div class="text-center py-10 text-slate-400"><i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-cyber-500"></i><p>A calcular disponibilidade na frota...</p></div>`;
+
+            try {
+                const res = await fetch(`/api/availability?start_date=${start}&end_date=${end}&category=${encodeURIComponent(cat)}`);
+                const data = await res.json();
+
+                if (data.success) {
+                    if (data.vehicles.length === 0) {
+                        container.innerHTML = `
+                            <div class="glass-panel p-8 rounded-2xl border border-rose-500/30 text-center">
+                                <i class="fa-solid fa-triangle-exclamation text-3xl text-rose-500 mb-2"></i>
+                                <h4 class="text-base font-bold text-white">Nenhum veículo disponível para este intervalo</h4>
+                                <p class="text-xs text-slate-400 mt-1">Todos os veículos da categoria estão em aluguer ou manutenção. Tente alterar as datas ou a categoria.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    // Calculate Days
+                    const d1 = new Date(start);
+                    const d2 = new Date(end);
+                    const diffDays = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+
+                    container.innerHTML = `
+                        <div class="flex items-center justify-between text-xs text-slate-400 px-1">
+                            <span><strong class="text-white">${data.vehicles.length}</strong> veículos disponíveis entre <strong>${start}</strong> e <strong>${end}</strong> (${diffDays} dias)</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            ${data.vehicles.map(v => {
+                                const totalEstimated = (v.daily_rate * diffDays).toFixed(2);
+                                return `
+                                    <div class="glass-panel p-5 rounded-2xl border border-borderDark hover:border-emerald-500/50 transition-all flex flex-col justify-between">
+                                        <div>
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                                                    Livre
+                                                </span>
+                                                <span class="text-xs text-slate-400 font-mono">${v.plate}</span>
+                                            </div>
+                                            <h4 class="text-base font-bold text-white mt-2">${v.brand} ${v.model}</h4>
+                                            <p class="text-xs text-slate-400">${v.category} &bull; ${v.transmission} &bull; ${v.fuel_type}</p>
+                                        </div>
+
+                                        <div class="my-4 p-3 bg-slate-900/80 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+                                            <div>
+                                                <span class="text-slate-400">Total ${diffDays} dias:</span>
+                                                <div class="text-lg font-black text-emerald-400">${totalEstimated} €</div>
+                                            </div>
+                                            <div class="text-right">
+                                                <span class="text-slate-400">Caução:</span>
+                                                <div class="font-bold text-amberGold-400">${v.deposit} €</div>
+                                            </div>
+                                        </div>
+
+                                        <button onclick="bookSpecificVehicle(${v.id}, '${start}', '${end}')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-semibold text-xs transition-all shadow-md flex items-center justify-center gap-2">
+                                            <i class="fa-solid fa-key"></i> Reservar Este Veículo
+                                        </button>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                container.innerHTML = `<div class="text-rose-400 text-sm">Erro ao pesquisar disponibilidade.</div>`;
+            }
+        }
+
+        // Render Rentals Table
+        function renderRentals() {
+            const tbody = document.getElementById('rentalsTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = appState.rentals.map(r => {
+                let badgeStatus = 'bg-cyber-500/20 text-cyber-400 border-cyber-500/30';
+                if (r.status === 'Em Curso') badgeStatus = 'bg-amberGold-500/20 text-amberGold-400 border-amberGold-500/30';
+                if (r.status === 'Concluído') badgeStatus = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+                if (r.status === 'Cancelada') badgeStatus = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+
+                let badgePay = 'bg-slate-800 text-slate-400';
+                if (r.payment_status === 'Pago Total') badgePay = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
+                if (r.payment_status === 'Pago Parcial') badgePay = 'bg-amberGold-500/10 text-amberGold-400 border border-amberGold-500/30';
+
+                return `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="px-5 py-4">
+                        <div class="font-bold text-white flex items-center gap-1.5">
+                            <i class="fa-solid fa-hashtag text-cyber-500 text-xs"></i> ${r.rental_code}
+                        </div>
+                        <div class="text-xs text-slate-400">${r.brand} ${r.model} (${r.plate})</div>
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="font-semibold text-white">${r.client_name}</div>
+                        <div class="text-xs text-slate-400"><i class="fa-solid fa-phone text-[10px]"></i> ${r.client_phone}</div>
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="text-xs font-medium text-slate-200">${r.start_date} &rarr; ${r.end_date}</div>
+                        <div class="text-[11px] text-slate-400">${r.total_days} dia(s) &bull; ${r.pickup_location}</div>
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="font-bold text-white">${r.total_amount.toFixed(2)} €</div>
+                        <div class="text-[11px] text-slate-400">Caução: ${r.deposit_amount.toFixed(2)} €</div>
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-1 rounded-full font-semibold border ${badgeStatus}">
+                            ${r.status}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-1 rounded-full font-medium ${badgePay}">
+                            ${r.payment_status} (${r.paid_amount.toFixed(0)}€)
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-right space-x-1">
+                        ${r.status === 'Confirmada' ? `
+                            <button onclick="updateRentalStatus(${r.id}, 'Em Curso')" class="px-2.5 py-1 rounded-lg bg-cyber-600 hover:bg-cyber-500 text-white text-xs font-semibold" title="Iniciar Aluguer (Entregar Chaves)">
+                                <i class="fa-solid fa-key"></i> Iniciar
+                            </button>
+                        ` : ''}
+                        ${r.status === 'Em Curso' ? `
+                            <button onclick="openInspectionModal(${r.id}, '${r.rental_code}')" class="px-2.5 py-1 rounded-lg bg-amberGold-500 hover:bg-amberGold-400 text-slate-900 text-xs font-bold" title="Receber Veículo & Vistoria Final">
+                                <i class="fa-solid fa-clipboard-check"></i> Devolução
+                            </button>
+                        ` : ''}
+                        ${r.status !== 'Cancelada' && r.status !== 'Concluído' ? `
+                            <button onclick="updateRentalStatus(${r.id}, 'Cancelada')" class="px-2 py-1 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white text-xs" title="Cancelar Reserva">
+                                <i class="fa-solid fa-ban"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        // Render Clients Grid
+        function renderClients() {
+            const grid = document.getElementById('clientsGrid');
+            if (!grid) return;
+
+            grid.innerHTML = appState.clients.map(c => {
+                let badgeType = 'bg-slate-800 text-slate-400';
+                if (c.client_type === 'VIP') badgeType = 'bg-amberGold-500/20 text-amberGold-400 border border-amberGold-500/30';
+                if (c.client_type === 'Empresa') badgeType = 'bg-cyber-500/20 text-cyber-400 border border-cyber-500/30';
+
+                return `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark hover:border-cyber-500/40 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold ${badgeType}">
+                                ${c.client_type}
+                            </span>
+                            <span class="text-xs text-slate-500">${c.nationality}</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white mt-2 flex items-center gap-2">
+                            <i class="fa-solid fa-user text-slate-400 text-xs"></i> ${c.full_name}
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-envelope text-[10px]"></i> ${c.email}</p>
+                        <p class="text-xs text-slate-400"><i class="fa-solid fa-phone text-[10px]"></i> ${c.phone}</p>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-borderDark text-xs text-slate-300 space-y-1">
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Carta de Condução:</span>
+                            <span class="font-mono text-white">${c.license_number}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Validade:</span>
+                            <span class="text-slate-300">${c.license_expiry}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Total de Alugueres:</span>
+                            <span class="font-bold text-cyber-400">${c.total_rentals} aluguer(es)</span>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Render Contracts Table
+        function renderContracts() {
+            const tbody = document.getElementById('contractsTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = appState.contracts.map(c => `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="px-5 py-4 font-mono font-bold text-cyber-400">
+                        ${c.contract_number}
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="font-bold text-white">${c.rental_code}</div>
+                        <div class="text-xs text-slate-400">${c.brand} ${c.model} (${c.plate})</div>
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="font-semibold text-white">${c.client_name}</div>
+                        <div class="text-xs text-slate-400">Carta: ${c.license_number}</div>
+                    </td>
+                    <td class="px-5 py-4 text-xs">
+                        <div class="text-slate-200">KM: <strong>${c.initial_mileage}</strong></div>
+                        <div class="text-slate-400">Depósito: <strong>${c.initial_fuel}%</strong></div>
+                    </td>
+                    <td class="px-5 py-4 text-xs">
+                        ${c.final_mileage ? `
+                            <div class="text-slate-200">KM: <strong>${c.final_mileage}</strong></div>
+                            <div class="text-slate-400">Depósito: <strong>${c.final_fuel}%</strong></div>
+                        ` : `<span class="text-amberGold-400 italic">Em Curso</span>`}
+                    </td>
+                    <td class="px-5 py-4 text-xs font-semibold text-slate-300">
+                        <span class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-700">
+                            ${c.insurance_type}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-right text-xs text-slate-500 font-mono">
+                        ${c.signed_at.substring(0, 16)}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Render Pricing Grid
+        function renderPricing() {
+            const grid = document.getElementById('pricingGrid');
+            if (!grid) return;
+
+            grid.innerHTML = appState.pricing.map(p => `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between text-xs mb-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-cyber-500/20 text-cyber-400 font-semibold border border-cyber-500/30">
+                                ${p.season}
+                            </span>
+                            <span class="text-slate-400">${p.category}</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white">${p.title}</h4>
+                        <p class="text-xs text-slate-400 mt-1">${p.description}</p>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-borderDark flex items-baseline justify-between">
+                        <div>
+                            <span class="text-[11px] text-slate-500 block">Fator Multiplicador</span>
+                            <span class="text-2xl font-black text-amberGold-400">${p.multiplier}x</span>
+                        </div>
+                        <div class="text-xs text-slate-400 text-right">
+                            Mínimo de <strong class="text-white">${p.min_days}</strong> dia(s)
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Payments Table
+        function renderPayments() {
+            const tbody = document.getElementById('paymentsTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = appState.payments.map(p => {
+                let badgeType = 'bg-cyber-500/20 text-cyber-400 border-cyber-500/30';
+                if (p.payment_type === 'Caução') badgeType = 'bg-purple-500/20 text-purple-400 border-purple-500/30';
+
+                return `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="px-5 py-4 font-mono font-bold text-white">
+                        ${p.reference}
+                    </td>
+                    <td class="px-5 py-4 text-xs font-semibold text-slate-300">
+                        ${p.rental_code}
+                    </td>
+                    <td class="px-5 py-4 font-medium text-white">
+                        ${p.client_name}
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold border ${badgeType}">
+                            ${p.payment_type}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-xs text-slate-300">
+                        <i class="fa-solid fa-wallet text-slate-500 mr-1"></i> ${p.method}
+                    </td>
+                    <td class="px-5 py-4 font-bold text-emerald-400">
+                        ${p.amount.toFixed(2)} €
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400">
+                            ${p.status}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-right text-xs text-slate-500 font-mono">
+                        ${p.created_at.substring(0, 16)}
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        // Populate Form Dropdowns
+        function populateDropdowns() {
+            // Vehicles dropdown in rental modal
+            const vSelect = document.getElementById('rentalVehicleSelect');
+            if (vSelect) {
+                vSelect.innerHTML = appState.vehicles.map(v => `
+                    <option value="${v.id}" data-rate="${v.daily_rate}" data-deposit="${v.deposit}">
+                        ${v.brand} ${v.model} (${v.plate}) - ${v.daily_rate}€/dia
+                    </option>
+                `).join('');
+            }
+
+            // Clients dropdown in rental modal
+            const cSelect = document.getElementById('rentalClientSelect');
+            if (cSelect) {
+                cSelect.innerHTML = appState.clients.map(c => `
+                    <option value="${c.id}">${c.full_name} (${c.license_number}) - ${c.client_type}</option>
+                `).join('');
+            }
+
+            // Rentals dropdown in payment modal
+            const pSelect = document.getElementById('payRentalSelect');
+            if (pSelect) {
+                pSelect.innerHTML = appState.rentals.map(r => `
+                    <option value="${r.id}" data-total="${r.total_amount}" data-paid="${r.paid_amount}">
+                        ${r.rental_code} - ${r.client_name} (${r.brand} ${r.model})
+                    </option>
+                `).join('');
+            }
+        }
+
+        // Calculate Modal Rental Totals
+        function calculateRentalTotals() {
+            const vSelect = document.getElementById('rentalVehicleSelect');
+            const sDate = document.getElementById('rentalStartDate')?.value;
+            const eDate = document.getElementById('rentalEndDate')?.value;
+            const insSelect = document.getElementById('rentalInsurance')?.value;
+
+            if (!vSelect || !sDate || !eDate) return;
+
+            const selectedOption = vSelect.options[vSelect.selectedIndex];
+            const dailyRate = parseFloat(selectedOption?.getAttribute('data-rate') || 80);
+            const deposit = parseFloat(selectedOption?.getAttribute('data-deposit') || 500);
+
+            const d1 = new Date(sDate);
+            const d2 = new Date(eDate);
+            const diffDays = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+
+            let extraRate = 0;
+            if (insSelect === 'Cobertura Total (CDW VIP)') extraRate = 25;
+            if (insSelect === 'Proteção Pneus & Vidros') extraRate = 10;
+
+            const totalAmount = (dailyRate + extraRate) * diffDays;
+
+            document.getElementById('modalRentalDays').innerText = `${diffDays} dia(s)`;
+            document.getElementById('modalRentalTotal').innerText = `${totalAmount.toFixed(2)} €`;
+            document.getElementById('modalRentalDeposit').innerText = `${deposit.toFixed(2)} €`;
+
+            const paidInput = document.getElementById('rentalPaidNow');
+            if (paidInput && (!paidInput.value || parseFloat(paidInput.value) === 0)) {
+                paidInput.value = totalAmount.toFixed(2);
+            }
+        }
+
+        // Price Simulator
+        function runPriceSimulator() {
+            const daily = parseFloat(document.getElementById('simDaily')?.value || 85);
+            const days = parseInt(document.getElementById('simDays')?.value || 5);
+            const mult = parseFloat(document.getElementById('simSeason')?.value || 1.0);
+
+            const total = daily * days * mult;
+            const deposit = daily * 8; // standard formula
+
+            const simRes = document.getElementById('simResult');
+            const simDep = document.getElementById('simDeposit');
+            if (simRes) simRes.innerText = `${total.toFixed(2)} €`;
+            if (simDep) simDep.innerText = `${deposit.toFixed(2)} €`;
+        }
+
+        // Action Handlers
+        async function updateVehicleStatus(id, newStatus) {
+            try {
+                const res = await fetch(`/api/vehicles/${id}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao atualizar estado.", "error");
+            }
+        }
+
+        function startBookingVehicle(vehId) {
+            openModal('modalNewRental');
+            const vSelect = document.getElementById('rentalVehicleSelect');
+            if (vSelect) {
+                vSelect.value = vehId;
+                calculateRentalTotals();
+            }
+        }
+
+        function bookSpecificVehicle(vehId, start, end) {
+            openModal('modalNewRental');
+            const vSelect = document.getElementById('rentalVehicleSelect');
+            const rStart = document.getElementById('rentalStartDate');
+            const rEnd = document.getElementById('rentalEndDate');
+
+            if (vSelect) vSelect.value = vehId;
+            if (rStart) rStart.value = start;
+            if (rEnd) rEnd.value = end;
+
+            calculateRentalTotals();
+        }
+
+        async function submitNewRental() {
+            const vSelect = document.getElementById('rentalVehicleSelect');
+            const selectedOption = vSelect.options[vSelect.selectedIndex];
+            const dailyRate = parseFloat(selectedOption.getAttribute('data-rate'));
+            const deposit = parseFloat(selectedOption.getAttribute('data-deposit'));
+
+            const sDate = document.getElementById('rentalStartDate').value;
+            const eDate = document.getElementById('rentalEndDate').value;
+            const d1 = new Date(sDate);
+            const d2 = new Date(eDate);
+            const diffDays = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+
+            const insType = document.getElementById('rentalInsurance').value;
+            let extraDaily = 0;
+            if (insType === 'Cobertura Total (CDW VIP)') extraDaily = 25;
+            if (insType === 'Proteção Pneus & Vidros') extraDaily = 10;
+
+            const extrasTotal = extraDaily * diffDays;
+            const total = (dailyRate * diffDays) + extrasTotal;
+            const paid = parseFloat(document.getElementById('rentalPaidNow').value || 0);
+
+            const payload = {
+                vehicle_id: parseInt(vSelect.value),
+                client_id: parseInt(document.getElementById('rentalClientSelect').value),
+                start_date: sDate,
+                end_date: eDate,
+                pickup_location: document.getElementById('rentalPickupLoc').value,
+                return_location: document.getElementById('rentalReturnLoc').value,
+                total_days: diffDays,
+                daily_price: dailyRate,
+                extras_price: extrasTotal,
+                total_amount: total,
+                paid_amount: paid,
+                deposit_amount: deposit,
+                extras: document.getElementById('rentalExtras').value || 'Nenhum',
+                insurance_type: insType
+            };
+
+            try {
+                const res = await fetch('/api/rentals', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewRental');
+                    fetchAllData();
+                    switchTab('rentals');
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao submeter reserva.", "error");
+            }
+        }
+
+        async function submitNewVehicle() {
+            const payload = {
+                plate: document.getElementById('vehPlate').value,
+                category: document.getElementById('vehCategory').value,
+                brand: document.getElementById('vehBrand').value,
+                model: document.getElementById('vehModel').value,
+                year: parseInt(document.getElementById('vehYear').value),
+                transmission: document.getElementById('vehTransmission').value,
+                fuel_type: document.getElementById('vehFuelType').value,
+                daily_rate: parseFloat(document.getElementById('vehDailyRate').value),
+                mileage: parseInt(document.getElementById('vehMileage').value),
+                fuel_level: 100,
+                seats: 5,
+                deposit: parseFloat(document.getElementById('vehDeposit').value),
+                features: document.getElementById('vehFeatures').value,
+                image_icon: 'fa-car-side'
+            };
+
+            try {
+                const res = await fetch('/api/vehicles', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewVehicle');
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao adicionar veículo.", "error");
+            }
+        }
+
+        async function submitNewClient() {
+            const payload = {
+                full_name: document.getElementById('cliName').value,
+                email: document.getElementById('cliEmail').value,
+                phone: document.getElementById('cliPhone').value,
+                license_number: document.getElementById('cliLicense').value,
+                license_expiry: document.getElementById('cliExpiry').value,
+                nationality: document.getElementById('cliNationality').value,
+                client_type: document.getElementById('cliType').value,
+                notes: document.getElementById('cliNotes').value
+            };
+
+            try {
+                const res = await fetch('/api/clients', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewClient');
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao guardar cliente.", "error");
+            }
+        }
+
+        async function updateRentalStatus(rid, newStatus) {
+            try {
+                const res = await fetch(`/api/rentals/${rid}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao atualizar reserva.", "error");
+            }
+        }
+
+        function openInspectionModal(rid, code) {
+            document.getElementById('inspRentalId').value = rid;
+            document.getElementById('inspRentalCode').innerText = code;
+            openModal('modalInspection');
+        }
+
+        async function submitInspection() {
+            const rid = document.getElementById('inspRentalId').value;
+            const finalKm = document.getElementById('inspFinalKm').value;
+            const finalFuel = document.getElementById('inspFinalFuel').value;
+
+            try {
+                const res = await fetch(`/api/rentals/${rid}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        status: 'Concluído',
+                        final_km: finalKm,
+                        final_fuel: finalFuel
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast("Aluguer concluído! Veículo enviado para lavagem.");
+                    closeModal('modalInspection');
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao registar devolução.", "error");
+            }
+        }
+
+        async function submitNewPayment() {
+            const payload = {
+                rental_id: parseInt(document.getElementById('payRentalSelect').value),
+                amount: parseFloat(document.getElementById('payAmount').value),
+                payment_type: document.getElementById('payType').value,
+                method: document.getElementById('payMethod').value
+            };
+
+            try {
+                const res = await fetch('/api/payments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`Pagamento ${data.reference} registado!`);
+                    closeModal('modalNewPayment');
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao processar pagamento.", "error");
+            }
+        }
+
+        async function submitNewPricing() {
+            const payload = {
+                title: document.getElementById('ruleTitle').value,
+                category: document.getElementById('ruleCategory').value,
+                season: document.getElementById('ruleSeason').value,
+                multiplier: parseFloat(document.getElementById('ruleMultiplier').value),
+                min_days: parseInt(document.getElementById('ruleMinDays').value),
+                description: document.getElementById('ruleDescription').value
+            };
+
+            try {
+                const res = await fetch('/api/pricing', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast("Regra tarifária criada!");
+                    closeModal('modalNewPricing');
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao criar regra tarifária.", "error");
+            }
+        }
+
+        // On Load
+        window.addEventListener('DOMContentLoaded', () => {
+            initDates();
+            fetchAllData();
+        });
+    </script>
+</body>
+</html>
