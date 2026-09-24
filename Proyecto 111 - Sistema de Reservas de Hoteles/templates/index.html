@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrandHotel Suite PMS — Sistema de Reservas & Gestão Hoteleira</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        hotel: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-serif-lux { font-family: 'Playfair Display', serif; }
+
+        /* Dark Mode Glassmorphism */
+        .dark body {
+            background-color: #080c16;
+            color: #f8fafc;
+        }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+        .dark .header-bg {
+            background-color: rgba(10, 15, 29, 0.95);
+            border-color: #1e293b;
+        }
+        .dark .card-sub-bg {
+            background-color: #0b1120;
+            border-color: #1e293b;
+        }
+
+        /* Light Mode Glassmorphism */
+        body {
+            background-color: #fdfbf7;
+            color: #0f172a;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.1);
+        }
+        .header-bg {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: #e2e8f0;
+        }
+        .card-sub-bg {
+            background-color: #f8fafc;
+            border-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-hotel-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="header-bg border-b sticky top-0 z-50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-600 via-hotel-500 to-yellow-400 flex items-center justify-center text-white shadow-lg shadow-hotel-500/30">
+                    <i class="fa-solid fa-hotel text-xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-extrabold text-xl tracking-tight text-gray-900 dark:text-white font-serif-lux">GrandHotel Suite</h1>
+                        <span class="px-2 py-0.5 text-[10px] uppercase font-bold tracking-widest bg-hotel-500/20 text-hotel-500 border border-hotel-500/30 rounded-full">PMS v4.5</span>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Sistema Integrado de Reservas, Hóspedes & Gestão Hoteleira</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-xs">
+                <span class="hidden sm:inline-flex items-center px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20">
+                    <i class="fa-solid fa-circle text-[8px] mr-1.5 animate-pulse text-emerald-400"></i> Sistema Online & Sincronizado
+                </span>
+
+                <!-- Action Button: Nova Reserva -->
+                <button onclick="openBookingModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-hotel-500 to-amber-600 hover:from-hotel-600 hover:to-amber-700 text-white font-bold shadow-lg shadow-hotel-500/25 transition flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Nova Reserva</span>
+                </button>
+
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" id="themeToggleBtn" class="px-3 py-2 rounded-xl bg-gray-200 dark:bg-slate-800 text-gray-800 dark:text-gray-200 hover:bg-hotel-500 hover:text-white transition flex items-center gap-2 font-bold border border-gray-300 dark:border-slate-700 shadow">
+                    <i id="themeIcon" class="fa-solid fa-moon text-amber-400"></i>
+                    <span id="themeText">Modo Escuro</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs Bar -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex space-x-1 sm:space-x-3 overflow-x-auto py-2 text-sm font-semibold border-t border-gray-200 dark:border-slate-800/80">
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-3.5 py-2 rounded-xl text-hotel-500 bg-hotel-500/10 flex items-center gap-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-chart-pie"></i> Dashboard
+                </button>
+                <button onclick="switchTab('rooms')" id="tab-rooms" class="tab-btn px-3.5 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:text-hotel-500 hover:bg-hotel-500/5 flex items-center gap-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-bed"></i> Habitaciones
+                </button>
+                <button onclick="switchTab('availability')" id="tab-availability" class="tab-btn px-3.5 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:text-hotel-500 hover:bg-hotel-500/5 flex items-center gap-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-calendar-check"></i> Disponibilidade
+                </button>
+                <button onclick="switchTab('bookings')" id="tab-bookings" class="tab-btn px-3.5 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:text-hotel-500 hover:bg-hotel-500/5 flex items-center gap-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-concierge-bell"></i> Reservas
+                </button>
+                <button onclick="switchTab('clients')" id="tab-clients" class="tab-btn px-3.5 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:text-hotel-500 hover:bg-hotel-500/5 flex items-center gap-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-user-group"></i> Clientes
+                </button>
+                <button onclick="switchTab('pricing')" id="tab-pricing" class="tab-btn px-3.5 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:text-hotel-500 hover:bg-hotel-500/5 flex items-center gap-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-tags"></i> Preços
+                </button>
+                <button onclick="switchTab('payments')" id="tab-payments" class="tab-btn px-3.5 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:text-hotel-500 hover:bg-hotel-500/5 flex items-center gap-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-credit-card"></i> Pagos
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: DASHBOARD -->
+        <!-- ========================================== -->
+        <section id="view-dashboard" class="tab-content space-y-6">
+            <!-- KPI Cards Row -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Taxa de Ocupação</p>
+                            <h3 class="text-3xl font-extrabold text-gray-900 dark:text-white mt-1">{{ stats.occupancy_rate }}%</h3>
+                            <p class="text-xs text-emerald-500 font-semibold mt-1"><i class="fa-solid fa-arrow-trend-up mr-1"></i> {{ stats.occupied_rooms }} de {{ stats.total_rooms }} quartos ocupados</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-hotel-500/10 text-hotel-500 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-door-open"></i>
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-slate-700 h-1.5 rounded-full mt-4 overflow-hidden">
+                        <div class="bg-gradient-to-r from-hotel-500 to-amber-600 h-full rounded-full" style="width: {{ stats.occupancy_rate }}%"></div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Receitas Totais</p>
+                            <h3 class="text-3xl font-extrabold text-gray-900 dark:text-white mt-1">{{ "%.2f"|format(stats.total_revenue) }} €</h3>
+                            <p class="text-xs text-amber-500 font-semibold mt-1"><i class="fa-solid fa-coins mr-1"></i> RevPAR Médio: {{ "%.2f"|format(stats.revpar) }} €</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-sack-dollar"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Reservas Ativas</p>
+                            <h3 class="text-3xl font-extrabold text-gray-900 dark:text-white mt-1">{{ stats.active_bookings }}</h3>
+                            <p class="text-xs text-cyan-500 font-semibold mt-1"><i class="fa-solid fa-circle-check mr-1"></i> Confirmadas / Em estadia</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-500 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Check-ins & Outs Hoje</p>
+                            <div class="flex items-baseline gap-2 mt-1">
+                                <h3 class="text-3xl font-extrabold text-emerald-500">{{ stats.today_checkins }}</h3>
+                                <span class="text-xs text-gray-400">In /</span>
+                                <h3 class="text-2xl font-bold text-amber-500">{{ stats.today_checkouts }}</h3>
+                                <span class="text-xs text-gray-400">Out</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">Fluxo da receção em tempo real</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-500 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-bell-concierge"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Quick Overview Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Main Line/Bar Chart -->
+                <div class="glass-card rounded-2xl p-6 lg:col-span-2">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h4 class="font-bold text-base text-gray-900 dark:text-white">Evolução de Ocupação & Receita Semanal</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Desempenho operacional dos últimos 7 dias</p>
+                        </div>
+                        <span class="text-xs px-2.5 py-1 rounded-lg bg-hotel-500/10 text-hotel-500 font-bold border border-hotel-500/20">
+                            Tempo Real
+                        </span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="occupancyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Room Distribution Donut -->
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h4 class="font-bold text-base text-gray-900 dark:text-white">Estado dos Quartos</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Distribuição do inventário</p>
+                        </div>
+                    </div>
+                    <div class="h-48 relative flex items-center justify-center">
+                        <canvas id="roomStatusDonut"></canvas>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-4 text-xs font-semibold">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                            <span class="text-gray-600 dark:text-gray-400">Disponíveis: {{ stats.available_rooms }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                            <span class="text-gray-600 dark:text-gray-400">Ocupados: {{ stats.occupied_rooms }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                            <span class="text-gray-600 dark:text-gray-400">Limpeza: {{ stats.cleaning_rooms }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span class="text-gray-600 dark:text-gray-400">Manutenção: {{ stats.maintenance_rooms }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Bookings Mini-Table -->
+            <div class="glass-card rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-bold text-base text-gray-900 dark:text-white">Últimas Reservas Registadas</h4>
+                    <button onclick="switchTab('bookings')" class="text-xs font-bold text-hotel-500 hover:underline">Ver todas as reservas &rarr;</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="uppercase tracking-wider text-gray-400 border-b border-gray-200 dark:border-slate-800">
+                            <tr>
+                                <th class="pb-3">Código</th>
+                                <th class="pb-3">Hóspede</th>
+                                <th class="pb-3">Quarto</th>
+                                <th class="pb-3">Check-in / Out</th>
+                                <th class="pb-3">Total</th>
+                                <th class="pb-3">Status</th>
+                                <th class="pb-3 text-right">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-slate-800">
+                            {% for b in bookings[:4] %}
+                            <tr class="hover:bg-hotel-500/5 transition">
+                                <td class="py-3 font-mono font-bold text-hotel-500">{{ b.booking_code }}</td>
+                                <td class="py-3 font-semibold text-gray-900 dark:text-white">{{ b.client_name }}</td>
+                                <td class="py-3 text-gray-600 dark:text-gray-300">#{{ b.room_number }} — {{ b.room_title }}</td>
+                                <td class="py-3 font-mono text-gray-500 dark:text-gray-400">{{ b.check_in }} &rarr; {{ b.check_out }}</td>
+                                <td class="py-3 font-bold text-gray-900 dark:text-white">{{ "%.2f"|format(b.total_price) }} €</td>
+                                <td class="py-3">
+                                    {% if b.status == 'Confirmada' %}
+                                    <span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 font-bold border border-blue-500/20">Confirmada</span>
+                                    {% elif b.status == 'Check-in' %}
+                                    <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20">Em Estadia</span>
+                                    {% elif b.status == 'Check-out' %}
+                                    <span class="px-2 py-0.5 rounded-full bg-gray-500/10 text-gray-500 font-bold border border-gray-500/20">Finalizada</span>
+                                    {% else %}
+                                    <span class="px-2 py-0.5 rounded-full bg-red-500/10 text-red-500 font-bold border border-red-500/20">Cancelada</span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-3 text-right">
+                                    <button onclick="viewBookingDetails({{ b.id }})" class="px-2.5 py-1 rounded-lg bg-hotel-500/10 hover:bg-hotel-500 text-hotel-500 hover:text-white transition font-bold">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: HABITACIONES -->
+        <!-- ========================================== -->
+        <section id="view-rooms" class="tab-content hidden space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Inventário de Quartos & Suites</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Controlo de quartos, capacidade, estado operacional e comodidades</p>
+                </div>
+                <button onclick="openRoomModal()" class="px-4 py-2 rounded-xl bg-hotel-500 hover:bg-hotel-600 text-white font-bold text-xs shadow-md transition flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Adicionar Quarto
+                </button>
+            </div>
+
+            <!-- Room Filter Pills -->
+            <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+                <button onclick="filterRooms('all')" class="room-filter-btn px-3 py-1.5 rounded-lg bg-hotel-500 text-white shadow">Todos</button>
+                <button onclick="filterRooms('Disponível')" class="room-filter-btn px-3 py-1.5 rounded-lg bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-emerald-500 hover:text-white">Disponíveis</button>
+                <button onclick="filterRooms('Ocupado')" class="room-filter-btn px-3 py-1.5 rounded-lg bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-amber-500 hover:text-white">Ocupados</button>
+                <button onclick="filterRooms('Limpeza')" class="room-filter-btn px-3 py-1.5 rounded-lg bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white">Limpeza</button>
+                <button onclick="filterRooms('Manutenção')" class="room-filter-btn px-3 py-1.5 rounded-lg bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-red-500 hover:text-white">Manutenção</button>
+            </div>
+
+            <!-- Rooms Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="roomsContainer">
+                {% for r in rooms %}
+                <div class="glass-card rounded-2xl p-5 room-card relative flex flex-col justify-between" data-status="{{ r.status }}">
+                    <div>
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl bg-hotel-500/10 text-hotel-500 flex items-center justify-center text-xl">
+                                    <i class="fa-solid {{ r.icon }}"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Piso {{ r.floor }} • {{ r.room_type }}</span>
+                                    <h4 class="font-extrabold text-lg text-gray-900 dark:text-white">#{{ r.room_number }} — {{ r.title }}</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-3">{{ r.description }}</p>
+
+                        <!-- Amenities -->
+                        <div class="flex flex-wrap gap-1.5 mt-3">
+                            {% for a in r.amenities.split(',') %}
+                            <span class="text-[10px] px-2 py-0.5 rounded-md bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-slate-700">
+                                {{ a.strip() }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 dark:border-slate-800/80 pt-4 mt-5 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] text-gray-400">Tarifa Diária</span>
+                            <p class="text-xl font-extrabold text-hotel-500">{{ "%.2f"|format(r.base_price) }} € <span class="text-xs font-normal text-gray-400">/noite</span></p>
+                        </div>
+                        
+                        <!-- Status Selector Dropdown -->
+                        <div class="relative">
+                            <select onchange="changeRoomStatus({{ r.id }}, this.value)" class="text-xs font-bold px-3 py-1.5 rounded-xl border cursor-pointer transition
+                                {% if r.status == 'Disponível' %}bg-emerald-500/10 text-emerald-500 border-emerald-500/30
+                                {% elif r.status == 'Ocupado' %}bg-amber-500/10 text-amber-500 border-amber-500/30
+                                {% elif r.status == 'Limpeza' %}bg-blue-500/10 text-blue-500 border-blue-500/30
+                                {% else %}bg-red-500/10 text-red-500 border-red-500/30{% endif %}">
+                                <option value="Disponível" {% if r.status == 'Disponível' %}selected{% endif %}>🟢 Disponível</option>
+                                <option value="Ocupado" {% if r.status == 'Ocupado' %}selected{% endif %}>🟡 Ocupado</option>
+                                <option value="Limpeza" {% if r.status == 'Limpeza' %}selected{% endif %}>🔵 Limpeza</option>
+                                <option value="Manutenção" {% if r.status == 'Manutenção' %}selected{% endif %}>🔴 Manutenção</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: DISPONIBILIDADE & CALENDÁRIO -->
+        <!-- ========================================== -->
+        <section id="view-availability" class="tab-content hidden space-y-6">
+            <div class="glass-card rounded-2xl p-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Motor de Verificação de Disponibilidade</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Consulte quartos livres em tempo real por intervalo de datas para prevenir overbooking</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 mb-1.5">Data de Check-in</label>
+                        <input type="date" id="avail_check_in" class="w-full text-xs font-semibold px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-hotel-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 mb-1.5">Data de Check-out</label>
+                        <input type="date" id="avail_check_out" class="w-full text-xs font-semibold px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-hotel-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 mb-1.5">Tipo de Quarto</label>
+                        <select id="avail_room_type" class="w-full text-xs font-semibold px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-hotel-500 outline-none">
+                            <option value="Todas">Todas as Tipologias</option>
+                            <option value="Standard Double">Standard Double</option>
+                            <option value="Deluxe Ocean">Deluxe Ocean</option>
+                            <option value="Executive Suite">Executive Suite</option>
+                            <option value="Family Comfort">Family Comfort</option>
+                            <option value="Presidential Penthouse">Presidential Penthouse</option>
+                            <option value="Junior Suite">Junior Suite</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button onclick="searchAvailability()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-hotel-500 to-amber-600 hover:from-hotel-600 hover:to-amber-700 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass"></i> Verificar Vagas
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Availability Results Container -->
+            <div id="availResultsContainer" class="hidden space-y-4">
+                <div class="flex items-center justify-between">
+                    <h4 class="font-bold text-base text-gray-900 dark:text-white" id="availResultsTitle">Quartos Disponíveis</h4>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="availRoomsGrid">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: RESERVAS (BOOKING ENGINE) -->
+        <!-- ========================================== -->
+        <section id="view-bookings" class="tab-content hidden space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Gestão Central de Reservas</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Ciclo completo de estadias: check-in, check-out, extratos e controlo de pagamentos</p>
+                </div>
+                <button onclick="openBookingModal()" class="px-4 py-2 rounded-xl bg-hotel-500 hover:bg-hotel-600 text-white font-bold text-xs shadow-md transition flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Nova Reserva
+                </button>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="uppercase tracking-wider text-gray-400 border-b border-gray-200 dark:border-slate-800">
+                            <tr>
+                                <th class="pb-3">Código</th>
+                                <th class="pb-3">Hóspede & Contacto</th>
+                                <th class="pb-3">Quarto Reservado</th>
+                                <th class="pb-3">Período de Estadia</th>
+                                <th class="pb-3">Hóspedes</th>
+                                <th class="pb-3">Total / Pago</th>
+                                <th class="pb-3">Estado</th>
+                                <th class="pb-3 text-right">Ações de Receção</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-slate-800">
+                            {% for b in bookings %}
+                            <tr class="hover:bg-hotel-500/5 transition">
+                                <td class="py-3 font-mono font-bold text-hotel-500">{{ b.booking_code }}</td>
+                                <td class="py-3">
+                                    <p class="font-bold text-gray-900 dark:text-white">{{ b.client_name }}</p>
+                                    <p class="text-[11px] text-gray-400 font-mono">{{ b.client_phone }}</p>
+                                </td>
+                                <td class="py-3">
+                                    <span class="font-semibold text-gray-800 dark:text-gray-200">#{{ b.room_number }}</span>
+                                    <p class="text-[11px] text-gray-400">{{ b.room_title }}</p>
+                                </td>
+                                <td class="py-3 font-mono text-gray-600 dark:text-gray-300">
+                                    {{ b.check_in }} &rarr; {{ b.check_out }}
+                                </td>
+                                <td class="py-3 text-gray-600 dark:text-gray-300 font-bold">
+                                    <i class="fa-solid fa-user mr-1 text-hotel-500"></i> {{ b.guests_count }}
+                                </td>
+                                <td class="py-3 font-semibold">
+                                    <p class="text-gray-900 dark:text-white font-bold">{{ "%.2f"|format(b.total_price) }} €</p>
+                                    <p class="text-[11px] {% if b.payment_status == 'Pago Total' %}text-emerald-500{% elif b.payment_status == 'Pago Parcial' %}text-amber-500{% else %}text-red-500{% endif %}">
+                                        {{ b.payment_status }} ({{ "%.2f"|format(b.paid_amount) }} €)
+                                    </p>
+                                </td>
+                                <td class="py-3">
+                                    {% if b.status == 'Confirmada' %}
+                                    <span class="px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 font-bold border border-blue-500/20">Confirmada</span>
+                                    {% elif b.status == 'Check-in' %}
+                                    <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20">Em Estadia</span>
+                                    {% elif b.status == 'Check-out' %}
+                                    <span class="px-2.5 py-1 rounded-full bg-gray-500/10 text-gray-400 font-bold border border-gray-500/20">Check-out Feito</span>
+                                    {% else %}
+                                    <span class="px-2.5 py-1 rounded-full bg-red-500/10 text-red-500 font-bold border border-red-500/20">Cancelada</span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-3 text-right space-x-1">
+                                    {% if b.status == 'Confirmada' %}
+                                    <button onclick="changeBookingStatus({{ b.id }}, 'Check-in')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-white transition font-bold" title="Fazer Check-in">
+                                        <i class="fa-solid fa-key mr-1"></i> Check-in
+                                    </button>
+                                    {% elif b.status == 'Check-in' %}
+                                    <button onclick="changeBookingStatus({{ b.id }}, 'Check-out')" class="px-2.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500 text-amber-500 hover:text-white transition font-bold" title="Fazer Check-out">
+                                        <i class="fa-solid fa-receipt mr-1"></i> Check-out
+                                    </button>
+                                    {% endif %}
+                                    
+                                    <button onclick="openPaymentForBooking({{ b.id }}, {{ b.total_price - b.paid_amount }})" class="px-2.5 py-1.5 rounded-lg bg-hotel-500/10 hover:bg-hotel-500 text-hotel-500 hover:text-white transition font-bold" title="Registar Pagamento">
+                                        <i class="fa-solid fa-euro-sign"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: CLIENTES (CRM HÓSPEDES) -->
+        <!-- ========================================== -->
+        <section id="view-clients" class="tab-content hidden space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Diretório & CRM de Hóspedes</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Fichas de clientes, histórico de estadias, documentos e preferências VIP</p>
+                </div>
+                <button onclick="openClientModal()" class="px-4 py-2 rounded-xl bg-hotel-500 hover:bg-hotel-600 text-white font-bold text-xs shadow-md transition flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus"></i> Novo Hóspede
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for c in clients %}
+                <div class="glass-card rounded-2xl p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-hotel-600 text-white flex items-center justify-center font-bold text-lg shadow">
+                                    {{ c.full_name[:2].upper() }}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-base text-gray-900 dark:text-white">{{ c.full_name }}</h4>
+                                    <p class="text-xs text-gray-400"><i class="fa-solid fa-flag text-[10px] mr-1"></i> {{ c.nationality }}</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border 
+                                {% if c.vip_level == 'Platinum VIP' %}bg-purple-500/10 text-purple-400 border-purple-500/30
+                                {% elif c.vip_level == 'Gold VIP' %}bg-amber-500/10 text-amber-400 border-amber-500/30
+                                {% elif c.vip_level == 'Silver VIP' %}bg-cyan-500/10 text-cyan-400 border-cyan-500/30
+                                {% else %}bg-gray-500/10 text-gray-400 border-gray-500/30{% endif %}">
+                                {{ c.vip_level }}
+                            </span>
+                        </div>
+
+                        <div class="space-y-1.5 mt-4 text-xs text-gray-600 dark:text-gray-300">
+                            <p><i class="fa-solid fa-envelope text-hotel-500 w-4"></i> {{ c.email }}</p>
+                            <p><i class="fa-solid fa-phone text-hotel-500 w-4"></i> {{ c.phone }}</p>
+                            <p><i class="fa-solid fa-id-card text-hotel-500 w-4"></i> {{ c.document_id }}</p>
+                        </div>
+
+                        {% if c.notes %}
+                        <div class="mt-3 p-2.5 rounded-xl bg-hotel-500/5 border border-hotel-500/10 text-xs italic text-gray-500 dark:text-gray-400">
+                            "{{ c.notes }}"
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="border-t border-gray-200 dark:border-slate-800 pt-3 mt-4 flex items-center justify-between text-xs">
+                        <span class="text-gray-400">Histórico de Estadias:</span>
+                        <span class="font-extrabold text-hotel-500 font-mono text-sm">{{ c.total_stays }} reservas</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 6: PREÇOS & TARIFAS DINÂMICAS -->
+        <!-- ========================================== -->
+        <section id="view-pricing" class="tab-content hidden space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Matriz de Tarifação Dinâmica</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Regras sazonais, multiplicadores de época e pacotes promocionais</p>
+                </div>
+                <button onclick="openPricingModal()" class="px-4 py-2 rounded-xl bg-hotel-500 hover:bg-hotel-600 text-white font-bold text-xs shadow-md transition flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Adicionar Regra
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for p in pricing %}
+                <div class="glass-card rounded-2xl p-5 flex items-start justify-between">
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-hotel-500/10 text-hotel-500 border border-hotel-500/20">
+                                {{ p.season_type }}
+                            </span>
+                            <span class="text-xs text-emerald-500 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Ativa</span>
+                        </div>
+                        <h4 class="font-bold text-base text-gray-900 dark:text-white">{{ p.name }}</h4>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ p.description }}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] text-gray-400">Multiplicador</span>
+                        <p class="text-2xl font-extrabold text-hotel-500 font-mono">x{{ p.multiplier }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 7: PAGOS & TRANSAÇÕES -->
+        <!-- ========================================== -->
+        <section id="view-payments" class="tab-content hidden space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Histórico de Transações & Faturação</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Registo de pagamentos, sinais de caução e emissão de comprovativos fiscais</p>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="uppercase tracking-wider text-gray-400 border-b border-gray-200 dark:border-slate-800">
+                            <tr>
+                                <th class="pb-3">Ref. Pagamento</th>
+                                <th class="pb-3">Reserva</th>
+                                <th class="pb-3">Hóspede</th>
+                                <th class="pb-3">Montante</th>
+                                <th class="pb-3">Método</th>
+                                <th class="pb-3">Data</th>
+                                <th class="pb-3">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-slate-800">
+                            {% for pay in payments %}
+                            <tr class="hover:bg-hotel-500/5 transition">
+                                <td class="py-3 font-mono font-bold text-hotel-500">{{ pay.reference }}</td>
+                                <td class="py-3 font-mono text-gray-900 dark:text-white font-semibold">{{ pay.booking_code }}</td>
+                                <td class="py-3 font-semibold text-gray-700 dark:text-gray-300">{{ pay.client_name }}</td>
+                                <td class="py-3 font-extrabold text-emerald-500 text-sm">{{ "%.2f"|format(pay.amount) }} €</td>
+                                <td class="py-3 text-gray-600 dark:text-gray-400">
+                                    <i class="fa-solid fa-wallet mr-1 text-hotel-500"></i> {{ pay.method }}
+                                </td>
+                                <td class="py-3 font-mono text-gray-400">{{ pay.created_at }}</td>
+                                <td class="py-3">
+                                    <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20">
+                                        {{ pay.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- MODALS SECTION -->
+    <!-- ========================================== -->
+
+    <!-- 1. Modal Nova Reserva -->
+    <div id="bookingModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl max-w-xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h3 class="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-plus text-hotel-500"></i> Nova Reserva de Hóspede
+                </h3>
+                <button onclick="closeModal('bookingModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form id="bookingForm" onsubmit="submitNewBooking(event)" class="space-y-4 text-xs">
+                <!-- Room Selection -->
+                <div>
+                    <label class="block font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Selecionar Quarto</label>
+                    <select id="modal_room_id" onchange="calculateBookingTotal()" required class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                        {% for r in rooms %}
+                        <option value="{{ r.id }}" data-price="{{ r.base_price }}">#{{ r.room_number }} — {{ r.title }} ({{ "%.2f"|format(r.base_price) }} €/noite)</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Dates Grid -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Check-in</label>
+                        <input type="date" id="modal_check_in" onchange="calculateBookingTotal()" required class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Check-out</label>
+                        <input type="date" id="modal_check_out" onchange="calculateBookingTotal()" required class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                    </div>
+                </div>
+
+                <!-- Client Mode Switch (Existente ou Novo) -->
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="font-bold uppercase text-gray-500 dark:text-gray-400">Hóspede</label>
+                        <button type="button" onclick="toggleClientMode()" id="clientModeBtn" class="text-hotel-500 font-bold hover:underline">+ Criar Novo Hóspede</button>
+                    </div>
+
+                    <!-- Existing Client Dropdown -->
+                    <div id="existingClientWrapper">
+                        <select id="modal_client_id" class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                            {% for c in clients %}
+                            <option value="{{ c.id }}">{{ c.full_name }} ({{ c.document_id }}) — {{ c.vip_level }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- New Client Inputs (Hidden by default) -->
+                    <div id="newClientWrapper" class="hidden space-y-2 mt-2 p-3 rounded-xl bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-800">
+                        <input type="text" id="new_client_name" placeholder="Nome Completo do Hóspede" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="email" id="new_client_email" placeholder="Email" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                            <input type="text" id="new_client_phone" placeholder="Telemóvel" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="new_client_doc" placeholder="NIF / Passaporte" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                            <input type="text" id="new_client_nat" placeholder="Nacionalidade" value="Portugal" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guests & Pricing Summary -->
+                <div class="grid grid-cols-2 gap-3 items-center">
+                    <div>
+                        <label class="block font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Nº de Hóspedes</label>
+                        <input type="number" id="modal_guests" min="1" max="6" value="2" class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                    </div>
+                    <div class="p-3 rounded-xl bg-hotel-500/10 border border-hotel-500/20 text-right">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold">Total Previsto:</span>
+                        <p id="modal_total_display" class="text-xl font-extrabold text-hotel-500 font-mono">0.00 €</p>
+                        <span id="modal_nights_display" class="text-[10px] text-gray-400">0 noites</span>
+                    </div>
+                </div>
+
+                <!-- Initial Payment -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Sinal / Pagamento Inicial (€)</label>
+                        <input type="number" id="modal_paid_amount" step="0.01" min="0" value="0.00" class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Método de Pagamento</label>
+                        <select id="modal_pay_method" class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="MB Way">MB Way</option>
+                            <option value="Transferência Bancária">Transferência Bancária</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Pedidos Especiais / Observações</label>
+                    <textarea id="modal_special_requests" rows="2" placeholder="Ex: Cama de casal, berço de bebé, espumante no quarto..." class="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-3 border-t border-gray-200 dark:border-slate-800">
+                    <button type="button" onclick="closeModal('bookingModal')" class="px-4 py-2 rounded-xl bg-gray-200 dark:bg-slate-800 text-gray-800 dark:text-gray-200 font-bold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-hotel-500 hover:bg-hotel-600 text-white font-bold shadow-lg transition">Confirmar Reserva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Modal Registar Pagamento -->
+    <div id="paymentModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h3 class="font-bold text-base text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-credit-card text-hotel-500"></i> Registar Pagamento de Reserva
+                </h3>
+                <button onclick="closeModal('paymentModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="submitPayment(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="pay_booking_id">
+                <div>
+                    <label class="block font-bold text-gray-400 uppercase mb-1">Montante a Pagar (€)</label>
+                    <input type="number" id="pay_amount" step="0.01" min="1" required class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white text-base font-bold font-mono outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-400 uppercase mb-1">Método</label>
+                    <select id="pay_method_select" class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                        <option value="Cartão de Crédito">Cartão de Crédito</option>
+                        <option value="MB Way">MB Way</option>
+                        <option value="Transferência Bancária">Transferência Bancária</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                    </select>
+                </div>
+                <div class="flex justify-end gap-2 pt-3">
+                    <button type="button" onclick="closeModal('paymentModal')" class="px-4 py-2 rounded-xl bg-gray-200 dark:bg-slate-800 font-bold">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-emerald-500 text-white font-bold shadow">Concluir Pagamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. Modal Adicionar Quarto -->
+    <div id="roomModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h3 class="font-bold text-base text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-door-closed text-hotel-500"></i> Adicionar Novo Quarto
+                </h3>
+                <button onclick="closeModal('roomModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="submitNewRoom(event)" class="space-y-3 text-xs">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold text-gray-400 uppercase mb-1">Número</label>
+                        <input type="text" id="new_room_number" placeholder="Ex: 401" required class="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-gray-400 uppercase mb-1">Piso</label>
+                        <input type="number" id="new_room_floor" value="1" min="1" max="10" required class="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-400 uppercase mb-1">Título</label>
+                    <input type="text" id="new_room_title" placeholder="Ex: Suite Deluxe Pôr do Sol" required class="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold text-gray-400 uppercase mb-1">Tipologia</label>
+                        <select id="new_room_type" class="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                            <option value="Standard Double">Standard Double</option>
+                            <option value="Deluxe Ocean">Deluxe Ocean</option>
+                            <option value="Executive Suite">Executive Suite</option>
+                            <option value="Family Comfort">Family Comfort</option>
+                            <option value="Presidential Penthouse">Presidential Penthouse</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-gray-400 uppercase mb-1">Preço Base (€)</label>
+                        <input type="number" id="new_room_price" step="0.01" value="120.00" required class="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-400 uppercase mb-1">Comodidades (separadas por vírgula)</label>
+                    <input type="text" id="new_room_amenities" value="Wi-Fi 6, Cama King, AC, TV 4K, Minibar" class="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-400 uppercase mb-1">Descrição</label>
+                    <textarea id="new_room_desc" rows="2" placeholder="Breve descrição do quarto..." class="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white outline-none"></textarea>
+                </div>
+                <div class="flex justify-end gap-2 pt-3">
+                    <button type="button" onclick="closeModal('roomModal')" class="px-4 py-2 rounded-xl bg-gray-200 dark:bg-slate-800 font-bold">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-hotel-500 text-white font-bold shadow">Guardar Quarto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="header-bg border-t py-4 text-center text-xs text-gray-500 dark:text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p><strong>GrandHotel Suite PMS</strong> &copy; 2026 EJAJ TECH • Enmanuel Jimenez. Todos os direitos reservados.</p>
+            <div class="flex items-center gap-4 text-hotel-500 font-bold">
+                <span class="hover:underline cursor-pointer"><i class="fa-brands fa-python mr-1"></i> Python & Flask</span>
+                <span class="hover:underline cursor-pointer"><i class="fa-solid fa-database mr-1"></i> SQLite3</span>
+                <span class="hover:underline cursor-pointer"><i class="fa-brands fa-github mr-1"></i> ejaj94</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-hotel-500', 'bg-hotel-500/10');
+                btn.classList.add('text-gray-600', 'dark:text-gray-400');
+            });
+
+            const target = document.getElementById(`view-${tabId}`);
+            const btn = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+            if (btn) {
+                btn.classList.add('text-hotel-500', 'bg-hotel-500/10');
+                btn.classList.remove('text-gray-600', 'dark:text-gray-400');
+            }
+        }
+
+        // Dark / Light Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+            if (isDark) {
+                html.classList.remove('dark');
+                document.getElementById('themeText').innerText = 'Modo Claro';
+                document.getElementById('themeIcon').className = 'fa-solid fa-sun text-hotel-500';
+            } else {
+                html.classList.add('dark');
+                document.getElementById('themeText').innerText = 'Modo Escuro';
+                document.getElementById('themeIcon').className = 'fa-solid fa-moon text-amber-400';
+            }
+        }
+
+        // Room Status Change
+        async function changeRoomStatus(roomId, newStatus) {
+            try {
+                const res = await fetch(`/api/rooms/${roomId}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.error || 'Erro ao alterar estado do quarto.');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Booking Status Change (Check-in / Check-out)
+        async function changeBookingStatus(bookingId, newStatus) {
+            if (!confirm(`Deseja confirmar o ${newStatus} para esta reserva?`)) return;
+            try {
+                const res = await fetch(`/api/bookings/${bookingId}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.error || 'Erro ao atualizar reserva.');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Search Availability
+        async function searchAvailability() {
+            const checkIn = document.getElementById('avail_check_in').value;
+            const checkOut = document.getElementById('avail_check_out').value;
+            const roomType = document.getElementById('avail_room_type').value;
+
+            if (!checkIn || !checkOut) {
+                alert('Por favor selecione as datas de check-in e check-out.');
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/availability?check_in=${checkIn}&check_out=${checkOut}&room_type=${roomType}`);
+                const data = await res.json();
+                if (!data.success) {
+                    alert(data.error || 'Erro na pesquisa.');
+                    return;
+                }
+
+                const container = document.getElementById('availResultsContainer');
+                const grid = document.getElementById('availRoomsGrid');
+                container.classList.remove('hidden');
+
+                document.getElementById('availResultsTitle').innerText = `${data.available_count} Quartos Disponíveis (${data.nights} noites: ${checkIn} a ${checkOut})`;
+
+                if (data.available_count === 0) {
+                    grid.innerHTML = `<div class="col-span-3 text-center py-8 text-gray-400">Nenhum quarto disponível para as datas selecionadas.</div>`;
+                    return;
+                }
+
+                grid.innerHTML = data.rooms.map(r => `
+                    <div class="glass-card rounded-2xl p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-hotel-500">Piso ${r.floor} • ${r.room_type}</span>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20">Vago</span>
+                            </div>
+                            <h4 class="font-extrabold text-lg text-gray-900 dark:text-white mt-1">#${r.room_number} — ${r.title}</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">${r.description}</p>
+                        </div>
+                        <div class="border-t border-gray-200 dark:border-slate-800 pt-4 mt-4 flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-gray-400">Total para ${r.nights} noites</span>
+                                <p class="text-xl font-extrabold text-emerald-500 font-mono">${r.total_estimate.toFixed(2)} €</p>
+                            </div>
+                            <button onclick="bookDirect(${r.id}, '${checkIn}', '${checkOut}', ${r.total_estimate})" class="px-3.5 py-2 rounded-xl bg-hotel-500 hover:bg-hotel-600 text-white font-bold text-xs shadow transition">
+                                Reservar Já
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Direct Booking Trigger
+        function bookDirect(roomId, checkIn, checkOut, totalEstimate) {
+            openBookingModal();
+            document.getElementById('modal_room_id').value = roomId;
+            document.getElementById('modal_check_in').value = checkIn;
+            document.getElementById('modal_check_out').value = checkOut;
+            document.getElementById('modal_total_display').innerText = `${totalEstimate.toFixed(2)} €`;
+        }
+
+        // Toggle New/Existing Client Form in Modal
+        let isNewClient = false;
+        function toggleClientMode() {
+            isNewClient = !isNewClient;
+            const existWrap = document.getElementById('existingClientWrapper');
+            const newWrap = document.getElementById('newClientWrapper');
+            const btn = document.getElementById('clientModeBtn');
+
+            if (isNewClient) {
+                existWrap.classList.add('hidden');
+                newWrap.classList.remove('hidden');
+                btn.innerText = '← Selecionar Hóspede Existente';
+            } else {
+                existWrap.classList.remove('hidden');
+                newWrap.classList.add('hidden');
+                btn.innerText = '+ Criar Novo Hóspede';
+            }
+        }
+
+        // Calculate Modal Total dynamically
+        function calculateBookingTotal() {
+            const checkInVal = document.getElementById('modal_check_in').value;
+            const checkOutVal = document.getElementById('modal_check_out').value;
+            const roomSelect = document.getElementById('modal_room_id');
+            const opt = roomSelect.options[roomSelect.selectedIndex];
+            const basePrice = parseFloat(opt ? opt.getAttribute('data-price') : 100);
+
+            if (checkInVal && checkOutVal) {
+                const d1 = new Date(checkInVal);
+                const d2 = new Date(checkOutVal);
+                const diffTime = d2 - d1;
+                const nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (nights > 0) {
+                    const total = nights * basePrice;
+                    document.getElementById('modal_total_display').innerText = `${total.toFixed(2)} €`;
+                    document.getElementById('modal_nights_display').innerText = `${nights} noites`;
+                    return total;
+                }
+            }
+            return 0;
+        }
+
+        // Submit New Booking
+        async function submitNewBooking(e) {
+            e.preventDefault();
+            const total = calculateBookingTotal();
+            if (total <= 0) {
+                alert('A data de check-out deve ser posterior ao check-in.');
+                return;
+            }
+
+            const payload = {
+                room_id: document.getElementById('modal_room_id').value,
+                check_in: document.getElementById('modal_check_in').value,
+                check_out: document.getElementById('modal_check_out').value,
+                guests_count: document.getElementById('modal_guests').value,
+                total_price: total,
+                paid_amount: parseFloat(document.getElementById('modal_paid_amount').value || 0),
+                payment_method: document.getElementById('modal_pay_method').value,
+                special_requests: document.getElementById('modal_special_requests').value
+            };
+
+            if (isNewClient) {
+                payload.client_name = document.getElementById('new_client_name').value;
+                payload.client_email = document.getElementById('new_client_email').value;
+                payload.client_phone = document.getElementById('new_client_phone').value;
+                payload.client_doc = document.getElementById('new_client_doc').value;
+                payload.client_nat = document.getElementById('new_client_nat').value;
+            } else {
+                payload.client_id = document.getElementById('modal_client_id').value;
+            }
+
+            try {
+                const res = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.error || 'Erro ao criar reserva.');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Submit Payment
+        async function submitPayment(e) {
+            e.preventDefault();
+            const payload = {
+                booking_id: document.getElementById('pay_booking_id').value,
+                amount: parseFloat(document.getElementById('pay_amount').value),
+                method: document.getElementById('pay_method_select').value
+            };
+
+            try {
+                const res = await fetch('/api/payments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert(`Pagamento registado com sucesso! Referência: ${data.reference}`);
+                    location.reload();
+                } else {
+                    alert(data.error || 'Erro ao processar pagamento.');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Submit New Room
+        async function submitNewRoom(e) {
+            e.preventDefault();
+            const payload = {
+                room_number: document.getElementById('new_room_number').value,
+                floor: document.getElementById('new_room_floor').value,
+                title: document.getElementById('new_room_title').value,
+                room_type: document.getElementById('new_room_type').value,
+                base_price: parseFloat(document.getElementById('new_room_price').value),
+                amenities: document.getElementById('new_room_amenities').value,
+                description: document.getElementById('new_room_desc').value
+            };
+
+            try {
+                const res = await fetch('/api/rooms', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.error || 'Erro ao guardar quarto.');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Room Filter Function
+        function filterRooms(status) {
+            document.querySelectorAll('.room-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-hotel-500', 'text-white', 'shadow');
+                btn.classList.add('bg-gray-200', 'dark:bg-slate-800', 'text-gray-700', 'dark:text-gray-300');
+            });
+            event.target.classList.remove('bg-gray-200', 'dark:bg-slate-800', 'text-gray-700', 'dark:text-gray-300');
+            event.target.classList.add('bg-hotel-500', 'text-white', 'shadow');
+
+            document.querySelectorAll('.room-card').forEach(card => {
+                if (status === 'all' || card.getAttribute('data-status') === status) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Open/Close Modals
+        function openBookingModal() {
+            document.getElementById('bookingModal').classList.remove('hidden');
+            const today = new Date().toISOString().split('T')[0];
+            const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+            if (!document.getElementById('modal_check_in').value) document.getElementById('modal_check_in').value = today;
+            if (!document.getElementById('modal_check_out').value) document.getElementById('modal_check_out').value = tomorrow;
+            calculateBookingTotal();
+        }
+        function openPaymentForBooking(bookingId, pendingAmount) {
+            document.getElementById('pay_booking_id').value = bookingId;
+            document.getElementById('pay_amount').value = Math.max(0, pendingAmount).toFixed(2);
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+        function openRoomModal() {
+            document.getElementById('roomModal').classList.remove('hidden');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        // Initialize Chart.js Graphs
+        window.addEventListener('DOMContentLoaded', () => {
+            // Line Chart: Occupancy & Revenue
+            const ctx1 = document.getElementById('occupancyChart');
+            if (ctx1) {
+                new Chart(ctx1, {
+                    type: 'line',
+                    data: {
+                        labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        datasets: [
+                            {
+                                label: 'Taxa de Ocupação (%)',
+                                data: [65, 72, 78, 85, 95, 100, 88],
+                                borderColor: '#f59e0b',
+                                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                tension: 0.4,
+                                fill: true,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Receita (€)',
+                                data: [850, 920, 1100, 1450, 1980, 2200, 1750],
+                                borderColor: '#10b981',
+                                backgroundColor: 'transparent',
+                                tension: 0.4,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { callback: v => v + '%' }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                grid: { drawOnChartArea: false },
+                                ticks: { callback: v => v + ' €' }
+                            },
+                            x: { grid: { color: 'rgba(255,255,255,0.05)' } }
+                        }
+                    }
+                });
+            }
+
+            // Donut Chart: Room Status
+            const ctx2 = document.getElementById('roomStatusDonut');
+            if (ctx2) {
+                new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Disponível', 'Ocupado', 'Limpeza', 'Manutenção'],
+                        datasets: [{
+                            data: [{{ stats.available_rooms }}, {{ stats.occupied_rooms }}, {{ stats.cleaning_rooms }}, {{ stats.maintenance_rooms }}],
+                            backgroundColor: ['#10b981', '#f59e0b', '#3b82f6', '#ef4444'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '75%',
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+
+            // Set default date picker values for availability
+            const today = new Date().toISOString().split('T')[0];
+            const in3days = new Date(Date.now() + 3*86400000).toISOString().split('T')[0];
+            if (document.getElementById('avail_check_in')) document.getElementById('avail_check_in').value = today;
+            if (document.getElementById('avail_check_out')) document.getElementById('avail_check_out').value = in3days;
+        });
+    </script>
+</body>
+</html>
