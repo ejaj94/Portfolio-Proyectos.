@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="pt" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalPro | Marketplace de Serviços Locais & Profissionais Verificados</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        coral: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                        },
+                        tangerine: {
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                        },
+                        darkBg: '#090d16',
+                        cardDark: '#111827',
+                        borderDark: '#1f2937',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light .glass-panel {
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .glow-coral {
+            box-shadow: 0 0 25px -5px rgba(244, 63, 94, 0.35);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f43f5e;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 bg-cardDark/85 backdrop-blur-md border-b border-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-coral-600 via-coral-500 to-tangerine-500 flex items-center justify-center text-white shadow-lg shadow-coral-500/25">
+                <i class="fa-solid fa-location-dot text-lg"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-rose-100 to-coral-400 bg-clip-text text-transparent">
+                        LocalPro
+                    </h1>
+                    <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-coral-500/20 text-coral-400 border border-coral-500/30">
+                        Marketplace v1.0
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 font-medium">Serviços Locais & Profissionais Certificados</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme()" class="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700/50" title="Alternar Tema">
+                <i id="themeIcon" class="fa-solid fa-sun text-amber-400"></i>
+            </button>
+
+            <!-- Quick Action: Novo Agendamento -->
+            <button onclick="openModal('modalNewBooking')" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-coral-600 to-tangerine-500 hover:from-coral-500 hover:to-tangerine-400 text-white font-semibold text-sm shadow-lg shadow-coral-600/30 transition-all transform hover:-translate-y-0.5">
+                <i class="fa-solid fa-calendar-plus"></i>
+                <span>Pedir Serviço</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="bg-cardDark/40 border-b border-borderDark px-4 lg:px-8 py-2 overflow-x-auto">
+        <nav class="flex space-x-1 sm:space-x-2 min-w-max" id="navTabs">
+            <button onclick="switchTab('explore')" class="tab-btn active px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all bg-coral-600 text-white shadow-md">
+                <i class="fa-solid fa-magnifying-glass"></i> Explorar & Búsqueda
+            </button>
+            <button onclick="switchTab('pros')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-user-gear"></i> Profissionais
+            </button>
+            <button onclick="switchTab('services')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-toolbox"></i> Serviços
+            </button>
+            <button onclick="switchTab('location')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-map-location-dot"></i> Localização
+            </button>
+            <button onclick="switchTab('bookings')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-calendar-check"></i> Reservas
+            </button>
+            <button onclick="switchTab('reviews')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-star"></i> Avaliações
+            </button>
+            <button onclick="switchTab('messages')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-comments"></i> Mensagens
+            </button>
+            <button onclick="switchTab('dashboard')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-chart-line"></i> Dashboard
+            </button>
+        </nav>
+    </div>
+
+    <!-- Main Container -->
+    <main class="flex-1 p-4 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+        <!-- TAB 1: EXPLORAR & BÚSQUEDA -->
+        <section id="tab-explore" class="tab-content space-y-6">
+            <!-- Hero Search Filter Bar -->
+            <div class="glass-panel p-5 lg:p-6 rounded-2xl border border-borderDark relative overflow-hidden">
+                <div class="relative z-10 space-y-4">
+                    <div class="max-w-2xl">
+                        <h2 class="text-2xl font-black text-white tracking-tight">
+                            Encontre o profissional certo para o seu lar ou empresa
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1">
+                            Pesquise por especialidade, localização e disponibilidade em tempo real.
+                        </p>
+                    </div>
+
+                    <!-- Filter Controls Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Categoria de Serviço</label>
+                            <select id="searchCategory" onchange="runSearch()" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-coral-500">
+                                <option value="Todas">Todas as Categorias</option>
+                                <option value="Electricidade">Electricidade</option>
+                                <option value="Canalização">Canalização</option>
+                                <option value="Limpeza">Limpeza</option>
+                                <option value="Pintura">Pintura</option>
+                                <option value="Climatização">Climatização</option>
+                                <option value="Carpintaria">Carpintaria</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Cidade / Localização</label>
+                            <select id="searchCity" onchange="runSearch()" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-coral-500">
+                                <option value="Todas">Todas as Cidades</option>
+                                <option value="Lisboa">Lisboa</option>
+                                <option value="Porto">Porto</option>
+                                <option value="Braga">Braga</option>
+                                <option value="Faro">Faro</option>
+                                <option value="Cascais">Cascais</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Avaliação Mínima</label>
+                            <select id="searchRating" onchange="runSearch()" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-coral-500">
+                                <option value="0">Qualquer Avaliação</option>
+                                <option value="4.5">★ 4.5 ou superior</option>
+                                <option value="4.8">★ 4.8 ou superior</option>
+                                <option value="5.0">★ 5.0 Estrelas</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Estado de Agenda</label>
+                            <select id="searchStatus" onchange="runSearch()" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-coral-500">
+                                <option value="Todos">Todos os Profissionais</option>
+                                <option value="Disponível">Apenas Disponíveis Hoje</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Fast Chips -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1">
+                <button onclick="setCategoryFilter('Todas')" class="chip-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-coral-600 text-white">Todas</button>
+                <button onclick="setCategoryFilter('Electricidade')" class="chip-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900 text-slate-300 hover:bg-slate-800 border border-borderDark"><i class="fa-solid fa-bolt text-amber-400 mr-1"></i> Electricidade</button>
+                <button onclick="setCategoryFilter('Canalização')" class="chip-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900 text-slate-300 hover:bg-slate-800 border border-borderDark"><i class="fa-solid fa-faucet-drip text-cyan-400 mr-1"></i> Canalização</button>
+                <button onclick="setCategoryFilter('Limpeza')" class="chip-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900 text-slate-300 hover:bg-slate-800 border border-borderDark"><i class="fa-solid fa-sparkles text-emerald-400 mr-1"></i> Limpeza</button>
+                <button onclick="setCategoryFilter('Pintura')" class="chip-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900 text-slate-300 hover:bg-slate-800 border border-borderDark"><i class="fa-solid fa-paint-roller text-purple-400 mr-1"></i> Pintura</button>
+                <button onclick="setCategoryFilter('Climatização')" class="chip-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900 text-slate-300 hover:bg-slate-800 border border-borderDark"><i class="fa-solid fa-snowflake text-sky-400 mr-1"></i> Climatização</button>
+                <button onclick="setCategoryFilter('Carpintaria')" class="chip-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900 text-slate-300 hover:bg-slate-800 border border-borderDark"><i class="fa-solid fa-hammer text-orange-400 mr-1"></i> Carpintaria</button>
+            </div>
+
+            <!-- Pros Result Cards Grid -->
+            <div id="exploreProsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- TAB 2: PROFISSIONAIS -->
+        <section id="tab-pros" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-user-gear text-coral-400"></i> Diretório de Profissionais Certificados
+                    </h2>
+                    <p class="text-xs text-slate-400">Técnicos qualificados, anos de experiência e classificação por clientes</p>
+                </div>
+                <button onclick="openModal('modalNewPro')" class="px-4 py-2 rounded-xl bg-coral-600 hover:bg-coral-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                    <i class="fa-solid fa-user-plus"></i> Novo Profissional
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="prosFullGrid">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 3: SERVIÇOS -->
+        <section id="tab-services" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-toolbox text-coral-400"></i> Catálogo de Serviços Disponíveis
+                    </h2>
+                    <p class="text-xs text-slate-400">Preços tabelados por hora ou intervenção fixa com estimativa de duração</p>
+                </div>
+                <button onclick="openModal('modalNewService')" class="px-4 py-2 rounded-xl bg-coral-600 hover:bg-coral-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                    <i class="fa-solid fa-plus"></i> Adicionar Serviço
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="servicesGrid">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 4: LOCALIZAÇÃO -->
+        <section id="tab-location" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 rounded-2xl border border-borderDark">
+                <div class="max-w-2xl mb-6">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot text-coral-400"></i> Cobertura Geográfica de Atendimento
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Selecione a sua cidade para ver os profissionais que operam num raio de até 35 km.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4" id="cityCoverageGrid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: RESERVAS -->
+        <section id="tab-bookings" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-check text-coral-400"></i> Agendamentos & Reservas de Serviços
+                    </h2>
+                    <p class="text-xs text-slate-400">Acompanhamento de pedidos, horários marcados e conclusão de trabalhos</p>
+                </div>
+                <button onclick="openModal('modalNewBooking')" class="px-4 py-2 rounded-xl bg-coral-600 hover:bg-coral-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                    <i class="fa-solid fa-calendar-plus"></i> Nova Reserva
+                </button>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-borderDark overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/80 text-xs uppercase font-bold text-slate-400 border-b border-borderDark">
+                            <tr>
+                                <th class="px-5 py-3.5">Código / Serviço</th>
+                                <th class="px-5 py-3.5">Profissional</th>
+                                <th class="px-5 py-3.5">Cliente</th>
+                                <th class="px-5 py-3.5">Data & Horário</th>
+                                <th class="px-5 py-3.5">Morada / Cidade</th>
+                                <th class="px-5 py-3.5">Valor (€)</th>
+                                <th class="px-5 py-3.5">Estado</th>
+                                <th class="px-5 py-3.5 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsTableBody" class="divide-y divide-borderDark">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: AVALIAÇÕES -->
+        <section id="tab-reviews" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-star text-amber-400"></i> Avaliações & Opiniões de Clientes
+                    </h2>
+                    <p class="text-xs text-slate-400">Testemunhos verificados após conclusão dos serviços prestados</p>
+                </div>
+                <button onclick="openModal('modalNewReview')" class="px-4 py-2 rounded-xl bg-coral-600 hover:bg-coral-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                    <i class="fa-solid fa-pen"></i> Avaliar Serviço
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="reviewsGrid">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 7: MENSAGENS -->
+        <section id="tab-messages" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-coral-400"></i> Chat Direto com Profissionais
+                    </h2>
+                    <p class="text-xs text-slate-400">Tire dúvidas, envie fotografias do problema ou confirme detalhes de chegada</p>
+                </div>
+            </div>
+
+            <!-- Chat Interface Layout -->
+            <div class="glass-panel rounded-2xl border border-borderDark overflow-hidden grid grid-cols-1 md:grid-cols-3 min-h-[500px]">
+                <!-- Conversations List -->
+                <div class="border-r border-borderDark bg-slate-900/60 p-4 space-y-2" id="chatConversationsList">
+                    <!-- Populated via JS -->
+                </div>
+
+                <!-- Chat Box Active Stream -->
+                <div class="md:col-span-2 flex flex-col justify-between bg-cardDark/40">
+                    <!-- Chat Header -->
+                    <div class="p-4 border-b border-borderDark flex items-center justify-between bg-slate-900/40">
+                        <div class="flex items-center gap-3" id="chatActiveHeader">
+                            <div class="w-9 h-9 rounded-xl bg-coral-500/20 text-coral-400 flex items-center justify-center">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white" id="chatActiveName">Selecione uma conversa</h4>
+                                <span class="text-[11px] text-emerald-400" id="chatActiveStatus">Online</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Messages Bubbles Container -->
+                    <div class="p-5 flex-1 overflow-y-auto space-y-3 max-h-[360px]" id="chatMessagesContainer">
+                        <div class="text-center text-slate-500 text-xs py-8">
+                            Selecione um profissional à esquerda para conversar.
+                        </div>
+                    </div>
+
+                    <!-- Chat Input Form -->
+                    <form id="chatForm" onsubmit="event.preventDefault(); submitChatMessage();" class="p-3 border-t border-borderDark flex items-center gap-2 bg-slate-900/50">
+                        <input type="text" id="chatInput" placeholder="Escreva a sua mensagem..." required class="flex-1 bg-slate-900 border border-borderDark rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-coral-500">
+                        <button type="submit" class="p-2.5 rounded-xl bg-coral-600 hover:bg-coral-500 text-white transition-colors">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 8: DASHBOARD -->
+        <section id="tab-dashboard" class="tab-content hidden space-y-6">
+            <!-- Metric Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-slate-400">Profissionais Ativos</span>
+                    <div class="text-3xl font-extrabold text-white mt-1" id="dashTotalPros">--</div>
+                    <span class="text-[11px] text-emerald-400 font-medium"><i class="fa-solid fa-check"></i> Verificados</span>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-slate-400">Total Agendamentos</span>
+                    <div class="text-3xl font-extrabold text-white mt-1" id="dashTotalBookings">--</div>
+                    <span class="text-[11px] text-coral-400 font-medium">Marcados no Marketplace</span>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-slate-400">Volume Transacionado</span>
+                    <div class="text-3xl font-extrabold text-emerald-400 mt-1" id="dashVolume">-- €</div>
+                    <span class="text-[11px] text-slate-400">Serviços executados</span>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-slate-400">Satisfação Média</span>
+                    <div class="text-3xl font-extrabold text-amber-400 mt-1" id="dashRating">-- ★</div>
+                    <span class="text-[11px] text-slate-400">Avaliações 5 estrelas</span>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark">
+                    <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-coral-400"></i> Distribuição por Especialidade
+                    </h3>
+                    <div class="relative h-64 flex items-center justify-center">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark">
+                    <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-tangerine-500"></i> Evolução Mensal de Pedidos
+                    </h3>
+                    <div class="relative h-64">
+                        <canvas id="bookingsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-borderDark py-5 px-6 text-center text-xs text-slate-500">
+        <p>LocalPro Services &bull; Marketplace de Profissionais e Serviços Locais &bull; Lisboa, Porto & Todo Portugal</p>
+    </footer>
+
+    <!-- MODAL: NOVO AGENDAMENTO -->
+    <div id="modalNewBooking" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-lg w-full p-6 space-y-4 my-8 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-plus text-coral-400"></i> Agendar Serviço Local
+                </h3>
+                <button onclick="closeModal('modalNewBooking')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewBooking" onsubmit="event.preventDefault(); submitNewBooking();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Serviço Pretendido</label>
+                    <select id="bookingServiceSelect" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-coral-500">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Seu Nome</label>
+                        <input type="text" id="bookClientName" placeholder="ex: Rui Silva" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Telefone</label>
+                        <input type="text" id="bookClientPhone" placeholder="+351 912 ..." required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Email</label>
+                    <input type="email" id="bookClientEmail" placeholder="seu@email.com" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Morada de Execução</label>
+                        <input type="text" id="bookAddress" placeholder="Rua / Avenida..." required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Cidade</label>
+                        <select id="bookCity" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Lisboa">Lisboa</option>
+                            <option value="Porto">Porto</option>
+                            <option value="Braga">Braga</option>
+                            <option value="Faro">Faro</option>
+                            <option value="Cascais">Cascais</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Data Pretendida</label>
+                        <input type="date" id="bookDate" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Janela Horária</label>
+                        <select id="bookTimeSlot" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="09:00 - 11:00">09:00 - 11:00 (Manhã)</option>
+                            <option value="11:30 - 13:30">11:30 - 13:30 (Almoço)</option>
+                            <option value="14:30 - 16:30">14:30 - 16:30 (Tarde)</option>
+                            <option value="17:00 - 19:00">17:00 - 19:00 (Fim de Tarde)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Detalhes do Pedido / Observações</label>
+                    <textarea id="bookNotes" rows="2" placeholder="Descreva brevemente o problema ou trabalho a realizar..." class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewBooking')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-coral-600 hover:bg-coral-500 text-white text-sm font-semibold transition-all shadow-md">
+                        Confirmar Agendamento
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: REGISTAR PROFISSIONAL -->
+    <div id="modalNewPro" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-lg w-full p-6 space-y-4 my-8 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-coral-400"></i> Registar Profissional
+                </h3>
+                <button onclick="closeModal('modalNewPro')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewPro" onsubmit="event.preventDefault(); submitNewPro();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Nome Profissional</label>
+                    <input type="text" id="proName" placeholder="ex: Mestre João Silva" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Especialidade</label>
+                        <select id="proCategory" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Electricidade">Electricidade</option>
+                            <option value="Canalização">Canalização</option>
+                            <option value="Limpeza">Limpeza</option>
+                            <option value="Pintura">Pintura</option>
+                            <option value="Climatização">Climatização</option>
+                            <option value="Carpintaria">Carpintaria</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Cidade Principal</label>
+                        <select id="proCity" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Lisboa">Lisboa</option>
+                            <option value="Porto">Porto</option>
+                            <option value="Braga">Braga</option>
+                            <option value="Faro">Faro</option>
+                            <option value="Cascais">Cascais</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Email</label>
+                        <input type="email" id="proEmail" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Telefone / WhatsApp</label>
+                        <input type="text" id="proPhone" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Tarifa Horária (€/h)</label>
+                        <input type="number" step="0.5" id="proHourlyRate" value="30.00" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Anos de Experiência</label>
+                        <input type="number" id="proExp" value="5" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Bio / Apresentação de Competências</label>
+                    <textarea id="proBio" rows="2" placeholder="Descreva as certificações e principais trabalhos realizados..." required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewPro')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-coral-600 hover:bg-coral-500 text-white text-sm font-semibold transition-all shadow-md">
+                        Guardar Profissional
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO SERVIÇO -->
+    <div id="modalNewService" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-toolbox text-coral-400"></i> Adicionar Novo Serviço
+                </h3>
+                <button onclick="closeModal('modalNewService')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewService" onsubmit="event.preventDefault(); submitNewService();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Profissional Responsável</label>
+                    <select id="servProSelect" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Título do Serviço</label>
+                    <input type="text" id="servTitle" placeholder="ex: Reparação de Fugas de Água" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Preço (€)</label>
+                        <input type="number" step="0.5" id="servPrice" value="50.00" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Modelo de Preço</label>
+                        <select id="servPriceType" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Preço Fixo">Preço Fixo</option>
+                            <option value="Por Hora">Por Hora</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Descrição</label>
+                    <textarea id="servDesc" rows="2" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewService')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-coral-600 hover:bg-coral-500 text-white text-sm font-semibold transition-all shadow-md">
+                        Criar Serviço
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVA AVALIAÇÃO -->
+    <div id="modalNewReview" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-star text-amber-400"></i> Avaliar Profissional
+                </h3>
+                <button onclick="closeModal('modalNewReview')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewReview" onsubmit="event.preventDefault(); submitNewReview();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Profissional a Avaliar</label>
+                    <select id="revProSelect" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Seu Nome</label>
+                    <input type="text" id="revClientName" placeholder="ex: Carlos Moreira" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Classificação (Estrelas)</label>
+                    <select id="revRating" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                        <option value="5">★★★★★ (5 Estrelas - Excelente)</option>
+                        <option value="4">★★★★☆ (4 Estrelas - Muito Bom)</option>
+                        <option value="3">★★★☆☆ (3 Estrelas - Bom)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Comentário / Experiência</label>
+                    <textarea id="revComment" rows="3" placeholder="Conte como correu o serviço, pontualidade e qualidade..." required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewReview')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold text-sm transition-all shadow-md">
+                        Publicar Avaliação
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none px-4 py-3 rounded-xl bg-slate-900 border border-borderDark shadow-2xl text-sm font-semibold text-white flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-check-circle text-emerald-400 text-base"></i>
+        <span id="toastMsg">Operação realizada com sucesso!</span>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        let state = {
+            professionals: [],
+            services: [],
+            bookings: [],
+            reviews: [],
+            conversations: [],
+            activeChatProId: 1,
+            activeChatClient: 'Gonçalo Marques',
+            stats: {}
+        };
+
+        let charts = {
+            category: null,
+            bookings: null
+        };
+
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                icon.className = 'fa-solid fa-moon text-coral-600';
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-sun text-amber-400';
+            }
+        }
+
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-coral-600', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-400');
+            });
+
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick')?.includes(tabId));
+            if (activeBtn) {
+                activeBtn.classList.add('bg-coral-600', 'text-white', 'shadow-md');
+                activeBtn.classList.remove('text-slate-400');
+            }
+        }
+
+        // Modals
+        function openModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.remove('hidden');
+        }
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.add('hidden');
+        }
+
+        // Toast
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const txt = document.getElementById('toastMsg');
+
+            txt.innerText = msg;
+            if (type === 'success') {
+                icon.className = 'fa-solid fa-circle-check text-emerald-400 text-base';
+            } else if (type === 'error') {
+                icon.className = 'fa-solid fa-circle-exclamation text-rose-500 text-base';
+            } else {
+                icon.className = 'fa-solid fa-circle-info text-coral-400 text-base';
+            }
+
+            t.classList.remove('translate-y-20', 'opacity-0');
+            t.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                t.classList.add('translate-y-20', 'opacity-0');
+                t.classList.remove('translate-y-0', 'opacity-100');
+            }, 3500);
+        }
+
+        // Fetch All Data
+        async function fetchAllData() {
+            try {
+                const [statsRes, prosRes, servRes, bookRes, revRes, msgRes] = await Promise.all([
+                    fetch('/api/stats').then(r => r.json()),
+                    fetch('/api/professionals').then(r => r.json()),
+                    fetch('/api/services').then(r => r.json()),
+                    fetch('/api/bookings').then(r => r.json()),
+                    fetch('/api/reviews').then(r => r.json()),
+                    fetch('/api/messages').then(r => r.json())
+                ]);
+
+                if (statsRes.success) state.stats = statsRes.stats;
+                if (prosRes.success) state.professionals = prosRes.professionals;
+                if (servRes.success) state.services = servRes.services;
+                if (bookRes.success) state.bookings = bookRes.bookings;
+                if (revRes.success) state.reviews = revRes.reviews;
+                if (msgRes.success) state.conversations = msgRes.conversations;
+
+                renderExploreGrid(state.professionals);
+                renderProsFullGrid();
+                renderServicesGrid();
+                renderLocationCoverage();
+                renderBookingsTable();
+                renderReviewsGrid();
+                renderConversationsList();
+                renderDashboardMetrics();
+                populateDropdowns();
+            } catch (err) {
+                console.error("Erro ao carregar dados:", err);
+            }
+        }
+
+        // Render Explore Pros
+        function renderExploreGrid(pros) {
+            const grid = document.getElementById('exploreProsGrid');
+            if (!grid) return;
+
+            if (pros.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><i class="fa-solid fa-user-slash text-3xl mb-2"></i><p>Nenhum profissional encontrado com os filtros selecionados.</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = pros.map(p => `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark hover:border-coral-500/50 transition-all flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl bg-coral-500/10 text-coral-400 flex items-center justify-center text-xl shrink-0 group-hover:scale-105 transition-transform">
+                                    <i class="fa-solid ${p.avatar_icon || 'fa-user-gear'}"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-bold text-white group-hover:text-coral-400 transition-colors flex items-center gap-1.5">
+                                        ${p.name}
+                                        ${p.verified ? '<i class="fa-solid fa-circle-check text-emerald-400 text-xs" title="Profissional Verificado"></i>' : ''}
+                                    </h3>
+                                    <span class="text-xs text-slate-400 font-medium">${p.category} &bull; <i class="fa-solid fa-location-dot text-coral-500 text-[10px]"></i> ${p.city}</span>
+                                </div>
+                            </div>
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold ${p.status === 'Disponível' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-800 text-slate-400'}">
+                                ${p.status}
+                            </span>
+                        </div>
+
+                        <p class="text-xs text-slate-300 line-clamp-2 mb-3">${p.bio}</p>
+
+                        <div class="flex items-center justify-between text-xs py-2 border-y border-borderDark text-slate-400">
+                            <div class="flex items-center gap-1 text-amber-400 font-bold">
+                                <i class="fa-solid fa-star text-xs"></i> ${p.rating.toFixed(1)} 
+                                <span class="text-slate-400 font-normal">(${p.review_count} avaliações)</span>
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-briefcase text-slate-500 mr-1"></i> ${p.experience_years} anos exp.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-2">
+                        <div class="flex items-baseline justify-between mb-3">
+                            <span class="text-xs text-slate-500">Tarifa média:</span>
+                            <div class="text-base font-extrabold text-white">${p.hourly_rate.toFixed(2)} €<span class="text-xs font-normal text-slate-400">/hora</span></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="startChatWithPro(${p.id}, '${p.name}')" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors border border-slate-700">
+                                <i class="fa-solid fa-comment-dots text-coral-400"></i> Mensagem
+                            </button>
+                            <button onclick="bookProDirectly(${p.id})" class="py-2 px-3 rounded-xl bg-coral-600 hover:bg-coral-500 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-md">
+                                <i class="fa-solid fa-calendar-check"></i> Agendar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Search Filter Engine
+        function runSearch() {
+            const cat = document.getElementById('searchCategory').value;
+            const city = document.getElementById('searchCity').value;
+            const minR = parseFloat(document.getElementById('searchRating').value || 0);
+            const status = document.getElementById('searchStatus').value;
+
+            let filtered = state.professionals;
+            if (cat !== 'Todas') filtered = filtered.filter(p => p.category === cat);
+            if (city !== 'Todas') filtered = filtered.filter(p => p.city === city);
+            if (minR > 0) filtered = filtered.filter(p => p.rating >= minR);
+            if (status !== 'Todos') filtered = filtered.filter(p => p.status === status);
+
+            renderExploreGrid(filtered);
+        }
+
+        function setCategoryFilter(cat) {
+            document.getElementById('searchCategory').value = cat;
+            document.querySelectorAll('.chip-btn').forEach(btn => {
+                if (btn.innerText.includes(cat) || (cat === 'Todas' && btn.innerText === 'Todas')) {
+                    btn.className = 'chip-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-coral-600 text-white';
+                } else {
+                    btn.className = 'chip-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900 text-slate-300 hover:bg-slate-800 border border-borderDark';
+                }
+            });
+            runSearch();
+        }
+
+        // Render Pros Full Grid
+        function renderProsFullGrid() {
+            const grid = document.getElementById('prosFullGrid');
+            if (!grid) return;
+
+            grid.innerHTML = state.professionals.map(p => `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-coral-500/20 text-coral-400 border border-coral-500/30">
+                                ${p.category}
+                            </span>
+                            <select onchange="updateProStatus(${p.id}, this.value)" class="bg-slate-900 border border-borderDark text-xs text-slate-300 rounded-lg px-2 py-1 outline-none">
+                                <option value="Disponível" ${p.status === 'Disponível' ? 'selected' : ''}>Disponível</option>
+                                <option value="Ocupado" ${p.status === 'Ocupado' ? 'selected' : ''}>Ocupado</option>
+                            </select>
+                        </div>
+
+                        <h3 class="text-base font-bold text-white">${p.name}</h3>
+                        <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-location-dot text-[10px] text-coral-500"></i> ${p.address || p.city}</p>
+
+                        <div class="mt-3 text-xs text-slate-300 space-y-1">
+                            <div><i class="fa-solid fa-envelope text-slate-500 mr-1.5"></i> ${p.email}</div>
+                            <div><i class="fa-solid fa-phone text-slate-500 mr-1.5"></i> ${p.phone}</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-borderDark flex items-center justify-between text-xs">
+                        <span class="text-amber-400 font-bold"><i class="fa-solid fa-star"></i> ${p.rating} (${p.review_count})</span>
+                        <span class="font-bold text-white">${p.hourly_rate.toFixed(2)} €/h</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Services Grid
+        function renderServicesGrid() {
+            const grid = document.getElementById('servicesGrid');
+            if (!grid) return;
+
+            grid.innerHTML = state.services.map(s => `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark hover:border-coral-500/40 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-coral-500/10 text-coral-400 flex items-center justify-center text-lg mb-3">
+                            <i class="fa-solid ${s.icon || 'fa-wrench'}"></i>
+                        </div>
+                        <span class="text-[11px] font-semibold text-coral-400 uppercase tracking-wider block mb-1">${s.category}</span>
+                        <h4 class="text-sm font-bold text-white line-clamp-2">${s.title}</h4>
+                        <p class="text-xs text-slate-400 mt-1 line-clamp-2">${s.description}</p>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-borderDark flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] text-slate-500 block">${s.price_type}</span>
+                            <span class="text-base font-extrabold text-white">${s.price.toFixed(2)} €</span>
+                        </div>
+                        <button onclick="bookSpecificService(${s.id})" class="px-3 py-1.5 rounded-xl bg-coral-600 hover:bg-coral-500 text-white text-xs font-semibold transition-colors">
+                            Pedir
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Location Coverage
+        function renderLocationCoverage() {
+            const grid = document.getElementById('cityCoverageGrid');
+            if (!grid) return;
+
+            const cities = [
+                { name: 'Lisboa', icon: 'fa-city', pros: 2, radius: '30 km' },
+                { name: 'Porto', icon: 'fa-building', pros: 1, radius: '25 km' },
+                { name: 'Braga', icon: 'fa-house-chimney', pros: 1, radius: '20 km' },
+                { name: 'Faro', icon: 'fa-umbrella-beach', pros: 1, radius: '35 km' },
+                { name: 'Cascais', icon: 'fa-tree', pros: 1, radius: '25 km' }
+            ];
+
+            grid.innerHTML = cities.map(c => `
+                <div onclick="filterByLocation('${c.name}')" class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-coral-500/60 cursor-pointer transition-all text-center group">
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-slate-800 text-coral-400 flex items-center justify-center text-lg mb-2 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid ${c.icon}"></i>
+                    </div>
+                    <h4 class="text-sm font-bold text-white group-hover:text-coral-400">${c.name}</h4>
+                    <span class="text-xs text-slate-400 block mt-1">${c.pros} profissionais</span>
+                    <span class="text-[10px] text-coral-400 font-medium">Raio ${c.radius}</span>
+                </div>
+            `).join('');
+        }
+
+        function filterByLocation(cityName) {
+            document.getElementById('searchCity').value = cityName;
+            switchTab('explore');
+            runSearch();
+        }
+
+        // Render Bookings Table
+        function renderBookingsTable() {
+            const tbody = document.getElementById('bookingsTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = state.bookings.map(b => {
+                let badgeClass = 'bg-coral-500/20 text-coral-400 border-coral-500/30';
+                if (b.status === 'Confirmada') badgeClass = 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30';
+                if (b.status === 'Em Andamento') badgeClass = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+                if (b.status === 'Concluída') badgeClass = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+                if (b.status === 'Cancelada') badgeClass = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+
+                return `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="px-5 py-4">
+                        <div class="font-bold text-white flex items-center gap-1.5">
+                            <i class="fa-solid fa-hashtag text-coral-500 text-xs"></i> ${b.booking_code}
+                        </div>
+                        <div class="text-xs text-slate-400 line-clamp-1">${b.service_title}</div>
+                    </td>
+                    <td class="px-5 py-4 font-semibold text-white">
+                        ${b.pro_name}
+                        <div class="text-[11px] text-slate-400">${b.pro_category}</div>
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="font-medium text-white">${b.client_name}</div>
+                        <div class="text-xs text-slate-400">${b.client_phone}</div>
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="text-xs font-semibold text-slate-200">${b.booking_date}</div>
+                        <div class="text-[11px] text-slate-400">${b.time_slot}</div>
+                    </td>
+                    <td class="px-5 py-4 text-xs text-slate-300">
+                        <div>${b.city}</div>
+                        <div class="text-[11px] text-slate-500">${b.service_address}</div>
+                    </td>
+                    <td class="px-5 py-4 font-bold text-white">
+                        ${b.total_price.toFixed(2)} €
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold border ${badgeClass}">
+                            ${b.status}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-right space-x-1">
+                        ${b.status === 'Confirmada' ? `
+                            <button onclick="updateBookingStatus(${b.id}, 'Em Andamento')" class="px-2 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs font-bold" title="Iniciar Trabalho">
+                                Iniciar
+                            </button>
+                        ` : ''}
+                        ${b.status === 'Em Andamento' ? `
+                            <button onclick="updateBookingStatus(${b.id}, 'Concluída')" class="px-2 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold" title="Concluir Trabalho">
+                                Concluir
+                            </button>
+                        ` : ''}
+                        ${b.status !== 'Cancelada' && b.status !== 'Concluída' ? `
+                            <button onclick="updateBookingStatus(${b.id}, 'Cancelada')" class="px-2 py-1 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white text-xs">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        // Render Reviews Grid
+        function renderReviewsGrid() {
+            const grid = document.getElementById('reviewsGrid');
+            if (!grid) return;
+
+            grid.innerHTML = state.reviews.map(r => `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-1 text-amber-400 text-xs">
+                                ${Array(r.rating).fill('<i class="fa-solid fa-star"></i>').join('')}
+                            </div>
+                            <span class="text-xs text-slate-500">${r.created_at.substring(0, 10)}</span>
+                        </div>
+                        <p class="text-xs text-slate-200 italic mb-3">"${r.comment}"</p>
+                    </div>
+
+                    <div class="pt-3 border-t border-borderDark flex items-center justify-between text-xs">
+                        <span class="font-semibold text-white flex items-center gap-1">
+                            <i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i> ${r.client_name}
+                        </span>
+                        <span class="text-coral-400 font-medium">para ${r.pro_name}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Conversations List & Messages
+        function renderConversationsList() {
+            const list = document.getElementById('chatConversationsList');
+            if (!list) return;
+
+            if (state.conversations.length === 0) {
+                list.innerHTML = `<div class="text-xs text-slate-500 py-4 text-center">Sem conversas ativas.</div>`;
+                return;
+            }
+
+            list.innerHTML = state.conversations.map(c => `
+                <div onclick="selectChatConversation(${c.professional_id}, '${c.pro_name}', '${c.client_name}')" class="p-3 rounded-xl hover:bg-slate-800/80 cursor-pointer transition-colors border border-transparent hover:border-slate-700 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-coral-500/10 text-coral-400 flex items-center justify-center shrink-0">
+                        <i class="fa-solid ${c.avatar_icon || 'fa-user'}"></i>
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <h5 class="text-xs font-bold text-white truncate">${c.pro_name}</h5>
+                            <span class="text-[10px] text-slate-500">${c.last_time.substring(11, 16)}</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 truncate">Com: ${c.client_name}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Automatically open first conversation
+            if (state.conversations.length > 0) {
+                const first = state.conversations[0];
+                selectChatConversation(first.professional_id, first.pro_name, first.client_name);
+            }
+        }
+
+        async function selectChatConversation(proId, proName, clientName) {
+            state.activeChatProId = proId;
+            state.activeChatClient = clientName;
+
+            document.getElementById('chatActiveName').innerText = `${proName} (${clientName})`;
+            const container = document.getElementById('chatMessagesContainer');
+            container.innerHTML = `<div class="text-center py-4 text-slate-500 text-xs"><i class="fa-solid fa-spinner fa-spin mr-1"></i> A carregar mensagens...</div>`;
+
+            try {
+                const res = await fetch(`/api/messages?pro_id=${proId}`);
+                const data = await res.json();
+                if (data.success) {
+                    if (data.messages.length === 0) {
+                        container.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">Ainda não há mensagens. Envie a primeira mensagem abaixo!</div>`;
+                        return;
+                    }
+                    container.innerHTML = data.messages.map(m => {
+                        const isMe = m.sender === 'client';
+                        return `
+                            <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
+                                <div class="max-w-[80%] rounded-2xl px-4 py-2.5 text-xs ${isMe ? 'bg-coral-600 text-white rounded-br-none' : 'bg-slate-800 text-slate-200 rounded-bl-none'}">
+                                    <div class="font-bold text-[10px] opacity-75 mb-0.5">${isMe ? m.client_name : 'Profissional'}</div>
+                                    <div>${m.message_text}</div>
+                                    <div class="text-[9px] opacity-60 text-right mt-1">${m.created_at.substring(11, 16)}</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    container.scrollTop = container.scrollHeight;
+                }
+            } catch (err) {
+                container.innerHTML = `<div class="text-rose-400 text-xs">Erro ao carregar mensagens.</div>`;
+            }
+        }
+
+        async function submitChatMessage() {
+            const input = document.getElementById('chatInput');
+            const txt = input.value.trim();
+            if (!txt) return;
+
+            const payload = {
+                professional_id: state.activeChatProId,
+                client_name: state.activeChatClient,
+                sender: 'client',
+                message_text: txt
+            };
+
+            try {
+                const res = await fetch('/api/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    input.value = '';
+                    selectChatConversation(state.activeChatProId, document.getElementById('chatActiveName').innerText.split('(')[0].trim(), state.activeChatClient);
+                }
+            } catch (err) {
+                showToast("Erro ao enviar mensagem.", "error");
+            }
+        }
+
+        function startChatWithPro(proId, proName) {
+            switchTab('messages');
+            selectChatConversation(proId, proName, 'Gonçalo Marques');
+        }
+
+        // Render Dashboard Metrics & Charts
+        function renderDashboardMetrics() {
+            const s = state.stats;
+            document.getElementById('dashTotalPros').innerText = s.total_pros || 0;
+            document.getElementById('dashTotalBookings').innerText = s.total_bookings || 0;
+            document.getElementById('dashVolume').innerText = `${(s.total_volume || 0).toFixed(2)} €`;
+            document.getElementById('dashRating').innerText = `${s.avg_satisfaction || 5.0} ★`;
+
+            // Category Chart
+            const ctxCat = document.getElementById('categoryChart')?.getContext('2d');
+            if (ctxCat) {
+                if (charts.category) charts.category.destroy();
+                const dist = s.category_distribution || [];
+                charts.category = new Chart(ctxCat, {
+                    type: 'doughnut',
+                    data: {
+                        labels: dist.map(d => d.category),
+                        datasets: [{
+                            data: dist.map(d => d.count),
+                            backgroundColor: ['#f43f5e', '#f97316', '#fbbf24', '#10b981', '#0ea5e9', '#8b5cf6'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } }
+                        },
+                        cutout: '70%'
+                    }
+                });
+            }
+
+            // Monthly Bookings Chart
+            const ctxB = document.getElementById('bookingsChart')?.getContext('2d');
+            if (ctxB) {
+                if (charts.bookings) charts.bookings.destroy();
+                charts.bookings = new Chart(ctxB, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'],
+                        datasets: [{
+                            label: 'Serviços Agendados',
+                            data: [8, 14, 22, (s.total_bookings || 4) + 18, 12],
+                            backgroundColor: 'rgba(244, 63, 94, 0.85)',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } },
+                            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+        }
+
+        // Dropdowns Population
+        function populateDropdowns() {
+            // Service dropdown in booking modal
+            const sSelect = document.getElementById('bookingServiceSelect');
+            if (sSelect) {
+                sSelect.innerHTML = state.services.map(s => `
+                    <option value="${s.id}">${s.title} (${s.pro_name} &bull; ${s.price}€)</option>
+                `).join('');
+            }
+
+            // Pro dropdown in service modal
+            const spSelect = document.getElementById('servProSelect');
+            if (spSelect) {
+                spSelect.innerHTML = state.professionals.map(p => `
+                    <option value="${p.id}">${p.name} (${p.category} &bull; ${p.city})</option>
+                `).join('');
+            }
+
+            // Pro dropdown in review modal
+            const rpSelect = document.getElementById('revProSelect');
+            if (rpSelect) {
+                rpSelect.innerHTML = state.professionals.map(p => `
+                    <option value="${p.id}">${p.name} (${p.category})</option>
+                `).join('');
+            }
+
+            // Set default date in booking modal
+            const bDate = document.getElementById('bookDate');
+            if (bDate && !bDate.value) {
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                bDate.value = tomorrow.toISOString().split('T')[0];
+            }
+        }
+
+        // Submissions
+        function bookProDirectly(proId) {
+            openModal('modalNewBooking');
+            const sSelect = document.getElementById('bookingServiceSelect');
+            if (sSelect) {
+                const found = state.services.find(s => s.professional_id === proId);
+                if (found) sSelect.value = found.id;
+            }
+        }
+
+        function bookSpecificService(servId) {
+            openModal('modalNewBooking');
+            const sSelect = document.getElementById('bookingServiceSelect');
+            if (sSelect) sSelect.value = servId;
+        }
+
+        async function submitNewBooking() {
+            const payload = {
+                service_id: parseInt(document.getElementById('bookingServiceSelect').value),
+                client_name: document.getElementById('bookClientName').value,
+                client_phone: document.getElementById('bookClientPhone').value,
+                client_email: document.getElementById('bookClientEmail').value,
+                service_address: document.getElementById('bookAddress').value,
+                city: document.getElementById('bookCity').value,
+                booking_date: document.getElementById('bookDate').value,
+                time_slot: document.getElementById('bookTimeSlot').value,
+                notes: document.getElementById('bookNotes').value
+            };
+
+            try {
+                const res = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewBooking');
+                    fetchAllData();
+                    switchTab('bookings');
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao agendar serviço.", "error");
+            }
+        }
+
+        async function updateBookingStatus(id, newStatus) {
+            try {
+                const res = await fetch(`/api/bookings/${id}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao atualizar estado.", "error");
+            }
+        }
+
+        async function updateProStatus(id, newStatus) {
+            try {
+                const res = await fetch(`/api/professionals/${id}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao alterar estado.", "error");
+            }
+        }
+
+        async function submitNewPro() {
+            const payload = {
+                name: document.getElementById('proName').value,
+                category: document.getElementById('proCategory').value,
+                city: document.getElementById('proCity').value,
+                email: document.getElementById('proEmail').value,
+                phone: document.getElementById('proPhone').value,
+                hourly_rate: parseFloat(document.getElementById('proHourlyRate').value),
+                experience_years: parseInt(document.getElementById('proExp').value),
+                bio: document.getElementById('proBio').value,
+                address: document.getElementById('proCity').value
+            };
+
+            try {
+                const res = await fetch('/api/professionals', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewPro');
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao guardar profissional.", "error");
+            }
+        }
+
+        async function submitNewService() {
+            const proId = parseInt(document.getElementById('servProSelect').value);
+            const pro = state.professionals.find(p => p.id === proId);
+
+            const payload = {
+                professional_id: proId,
+                title: document.getElementById('servTitle').value,
+                category: pro ? pro.category : 'Geral',
+                price: parseFloat(document.getElementById('servPrice').value),
+                price_type: document.getElementById('servPriceType').value,
+                description: document.getElementById('servDesc').value,
+                estimated_hours: 2.0
+            };
+
+            try {
+                const res = await fetch('/api/services', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewService');
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao criar serviço.", "error");
+            }
+        }
+
+        async function submitNewReview() {
+            const payload = {
+                professional_id: parseInt(document.getElementById('revProSelect').value),
+                client_name: document.getElementById('revClientName').value,
+                rating: parseInt(document.getElementById('revRating').value),
+                comment: document.getElementById('revComment').value
+            };
+
+            try {
+                const res = await fetch('/api/reviews', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewReview');
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao submeter avaliação.", "error");
+            }
+        }
+
+        // On Load
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchAllData();
+        });
+    </script>
+</body>
+</html>
