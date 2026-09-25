@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="pt" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexa AI | Assistente Inteligente de Negócios & Copilot Executivo</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        tealAccent: {
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                        },
+                        indigoBiz: {
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                        },
+                        darkBg: '#090d16',
+                        cardDark: '#111827',
+                        borderDark: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(9, 13, 22, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0d9488;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 bg-cardDark/85 backdrop-blur-md border-b border-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-tealAccent-600 via-tealAccent-500 to-indigoBiz-500 flex items-center justify-center text-white shadow-lg shadow-tealAccent-500/25">
+                <i class="fa-solid fa-brain text-lg"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-teal-100 to-tealAccent-400 bg-clip-text text-transparent">
+                        Nexa AI
+                    </h1>
+                    <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-tealAccent-500/20 text-tealAccent-400 border border-tealAccent-500/30">
+                        Enterprise Copilot v4.0
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 font-medium">Assistente de IA para Estratégia, CRM & Decisão Executiva</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme()" class="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700/50" title="Alternar Modo Escuro/Claro">
+                <i id="themeIcon" class="fa-solid fa-sun text-amber-400"></i>
+            </button>
+
+            <!-- Quick Action: Novo Cliente -->
+            <button onclick="openModal('modalNewClient')" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-tealAccent-600 to-indigoBiz-600 hover:from-tealAccent-500 hover:to-indigoBiz-500 text-white font-semibold text-sm shadow-lg shadow-tealAccent-600/30 transition-all transform hover:-translate-y-0.5">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Novo Cliente</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="bg-cardDark/40 border-b border-borderDark px-4 lg:px-8 py-2 overflow-x-auto">
+        <nav class="flex space-x-1 sm:space-x-2 min-w-max" id="navTabs">
+            <button onclick="switchTab('chat')" class="tab-btn active px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all bg-tealAccent-600 text-white shadow-md">
+                <i class="fa-solid fa-comments"></i> Chat Copilot
+            </button>
+            <button onclick="switchTab('clients')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-address-book"></i> Clientes (CRM)
+            </button>
+            <button onclick="switchTab('summaries')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-file-contract"></i> Resúmenes
+            </button>
+            <button onclick="switchTab('emails')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-paper-plane"></i> Generación Emails
+            </button>
+            <button onclick="switchTab('analytics')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-chart-line"></i> Análisis de Datos
+            </button>
+            <button onclick="switchTab('tasks')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-list-check"></i> Tareas
+            </button>
+            <button onclick="switchTab('history')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-clock-rotate-left"></i> Historial
+            </button>
+        </nav>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 p-4 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+        <!-- TAB 1: CHAT COPILOT -->
+        <section id="tab-chat" class="tab-content space-y-4">
+            <!-- Mode Switcher Pills -->
+            <div class="glass-panel p-3 rounded-2xl border border-borderDark flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">Modo Especialista:</span>
+                    <button onclick="setChatMode('Estrategia')" class="mode-pill px-3 py-1 rounded-full text-xs font-bold bg-tealAccent-600 text-white transition-all shadow-sm">
+                        <i class="fa-solid fa-compass mr-1"></i> Estratégia
+                    </button>
+                    <button onclick="setChatMode('Vendas')" class="mode-pill px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
+                        <i class="fa-solid fa-handshake mr-1"></i> Vendas & Fecho
+                    </button>
+                    <button onclick="setChatMode('Financas')" class="mode-pill px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
+                        <i class="fa-solid fa-coins mr-1"></i> Finanças & MRR
+                    </button>
+                    <button onclick="setChatMode('Suporte')" class="mode-pill px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
+                        <i class="fa-solid fa-headset mr-1"></i> Suporte & SLA
+                    </button>
+                </div>
+                <div class="text-xs text-slate-400">
+                    <i class="fa-solid fa-bolt text-tealAccent-400 mr-1"></i> Modelo: <strong class="text-slate-200">Nexa Neural Enterprise</strong>
+                </div>
+            </div>
+
+            <!-- Chat Stream Box -->
+            <div class="glass-panel rounded-2xl border border-borderDark flex flex-col h-[520px] overflow-hidden">
+                <!-- Messages List -->
+                <div id="chatMessages" class="flex-1 p-5 overflow-y-auto space-y-4">
+                    <!-- Populated via JS -->
+                </div>
+
+                <!-- Suggested Quick Prompts -->
+                <div class="px-5 py-2 border-t border-borderDark bg-slate-900/50 flex items-center gap-2 overflow-x-auto text-xs">
+                    <span class="text-slate-500 shrink-0 font-medium">Sugestões rápidas:</span>
+                    <button onclick="quickPrompt('Como podemos reduzir o Churn Rate nos clientes de logística?')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 truncate transition-colors border border-slate-700">
+                        Otimizar Churn em Logística
+                    </button>
+                    <button onclick="quickPrompt('Qual o melhor argumento para fechar a proposta da Lumina Retail de 4.500€?')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 truncate transition-colors border border-slate-700">
+                        Argumento Proposta 4.500€
+                    </button>
+                    <button onclick="quickPrompt('Como melhorar a nossa margem de lucro e ticket médio este mês?')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 truncate transition-colors border border-slate-700">
+                        Aumentar Ticket Médio
+                    </button>
+                </div>
+
+                <!-- Chat Input Form -->
+                <form id="chatForm" onsubmit="event.preventDefault(); submitChatMessage();" class="p-3 border-t border-borderDark bg-slate-900/80 flex items-center gap-3">
+                    <input type="text" id="chatInput" placeholder="Faça uma pergunta executiva, peça conselhos de vendas ou análise financeira..." required class="flex-1 bg-slate-950 border border-borderDark rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-tealAccent-500">
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-tealAccent-600 to-indigoBiz-600 hover:from-tealAccent-500 hover:to-indigoBiz-500 text-white font-semibold text-sm transition-all shadow-md flex items-center gap-2 shrink-0">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Enviar</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- TAB 2: CLIENTES (CRM) -->
+        <section id="tab-clients" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-address-book text-tealAccent-400"></i> Carteira de Clientes & Contas Corporativas
+                    </h2>
+                    <p class="text-xs text-slate-400">Diretório CRM com valor de contrato mensal (MRR) e diagnóstico de retenção</p>
+                </div>
+                <button onclick="openModal('modalNewClient')" class="px-4 py-2 rounded-xl bg-tealAccent-600 hover:bg-tealAccent-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                    <i class="fa-solid fa-user-plus"></i> Novo Cliente
+                </button>
+            </div>
+
+            <!-- Clients Table -->
+            <div class="glass-panel rounded-2xl border border-borderDark overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/80 text-xs uppercase font-bold text-slate-400 border-b border-borderDark">
+                            <tr>
+                                <th class="px-5 py-3.5">Empresa / Contacto</th>
+                                <th class="px-5 py-3.5">Setor</th>
+                                <th class="px-5 py-3.5">Valor Mensal (MRR)</th>
+                                <th class="px-5 py-3.5">Estado</th>
+                                <th class="px-5 py-3.5">Notas de Contexto</th>
+                                <th class="px-5 py-3.5 text-right">Ação IA</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTableBody" class="divide-y divide-borderDark">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: RESÚMENES (EXECUTIVE SUMMARIES) -->
+        <section id="tab-summaries" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 rounded-2xl border border-borderDark">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-file-contract text-tealAccent-400"></i> Gerador de Resumos Executivos & Atas com IA
+                </h2>
+                <p class="text-xs text-slate-400 mb-6">
+                    Cole transcrições de reuniões, relatórios extensos ou feedbacks para extrair as decisões críticas e itens de ação.
+                </p>
+
+                <form id="formNewSummary" onsubmit="event.preventDefault(); submitNewSummary();" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Título do Documento / Reunião</label>
+                            <input type="text" id="sumTitle" placeholder="ex: Alinhamento Estratégico com Direção de Vendas" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-tealAccent-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Tipo de Documento</label>
+                            <select id="sumSource" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-tealAccent-500">
+                                <option value="Reunião">Reunião / Ata Interna</option>
+                                <option value="Relatório Financeiro">Relatório Financeiro</option>
+                                <option value="Feedback Cliente">Feedback de Cliente</option>
+                                <option value="Contrato">Contrato / Proposta</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Conteúdo Original Completo</label>
+                        <textarea id="sumText" rows="4" placeholder="Cole aqui o texto longo, notas ou transcrição..." required class="w-full bg-slate-900 border border-borderDark rounded-xl p-3 text-sm text-white outline-none focus:border-tealAccent-500"></textarea>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-tealAccent-600 to-indigoBiz-600 hover:from-tealAccent-500 hover:to-indigoBiz-500 text-white font-semibold text-sm transition-all shadow-md flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Processar Resumo com IA
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Summaries Cards List -->
+            <div id="summariesGrid" class="space-y-4">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 4: GENERACIÓN DE EMAILS -->
+        <section id="tab-emails" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Generator Form -->
+                <div class="glass-panel p-6 rounded-2xl border border-borderDark space-y-4">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane text-tealAccent-400"></i> Redator Inteligente de Emails
+                    </h2>
+                    <p class="text-xs text-slate-400">
+                        Crie comunicações corporativas convincentes e de alta conversão personalizadas para cada cliente.
+                    </p>
+
+                    <form id="formGenEmail" onsubmit="event.preventDefault(); submitGenEmail();" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Destinatário / Empresa</label>
+                            <select id="emailClientSelect" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-tealAccent-500">
+                                <!-- Populated dynamically from CRM -->
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Objetivo / Tipo</label>
+                                <select id="emailTypeSelect" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                                    <option value="Proposta Comercial">Proposta Comercial</option>
+                                    <option value="Follow-up">Follow-up Pós-Reunião</option>
+                                    <option value="Cobrança Amigável">Cobrança Amigável</option>
+                                    <option value="Apresentação">Apresentação Institucional</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tom de Voz</label>
+                                <select id="emailToneSelect" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                                    <option value="Profissional">Profissional & Executivo</option>
+                                    <option value="Persuasivo">Persuasivo & Foco em ROI</option>
+                                    <option value="Conciso">Conciso & Direto</option>
+                                    <option value="Empático">Empático & Atencioso</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Pontos-Chave / Notas do Negócio</label>
+                            <textarea id="emailKeyPoints" rows="3" placeholder="ex: Redução de custos em 20%, reunião na próxima quinta às 15h, proposta de 4.500€..." class="w-full bg-slate-900 border border-borderDark rounded-xl p-3 text-sm text-white"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 rounded-xl bg-tealAccent-600 hover:bg-tealAccent-500 text-white font-semibold text-sm transition-all shadow-md flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-sparkles"></i> Gerar Email com IA
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Email Output & Copy Box -->
+                <div class="glass-panel p-6 rounded-2xl border border-borderDark flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between pb-3 border-b border-borderDark mb-3">
+                            <span class="text-xs uppercase font-bold text-slate-400">Pré-visualização do Email</span>
+                            <button onclick="copyGeneratedEmail()" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-tealAccent-400 text-xs font-semibold flex items-center gap-1.5 transition-colors border border-slate-700">
+                                <i class="fa-solid fa-copy"></i> Copiar Texto
+                            </button>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div>
+                                <span class="text-xs text-slate-500 block">Assunto:</span>
+                                <div id="previewEmailSubject" class="text-sm font-bold text-white">
+                                    Selecione os parâmetros e clique em 'Gerar Email com IA'
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-500 block mb-1">Corpo da Mensagem:</span>
+                                <div id="previewEmailBody" class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 font-sans whitespace-pre-line min-h-[220px]">
+                                    O rascunho inteligente será renderizado aqui com formatação profissional pronta a colar no seu cliente de email.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-[11px] text-slate-500 pt-3 border-t border-borderDark flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                        Modelos calibrados para alta taxa de abertura e resposta executiva.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Generated Emails -->
+            <div class="glass-panel p-5 rounded-2xl border border-borderDark">
+                <h3 class="text-base font-bold text-white mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-history text-tealAccent-400"></i> Histórico de Emails Recentes
+                </h3>
+                <div class="space-y-2" id="recentEmailsList">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: ANÁLISIS DE DATOS -->
+        <section id="tab-analytics" class="tab-content hidden space-y-6">
+            <!-- Financial Metric Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-slate-400">MRR Ativo</span>
+                    <div class="text-3xl font-extrabold text-tealAccent-400 mt-1" id="kpiMrr">-- €</div>
+                    <span class="text-[11px] text-emerald-400 font-medium"><i class="fa-solid fa-arrow-trend-up"></i> Receita Recorrente</span>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-slate-400">Contas Ativas</span>
+                    <div class="text-3xl font-extrabold text-white mt-1" id="kpiClientsCount">--</div>
+                    <span class="text-[11px] text-slate-400">Clientes sob contrato</span>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-slate-400">Ticket Médio</span>
+                    <div class="text-3xl font-extrabold text-indigo-400 mt-1" id="kpiTicket">-- €</div>
+                    <span class="text-[11px] text-slate-400">Por conta ativa</span>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-slate-400">Tokens Processados</span>
+                    <div class="text-3xl font-extrabold text-amber-400 mt-1" id="kpiTokens">--</div>
+                    <span class="text-[11px] text-slate-400">Otimização de IA</span>
+                </div>
+            </div>
+
+            <!-- Charts & AI Insights -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Status Donut -->
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark flex flex-col">
+                    <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-tealAccent-400"></i> Distribuição da Carteira (CRM)
+                    </h3>
+                    <div class="relative flex-1 flex items-center justify-center min-h-[220px]">
+                        <canvas id="crmStatusChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Monthly Revenue Projection -->
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark lg:col-span-2 flex flex-col">
+                    <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-indigo-400"></i> Evolução de Receita & Pipeline Comercial
+                    </h3>
+                    <div class="relative flex-1 min-h-[220px]">
+                        <canvas id="revenueGrowthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Strategic Diagnostics Card -->
+            <div class="glass-panel p-6 rounded-2xl border border-tealAccent-500/30 bg-tealAccent-950/10">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-tealAccent-500/20 text-tealAccent-400 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-base font-bold text-white">Diagnóstico Estratégico do Assistente de IA</h4>
+                        <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                            A sua taxa de retenção global situa-se em <strong>82%</strong>, com forte concentração no setor tecnológico. A conta <strong>Horizon Logistics SA</strong> encontra-se em risco iminente de rotura contratual devido à quebra de atividade nos últimos 30 dias. 
+                            Recomenda-se iniciar ação imediata de Customer Success antes do fecho do trimestre.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: TAREFAS (ACTION ITEMS) -->
+        <section id="tab-tasks" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-tealAccent-400"></i> Gestão de Tarefas & Action Items
+                    </h2>
+                    <p class="text-xs text-slate-400">Ações recomendadas pela IA e atribuídas a contas de clientes</p>
+                </div>
+                <button onclick="openModal('modalNewTask')" class="px-4 py-2 rounded-xl bg-tealAccent-600 hover:bg-tealAccent-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                    <i class="fa-solid fa-plus"></i> Nova Tarefa
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="tasksGrid">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 7: HISTORIAL -->
+        <section id="tab-history" class="tab-content hidden space-y-6">
+            <div>
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-tealAccent-400"></i> Histórico & Auditoria de Atividades
+                </h2>
+                <p class="text-xs text-slate-400">Registo cronológico de consultas Copilot, resumos, emails gerados e ações concluídas</p>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-borderDark overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/80 text-xs uppercase font-bold text-slate-400 border-b border-borderDark">
+                            <tr>
+                                <th class="px-5 py-3.5">Tipo de Atividade</th>
+                                <th class="px-5 py-3.5">Descrição</th>
+                                <th class="px-5 py-3.5">Consumo de Tokens</th>
+                                <th class="px-5 py-3.5 text-right">Data & Hora</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody" class="divide-y divide-borderDark">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-borderDark py-5 px-6 text-center text-xs text-slate-500">
+        <p>Nexa AI Business Assistant &bull; Copilot Corporativo Full-Stack com Flask, SQLite & Motor Neural &bull; Portugal</p>
+    </footer>
+
+    <!-- MODAL: NOVO CLIENTE -->
+    <div id="modalNewClient" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-md w-full p-6 space-y-4 my-8">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-tealAccent-400"></i> Adicionar Cliente ao CRM
+                </h3>
+                <button onclick="closeModal('modalNewClient')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewClient" onsubmit="event.preventDefault(); submitNewClient();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Nome da Empresa</label>
+                    <input type="text" id="cliCompany" placeholder="ex: Soluções Digitais SA" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Pessoa de Contacto</label>
+                        <input type="text" id="cliContact" placeholder="ex: Miguel Costa" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Setor / Indústria</label>
+                        <select id="cliIndustry" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Tecnologia">Tecnologia</option>
+                            <option value="Retalho">Retalho</option>
+                            <option value="Saude">Saúde</option>
+                            <option value="Financas">Finanças</option>
+                            <option value="Logistica">Logística</option>
+                            <option value="Servicos">Serviços</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Email Corporativo</label>
+                        <input type="email" id="cliEmail" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Telefone</label>
+                        <input type="text" id="cliPhone" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Valor Mensal (MRR €)</label>
+                        <input type="number" step="50" id="cliMrr" value="1500" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Estado da Conta</label>
+                        <select id="cliStatus" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Ativo">Ativo</option>
+                            <option value="Em Negociacao">Em Negociação</option>
+                            <option value="Lead">Lead</option>
+                            <option value="Risco Churn">Risco de Churn</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Notas Adicionais</label>
+                    <textarea id="cliNotes" rows="2" placeholder="Desafios, interesses ou histórico do cliente..." class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewClient')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-tealAccent-600 hover:bg-tealAccent-500 text-white text-sm font-semibold transition-all shadow-md">
+                        Guardar no CRM
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVA TAREFA -->
+    <div id="modalNewTask" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-tealAccent-400"></i> Criar Nova Tarefa
+                </h3>
+                <button onclick="closeModal('modalNewTask')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewTask" onsubmit="event.preventDefault(); submitNewTask();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Título da Tarefa</label>
+                    <input type="text" id="taskTitle" placeholder="ex: Preparar proposta comercial para Lumina Retail" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Cliente Associado (Opcional)</label>
+                    <select id="taskClientSelect" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Prioridade</label>
+                        <select id="taskPriority" class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Alta">Alta</option>
+                            <option value="Media">Média</option>
+                            <option value="Baixa">Baixa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Data Limite</label>
+                        <input type="date" id="taskDueDate" required class="w-full bg-slate-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewTask')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-tealAccent-600 hover:bg-tealAccent-500 text-white text-sm font-semibold transition-all shadow-md">
+                        Criar Tarefa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none px-4 py-3 rounded-xl bg-slate-900 border border-borderDark shadow-2xl text-sm font-semibold text-white flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-check-circle text-tealAccent-400 text-base"></i>
+        <span id="toastMsg">Operação executada com sucesso!</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let state = {
+            chatMode: 'Estrategia',
+            clients: [],
+            chat: [],
+            summaries: [],
+            emails: [],
+            tasks: [],
+            history: [],
+            kpis: {}
+        };
+
+        let charts = {
+            crmStatus: null,
+            revenueGrowth: null
+        };
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                icon.className = 'fa-solid fa-moon text-tealAccent-600';
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-sun text-amber-400';
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-tealAccent-600', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-400');
+            });
+
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick')?.includes(tabId));
+            if (activeBtn) {
+                activeBtn.classList.add('bg-tealAccent-600', 'text-white', 'shadow-md');
+                activeBtn.classList.remove('text-slate-400');
+            }
+        }
+
+        function openModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.remove('hidden');
+        }
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.add('hidden');
+        }
+
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const txt = document.getElementById('toastMsg');
+
+            txt.innerText = msg;
+            if (type === 'success') {
+                icon.className = 'fa-solid fa-circle-check text-tealAccent-400 text-base';
+            } else if (type === 'error') {
+                icon.className = 'fa-solid fa-circle-exclamation text-rose-500 text-base';
+            } else {
+                icon.className = 'fa-solid fa-circle-info text-tealAccent-400 text-base';
+            }
+
+            t.classList.remove('translate-y-20', 'opacity-0');
+            t.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                t.classList.add('translate-y-20', 'opacity-0');
+                t.classList.remove('translate-y-0', 'opacity-100');
+            }, 3500);
+        }
+
+        function setChatMode(mode) {
+            state.chatMode = mode;
+            document.querySelectorAll('.mode-pill').forEach(btn => {
+                if (btn.innerText.includes(mode)) {
+                    btn.className = 'mode-pill px-3 py-1 rounded-full text-xs font-bold bg-tealAccent-600 text-white transition-all shadow-sm';
+                } else {
+                    btn.className = 'mode-pill px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all';
+                }
+            });
+            showToast(`Modo alterado para ${mode}`);
+        }
+
+        function quickPrompt(text) {
+            document.getElementById('chatInput').value = text;
+            submitChatMessage();
+        }
+
+        // Fetch All Data
+        async function fetchAllData() {
+            try {
+                const [kpiRes, cliRes, chatRes, sumRes, emailRes, taskRes, histRes] = await Promise.all([
+                    fetch('/api/stats').then(r => r.json()),
+                    fetch('/api/clients').then(r => r.json()),
+                    fetch('/api/chat').then(r => r.json()),
+                    fetch('/api/summaries').then(r => r.json()),
+                    fetch('/api/emails').then(r => r.json()),
+                    fetch('/api/tasks').then(r => r.json()),
+                    fetch('/api/history').then(r => r.json())
+                ]);
+
+                if (kpiRes.success) state.kpis = kpiRes.kpis;
+                if (cliRes.success) state.clients = cliRes.clients;
+                if (chatRes.success) state.chat = chatRes.messages;
+                if (sumRes.success) state.summaries = sumRes.summaries;
+                if (emailRes.success) state.emails = emailRes.emails;
+                if (taskRes.success) state.tasks = taskRes.tasks;
+                if (histRes.success) state.history = histRes.history;
+
+                renderChatStream();
+                renderClientsTable();
+                renderSummaries();
+                renderRecentEmails();
+                renderAnalyticsDashboard();
+                renderTasks();
+                renderHistoryTable();
+                populateDropdowns();
+            } catch (err) {
+                console.error("Erro ao carregar dados:", err);
+            }
+        }
+
+        // Render Chat Stream
+        function renderChatStream() {
+            const container = document.getElementById('chatMessages');
+            if (!container) return;
+
+            container.innerHTML = state.chat.map(m => {
+                const isUser = m.role === 'user';
+                return `
+                <div class="flex ${isUser ? 'justify-end' : 'justify-start'} gap-3">
+                    ${!isUser ? `
+                        <div class="w-8 h-8 rounded-xl bg-tealAccent-500/20 text-tealAccent-400 flex items-center justify-center text-sm shrink-0">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                    ` : ''}
+                    <div class="max-w-[85%] rounded-2xl p-4 text-xs ${isUser ? 'bg-indigoBiz-600 text-white rounded-br-none' : 'bg-slate-900 border border-slate-800 text-slate-200 rounded-bl-none'} space-y-1">
+                        <div class="flex items-center justify-between text-[10px] opacity-75 mb-1">
+                            <span class="font-bold">${isUser ? 'Você (Executivo)' : `Nexa AI (${m.mode})`}</span>
+                            <span>${m.created_at ? m.created_at.substring(11, 16) : ''}</span>
+                        </div>
+                        <div class="whitespace-pre-line leading-relaxed">${m.message}</div>
+                        ${!isUser && m.tokens_used > 0 ? `
+                            <div class="text-[9px] text-slate-500 text-right pt-1 border-t border-slate-800/80">
+                                <i class="fa-solid fa-bolt text-tealAccent-400"></i> ${m.tokens_used} tokens processados
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${isUser ? `
+                        <div class="w-8 h-8 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center text-sm shrink-0">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                    ` : ''}
+                </div>
+                `;
+            }).join('');
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function submitChatMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            input.value = '';
+            // Optimistic user bubble
+            state.chat.push({ role: 'user', mode: state.chatMode, message: msg, created_at: new Date().toISOString() });
+            renderChatStream();
+
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msg, mode: state.chatMode })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    state.chat.push({ role: 'assistant', mode: state.chatMode, message: data.reply, tokens_used: data.tokens_used, created_at: new Date().toISOString() });
+                    renderChatStream();
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao processar mensagem.", "error");
+            }
+        }
+
+        // Render Clients CRM Table
+        function renderClientsTable() {
+            const tbody = document.getElementById('clientsTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = state.clients.map(c => {
+                let badgeClass = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+                if (c.status === 'Em Negociacao') badgeClass = 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30';
+                if (c.status === 'Lead') badgeClass = 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30';
+                if (c.status === 'Risco Churn') badgeClass = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+
+                return `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="px-5 py-4">
+                        <div class="font-bold text-white">${c.company_name}</div>
+                        <div class="text-xs text-slate-400"><i class="fa-solid fa-user text-[10px]"></i> ${c.contact_name} &bull; ${c.email}</div>
+                    </td>
+                    <td class="px-5 py-4 text-xs font-semibold text-slate-300">
+                        ${c.industry}
+                    </td>
+                    <td class="px-5 py-4 font-bold text-tealAccent-400">
+                        ${c.monthly_value.toFixed(2)} €<span class="text-[10px] text-slate-500 font-normal">/mês</span>
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold border ${badgeClass}">
+                            ${c.status}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-xs text-slate-300 max-w-xs truncate">
+                        ${c.notes || 'Sem observações'}
+                    </td>
+                    <td class="px-5 py-4 text-right">
+                        <button onclick="aiDiagnoseClient('${c.company_name}', '${c.status}', ${c.monthly_value})" class="px-2.5 py-1 rounded-lg bg-tealAccent-600/20 text-tealAccent-400 hover:bg-tealAccent-600 hover:text-white text-xs font-semibold transition-colors border border-tealAccent-500/30">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Diagnóstico IA
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        function aiDiagnoseClient(company, status, mrr) {
+            switchTab('chat');
+            quickPrompt(`Faça um diagnóstico comercial e plano de retenção para o cliente '${company}' com status '${status}' e MRR de ${mrr}€.`);
+        }
+
+        // Render Summaries
+        function renderSummaries() {
+            const grid = document.getElementById('summariesGrid');
+            if (!grid) return;
+
+            grid.innerHTML = state.summaries.map(s => {
+                let badgeSent = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+                if (s.sentiment === 'Requer Atencao') badgeSent = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+                if (s.sentiment === 'Neutro') badgeSent = 'bg-slate-800 text-slate-400 border-slate-700';
+
+                return `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-indigoBiz-600/20 text-indigo-400 border border-indigo-500/30">
+                                ${s.source_type}
+                            </span>
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold border ${badgeSent}">
+                                Sentimento: ${s.sentiment}
+                            </span>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">${s.created_at.substring(0, 16)}</span>
+                    </div>
+
+                    <h3 class="text-base font-bold text-white">${s.title}</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">${s.summary_text}</p>
+
+                    <div class="p-3 bg-slate-900/90 rounded-xl border border-slate-800 text-xs">
+                        <span class="text-[11px] font-bold text-tealAccent-400 uppercase tracking-wider block mb-1">
+                            <i class="fa-solid fa-list-check mr-1"></i> Ações & Entregáveis Prioritários:
+                        </span>
+                        <div class="text-slate-300 whitespace-pre-line">${s.action_points}</div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Render Recent Emails
+        function renderRecentEmails() {
+            const list = document.getElementById('recentEmailsList');
+            if (!list) return;
+
+            list.innerHTML = state.emails.map(e => `
+                <div class="p-3 rounded-xl bg-slate-900/70 border border-slate-800 flex items-center justify-between text-xs">
+                    <div>
+                        <div class="font-bold text-white">${e.subject}</div>
+                        <div class="text-slate-400">Para: <strong>${e.client_name}</strong> &bull; Tom: ${e.tone} &bull; Tipo: ${e.email_type}</div>
+                    </div>
+                    <button onclick="previewEmailModal('${e.subject.replace(/'/g, "\\'")}', '${e.body.replace(/'/g, "\\'").replace(/\n/g, "\\n")}')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-tealAccent-400 text-xs font-semibold">
+                        Ver
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function previewEmailModal(subject, body) {
+            document.getElementById('previewEmailSubject').innerText = subject;
+            document.getElementById('previewEmailBody').innerText = body;
+            showToast("Email carregado na caixa de visualização.");
+        }
+
+        function copyGeneratedEmail() {
+            const subject = document.getElementById('previewEmailSubject').innerText;
+            const body = document.getElementById('previewEmailBody').innerText;
+            navigator.clipboard.writeText(`Assunto: ${subject}\n\n${body}`).then(() => {
+                showToast("Email copiado para a área de transferência!");
+            });
+        }
+
+        // Render Analytics Dashboard & Charts
+        function renderAnalyticsDashboard() {
+            const k = state.kpis;
+            document.getElementById('kpiMrr').innerText = `${(k.active_mrr || 0).toLocaleString('pt-PT', {minimumFractionDigits: 2})} €`;
+            document.getElementById('kpiClientsCount').innerText = k.total_clients || 0;
+            const ticket = k.total_clients > 0 ? (k.active_mrr / (k.total_clients || 1)) : 0;
+            document.getElementById('kpiTicket').innerText = `${ticket.toFixed(2)} €`;
+            document.getElementById('kpiTokens').innerText = (k.total_tokens || 670).toLocaleString();
+
+            // Status Donut
+            const ctxDonut = document.getElementById('crmStatusChart')?.getContext('2d');
+            if (ctxDonut) {
+                if (charts.crmStatus) charts.crmStatus.destroy();
+                const dist = k.status_distribution || [];
+                charts.crmStatus = new Chart(ctxDonut, {
+                    type: 'doughnut',
+                    data: {
+                        labels: dist.map(d => d.status),
+                        datasets: [{
+                            data: dist.map(d => d.count),
+                            backgroundColor: ['#10b981', '#6366f1', '#06b6d4', '#f43f5e'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } } },
+                        cutout: '70%'
+                    }
+                });
+            }
+
+            // Monthly Growth Bar
+            const ctxBar = document.getElementById('revenueGrowthChart')?.getContext('2d');
+            if (ctxBar) {
+                if (charts.revenueGrowth) charts.revenueGrowth.destroy();
+                charts.revenueGrowth = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Junho', 'Julho', 'Agosto', 'Setembro', 'Projeção Q4'],
+                        datasets: [{
+                            label: 'MRR Recorrente (€)',
+                            data: [2800, 3400, 3900, (k.active_mrr || 4250), 5500],
+                            backgroundColor: 'rgba(20, 184, 166, 0.85)',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } },
+                            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+        }
+
+        // Render Tasks
+        function renderTasks() {
+            const grid = document.getElementById('tasksGrid');
+            if (!grid) return;
+
+            grid.innerHTML = state.tasks.map(t => {
+                let badgePri = 'bg-slate-800 text-slate-400';
+                if (t.priority === 'Alta') badgePri = 'bg-rose-500/20 text-rose-400 border border-rose-500/30';
+                if (t.priority === 'Media') badgePri = 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+
+                const isDone = t.status === 'Concluida';
+
+                return `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark flex flex-col justify-between ${isDone ? 'opacity-60' : ''}">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold ${badgePri}">
+                                Prioridade: ${t.priority}
+                            </span>
+                            <span class="text-[11px] text-slate-500">${t.due_date || 'Sem data'}</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white ${isDone ? 'line-through text-slate-400' : ''}">${t.title}</h4>
+                        <p class="text-xs text-tealAccent-400 mt-1">${t.client_name ? `Conta: ${t.client_name}` : 'Geral'}</p>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-borderDark flex items-center justify-between text-xs">
+                        <span class="font-semibold ${isDone ? 'text-emerald-400' : 'text-slate-400'}">
+                            <i class="fa-solid ${isDone ? 'fa-circle-check text-emerald-400' : 'fa-clock'} mr-1"></i> ${t.status}
+                        </span>
+                        ${!isDone ? `
+                            <button onclick="toggleTaskDone(${t.id})" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors">
+                                Concluir
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        async function toggleTaskDone(id) {
+            try {
+                const res = await fetch(`/api/tasks/${id}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'Concluida' })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchAllData();
+                }
+            } catch(e) {
+                showToast("Erro ao atualizar tarefa.", "error");
+            }
+        }
+
+        // Render History Table
+        function renderHistoryTable() {
+            const tbody = document.getElementById('historyTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = state.history.map(h => `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="px-5 py-4 font-semibold text-tealAccent-400">
+                        ${h.action_type}
+                    </td>
+                    <td class="px-5 py-4 text-xs text-slate-200">
+                        ${h.description}
+                    </td>
+                    <td class="px-5 py-4 text-xs font-mono text-slate-400">
+                        <i class="fa-solid fa-bolt text-tealAccent-500 mr-1"></i> ${h.tokens_used} tokens
+                    </td>
+                    <td class="px-5 py-4 text-right text-xs text-slate-500 font-mono">
+                        ${h.created_at}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Dropdowns Population
+        function populateDropdowns() {
+            const eSelect = document.getElementById('emailClientSelect');
+            if (eSelect) {
+                eSelect.innerHTML = state.clients.map(c => `
+                    <option value="${c.company_name}">${c.company_name} (${c.contact_name} &bull; ${c.industry})</option>
+                `).join('');
+            }
+
+            const tSelect = document.getElementById('taskClientSelect');
+            if (tSelect) {
+                tSelect.innerHTML = `
+                    <option value="">Geral (Sem cliente)</option>
+                    ${state.clients.map(c => `<option value="${c.company_name}">${c.company_name}</option>`).join('')}
+                `;
+            }
+
+            const tDate = document.getElementById('taskDueDate');
+            if (tDate && !tDate.value) {
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 2);
+                tDate.value = tomorrow.toISOString().split('T')[0];
+            }
+        }
+
+        // Submissions
+        async function submitNewClient() {
+            const payload = {
+                company_name: document.getElementById('cliCompany').value,
+                contact_name: document.getElementById('cliContact').value,
+                industry: document.getElementById('cliIndustry').value,
+                email: document.getElementById('cliEmail').value,
+                phone: document.getElementById('cliPhone').value,
+                monthly_value: parseFloat(document.getElementById('cliMrr').value),
+                status: document.getElementById('cliStatus').value,
+                notes: document.getElementById('cliNotes').value
+            };
+
+            try {
+                const res = await fetch('/api/clients', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewClient');
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao registar cliente.", "error");
+            }
+        }
+
+        async function submitNewSummary() {
+            const payload = {
+                title: document.getElementById('sumTitle').value,
+                source_type: document.getElementById('sumSource').value,
+                text: document.getElementById('sumText').value
+            };
+
+            try {
+                const res = await fetch('/api/summaries', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    document.getElementById('sumText').value = '';
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao processar resumo.", "error");
+            }
+        }
+
+        async function submitGenEmail() {
+            const payload = {
+                client_name: document.getElementById('emailClientSelect').value,
+                email_type: document.getElementById('emailTypeSelect').value,
+                tone: document.getElementById('emailToneSelect').value,
+                key_points: document.getElementById('emailKeyPoints').value
+            };
+
+            try {
+                const res = await fetch('/api/emails', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    previewEmailModal(data.subject, data.body);
+                    showToast(data.message);
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao gerar email.", "error");
+            }
+        }
+
+        async function submitNewTask() {
+            const payload = {
+                title: document.getElementById('taskTitle').value,
+                client_name: document.getElementById('taskClientSelect').value,
+                priority: document.getElementById('taskPriority').value,
+                due_date: document.getElementById('taskDueDate').value
+            };
+
+            try {
+                const res = await fetch('/api/tasks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewTask');
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao criar tarefa.", "error");
+            }
+        }
+
+        // On Load
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchAllData();
+        });
+    </script>
+</body>
+</html>
