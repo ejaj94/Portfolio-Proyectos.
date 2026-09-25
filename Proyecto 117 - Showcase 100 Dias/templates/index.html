@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJAJ TECH — O GRANDE SHOWCASE DOS 100 DIAS & 100 PROJETOS (Gold Master Edition)</title>
+    
+    <!-- Google Fonts: Cormorant Garamond + Plus Jakarta Sans + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Pro CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#fffdf0',
+                            100: '#fef9c3',
+                            200: '#fef08a',
+                            300: '#fde047',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207',
+                            800: '#854d0e',
+                            900: '#713f12',
+                            metallic: '#d4af37',
+                            bright: '#ffd700',
+                            shimmer: '#fbf5b7',
+                            dark: '#aa771c'
+                        },
+                        obsidian: {
+                            950: '#070709',
+                            900: '#0d0d12',
+                            850: '#121218',
+                            800: '#181822',
+                            700: '#222230',
+                            600: '#323246'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        mono: ['"JetBrains Mono"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --gold-gradient: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+            --gold-gradient-subtle: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(251, 245, 183, 0.4) 50%, rgba(170, 119, 28, 0.2) 100%);
+            --gold-text-glow: 0 0 25px rgba(212, 175, 55, 0.55), 0 0 50px rgba(255, 215, 0, 0.25);
+            --gold-border-glow: 0 0 30px rgba(212, 175, 55, 0.3), inset 0 0 15px rgba(212, 175, 55, 0.15);
+        }
+
+        body {
+            background-color: #070709;
+            color: #f8fafc;
+            overflow-x: hidden;
+            selection-background-color: #d4af37;
+            selection-color: #070709;
+        }
+
+        ::selection {
+            background: #d4af37;
+            color: #070709;
+        }
+
+        /* Gold Foil Metallic Text */
+        .gold-foil-text {
+            background: linear-gradient(135deg, #FFF7D6 0%, #E8BE48 25%, #FFF0AA 45%, #C2932B 70%, #F7E298 90%, #9E741B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
+        }
+
+        .gold-foil-bg {
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+        }
+
+        .gold-foil-border {
+            border-image: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #AA771C) 1;
+        }
+
+        /* Luxury Glassmorphism */
+        .luxury-card {
+            background: rgba(13, 13, 18, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(212, 175, 55, 0.22);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(212, 175, 55, 0.08);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .luxury-card:hover {
+            border-color: rgba(212, 175, 55, 0.45);
+            box-shadow: 0 30px 70px -10px rgba(0, 0, 0, 0.9), 0 0 45px rgba(212, 175, 55, 0.18);
+        }
+
+        .gold-border-glow {
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(212, 175, 55, 0.08);
+        }
+
+        /* Canvas Fireworks Fullscreen */
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Subtle Gold Grid Background */
+        .gold-grid-bg {
+            background-image: 
+                radial-gradient(circle at 50% 10%, rgba(212, 175, 55, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 10% 80%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(212, 175, 55, 0.07) 0%, transparent 50%),
+                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+        }
+
+        /* Gold Shimmer Animated Overlay */
+        @keyframes shimmerGlow {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .shimmer-badge {
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 215, 0, 0.4) 50%, rgba(212, 175, 55, 0.1) 100%);
+            background-size: 200% 100%;
+            animation: shimmerGlow 4s infinite linear;
+        }
+
+        /* Floating elements animation */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+
+        .animate-float {
+            animation: floatSlow 6s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar in Luxury Gold & Obsidian */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070709;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #d4af37, #854d0e);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fde047;
+        }
+
+        /* Pulsing Gold Crown Effect */
+        @keyframes crownPulse {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4)); }
+            50% { filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.9)); }
+        }
+
+        .crown-glow {
+            animation: crownPulse 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="gold-grid-bg min-h-screen relative flex flex-col justify-between selection:bg-gold-metallic selection:text-obsidian-950 font-sans">
+
+    <!-- Interactive HTML5 Fireworks Canvas -->
+    <canvas id="fireworksCanvas"></canvas>
+
+    <!-- Top Luxury Header & Navigation Bar -->
+    <header class="relative z-20 bg-obsidian-950/85 backdrop-blur-xl border-b border-gold-metallic/25 sticky top-0 px-4 sm:px-8 py-4 transition-all">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            
+            <!-- Brand & Milestone Badge -->
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl gold-foil-bg flex items-center justify-center text-obsidian-950 font-black text-2xl shadow-xl shadow-gold-500/30 crown-glow relative group cursor-pointer" onclick="fireworksVolley(6)">
+                    <i class="fa-solid fa-crown text-obsidian-950 transition-transform group-hover:scale-110"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono font-bold tracking-widest text-gold-400 uppercase">EJAJ TECH EDITIONS</span>
+                        <span class="px-2 py-0.5 rounded-full bg-gold-500/20 text-gold-300 text-[10px] font-bold border border-gold-500/30">GOLD MASTER #100</span>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-serif font-black tracking-wide gold-foil-text">
+                        SHOWCASE DIA 100 — A LENDA DOS 100 PROJETOS
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Action Controls: Audio Toggle, Fireworks Trigger, Direct Scroll -->
+            <div class="flex items-center gap-3">
+                
+                <!-- Audio Celebration Toggle -->
+                <button id="soundToggleBtn" onclick="toggleAudio()" class="px-3.5 py-2 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-gold-300 border border-gold-metallic/30 text-xs font-bold transition flex items-center gap-2 shadow-sm" title="Ativar/Desativar Som das Celebrações">
+                    <i id="soundIcon" class="fa-solid fa-volume-high text-gold-400"></i>
+                    <span id="soundLabel" class="hidden sm:inline">Som Festivo</span>
+                </button>
+
+                <!-- Trigger Fireworks Volley Button -->
+                <button onclick="fireworksVolley(8)" class="px-4 py-2 rounded-xl gold-foil-bg text-obsidian-950 hover:brightness-110 font-bold text-xs transition flex items-center gap-2 shadow-lg shadow-gold-500/30 font-mono tracking-wider active:scale-95 cursor-pointer">
+                    <i class="fa-solid fa-sparkles animate-spin"></i>
+                    <span>LANÇAR FOGO DE ARTIFÍCIO</span>
+                </button>
+
+                <!-- Navigation Links -->
+                <a href="#theater" class="hidden md:flex px-3.5 py-2 rounded-xl bg-obsidian-850 hover:bg-gold-500/10 text-slate-300 hover:text-gold-300 border border-white/10 text-xs font-semibold transition items-center gap-1.5">
+                    <i class="fa-solid fa-play text-gold-400 text-[10px]"></i> Vídeos
+                </a>
+
+                <a href="#guiao" class="hidden md:flex px-3.5 py-2 rounded-xl bg-obsidian-850 hover:bg-gold-500/10 text-slate-300 hover:text-gold-300 border border-white/10 text-xs font-semibold transition items-center gap-1.5">
+                    <i class="fa-solid fa-microphone-lines text-gold-400 text-[10px]"></i> Guião Oficial
+                </a>
+
+                <a href="#diploma" class="hidden md:flex px-3.5 py-2 rounded-xl bg-obsidian-850 hover:bg-gold-500/10 text-slate-300 hover:text-gold-300 border border-white/10 text-xs font-semibold transition items-center gap-1.5">
+                    <i class="fa-solid fa-award text-gold-400 text-[10px]"></i> Certificado
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- ========================================== -->
+        <!-- HERO CELEBRATION: THE 100 DAYS VICTORY     -->
+        <!-- ========================================== -->
+        <section class="text-center space-y-8 pt-4">
+            
+            <!-- Golden Laurel & Crown Hero Badge -->
+            <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-obsidian-900 border border-gold-metallic/40 shadow-2xl shadow-gold-500/20 shimmer-badge">
+                <i class="fa-solid fa-laurel-wreath text-gold-400 text-lg"></i>
+                <span class="text-xs sm:text-sm font-bold font-mono tracking-widest text-gold-200 uppercase">
+                    100 DIAS CONSECUTIVOS • 100 PROJETOS DE CÓDIGO PURO • MISSÃO CUMPRIDA
+                </span>
+                <i class="fa-solid fa-laurel-wreath text-gold-400 text-lg scale-x-[-1]"></i>
+            </div>
+
+            <!-- Grand Hero Title -->
+            <div class="space-y-4 max-w-4xl mx-auto">
+                <h2 class="text-4xl sm:text-6xl lg:text-7xl font-serif font-black tracking-tight leading-none text-white">
+                    O DIA 100 CHEGOU. <br>
+                    <span class="gold-foil-text italic">A HISTÓRIA FOI ESCRITA.</span>
+                </h2>
+                <p class="text-slate-300 text-base sm:text-xl font-normal leading-relaxed max-w-3xl mx-auto font-sans">
+                    Cem dias de foco inabalável, madrugada após madrugada, superando todos os limites da engenharia de software e do design digital. O desafio que parecia impossível foi vencido com maestria ao lado de mais de <strong class="text-gold-300">3.500 mentes brilhantes</strong>.
+                </p>
+            </div>
+
+            <!-- 5 Golden Metrics Cards (Dourado, Branco, Preto) -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 pt-4">
+                
+                <!-- Metric 1: 100 Dias -->
+                <div class="luxury-card rounded-2xl p-5 text-center relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 text-gold-500/10 text-6xl font-black font-mono">100</div>
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-gold-500/10 border border-gold-metallic/30 flex items-center justify-center text-gold-400 mb-2">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div class="text-3xl sm:text-4xl font-black font-mono gold-foil-text">100</div>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mt-1">Dias Ininterruptos</div>
+                </div>
+
+                <!-- Metric 2: 100 Projetos -->
+                <div class="luxury-card rounded-2xl p-5 text-center relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 text-gold-500/10 text-6xl font-black font-mono">100</div>
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-gold-500/10 border border-gold-metallic/30 flex items-center justify-center text-gold-400 mb-2">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <div class="text-3xl sm:text-4xl font-black font-mono gold-foil-text">100</div>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mt-1">Projetos Reais</div>
+                </div>
+
+                <!-- Metric 3: 100% Concluído -->
+                <div class="luxury-card rounded-2xl p-5 text-center relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 text-gold-500/10 text-6xl font-black font-mono">%</div>
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-gold-500/10 border border-gold-metallic/30 flex items-center justify-center text-gold-400 mb-2">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div class="text-3xl sm:text-4xl font-black font-mono gold-foil-text">100%</div>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mt-1">Desafio Cumprido</div>
+                </div>
+
+                <!-- Metric 4: +3.500 Devs -->
+                <div class="luxury-card rounded-2xl p-5 text-center relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 text-gold-500/10 text-6xl font-black font-mono">+</div>
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-gold-500/10 border border-gold-metallic/30 flex items-center justify-center text-gold-400 mb-2">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div class="text-3xl sm:text-4xl font-black font-mono gold-foil-text">+3.500</div>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mt-1">Devs na Comunidade</div>
+                </div>
+
+                <!-- Metric 5: +500.000 Linhas -->
+                <div class="luxury-card rounded-2xl p-5 text-center relative overflow-hidden group col-span-2 md:col-span-1">
+                    <div class="absolute -right-4 -bottom-4 text-gold-500/10 text-6xl font-black font-mono">K</div>
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-gold-500/10 border border-gold-metallic/30 flex items-center justify-center text-gold-400 mb-2">
+                        <i class="fa-solid fa-terminal"></i>
+                    </div>
+                    <div class="text-3xl sm:text-4xl font-black font-mono gold-foil-text">+500K</div>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mt-1">Linhas de Código</div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- THEATER SECTION: SLIDESHOW DOS PROJETOS FINAIS (DIAS 91 A 100)  -->
+        <!-- ============================================================== -->
+        <section id="theater" class="luxury-card rounded-3xl p-6 sm:p-10 space-y-8 relative overflow-hidden border border-gold-metallic/35">
+            
+            <!-- Top Controls Bar -->
+            <div class="flex flex-wrap justify-between items-center gap-4 border-b border-gold-metallic/20 pb-6">
+                
+                <div class="space-y-1">
+                    <div class="flex items-center gap-3">
+                        <span id="slideIndexBadge" class="px-3.5 py-1 rounded-xl gold-foil-bg text-obsidian-950 font-mono font-black text-xs tracking-wider shadow-sm">
+                            PROJETO 10 / 10
+                        </span>
+                        <span id="slideDayHeader" class="text-xs font-mono font-bold text-gold-400 uppercase tracking-widest">
+                            FASE CLÍMAX (DIAS 91 A 100)
+                        </span>
+                    </div>
+                    <h3 id="slideTitleMain" class="text-2xl sm:text-3xl font-serif font-black text-white">
+                        Dia 100 — NEXUS Business OS (O Sistema Operativo Supremo)
+                    </h3>
+                </div>
+
+                <!-- Navigation Buttons + Auto Play Toggle -->
+                <div class="flex items-center gap-2">
+                    
+                    <button id="playPauseBtn" onclick="toggleAutoPlay()" class="px-3.5 py-2 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-gold-300 font-bold text-xs border border-gold-metallic/30 transition flex items-center gap-2">
+                        <i id="playPauseIcon" class="fa-solid fa-pause text-gold-400"></i>
+                        <span id="playPauseText">Pausa (8s)</span>
+                    </button>
+
+                    <button onclick="prevSlide()" class="w-10 h-10 rounded-xl bg-obsidian-850 hover:gold-foil-bg hover:text-obsidian-950 text-gold-300 font-bold transition flex items-center justify-center border border-gold-metallic/30 cursor-pointer shadow">
+                        <i class="fa-solid fa-chevron-left text-sm"></i>
+                    </button>
+
+                    <button onclick="nextSlide()" class="w-10 h-10 rounded-xl bg-obsidian-850 hover:gold-foil-bg hover:text-obsidian-950 text-gold-300 font-bold transition flex items-center justify-center border border-gold-metallic/30 cursor-pointer shadow">
+                        <i class="fa-solid fa-chevron-right text-sm"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Auto-Transition Progress Bar in Gold Shimmer -->
+            <div class="w-full bg-obsidian-900 h-1.5 rounded-full overflow-hidden border border-gold-metallic/20">
+                <div id="slideProgressBar" class="gold-foil-bg h-full w-0 transition-all duration-100 ease-linear"></div>
+            </div>
+
+            <!-- Active Slide Content: Video Player (Left) + Detailed Specs (Right) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Left: Video Showcase Player -->
+                <div class="lg:col-span-7 bg-obsidian-950 rounded-2xl overflow-hidden border border-gold-metallic/30 shadow-2xl aspect-video flex items-center justify-center relative group">
+                    
+                    <video id="slideVideoPlayer" autoplay loop muted playsinline class="w-full h-full object-cover">
+                        <source id="slideVideoSource" src="/videos/Proyecto 100 Nexa AI.mp4" type="video/mp4">
+                        O seu navegador não suporta reprodução de vídeo HTML5.
+                    </video>
+
+                    <!-- Video Overlay Badge -->
+                    <div class="absolute bottom-4 left-4 bg-obsidian-950/85 backdrop-blur-md px-3.5 py-1.5 rounded-xl text-xs font-mono text-gold-300 border border-gold-metallic/40 flex items-center gap-2 shadow-lg">
+                        <span class="w-2.5 h-2.5 rounded-full bg-gold-400 animate-ping"></span>
+                        <span id="videoLiveBadgeText">VÍDEO DEMONSTRATIVO REAL • DIA 100</span>
+                    </div>
+
+                    <!-- Fullscreen / Replay Button -->
+                    <button onclick="restartVideo()" class="absolute top-4 right-4 w-9 h-9 rounded-xl bg-obsidian-950/80 hover:bg-gold-500/20 text-gold-300 border border-gold-metallic/30 flex items-center justify-center text-xs transition backdrop-blur-md" title="Reiniciar Vídeo">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+
+                </div>
+
+                <!-- Right: Project Detailed Card -->
+                <div class="lg:col-span-5 space-y-6">
+                    
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span id="slideTag" class="px-3 py-1 rounded-full bg-gold-500/20 text-gold-300 text-xs font-bold border border-gold-500/40 font-mono">
+                                PROJETO #100 | O SISTEMA OPERATIVO SUPREMO
+                            </span>
+                        </div>
+                        <h4 id="slideName" class="text-3xl font-serif font-black text-white mt-2 leading-tight">
+                            NEXUS Business OS (Crowning Masterpiece)
+                        </h4>
+                        <p id="slideSubtitle" class="text-xs font-mono font-bold text-gold-400 mt-1 uppercase tracking-wider">
+                            A Unificação Total dos 100 Dias de Código
+                        </p>
+                        <p id="slideDesc" class="text-sm text-slate-300 mt-3 leading-relaxed font-sans">
+                            O projeto ápice dos 100 dias: um sistema operacional empresarial tudo-em-um com CRM completo, Clientes 360°, Faturação oficial (23% IVA), Orçamentos convertíveis, Inventário inteligente, Tarefas, Calendário, Suporte Helpdesk e Copiloto de Inteligência Artificial.
+                        </p>
+                    </div>
+
+                    <!-- Key Features / Highlights -->
+                    <div class="space-y-2 pt-3 border-t border-gold-metallic/20">
+                        <span class="text-xs font-bold text-gold-400 uppercase tracking-widest font-mono block">Destaques Arquiteturais:</span>
+                        <div id="slideHighlightsList" class="space-y-1.5">
+                            <div class="flex items-center gap-2 text-xs text-slate-200">
+                                <i class="fa-solid fa-check text-gold-400"></i>
+                                <span>10 Módulos Empresariais Unificados</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-200">
+                                <i class="fa-solid fa-check text-gold-400"></i>
+                                <span>Conversão de Orçamento a Fatura em 1 clique</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-200">
+                                <i class="fa-solid fa-check text-gold-400"></i>
+                                <span>Copiloto IA Estratégico Autônomo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech Stack Badges -->
+                    <div class="space-y-2 pt-3 border-t border-gold-metallic/20">
+                        <span class="text-xs font-bold text-gold-400 uppercase tracking-widest font-mono block">Stack Tecnológico:</span>
+                        <div id="slideTechStackContainer" class="flex flex-wrap gap-2">
+                            <span class="px-2.5 py-1 rounded-lg bg-obsidian-900 text-gold-200 text-xs font-mono border border-gold-metallic/25">Python Flask</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-obsidian-900 text-gold-200 text-xs font-mono border border-gold-metallic/25">SQLite ACID</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-obsidian-900 text-gold-200 text-xs font-mono border border-gold-metallic/25">AI Business Brain</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-obsidian-900 text-gold-200 text-xs font-mono border border-gold-metallic/25">Ultra 8K Cosmic Glass</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Slide Navigation Thumbnails / Dots (10 Projects) -->
+            <div class="pt-6 border-t border-gold-metallic/20">
+                <div class="flex flex-wrap justify-center items-center gap-2.5" id="slideDotsContainer">
+                    <!-- Injected via JavaScript -->
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ============================================================== -->
+        <!-- THE 10 CLIMAX PROJECTS: LUXURY INTERACTIVE GOLD GALLERY         -->
+        <!-- ============================================================== -->
+        <section class="space-y-8">
+            
+            <div class="text-center space-y-2">
+                <span class="px-3.5 py-1 rounded-full bg-gold-500/10 text-gold-300 text-xs font-bold border border-gold-metallic/30 font-mono uppercase tracking-widest">
+                    A DÉCADA FINAL (DIAS 91 A 100)
+                </span>
+                <h3 class="text-3xl sm:text-4xl font-serif font-black text-white">
+                    Galeria de Honra dos Projetos Clímax
+                </h3>
+                <p class="text-slate-400 text-sm max-w-2xl mx-auto">
+                    Clica em qualquer um dos 10 projetos para carregar o vídeo imediatamente no projetor principal e explorar as suas especificações completas.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4" id="projectsGrid">
+                <!-- Injected via JavaScript -->
+            </div>
+
+        </section>
+
+
+        <!-- ============================================================== -->
+        <!-- OFFICIAL VOICEOVER SCRIPT: NARRATIVA COMPLETA EM PORTUGUÊS     -->
+        <!-- ============================================================== -->
+        <section id="guiao" class="luxury-card rounded-3xl p-6 sm:p-10 space-y-6 border border-gold-metallic/35">
+            
+            <div class="flex flex-wrap justify-between items-center border-b border-gold-metallic/25 pb-5 gap-4">
+                <div>
+                    <span class="px-3.5 py-1.5 rounded-full bg-gold-500/20 text-gold-300 text-xs font-extrabold border border-gold-500/40 uppercase tracking-widest font-mono">
+                        <i class="fa-solid fa-microphone-lines mr-1.5 text-gold-400"></i> Guião Oficial do Locutor • Dia 100
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-serif font-black text-white mt-2">
+                        Narrativa Triunfal de Celebração (Português de Portugal)
+                    </h3>
+                </div>
+
+                <button onclick="copyVoiceoverText()" class="px-5 py-2.5 rounded-xl gold-foil-bg text-obsidian-950 font-bold text-xs transition flex items-center gap-2 shadow-lg shadow-gold-500/30 hover:brightness-110 active:scale-95 cursor-pointer font-mono">
+                    <i class="fa-regular fa-copy text-sm"></i>
+                    <span id="copyBtnText">COPIAR TEXTO COMPLETO</span>
+                </button>
+            </div>
+
+            <!-- Single Paragraph Spoken Block -->
+            <div class="bg-obsidian-950 rounded-2xl p-6 sm:p-8 border border-gold-metallic/30 space-y-4 relative">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-mono font-bold text-gold-400 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-solid fa-quote-left text-gold-500"></i> Texto Contínuo Sem Cortes para Gravação de Voz:
+                    </p>
+                    <span class="text-[11px] font-mono text-slate-400 bg-obsidian-900 px-2.5 py-1 rounded-lg border border-gold-metallic/20">
+                        100% Fluido • Zero Códigos ou Pausas
+                    </span>
+                </div>
+
+                <blockquote id="voiceoverFullText" class="text-base sm:text-lg italic text-slate-100 leading-relaxed font-serif pl-5 border-l-4 border-gold-metallic">
+                    Chegámos ao dia cem e ao projeto número cem. Quando comecei este desafio parecia uma loucura construir uma aplicação completa todos os dias sem falhar um único dia. Mas hoje estamos aqui no topo da montanha com cem projetos reais desenvolvidos cem desafios superados e uma comunidade incrível com mais de três mil e quinhentos programadores que me acompanharam em cada linha de código. Para fechar com chave de ouro decidi juntar tudo o que aprendi e construí o NEXUS Business OS um sistema operativo empresarial tudo em um que reúne faturação legal gestão de clientes orçamentos inventário calendário e inteligência artificial num único lugar. Quero agradecer de coração a cada um de vocês pelo apoio pelas mensagens e pela força ao longo destes cem dias inesquecíveis. Esta jornada dos cem dias termina hoje mas o nosso caminho na tecnologia está apenas a começar. Se querem continuar a evoluir comigo aprender a criar softwares profissionais e transformar ideias em negócios reais sigam o meu perfil e enviem me uma mensagem privada com a palavra AJUDA para vos apoiar no vosso próximo grande projeto. Muito obrigado a todos nós conseguimos.
+                </blockquote>
+            </div>
+
+            <!-- 4 Emotional Pillars Breakdown -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-sans">
+                
+                <div class="bg-obsidian-900/90 p-4 rounded-xl border border-gold-metallic/20 space-y-1.5">
+                    <span class="font-mono font-bold text-gold-400 block uppercase">1. O Triunfo dos 100 Dias</span>
+                    <p class="text-slate-300 leading-relaxed">A declaração da vitória final: 100 dias consecutivos sem falhar um único dia, atingindo o topo da montanha com 100 projetos reais.</p>
+                </div>
+
+                <div class="bg-obsidian-900/90 p-4 rounded-xl border border-gold-metallic/20 space-y-1.5">
+                    <span class="font-mono font-bold text-gold-400 block uppercase">2. A Grande Comunidade</span>
+                    <p class="text-slate-300 leading-relaxed">Reconhecimento sincero aos mais de 3.500 desenvolvedores e seguidores que acompanharam cada linha de código e apoiaram o desafio.</p>
+                </div>
+
+                <div class="bg-obsidian-900/90 p-4 rounded-xl border border-gold-metallic/20 space-y-1.5">
+                    <span class="font-mono font-bold text-gold-400 block uppercase">3. O Projeto 100: NEXUS OS</span>
+                    <p class="text-slate-300 leading-relaxed">Apresentação da obra-prima que unifica faturamento, clientes, orçamentos, estoque e inteligência artificial numa única suite empresarial.</p>
+                </div>
+
+                <div class="bg-obsidian-900/90 p-4 rounded-xl border border-gold-metallic/20 space-y-1.5">
+                    <span class="font-mono font-bold text-gold-400 block uppercase">4. Chamada de Ação (AJUDA)</span>
+                    <p class="text-slate-300 leading-relaxed">Conexão final para novos horizontes: seguir as redes e enviar mensagem direta com a palavra-chave AJUDA para mentoria e consultoria.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================================================== -->
+        <!-- LUXURY DIPLOMA & CERTIFIED SEAL OF COMPLETION                  -->
+        <!-- ============================================================== -->
+        <section id="diploma" class="luxury-card rounded-3xl p-6 sm:p-12 space-y-8 border-2 border-gold-metallic/40 relative overflow-hidden text-center">
+            
+            <!-- Corner Golden Filigrees -->
+            <div class="absolute top-4 left-4 text-gold-metallic/40 text-3xl font-serif">✦</div>
+            <div class="absolute top-4 right-4 text-gold-metallic/40 text-3xl font-serif">✦</div>
+            <div class="absolute bottom-4 left-4 text-gold-metallic/40 text-3xl font-serif">✦</div>
+            <div class="absolute bottom-4 right-4 text-gold-metallic/40 text-3xl font-serif">✦</div>
+
+            <div class="space-y-3 max-w-3xl mx-auto">
+                <div class="w-16 h-16 mx-auto rounded-full gold-foil-bg flex items-center justify-center text-obsidian-950 text-2xl shadow-xl shadow-gold-500/40 crown-glow">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                
+                <span class="text-xs font-mono font-bold tracking-widest text-gold-400 uppercase block">
+                    CERTIFICADO DE MÉRITO & EXCELÊNCIA TÉCNICA
+                </span>
+                
+                <h3 class="text-3xl sm:text-5xl font-serif font-black gold-foil-text tracking-wide">
+                    DESAFIO DOS 100 DIAS E 100 PROJETOS
+                </h3>
+                
+                <p class="text-slate-300 text-sm sm:text-base font-serif italic max-w-2xl mx-auto">
+                    Certifica-se com a mais alta honra que a marca <strong class="text-gold-300 font-sans">EJAJ TECH</strong> e o seu desenvolvedor <strong class="text-gold-300 font-sans">Enmanuel Jiménez</strong> cumpriram integralmente, com rigor técnico e inovação ininterrupta, os 100 dias consecutivos de programação e publicação de softwares de nível empresarial.
+                </p>
+            </div>
+
+            <!-- Signature & Seal Section -->
+            <div class="pt-8 border-t border-gold-metallic/30 max-w-4xl mx-auto flex flex-wrap items-center justify-around gap-8 text-xs font-mono">
+                
+                <div class="space-y-1 text-center">
+                    <div class="h-10 flex items-center justify-center font-serif text-lg text-gold-300 italic">
+                        Enmanuel Jiménez
+                    </div>
+                    <div class="w-48 h-0.5 bg-gradient-to-r from-transparent via-gold-metallic to-transparent mx-auto"></div>
+                    <div class="text-gold-400 font-bold uppercase tracking-wider">Fundador & Lead Engineer</div>
+                    <div class="text-slate-500">EJAJ TECH Studio</div>
+                </div>
+
+                <!-- Golden Holographic Seal -->
+                <div class="w-24 h-24 rounded-full border-2 border-dashed border-gold-metallic flex flex-col items-center justify-center text-gold-400 text-center p-2 relative group cursor-pointer" onclick="fireworksVolley(5)">
+                    <div class="absolute inset-0 rounded-full bg-gold-500/10 animate-spin" style="animation-duration: 20s;"></div>
+                    <i class="fa-solid fa-certificate text-2xl text-gold-300 mb-1"></i>
+                    <span class="text-[9px] font-black tracking-widest text-gold-200">SELO OURO</span>
+                    <span class="text-[8px] text-slate-400">100% VERIFICADO</span>
+                </div>
+
+                <div class="space-y-1 text-center">
+                    <div class="h-10 flex items-center justify-center font-serif text-lg text-gold-300 italic">
+                        25 de Setembro de 2026
+                    </div>
+                    <div class="w-48 h-0.5 bg-gradient-to-r from-transparent via-gold-metallic to-transparent mx-auto"></div>
+                    <div class="text-gold-400 font-bold uppercase tracking-wider">Data do Grande Marco</div>
+                    <div class="text-slate-500">Lisboa, Portugal</div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Luxury Footer -->
+    <footer class="relative z-10 bg-obsidian-950 border-t border-gold-metallic/20 py-8 px-4 text-center mt-12">
+        <div class="max-w-7xl mx-auto space-y-4">
+            <div class="flex items-center justify-center gap-3">
+                <div class="w-8 h-8 rounded-lg gold-foil-bg flex items-center justify-center text-obsidian-950 font-black text-sm">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+                <span class="font-serif font-black text-lg gold-foil-text tracking-wide">EJAJ TECH — LUXURY CODE EDITIONS</span>
+            </div>
+            <p class="text-xs text-slate-400 max-w-xl mx-auto">
+                Concebido com precisão artesanal em Dourado, Branco e Preto Obsidian. Unindo o design gráfico da mais alta elegância com a engenharia de software full-stack de classe mundial.
+            </p>
+            <div class="text-[11px] font-mono text-gold-400/80 pt-2">
+                © 2026 EJAJ TECH • 100 Dias • 100 Projetos • Todos os Direitos Reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Element -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 luxury-card px-5 py-3 rounded-2xl flex items-center gap-3 border border-gold-metallic shadow-2xl">
+        <div class="w-8 h-8 rounded-xl gold-foil-bg text-obsidian-950 flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <div class="text-xs">
+            <div class="font-bold text-white" id="toastTitle">Sucesso!</div>
+            <div class="text-gold-300" id="toastMessage">Texto copiado para a área de transferência.</div>
+        </div>
+    </div>
+
+
+    <!-- ============================================================== -->
+    <!-- INTERACTIVE JAVASCRIPT & FIREWORKS CELEBRATION ENGINE          -->
+    <!-- ============================================================== -->
+    <script>
+        // Projects Data from Backend API / Static fallback
+        const projectsData = [
+            {
+                day: 91,
+                title: "Dia 91 — API Tester Pro",
+                name: "API Tester Pro",
+                tag: "PROJETO #91 | TESTES DE REST API",
+                subtitle: "Bancada Avançada de Teste & Inspeção de Requisições HTTP",
+                desc: "Ferramenta profissional e intuitiva para desenvolvedores realizarem testes de endpoints, inspeção de cabeçalhos HTTP, payload JSON e cronometragem de latência em milissegundos.",
+                video: "/videos/Proyecto 91 API Tester.mp4",
+                tech: ["Python Flask", "RESTful API", "Fetch Client", "Tailwind CSS"],
+                icon: "fa-solid fa-bolt",
+                highlights: ["Histórico de chamadas", "Inspeção de Headers", "Formatador JSON nativo"]
+            },
+            {
+                day: 92,
+                title: "Dia 92 — Image Compressor AI",
+                name: "Image Compressor AI",
+                tag: "PROJETO #92 | OTIMIZAÇÃO GRÁFICA",
+                subtitle: "Compressão Inteligente sem Perda de Fidelidade",
+                desc: "Sistema de compressão matemática para WebP, PNG e JPEG que reduz até 85% do peso dos ficheiros mantendo a acuidade visual cristalina para alta performance web.",
+                video: "/videos/Proyecto 92 Compress Picture.mp4",
+                tech: ["Python Pillow", "WebP Engine", "Blob Processing", "CSS Luxury Glass"],
+                icon: "fa-solid fa-file-image",
+                highlights: ["Redução de 85% de peso", "Conversão WebP em lote", "Preview comparativo instantâneo"]
+            },
+            {
+                day: 93,
+                title: "Dia 93 — SubCraft SaaS",
+                name: "SubCraft SaaS",
+                tag: "PROJETO #93 | GESTÃO DE ASSINATURAS",
+                subtitle: "Motor de Recorrência & Planos Empresariais",
+                desc: "Solução completa de monetização recorrente para empresas, gestão de tiers (Basic, Pro, Enterprise), faturas automatizadas e monitorização de churn rate.",
+                video: "/videos/Proyecto 93 Sub Craft.mp4",
+                tech: ["Flask ORM", "SQLite3", "Stripe Concept", "Chart.js"],
+                icon: "fa-solid fa-credit-card",
+                highlights: ["Cálculo de MRR em tempo real", "Upgrade de planos 1-clique", "Controlo de Churn"]
+            },
+            {
+                day: 94,
+                title: "Dia 94 — MemberCraft",
+                name: "MemberCraft Portal",
+                tag: "PROJETO #94 | COMUNIDADES EXCLUSIVAS",
+                subtitle: "Ecossistema Fechado de Membros & Conteúdo VIP",
+                desc: "Portal de membresias e gestão de comunidades com controlo granular de acessos por tier, área de membros protegida e feed exclusivo de recursos para programadores.",
+                video: "/videos/Proyecto 94 Member Craft.mp4",
+                tech: ["Session Auth", "Role-Based Access", "Tailwind UI", "SQLite3"],
+                icon: "fa-solid fa-users-gear",
+                highlights: ["Acesso por níveis", "Salas exclusivas de membros", "Sistema de crachás VIP"]
+            },
+            {
+                day: 95,
+                title: "Dia 95 — FreelanceCraft",
+                name: "FreelanceCraft Hub",
+                tag: "PROJETO #95 | MARKETPLACE DE TALENTO",
+                subtitle: "Conexão Direta entre Clientes & Especialistas Digitais",
+                desc: "Marketplace bidirecional para contratação de freelancers de elite, submissão de propostas comerciais com marcos (milestones) e sistema de garantia de entrega.",
+                video: "/videos/Proyecto 95 Freelance Craft.mp4",
+                tech: ["REST API", "Milestone Tracking", "Live Chat Mockup", "Responsive CSS"],
+                icon: "fa-solid fa-briefcase",
+                highlights: ["Marcos de entrega (Milestones)", "Gestão de propostas", "Perfis com portfólio integrado"]
+            },
+            {
+                day: 96,
+                title: "Dia 96 — DrivePulse Rent-a-Car",
+                name: "DrivePulse Fleet OS",
+                tag: "PROJETO #96 | ALUGUER DE VEÍCULOS",
+                subtitle: "Gestão Operacional de Frotas & Contratos Digitais",
+                desc: "Plataforma de alta precisão para locação automóvel: catálogo segmentado por categorias (SUV, Elétricos, Luxury), calendário de reservas, cálculo de cauções e emissão de contratos.",
+                video: "/videos/Proyecto 96 DrivePulse.mp4",
+                tech: ["Fleet Logic", "Date Range Picker", "Contract Generator", "Glassmorphism UI"],
+                icon: "fa-solid fa-car-side",
+                highlights: ["Contratos digitais em tempo real", "Status de frota ao vivo", "Cálculo de depósitos de segurança"]
+            },
+            {
+                day: 97,
+                title: "Dia 97 — Grand Hotel Suite",
+                name: "Grand Hotel Suite 5-Star",
+                tag: "PROJETO #97 | HOSPITALITY TECH",
+                subtitle: "Motor de Reservas Hoteleiras & Experiência de Hóspedes",
+                desc: "Sistema de gestão hoteleira de padrão 5 estrelas: check-in express, gestão de quartos e suítes, mapa de disponibilidade em tempo real e serviços de concierge digital.",
+                video: "/videos/Proyecto 97 Grand Hotel Suite.mp4",
+                tech: ["Hospitality Engine", "Room Grid", "Concierge Chat", "Tailwind Luxury"],
+                icon: "fa-solid fa-hotel",
+                highlights: ["Mapa de quartos interativo", "Check-in e Check-out automatizado", "Desglose de taxas turísticas"]
+            },
+            {
+                day: 98,
+                title: "Dia 98 — LocalPro Marketplace",
+                name: "LocalPro Services",
+                tag: "PROJETO #98 | SERVIÇOS DE PROXIMIDADE",
+                subtitle: "Localizador & Agendamento de Especialistas Certificados",
+                desc: "Plataforma de geolocalização e contratação de serviços residenciais e técnicos com avaliações verificadas, orçamentos rápidos e sistema de mensagens direto.",
+                video: "/videos/Proyecto 98 Local Pro.mp4",
+                tech: ["Geolocation Concept", "Service Booking", "Star Rating", "Modern Dark UI"],
+                icon: "fa-solid fa-location-dot",
+                highlights: ["Busca por proximidade", "Agendamento instantâneo", "Avaliações 100% verificadas"]
+            },
+            {
+                day: 99,
+                title: "Dia 99 — AutoFlow OS",
+                name: "AutoFlow Enterprise",
+                tag: "PROJETO #99 | AUTOMAÇÃO INTELIGENTE",
+                subtitle: "Orquestrador de Triggers, Webhooks & Ações",
+                desc: "Motor de automação sem código capaz de encadear eventos em disparos condicionais (if/then), registar auditoria completa de execuções e integrar serviços em cadeia.",
+                video: "/videos/Proyecto 99 Auto Flow OS.mp4",
+                tech: ["Workflow Engine", "Event Listeners", "Execution Pipeline", "Reactive Nodes"],
+                icon: "fa-solid fa-diagram-project",
+                highlights: ["Disparadores por Webhook", "Lógica condicional if-else", "Histórico de execuções com log visual"]
+            },
+            {
+                day: 100,
+                title: "Dia 100 — NEXUS Business OS",
+                name: "NEXUS Business OS (Crowning Masterpiece)",
+                tag: "PROJETO #100 | O SISTEMA OPERATIVO SUPREMO",
+                subtitle: "A Unificação Total dos 100 Dias de Código",
+                desc: "O projeto ápice dos 100 dias: um sistema operacional empresarial tudo-em-um com CRM completo, Clientes 360°, Faturação oficial (23% IVA), Orçamentos convertíveis, Inventário inteligente, Tarefas, Calendário, Suporte Helpdesk e Copiloto de Inteligência Artificial.",
+                video: "/videos/Proyecto 100 Nexa AI.mp4",
+                tech: ["Python Flask", "SQLite ACID", "AI Business Brain", "Ultra 8K Cosmic Glass", "Chart.js"],
+                icon: "fa-solid fa-crown",
+                highlights: ["10 Módulos Empresariais Unificados", "Conversão de Orçamento a Fatura em 1 clique", "Copiloto IA Estratégico Autônomo"]
+            }
+        ];
+
+        // State
+        let currentIndex = 9; // Default to Day 100 (Index 9)
+        const SLIDE_DURATION = 8000; // 8 seconds per slide
+        let isAutoPlaying = true;
+        let slideStartTime = Date.now();
+        let animationFrameReq;
+        let soundEnabled = true;
+
+        // Web Audio API Synthesized Celebration Sound (Golden Shimmer / Firework Chime)
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSparkleSound() {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+                
+                // Play 3 harmonious golden chimes (frequencies in pentatonic gold harmony)
+                const freqs = [1046.50, 1318.51, 1567.98, 2093.00]; // C6, E6, G6, C7
+                freqs.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                    
+                    gain.gain.setValueAtTime(0.001, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.06, now + idx * 0.08 + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.08 + 0.6);
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.7);
+                });
+            } catch (e) {
+                console.log("Audio not supported or blocked by browser gesture", e);
+            }
+        }
+
+        function toggleAudio() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('soundIcon');
+            const label = document.getElementById('soundLabel');
+            if (soundEnabled) {
+                icon.className = "fa-solid fa-volume-high text-gold-400";
+                label.innerText = "Som Festivo";
+                showToast("Áudio Ativado", "Sons dourados das celebrações ativados.");
+                playSparkleSound();
+            } else {
+                icon.className = "fa-solid fa-volume-xmark text-slate-500";
+                label.innerText = "Silencioso";
+                showToast("Áudio Desativado", "Efeitos sonoros colocados em silêncio.");
+            }
+        }
+
+        // Initialize Slide Navigation Dots
+        function initDots() {
+            const container = document.getElementById('slideDotsContainer');
+            container.innerHTML = '';
+            projectsData.forEach((proj, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition flex items-center gap-1.5 border cursor-pointer ${
+                    idx === currentIndex 
+                    ? 'gold-foil-bg text-obsidian-950 border-gold-bright shadow-lg shadow-gold-500/30 scale-105' 
+                    : 'bg-obsidian-900 text-slate-400 hover:text-gold-200 border-gold-metallic/20 hover:border-gold-metallic/50'
+                }`;
+                btn.innerHTML = `<i class="${proj.icon} text-[10px]"></i> <span>D${proj.day}</span>`;
+                btn.title = proj.title;
+                btn.onclick = () => goToSlide(idx);
+                container.appendChild(btn);
+            });
+        }
+
+        // Initialize Project Grid Cards
+        function initGrid() {
+            const grid = document.getElementById('projectsGrid');
+            grid.innerHTML = '';
+            projectsData.forEach((proj, idx) => {
+                const isFinalDay = proj.day === 100;
+                const card = document.createElement('div');
+                card.className = `luxury-card rounded-2xl p-4 flex flex-col justify-between space-y-3 cursor-pointer group transition-all duration-300 ${
+                    isFinalDay ? 'border-2 border-gold-metallic/70 bg-obsidian-900/95 ring-2 ring-gold-500/20' : ''
+                }`;
+                card.onclick = () => {
+                    goToSlide(idx);
+                    document.getElementById('theater').scrollIntoView({ behavior: 'smooth' });
+                    fireworksBurst(window.innerWidth / 2, window.innerHeight * 0.4);
+                };
+
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md ${
+                                isFinalDay ? 'gold-foil-bg text-obsidian-950' : 'bg-gold-500/10 text-gold-300 border border-gold-metallic/30'
+                            }">
+                                DIA ${proj.day}
+                            </span>
+                            <div class="w-7 h-7 rounded-lg bg-obsidian-850 border border-gold-metallic/30 flex items-center justify-center text-gold-400 text-xs group-hover:scale-110 transition">
+                                <i class="${proj.icon}"></i>
+                            </div>
+                        </div>
+                        <h5 class="text-sm font-bold text-white group-hover:text-gold-300 transition leading-snug line-clamp-1">
+                            ${proj.name}
+                        </h5>
+                        <p class="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                            ${proj.desc}
+                        </p>
+                    </div>
+                    <div class="pt-2 border-t border-gold-metallic/15 flex items-center justify-between text-[11px] text-gold-400/90 font-mono">
+                        <span class="flex items-center gap-1">
+                            <i class="fa-solid fa-play text-[9px]"></i> Ver Vídeo
+                        </span>
+                        <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition transform group-hover:translate-x-1"></i>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Update Theater Slide Content
+        function updateSlide(index) {
+            currentIndex = index;
+            const data = projectsData[index];
+
+            document.getElementById('slideIndexBadge').innerText = `PROJETO ${index + 1} / 10`;
+            document.getElementById('slideTitleMain').innerText = data.title;
+            document.getElementById('slideDayHeader').innerText = `FASE CLÍMAX • DIA ${data.day}`;
+            document.getElementById('slideTag').innerText = data.tag;
+            document.getElementById('slideName').innerText = data.name;
+            document.getElementById('slideSubtitle').innerText = data.subtitle;
+            document.getElementById('slideDesc').innerText = data.desc;
+            document.getElementById('videoLiveBadgeText').innerText = `VÍDEO DEMONSTRATIVO REAL • DIA ${data.day}`;
+
+            // Highlights
+            const highlightsList = document.getElementById('slideHighlightsList');
+            highlightsList.innerHTML = '';
+            data.highlights.forEach(h => {
+                const div = document.createElement('div');
+                div.className = "flex items-center gap-2 text-xs text-slate-200";
+                div.innerHTML = `<i class="fa-solid fa-check text-gold-400"></i><span>${h}</span>`;
+                highlightsList.appendChild(div);
+            });
+
+            // Tech Stack
+            const techContainer = document.getElementById('slideTechStackContainer');
+            techContainer.innerHTML = '';
+            data.tech.forEach(t => {
+                const span = document.createElement('span');
+                span.className = "px-2.5 py-1 rounded-lg bg-obsidian-900 text-gold-200 text-xs font-mono border border-gold-metallic/25";
+                span.innerText = t;
+                techContainer.appendChild(span);
+            });
+
+            // Video Player Source Update
+            const video = document.getElementById('slideVideoPlayer');
+            const source = document.getElementById('slideVideoSource');
+            source.src = data.video;
+            video.load();
+            video.play().catch(e => console.log("Video autoplay prevented by user settings", e));
+
+            // Refresh Dots
+            initDots();
+            slideStartTime = Date.now();
+        }
+
+        function nextSlide() {
+            const nextIdx = (currentIndex + 1) % projectsData.length;
+            updateSlide(nextIdx);
+        }
+
+        function prevSlide() {
+            const prevIdx = (currentIndex - 1 + projectsData.length) % projectsData.length;
+            updateSlide(prevIdx);
+        }
+
+        function goToSlide(idx) {
+            updateSlide(idx);
+        }
+
+        function restartVideo() {
+            const video = document.getElementById('slideVideoPlayer');
+            video.currentTime = 0;
+            video.play();
+            showToast("Vídeo Reiniciado", "O vídeo foi rebobinado para o início.");
+        }
+
+        function toggleAutoPlay() {
+            isAutoPlaying = !isAutoPlaying;
+            const icon = document.getElementById('playPauseIcon');
+            const text = document.getElementById('playPauseText');
+            if (isAutoPlaying) {
+                icon.className = "fa-solid fa-pause text-gold-400";
+                text.innerText = "Pausa (8s)";
+                slideStartTime = Date.now();
+            } else {
+                icon.className = "fa-solid fa-play text-gold-400";
+                text.innerText = "Reproduzir";
+                document.getElementById('slideProgressBar').style.width = '0%';
+            }
+        }
+
+        // Auto Slider Animation Loop
+        function sliderLoop() {
+            if (isAutoPlaying) {
+                const elapsed = Date.now() - slideStartTime;
+                const percentage = Math.min((elapsed / SLIDE_DURATION) * 100, 100);
+                document.getElementById('slideProgressBar').style.width = `${percentage}%`;
+
+                if (elapsed >= SLIDE_DURATION) {
+                    nextSlide();
+                }
+            }
+            requestAnimationFrame(sliderLoop);
+        }
+
+        // Copy Voiceover Text to Clipboard
+        function copyVoiceoverText() {
+            const text = document.getElementById('voiceoverFullText').innerText.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("Guião Copiado!", "O texto contínuo completo está na área de transferência pronto para gravar.");
+                const btnText = document.getElementById('copyBtnText');
+                btnText.innerText = "COPIADO COM SUCESSO!";
+                setTimeout(() => {
+                    btnText.innerText = "COPIAR TEXTO COMPLETO";
+                }, 3000);
+            }).catch(err => {
+                console.error("Falha ao copiar:", err);
+            });
+        }
+
+        // Toast Notification System
+        let toastTimeout;
+        function showToast(title, message) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastMessage').innerText = message;
+            
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 4000);
+        }
+
+
+        // ==============================================================
+        // MAJESTIC HTML5 CANVAS FIREWORKS ENGINE (Dourado, Branco, Âmbar)
+        // ==============================================================
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const particles = [];
+        const rockets = [];
+
+        // Colors: Gold, Platinum White, Amber, Champagne Sparkles
+        const goldColors = [
+            '#FFD700', // Gold
+            '#FFFFFF', // Pure White
+            '#FBF5B7', // Light Champagne
+            '#D4AF37', // Metallic Gold
+            '#FFF8DC', // Cornsilk White
+            '#F59E0B', // Amber
+            '#E5C07B', // Soft Gold
+            '#FFE57F'  // Pale Golden
+        ];
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 1.5;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.015 + 0.012;
+                this.gravity = 0.06;
+                this.friction = 0.96;
+                this.size = Math.random() * 2.8 + 1.2;
+                this.flicker = Math.random() > 0.5;
+            }
+
+            update() {
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        class Rocket {
+            constructor(startX, startY, targetX, targetY) {
+                this.x = startX;
+                this.y = startY;
+                this.targetX = targetX;
+                this.targetY = targetY;
+                const angle = Math.atan2(targetY - startY, targetX - startX);
+                const distance = Math.hypot(targetX - startX, targetY - startY);
+                this.speed = Math.random() * 4 + 7;
+                this.vx = Math.cos(angle) * this.speed;
+                this.vy = Math.sin(angle) * this.speed;
+                this.exploded = false;
+                this.color = goldColors[Math.floor(Math.random() * goldColors.length)];
+                this.trail = [];
+            }
+
+            update() {
+                this.trail.push({ x: this.x, y: this.y, alpha: 1 });
+                if (this.trail.length > 5) this.trail.shift();
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Check distance to target
+                if (Math.hypot(this.targetX - this.x, this.targetY - this.y) < 15 || this.vy >= 0) {
+                    this.explode();
+                }
+            }
+
+            explode() {
+                this.exploded = true;
+                const particleCount = Math.floor(Math.random() * 40) + 60;
+                playSparkleSound();
+                for (let i = 0; i < particleCount; i++) {
+                    const color = goldColors[Math.floor(Math.random() * goldColors.length)];
+                    particles.push(new Particle(this.x, this.y, color));
+                }
+            }
+
+            draw() {
+                ctx.save();
+                this.trail.forEach((t, i) => {
+                    ctx.globalAlpha = (i / this.trail.length) * 0.7;
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(t.x, t.y, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                ctx.globalAlpha = 1;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = this.color;
+                ctx.fillStyle = '#FFFFFF';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function fireworksBurst(x, y) {
+            const startX = x + (Math.random() * 100 - 50);
+            const startY = height;
+            rockets.push(new Rocket(startX, startY, x, y));
+        }
+
+        function fireworksVolley(count = 6) {
+            playSparkleSound();
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const targetX = Math.random() * (width * 0.7) + (width * 0.15);
+                    const targetY = Math.random() * (height * 0.45) + (height * 0.1);
+                    fireworksBurst(targetX, targetY);
+                }, i * 220);
+            }
+            showToast("Celebração dos 100 Dias!", "Fogo de artifício dourado lançado pelo marco histórico.");
+        }
+
+        // Ambient automatic fireworks every few seconds
+        let lastAutoFirework = Date.now();
+        function fireworksLoop() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Ambient automatic launch every 4-6 seconds
+            if (Date.now() - lastAutoFirework > 4500) {
+                lastAutoFirework = Date.now();
+                const targetX = Math.random() * (width * 0.8) + (width * 0.1);
+                const targetY = Math.random() * (height * 0.4) + (height * 0.12);
+                fireworksBurst(targetX, targetY);
+            }
+
+            // Update & Draw Rockets
+            for (let i = rockets.length - 1; i >= 0; i--) {
+                const r = rockets[i];
+                r.update();
+                r.draw();
+                if (r.exploded) {
+                    rockets.splice(i, 1);
+                }
+            }
+
+            // Update & Draw Particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.update();
+                p.draw();
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(fireworksLoop);
+        }
+
+        // Screen click to spawn fireworks
+        window.addEventListener('click', (e) => {
+            // Ignore clicks on buttons, links or video
+            if (e.target.closest('button, a, video, input, select, textarea')) return;
+            fireworksBurst(e.clientX, e.clientY);
+        });
+
+        // Initialize Everything on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            initDots();
+            initGrid();
+            updateSlide(9); // Start directly on Day 100
+            requestAnimationFrame(sliderLoop);
+            requestAnimationFrame(fireworksLoop);
+
+            // Grand opening fireworks salvo
+            setTimeout(() => {
+                fireworksVolley(5);
+            }, 800);
+        });
+    </script>
+</body>
+</html>
