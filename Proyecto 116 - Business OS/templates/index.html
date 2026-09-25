@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="pt" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS Business OS | Sistema Operativo Integrado para PMEs</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        nexus: {
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                        },
+                        cyberCyan: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                        },
+                        emeraldGlow: {
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                        },
+                        amberGlow: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        darkCosmic: '#030712',
+                        cardCosmic: '#0b1120',
+                        borderCosmic: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome 6 Pro -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .glass-panel {
+            background: rgba(11, 17, 32, 0.78);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light .glass-panel {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .glow-violet {
+            box-shadow: 0 0 35px -5px rgba(139, 92, 246, 0.4);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 35px -5px rgba(6, 182, 212, 0.35);
+        }
+        .glow-emerald {
+            box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.35);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(3, 7, 18, 0.7);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7c3aed;
+            border-radius: 4px;
+        }
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.65; }
+        }
+        .animate-subtle {
+            animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="bg-darkCosmic text-slate-100 min-h-screen flex flex-col transition-colors duration-200 selection:bg-nexus-500 selection:text-white">
+
+    <!-- Top Executive Command Bar -->
+    <header class="sticky top-0 z-40 bg-cardCosmic/85 backdrop-blur-md border-b border-borderCosmic px-4 lg:px-8 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-nexus-600 via-cyberCyan-500 to-emeraldGlow-500 flex items-center justify-center text-white shadow-lg glow-violet">
+                <i class="fa-solid fa-rocket text-xl animate-subtle"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xl font-black tracking-tight bg-gradient-to-r from-white via-indigo-100 to-cyberCyan-400 bg-clip-text text-transparent">
+                        NEXUS Business OS
+                    </h1>
+                    <span class="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-gradient-to-r from-nexus-600/30 to-cyberCyan-600/30 text-cyberCyan-300 border border-cyberCyan-500/30">
+                        ALL-IN-ONE 8K
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 font-medium">CRM &bull; Facturação &bull; Inventário &bull; Projetos &bull; Suporte &bull; IA</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <!-- Global AI Brain Status -->
+            <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-borderCosmic text-xs text-slate-300">
+                <span class="w-2.5 h-2.5 rounded-full bg-emeraldGlow-400 animate-pulse"></span>
+                <span>Copilot IA: <strong>Autónomo Ativo</strong></span>
+            </div>
+
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme()" class="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700/50" title="Alternar Modo Escuro/Claro">
+                <i id="themeIcon" class="fa-solid fa-sun text-amberGlow-400"></i>
+            </button>
+
+            <!-- Quick Action: Emitir Fatura -->
+            <button onclick="openModal('modalNewInvoice')" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-nexus-600 to-cyberCyan-600 hover:from-nexus-500 hover:to-cyberCyan-500 text-white font-bold text-xs shadow-lg glow-cyan transition-all transform hover:-translate-y-0.5">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <span>Emitir Fatura</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Master Navigation Tabs -->
+    <div class="bg-cardCosmic/40 border-b border-borderCosmic px-4 lg:px-8 py-2 overflow-x-auto">
+        <nav class="flex space-x-1 sm:space-x-2 min-w-max" id="navTabs">
+            <button onclick="switchTab('dashboard')" class="tab-btn active px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all bg-gradient-to-r from-nexus-600 to-cyberCyan-600 text-white shadow-md">
+                <i class="fa-solid fa-gauge-high"></i> Dashboard
+            </button>
+            <button onclick="switchTab('crm')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-filter-circle-dollar"></i> CRM & Funil
+            </button>
+            <button onclick="switchTab('clients')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-users"></i> Clientes
+            </button>
+            <button onclick="switchTab('invoices')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-receipt"></i> Facturação
+            </button>
+            <button onclick="switchTab('quotes')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-file-signature"></i> Orçamentos
+            </button>
+            <button onclick="switchTab('inventory')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-boxes-stacked"></i> Inventário
+            </button>
+            <button onclick="switchTab('tasks')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-list-check"></i> Tarefas
+            </button>
+            <button onclick="switchTab('calendar')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-calendar-days"></i> Calendário
+            </button>
+            <button onclick="switchTab('support')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-headset"></i> Suporte (SLA)
+            </button>
+            <button onclick="switchTab('ai')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-brain"></i> Copilot IA
+            </button>
+        </nav>
+    </div>
+
+    <!-- Master Main Viewport -->
+    <main class="flex-1 p-4 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+        <!-- TAB 1: EXECUTIVE DASHBOARD -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+            <!-- 8K Metric Tiles Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-panel p-5 rounded-2xl border border-borderCosmic hover:border-emeraldGlow-500/50 transition-all flex flex-col justify-between">
+                    <div class="flex items-center justify-between text-xs font-semibold uppercase text-slate-400">
+                        <span>Receita Paga (Mês)</span>
+                        <div class="w-8 h-8 rounded-lg bg-emeraldGlow-500/10 text-emeraldGlow-400 flex items-center justify-center">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="text-3xl font-black text-emeraldGlow-400 tracking-tight" id="dashPaidRevenue">-- €</div>
+                        <div class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-arrow-trend-up text-emeraldGlow-400"></i> Faturação liquidada em conta
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-5 rounded-2xl border border-borderCosmic hover:border-cyberCyan-500/50 transition-all flex flex-col justify-between">
+                    <div class="flex items-center justify-between text-xs font-semibold uppercase text-slate-400">
+                        <span>Pipeline Comercial (CRM)</span>
+                        <div class="w-8 h-8 rounded-lg bg-cyberCyan-500/10 text-cyberCyan-400 flex items-center justify-center">
+                            <i class="fa-solid fa-funnel-dollar"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="text-3xl font-black text-cyberCyan-400 tracking-tight" id="dashPipelineValue">-- €</div>
+                        <div class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-handshake text-cyberCyan-400"></i> <span id="dashDealsCount">--</span> oportunidades ativas
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-5 rounded-2xl border border-borderCosmic hover:border-nexus-500/50 transition-all flex flex-col justify-between">
+                    <div class="flex items-center justify-between text-xs font-semibold uppercase text-slate-400">
+                        <span>Faturação Pendente</span>
+                        <div class="w-8 h-8 rounded-lg bg-nexus-500/10 text-nexus-400 flex items-center justify-center">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="text-3xl font-black text-nexus-400 tracking-tight" id="dashPendingRevenue">-- €</div>
+                        <div class="text-[11px] text-amberGlow-400 mt-1 flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-triangle-exclamation"></i> <span id="dashOverdueRevenue">-- €</span> em atraso
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-5 rounded-2xl border border-borderCosmic hover:border-amberGlow-500/50 transition-all flex flex-col justify-between">
+                    <div class="flex items-center justify-between text-xs font-semibold uppercase text-slate-400">
+                        <span>Saúde Operacional</span>
+                        <div class="w-8 h-8 rounded-lg bg-amberGlow-500/10 text-amberGlow-400 flex items-center justify-center">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="text-2xl font-black text-white" id="dashActiveClients">-- Clientes</div>
+                        <div class="text-[11px] text-slate-400 mt-1 flex items-center justify-between">
+                            <span class="text-rose-400 font-bold"><i class="fa-solid fa-boxes-stacked"></i> <span id="dashLowStock">0</span> Stock Baixo</span>
+                            <span class="text-cyan-400 font-bold"><i class="fa-solid fa-headset"></i> <span id="dashOpenTickets">0</span> Tickets</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Real-Time Intelligence Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Deals by Stage Bar Chart -->
+                <div class="glass-panel p-5 rounded-2xl border border-borderCosmic lg:col-span-2 flex flex-col">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-chart-column text-cyberCyan-400"></i> Distribuição do Pipeline por Etapas (€)
+                        </h3>
+                        <span class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-mono">
+                            Tempo Real
+                        </span>
+                    </div>
+                    <div class="relative flex-1 min-h-[260px]">
+                        <canvas id="pipelineStageChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Financial Health Donut -->
+                <div class="glass-panel p-5 rounded-2xl border border-borderCosmic flex flex-col">
+                    <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-nexus-400"></i> Estado das Cobranças
+                    </h3>
+                    <div class="relative flex-1 flex items-center justify-center min-h-[220px]">
+                        <canvas id="financialDonutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Streaming Operational Feeds -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- AI Strategic Alerts -->
+                <div class="glass-panel p-5 rounded-2xl border border-nexus-500/30 bg-gradient-to-br from-cardCosmic to-nexus-950/20">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-microchip text-nexus-400"></i> Copilot IA: Diagnóstico Autónomo
+                        </h4>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-emeraldGlow-500/20 text-emeraldGlow-400 font-mono">LIVE AI</span>
+                    </div>
+                    <div class="space-y-2.5 text-xs" id="dashAiInsightsPreview">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Upcoming Calendar & Deadlines -->
+                <div class="glass-panel p-5 rounded-2xl border border-borderCosmic">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-emeraldGlow-400"></i> Compromissos & Vencimentos Imediatos
+                        </h4>
+                        <button onclick="switchTab('calendar')" class="text-xs text-cyberCyan-400 hover:underline">Ver Todos</button>
+                    </div>
+                    <div class="space-y-2 text-xs" id="dashEventsPreview">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: CRM & FUNIL DE VENDAS -->
+        <section id="tab-crm" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-filter-circle-dollar text-cyberCyan-400"></i> Pipeline Comercial & Gestão de Deals
+                    </h2>
+                    <p class="text-xs text-slate-400">Controlo de oportunidades desde a prospeção até ao fecho contratual</p>
+                </div>
+                <button onclick="openModal('modalNewDeal')" class="px-4 py-2 rounded-xl bg-gradient-to-r from-nexus-600 to-cyberCyan-600 hover:from-nexus-500 hover:to-cyberCyan-500 text-white font-bold text-xs shadow-md transition-all">
+                    <i class="fa-solid fa-plus"></i> Nova Oportunidade
+                </button>
+            </div>
+
+            <!-- Kanban Pipeline View -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-3" id="kanbanBoard">
+                <!-- 5 Columns: Prospecto, Qualificado, Proposta, Negociação, Ganho -->
+            </div>
+        </section>
+
+        <!-- TAB 3: CLIENTES -->
+        <section id="tab-clients" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-users text-nexus-400"></i> Diretório de Clientes & Contas Corporativas
+                    </h2>
+                    <p class="text-xs text-slate-400">Histórico de faturação acumulada, NIF fiscal e contacto de decisores</p>
+                </div>
+                <button onclick="openModal('modalNewClient')" class="px-4 py-2 rounded-xl bg-nexus-600 hover:bg-nexus-500 text-white font-bold text-xs shadow-md transition-all">
+                    <i class="fa-solid fa-user-plus"></i> Novo Cliente
+                </button>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-borderCosmic overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/90 text-xs uppercase font-bold text-slate-400 border-b border-borderCosmic">
+                            <tr>
+                                <th class="px-5 py-3.5">Empresa / Contacto</th>
+                                <th class="px-5 py-3.5">NIF / Cidade</th>
+                                <th class="px-5 py-3.5">Segmento (Tier)</th>
+                                <th class="px-5 py-3.5">Faturação Histórica</th>
+                                <th class="px-5 py-3.5">Estado</th>
+                                <th class="px-5 py-3.5 text-right">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTableBody" class="divide-y divide-borderCosmic">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: FACTURAÇÃO (INVOICING) -->
+        <section id="tab-invoices" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-receipt text-emeraldGlow-400"></i> Gestão de Facturação & Documentos Fiscais
+                    </h2>
+                    <p class="text-xs text-slate-400">Emissão de faturas certificadas, IVA (23%), datas de vencimento e recibos</p>
+                </div>
+                <button onclick="openModal('modalNewInvoice')" class="px-4 py-2 rounded-xl bg-emeraldGlow-600 hover:bg-emeraldGlow-500 text-white font-bold text-xs shadow-md transition-all">
+                    <i class="fa-solid fa-plus"></i> Emitir Fatura
+                </button>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-borderCosmic overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/90 text-xs uppercase font-bold text-slate-400 border-b border-borderCosmic">
+                            <tr>
+                                <th class="px-5 py-3.5">Fatura Nº</th>
+                                <th class="px-5 py-3.5">Cliente / Empresa</th>
+                                <th class="px-5 py-3.5">Emissão & Vencimento</th>
+                                <th class="px-5 py-3.5">Subtotal & IVA</th>
+                                <th class="px-5 py-3.5">Total (€)</th>
+                                <th class="px-5 py-3.5">Estado</th>
+                                <th class="px-5 py-3.5 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoicesTableBody" class="divide-y divide-borderCosmic">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: ORÇAMENTOS (PRESUPUESTOS) -->
+        <section id="tab-quotes" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-file-signature text-amberGlow-400"></i> Orçamentos & Propostas Comerciais
+                    </h2>
+                    <p class="text-xs text-slate-400">Criação rápida de orçamentos com conversão direta em Fatura num único clique</p>
+                </div>
+                <button onclick="openModal('modalNewQuote')" class="px-4 py-2 rounded-xl bg-amberGlow-600 hover:bg-amberGlow-500 text-slate-950 font-bold text-xs shadow-md transition-all">
+                    <i class="fa-solid fa-plus"></i> Novo Orçamento
+                </button>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-borderCosmic overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/90 text-xs uppercase font-bold text-slate-400 border-b border-borderCosmic">
+                            <tr>
+                                <th class="px-5 py-3.5">Orçamento Nº</th>
+                                <th class="px-5 py-3.5">Título da Proposta</th>
+                                <th class="px-5 py-3.5">Cliente</th>
+                                <th class="px-5 py-3.5">Validade</th>
+                                <th class="px-5 py-3.5">Total com IVA</th>
+                                <th class="px-5 py-3.5">Estado</th>
+                                <th class="px-5 py-3.5 text-right">Ação Rápida</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quotesTableBody" class="divide-y divide-borderCosmic">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: INVENTÁRIO -->
+        <section id="tab-inventory" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-boxes-stacked text-cyberCyan-400"></i> Inventário de Produtos, Licenças & Serviços
+                    </h2>
+                    <p class="text-xs text-slate-400">Controlo de existências em armazém com alertas de limiar crítico de segurança</p>
+                </div>
+                <button onclick="openModal('modalNewProduct')" class="px-4 py-2 rounded-xl bg-cyberCyan-600 hover:bg-cyberCyan-500 text-white font-bold text-xs shadow-md transition-all">
+                    <i class="fa-solid fa-plus"></i> Novo Artigo
+                </button>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-borderCosmic overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/90 text-xs uppercase font-bold text-slate-400 border-b border-borderCosmic">
+                            <tr>
+                                <th class="px-5 py-3.5">SKU / Artigo</th>
+                                <th class="px-5 py-3.5">Categoria</th>
+                                <th class="px-5 py-3.5">Preço Custo / Venda</th>
+                                <th class="px-5 py-3.5">Margem Bruta</th>
+                                <th class="px-5 py-3.5">Quantidade em Stock</th>
+                                <th class="px-5 py-3.5 text-right">Ajuste de Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody" class="divide-y divide-borderCosmic">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 7: TAREFAS -->
+        <section id="tab-tasks" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-emeraldGlow-400"></i> Gestor de Tarefas Operacionais & Projetos
+                    </h2>
+                    <p class="text-xs text-slate-400">Priorização de entregáveis, delegação de equipas e prazos limites</p>
+                </div>
+                <button onclick="openModal('modalNewTask')" class="px-4 py-2 rounded-xl bg-emeraldGlow-600 hover:bg-emeraldGlow-500 text-white font-bold text-xs shadow-md transition-all">
+                    <i class="fa-solid fa-plus"></i> Nova Tarefa
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="tasksGrid">
+                <!-- Populated dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 8: CALENDÁRIO -->
+        <section id="tab-calendar" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-days text-nexus-400"></i> Calendário Executivo & Agenda
+                    </h2>
+                    <p class="text-xs text-slate-400">Reuniões com clientes, datas de entrega de projetos e vencimento de faturas</p>
+                </div>
+                <button onclick="openModal('modalNewEvent')" class="px-4 py-2 rounded-xl bg-nexus-600 hover:bg-nexus-500 text-white font-bold text-xs shadow-md transition-all">
+                    <i class="fa-solid fa-calendar-plus"></i> Agendar Evento
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="calendarEventsGrid">
+                <!-- Populated dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 9: SUPORTE & HELPDESK -->
+        <section id="tab-support" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-headset text-cyberCyan-400"></i> Central de Suporte ao Cliente & SLA
+                    </h2>
+                    <p class="text-xs text-slate-400">Triagem de incidentes, canais de atendimento e acompanhamento de chamados</p>
+                </div>
+                <button onclick="openModal('modalNewTicket')" class="px-4 py-2 rounded-xl bg-cyberCyan-600 hover:bg-cyberCyan-500 text-white font-bold text-xs shadow-md transition-all">
+                    <i class="fa-solid fa-plus"></i> Abrir Ticket
+                </button>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-borderCosmic overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900/90 text-xs uppercase font-bold text-slate-400 border-b border-borderCosmic">
+                            <tr>
+                                <th class="px-5 py-3.5">Código / Assunto</th>
+                                <th class="px-5 py-3.5">Cliente</th>
+                                <th class="px-5 py-3.5">Canal</th>
+                                <th class="px-5 py-3.5">Prioridade</th>
+                                <th class="px-5 py-3.5">Estado</th>
+                                <th class="px-5 py-3.5 text-right">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticketsTableBody" class="divide-y divide-borderCosmic">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 10: COPILOT IA AUTÓNOMO -->
+        <section id="tab-ai" class="tab-content hidden space-y-6">
+            <!-- Strategic Insights Stream -->
+            <div class="glass-panel p-6 rounded-2xl border border-nexus-500/40 bg-gradient-to-br from-cardCosmic to-nexus-950/20">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-black text-white flex items-center gap-2">
+                        <i class="fa-solid fa-brain text-nexus-400"></i> Cérebro Autónomo de Inteligência Artificial
+                    </h2>
+                    <span class="text-xs px-3 py-1 rounded-full bg-nexus-600/30 text-nexus-300 font-mono border border-nexus-500/30">
+                        NEXUS NEURAL CORE
+                    </span>
+                </div>
+                <p class="text-xs text-slate-300 mb-6">
+                    A IA analisa continuamente o estado de todas as 8 áreas operacionais do Business OS e gera recomendações estratégicas de impacto.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="aiInsightsFullGrid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Terminal de Conversação com o Business OS -->
+            <div class="glass-panel rounded-2xl border border-borderCosmic p-5 space-y-4">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-terminal text-cyberCyan-400"></i> Terminal Executivo de Comando IA
+                </h3>
+
+                <div class="flex items-center gap-2 overflow-x-auto text-xs pb-1">
+                    <span class="text-slate-500 shrink-0 font-medium">Análises Rápidas:</span>
+                    <button onclick="runAiCommand('Como está a faturação e o fluxo de caixa este mês?')" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 truncate">
+                        Faturação & Caixa
+                    </button>
+                    <button onclick="runAiCommand('Quais são as oportunidades de CRM mais quentes para fechar esta semana?')" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 truncate">
+                        Diagnóstico CRM
+                    </button>
+                    <button onclick="runAiCommand('Existe algum produto em stock crítico que requer reposição imediata?')" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 truncate">
+                        Alertas de Stock
+                    </button>
+                    <button onclick="runAiCommand('Qual o ponto de situação do suporte técnico e SLA?')" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 truncate">
+                        Relatório de Suporte
+                    </button>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-emeraldGlow-400 min-h-[140px] whitespace-pre-line leading-relaxed" id="aiTerminalOutput">
+                    &gt; NEXUS Business OS Core inicializado com telemetria 8K em tempo real.
+                    &gt; Digite uma ordem abaixo ou selecione uma análise rápida acima para diagnóstico imediato.
+                </div>
+
+                <form onsubmit="event.preventDefault(); submitAiTerminal();" class="flex gap-2">
+                    <input type="text" id="aiInputPrompt" placeholder="Diga o que pretende analisar ou ordenar ao Business OS..." class="flex-1 bg-slate-900 border border-borderCosmic rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-nexus-500">
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-nexus-600 to-cyberCyan-600 hover:from-nexus-500 hover:to-cyberCyan-500 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-bolt"></i> Executar Ordem
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-borderCosmic py-6 px-6 text-center text-xs text-slate-500">
+        <p class="font-semibold text-slate-400">NEXUS Business OS &bull; O Sistema Operativo Definitivo para Pequenas e Médias Empresas</p>
+        <p class="mt-1">Full-Stack Python Flask &bull; SQLite com Integridade Referencial &bull; 10 Módulos Integrados &bull; Portugal</p>
+    </footer>
+
+    <!-- MODAL: NOVA FATURA -->
+    <div id="modalNewInvoice" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel bg-cardCosmic border border-borderCosmic rounded-2xl max-w-md w-full p-6 space-y-4 my-8">
+            <div class="flex items-center justify-between border-b border-borderCosmic pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-emeraldGlow-400"></i> Emitir Fatura Certificada
+                </h3>
+                <button onclick="closeModal('modalNewInvoice')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitNewInvoice();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Cliente</label>
+                    <select id="invClientSelect" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                        <!-- Dynamic -->
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Subtotal (€)</label>
+                        <input type="number" step="10" id="invSubtotal" value="2500" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Prazo Vencimento</label>
+                        <select id="invDueDays" class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="30">30 Dias</option>
+                            <option value="15">15 Dias</option>
+                            <option value="60">60 Dias</option>
+                            <option value="0">Pronto Pagamento</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Taxa IVA</label>
+                    <input type="text" value="23% (Taxa Normal)" disabled class="w-full bg-slate-950 border border-borderCosmic rounded-xl px-3 py-2 text-xs text-slate-500">
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t border-borderCosmic">
+                    <button type="button" onclick="closeModal('modalNewInvoice')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-emeraldGlow-600 hover:bg-emeraldGlow-500 text-white font-bold text-xs shadow-md">Emitir Agora</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO ORÇAMENTO -->
+    <div id="modalNewQuote" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel bg-cardCosmic border border-borderCosmic rounded-2xl max-w-md w-full p-6 space-y-4 my-8">
+            <div class="flex items-center justify-between border-b border-borderCosmic pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-file-signature text-amberGlow-400"></i> Novo Orçamento Comercial
+                </h3>
+                <button onclick="closeModal('modalNewQuote')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitNewQuote();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Título da Proposta</label>
+                    <input type="text" id="quoteTitle" placeholder="ex: Upgrade de Infraestrutura Cloud" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Cliente</label>
+                    <select id="quoteClientSelect" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                        <!-- Dynamic -->
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Subtotal (€)</label>
+                        <input type="number" step="50" id="quoteSubtotal" value="4800" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Validade</label>
+                        <select id="quoteValidDays" class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="30">30 Dias</option>
+                            <option value="15">15 Dias</option>
+                            <option value="45">45 Dias</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t border-borderCosmic">
+                    <button type="button" onclick="closeModal('modalNewQuote')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-amberGlow-600 hover:bg-amberGlow-500 text-slate-950 font-bold text-xs shadow-md">Criar Orçamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO DEAL CRM -->
+    <div id="modalNewDeal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardCosmic border border-borderCosmic rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderCosmic pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-filter-circle-dollar text-cyberCyan-400"></i> Nova Oportunidade no Funil
+                </h3>
+                <button onclick="closeModal('modalNewDeal')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitNewDeal();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Título do Deal</label>
+                    <input type="text" id="dealTitle" placeholder="ex: Renovação Contrato Anual" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Cliente</label>
+                    <select id="dealClientSelect" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                        <!-- Dynamic -->
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Valor (€)</label>
+                        <input type="number" step="100" id="dealValue" value="8500" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Etapa Inicial</label>
+                        <select id="dealStage" class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Prospecto">Prospecto</option>
+                            <option value="Qualificado">Qualificado</option>
+                            <option value="Proposta">Proposta</option>
+                            <option value="Negociacao">Negociação</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Data Estimada Fecho</label>
+                    <input type="date" id="dealDate" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t border-borderCosmic">
+                    <button type="button" onclick="closeModal('modalNewDeal')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-cyberCyan-600 hover:bg-cyberCyan-500 text-white font-bold text-xs shadow-md">Adicionar ao Funil</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO CLIENTE -->
+    <div id="modalNewClient" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardCosmic border border-borderCosmic rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderCosmic pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-users text-nexus-400"></i> Registar Nova Conta de Cliente
+                </h3>
+                <button onclick="closeModal('modalNewClient')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitNewClient();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nome da Empresa</label>
+                    <input type="text" id="cliName" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Pessoa Contacto</label>
+                        <input type="text" id="cliContact" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">NIF / NIPC</label>
+                        <input type="text" id="cliTax" value="PT509999999" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Email</label>
+                        <input type="email" id="cliEmail" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Cidade</label>
+                        <input type="text" id="cliCity" value="Lisboa" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Segmento</label>
+                        <select id="cliTier" class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Standard">Standard</option>
+                            <option value="Premium">Premium</option>
+                            <option value="VIP Enterprise">VIP Enterprise</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Telefone</label>
+                        <input type="text" id="cliPhone" value="+351 912 000 000" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t border-borderCosmic">
+                    <button type="button" onclick="closeModal('modalNewClient')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-nexus-600 hover:bg-nexus-500 text-white font-bold text-xs shadow-md">Criar Cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO PRODUTO INVENTARIO -->
+    <div id="modalNewProduct" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardCosmic border border-borderCosmic rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderCosmic pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-boxes-stacked text-cyberCyan-400"></i> Novo Artigo de Inventário
+                </h3>
+                <button onclick="closeModal('modalNewProduct')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitNewProduct();" class="space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">SKU</label>
+                        <input type="text" id="prodSku" placeholder="ex: HW-ROUTER-X" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Categoria</label>
+                        <select id="prodCategory" class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Hardware">Hardware</option>
+                            <option value="Software Licencas">Software / Licenças</option>
+                            <option value="Servicos Consultoria">Serviços / Consultoria</option>
+                            <option value="Acessorios">Acessórios</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nome do Produto</label>
+                    <input type="text" id="prodName" placeholder="ex: Router Gigabit VPN 10Gbps" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Preço Custo (€)</label>
+                        <input type="number" step="1" id="prodCost" value="80" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Preço Venda (€)</label>
+                        <input type="number" step="1" id="prodSale" value="190" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Qtd Inicial</label>
+                        <input type="number" id="prodQty" value="15" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Limiar Mínimo</label>
+                        <input type="number" id="prodMin" value="5" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t border-borderCosmic">
+                    <button type="button" onclick="closeModal('modalNewProduct')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-cyberCyan-600 hover:bg-cyberCyan-500 text-white font-bold text-xs shadow-md">Adicionar Artigo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVA TAREFA -->
+    <div id="modalNewTask" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardCosmic border border-borderCosmic rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderCosmic pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-emeraldGlow-400"></i> Criar Nova Tarefa
+                </h3>
+                <button onclick="closeModal('modalNewTask')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitNewTask();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Título</label>
+                    <input type="text" id="taskTitle" placeholder="ex: Apresentação de Balanço Q4" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Prioridade</label>
+                        <select id="taskPriority" class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Critica">Crítica</option>
+                            <option value="Alta">Alta</option>
+                            <option value="Media">Média</option>
+                            <option value="Baixa">Baixa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Atribuído a</label>
+                        <input type="text" id="taskAssignee" value="Direção" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Data Limite</label>
+                    <input type="date" id="taskDueDate" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t border-borderCosmic">
+                    <button type="button" onclick="closeModal('modalNewTask')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-emeraldGlow-600 hover:bg-emeraldGlow-500 text-white font-bold text-xs shadow-md">Criar Tarefa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: AGENDAR EVENTO -->
+    <div id="modalNewEvent" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardCosmic border border-borderCosmic rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderCosmic pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-plus text-nexus-400"></i> Agendar Evento no Calendário
+                </h3>
+                <button onclick="closeModal('modalNewEvent')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitNewEvent();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Título do Evento</label>
+                    <input type="text" id="eventTitle" placeholder="ex: Reunião Executiva de Alinhamento" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Tipo</label>
+                        <select id="eventType" class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Reuniao">Reunião</option>
+                            <option value="Demo">Demonstração</option>
+                            <option value="Entrega">Entrega de Projeto</option>
+                            <option value="Vencimento">Vencimento Fiscal</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Data</label>
+                        <input type="date" id="eventDate" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Início</label>
+                        <input type="time" id="eventStart" value="10:00" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Fim</label>
+                        <input type="time" id="eventEnd" value="11:30" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Localização</label>
+                    <input type="text" id="eventLoc" value="Virtual / Google Meet" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t border-borderCosmic">
+                    <button type="button" onclick="closeModal('modalNewEvent')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-nexus-600 hover:bg-nexus-500 text-white font-bold text-xs shadow-md">Agendar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO TICKET SUPORTE -->
+    <div id="modalNewTicket" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardCosmic border border-borderCosmic rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderCosmic pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-headset text-cyberCyan-400"></i> Abertura de Ticket de Suporte
+                </h3>
+                <button onclick="closeModal('modalNewTicket')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); submitNewTicket();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Cliente</label>
+                    <select id="ticketClientSelect" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                        <!-- Dynamic -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Assunto do Incidente</label>
+                    <input type="text" id="ticketSubject" placeholder="ex: Lentidão na sincronização de dados" required class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Prioridade</label>
+                        <select id="ticketPriority" class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Alta">Alta</option>
+                            <option value="Critica">Crítica (P0)</option>
+                            <option value="Media">Média</option>
+                            <option value="Baixa">Baixa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Canal de Origem</label>
+                        <select id="ticketChannel" class="w-full bg-slate-900 border border-borderCosmic rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Email">Email</option>
+                            <option value="Chat">Chat</option>
+                            <option value="Telefone">Telefone</option>
+                            <option value="Portal">Portal</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t border-borderCosmic">
+                    <button type="button" onclick="closeModal('modalNewTicket')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-cyberCyan-600 hover:bg-cyberCyan-500 text-white font-bold text-xs shadow-md">Abrir Chamado</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none px-4 py-3 rounded-2xl bg-cardCosmic border border-borderCosmic shadow-2xl text-sm font-semibold text-white flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-check-circle text-emeraldGlow-400 text-base"></i>
+        <span id="toastMsg">Operação executada no Business OS!</span>
+    </div>
+
+    <!-- JAVASCRIPT MASTER BUSINESS LOGIC -->
+    <script>
+        let app = {
+            telemetry: {},
+            clients: [],
+            deals: [],
+            invoices: [],
+            quotes: [],
+            inventory: [],
+            tasks: [],
+            events: [],
+            tickets: [],
+            insights: []
+        };
+
+        let charts = {
+            pipelineBar: null,
+            financialDonut: null
+        };
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                icon.className = 'fa-solid fa-moon text-nexus-600';
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-sun text-amberGlow-400';
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-gradient-to-r', 'from-nexus-600', 'to-cyberCyan-600', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-400');
+            });
+
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick')?.includes(tabId));
+            if (activeBtn) {
+                activeBtn.classList.add('bg-gradient-to-r', 'from-nexus-600', 'to-cyberCyan-600', 'text-white', 'shadow-md');
+                activeBtn.classList.remove('text-slate-400');
+            }
+        }
+
+        function openModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.remove('hidden');
+        }
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.add('hidden');
+        }
+
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const txt = document.getElementById('toastMsg');
+
+            txt.innerText = msg;
+            if (type === 'success') {
+                icon.className = 'fa-solid fa-circle-check text-emeraldGlow-400 text-base';
+            } else if (type === 'error') {
+                icon.className = 'fa-solid fa-circle-exclamation text-rose-500 text-base';
+            } else {
+                icon.className = 'fa-solid fa-circle-info text-cyberCyan-400 text-base';
+            }
+
+            t.classList.remove('translate-y-20', 'opacity-0');
+            t.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                t.classList.add('translate-y-20', 'opacity-0');
+                t.classList.remove('translate-y-0', 'opacity-100');
+            }, 3500);
+        }
+
+        // Master Fetch
+        async function fetchMasterData() {
+            try {
+                const [telRes, cliRes, dealRes, invRes, quoRes, invtRes, tskRes, calRes, tckRes, insRes] = await Promise.all([
+                    fetch('/api/telemetry').then(r => r.json()),
+                    fetch('/api/clients').then(r => r.json()),
+                    fetch('/api/crm').then(r => r.json()),
+                    fetch('/api/invoices').then(r => r.json()),
+                    fetch('/api/quotes').then(r => r.json()),
+                    fetch('/api/inventory').then(r => r.json()),
+                    fetch('/api/tasks').then(r => r.json()),
+                    fetch('/api/calendar').then(r => r.json()),
+                    fetch('/api/tickets').then(r => r.json()),
+                    fetch('/api/ai/insights').then(r => r.json())
+                ]);
+
+                if (telRes.success) app.telemetry = telRes.telemetry;
+                if (cliRes.success) app.clients = cliRes.clients;
+                if (dealRes.success) app.deals = dealRes.deals;
+                if (invRes.success) app.invoices = invRes.invoices;
+                if (quoRes.success) app.quotes = quoRes.quotes;
+                if (invtRes.success) app.inventory = invtRes.inventory;
+                if (tskRes.success) app.tasks = tskRes.tasks;
+                if (calRes.success) app.events = calRes.events;
+                if (tckRes.success) app.tickets = tckRes.tickets;
+                if (insRes.success) app.insights = insRes.insights;
+
+                renderDashboard();
+                renderCRM();
+                renderClients();
+                renderInvoices();
+                renderQuotes();
+                renderInventory();
+                renderTasks();
+                renderCalendar();
+                renderTickets();
+                renderAIInsights();
+                populateDropdowns();
+            } catch(e) {
+                console.error("Erro ao carregar dados do Business OS:", e);
+            }
+        }
+
+        // Render Dashboard
+        function renderDashboard() {
+            const t = app.telemetry;
+            document.getElementById('dashPaidRevenue').innerText = `${(t.total_paid_revenue || 0).toLocaleString('pt-PT', {minimumFractionDigits: 2})} €`;
+            document.getElementById('dashPipelineValue').innerText = `${(t.pipeline_value || 0).toLocaleString('pt-PT', {minimumFractionDigits: 2})} €`;
+            document.getElementById('dashPendingRevenue').innerText = `${(t.total_pending_revenue || 0).toLocaleString('pt-PT', {minimumFractionDigits: 2})} €`;
+            document.getElementById('dashOverdueRevenue').innerText = `${(t.total_overdue_revenue || 0).toLocaleString('pt-PT', {minimumFractionDigits: 2})} €`;
+            document.getElementById('dashDealsCount').innerText = t.active_deals_count || 0;
+            document.getElementById('dashActiveClients').innerText = `${t.active_clients || 0} Contas VIP`;
+            document.getElementById('dashLowStock').innerText = t.low_stock_count || 0;
+            document.getElementById('dashOpenTickets').innerText = t.open_tickets || 0;
+
+            // Pipeline Stages Bar Chart
+            const ctxBar = document.getElementById('pipelineStageChart')?.getContext('2d');
+            if (ctxBar) {
+                if (charts.pipelineBar) charts.pipelineBar.destroy();
+                const dStages = t.deals_by_stage || [];
+                charts.pipelineBar = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: dStages.map(d => d.stage),
+                        datasets: [{
+                            label: 'Valor Total (€)',
+                            data: dStages.map(d => d.total),
+                            backgroundColor: 'rgba(6, 182, 212, 0.85)',
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } },
+                            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+
+            // Financial Donut Chart
+            const ctxDonut = document.getElementById('financialDonutChart')?.getContext('2d');
+            if (ctxDonut) {
+                if (charts.financialDonut) charts.financialDonut.destroy();
+                charts.financialDonut = new Chart(ctxDonut, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Liquidada (Paga)', 'Pendente', 'Em Atraso'],
+                        datasets: [{
+                            data: [t.total_paid_revenue || 1, t.total_pending_revenue || 0, t.total_overdue_revenue || 0],
+                            backgroundColor: ['#10b981', '#8b5cf6', '#f43f5e'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } } },
+                        cutout: '72%'
+                    }
+                });
+            }
+
+            // Previews in dashboard
+            const aiBox = document.getElementById('dashAiInsightsPreview');
+            if (aiBox) {
+                aiBox.innerHTML = app.insights.slice(0, 3).map(i => `
+                    <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-start gap-2.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-nexus-400 mt-1.5 shrink-0"></span>
+                        <div>
+                            <strong class="text-white">${i.category}:</strong> ${i.insight_text}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            const evtBox = document.getElementById('dashEventsPreview');
+            if (evtBox) {
+                evtBox.innerHTML = app.events.slice(0, 3).map(e => `
+                    <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <div class="font-bold text-white">${e.title}</div>
+                            <div class="text-[11px] text-slate-400">${e.event_date} às ${e.start_time} &bull; ${e.company_name || 'Geral'}</div>
+                        </div>
+                        <span class="text-[10px] px-2 py-0.5 rounded-lg bg-emeraldGlow-500/10 text-emeraldGlow-400 border border-emeraldGlow-500/20 font-semibold">${e.event_type}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Render CRM Kanban
+        function renderCRM() {
+            const board = document.getElementById('kanbanBoard');
+            if (!board) return;
+
+            const stages = ['Prospecto', 'Qualificado', 'Proposta', 'Negociacao', 'Ganho'];
+            const titles = {
+                'Prospecto': '1. Prospeção',
+                'Qualificado': '2. Qualificado',
+                'Proposta': '3. Proposta Enviada',
+                'Negociacao': '4. Em Negociação',
+                'Ganho': '5. Ganho (Fechado)'
+            };
+
+            board.innerHTML = stages.map(st => {
+                const stageDeals = app.deals.filter(d => d.stage === st);
+                const stageTotal = stageDeals.reduce((sum, d) => sum + d.value, 0);
+
+                return `
+                <div class="glass-panel p-3.5 rounded-2xl border border-borderCosmic flex flex-col min-h-[480px]">
+                    <div class="pb-2 border-b border-borderCosmic mb-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-white">
+                            <span>${titles[st]}</span>
+                            <span class="px-2 py-0.5 rounded-full bg-slate-800 text-[10px] font-mono text-cyan-400">${stageDeals.length}</span>
+                        </div>
+                        <div class="text-[11px] font-bold text-emeraldGlow-400 mt-1">${stageTotal.toLocaleString('pt-PT')} €</div>
+                    </div>
+
+                    <div class="space-y-2.5 flex-1 overflow-y-auto">
+                        ${stageDeals.map(d => `
+                            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyberCyan-500/50 transition-all text-xs space-y-1.5 shadow-sm">
+                                <div class="font-bold text-white line-clamp-1">${d.title}</div>
+                                <div class="text-slate-400 font-semibold">${d.company_name}</div>
+                                <div class="flex items-center justify-between pt-1 border-t border-slate-800/80">
+                                    <span class="font-extrabold text-cyberCyan-400">${d.value.toLocaleString('pt-PT')} €</span>
+                                    <select onchange="updateDealStage(${d.id}, this.value)" class="bg-slate-950 text-[10px] border border-borderCosmic rounded px-1 py-0.5 text-slate-300 outline-none">
+                                        ${stages.map(s => `<option value="${s}" ${s === d.stage ? 'selected' : ''}>${s}</option>`).join('')}
+                                    </select>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        async function updateDealStage(id, stage) {
+            try {
+                const res = await fetch(`/api/crm/${id}/stage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ stage })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchMasterData();
+                }
+            } catch(e) {
+                showToast("Erro ao mover deal.", "error");
+            }
+        }
+
+        // Render Clientes
+        function renderClients() {
+            const tbody = document.getElementById('clientsTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = app.clients.map(c => `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="px-5 py-4">
+                        <div class="font-bold text-white">${c.company_name}</div>
+                        <div class="text-xs text-slate-400"><i class="fa-solid fa-user text-[10px]"></i> ${c.contact_name} &bull; ${c.email}</div>
+                    </td>
+                    <td class="px-5 py-4 text-xs font-mono text-slate-300">
+                        ${c.tax_id} &bull; <span class="text-slate-400">${c.city}</span>
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-bold bg-nexus-600/20 text-nexus-300 border border-nexus-500/30">
+                            ${c.tier}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 font-bold text-emeraldGlow-400">
+                        ${c.lifetime_value.toLocaleString('pt-PT', {minimumFractionDigits: 2})} €
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emeraldGlow-500/10 text-emeraldGlow-400">
+                            ${c.status}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-right">
+                        <button onclick="aiDiagnoseClientDirect('${c.company_name}')" class="px-2.5 py-1 rounded-lg bg-nexus-600/20 text-nexus-400 hover:bg-nexus-600 hover:text-white text-xs font-bold transition-all border border-nexus-500/30">
+                            <i class="fa-solid fa-brain mr-1"></i> Análise IA
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function aiDiagnoseClientDirect(company) {
+            switchTab('ai');
+            runAiCommand(`Faça um diagnóstico comercial completo da conta '${company}', propondo upsell e retenção.`);
+        }
+
+        // Render Invoices
+        function renderInvoices() {
+            const tbody = document.getElementById('invoicesTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = app.invoices.map(i => {
+                let badgeClass = 'bg-emeraldGlow-500/20 text-emeraldGlow-400 border-emeraldGlow-500/30';
+                if (i.status === 'Pendente') badgeClass = 'bg-nexus-500/20 text-nexus-400 border-nexus-500/30';
+                if (i.status === 'Atrasada') badgeClass = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+
+                return `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="px-5 py-4 font-mono font-bold text-white flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-invoice text-emeraldGlow-400"></i> ${i.invoice_number}
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="font-bold text-white">${i.company_name}</div>
+                        <div class="text-xs text-slate-400">NIF: ${i.tax_id}</div>
+                    </td>
+                    <td class="px-5 py-4 text-xs">
+                        <div class="text-slate-300">Emissão: ${i.issue_date}</div>
+                        <div class="text-slate-500">Vencimento: <strong class="text-white">${i.due_date}</strong></div>
+                    </td>
+                    <td class="px-5 py-4 text-xs font-mono text-slate-300">
+                        ${i.subtotal.toFixed(2)} € + IVA (${i.tax_amount.toFixed(2)} €)
+                    </td>
+                    <td class="px-5 py-4 font-black text-white text-base">
+                        ${i.total_amount.toFixed(2)} €
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-bold border ${badgeClass}">
+                            ${i.status}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-right space-x-1">
+                        ${i.status !== 'Paga' ? `
+                            <button onclick="updateInvoiceStatus(${i.id}, 'Paga')" class="px-2.5 py-1 rounded-lg bg-emeraldGlow-600 hover:bg-emeraldGlow-500 text-white text-xs font-bold transition-all" title="Marcar Paga">
+                                <i class="fa-solid fa-check"></i> Pago
+                            </button>
+                        ` : ''}
+                        <button onclick="showInvoicePrint('${i.invoice_number}', '${i.company_name}', ${i.total_amount})" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">
+                            <i class="fa-solid fa-print"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        async function updateInvoiceStatus(id, status) {
+            try {
+                const res = await fetch(`/api/invoices/${id}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchMasterData();
+                }
+            } catch(e) {
+                showToast("Erro ao atualizar fatura.", "error");
+            }
+        }
+
+        function showInvoicePrint(num, comp, val) {
+            showToast(`Documento ${num} pronto para impressão (${comp} - ${val.toFixed(2)}€)`);
+            window.print();
+        }
+
+        // Render Quotes (With 1-Click Convert to Invoice)
+        function renderQuotes() {
+            const tbody = document.getElementById('quotesTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = app.quotes.map(q => `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="px-5 py-4 font-mono font-bold text-amberGlow-400">
+                        ${q.quote_number}
+                    </td>
+                    <td class="px-5 py-4 font-bold text-white">
+                        ${q.title}
+                    </td>
+                    <td class="px-5 py-4 text-xs font-semibold text-slate-300">
+                        ${q.company_name}
+                    </td>
+                    <td class="px-5 py-4 text-xs font-mono text-slate-400">
+                        ${q.valid_until}
+                    </td>
+                    <td class="px-5 py-4 font-bold text-white">
+                        ${q.total_amount.toFixed(2)} €
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${q.status === 'Convertido' ? 'bg-emeraldGlow-500/20 text-emeraldGlow-400 border border-emeraldGlow-500/30' : 'bg-amberGlow-500/20 text-amberGlow-400 border border-amberGlow-500/30'}">
+                            ${q.status}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-right">
+                        ${q.status !== 'Convertido' ? `
+                            <button onclick="convertQuoteToInvoice(${q.id})" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emeraldGlow-600 to-cyberCyan-600 hover:from-emeraldGlow-500 hover:to-cyberCyan-500 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5 ml-auto">
+                                <i class="fa-solid fa-arrow-right-arrow-left"></i> Converter em Fatura
+                            </button>
+                        ` : `<span class="text-xs text-slate-500 italic"><i class="fa-solid fa-circle-check text-emeraldGlow-400 mr-1"></i> Faturado</span>`}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function convertQuoteToInvoice(qid) {
+            showToast("A converter proposta comercial em Fatura...", "info");
+            try {
+                const res = await fetch(`/api/quotes/${qid}/convert`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchMasterData();
+                    switchTab('invoices');
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch(e) {
+                showToast("Erro ao converter orçamento.", "error");
+            }
+        }
+
+        // Render Inventory
+        function renderInventory() {
+            const tbody = document.getElementById('inventoryTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = app.inventory.map(item => {
+                const isLow = item.stock_quantity <= item.min_threshold;
+                const margin = ((item.sale_price - item.cost_price) / item.sale_price * 100).toFixed(1);
+
+                return `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="px-5 py-4">
+                        <div class="font-bold text-white">${item.name}</div>
+                        <div class="text-xs text-slate-400 font-mono">SKU: ${item.sku}</div>
+                    </td>
+                    <td class="px-5 py-4 text-xs font-semibold text-slate-300">
+                        ${item.category}
+                    </td>
+                    <td class="px-5 py-4 text-xs font-mono text-slate-300">
+                        Custo: ${item.cost_price.toFixed(2)}€ &bull; Venda: <strong class="text-white">${item.sale_price.toFixed(2)}€</strong>
+                    </td>
+                    <td class="px-5 py-4 font-bold text-emeraldGlow-400 text-xs">
+                        +${margin}%
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-base font-black ${isLow ? 'text-rose-400' : 'text-white'}">${item.stock_quantity}</span>
+                            <span class="text-xs text-slate-500">${item.unit}</span>
+                            ${isLow ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 font-bold border border-rose-500/30">STOCK CRÍTICO</span>' : ''}
+                        </div>
+                    </td>
+                    <td class="px-5 py-4 text-right space-x-1">
+                        <button onclick="adjustStock(${item.id}, 10)" class="px-2.5 py-1 rounded-lg bg-emeraldGlow-600/20 text-emeraldGlow-400 hover:bg-emeraldGlow-600 hover:text-white text-xs font-bold transition-all border border-emeraldGlow-500/30">
+                            +10 Unid
+                        </button>
+                        <button onclick="adjustStock(${item.id}, -1)" class="px-2 py-1 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white text-xs font-bold transition-all border border-rose-500/30">
+                            -1
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        async function adjustStock(id, delta) {
+            try {
+                const res = await fetch(`/api/inventory/${id}/adjust`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ delta })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchMasterData();
+                }
+            } catch(e) {
+                showToast("Erro ao ajustar stock.", "error");
+            }
+        }
+
+        // Render Tasks
+        function renderTasks() {
+            const grid = document.getElementById('tasksGrid');
+            if (!grid) return;
+
+            grid.innerHTML = app.tasks.map(t => {
+                let badgePri = 'bg-slate-800 text-slate-400';
+                if (t.priority === 'Critica') badgePri = 'bg-rose-500/20 text-rose-400 border border-rose-500/30';
+                if (t.priority === 'Alta') badgePri = 'bg-amberGlow-500/20 text-amberGlow-400 border border-amberGlow-500/30';
+
+                const isDone = t.status === 'Concluida';
+
+                return `
+                <div class="glass-panel p-5 rounded-2xl border border-borderCosmic flex flex-col justify-between ${isDone ? 'opacity-50' : ''}">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${badgePri}">
+                                Prioridade: ${t.priority}
+                            </span>
+                            <span class="text-[11px] text-slate-500 font-mono">${t.due_date || 'Sem data'}</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white ${isDone ? 'line-through text-slate-400' : ''}">${t.title}</h4>
+                        <div class="text-xs text-cyan-400 mt-2 flex items-center justify-between">
+                            <span><i class="fa-solid fa-user-check mr-1"></i> ${t.assigned_to}</span>
+                            <span class="text-slate-400">${t.company_name || 'Geral'}</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-borderCosmic flex items-center justify-between text-xs">
+                        <span class="font-bold ${isDone ? 'text-emeraldGlow-400' : 'text-slate-400'}">
+                            <i class="fa-solid ${isDone ? 'fa-circle-check text-emeraldGlow-400' : 'fa-clock'} mr-1"></i> ${t.status}
+                        </span>
+                        ${!isDone ? `
+                            <button onclick="updateTaskStatus(${t.id}, 'Concluida')" class="px-2.5 py-1 rounded-lg bg-emeraldGlow-600 hover:bg-emeraldGlow-500 text-white font-bold transition-all">
+                                Concluir
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        async function updateTaskStatus(id, status) {
+            try {
+                const res = await fetch(`/api/tasks/${id}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchMasterData();
+                }
+            } catch(e) {
+                showToast("Erro ao atualizar tarefa.", "error");
+            }
+        }
+
+        // Render Calendar
+        function renderCalendar() {
+            const grid = document.getElementById('calendarEventsGrid');
+            if (!grid) return;
+
+            grid.innerHTML = app.events.map(e => `
+                <div class="glass-panel p-5 rounded-2xl border border-borderCosmic flex flex-col justify-between hover:border-nexus-500/50 transition-all">
+                    <div>
+                        <div class="flex items-center justify-between text-xs mb-2">
+                            <span class="px-2.5 py-0.5 rounded-full font-bold bg-nexus-600/20 text-nexus-300 border border-nexus-500/30">
+                                ${e.event_type}
+                            </span>
+                            <span class="text-slate-400 font-mono">${e.start_time} - ${e.end_time}</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white mt-1">${e.title}</h4>
+                        <div class="text-xs text-slate-300 mt-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-location-dot text-cyberCyan-400"></i> ${e.location}
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-borderCosmic flex items-center justify-between text-xs">
+                        <span class="font-bold text-emeraldGlow-400">${e.event_date}</span>
+                        <span class="text-slate-400">${e.company_name || 'Geral'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Tickets
+        function renderTickets() {
+            const tbody = document.getElementById('ticketsTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = app.tickets.map(t => {
+                let badgePri = 'bg-slate-800 text-slate-400';
+                if (t.priority === 'Critica') badgePri = 'bg-rose-500/20 text-rose-400 border border-rose-500/30';
+                if (t.priority === 'Alta') badgePri = 'bg-amberGlow-500/20 text-amberGlow-400 border border-amberGlow-500/30';
+
+                return `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="px-5 py-4">
+                        <div class="font-mono font-bold text-cyberCyan-400">${t.ticket_code}</div>
+                        <div class="font-bold text-white mt-0.5">${t.subject}</div>
+                    </td>
+                    <td class="px-5 py-4 text-xs font-semibold text-slate-300">
+                        ${t.company_name}
+                    </td>
+                    <td class="px-5 py-4 text-xs text-slate-400">
+                        <i class="fa-solid fa-paper-plane mr-1 text-slate-500"></i> ${t.channel}
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${badgePri}">
+                            ${t.priority}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold ${t.status === 'Resolvido' ? 'bg-emeraldGlow-500/20 text-emeraldGlow-400 border border-emeraldGlow-500/30' : 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'}">
+                            ${t.status}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-right">
+                        ${t.status !== 'Resolvido' ? `
+                            <button onclick="updateTicketStatus(${t.id}, 'Resolvido')" class="px-2.5 py-1 rounded-lg bg-emeraldGlow-600 hover:bg-emeraldGlow-500 text-white text-xs font-bold transition-all">
+                                Fechar
+                            </button>
+                        ` : '<span class="text-xs text-slate-500"><i class="fa-solid fa-check text-emeraldGlow-400"></i> Concluído</span>'}
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        async function updateTicketStatus(id, status) {
+            try {
+                const res = await fetch(`/api/tickets/${id}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchMasterData();
+                }
+            } catch(e) {
+                showToast("Erro ao atualizar ticket.", "error");
+            }
+        }
+
+        // Render AI Insights
+        function renderAIInsights() {
+            const grid = document.getElementById('aiInsightsFullGrid');
+            if (!grid) return;
+
+            grid.innerHTML = app.insights.map(i => `
+                <div class="glass-panel p-5 rounded-2xl border border-borderCosmic flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-bold bg-nexus-600/30 text-nexus-300 border border-nexus-500/30">
+                                ${i.category}
+                            </span>
+                            <span class="text-xs text-emeraldGlow-400 font-bold font-mono">Impacto: ${i.impact_score}%</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mt-1">${i.insight_text}</h4>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-borderCosmic text-xs text-cyberCyan-300 font-medium">
+                        <i class="fa-solid fa-circle-arrow-right mr-1.5"></i> ${i.action_recommended}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // AI Terminal Execution
+        async function runAiCommand(prompt) {
+            document.getElementById('aiInputPrompt').value = prompt;
+            submitAiTerminal();
+        }
+
+        async function submitAiTerminal() {
+            const input = document.getElementById('aiInputPrompt');
+            const prompt = input.value.trim();
+            if (!prompt) return;
+
+            const term = document.getElementById('aiTerminalOutput');
+            term.innerText = `> Analisando dados dos 10 módulos operacionais do Business OS...\n> Executando modelo com heurística preditiva...`;
+
+            try {
+                const res = await fetch('/api/ai/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    term.innerText = `> Ordem: "${prompt}"\n\n${data.reply}`;
+                    input.value = '';
+                } else {
+                    term.innerText = `> Erro: ${data.error}`;
+                }
+            } catch(e) {
+                term.innerText = `> Erro de comunicação com o Cérebro Autónomo.`;
+            }
+        }
+
+        // Populate Form Dropdowns
+        function populateDropdowns() {
+            const clientsOptions = app.clients.map(c => `<option value="${c.id}">${c.company_name} (${c.contact_name})</option>`).join('');
+
+            const iSelect = document.getElementById('invClientSelect');
+            if (iSelect) iSelect.innerHTML = clientsOptions;
+
+            const qSelect = document.getElementById('quoteClientSelect');
+            if (qSelect) qSelect.innerHTML = clientsOptions;
+
+            const dSelect = document.getElementById('dealClientSelect');
+            if (dSelect) dSelect.innerHTML = clientsOptions;
+
+            const tSelect = document.getElementById('ticketClientSelect');
+            if (tSelect) tSelect.innerHTML = clientsOptions;
+
+            // Dates defaults
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 15);
+            const iso = tomorrow.toISOString().split('T')[0];
+
+            if (document.getElementById('dealDate')) document.getElementById('dealDate').value = iso;
+            if (document.getElementById('taskDueDate')) document.getElementById('taskDueDate').value = iso;
+            if (document.getElementById('eventDate')) document.getElementById('eventDate').value = new Date().toISOString().split('T')[0];
+        }
+
+        // Submissions
+        async function submitNewInvoice() {
+            const payload = {
+                client_id: parseInt(document.getElementById('invClientSelect').value),
+                subtotal: parseFloat(document.getElementById('invSubtotal').value),
+                due_days: parseInt(document.getElementById('invDueDays').value),
+                tax_rate: 23.0
+            };
+            try {
+                const res = await fetch('/api/invoices', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewInvoice');
+                    fetchMasterData();
+                    switchTab('invoices');
+                }
+            } catch(e) {
+                showToast("Erro ao emitir fatura.", "error");
+            }
+        }
+
+        async function submitNewQuote() {
+            const payload = {
+                client_id: parseInt(document.getElementById('quoteClientSelect').value),
+                title: document.getElementById('quoteTitle').value,
+                subtotal: parseFloat(document.getElementById('quoteSubtotal').value),
+                valid_days: parseInt(document.getElementById('quoteValidDays').value)
+            };
+            try {
+                const res = await fetch('/api/quotes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewQuote');
+                    fetchMasterData();
+                    switchTab('quotes');
+                }
+            } catch(e) {
+                showToast("Erro ao criar orçamento.", "error");
+            }
+        }
+
+        async function submitNewDeal() {
+            const payload = {
+                client_id: parseInt(document.getElementById('dealClientSelect').value),
+                title: document.getElementById('dealTitle').value,
+                value: parseFloat(document.getElementById('dealValue').value),
+                stage: document.getElementById('dealStage').value,
+                closing_date: document.getElementById('dealDate').value
+            };
+            try {
+                const res = await fetch('/api/crm', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewDeal');
+                    fetchMasterData();
+                    switchTab('crm');
+                }
+            } catch(e) {
+                showToast("Erro ao criar deal.", "error");
+            }
+        }
+
+        async function submitNewClient() {
+            const payload = {
+                company_name: document.getElementById('cliName').value,
+                contact_name: document.getElementById('cliContact').value,
+                email: document.getElementById('cliEmail').value,
+                phone: document.getElementById('cliPhone').value,
+                city: document.getElementById('cliCity').value,
+                tax_id: document.getElementById('cliTax').value,
+                tier: document.getElementById('cliTier').value,
+                status: 'Ativo'
+            };
+            try {
+                const res = await fetch('/api/clients', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewClient');
+                    fetchMasterData();
+                    switchTab('clients');
+                }
+            } catch(e) {
+                showToast("Erro ao cadastrar cliente.", "error");
+            }
+        }
+
+        async function submitNewProduct() {
+            const payload = {
+                sku: document.getElementById('prodSku').value,
+                name: document.getElementById('prodName').value,
+                category: document.getElementById('prodCategory').value,
+                cost_price: parseFloat(document.getElementById('prodCost').value),
+                sale_price: parseFloat(document.getElementById('prodSale').value),
+                stock_quantity: parseInt(document.getElementById('prodQty').value),
+                min_threshold: parseInt(document.getElementById('prodMin').value),
+                unit: 'Unid'
+            };
+            try {
+                const res = await fetch('/api/inventory', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewProduct');
+                    fetchMasterData();
+                    switchTab('inventory');
+                }
+            } catch(e) {
+                showToast("Erro ao criar artigo.", "error");
+            }
+        }
+
+        async function submitNewTask() {
+            const payload = {
+                title: document.getElementById('taskTitle').value,
+                priority: document.getElementById('taskPriority').value,
+                assigned_to: document.getElementById('taskAssignee').value,
+                due_date: document.getElementById('taskDueDate').value
+            };
+            try {
+                const res = await fetch('/api/tasks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewTask');
+                    fetchMasterData();
+                    switchTab('tasks');
+                }
+            } catch(e) {
+                showToast("Erro ao criar tarefa.", "error");
+            }
+        }
+
+        async function submitNewEvent() {
+            const payload = {
+                title: document.getElementById('eventTitle').value,
+                event_type: document.getElementById('eventType').value,
+                event_date: document.getElementById('eventDate').value,
+                start_time: document.getElementById('eventStart').value,
+                end_time: document.getElementById('eventEnd').value,
+                location: document.getElementById('eventLoc').value
+            };
+            try {
+                const res = await fetch('/api/calendar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewEvent');
+                    fetchMasterData();
+                    switchTab('calendar');
+                }
+            } catch(e) {
+                showToast("Erro ao criar evento.", "error");
+            }
+        }
+
+        async function submitNewTicket() {
+            const payload = {
+                client_id: parseInt(document.getElementById('ticketClientSelect').value),
+                subject: document.getElementById('ticketSubject').value,
+                priority: document.getElementById('ticketPriority').value,
+                channel: document.getElementById('ticketChannel').value
+            };
+            try {
+                const res = await fetch('/api/tickets', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewTicket');
+                    fetchMasterData();
+                    switchTab('support');
+                }
+            } catch(e) {
+                showToast("Erro ao abrir ticket.", "error");
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchMasterData();
+        });
+    </script>
+</body>
+</html>
