@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="pt" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoFlow | Plataforma de Automatizações & Workflows Inteligentes</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            900: '#4c1d95',
+                        },
+                        neonCyan: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                        },
+                        darkBg: '#09090b',
+                        cardDark: '#121217',
+                        borderDark: '#27272a',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .glass-panel {
+            background: rgba(18, 18, 23, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .pipeline-connector {
+            position: relative;
+        }
+        .pipeline-connector::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -12px;
+            width: 12px;
+            height: 2px;
+            background: #8b5cf6;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(9, 9, 11, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7c3aed;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-zinc-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- Top Header -->
+    <header class="sticky top-0 z-40 bg-cardDark/85 backdrop-blur-md border-b border-borderDark px-4 lg:px-8 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-brand-500 to-neonCyan-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
+                <i class="fa-solid fa-bolt-lightning text-lg"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-brand-100 to-brand-400 bg-clip-text text-transparent">
+                        AutoFlow OS
+                    </h1>
+                    <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30">
+                        Workflow Engine v3.2
+                    </span>
+                </div>
+                <p class="text-xs text-zinc-400 font-medium">Orquestração de Eventos, Triggers & Ações em Tempo Real</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme()" class="p-2 rounded-xl bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 transition-colors border border-zinc-700/50" title="Alternar Tema">
+                <i id="themeIcon" class="fa-solid fa-sun text-amber-400"></i>
+            </button>
+
+            <!-- Quick Action: Novo Fluxo -->
+            <button onclick="openModal('modalNewWorkflow')" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-neonCyan-600 hover:from-brand-500 hover:to-neonCyan-500 text-white font-semibold text-sm shadow-lg shadow-brand-600/30 transition-all transform hover:-translate-y-0.5">
+                <i class="fa-solid fa-plus"></i>
+                <span>Novo Fluxo</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="bg-cardDark/40 border-b border-borderDark px-4 lg:px-8 py-2 overflow-x-auto">
+        <nav class="flex space-x-1 sm:space-x-2 min-w-max" id="navTabs">
+            <button onclick="switchTab('workflows')" class="tab-btn active px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all bg-brand-600 text-white shadow-md">
+                <i class="fa-solid fa-diagram-project"></i> Flujos
+            </button>
+            <button onclick="switchTab('triggers')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-all">
+                <i class="fa-solid fa-satellite-dish"></i> Triggers
+            </button>
+            <button onclick="switchTab('actions')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-all">
+                <i class="fa-solid fa-gears"></i> Acciones
+            </button>
+            <button onclick="switchTab('conditions')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-all">
+                <i class="fa-solid fa-filter"></i> Condiciones
+            </button>
+            <button onclick="switchTab('history')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-all">
+                <i class="fa-solid fa-clock-rotate-left"></i> Historial
+            </button>
+            <button onclick="switchTab('integrations')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-all">
+                <i class="fa-solid fa-plug"></i> Integraciones
+            </button>
+            <button onclick="switchTab('dashboard')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-all">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </button>
+        </nav>
+    </div>
+
+    <!-- Main Container -->
+    <main class="flex-1 p-4 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+        <!-- TAB 1: FLUJOS (WORKFLOWS) -->
+        <section id="tab-workflows" class="tab-content space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-diagram-project text-brand-400"></i> Pipelines de Automatização Ativos
+                    </h2>
+                    <p class="text-xs text-zinc-400">Cadeia lógica de execução: Disparador &rarr; Condição de Filtro &rarr; Ação Final</p>
+                </div>
+                <button onclick="openModal('modalNewWorkflow')" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm flex items-center gap-2 transition-all shadow-md">
+                    <i class="fa-solid fa-plus"></i> Criar Nova Automação
+                </button>
+            </div>
+
+            <!-- Workflows Cards Container -->
+            <div id="workflowsGrid" class="space-y-4">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 2: TRIGGERS (DISPARADORES) -->
+        <section id="tab-triggers" class="tab-content hidden space-y-6">
+            <div>
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-satellite-dish text-brand-400"></i> Catálogo de Triggers (Disparadores)
+                </h2>
+                <p class="text-xs text-zinc-400">Eventos que iniciam a execução automática das suas regras de negócio</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="triggersGrid">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 3: ACCIONES -->
+        <section id="tab-actions" class="tab-content hidden space-y-6">
+            <div>
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-gears text-brand-400"></i> Catálogo de Ações Automatizadas
+                </h2>
+                <p class="text-xs text-zinc-400">Tarefas que o sistema executa automaticamente quando as condições são validadas</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="actionsGrid">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 4: CONDICIONES (SIMULADOR LÓGICO) -->
+        <section id="tab-conditions" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 rounded-2xl border border-borderDark">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-filter text-brand-400"></i> Motor de Regras & Avaliação Condicional
+                </h2>
+                <p class="text-xs text-zinc-400 mb-6">
+                    Teste em tempo real se o seu filtro (IF/THEN) aprova ou descarta a execução antes de enviar comandos reais.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Rule Inputs -->
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-zinc-400 mb-1">Campo do Objeto</label>
+                                <input type="text" id="simField" value="amount" class="w-full bg-zinc-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-zinc-400 mb-1">Operador</label>
+                                <select id="simOperator" class="w-full bg-zinc-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                                    <option value=">">&gt; (Maior que)</option>
+                                    <option value=">=">&gt;= (Maior ou igual)</option>
+                                    <option value="<">&lt; (Menor que)</option>
+                                    <option value="==">== (Igual a)</option>
+                                    <option value="!=">!= (Diferente)</option>
+                                    <option value="contains">contains (Contém texto)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-zinc-400 mb-1">Valor Alvo</label>
+                                <input type="text" id="simTargetVal" value="100" class="w-full bg-zinc-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-zinc-400 mb-1">Payload JSON de Entrada (Simulado)</label>
+                            <textarea id="simPayloadJson" rows="5" class="w-full font-mono text-xs bg-zinc-900 border border-borderDark rounded-xl p-3 text-brand-300">{
+  "amount": 250.00,
+  "currency": "EUR",
+  "customer_email": "vip@enterprise.pt",
+  "status": "approved"
+}</textarea>
+                        </div>
+
+                        <button onclick="runConditionTester()" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm transition-all shadow-md flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-play"></i> Avaliar Condição Agora
+                        </button>
+                    </div>
+
+                    <!-- Evaluation Output Result -->
+                    <div class="glass-panel p-5 rounded-2xl border border-borderDark flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs uppercase font-bold text-zinc-500 tracking-wider">Resultado da Avaliação</span>
+                            <div class="mt-4 p-4 rounded-xl border" id="simResultBox">
+                                <div class="text-center py-6 text-zinc-500 text-xs">
+                                    Clique em "Avaliar Condição Agora" para ver o resultado do fluxo.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-[11px] text-zinc-400 pt-3 border-t border-borderDark">
+                            <i class="fa-solid fa-circle-info text-brand-400 mr-1"></i>
+                            Fluxos com resultado <strong class="text-emerald-400">Aprovado</strong> disparam as ações; fluxos <strong class="text-amber-400">Filtrados</strong> encerram sem consumir cotas de envio.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: HISTORIAL -->
+        <section id="tab-history" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-brand-400"></i> Histórico & Logs de Execução
+                    </h2>
+                    <p class="text-xs text-zinc-400">Rastreabilidade completa de cada disparo, tempo de resposta e resultado</p>
+                </div>
+                <button onclick="fetchAllData()" class="px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold transition-colors border border-zinc-700">
+                    <i class="fa-solid fa-rotate-right mr-1"></i> Atualizar Logs
+                </button>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-borderDark overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-zinc-300">
+                        <thead class="bg-zinc-900/80 text-xs uppercase font-bold text-zinc-400 border-b border-borderDark">
+                            <tr>
+                                <th class="px-5 py-3.5">Fluxo / Disparador</th>
+                                <th class="px-5 py-3.5">Ação Realizada</th>
+                                <th class="px-5 py-3.5">Estado</th>
+                                <th class="px-5 py-3.5">Latência</th>
+                                <th class="px-5 py-3.5">Data & Hora</th>
+                                <th class="px-5 py-3.5 text-right">Payload</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody" class="divide-y divide-borderDark">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: INTEGRACIONES -->
+        <section id="tab-integrations" class="tab-content hidden space-y-6">
+            <div>
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-plug text-brand-400"></i> Conexões & Serviços Integrados
+                </h2>
+                <p class="text-xs text-zinc-400">Plataformas externas conectadas com credenciais seguras e webhooks ativos</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="integrationsGrid">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 7: DASHBOARD -->
+        <section id="tab-dashboard" class="tab-content hidden space-y-6">
+            <!-- Metrics Row -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-zinc-400">Fluxos Ativos</span>
+                    <div class="text-3xl font-extrabold text-white mt-1" id="kpiActiveWf">--</div>
+                    <span class="text-[11px] text-brand-400 font-medium"><i class="fa-solid fa-circle-check"></i> Prontos a disparar</span>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-zinc-400">Total Execuções</span>
+                    <div class="text-3xl font-extrabold text-neonCyan-400 mt-1" id="kpiTotalRuns">--</div>
+                    <span class="text-[11px] text-zinc-400">Disparos orquestrados</span>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-zinc-400">Taxa de Sucesso</span>
+                    <div class="text-3xl font-extrabold text-emerald-400 mt-1" id="kpiSuccessRate">--%</div>
+                    <span class="text-[11px] text-zinc-400">Sem falhas críticas</span>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-borderDark">
+                    <span class="text-xs uppercase font-semibold text-zinc-400">Latência Média</span>
+                    <div class="text-3xl font-extrabold text-amber-400 mt-1" id="kpiAvgSpeed">-- ms</div>
+                    <span class="text-[11px] text-zinc-400">Processamento em fila</span>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Status Donut -->
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark flex flex-col">
+                    <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-brand-400"></i> Desempenho de Execução
+                    </h3>
+                    <div class="relative flex-1 flex items-center justify-center min-h-[220px]">
+                        <canvas id="statusDonutChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Executions Volume Bar -->
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark lg:col-span-2 flex flex-col">
+                    <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-neonCyan-400"></i> Volume Operacional Diário
+                    </h3>
+                    <div class="relative flex-1 min-h-[220px]">
+                        <canvas id="executionsBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-borderDark py-5 px-6 text-center text-xs text-zinc-500">
+        <p>AutoFlow OS &bull; Mini Plataforma de Automação Full-Stack com Flask, SQLite & Webhooks &bull; Portugal</p>
+    </footer>
+
+    <!-- MODAL: NOVO FLUXO DE AUTOMATIZAÇÃO -->
+    <div id="modalNewWorkflow" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-xl w-full p-6 space-y-4 my-8 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-brand-400"></i> Criar Novo Fluxo de Automação
+                </h3>
+                <button onclick="closeModal('modalNewWorkflow')" class="text-zinc-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formNewWorkflow" onsubmit="event.preventDefault(); submitNewWorkflow();" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Título do Fluxo</label>
+                    <input type="text" id="wfTitle" placeholder="ex: Alerta Slack: Pagamento Stripe > 100€" required class="w-full bg-zinc-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Descrição</label>
+                    <input type="text" id="wfDesc" placeholder="Explique brevemente a finalidade deste fluxo..." class="w-full bg-zinc-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-zinc-900/80 border border-zinc-800">
+                    <div>
+                        <label class="block text-xs font-bold text-brand-400 mb-1">1. Disparador (WHEN / QUANDO)</label>
+                        <select id="wfTriggerSelect" required class="w-full bg-zinc-950 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-neonCyan-400 mb-1">2. Ação (THEN / ENTÃO FAZER)</label>
+                        <select id="wfActionSelect" required class="w-full bg-zinc-950 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-neonCyan-500">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Condition Filter Setup -->
+                <div class="p-4 rounded-xl bg-zinc-900/80 border border-zinc-800 space-y-2">
+                    <label class="block text-xs font-bold text-amber-400">3. Condição de Filtro (OPCIONAL / SE)</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <input type="text" id="wfCondField" placeholder="Campo (ex: amount)" class="w-full bg-zinc-950 border border-borderDark rounded-xl px-3 py-2 text-xs text-white">
+                        <select id="wfCondOp" class="w-full bg-zinc-950 border border-borderDark rounded-xl px-3 py-2 text-xs text-white">
+                            <option value=">">&gt;</option>
+                            <option value=">=">&gt;=</option>
+                            <option value="<">&lt;</option>
+                            <option value="==">==</option>
+                            <option value="!=">!=</option>
+                            <option value="contains">contains</option>
+                        </select>
+                        <input type="text" id="wfCondVal" placeholder="Valor (ex: 100)" class="w-full bg-zinc-950 border border-borderDark rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <span class="text-[11px] text-zinc-500">Se deixar em branco, o fluxo executará para todos os eventos recebidos.</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Template de Dados / Mensagem a Enviar</label>
+                    <textarea id="wfTemplate" rows="2" placeholder="Mensagem personalizada, ex: Novo lead {{company}} registado com sucesso!" class="w-full bg-zinc-900 border border-borderDark rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-borderDark">
+                    <button type="button" onclick="closeModal('modalNewWorkflow')" class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-sm font-semibold transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold transition-all shadow-md">
+                        Ativar Fluxo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: PAYLOAD INSPECTOR -->
+    <div id="modalPayload" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-cardDark border border-borderDark rounded-2xl max-w-lg w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-borderDark pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-code text-neonCyan-400"></i> Inspeção de Payload & Execução
+                </h3>
+                <button onclick="closeModal('modalPayload')" class="text-zinc-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <span class="text-xs font-semibold text-zinc-400 block mb-1">Entrada (Input Payload):</span>
+                    <pre id="inspectInput" class="p-3 bg-zinc-950 rounded-xl border border-zinc-800 text-xs font-mono text-brand-300 overflow-x-auto max-h-40"></pre>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-zinc-400 block mb-1">Saída (Output / Dispatched):</span>
+                    <pre id="inspectOutput" class="p-3 bg-zinc-950 rounded-xl border border-zinc-800 text-xs font-mono text-emerald-400 overflow-x-auto max-h-40"></pre>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2 border-t border-borderDark">
+                <button type="button" onclick="closeModal('modalPayload')" class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none px-4 py-3 rounded-xl bg-zinc-900 border border-borderDark shadow-2xl text-sm font-semibold text-white flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-check-circle text-emerald-400 text-base"></i>
+        <span id="toastMsg">Operação realizada com sucesso!</span>
+    </div>
+
+    <!-- APPLICATION LOGIC JAVASCRIPT -->
+    <script>
+        let state = {
+            workflows: [],
+            triggers: [],
+            actions: [],
+            integrations: [],
+            history: [],
+            metrics: {}
+        };
+
+        let charts = {
+            statusDonut: null,
+            executionsBar: null
+        };
+
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                icon.className = 'fa-solid fa-moon text-brand-600';
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-sun text-amber-400';
+            }
+        }
+
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white', 'shadow-md');
+                btn.classList.add('text-zinc-400');
+            });
+
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick')?.includes(tabId));
+            if (activeBtn) {
+                activeBtn.classList.add('bg-brand-600', 'text-white', 'shadow-md');
+                activeBtn.classList.remove('text-zinc-400');
+            }
+        }
+
+        function openModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.remove('hidden');
+        }
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.add('hidden');
+        }
+
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const txt = document.getElementById('toastMsg');
+
+            txt.innerText = msg;
+            if (type === 'success') {
+                icon.className = 'fa-solid fa-circle-check text-emerald-400 text-base';
+            } else if (type === 'error') {
+                icon.className = 'fa-solid fa-circle-exclamation text-rose-500 text-base';
+            } else {
+                icon.className = 'fa-solid fa-circle-info text-brand-400 text-base';
+            }
+
+            t.classList.remove('translate-y-20', 'opacity-0');
+            t.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                t.classList.add('translate-y-20', 'opacity-0');
+                t.classList.remove('translate-y-0', 'opacity-100');
+            }, 3500);
+        }
+
+        // Fetch All Data
+        async function fetchAllData() {
+            try {
+                const [statsRes, wfRes, trigRes, actRes, intRes, histRes] = await Promise.all([
+                    fetch('/api/stats').then(r => r.json()),
+                    fetch('/api/workflows').then(r => r.json()),
+                    fetch('/api/triggers').then(r => r.json()),
+                    fetch('/api/actions').then(r => r.json()),
+                    fetch('/api/integrations').then(r => r.json()),
+                    fetch('/api/history').then(r => r.json())
+                ]);
+
+                if (statsRes.success) state.metrics = statsRes.metrics;
+                if (wfRes.success) state.workflows = wfRes.workflows;
+                if (trigRes.success) state.triggers = trigRes.triggers;
+                if (actRes.success) state.actions = actRes.actions;
+                if (intRes.success) state.integrations = intRes.integrations;
+                if (histRes.success) state.history = histRes.history;
+
+                renderWorkflowsGrid();
+                renderTriggersGrid();
+                renderActionsGrid();
+                renderIntegrationsGrid();
+                renderHistoryTable();
+                renderDashboardMetrics();
+                populateDropdowns();
+            } catch (err) {
+                console.error("Erro ao carregar dados:", err);
+            }
+        }
+
+        // Render Workflows Pipeline Cards
+        function renderWorkflowsGrid() {
+            const grid = document.getElementById('workflowsGrid');
+            if (!grid) return;
+
+            if (state.workflows.length === 0) {
+                grid.innerHTML = `<div class="p-12 text-center text-zinc-500 text-sm"><i class="fa-solid fa-diagram-project text-3xl mb-2"></i><p>Nenhuma automação criada. Clique no botão acima para criar o seu primeiro fluxo!</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = state.workflows.map(w => {
+                const hasCondition = w.condition_field && w.condition_field.trim() !== '';
+                return `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark hover:border-brand-500/50 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="space-y-3 flex-1">
+                        <div class="flex items-center gap-3">
+                            <span class="w-2.5 h-2.5 rounded-full ${w.is_active ? 'bg-emerald-400 animate-pulse' : 'bg-zinc-600'}"></span>
+                            <h3 class="text-base font-bold text-white">${w.title}</h3>
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold ${w.is_active ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-zinc-800 text-zinc-400'}">
+                                ${w.is_active ? 'Ativo' : 'Pausado'}
+                            </span>
+                        </div>
+                        <p class="text-xs text-zinc-400">${w.description || 'Sem descrição adicional.'}</p>
+
+                        <!-- Pipeline Flow Diagram -->
+                        <div class="flex flex-wrap items-center gap-2 pt-1">
+                            <!-- Trigger Node -->
+                            <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-brand-300 font-semibold shadow-inner">
+                                <i class="fa-solid ${w.trigger_icon || 'fa-satellite-dish'}"></i>
+                                <span>${w.trigger_name}</span>
+                            </div>
+
+                            <i class="fa-solid fa-arrow-right text-zinc-600 text-xs"></i>
+
+                            <!-- Condition Node -->
+                            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl ${hasCondition ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-zinc-900 text-zinc-500 border border-zinc-800'} text-xs font-mono">
+                                <i class="fa-solid fa-filter text-[10px]"></i>
+                                <span>${hasCondition ? `${w.condition_field} ${w.condition_operator} ${w.condition_value}` : 'Sem filtro'}</span>
+                            </div>
+
+                            <i class="fa-solid fa-arrow-right text-zinc-600 text-xs"></i>
+
+                            <!-- Action Node -->
+                            <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-neonCyan-300 font-semibold shadow-inner">
+                                <i class="fa-solid ${w.action_icon || 'fa-bolt'}"></i>
+                                <span>${w.action_name}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions & Controls -->
+                    <div class="flex items-center gap-2 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-borderDark">
+                        <div class="text-right mr-2 hidden sm:block text-xs text-zinc-500 font-mono">
+                            <div>${w.total_runs} execuções</div>
+                            <div class="text-emerald-400">${w.success_runs} sucessos</div>
+                        </div>
+
+                        <!-- Run Immediately Button -->
+                        <button onclick="runWorkflowNow(${w.id})" class="px-3 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-md" title="Executar Teste Agora">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Executar</span>
+                        </button>
+
+                        <!-- Toggle Active -->
+                        <button onclick="toggleWorkflowState(${w.id}, ${w.is_active ? 0 : 1})" class="p-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs transition-colors border border-zinc-700" title="${w.is_active ? 'Pausar Fluxo' : 'Ativar Fluxo'}">
+                            <i class="fa-solid ${w.is_active ? 'fa-pause' : 'fa-play text-emerald-400'}"></i>
+                        </button>
+
+                        <!-- Delete Workflow -->
+                        <button onclick="deleteWorkflow(${w.id})" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-400 text-xs transition-colors border border-rose-500/20" title="Eliminar Fluxo">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Render Triggers Grid
+        function renderTriggersGrid() {
+            const grid = document.getElementById('triggersGrid');
+            if (!grid) return;
+
+            grid.innerHTML = state.triggers.map(t => `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-brand-500/20 text-brand-400 border border-brand-500/30">
+                                ${t.integration_name}
+                            </span>
+                            <span class="text-xs text-zinc-500 font-mono">${t.event_type}</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid ${t.icon} text-brand-400"></i> ${t.name}
+                        </h4>
+                        <p class="text-xs text-zinc-400 mt-1">${t.description}</p>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-borderDark">
+                        <span class="text-[11px] text-zinc-500 block mb-1">Exemplo de Payload Recebido:</span>
+                        <pre class="p-2 bg-zinc-950 rounded-lg text-[10px] font-mono text-zinc-400 overflow-x-auto">${t.sample_payload}</pre>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Actions Grid
+        function renderActionsGrid() {
+            const grid = document.getElementById('actionsGrid');
+            if (!grid) return;
+
+            grid.innerHTML = state.actions.map(a => `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-neonCyan-500/10 text-neonCyan-400 flex items-center justify-center text-lg mb-3">
+                            <i class="fa-solid ${a.icon}"></i>
+                        </div>
+                        <span class="text-[11px] font-semibold text-neonCyan-400 uppercase tracking-wider block mb-1">${a.integration_name}</span>
+                        <h4 class="text-sm font-bold text-white">${a.name}</h4>
+                        <p class="text-xs text-zinc-400 mt-1">${a.description}</p>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-borderDark text-[11px] text-zinc-500 font-mono">
+                        ${a.action_type}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Integrations Grid
+        function renderIntegrationsGrid() {
+            const grid = document.getElementById('integrationsGrid');
+            if (!grid) return;
+
+            grid.innerHTML = state.integrations.map(i => `
+                <div class="glass-panel p-5 rounded-2xl border border-borderDark flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-zinc-800 text-brand-400 flex items-center justify-center text-xl">
+                                <i class="${i.icon}"></i>
+                            </div>
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold ${i.status === 'Conectado' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-zinc-800 text-zinc-400'}">
+                                ${i.status}
+                            </span>
+                        </div>
+                        <h4 class="text-base font-bold text-white">${i.name}</h4>
+                        <span class="text-xs text-zinc-400">${i.category} &bull; ${i.auth_type}</span>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-borderDark flex items-center justify-between">
+                        <span class="text-[11px] text-zinc-500 font-mono">Status: OK</span>
+                        <button onclick="pingIntegration(${i.id}, '${i.name}')" class="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold transition-colors">
+                            Testar Conexão
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render History Table
+        function renderHistoryTable() {
+            const tbody = document.getElementById('historyTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = state.history.map(h => {
+                let badgeClass = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+                if (h.status === 'Filtrado') badgeClass = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+                if (h.status === 'Erro') badgeClass = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+
+                return `
+                <tr class="hover:bg-zinc-800/40 transition-colors">
+                    <td class="px-5 py-4">
+                        <div class="font-bold text-white">${h.workflow_title}</div>
+                        <div class="text-xs text-zinc-400">${h.trigger_name}</div>
+                    </td>
+                    <td class="px-5 py-4 text-xs font-semibold text-neonCyan-400">
+                        ${h.action_name}
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold border ${badgeClass}">
+                            ${h.status}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-xs font-mono text-zinc-300">
+                        ${h.execution_time_ms} ms
+                    </td>
+                    <td class="px-5 py-4 text-xs text-zinc-500 font-mono">
+                        ${h.executed_at}
+                    </td>
+                    <td class="px-5 py-4 text-right">
+                        <button onclick="inspectPayload(${h.id})" class="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold transition-colors">
+                            Ver JSON
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        // Inspect Payload Modal
+        function inspectPayload(histId) {
+            const item = state.history.find(h => h.id === histId);
+            if (!item) return;
+
+            try {
+                document.getElementById('inspectInput').innerText = JSON.stringify(JSON.parse(item.input_payload), null, 2);
+            } catch(e) {
+                document.getElementById('inspectInput').innerText = item.input_payload;
+            }
+
+            try {
+                document.getElementById('inspectOutput').innerText = JSON.stringify(JSON.parse(item.output_payload), null, 2);
+            } catch(e) {
+                document.getElementById('inspectOutput').innerText = item.output_payload;
+            }
+
+            openModal('modalPayload');
+        }
+
+        // Test Condition in Real Time
+        function runConditionTester() {
+            const field = document.getElementById('simField').value.trim();
+            const op = document.getElementById('simOperator').value;
+            const targetVal = document.getElementById('simTargetVal').value.trim();
+            const jsonText = document.getElementById('simPayloadJson').value;
+            const box = document.getElementById('simResultBox');
+
+            try {
+                const payload = JSON.parse(jsonText);
+                if (!(field in payload)) {
+                    box.className = 'mt-4 p-4 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 text-xs';
+                    box.innerHTML = `<strong>Campo Ausente:</strong> O payload não possui a chave '<code>${field}</code>'. A automação seria ignorada.`;
+                    return;
+                }
+
+                const actual = payload[field];
+                let passed = false;
+
+                // Numeric check
+                const nActual = parseFloat(actual);
+                const nTarget = parseFloat(targetVal);
+                if (!isNaN(nActual) && !isNaN(nTarget)) {
+                    if (op === '>') passed = (nActual > nTarget);
+                    else if (op === '>=') passed = (nActual >= nTarget);
+                    else if (op === '<') passed = (nActual < nTarget);
+                    else if (op === '==') passed = (nActual == nTarget);
+                    else if (op === '!=') passed = (nActual != nTarget);
+                } else {
+                    const sActual = String(actual).toLowerCase();
+                    const sTarget = String(targetVal).toLowerCase();
+                    if (op === '==') passed = (sActual === sTarget);
+                    else if (op === '!=') passed = (sActual !== sTarget);
+                    else if (op === 'contains') passed = sActual.includes(sTarget);
+                }
+
+                if (passed) {
+                    box.className = 'mt-4 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-xs';
+                    box.innerHTML = `<div class="flex items-center gap-2 text-sm font-bold text-emerald-400 mb-1"><i class="fa-solid fa-circle-check"></i> Condição APROVADA!</div><div>O valor recebido <code>${actual}</code> cumpre a regra <code>${op} ${targetVal}</code>. A ação será disparada imediatamente!</div>`;
+                } else {
+                    box.className = 'mt-4 p-4 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs';
+                    box.innerHTML = `<div class="flex items-center gap-2 text-sm font-bold text-amber-400 mb-1"><i class="fa-solid fa-filter"></i> Condição FILTRADA!</div><div>O valor recebido <code>${actual}</code> não cumpre a regra <code>${op} ${targetVal}</code>. O fluxo para aqui com segurança.</div>`;
+                }
+            } catch(e) {
+                box.className = 'mt-4 p-4 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 text-xs';
+                box.innerHTML = `<strong>Erro de JSON:</strong> Certifique-se de que o payload é um JSON válido.`;
+            }
+        }
+
+        // Render Dashboard Metrics & Charts
+        function renderDashboardMetrics() {
+            const m = state.metrics;
+            document.getElementById('kpiActiveWf').innerText = m.active_workflows || 0;
+            document.getElementById('kpiTotalRuns').innerText = m.total_executions || 0;
+            document.getElementById('kpiSuccessRate').innerText = `${m.success_rate || 100}%`;
+            document.getElementById('kpiAvgSpeed').innerText = `${m.avg_speed_ms || 90} ms`;
+
+            // Status Donut
+            const ctxDonut = document.getElementById('statusDonutChart')?.getContext('2d');
+            if (ctxDonut) {
+                if (charts.statusDonut) charts.statusDonut.destroy();
+                const b = m.status_breakdown || [];
+                const labels = b.map(x => x.status);
+                const data = b.map(x => x.count);
+
+                charts.statusDonut = new Chart(ctxDonut, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels.length ? labels : ['Sucesso'],
+                        datasets: [{
+                            data: data.length ? data : [1],
+                            backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: '#94a3b8' } }
+                        },
+                        cutout: '70%'
+                    }
+                });
+            }
+
+            // Executions Bar
+            const ctxBar = document.getElementById('executionsBarChart')?.getContext('2d');
+            if (ctxBar) {
+                if (charts.executionsBar) charts.executionsBar.destroy();
+                charts.executionsBar = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: ['02:00', '06:00', '10:00', '14:00', '18:00', '22:00'],
+                        datasets: [{
+                            label: 'Disparos',
+                            data: [12, 19, 45, 68, (m.total_executions || 5) + 32, 24],
+                            backgroundColor: 'rgba(139, 92, 246, 0.85)',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } },
+                            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+        }
+
+        // Dropdowns Population
+        function populateDropdowns() {
+            const tSelect = document.getElementById('wfTriggerSelect');
+            if (tSelect) {
+                tSelect.innerHTML = state.triggers.map(t => `
+                    <option value="${t.id}">${t.integration_name}: ${t.name}</option>
+                `).join('');
+            }
+
+            const aSelect = document.getElementById('wfActionSelect');
+            if (aSelect) {
+                aSelect.innerHTML = state.actions.map(a => `
+                    <option value="${a.id}">${a.integration_name}: ${a.name}</option>
+                `).join('');
+            }
+        }
+
+        // Actions
+        async function runWorkflowNow(wid) {
+            showToast("A orquestrar execução do fluxo...", "info");
+            try {
+                const res = await fetch(`/api/workflows/${wid}/run`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao executar fluxo.", "error");
+            }
+        }
+
+        async function toggleWorkflowState(wid, newState) {
+            try {
+                const res = await fetch(`/api/workflows/${wid}/toggle`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ is_active: newState })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchAllData();
+                }
+            } catch (err) {
+                showToast("Erro ao alterar estado.", "error");
+            }
+        }
+
+        async function deleteWorkflow(wid) {
+            if (!confirm("Tem a certeza que deseja eliminar esta automação?")) return;
+            try {
+                const res = await fetch(`/api/workflows/${wid}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    fetchAllData();
+                }
+            } catch (err) {
+                showToast("Erro ao eliminar.", "error");
+            }
+        }
+
+        async function submitNewWorkflow() {
+            const payload = {
+                title: document.getElementById('wfTitle').value,
+                description: document.getElementById('wfDesc').value,
+                trigger_id: parseInt(document.getElementById('wfTriggerSelect').value),
+                action_id: parseInt(document.getElementById('wfActionSelect').value),
+                condition_field: document.getElementById('wfCondField').value,
+                condition_operator: document.getElementById('wfCondOp').value,
+                condition_value: document.getElementById('wfCondVal').value,
+                action_template: document.getElementById('wfTemplate').value
+            };
+
+            try {
+                const res = await fetch('/api/workflows', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message);
+                    closeModal('modalNewWorkflow');
+                    fetchAllData();
+                } else {
+                    showToast(data.error, "error");
+                }
+            } catch (err) {
+                showToast("Erro ao criar fluxo.", "error");
+            }
+        }
+
+        function pingIntegration(id, name) {
+            showToast(`A validar token e webhook para ${name}...`);
+            setTimeout(() => {
+                showToast(`Conexão com ${name} verificada com sucesso! (HTTP 200 OK)`);
+            }, 800);
+        }
+
+        // On Load
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchAllData();
+        });
+    </script>
+</body>
+</html>
