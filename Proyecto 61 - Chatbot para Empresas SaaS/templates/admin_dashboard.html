@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Painel Administrador{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 900; color: var(--text-dark); display: flex; align-items: center; gap: 0.6rem;">
+            <i class="fa-solid fa-robot" style="color: var(--robot-cyan);"></i> Painel de Administração BotCorp AI
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Supervisão em tempo real de atendimento ao cliente, automação de respostas e gestão de conhecimento.
+        </p>
+    </div>
+    <div>
+        <a href="/chat" class="btn btn-cyan">
+            <i class="fa-solid fa-comments"></i> Abrir Chat em Vivo
+        </a>
+    </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card cyan">
+        <div class="stat-title">Conversas Totais</div>
+        <div class="stat-value">{{ total_convs }}</div>
+        <span class="badge badge-cyan" style="margin-top: 0.5rem;">Sessões Ativas</span>
+    </div>
+
+    <div class="stat-card purple">
+        <div class="stat-title">FAQs Ativas</div>
+        <div class="stat-value">{{ total_faqs }}</div>
+        <span class="badge badge-purple" style="margin-top: 0.5rem;">Regras de Resposta</span>
+    </div>
+
+    <div class="stat-card steel">
+        <div class="stat-title">Base de Conhecimento</div>
+        <div class="stat-value">{{ total_kb }}</div>
+        <span class="badge badge-steel" style="margin-top: 0.5rem;">Artigos Publicados</span>
+    </div>
+
+    <div class="stat-card silver">
+        <div class="stat-title">Mensagens Trocadas</div>
+        <div class="stat-value">{{ total_messages }}</div>
+        <span class="badge badge-green" style="margin-top: 0.5rem;">Respostas Automáticas</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+    <!-- Recent Conversations Panel -->
+    <div class="panel-card" style="border-top: 4px solid var(--robot-cyan);">
+        <div class="panel-header">
+            <h2><i class="fa-solid fa-clock-rotate-left" style="color: var(--robot-cyan);"></i> Últimas Conversas de Clientes</h2>
+            <a href="/admin/history" class="btn btn-secondary btn-sm">Ver Todas</a>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                        <th>Data / Hora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if recent_convs %}
+                        {% for conv in recent_convs %}
+                        <tr>
+                            <td style="font-weight: 800; color: var(--text-dark);">
+                                <i class="fa-solid fa-user" style="color: var(--robot-cyan); margin-right: 0.4rem;"></i>
+                                {{ conv['customer_name'] }}
+                            </td>
+                            <td style="color: var(--text-muted);">{{ conv['customer_email'] or 'Anónimo' }}</td>
+                            <td>
+                                <span class="badge {% if conv['status'] == 'Ativa' %}badge-green{% else %}badge-steel{% endif %}">
+                                    {{ conv['status'] }}
+                                </span>
+                            </td>
+                            <td style="font-size: 0.88rem; color: var(--text-muted);">{{ conv['created_at'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--text-muted);">Sem conversas recentes.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bot Configuration Card -->
+    <div class="panel-card" style="border-top: 4px solid var(--robot-purple);">
+        <div class="panel-header">
+            <h2><i class="fa-solid fa-sliders" style="color: var(--robot-purple);"></i> Definições do Robô</h2>
+        </div>
+
+        <div style="font-size: 0.9rem; space-y-3;">
+            <div style="margin-bottom: 1rem;">
+                <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; display: block;">Nome do Assistente</span>
+                <span style="font-weight: 800; color: var(--text-dark); font-size: 1.05rem;">{{ settings['bot_name'] if settings else 'BotCorp AI' }}</span>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; display: block;">Mensagem de Boas-Vindas</span>
+                <p style="background: #f8fafc; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); font-size: 0.85rem; color: #334155;">
+                    {{ settings['welcome_message'] if settings else 'Olá!' }}
+                </p>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; display: block;">Palavra de Gatilho Humano</span>
+                <span class="badge badge-purple" style="font-size: 0.9rem;">
+                    {{ settings['trigger_word'] if settings else 'AJUDA' }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

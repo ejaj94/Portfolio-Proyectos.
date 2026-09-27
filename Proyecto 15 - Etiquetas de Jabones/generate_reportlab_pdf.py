@@ -4,10 +4,10 @@ from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 from PIL import Image
 
-brain_dir = r"C:\Users\ANGEL RAFAEL\.gemini\antigravity\brain\ce4a2ece-d2d7-41c9-acca-716b5f94d19d"
+brain_dir = r"C:\Users\enman\.gemini\antigravity\brain\ce4a2ece-d2d7-41c9-acca-716b5f94d19d"
 scratch_dir = os.path.join(brain_dir, "scratch")
 
-desktop_dir = r"C:\Users\ANGEL RAFAEL\Desktop"
+desktop_dir = r"C:\Users\enman\Desktop"
 
 print(f"Escritorio detectado para ReportLab: {desktop_dir}")
 

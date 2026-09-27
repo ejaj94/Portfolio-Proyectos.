@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}DÍA 20 — 20 Projetos EJAJ TECH em Produção{% endblock %}
+
+{% block content %}
+<!-- Hero Showcase Banner -->
+<div class="hero-banner">
+    <div style="display: inline-block; background: rgba(139, 92, 246, 0.2); border: 1px solid var(--purple-accent); color: #c084fc; padding: 0.35rem 1.2rem; border-radius: 50px; font-weight: 900; font-size: 0.85rem; margin-bottom: 1rem;">
+        <i class="fa-solid fa-crown"></i> MARCO DOS 20 DIAS — EVOLUÇÃO E ENGENHARIA SEM LIMITES
+    </div>
+    <h1>DÍA 20: De uma Página em Branco a 20 Ecossistemas Digitais</h1>
+    <p>
+        Há quase um ano, encarava o ecrã sem saber por onde começar. Hoje, após 20 dias consecutivos de trabalho incansável, apresentamos a segunda grande vaga de projetos da <strong>EJAJ TECH</strong>, liderada pelo Lead Architect <strong>Enmanuel Jimenez</strong>.
+    </p>
+
+    <!-- Stats Grid -->
+    <div class="stats-counter-grid">
+        <div class="stat-box">
+            <div class="stat-num">20</div>
+            <div class="stat-lbl">Dias Ininterruptos</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" style="color: var(--purple-accent);">20</div>
+            <div class="stat-lbl">Sistemas SaaS Concluídos</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" style="color: var(--rose-accent);">+2.000</div>
+            <div class="stat-lbl">Seguidores no Apoio</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" style="color: var(--cyan-accent);">100%</div>
+            <div class="stat-lbl">Código Autêntico & Real</div>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Slide Showcase Deck -->
+<div class="deck-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span id="slideDayBadge" class="badge-day20" style="font-size: 0.95rem;">
+                <i class="fa-solid fa-calendar-check"></i> <span id="slideDayNum">DÍA 11</span>
+            </span>
+            <span id="slideBadge" class="badge badge-purple">Categoria</span>
+        </div>
+        <span id="slideCounterText" style="color: var(--text-slate); font-weight: 700; font-size: 0.95rem;">
+            Projeto 11 de 20
+        </span>
+    </div>
+
+    <!-- Active Slide Content -->
+    <div style="background: rgba(11, 15, 25, 0.85); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 id="slideTitle" style="font-size: 2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.4rem;">
+            Título do Projeto
+        </h2>
+        <p id="slideSubtitle" style="font-size: 1.1rem; color: var(--purple-accent); font-weight: 700; margin-bottom: 1.25rem;">
+            Subtítulo / Descrição Curta
+        </p>
+
+        <p id="slideDescription" style="font-size: 1.05rem; color: #cbd5e1; margin-bottom: 1.5rem; line-height: 1.7;">
+            Descrição completa do projeto...
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; background: rgba(0,0,0,0.35); padding: 1.25rem; border-radius: 14px; border-left: 4px solid var(--rose-accent);">
+            <div>
+                <span style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-slate); font-weight: 800;">
+                    <i class="fa-solid fa-code"></i> Arquitetura & Tecnologias
+                </span>
+                <span id="slideTechStack" style="font-size: 0.95rem; font-weight: 700; color: #ffffff;">
+                    Python, Flask, SQLite3, REST API
+                </span>
+            </div>
+            <div>
+                <span style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--purple-accent); font-weight: 800;">
+                    <i class="fa-solid fa-chart-line"></i> Impacto Empresarial
+                </span>
+                <span id="slideImpact" style="font-size: 0.95rem; font-weight: 700; color: var(--emerald-accent);">
+                    Resultados práticos...
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thumbnails Navigation Bar -->
+    <div id="thumbnailsContainer" style="display: flex; gap: 0.75rem; overflow-x: auto; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+        <!-- Dynamically rendered thumbnail buttons -->
+    </div>
+
+    <!-- Slide Control Buttons -->
+    <div class="slide-controls">
+        <div style="display: flex; gap: 0.75rem;">
+            <button class="btn btn-secondary" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button class="btn btn-secondary" onclick="nextSlide()">Próximo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <div>
+            <button id="btnAutoPlay" class="btn btn-purple" onclick="toggleAutoPlay()">
+                <i class="fa-solid fa-play"></i> Iniciar Apresentação Automática
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Script Link Callout -->
+<div style="background: linear-gradient(135deg, #141c2e 0%, #0b0f19 100%); border: 2px solid var(--purple-accent); border-radius: 20px; padding: 2rem; text-align: center;">
+    <h3 style="font-size: 1.4rem; font-weight: 900; color: var(--purple-accent); margin-bottom: 0.5rem;">
+        🎙️ Guião de Locução Especial DÍA 20 (+2.000 Seguidores)
+    </h3>
+    <p style="color: var(--text-slate); font-size: 1rem; max-width: 800px; margin: 0 auto 1.5rem auto;">
+        Um texto profundo e cinematográfico celebrando os 20 dias ininterruptos e a conquista de mais de 2.000 seguidores.
+    </p>
+    <a href="/script" class="btn btn-cyan">
+        <i class="fa-solid fa-microphone-lines"></i> Ver Guião de Locução DÍA 20
+    </a>
+</div>
+{% endblock %}

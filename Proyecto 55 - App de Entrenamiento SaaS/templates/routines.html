@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Rutinas de Treino | FitTracker SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">Planos & Rutinas de Treino</h1>
+        <p style="color: #64748b;">Selecione uma rutina estruturada ou crie um plano personalizado.</p>
+    </div>
+    <a href="/log/new" class="btn btn-cyan"><i class="fa-solid fa-play"></i> Treino Livre</a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for r in routines %}
+    <div class="panel-card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <span class="badge badge-cyan">{{ r['category'] }}</span>
+                <span class="badge badge-lime" style="font-size: 0.7rem;"><i class="fa-regular fa-calendar"></i> {{ r['target_days'] }}</span>
+            </div>
+
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin: 0.4rem 0;">{{ r['name'] }}</h2>
+            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 1.25rem;">{{ r['description'] }}</p>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="/routine/{{ r['id'] }}" class="btn btn-secondary btn-sm" style="flex: 1; justify-content: center;"><i class="fa-solid fa-eye"></i> Ver Exercícios</a>
+            <a href="/log/new?routine_id={{ r['id'] }}" class="btn btn-cyan btn-sm" style="flex: 1; justify-content: center;"><i class="fa-solid fa-play"></i> Iniciar</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Chatbot em Tempo Real{% endblock %}
+
+{% block content %}
+<div style="max-width: 850px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 1.5rem;">
+        <h1 style="font-size: 1.8rem; font-weight: 900; color: var(--text-dark);">
+            <i class="fa-solid fa-comments" style="color: var(--robot-cyan);"></i> Demonstrador do Assistente Virtual BotCorp AI
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Teste o robô de atendimento ao cliente em tempo real. Faça perguntas sobre horários, pagamentos ou digite <strong>AJUDA</strong>.
+        </p>
+    </div>
+
+    <!-- Quick FAQ Buttons -->
+    <div style="display: flex; gap: 0.6rem; overflow-x: auto; padding-bottom: 0.75rem; margin-bottom: 1rem; justify-content: center; flex-wrap: wrap;">
+        <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fa-solid fa-bolt"></i> Testar Rápidos:
+        </span>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="sendQuickFaq('Quais os métodos de pagamento?')">
+            💳 Pagamentos
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="sendQuickFaq('Horário de atendimento')">
+            ⏰ Horários
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="sendQuickFaq('Como emitir fatura com NIF?')">
+            🧾 Faturação NIF
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="sendQuickFaq('AJUDA')">
+            🟢 Suporte Humano (AJUDA)
+        </button>
+    </div>
+
+    <!-- Live Robotic Chat Window -->
+    <div class="chat-window">
+        <!-- Header -->
+        <div class="chat-header">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(0, 216, 246, 0.15); border: 2px solid var(--robot-cyan); display: flex; align-items: center; justify-content: center; color: var(--robot-cyan); font-size: 1.2rem;">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div>
+                    <span style="font-weight: 800; color: #ffffff; font-size: 1.05rem; display: block;">
+                        {{ settings['bot_name'] if settings else 'BotCorp AI' }}
+                    </span>
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 0.4rem;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+                        Online & Resposta Automática Ativa
+                    </span>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.reload()" title="Reiniciar Conversa">
+                    <i class="fa-solid fa-rotate-left"></i> Limpar
+                </button>
+            </div>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="chatMessagesBody" class="chat-messages-body">
+            <div class="chat-msg bot">
+                {{ settings['welcome_message'] if settings else 'Olá! Sou o assistente virtual da EJAJ TECH. Como posso ajudar a sua empresa hoje?' }}
+            </div>
+        </div>
+
+        <!-- Footer Input Form -->
+        <form id="chatForm" class="chat-footer">
+            <input type="text" id="chatInputMessage" class="form-control" placeholder="Escreva a sua mensagem ou dúvida aqui..." style="background: #0b132b; color: #ffffff; border-color: rgba(255, 255, 255, 0.2);" autocomplete="off" required>
+            <button type="submit" class="btn btn-cyan">
+                <i class="fa-solid fa-paper-plane"></i> Enviar
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

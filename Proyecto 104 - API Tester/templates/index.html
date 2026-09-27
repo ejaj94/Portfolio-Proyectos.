@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APITester AI — Interactive API Testing Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        testerbrand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            900: '#881337'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+        /* Dark Mode styles */
+        .dark body {
+            background-color: #0b0c10;
+            color: #f1f5f9;
+        }
+        .dark .glass-card {
+            background: rgba(18, 15, 23, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
+        .dark .header-bg {
+            background-color: rgba(18, 13, 20, 0.95);
+            border-color: #271a24;
+        }
+        .dark .tab-active {
+            background: linear-gradient(135deg, #e11d48 0%, #f97316 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 20px -2px rgba(244, 63, 94, 0.4);
+        }
+        .dark .card-sub-bg {
+            background-color: #161019;
+            border-color: #271a24;
+        }
+
+        /* Light Mode styles */
+        body {
+            background-color: #fffafb;
+            color: #0f172a;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(244, 63, 94, 0.25);
+            box-shadow: 0 10px 30px -5px rgba(244, 63, 94, 0.08);
+        }
+        .header-bg {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: #fecdd3;
+        }
+        .tab-active {
+            background: linear-gradient(135deg, #e11d48 0%, #f97316 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 20px -2px rgba(225, 29, 72, 0.35);
+        }
+        .card-sub-bg {
+            background-color: #fff1f2;
+            border-color: #ffe4e6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-rose-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="header-bg border-b sticky top-0 z-50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-rose-500 to-orange-500 flex items-center justify-center text-white font-bold shadow-lg shadow-rose-500/30">
+                    <i class="fa-solid fa-vial text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl tracking-tight text-gray-900 dark:text-white">APITester AI</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Sunset Coral & Crimson — Request & Response Studio</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-xs">
+                <!-- Preset URL Quick Select -->
+                <select onchange="loadPresetUrl(this.value)" class="px-3 py-2 rounded-xl bg-rose-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 font-semibold border border-rose-200 dark:border-rose-900/50 focus:outline-none focus:border-rose-500">
+                    <option value="">⚡ Presets de Teste</option>
+                    <option value="https://jsonplaceholder.typicode.com/users">GET - JSONPlaceholder Users</option>
+                    <option value="https://jsonplaceholder.typicode.com/posts">POST - JSONPlaceholder Posts</option>
+                    <option value="https://httpbin.org/get">GET - HttpBin Test Echo</option>
+                </select>
+
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" id="themeToggleBtn" class="px-3 py-2 rounded-xl bg-rose-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 hover:bg-rose-500 hover:text-white transition flex items-center gap-2 font-bold border border-rose-200 dark:border-rose-900/50 shadow">
+                    <i id="themeIcon" class="fa-solid fa-moon text-orange-400"></i>
+                    <span id="themeText">Modo Escuro</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- Left Sidebar: Request History -->
+        <aside class="lg:col-span-1 glass-card rounded-2xl p-4 flex flex-col justify-between space-y-4 max-h-[800px] overflow-hidden">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-rose-950/60 pb-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-rose-500"></i> Histórico de Pedidos
+                </h3>
+                <button onclick="clearHistory()" class="text-xs text-rose-500 hover:underline font-semibold">Limpar</button>
+            </div>
+
+            <div id="historyList" class="flex-grow space-y-2 overflow-y-auto pr-1">
+                {% for item in history %}
+                <div onclick='reloadFromHistory({{ item | tojson }})' class="p-2.5 rounded-xl card-sub-bg border hover:border-rose-500/50 cursor-pointer transition space-y-1">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold 
+                            {% if item.method == 'GET' %}bg-blue-500/20 text-blue-500
+                            {% elif item.method == 'POST' %}bg-rose-500/20 text-rose-500
+                            {% elif item.method == 'PUT' %}bg-amber-500/20 text-amber-500
+                            {% else %}bg-purple-500/20 text-purple-500{% endif %}">
+                            {{ item.method }}
+                        </span>
+                        <span class="font-mono text-[10px] {% if item.status_code < 300 %}text-rose-500{% else %}text-amber-500{% endif %} font-bold">
+                            {{ item.status_code }}
+                        </span>
+                    </div>
+                    <div class="text-xs font-mono-code truncate text-gray-800 dark:text-gray-200 font-medium">
+                        {{ item.url }}
+                    </div>
+                    <div class="flex justify-between text-[10px] text-gray-400">
+                        <span>{{ item.response_time_ms }} ms</span>
+                        <span>{{ item.created_at[11:16] }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </aside>
+
+        <!-- Right Studio Area: Request Builder & Response Viewer -->
+        <section class="lg:col-span-3 space-y-6">
+            
+            <!-- HTTP Request Bar -->
+            <div class="glass-card rounded-2xl p-4 space-y-4">
+                <div class="flex flex-wrap sm:flex-nowrap gap-3">
+                    <select id="reqMethod" class="px-4 py-3 rounded-xl bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-rose-950/60 font-extrabold text-sm text-rose-600 dark:text-rose-400 focus:outline-none focus:border-rose-500">
+                        <option value="GET">GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="DELETE">DELETE</option>
+                    </select>
+                    
+                    <input type="text" id="reqUrl" placeholder="https://api.exemplo.com/v1/recurso" value="https://jsonplaceholder.typicode.com/users" class="flex-grow px-4 py-3 rounded-xl bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-rose-950/60 font-mono-code text-sm text-gray-900 dark:text-white focus:outline-none focus:border-rose-500">
+                    
+                    <button onclick="sendRequest()" id="sendBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white font-bold text-sm shadow-lg shadow-rose-500/30 transition flex items-center justify-center gap-2 min-w-[140px]">
+                        <i class="fa-solid fa-paper-plane"></i> Enviar Pedido
+                    </button>
+                </div>
+
+                <!-- Request Options Tabs (Headers & Body) -->
+                <div class="border-t border-gray-200 dark:border-rose-950/60 pt-3">
+                    <div class="flex gap-4 border-b border-gray-200 dark:border-rose-950/60 pb-2 text-xs font-bold">
+                        <button onclick="switchReqTab('headers')" id="req-tab-btn-headers" class="req-tab-btn text-rose-500 border-b-2 border-rose-500 pb-1">
+                            <i class="fa-solid fa-list mr-1"></i> Headers (<span id="headerCount">1</span>)
+                        </button>
+                        <button onclick="switchReqTab('body')" id="req-tab-btn-body" class="req-tab-btn text-gray-400 hover:text-gray-200 pb-1">
+                            <i class="fa-solid fa-code mr-1"></i> Request Body (JSON)
+                        </button>
+                    </div>
+
+                    <!-- Headers Tab Content -->
+                    <div id="req-tab-headers" class="req-tab-panel pt-3 space-y-2">
+                        <div id="headersContainer" class="space-y-2">
+                            <div class="flex gap-2 text-xs">
+                                <input type="text" value="Content-Type" class="header-key w-1/2 bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-rose-950/60 rounded-lg p-2 font-mono-code text-gray-800 dark:text-gray-200">
+                                <input type="text" value="application/json" class="header-val w-1/2 bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-rose-950/60 rounded-lg p-2 font-mono-code text-gray-800 dark:text-gray-200">
+                                <button onclick="this.parentElement.remove(); updateHeaderCount();" class="text-rose-500 px-2"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <button onclick="addHeaderRow()" class="text-xs text-rose-500 hover:underline font-bold flex items-center gap-1 pt-1">
+                            <i class="fa-solid fa-plus"></i> Adicionar Header
+                        </button>
+                    </div>
+
+                    <!-- Body Tab Content -->
+                    <div id="req-tab-body" class="req-tab-panel hidden pt-3 space-y-2">
+                        <textarea id="reqBody" rows="5" placeholder='{\n  "nome": "Angel Rafael",\n  "email": "admin@rolecraft.ai"\n}' class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-rose-950/60 rounded-xl p-3 font-mono-code text-xs text-gray-900 dark:text-orange-400 focus:outline-none focus:border-rose-500"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Response Viewer Panel -->
+            <div class="glass-card rounded-2xl p-5 space-y-4">
+                <div class="flex flex-wrap justify-between items-center border-b border-gray-200 dark:border-rose-950/60 pb-3 gap-3">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-terminal text-rose-500"></i> Resposta do Servidor
+                    </h3>
+                    
+                    <div id="responseMetrics" class="flex items-center gap-3 text-xs">
+                        <span id="resStatus" class="px-3 py-1 rounded-full bg-rose-500/20 text-rose-500 font-extrabold border border-rose-500/30">
+                            200 OK
+                        </span>
+                        <span class="text-gray-500 dark:text-gray-400">Tempo: <strong id="resTime" class="text-gray-900 dark:text-white font-mono">142 ms</strong></span>
+                        <span class="text-gray-500 dark:text-gray-400">Tamanho: <strong id="resSize" class="text-gray-900 dark:text-white font-mono">5.8 KB</strong></span>
+                        <button onclick="copyResponseBody()" class="px-2.5 py-1 rounded-lg bg-gray-200 dark:bg-slate-900 hover:bg-rose-500 hover:text-white text-gray-700 dark:text-gray-300 font-bold transition">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Response Content View -->
+                <div class="space-y-2">
+                    <div class="flex gap-4 border-b border-gray-200 dark:border-rose-950/60 pb-2 text-xs font-bold">
+                        <button onclick="switchResTab('body')" id="res-tab-btn-body" class="res-tab-btn text-rose-500 border-b-2 border-rose-500 pb-1">
+                            Response Body (JSON)
+                        </button>
+                        <button onclick="switchResTab('headers')" id="res-tab-btn-headers" class="res-tab-btn text-gray-400 hover:text-gray-200 pb-1">
+                            Response Headers
+                        </button>
+                    </div>
+
+                    <div id="res-tab-body" class="res-tab-panel">
+                        <pre id="resBodyPre" class="p-4 rounded-xl bg-slate-950 text-orange-400 font-mono-code text-xs overflow-x-auto max-h-[350px] border border-rose-950/50">[
+  {
+    "id": 1,
+    "name": "Leanne Graham",
+    "email": "Sincere@april.biz",
+    "company": {
+      "name": "Romaguera-Crona"
+    }
+  }
+]</pre>
+                    </div>
+
+                    <div id="res-tab-headers" class="res-tab-panel hidden">
+                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-rose-950/60">
+                            <table class="w-full text-left text-xs font-mono-code text-gray-700 dark:text-gray-300">
+                                <tbody id="resHeadersTbody" class="divide-y divide-gray-200 dark:divide-rose-950/60 bg-white/50 dark:bg-slate-950/40">
+                                    <tr><td class="p-2.5 font-bold text-rose-500">Content-Type</td><td class="p-2.5">application/json; charset=utf-8</td></tr>
+                                    <tr><td class="p-2.5 font-bold text-rose-500">Server</td><td class="p-2.5">cloudflare</td></tr>
+                                    <tr><td class="p-2.5 font-bold text-rose-500">Cache-Control</td><td class="p-2.5">max-age=43200, public</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="header-bg border-t py-6 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500">
+            <p>© 2026 APITester AI Studio — Sunset Coral & Crimson Edition | Porta 6957</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Engine -->
+    <script>
+        // Light & Dark Theme Toggle Engine
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('apitester_theme', isDark ? 'dark' : 'light');
+            updateThemeUI(isDark);
+        }
+
+        function updateThemeUI(isDark) {
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (isDark) {
+                icon.className = 'fa-solid fa-moon text-orange-400';
+                text.innerText = 'Modo Escuro';
+            } else {
+                icon.className = 'fa-solid fa-sun text-rose-500';
+                text.innerText = 'Modo Claro';
+            }
+        }
+
+        const savedTheme = localStorage.getItem('apitester_theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+            updateThemeUI(false);
+        } else {
+            document.documentElement.classList.add('dark');
+            updateThemeUI(true);
+        }
+
+        function switchReqTab(tab) {
+            document.querySelectorAll('.req-tab-panel').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.req-tab-btn').forEach(btn => {
+                btn.classList.remove('text-rose-500', 'border-b-2', 'border-rose-500');
+                btn.classList.add('text-gray-400');
+            });
+
+            document.getElementById('req-tab-' + tab).classList.remove('hidden');
+            const activeBtn = document.getElementById('req-tab-btn-' + tab);
+            activeBtn.classList.add('text-rose-500', 'border-b-2', 'border-rose-500');
+            activeBtn.classList.remove('text-gray-400');
+        }
+
+        function switchResTab(tab) {
+            document.querySelectorAll('.res-tab-panel').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.res-tab-btn').forEach(btn => {
+                btn.classList.remove('text-rose-500', 'border-b-2', 'border-rose-500');
+                btn.classList.add('text-gray-400');
+            });
+
+            document.getElementById('res-tab-' + tab).classList.remove('hidden');
+            const activeBtn = document.getElementById('res-tab-btn-' + tab);
+            activeBtn.classList.add('text-rose-500', 'border-b-2', 'border-rose-500');
+            activeBtn.classList.remove('text-gray-400');
+        }
+
+        function addHeaderRow(key = "", val = "") {
+            const container = document.getElementById('headersContainer');
+            const div = document.createElement('div');
+            div.className = 'flex gap-2 text-xs';
+            div.innerHTML = `
+                <input type="text" value="${key}" placeholder="Chave" class="header-key w-1/2 bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-rose-950/60 rounded-lg p-2 font-mono-code text-gray-800 dark:text-gray-200">
+                <input type="text" value="${val}" placeholder="Valor" class="header-val w-1/2 bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-rose-950/60 rounded-lg p-2 font-mono-code text-gray-800 dark:text-gray-200">
+                <button onclick="this.parentElement.remove(); updateHeaderCount();" class="text-rose-500 px-2"><i class="fa-solid fa-trash"></i></button>
+            `;
+            container.appendChild(div);
+            updateHeaderCount();
+        }
+
+        function updateHeaderCount() {
+            const count = document.querySelectorAll('.header-key').length;
+            document.getElementById('headerCount').innerText = count;
+        }
+
+        function loadPresetUrl(url) {
+            if (!url) return;
+            document.getElementById('reqUrl').value = url;
+            if (url.includes('/posts') && !url.includes('/1')) {
+                document.getElementById('reqMethod').value = 'POST';
+                switchReqTab('body');
+            } else {
+                document.getElementById('reqMethod').value = 'GET';
+                switchReqTab('headers');
+            }
+        }
+
+        async function sendRequest() {
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> A Enviar...';
+            sendBtn.disabled = true;
+
+            const method = document.getElementById('reqMethod').value;
+            const url = document.getElementById('reqUrl').value;
+            const body = document.getElementById('reqBody').value;
+
+            const headers = {};
+            const keys = document.querySelectorAll('.header-key');
+            const vals = document.querySelectorAll('.header-val');
+            keys.forEach((k, idx) => {
+                if (k.value.trim()) {
+                    headers[k.value.trim()] = vals[idx].value.trim();
+                }
+            });
+
+            try {
+                const res = await fetch('/api/execute-request', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ method, url, headers, body })
+                });
+
+                if (res.ok) {
+                    const result = await res.json();
+                    renderResponse(result);
+                    refreshHistory();
+                }
+            } catch (e) {
+                alert("Erro ao disparar pedido: " + e.message);
+            } finally {
+                sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar Pedido';
+                sendBtn.disabled = false;
+            }
+        }
+
+        function renderResponse(res) {
+            const statusEl = document.getElementById('resStatus');
+            statusEl.innerText = res.status_text;
+            if (res.status_code < 300) {
+                statusEl.className = "px-3 py-1 rounded-full bg-rose-500/20 text-rose-500 font-extrabold border border-rose-500/30";
+            } else if (res.status_code < 500) {
+                statusEl.className = "px-3 py-1 rounded-full bg-amber-500/20 text-amber-500 font-extrabold border border-amber-500/30";
+            } else {
+                statusEl.className = "px-3 py-1 rounded-full bg-red-600/20 text-red-500 font-extrabold border border-red-600/30";
+            }
+
+            document.getElementById('resTime').innerText = res.response_time_ms + " ms";
+            document.getElementById('resSize').innerText = res.response_size_kb + " KB";
+
+            // Format Body JSON if possible
+            let formattedBody = res.response_body;
+            try {
+                const parsed = JSON.parse(res.response_body);
+                formattedBody = JSON.stringify(parsed, null, 2);
+            } catch (e) {}
+
+            document.getElementById('resBodyPre').innerText = formattedBody;
+
+            // Render Response Headers Table
+            const tbody = document.getElementById('resHeadersTbody');
+            tbody.innerHTML = '';
+            for (const [key, val] of Object.entries(res.response_headers || {})) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="p-2.5 font-bold text-rose-500">${key}</td><td class="p-2.5">${val}</td>`;
+                tbody.appendChild(tr);
+            }
+        }
+
+        function reloadFromHistory(item) {
+            document.getElementById('reqMethod').value = item.method;
+            document.getElementById('reqUrl').value = item.url;
+            document.getElementById('reqBody').value = item.body_json || '';
+
+            // Load Headers
+            const container = document.getElementById('headersContainer');
+            container.innerHTML = '';
+            try {
+                const headers = JSON.parse(item.headers_json);
+                for (const [k, v] of Object.entries(headers)) {
+                    addHeaderRow(k, v);
+                }
+            } catch (e) {
+                addHeaderRow('Content-Type', 'application/json');
+            }
+            updateHeaderCount();
+
+            // Render Response Body & Metrics from History Item
+            renderResponse({
+                status_code: item.status_code,
+                status_text: item.status_text,
+                response_time_ms: item.response_time_ms,
+                response_size_kb: item.response_size_kb,
+                response_body: item.response_body,
+                response_headers: { "Content-Type": "application/json" }
+            });
+        }
+
+        async function refreshHistory() {
+            const res = await fetch('/api/history');
+            if (res.ok) {
+                const history = await res.json();
+                const container = document.getElementById('historyList');
+                container.innerHTML = '';
+                history.forEach(item => {
+                    const div = document.createElement('div');
+                    const badgeClass = item.method === 'GET' ? 'bg-blue-500/20 text-blue-500' : (item.method === 'POST' ? 'bg-rose-500/20 text-rose-500' : 'bg-amber-500/20 text-amber-500');
+                    const statusClass = item.status_code < 300 ? 'text-rose-500' : 'text-amber-500';
+                    div.className = "p-2.5 rounded-xl card-sub-bg border hover:border-rose-500/50 cursor-pointer transition space-y-1";
+                    div.onclick = () => reloadFromHistory(item);
+                    div.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeClass}">${item.method}</span>
+                            <span class="font-mono text-[10px] ${statusClass} font-bold">${item.status_code}</span>
+                        </div>
+                        <div class="text-xs font-mono-code truncate text-gray-800 dark:text-gray-200 font-medium">${item.url}</div>
+                        <div class="flex justify-between text-[10px] text-gray-400">
+                            <span>${item.response_time_ms} ms</span>
+                            <span>${(item.created_at || '').substring(11, 16)}</span>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+        }
+
+        async function clearHistory() {
+            if (!confirm("Deseja limpar todo o histórico de pedidos?")) return;
+            await fetch('/api/history', { method: 'DELETE' });
+            refreshHistory();
+        }
+
+        function copyResponseBody() {
+            const text = document.getElementById('resBodyPre').innerText;
+            navigator.clipboard.writeText(text);
+            alert("Corpo da resposta copiado para a área de transferência!");
+        }
+    </script>
+</body>
+</html>

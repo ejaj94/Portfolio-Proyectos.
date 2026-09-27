@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}DÍA 30 — 30 Projetos EJAJ TECH em Produção{% endblock %}
+
+{% block content %}
+<!-- Hero Showcase Banner -->
+<div class="hero-banner">
+    <div style="display: inline-block; background: var(--yellow-tint); border: 1px solid var(--yellow-primary); color: var(--yellow-primary); padding: 0.35rem 1.2rem; border-radius: 50px; font-weight: 900; font-size: 0.85rem; margin-bottom: 1rem;">
+        <i class="fa-solid fa-crown"></i> MARCO DOS 30 DIAS — DOMÍNIO TÉCNICO & SUPERAÇÃO
+    </div>
+    <h1>DÍA 30: Resolver o Impossível Tornou-se a Minha Rotina</h1>
+    <p>
+        Durante muito tempo enfrentei problemas que pensei não ter solução. Após semanas de raciocínio, investigação e estudo implacável, aprendi a dominar e resolver desafios que hoje fazem parte do meu dia a dia.
+    </p>
+
+    <!-- Stats Grid -->
+    <div class="stats-counter-grid">
+        <div class="stat-box">
+            <div class="stat-num">30</div>
+            <div class="stat-lbl">Dias Ininterruptos</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" style="color: var(--yellow-primary);">30</div>
+            <div class="stat-lbl">Sistemas SaaS Criados</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" style="color: #ffffff;">100%</div>
+            <div class="stat-lbl">Código Autêntico & Real</div>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Slide Showcase Deck -->
+<div class="deck-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span id="slideDayBadge" class="badge-day30" style="font-size: 0.95rem;">
+                <i class="fa-solid fa-calendar-check"></i> <span id="slideDayNum">DÍA 21</span>
+            </span>
+            <span id="slideBadge" class="badge-yellow">Categoria</span>
+        </div>
+        <span id="slideCounterText" style="color: var(--text-slate); font-weight: 700; font-size: 0.95rem;">
+            Projeto 21 de 30
+        </span>
+    </div>
+
+    <!-- Active Slide Content -->
+    <div style="background: rgba(9, 13, 22, 0.9); border: 1px solid var(--border-color); border-radius: 18px; padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 id="slideTitle" style="font-size: 2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.4rem;">
+            Título do Projeto
+        </h2>
+        <p id="slideSubtitle" style="font-size: 1.1rem; color: var(--yellow-primary); font-weight: 700; margin-bottom: 1.25rem;">
+            Subtítulo / Descrição Curta
+        </p>
+
+        <p id="slideDescription" style="font-size: 1.05rem; color: #cbd5e1; margin-bottom: 1.5rem; line-height: 1.7;">
+            Descrição completa do projeto...
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; background: rgba(0,0,0,0.5); padding: 1.25rem; border-radius: 14px; border-left: 4px solid var(--yellow-primary);">
+            <div>
+                <span style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-slate); font-weight: 800;">
+                    <i class="fa-solid fa-code"></i> Arquitetura & Tecnologias
+                </span>
+                <span id="slideTechStack" style="font-size: 0.95rem; font-weight: 700; color: #ffffff;">
+                    Python, Flask, SQLite3, REST API
+                </span>
+            </div>
+            <div>
+                <span style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--yellow-primary); font-weight: 800;">
+                    <i class="fa-solid fa-chart-line"></i> Impacto Empresarial
+                </span>
+                <span id="slideImpact" style="font-size: 0.95rem; font-weight: 700; color: var(--yellow-primary);">
+                    Resultados práticos...
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thumbnails Navigation Bar -->
+    <div id="thumbnailsContainer" style="display: flex; gap: 0.75rem; overflow-x: auto; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+        <!-- Dynamically rendered thumbnail buttons -->
+    </div>
+
+    <!-- Slide Control Buttons -->
+    <div class="slide-controls">
+        <div style="display: flex; gap: 0.75rem;">
+            <button class="btn btn-secondary" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button class="btn btn-secondary" onclick="nextSlide()">Próximo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <div>
+            <button id="btnAutoPlay" class="btn btn-yellow" onclick="toggleAutoPlay()">
+                <i class="fa-solid fa-play"></i> Iniciar Apresentação Automática
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Script Link Callout -->
+<div style="background: linear-gradient(135deg, #121722 0%, #090d16 100%); border: 2px solid var(--yellow-primary); border-radius: 20px; padding: 2rem; text-align: center;">
+    <h3 style="font-size: 1.4rem; font-weight: 900; color: var(--yellow-primary); margin-bottom: 0.5rem;">
+        🎙️ Monólogo de Locução Especial DÍA 30 (Dramático & Inspirador)
+    </h3>
+    <p style="color: var(--text-slate); font-size: 1rem; max-width: 800px; margin: 0 auto 1.5rem auto;">
+        Sem tempos nem indicações técnicas — apenas o diálogo puro, emocionado e reflexivo sobre a superação de problemas, o domínio técnico e o propósito de vida.
+    </p>
+    <a href="/script" class="btn btn-yellow">
+        <i class="fa-solid fa-microphone-lines"></i> Ver Monólogo do Locutor DÍA 30
+    </a>
+</div>
+{% endblock %}

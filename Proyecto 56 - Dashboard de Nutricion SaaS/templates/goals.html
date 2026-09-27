@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Objetivos Nutricionais{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-dark);">
+        <i class="fa-solid fa-bullseye" style="color: var(--green-primary);"></i> Configuração de Objetivos Nutricionais
+    </h1>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Personalize as suas metas diárias de calorias e macronutrientes ou utilize a nossa calculadora de gasto energético (TDEE).
+    </p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <!-- Form Objetivos -->
+    <div class="panel-card" style="border-top: 4px solid var(--green-primary);">
+        <div class="panel-header">
+            <h2><i class="fa-solid fa-user-gear" style="color: var(--green-primary);"></i> As Minhas Metas Diárias</h2>
+        </div>
+
+        <form onsubmit="submitUpdateGoals(event)">
+            <div class="form-group">
+                <label for="userNameInput"><i class="fa-solid fa-user"></i> Nome do Perfil</label>
+                <input type="text" id="userNameInput" class="form-control" value="{{ goals['user_name'] if goals else 'Enmanuel Jimenez' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="targetCalInput"><i class="fa-solid fa-fire-flame-curved"></i> Meta de Calorias (kcal/dia)</label>
+                <input type="number" id="targetCalInput" class="form-control" value="{{ goals['target_calories'] if goals else 2200 }}" step="50" min="500" required>
+            </div>
+
+            <div class="form-group">
+                <label for="targetProtInput"><i class="fa-solid fa-drumstick-bite"></i> Meta de Proteína (g/dia)</label>
+                <input type="number" id="targetProtInput" class="form-control" value="{{ goals['target_protein_g'] if goals else 160 }}" step="5" min="20" required>
+            </div>
+
+            <div class="form-group">
+                <label for="targetCarbsInput"><i class="fa-solid fa-wheat-awn"></i> Meta de Carbohidratos (g/dia)</label>
+                <input type="number" id="targetCarbsInput" class="form-control" value="{{ goals['target_carbs_g'] if goals else 220 }}" step="5" min="20" required>
+            </div>
+
+            <div class="form-group">
+                <label for="targetFatInput"><i class="fa-solid fa-oil-well"></i> Meta de Gorduras (g/dia)</label>
+                <input type="number" id="targetFatInput" class="form-control" value="{{ goals['target_fat_g'] if goals else 60 }}" step="5" min="10" required>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-green"><i class="fa-solid fa-floppy-disk"></i> Guardar Metas</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- TDEE Calculator Helper Widget -->
+    <div class="panel-card" style="border-top: 4px solid var(--lime-accent);">
+        <div class="panel-header">
+            <h2><i class="fa-solid fa-calculator" style="color: var(--lime-accent);"></i> Estimador de TDEE & Recomendador</h2>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Calcule uma estimativa de calorias recomendadas com base no seu peso e objetivo fitness.
+        </p>
+
+        <div class="form-group">
+            <label for="calcWeight"><i class="fa-solid fa-weight-scale"></i> Peso Corporal (kg)</label>
+            <input type="number" id="calcWeight" class="form-control" value="75" min="30" max="250" oninput="calculateTDEE()">
+        </div>
+
+        <div class="form-group">
+            <label for="calcGoal"><i class="fa-solid fa-trophy"></i> Objetivo Nutricional</label>
+            <select id="calcGoal" class="form-control" onchange="calculateTDEE()">
+                <option value="maintenance">Manutenção de Peso (Equilíbrio)</option>
+                <option value="cut">Défice Calórico / Perda de Gordura (-400 kcal)</option>
+                <option value="bulk">Superávit Calórico / Ganho Muscular (+400 kcal)</option>
+            </select>
+        </div>
+
+        <div style="background: var(--green-bg-tint); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--green-light); margin-top: 1.5rem;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--green-mint-dark); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
+                💡 Sugestão Automática:
+            </span>
+            <p style="font-size: 0.9rem; color: var(--text-dark);">
+                Clique no botão abaixo para preencher automaticamente o formulário com a recomendação baseada em 2.0g/kg de Proteína e 0.8g/kg de Gordura.
+            </p>
+            <button type="button" class="btn btn-green btn-sm" onclick="calculateTDEE()" style="margin-top: 0.75rem;">
+                <i class="fa-solid fa-magic"></i> Aplicar Recomendação
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

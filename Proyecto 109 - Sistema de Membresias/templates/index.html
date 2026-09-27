@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemberCraft AI — VIP Membership & Exclusive Perks Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        vipgold: {
+                            50: '#fffbe6',
+                            100: '#fff1b8',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            900: '#78350f'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+        /* Dark Mode styles */
+        .dark body {
+            background-color: #07090e;
+            color: #f1f5f9;
+        }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .dark .header-bg {
+            background-color: rgba(12, 16, 26, 0.95);
+            border-color: #1e293b;
+        }
+        .dark .card-sub-bg {
+            background-color: #0c111d;
+            border-color: #1e293b;
+        }
+
+        /* Light Mode styles */
+        body {
+            background-color: #fffdfa;
+            color: #0f172a;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.08);
+        }
+        .header-bg {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: #fef3c7;
+        }
+        .card-sub-bg {
+            background-color: #fffbeb;
+            border-color: #fde68a;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="header-bg border-b sticky top-0 z-50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-yellow-500 to-amber-400 flex items-center justify-center text-white font-bold shadow-lg shadow-amber-500/30">
+                    <i class="fa-solid fa-crown text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl tracking-tight text-gray-900 dark:text-white">MemberCraft AI</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Sistema de Membresias VIP & Gestão de Benefícios Exclusivos</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-500 font-bold border border-amber-500/20">
+                    <i class="fa-solid fa-gem mr-1"></i> Clube de Membros VIP
+                </span>
+
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" id="themeToggleBtn" class="px-3 py-2 rounded-xl bg-gray-200 dark:bg-slate-800 text-gray-800 dark:text-gray-200 hover:bg-amber-500 hover:text-white transition flex items-center gap-2 font-bold border border-gray-300 dark:border-slate-700 shadow">
+                    <i id="themeIcon" class="fa-solid fa-moon text-amber-400"></i>
+                    <span id="themeText">Modo Escuro</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow space-y-6">
+        
+        <!-- Executive VIP Dashboard Metrics -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <div class="glass-card rounded-2xl p-5 border flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">Membros Ativos</span>
+                    <h3 id="metricActive" class="text-2xl font-black text-amber-500 font-mono mt-1">{{ metrics.active_members }}</h3>
+                    <span class="text-[10px] text-amber-400 font-semibold"><i class="fa-solid fa-user-check mr-1"></i>Membros Ativos no Clube</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 border flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">Receita da Membresia</span>
+                    <h3 id="metricRevenue" class="text-2xl font-black text-emerald-400 font-mono mt-1">€{{ "%.2f"|format(metrics.total_revenue) }}</h3>
+                    <span class="text-[10px] text-emerald-400 font-semibold">Faturação mensal recorrente</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 border flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">Membros Platinum VIP</span>
+                    <h3 id="metricVip" class="text-2xl font-black text-purple-400 font-mono mt-1">{{ metrics.vip_count }}</h3>
+                    <span class="text-[10px] text-purple-300 font-semibold">Nível Máximo de Acesso</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 border flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">Taxa de Renovação</span>
+                    <h3 id="metricRenewal" class="text-2xl font-black text-cyan-400 font-mono mt-1">{{ metrics.renewal_rate }}%</h3>
+                    <span class="text-[10px] text-cyan-400 font-semibold">Fidelização da Comunidade</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-rotate"></i>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Membership Tiers Section -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h3 class="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-amber-500"></i> Planos de Membresia & Benefícios
+                </h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Bronze Tier -->
+                <div class="glass-card rounded-2xl p-5 space-y-4 border hover:border-amber-500/50 transition flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="px-2.5 py-1 rounded-full bg-amber-900/30 text-amber-500 text-xs font-bold border border-amber-800/40">Bronze</span>
+                            <span class="text-[10px] text-gray-400">Iniciante</span>
+                        </div>
+                        <h4 class="text-2xl font-extrabold text-gray-900 dark:text-white font-mono">€9<span class="text-xs font-normal text-gray-400">/mês</span></h4>
+                        <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-slate-800 pt-3">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Acesso a Snippets & Código</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Suporte em fórum público</li>
+                        </ul>
+                    </div>
+                    <button onclick="openJoinModal('Bronze', 9.00)" class="w-full py-2.5 rounded-xl bg-gray-200 dark:bg-slate-800 hover:bg-amber-500 hover:text-white text-gray-800 dark:text-gray-200 font-bold text-xs transition">Aderir Bronze</button>
+                </div>
+
+                <!-- Silver Tier -->
+                <div class="glass-card rounded-2xl p-5 space-y-4 border hover:border-amber-500/50 transition flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="px-2.5 py-1 rounded-full bg-slate-400/20 text-slate-300 text-xs font-bold border border-slate-400/30">Silver</span>
+                            <span class="text-[10px] text-gray-400">Intermédio</span>
+                        </div>
+                        <h4 class="text-2xl font-extrabold text-gray-900 dark:text-white font-mono">€19<span class="text-xs font-normal text-gray-400">/mês</span></h4>
+                        <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-slate-800 pt-3">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Tudo do plano Bronze</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Masterclasses Semanais HD</li>
+                        </ul>
+                    </div>
+                    <button onclick="openJoinModal('Silver', 19.00)" class="w-full py-2.5 rounded-xl bg-gray-200 dark:bg-slate-800 hover:bg-amber-500 hover:text-white text-gray-800 dark:text-gray-200 font-bold text-xs transition">Aderir Silver</button>
+                </div>
+
+                <!-- Gold Tier (Featured) -->
+                <div class="glass-card rounded-2xl p-5 space-y-4 border-2 border-amber-500 relative shadow-xl shadow-amber-500/10 flex flex-col justify-between">
+                    <span class="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-black text-[9px] font-black uppercase">Recomendado</span>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-bold">Gold VIP</span>
+                            <span class="text-[10px] text-amber-400 font-bold">Avançado</span>
+                        </div>
+                        <h4 class="text-2xl font-extrabold text-gray-900 dark:text-white font-mono">€39<span class="text-xs font-normal text-gray-400">/mês</span></h4>
+                        <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-slate-800 pt-3">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Canal VIP no Discord</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Resposta técnica em 2h</li>
+                        </ul>
+                    </div>
+                    <button onclick="openJoinModal('Gold', 39.00)" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-black font-extrabold text-xs transition shadow-md shadow-amber-500/30">Aderir Gold VIP</button>
+                </div>
+
+                <!-- VIP Platinum Tier -->
+                <div class="glass-card rounded-2xl p-5 space-y-4 border border-purple-500/50 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold">VIP Platinum</span>
+                            <span class="text-[10px] text-purple-400 font-bold">Crown Level</span>
+                        </div>
+                        <h4 class="text-2xl font-extrabold text-gray-900 dark:text-white font-mono">€79<span class="text-xs font-normal text-gray-400">/mês</span></h4>
+                        <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-slate-800 pt-3">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-crown text-amber-400"></i> Consultoria 1-on-1 Mensal</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Code Review prioritário</li>
+                        </ul>
+                    </div>
+                    <button onclick="openJoinModal('VIP Platinum', 79.00)" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs transition shadow-md shadow-purple-600/30">Aderir Platinum</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exclusive Benefits Content Unlocker & Members Directory -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Perks Matrix & Unlocker -->
+            <div class="lg:col-span-6 glass-card rounded-2xl p-6 space-y-4">
+                <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-gift text-amber-500"></i> Benefícios Exclusivos Desbloqueados
+                    </h3>
+                </div>
+
+                <div class="space-y-3">
+                    {% for perk in perks %}
+                    <div class="card-sub-bg p-3.5 rounded-xl border flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-lg">
+                                <i class="fa-solid {{ perk.icon }}"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-gray-900 dark:text-white">{{ perk.title }}</h5>
+                                <p class="text-[10px] text-gray-400">{{ perk.description }}</p>
+                            </div>
+                        </div>
+                        <button onclick="redeemPerk('{{ perk.title }}')" class="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-500 hover:bg-amber-500 hover:text-white font-bold text-[10px] transition border border-amber-500/30 min-w-[75px]">
+                            Aceder
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Active Members Table -->
+            <div class="lg:col-span-6 glass-card rounded-2xl p-6 space-y-4">
+                <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-users-rectangle text-amber-500"></i> Diretório de Membros Ativos
+                    </h3>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-slate-800">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-gray-100 dark:bg-slate-900 text-gray-500 font-bold uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3">Membro</th>
+                                <th class="p-3">Nível VIP</th>
+                                <th class="p-3">Valor</th>
+                                <th class="p-3 text-right">Renovação</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-slate-800">
+                            {% for m in members %}
+                            <tr>
+                                <td class="p-3">
+                                    <div class="font-bold text-gray-900 dark:text-white">{{ m.name }}</div>
+                                    <div class="text-[10px] text-gray-400">{{ m.email }}</div>
+                                </td>
+                                <td class="p-3">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold 
+                                        {% if m.tier == 'VIP Platinum' %}bg-purple-500/20 text-purple-300 border border-purple-500/40
+                                        {% elif m.tier == 'Gold' %}bg-amber-500/20 text-amber-400 border border-amber-500/40
+                                        {% elif m.tier == 'Silver' %}bg-slate-400/20 text-slate-300 border border-slate-400/40
+                                        {% else %}bg-amber-900/20 text-amber-500 border border-amber-800/40{% endif %}">
+                                        {{ m.tier }}
+                                    </span>
+                                </td>
+                                <td class="p-3 font-mono font-bold text-emerald-400">€{{ "%.2f"|format(m.amount_paid) }}</td>
+                                <td class="p-3 text-right">
+                                    <button onclick="renewMember({{ m.id }})" class="text-amber-500 hover:underline font-bold text-[11px]">Renovar</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Modal Form for Joining Membership -->
+    <div id="joinModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="glass-card rounded-2xl max-w-md w-full p-6 space-y-4 border border-amber-500/40">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h4 class="text-sm font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-crown text-amber-500"></i> Adesão ao Plano <span id="modalTierName">Gold</span>
+                </h4>
+                <button onclick="closeJoinModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-base"></i></button>
+            </div>
+
+            <form onsubmit="handleJoinSubmit(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Nome Completo</label>
+                    <input type="text" id="joinName" required placeholder="Ex: Gonçalo Martins" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-amber-500">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                    <input type="email" id="joinEmail" required placeholder="goncalo@empresa.pt" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-amber-500">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Método de Pagamento</label>
+                    <select id="joinPayment" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white font-semibold focus:outline-none focus:border-amber-500">
+                        <option value="Cartão de Crédito">Cartão de Crédito (Visa/Mastercard)</option>
+                        <option value="MB WAY">MB WAY</option>
+                        <option value="Multibanco">Multibanco</option>
+                        <option value="PayPal">PayPal</option>
+                    </select>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="joinBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-600 hover:to-yellow-600 text-black font-extrabold text-xs shadow-lg shadow-amber-500/30 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock"></i> Confirmar Membresia (€<span id="modalAmountLabel">39.00</span>/mês)
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="header-bg border-t py-6 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500">
+            <p>© 2026 MemberCraft AI Studio — Sistema de Membresias VIP & Benefícios Exclusivos | Porta 6962</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Engine -->
+    <script>
+        let currentModalTier = 'Gold';
+        let currentModalAmount = 39.00;
+
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('membercraft_theme', isDark ? 'dark' : 'light');
+            updateThemeUI(isDark);
+        }
+
+        function updateThemeUI(isDark) {
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (isDark) {
+                icon.className = 'fa-solid fa-moon text-amber-400';
+                text.innerText = 'Modo Escuro';
+            } else {
+                icon.className = 'fa-solid fa-sun text-amber-500';
+                text.innerText = 'Modo Claro';
+            }
+        }
+
+        const savedTheme = localStorage.getItem('membercraft_theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+            updateThemeUI(false);
+        } else {
+            document.documentElement.classList.add('dark');
+            updateThemeUI(true);
+        }
+
+        function openJoinModal(tier, amount) {
+            currentModalTier = tier;
+            currentModalAmount = amount;
+            document.getElementById('modalTierName').innerText = tier;
+            document.getElementById('modalAmountLabel').innerText = amount.toFixed(2);
+            document.getElementById('joinModal').classList.remove('hidden');
+        }
+
+        function closeJoinModal() {
+            document.getElementById('joinModal').classList.add('hidden');
+        }
+
+        async function handleJoinSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('joinBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> A Processar Pagamento...';
+
+            const name = document.getElementById('joinName').value;
+            const email = document.getElementById('joinEmail').value;
+            const payment_method = document.getElementById('joinPayment').value;
+
+            try {
+                const res = await fetch('/api/membership/join', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, tier: currentModalTier, amount_paid: currentModalAmount, payment_method })
+                });
+
+                if (res.ok) {
+                    alert(`Parabéns! A tua membresia ${currentModalTier} foi ativada com sucesso.`);
+                    window.location.reload();
+                } else {
+                    const err = await res.json();
+                    alert("Erro: " + err.error);
+                }
+            } catch (err) {
+                alert("Erro de ligação: " + err.message);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function renewMember(memberId) {
+            try {
+                const res = await fetch('/api/membership/renew', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ member_id: memberId })
+                });
+
+                if (res.ok) {
+                    alert("Membresia renovada com sucesso por mais 30 dias!");
+                    window.location.reload();
+                }
+            } catch (err) {
+                alert("Erro: " + err.message);
+            }
+        }
+
+        function redeemPerk(title) {
+            alert(`Benefício "${title}" acedido com sucesso no MemberCraft AI!`);
+        }
+    </script>
+</body>
+</html>

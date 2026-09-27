@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard de Nutrição{% endblock %}
+
+{% block content %}
+<!-- Top Welcome Banner -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 0.6rem;">
+            <i class="fa-solid fa-leaf" style="color: var(--green-primary);"></i> Dashboard de Nutrição & Macronutrientes
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Bem-vindo, <strong>{{ goals['user_name'] }}</strong>. Acompanhe o seu consumo diário e metas nutricionais.
+        </p>
+    </div>
+    <div style="background: var(--green-bg-tint); padding: 0.5rem 1.2rem; border-radius: 50px; border: 1px solid var(--green-light); font-weight: 700; color: var(--green-mint-dark);">
+        <i class="fa-regular fa-calendar"></i> Data: {{ today_date }}
+    </div>
+</div>
+
+<!-- Macro Cards Grid -->
+<div class="macro-grid">
+    <!-- Calorias Card -->
+    <div class="macro-card card-cal">
+        <div class="macro-title">
+            <span><i class="fa-solid fa-fire-flame-curved" style="color: var(--green-primary);"></i> Calorias Totais</span>
+            <span class="badge badge-green">{{ pct['calories'] }}%</span>
+        </div>
+        <div class="macro-value">{{ consumed['calories'] }} <span style="font-size: 1.1rem; font-weight: 600;">kcal</span></div>
+        <div class="macro-sub">Meta diária: <strong>{{ goals['target_calories'] }} kcal</strong></div>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width: {{ pct['calories'] }}%;"></div>
+        </div>
+    </div>
+
+    <!-- Proteínas Card -->
+    <div class="macro-card card-prot">
+        <div class="macro-title">
+            <span><i class="fa-solid fa-drumstick-bite" style="color: var(--purple-prot);"></i> Proteínas</span>
+            <span class="badge badge-purple">{{ pct['protein'] }}%</span>
+        </div>
+        <div class="macro-value">{{ consumed['protein_g'] }} <span style="font-size: 1.1rem; font-weight: 600;">g</span></div>
+        <div class="macro-sub">Meta diária: <strong>{{ goals['target_protein_g'] }} g</strong></div>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width: {{ pct['protein'] }}%;"></div>
+        </div>
+    </div>
+
+    <!-- Carbohidratos Card -->
+    <div class="macro-card card-carbs">
+        <div class="macro-title">
+            <span><i class="fa-solid fa-wheat-awn" style="color: var(--blue-carbs);"></i> Carbohidratos</span>
+            <span class="badge badge-blue">{{ pct['carbs'] }}%</span>
+        </div>
+        <div class="macro-value">{{ consumed['carbs_g'] }} <span style="font-size: 1.1rem; font-weight: 600;">g</span></div>
+        <div class="macro-sub">Meta diária: <strong>{{ goals['target_carbs_g'] }} g</strong></div>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width: {{ pct['carbs'] }}%;"></div>
+        </div>
+    </div>
+
+    <!-- Gorduras Card -->
+    <div class="macro-card card-fat">
+        <div class="macro-title">
+            <span><i class="fa-solid fa-oil-well" style="color: var(--amber-fat);"></i> Gorduras</span>
+            <span class="badge badge-amber">{{ pct['fat'] }}%</span>
+        </div>
+        <div class="macro-value">{{ consumed['fat_g'] }} <span style="font-size: 1.1rem; font-weight: 600;">g</span></div>
+        <div class="macro-sub">Meta diária: <strong>{{ goals['target_fat_g'] }} g</strong></div>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width: {{ pct['fat'] }}%;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Today's Meals Timeline -->
+<div class="panel-card" style="border-top: 4px solid var(--green-primary);">
+    <div class="panel-header">
+        <h2><i class="fa-solid fa-utensils" style="color: var(--green-primary);"></i> Refeições Registadas Hoje</h2>
+        <a href="/log" class="btn btn-green btn-sm"><i class="fa-solid fa-plus"></i> Adicionar Alimento</a>
+    </div>
+
+    {% for mtype, logs in meals_by_type.items() %}
+    <div class="meal-header">
+        <span>
+            {% if mtype == 'Pequeno-almoço' %}☕ Pequeno-almoço
+            {% elif mtype == 'Almoço' %}🍲 Almoço
+            {% elif mtype == 'Jantar' %}🍽️ Jantar
+            {% else %}🍏 Lanches & Snacks
+            {% endif %}
+        </span>
+        {% set total_m_cal = logs | map(attribute='calories') | sum %}
+        <span style="font-weight: 800; color: var(--green-mint-dark); font-size: 0.9rem;">
+            Subtotal: {{ '%.1f' | format(total_m_cal) }} kcal
+        </span>
+    </div>
+
+    {% if logs %}
+    <div style="overflow-x: auto; margin-bottom: 1rem;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Alimento</th>
+                    <th style="width: 12%;">Quantidade</th>
+                    <th style="width: 15%;">Calorias</th>
+                    <th style="width: 12%;">Proteínas</th>
+                    <th style="width: 12%;">Carbohidratos</th>
+                    <th style="width: 12%;">Gorduras</th>
+                    <th style="width: 8%; text-align: center;">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in logs %}
+                <tr>
+                    <td style="font-weight: 700; color: var(--text-dark);">
+                        <i class="fa-solid fa-angle-right" style="color: var(--green-primary); font-size: 0.8rem;"></i>
+                        {{ item['food_name'] }}
+                    </td>
+                    <td>{{ item['quantity_g'] }}g</td>
+                    <td style="font-weight: 800; color: var(--green-hover);">{{ item['calories'] }} kcal</td>
+                    <td><span class="badge badge-purple">{{ item['protein_g'] }}g P</span></td>
+                    <td><span class="badge badge-blue">{{ item['carbs_g'] }}g C</span></td>
+                    <td><span class="badge badge-amber">{{ item['fat_g'] }}g G</span></td>
+                    <td style="text-align: center;">
+                        <button class="btn btn-danger btn-sm" onclick="deleteMealLog({{ item['id'] }})" title="Eliminar">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color: var(--text-muted); font-size: 0.88rem; padding: 0.5rem 1rem; italic;">Sem registos para esta refeição.</p>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

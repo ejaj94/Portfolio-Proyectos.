@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompressPic AI — Interactive Image Compressor & Optimizer Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+        /* Dark Mode styles */
+        .dark body {
+            background-color: #060913;
+            color: #f1f5f9;
+        }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .dark .header-bg {
+            background-color: rgba(10, 15, 29, 0.95);
+            border-color: #1e293b;
+        }
+        .dark .card-sub-bg {
+            background-color: #0b1120;
+            border-color: #1e293b;
+        }
+
+        /* Light Mode styles */
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.08);
+        }
+        .header-bg {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: #e2e8f0;
+        }
+        .card-sub-bg {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .dropzone-active {
+            border-color: #10b981 !important;
+            background-color: rgba(16, 185, 129, 0.15) !important;
+        }
+
+        /* Custom range slider thumb styling */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #10b981;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="header-bg border-b sticky top-0 z-50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-cyan-500 flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-500/30">
+                    <i class="fa-solid fa-file-image text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl tracking-tight text-gray-900 dark:text-white">CompressPic AI</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Otimizador & Compressor de Imagens em Tempo Real</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20">
+                    <i class="fa-solid fa-bolt mr-1"></i> Compressão Inteligente WEBP / JPG / PNG
+                </span>
+
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" id="themeToggleBtn" class="px-3 py-2 rounded-xl bg-gray-200 dark:bg-slate-800 text-gray-800 dark:text-gray-200 hover:bg-emerald-500 hover:text-white transition flex items-center gap-2 font-bold border border-gray-300 dark:border-slate-700 shadow">
+                    <i id="themeIcon" class="fa-solid fa-moon text-amber-400"></i>
+                    <span id="themeText">Modo Escuro</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- Left Sidebar: Compression History -->
+        <aside class="lg:col-span-1 glass-card rounded-2xl p-4 flex flex-col justify-between space-y-4 max-h-[800px] overflow-hidden">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-emerald-500"></i> Histórico de Otimização
+                </h3>
+                <button onclick="clearHistory()" class="text-xs text-rose-500 hover:underline font-semibold">Limpar</button>
+            </div>
+
+            <div id="historyList" class="flex-grow space-y-2 overflow-y-auto pr-1">
+                {% for item in history %}
+                <div class="p-3 rounded-xl card-sub-bg border hover:border-emerald-500/50 transition space-y-1.5">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400">
+                            {{ item.output_format }} (Q: {{ item.quality }}%)
+                        </span>
+                        <span class="font-mono text-[10px] text-emerald-400 font-bold">
+                            -{{ item.savings_pct }}%
+                        </span>
+                    </div>
+                    <div class="text-xs font-mono-code truncate text-gray-800 dark:text-gray-200 font-semibold" title="{{ item.original_filename }}">
+                        {{ item.original_filename }}
+                    </div>
+                    <div class="flex justify-between items-center text-[10px] text-gray-400 pt-1 border-t border-gray-200 dark:border-slate-800/60">
+                        <span>{{ item.original_size_kb }} KB → <strong class="text-emerald-400">{{ item.compressed_size_kb }} KB</strong></span>
+                        <a href="/api/download/{{ item.compressed_filename }}" download class="text-emerald-500 hover:text-emerald-400 font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-download"></i> Baixar
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </aside>
+
+        <!-- Right Main Compressor Studio -->
+        <section class="lg:col-span-3 space-y-6">
+            
+            <!-- Upload Dropzone Card -->
+            <div class="glass-card rounded-2xl p-6 space-y-6">
+                
+                <div id="dropzone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onclick="document.getElementById('fileInput').click()" class="border-2 border-dashed border-emerald-500/40 hover:border-emerald-500 dark:bg-slate-900/50 bg-emerald-50/50 rounded-2xl p-8 text-center cursor-pointer transition flex flex-col items-center justify-center space-y-3">
+                    <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)" class="hidden">
+                    
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-500 text-2xl shadow-inner">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+
+                    <div>
+                        <p class="text-base font-bold text-gray-900 dark:text-white">Arraste e largue a sua imagem aqui</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">ou clique para selecionar (Suporta JPG, PNG, WEBP, BMP, GIF até 20 MB)</p>
+                    </div>
+
+                    <div id="fileSelectedBadge" class="hidden px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-mono-code text-xs font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-image text-sm"></i> <span id="selectedFileName">imagem.jpg</span> (<span id="selectedFileSize">0 KB</span>, <span id="selectedFileDims">0x0 px</span>)
+                    </div>
+                </div>
+
+                <!-- Controls & Tuning Section -->
+                <div id="controlsSection" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2 hidden">
+                    
+                    <!-- Quality Slider -->
+                    <div class="space-y-2 card-sub-bg p-4 rounded-xl border">
+                        <div class="flex justify-between items-center text-xs font-bold">
+                            <span class="text-gray-700 dark:text-gray-300">Qualidade de Saída</span>
+                            <span id="qualityVal" class="text-emerald-500 font-mono text-sm font-extrabold">80%</span>
+                        </div>
+                        <input type="range" id="qualityRange" min="1" max="100" value="80" oninput="updateQualityLabel(this.value)" class="w-full bg-gray-200 dark:bg-slate-800 rounded-lg h-2 accent-emerald-500 cursor-pointer">
+                        <p class="text-[10px] text-gray-400">Menor % reduz drasticamente o peso do ficheiro.</p>
+                    </div>
+
+                    <!-- Scale Selector -->
+                    <div class="space-y-2 card-sub-bg p-4 rounded-xl border">
+                        <span class="block text-xs font-bold text-gray-700 dark:text-gray-300">Resolução & Escala</span>
+                        <div class="grid grid-cols-4 gap-1.5 pt-1">
+                            <button onclick="selectScale(1.0, this)" class="scale-btn active-scale px-2 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow">100%</button>
+                            <button onclick="selectScale(0.75, this)" class="scale-btn px-2 py-1.5 rounded-lg text-xs font-bold bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300">75%</button>
+                            <button onclick="selectScale(0.50, this)" class="scale-btn px-2 py-1.5 rounded-lg text-xs font-bold bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300">50%</button>
+                            <button onclick="selectScale(0.25, this)" class="scale-btn px-2 py-1.5 rounded-lg text-xs font-bold bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300">25%</button>
+                        </div>
+                        <p class="text-[10px] text-gray-400">Reduz as dimensões em pixels se necessário.</p>
+                    </div>
+
+                    <!-- Output Format Selector -->
+                    <div class="space-y-2 card-sub-bg p-4 rounded-xl border">
+                        <span class="block text-xs font-bold text-gray-700 dark:text-gray-300">Formato de Saída</span>
+                        <div class="grid grid-cols-3 gap-2 pt-1">
+                            <button onclick="selectOutputFormat('WEBP', this)" class="fmt-btn active-fmt px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow">WEBP</button>
+                            <button onclick="selectOutputFormat('JPEG', this)" class="fmt-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300">JPEG</button>
+                            <button onclick="selectOutputFormat('PNG', this)" class="fmt-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300">PNG</button>
+                        </div>
+                        <p class="text-[10px] text-gray-400">WEBP é o padrão mais otimizado para a web.</p>
+                    </div>
+
+                </div>
+
+                <!-- Compress Action Button -->
+                <div class="flex justify-end">
+                    <button onclick="startCompression()" id="compressBtn" disabled class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-sm shadow-lg shadow-emerald-500/30 transition flex items-center gap-2 opacity-50 cursor-not-allowed">
+                        <i class="fa-solid fa-compress"></i> Otimizar & Comprimir Imagem
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Comparison & Results Preview Panel -->
+            <div id="resultCard" class="glass-card rounded-2xl p-6 space-y-6 hidden">
+                <div class="flex flex-wrap justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3 gap-3">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-emerald-500"></i> Imagem Otimizada com Sucesso!
+                    </h3>
+                    
+                    <span id="savingsBadge" class="px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 font-extrabold text-sm border border-emerald-500/40 shadow-inner">
+                        -0% Poupança
+                    </span>
+                </div>
+
+                <!-- Stats Cards Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="card-sub-bg p-3.5 rounded-xl border">
+                        <span class="text-[10px] text-gray-400 font-bold block uppercase">Peso Original</span>
+                        <span id="resOrigSize" class="text-sm font-mono-code font-bold text-gray-900 dark:text-white block">2.4 MB</span>
+                    </div>
+
+                    <div class="card-sub-bg p-3.5 rounded-xl border">
+                        <span class="text-[10px] text-gray-400 font-bold block uppercase">Peso Otimizado</span>
+                        <span id="resCompSize" class="text-sm font-mono-code font-bold text-emerald-400 block">380 KB</span>
+                    </div>
+
+                    <div class="card-sub-bg p-3.5 rounded-xl border">
+                        <span class="text-[10px] text-gray-400 font-bold block uppercase">Dimensões Originais</span>
+                        <span id="resOrigDims" class="text-xs font-mono-code font-bold text-gray-900 dark:text-white block">1920x1080</span>
+                    </div>
+
+                    <div class="card-sub-bg p-3.5 rounded-xl border">
+                        <span class="text-[10px] text-gray-400 font-bold block uppercase">Novas Dimensões</span>
+                        <span id="resCompDims" class="text-xs font-mono-code font-bold text-emerald-400 block">1920x1080</span>
+                    </div>
+                </div>
+
+                <!-- Visual Preview comparison -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                            <i class="fa-regular fa-image"></i> Imagem Original
+                        </span>
+                        <div class="rounded-xl overflow-hidden bg-slate-950 border border-gray-800 h-64 flex items-center justify-center p-2">
+                            <img id="previewOrigImg" src="" alt="Original Preview" class="max-h-full max-w-full object-contain rounded-lg">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Imagem Otimizada (Resultado)
+                        </span>
+                        <div class="rounded-xl overflow-hidden bg-slate-950 border border-emerald-500/30 h-64 flex items-center justify-center p-2">
+                            <img id="previewCompImg" src="" alt="Compressed Preview" class="max-h-full max-w-full object-contain rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <a id="downloadBtnLink" href="#" download class="px-8 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm shadow-lg shadow-emerald-500/30 transition flex items-center gap-2">
+                        <i class="fa-solid fa-download"></i> Baixar Imagem Otimizada
+                    </a>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="header-bg border-t py-6 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500">
+            <p>© 2026 CompressPic AI Studio — Otimizador de Imagens em Tempo Real | Porta 6959</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Engine -->
+    <script>
+        let currentFile = null;
+        let selectedScale = 1.0;
+        let selectedOutputFormat = 'WEBP';
+
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('compresspic_theme', isDark ? 'dark' : 'light');
+            updateThemeUI(isDark);
+        }
+
+        function updateThemeUI(isDark) {
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (isDark) {
+                icon.className = 'fa-solid fa-moon text-amber-400';
+                text.innerText = 'Modo Escuro';
+            } else {
+                icon.className = 'fa-solid fa-sun text-emerald-500';
+                text.innerText = 'Modo Claro';
+            }
+        }
+
+        const savedTheme = localStorage.getItem('compresspic_theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+            updateThemeUI(false);
+        } else {
+            document.documentElement.classList.add('dark');
+            updateThemeUI(true);
+        }
+
+        function updateQualityLabel(val) {
+            document.getElementById('qualityVal').innerText = val + '%';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('dropzone').classList.add('dropzone-active');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            document.getElementById('dropzone').classList.remove('dropzone-active');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('dropzone').classList.remove('dropzone-active');
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                processSelectedImage(e.dataTransfer.files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            if (e.target.files && e.target.files.length > 0) {
+                processSelectedImage(e.target.files[0]);
+            }
+        }
+
+        function processSelectedImage(file) {
+            if (!file.type.startsWith('image/')) {
+                alert("Por favor selecione um ficheiro de imagem válido.");
+                return;
+            }
+
+            currentFile = file;
+            const sizeKb = (file.size / 1024).toFixed(1);
+            
+            // Read image dimensions
+            const img = new Image();
+            img.onload = function() {
+                document.getElementById('selectedFileName').innerText = file.name;
+                document.getElementById('selectedFileSize').innerText = sizeKb + ' KB';
+                document.getElementById('selectedFileDims').innerText = `${this.width}x${this.height} px`;
+                document.getElementById('fileSelectedBadge').classList.remove('hidden');
+
+                // Set original preview src
+                document.getElementById('previewOrigImg').src = img.src;
+
+                document.getElementById('controlsSection').classList.remove('hidden');
+                enableCompressButton();
+            };
+            img.src = URL.createObjectURL(file);
+        }
+
+        function selectScale(scaleVal, btn) {
+            selectedScale = scaleVal;
+            document.querySelectorAll('.scale-btn').forEach(b => {
+                b.className = 'scale-btn px-2 py-1.5 rounded-lg text-xs font-bold bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300';
+            });
+            btn.className = 'scale-btn active-scale px-2 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow';
+        }
+
+        function selectOutputFormat(fmt, btn) {
+            selectedOutputFormat = fmt;
+            document.querySelectorAll('.fmt-btn').forEach(b => {
+                b.className = 'fmt-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300';
+            });
+            btn.className = 'fmt-btn active-fmt px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow';
+        }
+
+        function enableCompressButton() {
+            const btn = document.getElementById('compressBtn');
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        async function startCompression() {
+            if (!currentFile) return;
+
+            const btn = document.getElementById('compressBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> A Otimizar Imagem...';
+
+            const quality = document.getElementById('qualityRange').value;
+
+            const formData = new FormData();
+            formData.append('file', currentFile);
+            formData.append('quality', quality);
+            formData.append('scale', selectedScale);
+            formData.append('output_format', selectedOutputFormat);
+
+            try {
+                const res = await fetch('/api/compress', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    renderResult(data);
+                    refreshHistory();
+                } else {
+                    const err = await res.json();
+                    alert("Erro na compressão: " + (err.error || 'Erro desconhecido.'));
+                }
+            } catch (e) {
+                alert("Erro no envio: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-compress"></i> Otimizar & Comprimir Imagem';
+            }
+        }
+
+        function renderResult(data) {
+            document.getElementById('resOrigSize').innerText = data.original_size_kb + ' KB';
+            document.getElementById('resCompSize').innerText = data.compressed_size_kb + ' KB';
+            document.getElementById('resOrigDims').innerText = data.original_dimensions;
+            document.getElementById('resCompDims').innerText = data.compressed_dimensions;
+            document.getElementById('downloadBtnLink').href = data.download_url;
+
+            document.getElementById('savingsBadge').innerText = `-${data.savings_pct}% Poupança`;
+            document.getElementById('previewCompImg').src = data.data_url;
+
+            document.getElementById('resultCard').classList.remove('hidden');
+            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function refreshHistory() {
+            const res = await fetch('/api/history');
+            if (res.ok) {
+                const history = await res.json();
+                const container = document.getElementById('historyList');
+                container.innerHTML = '';
+                history.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = "p-3 rounded-xl card-sub-bg border hover:border-emerald-500/50 transition space-y-1.5";
+                    div.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400">
+                                ${item.output_format} (Q: ${item.quality}%)
+                            </span>
+                            <span class="font-mono text-[10px] text-emerald-400 font-bold">
+                                -${item.savings_pct}%
+                            </span>
+                        </div>
+                        <div class="text-xs font-mono-code truncate text-gray-800 dark:text-gray-200 font-semibold" title="${item.original_filename}">
+                            ${item.original_filename}
+                        </div>
+                        <div class="flex justify-between items-center text-[10px] text-gray-400 pt-1 border-t border-gray-200 dark:border-slate-800/60">
+                            <span>${item.original_size_kb} KB → <strong class="text-emerald-400">${item.compressed_size_kb} KB</strong></span>
+                            <a href="/api/download/${item.compressed_filename}" download class="text-emerald-500 hover:text-emerald-400 font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-download"></i> Baixar
+                            </a>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+        }
+
+        async function clearHistory() {
+            if (!confirm("Deseja apagar todo o histórico de compressão?")) return;
+            await fetch('/api/history', { method: 'DELETE' });
+            refreshHistory();
+        }
+    </script>
+</body>
+</html>

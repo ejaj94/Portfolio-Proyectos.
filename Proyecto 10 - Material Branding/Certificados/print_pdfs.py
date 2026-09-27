@@ -7,7 +7,7 @@ async def generate_pdfs():
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
         
-        desktop = r"C:\Users\ANGEL RAFAEL\Desktop"
+        desktop = r"C:\Users\enman\Desktop"
         base_url = "http://localhost:8088"
         
         print("Generating PT PDF...")

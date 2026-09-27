@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}DÍA 40 — 40 Projetos EJAJ TECH em Produção{% endblock %}
+
+{% block content %}
+<!-- Hero Showcase Banner -->
+<div class="hero-banner">
+    <div style="display: inline-block; background: rgba(255, 0, 127, 0.2); border: 1px solid var(--neon-pink); color: var(--neon-pink); padding: 0.35rem 1.2rem; border-radius: 50px; font-weight: 900; font-size: 0.85rem; margin-bottom: 1rem;">
+        <i class="fa-solid fa-atom"></i> DÍA 40 — NOVAS FRONTEIRAS & INTELIGÊNCIA ARTIFICIAL
+    </div>
+    <h1>DÍA 40: Domínio Técnico, Ambição & Humildade</h1>
+    <p>
+        40 dias sem vacilar. A elevar o nível da engenharia de software com integração de Inteligência Artificial, visão computacional OCR, automação avançada e arquiteturas de alta confiança.
+    </p>
+
+    <!-- Stats Grid -->
+    <div class="stats-counter-grid">
+        <div class="stat-box">
+            <div class="stat-num">40</div>
+            <div class="stat-lbl">Dias Ininterruptos</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" style="color: var(--neon-pink);">40</div>
+            <div class="stat-lbl">Sistemas SaaS Concluídos</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" style="color: var(--neon-purple);">AI</div>
+            <div class="stat-lbl">Inteligência Integrada</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" style="color: var(--neon-green);">100%</div>
+            <div class="stat-lbl">Código Autêntico & Real</div>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Slide Showcase Deck -->
+<div class="deck-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span id="slideDayBadge" class="badge-day40" style="font-size: 0.95rem;">
+                <i class="fa-solid fa-calendar-check"></i> <span id="slideDayNum">DÍA 31</span>
+            </span>
+            <span id="slideBadge" class="badge-neon-cyan">Categoria</span>
+        </div>
+        <span id="slideCounterText" style="color: var(--text-slate); font-weight: 700; font-size: 0.95rem;">
+            Projeto 31 de 40
+        </span>
+    </div>
+
+    <!-- Active Slide Content -->
+    <div style="background: rgba(5, 8, 17, 0.9); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 2rem; margin-bottom: 1.5rem;">
+        <h2 id="slideTitle" style="font-size: 2rem; font-weight: 900; color: #ffffff; margin-bottom: 0.4rem;">
+            Título do Projeto
+        </h2>
+        <p id="slideSubtitle" style="font-size: 1.1rem; color: var(--neon-pink); font-weight: 700; margin-bottom: 1.25rem;">
+            Subtítulo / Descrição Curta
+        </p>
+
+        <p id="slideDescription" style="font-size: 1.05rem; color: #cbd5e1; margin-bottom: 1.5rem; line-height: 1.7;">
+            Descrição completa do projeto...
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; background: rgba(0,0,0,0.5); padding: 1.25rem; border-radius: 14px; border-left: 4px solid var(--neon-cyan);">
+            <div>
+                <span style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-slate); font-weight: 800;">
+                    <i class="fa-solid fa-code"></i> Arquitetura & Tecnologias
+                </span>
+                <span id="slideTechStack" style="font-size: 0.95rem; font-weight: 700; color: #ffffff;">
+                    Python, OpenAI API, OCR, Flask
+                </span>
+            </div>
+            <div>
+                <span style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--neon-cyan); font-weight: 800;">
+                    <i class="fa-solid fa-chart-line"></i> Impacto Empresarial
+                </span>
+                <span id="slideImpact" style="font-size: 0.95rem; font-weight: 700; color: var(--neon-green);">
+                    Resultados práticos...
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thumbnails Navigation Bar -->
+    <div id="thumbnailsContainer" style="display: flex; gap: 0.75rem; overflow-x: auto; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+        <!-- Dynamically rendered thumbnail buttons -->
+    </div>
+
+    <!-- Slide Control Buttons -->
+    <div class="slide-controls">
+        <div style="display: flex; gap: 0.75rem;">
+            <button class="btn btn-secondary" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button class="btn btn-secondary" onclick="nextSlide()">Próximo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <div>
+            <button id="btnAutoPlay" class="btn btn-neon" onclick="toggleAutoPlay()">
+                <i class="fa-solid fa-play"></i> Iniciar Apresentação Automática
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Script Link Callout -->
+<div style="background: linear-gradient(135deg, #0d1322 0%, #050811 100%); border: 2px solid var(--neon-pink); border-radius: 20px; padding: 2rem; text-align: center;">
+    <h3 style="font-size: 1.4rem; font-weight: 900; color: var(--neon-pink); margin-bottom: 0.5rem;">
+        🎙️ Monólogo do Locutor DÍA 40 (Confiante, Desafiador, Reflexivo & Neón)
+    </h3>
+    <p style="color: var(--text-slate); font-size: 1rem; max-width: 800px; margin: 0 auto 1.5rem auto;">
+        Um texto marcante em Português de Portugal para gravação de voz, demonstrando maturidade técnica, novas capacidades e a mesma determinação inabalável.
+    </p>
+    <a href="/script" class="btn btn-cyan">
+        <i class="fa-solid fa-microphone-lines"></i> Ver Monólogo do Locutor DÍA 40
+    </a>
+</div>
+{% endblock %}

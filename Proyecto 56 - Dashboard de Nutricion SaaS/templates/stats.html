@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Estatísticas & Evolução{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-dark);">
+        <i class="fa-solid fa-chart-column" style="color: var(--green-primary);"></i> Estatísticas & Historico de Consumo
+    </h1>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Análise detalhada da consistência nutricional diária e distribuição de macronutrientes.
+    </p>
+</div>
+
+<!-- History Table -->
+<div class="panel-card" style="border-top: 4px solid var(--green-primary);">
+    <div class="panel-header">
+        <h2><i class="fa-solid fa-calendar-days" style="color: var(--green-primary);"></i> Histórico dos Últimos Dias</h2>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Calorias Consumidas</th>
+                    <th>Meta de Calorias</th>
+                    <th>Proteína (g)</th>
+                    <th>Carbohidratos (g)</th>
+                    <th>Gordura (g)</th>
+                    <th>Estado de Cumprimento</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if daily_history %}
+                    {% for day in daily_history %}
+                    {% set target_cal = goals['target_calories'] if goals else 2200 %}
+                    {% set diff = day['total_cal'] - target_cal %}
+                    <tr>
+                        <td style="font-weight: 800; color: var(--text-dark);">{{ day['log_date'] }}</td>
+                        <td style="font-weight: 800; color: var(--green-hover);">{{ '%.1f' | format(day['total_cal']) }} kcal</td>
+                        <td style="color: var(--text-muted);">{{ target_cal }} kcal</td>
+                        <td><span class="badge badge-purple">{{ '%.1f' | format(day['total_prot']) }}g P</span></td>
+                        <td><span class="badge badge-blue">{{ '%.1f' | format(day['total_carbs']) }}g C</span></td>
+                        <td><span class="badge badge-amber">{{ '%.1f' | format(day['total_fat']) }}g G</span></td>
+                        <td>
+                            {% if diff > 200 %}
+                                <span class="badge badge-amber"><i class="fa-solid fa-arrow-up"></i> Superávit</span>
+                            {% elif diff < -200 %}
+                                <span class="badge badge-blue"><i class="fa-solid fa-arrow-down"></i> Défice</span>
+                            {% else %}
+                                <span class="badge badge-green"><i class="fa-solid fa-check"></i> Meta Cumprida</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                            Sem histórico de dias anteriores.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Macro Distribution Summary Card -->
+<div class="panel-card" style="border-top: 4px solid var(--lime-accent);">
+    <div class="panel-header">
+        <h2><i class="fa-solid fa-pie-chart" style="color: var(--lime-accent);"></i> Proporção Ideal de Macronutrientes</h2>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; text-align: center;">
+        <div style="background: #f3e8ff; padding: 1.5rem; border-radius: 12px; border: 1px solid #d8b4fe;">
+            <i class="fa-solid fa-drumstick-bite" style="font-size: 2rem; color: #6b21a8; margin-bottom: 0.5rem;"></i>
+            <h3 style="font-size: 1.1rem; color: #6b21a8; font-weight: 800;">Proteínas</h3>
+            <p style="font-size: 1.5rem; font-weight: 800; color: #581c87; margin-top: 0.3rem;">30%</p>
+            <span style="font-size: 0.8rem; color: #7e22ce;">Síntese muscular & Saciedade</span>
+        </div>
+
+        <div style="background: #dbeafe; padding: 1.5rem; border-radius: 12px; border: 1px solid #93c5fd;">
+            <i class="fa-solid fa-wheat-awn" style="font-size: 2rem; color: #1e40af; margin-bottom: 0.5rem;"></i>
+            <h3 style="font-size: 1.1rem; color: #1e40af; font-weight: 800;">Carbohidratos</h3>
+            <p style="font-size: 1.5rem; font-weight: 800; color: #1e3a8a; margin-top: 0.3rem;">45%</p>
+            <span style="font-size: 0.8rem; color: #1d4ed8;">Energia diária & Glicogénio</span>
+        </div>
+
+        <div style="background: #fef3c7; padding: 1.5rem; border-radius: 12px; border: 1px solid #fcd34d;">
+            <i class="fa-solid fa-oil-well" style="font-size: 2rem; color: #92400e; margin-bottom: 0.5rem;"></i>
+            <h3 style="font-size: 1.1rem; color: #92400e; font-weight: 800;">Gorduras</h3>
+            <p style="font-size: 1.5rem; font-weight: 800; color: #78350f; margin-top: 0.3rem;">25%</p>
+            <span style="font-size: 0.8rem; color: #b45309;">Saúde hormonal & Absorção</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

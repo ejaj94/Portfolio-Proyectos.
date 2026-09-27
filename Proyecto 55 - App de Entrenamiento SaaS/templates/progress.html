@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Progresso & Récords Pessoais{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-dark);">
+        <i class="fa-solid fa-trophy" style="color: var(--cyan-primary);"></i> Progresso & Análise de Performance
+    </h1>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Acompanhe os seus Récords Pessoais (PRs), estimativa de 1 Repetição Máxima (1RM) e evolução do volume de treino.
+    </p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- 1RM Calculator Widget -->
+    <div class="panel-card" style="border-top: 4px solid var(--cyan-primary);">
+        <div class="panel-header">
+            <h2><i class="fa-solid fa-calculator" style="color: var(--cyan-primary);"></i> Calculadora de 1RM (Fórmula Brzycki)</h2>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Calcule a sua força máxima teórica (1 Repetição Máxima) sem necessitar de testar limites com risco de lesão.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+            <div class="form-group">
+                <label for="calcWeight"><i class="fa-solid fa-weight-hanging"></i> Carga Executada (kg)</label>
+                <input type="number" id="calcWeight" class="form-control" value="80" step="2.5" min="1" oninput="calculate1RM()">
+            </div>
+            <div class="form-group">
+                <label for="calcReps"><i class="fa-solid fa-rotate-right"></i> Repetições Realizadas</label>
+                <input type="number" id="calcReps" class="form-control" value="8" min="1" max="30" oninput="calculate1RM()">
+            </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 1.25rem; border-radius: 12px; text-align: center; color: #ffffff;">
+            <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.3rem;">
+                Estimativa Teórica de 1RM
+            </span>
+            <div id="calc1RMResult" style="font-size: 2.2rem; font-weight: 800; color: var(--cyan-primary);">
+                100.0 kg
+            </div>
+            <p style="font-size: 0.78rem; color: #cbd5e1; margin-top: 0.4rem;">
+                Fórmula: <code>Peso × (36 / (37 - Reps))</code>
+            </p>
+        </div>
+    </div>
+
+    <!-- Volume History Summary Card -->
+    <div class="panel-card" style="border-top: 4px solid var(--lime-accent);">
+        <div class="panel-header">
+            <h2><i class="fa-solid fa-chart-line" style="color: var(--lime-accent);"></i> Evolução do Volume de Carga (kg)</h2>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Histórico das últimas sessões e carga total acumulada (Carga × Repetições).
+        </p>
+
+        <div style="max-height: 270px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Sessão / Rotina</th>
+                        <th style="text-align: right;">Volume Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if volume_history %}
+                        {% for vol in volume_history %}
+                        <tr>
+                            <td style="font-size: 0.88rem; color: var(--text-muted);">{{ vol['workout_date'] }}</td>
+                            <td style="font-weight: 700; color: var(--text-dark);">{{ vol['routine_name'] }}</td>
+                            <td style="text-align: right; font-weight: 800; color: var(--lime-accent);">
+                                {{ vol['total_volume_kg'] }} kg
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: var(--text-muted);">Nenhum histórico disponível.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Personal Records Leaderboard Panel -->
+<div class="panel-card" style="border-top: 4px solid var(--amber-warning);">
+    <div class="panel-header">
+        <h2><i class="fa-solid fa-medal" style="color: var(--amber-warning);"></i> Tabela de Récords Pessoais (PR Leaderboard)</h2>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Exercício</th>
+                    <th>Carga Máxima (PR)</th>
+                    <th>Repetições Efetuadas</th>
+                    <th>1RM Estimado no PR</th>
+                    <th>Estado de Récord</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if prs %}
+                    {% for pr in prs %}
+                    {% set est_1rm = pr['max_weight'] * (36.0 / (37.0 - (pr['reps'] if pr['reps'] < 37 else 36))) %}
+                    <tr>
+                        <td style="font-weight: 800; font-size: 1.05rem; color: var(--text-dark);">
+                            <i class="fa-solid fa-crown" style="color: var(--amber-warning); margin-right: 0.5rem;"></i>
+                            {{ pr['exercise_name'] }}
+                        </td>
+                        <td style="font-weight: 800; font-size: 1.2rem; color: var(--text-dark);">
+                            {{ pr['max_weight'] }} kg
+                        </td>
+                        <td style="font-weight: 700; color: var(--text-muted);">
+                            {{ pr['reps'] }} reps
+                        </td>
+                        <td style="font-weight: 800; color: var(--cyan-hover);">
+                            {{ '%.1f' | format(est_1rm) }} kg
+                        </td>
+                        <td>
+                            <span class="badge badge-pr">
+                                <i class="fa-solid fa-trophy"></i> Récord Estabelecido
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                            Ainda não possui Récords Pessoais (PRs) assinalados. Registe um treino e assinale a opção "PR".
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        calculate1RM();
+    });
+</script>
+{% endblock %}

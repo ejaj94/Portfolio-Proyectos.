@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NutriTracker SaaS{% endblock %} | EJAJ TECH</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <i class="fa-solid fa-leaf" style="color: var(--green-light);"></i>
+            <div>NUTRITRACKER <span>SAAS</span></div>
+        </a>
+
+        <ul class="navbar-nav">
+            <li><a href="/" class="{% if request.path == '/' %}active{% endif %}"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+            <li><a href="/foods" class="{% if request.path == '/foods' %}active{% endif %}"><i class="fa-solid fa-apple-whole"></i> Alimentos</a></li>
+            <li><a href="/log" class="{% if request.path == '/log' %}active{% endif %}"><i class="fa-solid fa-pen-to-square"></i> Registo Diário</a></li>
+            <li><a href="/goals" class="{% if request.path == '/goals' %}active{% endif %}"><i class="fa-solid fa-bullseye"></i> Objetivos</a></li>
+            <li><a href="/stats" class="{% if request.path == '/stats' %}active{% endif %}"><i class="fa-solid fa-chart-column"></i> Estatísticas</a></li>
+            <li>
+                <a href="/log" class="btn-header-cta">
+                    <i class="fa-solid fa-plus"></i> Registar Refeição
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer Support Callout -->
+    <footer style="background: #064e3b; color: #a7f3d0; padding: 2.5rem 1.5rem; text-align: center; margin-top: 4rem; border-top: 4px solid var(--green-light);">
+        <p style="color: #ffffff; font-weight: 700; font-size: 1.05rem;">NutriTracker SaaS — Control Nutricional & Gestão de Macronutrientes</p>
+        <p style="font-size: 0.88rem; margin-top: 0.25rem;">Desenvolvido por Enmanuel Jimenez | Lead Architect EJAJ TECH</p>
+        <div style="margin-top: 1rem;">
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20Dashboard%20de%20Nutricao" target="_blank" style="color: #ffffff; font-weight: 700; text-decoration: none; background: rgba(52, 211, 153, 0.2); padding: 0.4rem 1.2rem; border-radius: 50px; border: 1px solid var(--green-light);">
+                <i class="fa-brands fa-whatsapp"></i> Suporte WhatsApp: +351 911 151 993 (Digite "AJUDA")
+            </a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.78rem; color: #a7f3d0;">&copy; 2026 EJAJ TECH. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/nutrition.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

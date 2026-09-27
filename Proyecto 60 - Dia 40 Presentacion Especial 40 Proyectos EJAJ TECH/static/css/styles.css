@@ -1,0 +1,232 @@
+/* EJAJ TECH - DÍA 40 Cyber Neon Palette Presentation Stylesheet */
+:root {
+    --bg-obsidian: #050811;
+    --bg-card: #0d1322;
+    --neon-cyan: #00f5d4;
+    --neon-pink: #ff007f;
+    --neon-purple: #a855f7;
+    --neon-green: #10b981;
+    --neon-cyan-glow: rgba(0, 245, 212, 0.35);
+    --neon-pink-glow: rgba(255, 0, 127, 0.35);
+    --neon-purple-glow: rgba(168, 85, 247, 0.35);
+    --text-white: #ffffff;
+    --text-slate: #94a3b8;
+    --border-color: rgba(255, 255, 255, 0.12);
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-obsidian);
+    color: var(--text-white);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Navbar Header */
+.navbar {
+    background: rgba(13, 19, 34, 0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 2px solid var(--neon-cyan);
+    padding: 1.25rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 245, 212, 0.15);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand span {
+    background: linear-gradient(135deg, #00f5d4 0%, #ff007f 50%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    list-style: none;
+}
+
+.navbar-nav a {
+    color: var(--text-slate);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.navbar-nav a:hover, .navbar-nav a.active {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan-glow);
+}
+
+.badge-day40 {
+    background: linear-gradient(135deg, #ff007f 0%, #a855f7 100%);
+    color: #ffffff;
+    padding: 0.4rem 1.2rem;
+    border-radius: 50px;
+    font-weight: 900;
+    font-size: 0.88rem;
+    box-shadow: 0 0 20px var(--neon-pink-glow);
+}
+
+/* Container */
+.container {
+    max-width: 1280px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Hero Milestone Showcase Banner */
+.hero-banner {
+    background: linear-gradient(135deg, rgba(13, 19, 34, 0.95) 0%, rgba(255, 0, 127, 0.2) 50%, rgba(0, 245, 212, 0.15) 100%);
+    border: 2px solid var(--neon-pink);
+    border-radius: 24px;
+    padding: 3.5rem 2.5rem;
+    text-align: center;
+    box-shadow: 0 10px 45px var(--neon-pink-glow);
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-banner h1 {
+    font-size: 2.7rem;
+    font-weight: 900;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #ffffff 0%, #00f5d4 40%, #ff007f 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-banner p {
+    color: var(--text-slate);
+    font-size: 1.15rem;
+    max-width: 880px;
+    margin: 0 auto 2rem auto;
+}
+
+/* Stats Counter Grid */
+.stats-counter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.stat-box {
+    background: rgba(5, 8, 17, 0.85);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.35rem;
+    text-align: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-4px);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 20px var(--neon-cyan-glow);
+}
+
+.stat-num {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--neon-cyan);
+}
+
+.stat-lbl {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-slate);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Slide Deck Container */
+.deck-card {
+    background: var(--bg-card);
+    border: 2px solid var(--neon-purple);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px var(--neon-purple-glow);
+    margin-bottom: 3rem;
+}
+
+.slide-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Badges */
+.badge-neon-pink { background: rgba(255, 0, 127, 0.2); color: var(--neon-pink); border: 1px solid var(--neon-pink); padding: 0.35rem 0.85rem; border-radius: 50px; font-size: 0.8rem; font-weight: 800; display: inline-block; text-transform: uppercase; }
+.badge-neon-cyan { background: rgba(0, 245, 212, 0.2); color: var(--neon-cyan); border: 1px solid var(--neon-cyan); padding: 0.35rem 0.85rem; border-radius: 50px; font-size: 0.8rem; font-weight: 800; display: inline-block; text-transform: uppercase; }
+.badge-neon-purple { background: rgba(168, 85, 247, 0.2); color: var(--neon-purple); border: 1px solid var(--neon-purple); padding: 0.35rem 0.85rem; border-radius: 50px; font-size: 0.8rem; font-weight: 800; display: inline-block; text-transform: uppercase; }
+.badge-neon-green { background: rgba(16, 185, 129, 0.2); color: var(--neon-green); border: 1px solid var(--neon-green); padding: 0.35rem 0.85rem; border-radius: 50px; font-size: 0.8rem; font-weight: 800; display: inline-block; text-transform: uppercase; }
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-neon { background: linear-gradient(135deg, #ff007f 0%, #a855f7 100%); color: #ffffff; box-shadow: 0 0 15px var(--neon-pink-glow); }
+.btn-neon:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--neon-pink-glow); }
+
+.btn-cyan { background: var(--neon-cyan); color: #050811; box-shadow: 0 0 15px var(--neon-cyan-glow); }
+.btn-cyan:hover { background: #00c4a9; transform: translateY(-2px); }
+
+.btn-secondary { background: rgba(255, 255, 255, 0.1); color: #ffffff; }
+.btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+
+/* Script Display Panel */
+.script-card {
+    background: #050811;
+    border-left: 6px solid var(--neon-pink);
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 35px var(--neon-pink-glow);
+}
+
+.script-monologue {
+    font-size: 1.25rem;
+    line-height: 2;
+    color: #f4f4f5;
+    font-weight: 500;
+    white-space: pre-line;
+}

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRCraft AI — Gerador de Códigos QR | EJAJ TECH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --bg-card: #111827;
+            --border-card: rgba(255, 255, 255, 0.1);
+            --accent-cyan: #38bdf8;
+            --accent-blue: #1d4ed8;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .studio-container {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            min-height: 100vh;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* LEFT CONTROL PANE */
+        .control-pane {
+            padding: 2rem;
+            background: #0f172a;
+            border-right: 1px solid var(--border-card);
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+
+        .brand-header {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px);
+            border: 1px solid var(--border-card); border-radius: 18px; padding: 1rem 1.5rem;
+        }
+
+        .brand-logo { display: flex; align-items: center; gap: 0.75rem; }
+        .brand-icon {
+            width: 42px; height: 42px; border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem; color: #fff; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .brand-text h1 { font-size: 1.2rem; font-weight: 800; color: #fff; }
+        .brand-text p { font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700; text-transform: uppercase; }
+
+        /* Type Selector Pills */
+        .type-selector {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;
+            background: #1e293b; padding: 0.4rem; border-radius: 14px; border: 1px solid var(--border-card);
+        }
+
+        .type-btn {
+            background: transparent; border: none; color: var(--text-sub);
+            padding: 0.75rem; border-radius: 10px; font-weight: 700; font-size: 0.85rem;
+            cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+            transition: all 0.2s;
+        }
+
+        .type-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+
+        .type-btn.active {
+            background: var(--accent-cyan); color: #0f172a;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Form Controls */
+        .form-section {
+            background: #1e293b; border: 1px solid var(--border-card);
+            border-radius: 20px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.2rem;
+        }
+
+        .form-title {
+            font-size: 1.1rem; font-weight: 800; color: #fff;
+            display: flex; align-items: center; gap: 0.5rem;
+            border-bottom: 1px solid var(--border-card); padding-bottom: 0.75rem;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+        .form-label { font-size: 0.82rem; font-weight: 700; color: var(--text-sub); }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%; background: #0f172a; border: 1px solid var(--border-card);
+            border-radius: 12px; padding: 0.75rem 1rem; color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;
+        }
+
+        .form-input:focus, .form-textarea:focus { border-color: var(--accent-cyan); }
+
+        .color-pickers {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+        }
+
+        .color-box {
+            display: flex; align-items: center; gap: 0.75rem;
+            background: #0f172a; padding: 0.6rem 0.85rem; border-radius: 12px; border: 1px solid var(--border-card);
+        }
+
+        .color-box input[type="color"] {
+            border: none; background: transparent; width: 32px; height: 32px; cursor: pointer; border-radius: 6px;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            color: #fff; border: none; padding: 0.9rem; border-radius: 14px;
+            font-weight: 800; font-size: 0.95rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+            box-shadow: 0 4px 20px rgba(29, 78, 216, 0.4); transition: transform 0.2s;
+        }
+
+        .btn-generate:hover { transform: translateY(-2px); }
+
+        /* RIGHT STAGE PANE */
+        .stage-pane {
+            padding: 2rem; background: #090d16;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: sticky; top: 0; height: 100vh; gap: 1.5rem;
+        }
+
+        /* QR Frame Outer Card */
+        .qr-card-stage {
+            background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.15); border-radius: 28px;
+            padding: 2rem; display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(56, 189, 248, 0.15);
+            position: relative; width: 340px;
+        }
+
+        .qr-badge-header {
+            background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.35rem 1rem; border-radius: 50px;
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;
+        }
+
+        /* QR Canvas Wrapper */
+        .qr-canvas-wrapper {
+            position: relative; padding: 1rem; background: #ffffff; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
+        }
+
+        #qrcodeCanvas {
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Centered Logo Overlay */
+        .qr-center-logo {
+            position: absolute; width: 44px; height: 44px; border-radius: 50%;
+            background: #ffffff; border: 3px solid #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent-blue); font-size: 1.2rem; pointer-events: none;
+        }
+
+        .qr-card-title {
+            font-size: 1.05rem; font-weight: 800; color: #fff; text-align: center;
+        }
+
+        .qr-card-subtitle {
+            font-size: 0.78rem; color: var(--text-sub); text-align: center; word-break: break-all; margin-top: -0.5rem;
+        }
+
+        /* Action Buttons */
+        .action-bar {
+            display: flex; gap: 0.75rem; width: 340px;
+        }
+
+        .action-btn {
+            flex: 1; background: #1e293b; color: #fff; border: 1px solid var(--border-card);
+            padding: 0.75rem; border-radius: 12px; font-weight: 700; font-size: 0.82rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover { background: var(--accent-cyan); color: #0f172a; }
+
+        /* History Table */
+        .history-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+        .history-table th, .history-table td { padding: 0.65rem 0.85rem; text-align: left; border-bottom: 1px solid var(--border-card); }
+        .history-table th { color: var(--text-sub); font-weight: 700; background: #0f172a; }
+    </style>
+</head>
+<body>
+
+    <div class="studio-container">
+        
+        <!-- LEFT CONTROL PANE -->
+        <div class="control-pane">
+            
+            <header class="brand-header">
+                <div class="brand-logo">
+                    <div class="brand-icon"><i class="fa-solid fa-qrcode"></i></div>
+                    <div class="brand-text">
+                        <h1>QRCraft AI</h1>
+                        <p>Gerador de Códigos QR • EJAJ TECH</p>
+                    </div>
+                </div>
+                <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.3rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800;">
+                    <i class="fa-solid fa-circle"></i> Online • Port 6949
+                </span>
+            </header>
+
+            <!-- Payload Type Selector -->
+            <div class="type-selector">
+                <button class="type-btn active" onclick="selectType('URL')">
+                    <i class="fa-solid fa-globe"></i> URL Web
+                </button>
+                <button class="type-btn" onclick="selectType('Texto')">
+                    <i class="fa-solid fa-align-left"></i> Texto
+                </button>
+                <button class="type-btn" onclick="selectType('WiFi')">
+                    <i class="fa-solid fa-wifi"></i> Wi-Fi
+                </button>
+                <button class="type-btn" onclick="selectType('Contacto')">
+                    <i class="fa-solid fa-address-card"></i> Contacto
+                </button>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-section">
+                <div class="form-title" id="formTitle">
+                    <i class="fa-solid fa-sliders" style="color: var(--accent-cyan);"></i> Parâmetros do Payload
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Título de Identificação do QR</label>
+                    <input type="text" id="qrTitle" class="form-input" value="Website EJAJ TECH 🚀" placeholder="ex: Wi-Fi do Escritório">
+                </div>
+
+                <!-- DYNAMIC INPUT FORMS -->
+                <!-- URL Form -->
+                <div id="form-URL" class="payload-form">
+                    <div class="form-group">
+                        <label class="form-label">Endereço Web (URL)</label>
+                        <input type="url" id="inputUrl" class="form-input" value="https://ejajtech.com" placeholder="https://...">
+                    </div>
+                </div>
+
+                <!-- Text Form -->
+                <div id="form-Texto" class="payload-form" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Mensagem de Texto Livre</label>
+                        <textarea id="inputText" class="form-textarea" rows="3" placeholder="Escreva a sua mensagem aqui..."></textarea>
+                    </div>
+                </div>
+
+                <!-- WiFi Form -->
+                <div id="form-WiFi" class="payload-form" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Nome da Rede (SSID)</label>
+                        <input type="text" id="wifiSsid" class="form-input" value="EJAJ_TECH_5G" placeholder="ex: MinhaRede">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Palavra-passe Wi-Fi</label>
+                        <input type="password" id="wifiPassword" class="form-input" value="EjajTech2026!" placeholder="Senha">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tipo de Encriptação</label>
+                        <select id="wifiSecurity" class="form-select">
+                            <option value="WPA">WPA / WPA2 / WPA3 (Recomendado)</option>
+                            <option value="WEP">WEP</option>
+                            <option value="nopass">Sem Palavra-passe (Aberta)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div id="form-Contacto" class="payload-form" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Nome Completo</label>
+                        <input type="text" id="cardName" class="form-input" value="Enmanuel Jimenez">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;" class="form-group">
+                        <input type="tel" id="cardPhone" class="form-input" value="+351 900 000 000" placeholder="Telemóvel">
+                        <input type="email" id="cardEmail" class="form-input" value="enmanuel@ejajtech.com" placeholder="E-mail">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;" class="form-group">
+                        <input type="text" id="cardCompany" class="form-input" value="EJAJ TECH" placeholder="Empresa">
+                        <input type="text" id="cardJob" class="form-input" value="Lead Architect" placeholder="Cargo">
+                    </div>
+                </div>
+
+                <!-- Personalização Visual & Colors -->
+                <div style="border-top: 1px solid var(--border-card); padding-top: 1rem;">
+                    <div class="form-label" style="margin-bottom: 0.6rem;">Personalização de Cores & Ícone Central</div>
+                    <div class="color-pickers">
+                        <div class="color-box">
+                            <input type="color" id="fgColor" value="#1d4ed8" onchange="renderQR()">
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #fff;">Cor do QR</div>
+                                <div style="font-size: 0.65rem; color: var(--text-sub);">Pontos / Módulos</div>
+                            </div>
+                        </div>
+                        <div class="color-box">
+                            <input type="color" id="bgColor" value="#ffffff" onchange="renderQR()">
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #fff;">Fundo</div>
+                                <div style="font-size: 0.65rem; color: var(--text-sub);">Cor de Fundo</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 0.75rem;">
+                        <label class="form-label">Logótipo Central Embutido</label>
+                        <select id="logoIconSelect" class="form-select" onchange="updateLogoIcon()">
+                            <option value="fa-solid fa-globe">Globo Web 🌐</option>
+                            <option value="fa-solid fa-wifi">Wi-Fi 📶</option>
+                            <option value="fa-solid fa-address-card">Cartão Contacto 👤</option>
+                            <option value="fa-brands fa-whatsapp">WhatsApp 💬</option>
+                            <option value="fa-solid fa-gem">Joia / EJAJ TECH 💎</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn-generate" onclick="generateQRSubmit()">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar Código QR Personalizado
+                </button>
+            </div>
+
+            <!-- History Section -->
+            <div style="background: #1e293b; border-radius: 20px; border: 1px solid var(--border-card); padding: 1.25rem;">
+                <div style="font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+                    <span><i class="fa-solid fa-history" style="color: var(--accent-cyan);"></i> Histórico de QRs Gerados</span>
+                    <span style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700;">{{ total_downloads }} Descarregamentos</span>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Tipo</th>
+                                <th>Data</th>
+                                <th>Downloads</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in history %}
+                            <tr>
+                                <td style="font-weight: 700; color: #fff;">{{ h.title }}</td>
+                                <td><span style="background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); padding: 0.15rem 0.5rem; border-radius: 50px; font-weight: 700;">{{ h.qr_type }}</span></td>
+                                <td>{{ h.created_at[:10] }}</td>
+                                <td><strong>{{ h.downloads }}</strong></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT STAGE PANE -->
+        <div class="stage-pane">
+            
+            <div class="qr-card-stage">
+                <div class="qr-badge-header" id="stageBadge">DIGITALIZA AQUI • SCAN ME</div>
+                
+                <div class="qr-canvas-wrapper">
+                    <div id="qrcodeCanvas"></div>
+                    <div class="qr-center-logo" id="centerLogoBox">
+                        <i class="fa-solid fa-globe" id="centerLogoIcon"></i>
+                    </div>
+                </div>
+
+                <div class="qr-card-title" id="stageTitle">Website EJAJ TECH 🚀</div>
+                <div class="qr-card-subtitle" id="stageSubtitle">https://ejajtech.com</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-bar">
+                <button class="action-btn" onclick="downloadPNG()">
+                    <i class="fa-solid fa-download"></i> Baixar PNG
+                </button>
+                <button class="action-btn" onclick="simulateScan()">
+                    <i class="fa-solid fa-mobile-screen"></i> Testar Scan
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT ENGINE -->
+    <script>
+        let currentType = 'URL';
+        let qrcodeObj = null;
+
+        function selectType(type) {
+            currentType = type;
+            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            document.querySelectorAll('.payload-form').forEach(f => f.style.display = 'none');
+            document.getElementById('form-' + type).style.display = 'block';
+
+            if (type === 'URL') {
+                document.getElementById('qrTitle').value = "Website EJAJ TECH 🚀";
+                document.getElementById('logoIconSelect').value = "fa-solid fa-globe";
+            } else if (type === 'WiFi') {
+                document.getElementById('qrTitle').value = "Wi-Fi Escritório VIP 📶";
+                document.getElementById('logoIconSelect').value = "fa-solid fa-wifi";
+            } else if (type === 'Contacto') {
+                document.getElementById('qrTitle').value = "Contacto Enmanuel Jimenez 👤";
+                document.getElementById('logoIconSelect').value = "fa-solid fa-address-card";
+            } else {
+                document.getElementById('qrTitle').value = "Nota de Texto 📝";
+            }
+            updateLogoIcon();
+            renderQR();
+        }
+
+        function updateLogoIcon() {
+            const iconClass = document.getElementById('logoIconSelect').value;
+            document.getElementById('centerLogoIcon').className = iconClass;
+        }
+
+        function getPayloadString() {
+            if (currentType === 'URL') {
+                return document.getElementById('inputUrl').value || 'https://ejajtech.com';
+            } else if (currentType === 'Texto') {
+                return document.getElementById('inputText').value || 'Mensagem QRCraft AI';
+            } else if (currentType === 'WiFi') {
+                const ssid = document.getElementById('wifiSsid').value;
+                const pwd = document.getElementById('wifiPassword').value;
+                const sec = document.getElementById('wifiSecurity').value;
+                return `WIFI:S:${ssid};T:${sec};P:${pwd};;`;
+            } else if (currentType === 'Contacto') {
+                const name = document.getElementById('cardName').value;
+                const phone = document.getElementById('cardPhone').value;
+                const email = document.getElementById('cardEmail').value;
+                const company = document.getElementById('cardCompany').value;
+                const job = document.getElementById('cardJob').value;
+                return `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nORG:${company}\nTITLE:${job}\nTEL:${phone}\nEMAIL:${email}\nEND:VCARD`;
+            }
+            return 'https://ejajtech.com';
+        }
+
+        function renderQR() {
+            const container = document.getElementById('qrcodeCanvas');
+            container.innerHTML = '';
+
+            const payload = getPayloadString();
+            const fg = document.getElementById('fgColor').value;
+            const bg = document.getElementById('bgColor').value;
+            const title = document.getElementById('qrTitle').value;
+
+            document.getElementById('stageTitle').innerText = title;
+            document.getElementById('stageSubtitle').innerText = payload.length > 35 ? payload.substring(0, 35) + '...' : payload;
+
+            qrcodeObj = new QRCode(container, {
+                text: payload,
+                width: 200,
+                height: 200,
+                colorDark: fg,
+                colorLight: bg,
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        async function generateQRSubmit() {
+            const payload = getPayloadString();
+            const fg = document.getElementById('fgColor').value;
+            const bg = document.getElementById('bgColor').value;
+            const title = document.getElementById('qrTitle').value;
+            const icon = document.getElementById('logoIconSelect').value;
+
+            const res = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    qr_type: currentType,
+                    title: title,
+                    fg_color: fg,
+                    bg_color: bg,
+                    logo_icon: icon,
+                    url: document.getElementById('inputUrl').value,
+                    text: document.getElementById('inputText').value,
+                    wifi_ssid: document.getElementById('wifiSsid').value,
+                    wifi_password: document.getElementById('wifiPassword').value,
+                    wifi_security: document.getElementById('wifiSecurity').value,
+                    card_name: document.getElementById('cardName').value,
+                    card_phone: document.getElementById('cardPhone').value,
+                    card_email: document.getElementById('cardEmail').value,
+                    card_company: document.getElementById('cardCompany').value,
+                    card_job: document.getElementById('cardJob').value
+                })
+            });
+            const data = await res.json();
+            renderQR();
+            alert("Código QR gerado e guardado no histórico!");
+        }
+
+        function downloadPNG() {
+            const canvas = document.querySelector('#qrcodeCanvas canvas');
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = 'QRCraft_' + Date.now() + '.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            }
+        }
+
+        function simulateScan() {
+            const payload = getPayloadString();
+            alert("📱 Leitura de QR Simulada com Sucesso!\n\nConteúdo Descodificado:\n" + payload);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQR();
+        });
+    </script>
+</body>
+</html>

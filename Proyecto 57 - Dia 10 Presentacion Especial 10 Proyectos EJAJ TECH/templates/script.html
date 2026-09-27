@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Guião de Locução DÍA 10{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; font-weight: 900; color: #ffffff; display: flex; align-items: center; gap: 0.75rem;">
+        <i class="fa-solid fa-microphone-lines" style="color: var(--gold-primary);"></i> Guião do Locutor — DÍA 10 (Especial Histórico)
+    </h1>
+    <p style="color: var(--text-slate); font-size: 1.05rem;">
+        Texto cinematográfico, emocionante e inspirador para vídeo promocional de redes sociais (TikTok, Reels, Shorts).
+    </p>
+</div>
+
+<!-- Tabs selector for Pt-PT vs Spanish -->
+<div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+    <button type="button" class="btn btn-cyan" onclick="switchLang('pt')"><i class="fa-solid fa-language"></i> Português Europeu (Pt-PT)</button>
+    <button type="button" class="btn btn-secondary" onclick="switchLang('es')"><i class="fa-solid fa-globe"></i> Español (Latam / España)</button>
+</div>
+
+<!-- Portuguese Script Container -->
+<div id="scriptPT" class="script-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <span class="badge badge-amber"><i class="fa-solid fa-clapperboard"></i> Guião Oficial em Português Europeu (Pt-PT)</span>
+        <span style="color: var(--text-slate); font-size: 0.85rem; font-weight: 700;">⏱️ Duração Estimada: 55 a 65 segundos</span>
+    </div>
+
+    <div class="script-quote">
+<strong>[00:00 - 00:08] 🎬 INTRODUÇÃO EMOTIVA & REFLEXIVA (Música: Piano Suave & Atmosférico)</strong>
+<em>(Enquadramento: Enmanuel Jimenez diante do monitor com linhas de código a passar em câmara lenta)</em>
+"Día 10 a construir projetos sem parar... E se te dissesse que isto não foi nada fácil?
+Ainda me lembro, como se fosse hoje, do dia em que entrei na academia. Eu nem sequer sabia escrever uma única linha de código..."
+
+<strong>[00:08 - 00:20] ⚡ TRANSIÇÃO & SUPERAÇÃO (Música: Crescendo Dramático com Sintetizadores Hybrid)</strong>
+<em>(Enquadramento: Montagem rápida e dinâmica dos primeiros 10 projetos SaaS no ecrã)</em>
+"Hoje, quase um ano depois, com noites sem dormir, estudo intenso e um esforço incansável...
+Aquilo que parecia impossível transformou-se em realidade. Agora construo sistemas potentes, modernos e reais, criados para transformar o desempenho de empresas e impactar positivamente a nossa sociedade!"
+
+<strong>[00:20 - 00:38] 🚀 CONQUISTA DA COMUNIDADE & AGRADECIMENTO (Música: Ritmo Épico & Motivacional)</strong>
+<em>(Enquadramento: Contador a subir até aos 1.300 seguidores no ecrã e flashes dos 10 softwares)</em>
+"Em apenas 10 dias de jornada contínua, já somos quase 1.300 seguidores aqui no canal! E este é apenas o início.
+O meu mais sincero obrigado a cada um de vocês pelo apoio, pelas mensagens e por acreditarem no meu trabalho."
+
+<strong>[00:38 - 00:58] 💡 CHAMADA PARA AÇÃO & OFERTA DE AJUDA (Música: Bateria Marcante & Tema Inspirador)</strong>
+<em>(Enquadramento: Enmanuel Jimenez a olhar para a câmara com sorriso confiante)</em>
+"Se tens uma ideia, um projeto empresarial ou qualquer dúvida sobre desenvolvimento de software, aplicações móveis ou páginas web... comenta agora mesmo ou envia-me mensagem!
+Estou aqui para te ajudar a realizar o teu projeto com toda a minha experiência e dedicação."
+
+<strong>[00:58 - 01:05] 🔥 ENCERRAMENTO & MARCA (Música: Acorde Final Potente)</strong>
+<em>(Enquadramento: Logo EJAJ TECH em destaque com efeito dourado e dados de contacto)</em>
+"Comenta a palavra <strong>AJUDA</strong> ou envia mensagem no WhatsApp para <strong>+351 911 151 993</strong>.
+Siga-nos nas redes sociais e vamos construir o futuro juntos com a <strong>EJAJ TECH</strong>!"
+    </div>
+</div>
+
+<!-- Spanish Script Container -->
+<div id="scriptES" class="script-card" style="display: none; border-left: 5px solid var(--cyan-accent);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <span class="badge badge-cyan"><i class="fa-solid fa-clapperboard"></i> Guion Oficial en Español</span>
+        <span style="color: var(--text-slate); font-size: 0.85rem; font-weight: 700;">⏱️ Duración Estimada: 55 a 65 segundos</span>
+    </div>
+
+    <div class="script-quote">
+<strong>[00:00 - 00:08] 🎬 INTRODUCCIÓN EMOTIVA (Música: Piano Cinematográfico Profundo)</strong>
+<em>(Tomas: Enmanuel frente a la pantalla con líneas de código en cámara lenta)</em>
+"Día 10 construyendo proyectos sin parar... Y si te dijera que esto no ha sido nada fácil?
+Aún me acuerdo, como si fuera hoy, cuando empecé en la academia y no sabía escribir ni una sola línea de código..."
+
+<strong>[00:08 - 00:20] ⚡ SUPERACIÓN & PODER (Música: Subida Épica de Sintetizadores)</strong>
+<em>(Tomas: Muestra rápida y dinámica de los primeros 10 proyectos reales desarrollados)</em>
+"Hoy, después de casi un año de estudio intenso, noches en vela y un esfuerzo inquebrantable...
+Aquello que parecía imposible es una realidad. Ahora construyo programas potentes, útiles y reales, diseñados para impulsar el crecimiento de las empresas e impactar positivamente en la sociedad."
+
+<strong>[00:20 - 00:38] 🚀 AGRADECIMIENTO A LA COMUNIDAD (Música: Ritmo Inspirador & Vibrante)</strong>
+<em>(Tomas: Contador subiendo a 1.300 seguidores y flashes de los sistemas)</em>
+"En solo 10 días de travesía continua, ¡ya somos casi 1.300 seguidores! Y esto es solo el comienzo.
+Gracias de corazón a cada uno de ustedes por el apoyo incondicional y por creer en este proyecto."
+
+<strong>[00:38 - 00:58] 💡 LLAMADO A LA ACCIÓN (Música: Tema Motivacional Creciente)</strong>
+<em>(Tomas: Enmanuel mirando a la cámara con determinación)</em>
+"Si tienes una idea, un proyecto empresarial o cualquier duda sobre desarrollo de software, apps o páginas web... ¡comenta ahora mismo o escríbeme!
+Te ayudaré a resolverlo y llevar tu visión al siguiente nivel con toda mi experiencia."
+
+<strong>[00:58 - 01:05] 🔥 CIERRE IMPACTANTE (Música: Golpe Final Cinematográfico)</strong>
+<em>(Tomas: Logo EJAJ TECH en dorado con datos de contacto y WhatsApp)</em>
+"Comenta la palabra <strong>AJUDA</strong> o escríbeme por WhatsApp al <strong>+351 911 151 993</strong>.
+¡Síguenos en redes sociales y construyamos el futuro juntos con <strong>EJAJ TECH</strong>!"
+    </div>
+</div>
+
+<script>
+    function switchLang(lang) {
+        if (lang === 'pt') {
+            document.getElementById('scriptPT').style.display = 'block';
+            document.getElementById('scriptES').style.display = 'none';
+        } else {
+            document.getElementById('scriptPT').style.display = 'none';
+            document.getElementById('scriptES').style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

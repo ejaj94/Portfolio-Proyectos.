@@ -1,0 +1,237 @@
+/* EJAJ TECH - DÍA 20 Special Celebration Presentation Stylesheet */
+:root {
+    --bg-obsidian: #0b0f19;
+    --bg-card: #141c2e;
+    --gold-primary: #f59e0b;
+    --gold-glow: rgba(245, 158, 11, 0.35);
+    --purple-accent: #8b5cf6;
+    --rose-accent: #ec4899;
+    --cyan-accent: #00f5d4;
+    --emerald-accent: #10b981;
+    --text-white: #ffffff;
+    --text-slate: #94a3b8;
+    --border-glow: rgba(139, 92, 246, 0.3);
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-obsidian);
+    color: var(--text-white);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Navbar Header */
+.navbar {
+    background: rgba(20, 28, 46, 0.88);
+    backdrop-filter: blur(14px);
+    border-bottom: 2px solid var(--purple-accent);
+    padding: 1.25rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand span {
+    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    list-style: none;
+}
+
+.navbar-nav a {
+    color: var(--text-slate);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.navbar-nav a:hover, .navbar-nav a.active {
+    color: var(--cyan-accent);
+}
+
+.badge-day20 {
+    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+    color: #ffffff;
+    padding: 0.4rem 1.2rem;
+    border-radius: 50px;
+    font-weight: 900;
+    font-size: 0.88rem;
+    box-shadow: 0 0 18px rgba(236, 72, 153, 0.4);
+}
+
+/* Container */
+.container {
+    max-width: 1280px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Hero Milestone Showcase Banner */
+.hero-banner {
+    background: linear-gradient(135deg, rgba(20, 28, 46, 0.95) 0%, rgba(88, 28, 135, 0.35) 100%);
+    border: 1px solid var(--purple-accent);
+    border-radius: 24px;
+    padding: 3.5rem 2.5rem;
+    text-align: center;
+    box-shadow: 0 10px 45px rgba(139, 92, 246, 0.2);
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-banner h1 {
+    font-size: 2.7rem;
+    font-weight: 900;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #ffffff 0%, #8b5cf6 50%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-banner p {
+    color: var(--text-slate);
+    font-size: 1.15rem;
+    max-width: 880px;
+    margin: 0 auto 2rem auto;
+}
+
+/* Stats Counter Grid */
+.stats-counter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.stat-box {
+    background: rgba(11, 15, 25, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.35rem;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-4px);
+    border-color: var(--cyan-accent);
+}
+
+.stat-num {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--purple-accent);
+}
+
+.stat-lbl {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-slate);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Slide Deck Container */
+.deck-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-glow);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.55);
+    margin-bottom: 3rem;
+}
+
+.slide-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Badges */
+.badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+.badge-cyan { background: rgba(0, 245, 212, 0.15); color: var(--cyan-accent); border: 1px solid var(--cyan-accent); }
+.badge-lime { background: rgba(16, 185, 129, 0.15); color: var(--emerald-accent); border: 1px solid var(--emerald-accent); }
+.badge-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #60a5fa; }
+.badge-amber { background: rgba(245, 158, 11, 0.15); color: var(--gold-primary); border: 1px solid var(--gold-primary); }
+.badge-purple { background: rgba(139, 92, 246, 0.15); color: var(--purple-accent); border: 1px solid var(--purple-accent); }
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-purple { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: #ffffff; }
+.btn-purple:hover { background: #6d28d9; transform: translateY(-2px); }
+
+.btn-cyan { background: var(--cyan-accent); color: #0b0f19; }
+.btn-cyan:hover { background: #00c4a9; transform: translateY(-2px); }
+
+.btn-secondary { background: rgba(255, 255, 255, 0.1); color: #ffffff; }
+.btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+
+/* Script Display Panel */
+.script-card {
+    background: #0f172a;
+    border-left: 5px solid var(--purple-accent);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.script-quote {
+    font-size: 1.15rem;
+    line-height: 1.85;
+    color: #e2e8f0;
+    font-style: italic;
+    white-space: pre-line;
+}

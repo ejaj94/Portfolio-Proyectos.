@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubCraft AI — Subscription Management & MRR Billing Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        subbrand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+        /* Dark Mode styles */
+        .dark body {
+            background-color: #060913;
+            color: #f1f5f9;
+        }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .dark .header-bg {
+            background-color: rgba(10, 15, 29, 0.95);
+            border-color: #1e293b;
+        }
+        .dark .card-sub-bg {
+            background-color: #0b1120;
+            border-color: #1e293b;
+        }
+
+        /* Light Mode styles */
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.08);
+        }
+        .header-bg {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: #e2e8f0;
+        }
+        .card-sub-bg {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="header-bg border-b sticky top-0 z-50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-indigo-600 flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-500/30">
+                    <i class="fa-solid fa-credit-card text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl tracking-tight text-gray-900 dark:text-white">SubCraft AI</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Plataforma SaaS de Gestão de Subscrições, Faturação & MRR</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20">
+                    <i class="fa-solid fa-chart-line mr-1"></i> Dashboard MRR / ARR
+                </span>
+
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" id="themeToggleBtn" class="px-3 py-2 rounded-xl bg-gray-200 dark:bg-slate-800 text-gray-800 dark:text-gray-200 hover:bg-emerald-500 hover:text-white transition flex items-center gap-2 font-bold border border-gray-300 dark:border-slate-700 shadow">
+                    <i id="themeIcon" class="fa-solid fa-moon text-amber-400"></i>
+                    <span id="themeText">Modo Escuro</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow space-y-6">
+        
+        <!-- Executive SaaS Metrics Overview -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <div class="glass-card rounded-2xl p-5 border flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">MRR (Mensal)</span>
+                    <h3 id="metricMrr" class="text-2xl font-black text-emerald-500 font-mono mt-1">€{{ "%.2f"|format(metrics.mrr) }}</h3>
+                    <span class="text-[10px] text-emerald-400 font-semibold"><i class="fa-solid fa-arrow-up mr-1"></i>+14.2% este mês</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-money-bill-trend-up"></i>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 border flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">ARR (Anual)</span>
+                    <h3 id="metricArr" class="text-2xl font-black text-indigo-400 font-mono mt-1">€{{ "%.2f"|format(metrics.arr) }}</h3>
+                    <span class="text-[10px] text-indigo-400 font-semibold">Projeção a 12 meses</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-vault"></i>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 border flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">Subscritores Ativos</span>
+                    <h3 id="metricActive" class="text-2xl font-black text-gray-900 dark:text-white font-mono mt-1">{{ metrics.active_subscribers }}</h3>
+                    <span class="text-[10px] text-gray-400 font-semibold">Clientes recorrentes</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-users font-bold"></i>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 border flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">Churn Rate (%)</span>
+                    <h3 id="metricChurn" class="text-2xl font-black text-rose-500 font-mono mt-1">{{ metrics.churn_rate }}%</h3>
+                    <span class="text-[10px] text-rose-400 font-semibold">Taxa de cancelamento</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-user-minus"></i>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Main Chart & Plans Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Revenue Growth Chart -->
+            <div class="lg:col-span-7 glass-card rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-area text-emerald-500"></i> Evolução de Receita Recorrente (MRR)
+                    </h3>
+                    <span class="text-xs text-gray-400 font-mono">2026 Q3 - Q4</span>
+                </div>
+                <div class="h-64 relative">
+                    <canvas id="mrrChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Subscription Cycle & Quick Action Modal Trigger -->
+            <div class="lg:col-span-5 glass-card rounded-2xl p-6 space-y-5 flex flex-col justify-between">
+                <div class="border-b border-gray-200 dark:border-slate-800 pb-3 flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-plus-circle text-emerald-500"></i> Ativar Nova Subscrição
+                    </h3>
+                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Checkout Simulado</span>
+                </div>
+
+                <form onsubmit="handleSubscribeSubmit(event)" class="space-y-3.5 text-xs">
+                    <div>
+                        <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Nome do Cliente / Empresa</label>
+                        <input type="text" id="subName" required placeholder="Ex: Rodrigo Neves" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Email de Faturação</label>
+                        <input type="email" id="subEmail" required placeholder="rodrigo@empresa.pt" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Plano Desejado</label>
+                            <select id="subPlan" onchange="updateSubAmount()" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white font-semibold focus:outline-none focus:border-emerald-500">
+                                <option value="Starter Plan" data-amount="12.00">Starter (€12/mês)</option>
+                                <option value="Pro Plan" data-amount="29.00" selected>Pro (€29/mês)</option>
+                                <option value="Enterprise Plan" data-amount="49.00">Enterprise (€49/mês)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Ciclo</label>
+                            <select id="subCycle" onchange="updateSubAmount()" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white font-semibold focus:outline-none focus:border-emerald-500">
+                                <option value="Mensal">Mensal</option>
+                                <option value="Anual">Anual (-20%)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Método de Pagamento</label>
+                        <select id="subPayment" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white font-semibold focus:outline-none focus:border-emerald-500">
+                            <option value="Cartão de Crédito">Cartão de Crédito (Visa/Mastercard)</option>
+                            <option value="MB WAY">MB WAY</option>
+                            <option value="Multibanco">Multibanco</option>
+                            <option value="PayPal">PayPal</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="subBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-emerald-500/30 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock"></i> Ativar Subscrição (€<span id="subAmountLabel">29.00</span>)
+                    </button>
+                </form>
+            </div>
+
+        </section>
+
+        <!-- Subscription Plans Tier Display -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-tags text-emerald-500"></i> Planos & Tarifários Disponíveis
+                </h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Starter Tier -->
+                <div class="glass-card rounded-2xl p-6 space-y-4 border hover:border-emerald-500/50 transition">
+                    <div class="flex justify-between items-center">
+                        <span class="px-3 py-1 rounded-full bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300 text-xs font-bold">Starter</span>
+                        <span class="text-xs text-gray-400">Pessoas & Freelancers</span>
+                    </div>
+                    <div>
+                        <h4 class="text-3xl font-extrabold text-gray-900 dark:text-white font-mono">€12<span class="text-xs font-normal text-gray-400">/mês</span></h4>
+                    </div>
+                    <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-slate-800 pt-3">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Até 3 projetos ativos</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Faturação básica</li>
+                        <li class="flex items-center gap-2 text-gray-400"><i class="fa-solid fa-xmark text-rose-500"></i> Suporte prioritário 24/7</li>
+                    </ul>
+                </div>
+
+                <!-- Pro Tier (Featured) -->
+                <div class="glass-card rounded-2xl p-6 space-y-4 border-2 border-emerald-500 relative shadow-xl shadow-emerald-500/10">
+                    <span class="absolute -top-3 right-6 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-500 to-indigo-600 text-white text-[10px] font-black uppercase tracking-wider shadow">Mais Popular</span>
+                    <div class="flex justify-between items-center">
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold">Pro Business</span>
+                        <span class="text-xs text-emerald-400 font-bold">Equipas em Crescimento</span>
+                    </div>
+                    <div>
+                        <h4 class="text-3xl font-extrabold text-gray-900 dark:text-white font-mono">€29<span class="text-xs font-normal text-gray-400">/mês</span></h4>
+                    </div>
+                    <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-slate-800 pt-3">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Projetos ilimitados</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> API Keys & Webhooks</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Suporte prioritário 24/7</li>
+                    </ul>
+                </div>
+
+                <!-- Enterprise Tier -->
+                <div class="glass-card rounded-2xl p-6 space-y-4 border hover:border-emerald-500/50 transition">
+                    <div class="flex justify-between items-center">
+                        <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-400 text-xs font-bold">Enterprise</span>
+                        <span class="text-xs text-gray-400">Grandes Organizações</span>
+                    </div>
+                    <div>
+                        <h4 class="text-3xl font-extrabold text-gray-900 dark:text-white font-mono">€49<span class="text-xs font-normal text-gray-400">/mês</span></h4>
+                    </div>
+                    <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-slate-800 pt-3">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> SLA de 99.9% Garantido</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Gestor de conta dedicado</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Exportação ilimitada de dados</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subscriptions & Invoices Tables Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Active Subscriptions Table -->
+            <div class="glass-card rounded-2xl p-6 space-y-4">
+                <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-user-check text-emerald-500"></i> Subscrições Ativas & Histórico
+                    </h3>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-slate-800">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-gray-100 dark:bg-slate-900 text-gray-500 font-bold uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3">Cliente</th>
+                                <th class="p-3">Plano</th>
+                                <th class="p-3">Valor</th>
+                                <th class="p-3">Estado</th>
+                                <th class="p-3 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subsTbody" class="divide-y divide-gray-200 dark:divide-slate-800">
+                            {% for sub in subscriptions %}
+                            <tr>
+                                <td class="p-3">
+                                    <div class="font-bold text-gray-900 dark:text-white">{{ sub.user_name }}</div>
+                                    <div class="text-[10px] text-gray-400">{{ sub.user_email }}</div>
+                                </td>
+                                <td class="p-3 font-medium">{{ sub.plan_name }} <span class="text-[10px] text-gray-400">({{ sub.billing_cycle }})</span></td>
+                                <td class="p-3 font-mono font-bold text-emerald-400">€{{ "%.2f"|format(sub.amount) }}</td>
+                                <td class="p-3">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {% if sub.status == 'Active' %}bg-emerald-500/20 text-emerald-400 border border-emerald-500/30{% else %}bg-rose-500/20 text-rose-500 border border-rose-500/30{% endif %}">
+                                        {{ sub.status }}
+                                    </span>
+                                </td>
+                                <td class="p-3 text-right">
+                                    {% if sub.status == 'Active' %}
+                                    <button onclick="promptCancelSubscription({{ sub.id }})" class="text-rose-500 hover:underline font-bold text-[11px]">Cancelar</button>
+                                    {% else %}
+                                    <span class="text-gray-500 text-[10px] italic">Cancelado</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Invoices Table -->
+            <div class="glass-card rounded-2xl p-6 space-y-4">
+                <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-receipt text-indigo-400"></i> Faturas Emitidas & Recibos
+                    </h3>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-slate-800">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-gray-100 dark:bg-slate-900 text-gray-500 font-bold uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3">Nº Fatura</th>
+                                <th class="p-3">Cliente</th>
+                                <th class="p-3">Valor</th>
+                                <th class="p-3">Método</th>
+                                <th class="p-3 text-right">Recibo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invTbody" class="divide-y divide-gray-200 dark:divide-slate-800">
+                            {% for inv in invoices %}
+                            <tr>
+                                <td class="p-3 font-mono font-bold text-indigo-400">{{ inv.invoice_number }}</td>
+                                <td class="p-3">
+                                    <div class="font-semibold text-gray-900 dark:text-white">{{ inv.user_name }}</div>
+                                </td>
+                                <td class="p-3 font-mono font-bold text-emerald-400">€{{ "%.2f"|format(inv.amount) }}</td>
+                                <td class="p-3 font-medium text-gray-400">{{ inv.payment_method }}</td>
+                                <td class="p-3 text-right">
+                                    <button onclick="downloadPdfReceipt('{{ inv.invoice_number }}', '{{ inv.user_name }}', '{{ inv.amount }}')" class="text-emerald-500 hover:text-emerald-400 font-bold text-[11px] flex items-center gap-1 justify-end">
+                                        <i class="fa-solid fa-file-pdf"></i> PDF
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="header-bg border-t py-6 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500">
+            <p>© 2026 SubCraft AI Studio — Gestão de Subscrições & MRR Billing | Porta 6961</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Engine -->
+    <script>
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('subcraft_theme', isDark ? 'dark' : 'light');
+            updateThemeUI(isDark);
+        }
+
+        function updateThemeUI(isDark) {
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (isDark) {
+                icon.className = 'fa-solid fa-moon text-amber-400';
+                text.innerText = 'Modo Escuro';
+            } else {
+                icon.className = 'fa-solid fa-sun text-emerald-500';
+                text.innerText = 'Modo Claro';
+            }
+        }
+
+        const savedTheme = localStorage.getItem('subcraft_theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+            updateThemeUI(false);
+        } else {
+            document.documentElement.classList.add('dark');
+            updateThemeUI(true);
+        }
+
+        function updateSubAmount() {
+            const planSelect = document.getElementById('subPlan');
+            const cycleSelect = document.getElementById('subCycle');
+            const selectedOpt = planSelect.options[planSelect.selectedIndex];
+            let baseAmount = parseFloat(selectedOpt.getAttribute('data-amount') || 29.00);
+
+            if (cycleSelect.value === 'Anual') {
+                baseAmount = round(baseAmount * 12 * 0.8, 2);
+            }
+
+            document.getElementById('subAmountLabel').innerText = baseAmount.toFixed(2);
+        }
+
+        function round(val, decimals) {
+            return Number(Math.round(val + 'e' + decimals) + 'e-' + decimals);
+        }
+
+        async function handleSubscribeSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('subBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> A Processar Pagamento...';
+
+            const user_name = document.getElementById('subName').value;
+            const user_email = document.getElementById('subEmail').value;
+            const plan_name = document.getElementById('subPlan').value;
+            const billing_cycle = document.getElementById('subCycle').value;
+            const amount = parseFloat(document.getElementById('subAmountLabel').innerText);
+            const payment_method = document.getElementById('subPayment').value;
+
+            try {
+                const res = await fetch('/api/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_name, user_email, plan_name, billing_cycle, amount, payment_method })
+                });
+
+                if (res.ok) {
+                    alert("Subscrição ativada com sucesso!");
+                    window.location.reload();
+                } else {
+                    const err = await res.json();
+                    alert("Erro: " + err.error);
+                }
+            } catch (err) {
+                alert("Erro ao comunicar com o servidor: " + err.message);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function promptCancelSubscription(subId) {
+            const reason = prompt("Por favor indique o motivo do cancelamento da subscrição:");
+            if (reason === null) return;
+
+            try {
+                const res = await fetch('/api/cancel', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ subscription_id: subId, reason: reason || 'Nenhum motivo especificado' })
+                });
+
+                if (res.ok) {
+                    alert("Subscrição cancelada.");
+                    window.location.reload();
+                }
+            } catch (err) {
+                alert("Erro: " + err.message);
+            }
+        }
+
+        function downloadPdfReceipt(invNum, userName, amount) {
+            alert(`Download de Recibo PDF Simulado:\n\nFatura: ${invNum}\nCliente: ${userName}\nValor Pago: €${amount}\n\nFatura processada com sucesso no SubCraft AI!`);
+        }
+
+        // Initialize Chart.js MRR Growth Chart
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('mrrChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out (Prev)'],
+                    datasets: [{
+                        label: 'MRR (€)',
+                        data: [420, 580, 750, 920, {{ metrics.mrr }}, {{ metrics.mrr * 1.18 }}],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

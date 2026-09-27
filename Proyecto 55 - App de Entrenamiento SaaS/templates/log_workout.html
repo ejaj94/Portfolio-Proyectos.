@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Registar Treino{% endblock %}
+
+{% block content %}
+<div class="panel-card" style="border-top: 4px solid var(--cyan-primary);">
+    <div class="panel-header">
+        <div>
+            <h2><i class="fa-solid fa-clipboard-list" style="color: var(--cyan-primary);"></i> Registo de Sessão de Treino</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+                {% if routine %}
+                    Rotina Selecionada: <strong>{{ routine['name'] }}</strong> ({{ routine['target_muscle'] }})
+                {% else %}
+                    Sessão Livre / Treino Personalizado
+                {% endif %}
+            </p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <div class="timer-box" style="min-width: 220px;">
+                <span style="font-size: 0.85rem; color: #94a3b8;"><i class="fa-solid fa-stopwatch"></i> Descanso:</span>
+                <span id="restTimerDisplay">00:00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rest Timer Controls -->
+    <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-weight: 700; font-size: 0.85rem; color: var(--text-dark);">Iniciar Descanso Rápido:</span>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="startRestTimer(60)"><i class="fa-solid fa-play"></i> 60s</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="startRestTimer(90)"><i class="fa-solid fa-play"></i> 90s</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="startRestTimer(120)"><i class="fa-solid fa-play"></i> 120s</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="pauseRestTimer()"><i class="fa-solid fa-pause"></i> Pausa</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="resetRestTimer()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+        </div>
+        <div>
+            <span style="font-weight: 700; font-size: 0.9rem;">Volume Estimado da Sessão: </span>
+            <span id="sessionVolumeDisplay" style="font-size: 1.2rem; font-weight: 800; color: var(--cyan-hover);">0.0 kg</span>
+        </div>
+    </div>
+
+    <form onsubmit="submitWorkoutLog(event)">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
+            <div class="form-group">
+                <label for="routineNameInput"><i class="fa-solid fa-pen"></i> Nome da Sessão / Rotina</label>
+                <input type="text" id="routineNameInput" class="form-control" value="{{ routine['name'] if routine else 'Treino Livre' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="durationInput"><i class="fa-solid fa-clock"></i> Duração (Minutos)</label>
+                <input type="number" id="durationInput" class="form-control" value="60" min="5" max="300" required>
+            </div>
+        </div>
+
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-dark); display: flex; justify-content: space-between; align-items: center;">
+            <span><i class="fa-solid fa-dumbbell"></i> Séries & Cargas Efetuadas</span>
+            <button type="button" id="btnAddSetRow" class="btn btn-secondary btn-sm">
+                <i class="fa-solid fa-plus"></i> Adicionar Série
+            </button>
+        </h3>
+
+        <div style="overflow-x: auto; margin-bottom: 1.5rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 32%;">Exercício</th>
+                        <th style="width: 10%;">Nº Série</th>
+                        <th style="width: 18%;">Tipo</th>
+                        <th style="width: 12%;">Reps</th>
+                        <th style="width: 14%;">Carga (kg)</th>
+                        <th style="width: 8%; text-align: center;">PR?</th>
+                        <th style="width: 6%;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="setRowsTableBody">
+                    {% if preselected_exercises %}
+                        {% for ex in preselected_exercises %}
+                            {% for set_i in range(ex['target_sets']) %}
+                            <tr class="set-log-row">
+                                <td>
+                                    <select class="form-control set-ex-name" required>
+                                        {% for option_ex in exercises %}
+                                            <option value="{{ option_ex['name'] }}" {% if option_ex['name'] == ex['exercise_name'] %}selected{% endif %}>
+                                                {{ option_ex['name'] }} ({{ option_ex['muscle_group'] }})
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td><input type="number" class="form-control set-num" value="{{ set_i + 1 }}" min="1"></td>
+                                <td>
+                                    <select class="form-control set-type">
+                                        <option value="Trabalho" selected>Trabalho</option>
+                                        <option value="Aquecimento">Aquecimento</option>
+                                        <option value="Até à Falha">Até à Falha</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" class="form-control set-reps" value="{{ ex['target_reps'] }}" min="1" onchange="recalcSessionVolume()"></td>
+                                <td><input type="number" class="form-control set-weight" value="60.0" step="2.5" min="0" onchange="recalcSessionVolume()"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="set-pr" style="width: 18px; height: 18px;"></td>
+                                <td><button type="button" class="btn btn-danger btn-sm" onclick="removeSetRow(this)">✕</button></td>
+                            </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        <!-- Default 3 rows if free workout -->
+                        <tr class="set-log-row">
+                            <td>
+                                <select class="form-control set-ex-name" required>
+                                    {% for option_ex in exercises %}
+                                        <option value="{{ option_ex['name'] }}">{{ option_ex['name'] }} ({{ option_ex['muscle_group'] }})</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td><input type="number" class="form-control set-num" value="1" min="1"></td>
+                            <td>
+                                <select class="form-control set-type">
+                                    <option value="Trabalho" selected>Trabalho</option>
+                                    <option value="Aquecimento">Aquecimento</option>
+                                    <option value="Até à Falha">Até à Falha</option>
+                                </select>
+                            </td>
+                            <td><input type="number" class="form-control set-reps" value="10" min="1" onchange="recalcSessionVolume()"></td>
+                            <td><input type="number" class="form-control set-weight" value="60.0" step="2.5" min="0" onchange="recalcSessionVolume()"></td>
+                            <td style="text-align: center;"><input type="checkbox" class="set-pr" style="width: 18px; height: 18px;"></td>
+                            <td><button type="button" class="btn btn-danger btn-sm" onclick="removeSetRow(this)">✕</button></td>
+                        </tr>
+                        <tr class="set-log-row">
+                            <td>
+                                <select class="form-control set-ex-name" required>
+                                    {% for option_ex in exercises %}
+                                        <option value="{{ option_ex['name'] }}">{{ option_ex['name'] }} ({{ option_ex['muscle_group'] }})</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td><input type="number" class="form-control set-num" value="2" min="1"></td>
+                            <td>
+                                <select class="form-control set-type">
+                                    <option value="Trabalho" selected>Trabalho</option>
+                                    <option value="Aquecimento">Aquecimento</option>
+                                    <option value="Até à Falha">Até à Falha</option>
+                                </select>
+                            </td>
+                            <td><input type="number" class="form-control set-reps" value="10" min="1" onchange="recalcSessionVolume()"></td>
+                            <td><input type="number" class="form-control set-weight" value="60.0" step="2.5" min="0" onchange="recalcSessionVolume()"></td>
+                            <td style="text-align: center;"><input type="checkbox" class="set-pr" style="width: 18px; height: 18px;"></td>
+                            <td><button type="button" class="btn btn-danger btn-sm" onclick="removeSetRow(this)">✕</button></td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="workoutNotesInput"><i class="fa-solid fa-note-sticky"></i> Notas & Sensações da Sessão</label>
+            <textarea id="workoutNotesInput" class="form-control" rows="3" placeholder="Ex: Excelente pump nos peitorais, foco na cadência de descida..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+            <a href="/" class="btn btn-secondary"><i class="fa-solid fa-xmark"></i> Cancelar</a>
+            <button type="submit" class="btn btn-cyan" style="font-size: 1rem; padding: 0.75rem 2rem;">
+                <i class="fa-solid fa-check"></i> Finalizar & Salvar Treino
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        recalcSessionVolume();
+    });
+</script>
+{% endblock %}

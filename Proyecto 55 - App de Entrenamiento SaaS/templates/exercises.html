@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Biblioteca de Exercícios | FitTracker SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">Biblioteca de Exercícios & Técnica</h1>
+        <p style="color: #64748b;">Consulte a execução correta, grupos musculares primários e equipamentos.</p>
+    </div>
+</div>
+
+<!-- Search & Muscle Filters -->
+<div class="panel-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+    <form method="GET" action="/exercises" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+        <div style="flex: 2; min-width: 200px;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Pesquisar Exercício</label>
+            <input type="text" name="q" class="form-control" placeholder="Supino, Agachamento, Levantamento Terra..." value="{{ query_search }}">
+        </div>
+
+        <div style="flex: 1; min-width: 160px;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Grupo Muscular</label>
+            <select name="muscle" class="form-control">
+                <option value="">Todos os Grupos</option>
+                <option value="Peito" {% if muscle_filter == 'Peito' %}selected{% endif %}>Peito</option>
+                <option value="Costas" {% if muscle_filter == 'Costas' %}selected{% endif %}>Costas</option>
+                <option value="Pernas" {% if muscle_filter == 'Pernas' %}selected{% endif %}>Pernas</option>
+                <option value="Ombros" {% if muscle_filter == 'Ombros' %}selected{% endif %}>Ombros</option>
+                <option value="Braços" {% if muscle_filter == 'Braços' %}selected{% endif %}>Braços</option>
+                <option value="Core" {% if muscle_filter == 'Core' %}selected{% endif %}>Core</option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-cyan"><i class="fa-solid fa-filter"></i> Filtrar</button>
+            <a href="/exercises" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Limpar</a>
+        </div>
+    </form>
+</div>
+
+<!-- Exercise Cards Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for ex in exercises %}
+    <div class="panel-card" style="margin-bottom: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+            <span class="badge badge-cyan">{{ ex['muscle_group'] }}</span>
+            <span class="badge badge-lime" style="font-size: 0.7rem;"><i class="fa-solid fa-wrench"></i> {{ ex['equipment'] }}</span>
+        </div>
+
+        <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0.4rem 0;">{{ ex['name'] }}</h2>
+        <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 1rem;">{{ ex['instructions'] }}</p>
+
+        <div style="text-align: right; padding-top: 0.75rem; border-top: 1px solid #e2e8f0;">
+            <a href="/log/new" class="btn btn-secondary btn-sm"><i class="fa-solid fa-plus"></i> Adicionar ao Treino</a>
+        </div>
+    </div>
+    {% else %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #94a3b8;">
+        Nenhum exercício encontrado para os critérios selecionados.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

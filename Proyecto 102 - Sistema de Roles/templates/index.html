@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoleCraft AI — Sistema de Roles & Governança Enterprise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        orangebrand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            900: '#7c2d12'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+        /* Dark Mode styles */
+        .dark body {
+            background-color: #050505;
+            color: #f5f5f5;
+        }
+        .dark .glass-card {
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+        }
+        .dark .header-bg {
+            background-color: rgba(10, 10, 10, 0.95);
+            border-color: #262626;
+        }
+        .dark .tab-active {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 20px -2px rgba(249, 115, 22, 0.5);
+        }
+        .dark .card-sub-bg {
+            background-color: #0a0a0a;
+            border-color: #262626;
+        }
+
+        /* Light Mode styles */
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        }
+        .header-bg {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: #e2e8f0;
+        }
+        .tab-active {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 20px -2px rgba(234, 88, 12, 0.4);
+        }
+        .card-sub-bg {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-orange-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="header-bg border-b sticky top-0 z-50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-black via-neutral-900 to-orange-500 flex items-center justify-center text-orange-500 font-bold shadow-lg shadow-orange-500/30 border border-orange-500/40">
+                    <i class="fa-solid fa-users-gear text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl tracking-tight text-gray-900 dark:text-white">RoleCraft AI</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Sistema de Gestão de Roles, Permissões Granulares & Auditoria</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-xs">
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" id="themeToggleBtn" class="px-3 py-2 rounded-xl bg-gray-200 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 hover:bg-orange-500 hover:text-white dark:hover:bg-orange-500 transition flex items-center gap-2 font-bold border border-gray-300 dark:border-neutral-700 shadow">
+                    <i id="themeIcon" class="fa-solid fa-moon text-amber-500"></i>
+                    <span id="themeText">Modo Escuro</span>
+                </button>
+
+                <button onclick="openAddUserModal()" class="px-4 py-2 rounded-lg bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white font-semibold transition flex items-center gap-2 shadow-lg shadow-orange-500/30">
+                    <i class="fa-solid fa-user-plus"></i> Novo Utilizador
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow space-y-8">
+        
+        <!-- Hero Header Summary -->
+        <div class="p-6 rounded-2xl glass-card relative overflow-hidden">
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center">
+                <div class="lg:col-span-3 space-y-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-600 dark:text-orange-400 text-xs font-semibold">
+                        <i class="fa-solid fa-shield-halved"></i> Módulo de Governança RBAC
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Gestão Centralizada de Cargos, Permissões & Auditoria</h2>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed max-w-3xl">
+                        Controlo de acessos por papéis entre **Administradores**, **Empregados** e **Utilizadores/Clientes**. Alterne entre Modo Claro e Modo Escuro em tempo real com personalização dinâmica.
+                    </p>
+                </div>
+                <div class="lg:col-span-1 card-sub-bg p-4 rounded-xl border space-y-2 text-xs">
+                    <div class="flex justify-between text-gray-500 dark:text-gray-400"><span>Cargos Ativos:</span> <strong class="text-gray-900 dark:text-white">Admin, Empleado, User</strong></div>
+                    <div class="flex justify-between text-gray-500 dark:text-gray-400"><span>Sessões Ativas:</span> <strong class="text-orange-600 dark:text-orange-400">{{ stats.active_sessions }} Ligadas</strong></div>
+                    <div class="flex justify-between text-gray-500 dark:text-gray-400"><span>Tema Atual:</span> <strong id="themeLabel" class="text-orange-600 dark:text-orange-400 font-bold">Modo Escuro</strong></div>
+                    <div class="flex justify-between text-gray-500 dark:text-gray-400"><span>Auditoria IP:</span> <strong class="text-emerald-600 dark:text-emerald-400">Ativa & Logada</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="p-5 rounded-xl glass-card transition">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wider">Total Utilizadores</span>
+                    <span class="p-2 rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400"><i class="fa-solid fa-users text-lg"></i></span>
+                </div>
+                <div class="text-2xl font-extrabold text-gray-900 dark:text-white">{{ stats.total_users }}</div>
+                <div class="mt-2 text-xs text-orange-600 dark:text-orange-400 flex items-center gap-1 font-medium">
+                    <i class="fa-solid fa-circle-check"></i> Base SQLite Sincronizada
+                </div>
+            </div>
+
+            <div class="p-5 rounded-xl glass-card transition">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wider">Administradores</span>
+                    <span class="p-2 rounded-lg bg-orange-600/10 text-orange-600 dark:text-orange-400"><i class="fa-solid fa-user-shield text-lg"></i></span>
+                </div>
+                <div class="text-2xl font-extrabold text-gray-900 dark:text-white">{{ stats.admins }}</div>
+                <div class="mt-2 text-xs text-orange-600 dark:text-orange-400 flex items-center gap-1 font-medium">
+                    <i class="fa-solid fa-key"></i> Acesso Total (Root)
+                </div>
+            </div>
+
+            <div class="p-5 rounded-xl glass-card transition">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wider">Empregados / Staff</span>
+                    <span class="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400"><i class="fa-solid fa-user-tie text-lg"></i></span>
+                </div>
+                <div class="text-2xl font-extrabold text-gray-900 dark:text-white">{{ stats.empleados }}</div>
+                <div class="mt-2 text-xs text-amber-600 dark:text-amber-400 flex items-center gap-1 font-medium">
+                    <i class="fa-solid fa-briefcase"></i> Permissões por Dept.
+                </div>
+            </div>
+
+            <div class="p-5 rounded-xl glass-card transition">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wider">Utilizadores / Clientes</span>
+                    <span class="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-user text-lg"></i></span>
+                </div>
+                <div class="text-2xl font-extrabold text-gray-900 dark:text-white">{{ stats.usuarios }}</div>
+                <div class="mt-2 text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-medium">
+                    <i class="fa-solid fa-lock"></i> Acesso Restrito
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs Container -->
+        <div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
+            
+            <!-- Tab Buttons -->
+            <div class="flex flex-wrap border-b border-gray-200 dark:border-neutral-800 card-sub-bg p-2 gap-2">
+                <button onclick="switchTab('overview')" id="tab-btn-overview" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 transition text-gray-600 dark:text-gray-400 hover:text-orange-500 tab-active">
+                    <i class="fa-solid fa-chart-pie"></i> Visão Geral & Distribuição
+                </button>
+                <button onclick="switchTab('users')" id="tab-btn-users" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 transition text-gray-600 dark:text-gray-400 hover:text-orange-500">
+                    <i class="fa-solid fa-id-card-clip"></i> Utilizadores & Cargos
+                </button>
+                <button onclick="switchTab('rbac')" id="tab-btn-rbac" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 transition text-gray-600 dark:text-gray-400 hover:text-orange-500">
+                    <i class="fa-solid fa-table-cells-large"></i> Matriz Granular RBAC
+                </button>
+                <button onclick="switchTab('sessions')" id="tab-btn-sessions" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 transition text-gray-600 dark:text-gray-400 hover:text-orange-500">
+                    <i class="fa-solid fa-globe"></i> Acessos & Sessões Ativas
+                </button>
+                <button onclick="switchTab('audit')" id="tab-btn-audit" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 transition text-gray-600 dark:text-gray-400 hover:text-orange-500">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Trilho de Auditoria
+                </button>
+            </div>
+
+            <!-- Tab Panels Content -->
+            <div class="p-6">
+                
+                <!-- TAB 1: VISÃO GERAL -->
+                <div id="tab-overview" class="tab-panel space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 p-5 rounded-xl card-sub-bg border border-gray-200 dark:border-neutral-800">
+                            <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-chart-donut text-orange-500"></i> Distribuição de Utilizadores por Cargo
+                            </h3>
+                            <div class="h-64 flex justify-center">
+                                <canvas id="rolesChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="p-5 rounded-xl card-sub-bg border border-gray-200 dark:border-neutral-800 flex flex-col justify-between space-y-4">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-shield-cat text-orange-500"></i> Políticas de Segurança
+                                </h3>
+                                <div class="space-y-3 text-xs">
+                                    <div class="p-3 rounded-lg bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800">
+                                        <div class="text-gray-500 dark:text-gray-400 font-semibold mb-1">Administradores</div>
+                                        <div class="text-gray-900 dark:text-white font-medium">Controlo absoluto sobre privilégios e auditoria.</div>
+                                    </div>
+                                    <div class="p-3 rounded-lg bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800">
+                                        <div class="text-gray-500 dark:text-gray-400 font-semibold mb-1">Empregados / Staff</div>
+                                        <div class="text-gray-900 dark:text-white font-medium">Acesso de escrita a HR e Vendas.</div>
+                                    </div>
+                                    <div class="p-3 rounded-lg bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800">
+                                        <div class="text-gray-500 dark:text-gray-400 font-semibold mb-1">Utilizadores</div>
+                                        <div class="text-gray-900 dark:text-white font-medium">Sem acesso a módulos internos.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-3 rounded-lg bg-orange-500/10 border border-orange-500/20 text-xs text-orange-600 dark:text-orange-400 font-medium">
+                                <i class="fa-solid fa-circle-info mr-1"></i> Auditoria em tempo real com gravação de IP.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: USERS & EMPLOYEES -->
+                <div id="tab-users" class="tab-panel hidden space-y-4">
+                    <div class="flex flex-wrap justify-between items-center gap-4">
+                        <div>
+                            <h3 class="text-base font-bold text-gray-900 dark:text-white">Diretório de Utilizadores & Empregados</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Altere cargos e estados de acesso instantaneamente.</p>
+                        </div>
+                        <button onclick="openAddUserModal()" class="px-3.5 py-2 rounded-lg bg-orange-600 hover:bg-orange-500 text-white text-xs font-semibold flex items-center gap-2 shadow">
+                            <i class="fa-solid fa-plus"></i> Adicionar Utilizador
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-neutral-800">
+                        <table class="w-full text-left text-xs text-gray-700 dark:text-gray-300">
+                            <thead class="card-sub-bg text-gray-600 dark:text-gray-400 font-semibold uppercase tracking-wider border-b border-gray-200 dark:border-neutral-800">
+                                <tr>
+                                    <th class="p-3.5">ID</th>
+                                    <th class="p-3.5">Nome & Email</th>
+                                    <th class="p-3.5">Departamento</th>
+                                    <th class="p-3.5">Cargo (Role)</th>
+                                    <th class="p-3.5">Status</th>
+                                    <th class="p-3.5">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-neutral-800 bg-white/50 dark:bg-neutral-900/40">
+                                {% for u in users %}
+                                <tr class="hover:bg-orange-500/5 transition">
+                                    <td class="p-3.5 font-mono text-gray-400">#{{ u.id }}</td>
+                                    <td class="p-3.5">
+                                        <div class="font-bold text-gray-900 dark:text-white">{{ u.name }}</div>
+                                        <div class="text-gray-500 text-[11px] font-mono-code">{{ u.email }}</div>
+                                    </td>
+                                    <td class="p-3.5 font-medium">{{ u.department }}</td>
+                                    <td class="p-3.5">
+                                        {% if u.role_type == 'Administrador' %}
+                                            <span class="px-2.5 py-1 rounded-md bg-orange-500/20 text-orange-600 dark:text-orange-400 border border-orange-500/30 font-bold"><i class="fa-solid fa-user-shield text-[10px] mr-1"></i> Administrador</span>
+                                        {% elif u.role_type == 'Empleado' %}
+                                            <span class="px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-bold"><i class="fa-solid fa-user-tie text-[10px] mr-1"></i> Empleado</span>
+                                        {% else %}
+                                            <span class="px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-bold"><i class="fa-solid fa-user text-[10px] mr-1"></i> Usuario</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="p-3.5">
+                                        {% if u.status == 'Ativo' %}
+                                            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">Ativo</span>
+                                        {% elif u.status == 'Pendente' %}
+                                            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-semibold text-[11px]">Pendente</span>
+                                        {% else %}
+                                            <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-semibold text-[11px]">Suspenso</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="p-3.5">
+                                        <div class="flex items-center gap-2">
+                                            <select onchange="changeUserRole({{ u.id }}, this.value)" class="bg-gray-100 dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 text-gray-800 dark:text-gray-200 text-xs rounded-lg px-2 py-1 focus:outline-none focus:border-orange-500">
+                                                <option value="Administrador" {% if u.role_type == 'Administrador' %}selected{% endif %}>Administrador</option>
+                                                <option value="Empleado" {% if u.role_type == 'Empleado' %}selected{% endif %}>Empleado</option>
+                                                <option value="Usuario" {% if u.role_type == 'Usuario' %}selected{% endif %}>Usuario</option>
+                                            </select>
+                                            <button onclick="toggleUserStatus({{ u.id }}, '{{ 'Suspenso' if u.status == 'Ativo' else 'Ativo' }}')" class="px-2 py-1 rounded bg-gray-200 dark:bg-neutral-800 hover:bg-orange-500 hover:text-white text-gray-700 dark:text-gray-300 text-[11px] font-semibold border border-gray-300 dark:border-neutral-700 transition">
+                                                {{ 'Suspender' if u.status == 'Ativo' else 'Ativar' }}
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 3: RBAC MATRIX -->
+                <div id="tab-rbac" class="tab-panel hidden space-y-4">
+                    <div class="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-xs text-orange-600 dark:text-orange-400 flex items-center justify-between font-medium">
+                        <div>
+                            <i class="fa-solid fa-lock mr-1.5"></i>
+                            <strong>Matriz de Permissões Granular:</strong> Configure o nível exato para cada módulo empresarial.
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-neutral-800">
+                        <table class="w-full text-center text-xs text-gray-700 dark:text-gray-300">
+                            <thead class="card-sub-bg text-gray-600 dark:text-gray-400 font-semibold uppercase tracking-wider border-b border-gray-200 dark:border-neutral-800">
+                                <tr>
+                                    <th class="p-3.5 text-left">Módulo Empresarial</th>
+                                    <th class="p-3.5">Administrador</th>
+                                    <th class="p-3.5">Empleado (Staff)</th>
+                                    <th class="p-3.5">Usuario (Cliente)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-neutral-800 bg-white/50 dark:bg-neutral-900/40">
+                                {% set modules = ['Financeiro', 'Recursos Humanos', 'Vendas', 'Infraestrutura', 'Auditoria'] %}
+                                {% for mod in modules %}
+                                <tr>
+                                    <td class="p-3.5 text-left font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                        <i class="fa-solid fa-cube text-orange-500 text-xs"></i> {{ mod }}
+                                    </td>
+                                    
+                                    <!-- Administrador -->
+                                    <td class="p-3.5">
+                                        <select onchange="updatePermission('Administrador', '{{ mod }}', this.value)" class="bg-gray-100 dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 text-xs rounded-lg px-2 py-1 text-orange-600 dark:text-orange-400 font-bold">
+                                            <option value="Admin" {% if matrix.Administrador and matrix.Administrador[mod] == 'Admin' %}selected{% endif %}>Admin (Total)</option>
+                                            <option value="Write" {% if matrix.Administrador and matrix.Administrador[mod] == 'Write' %}selected{% endif %}>Escrita</option>
+                                            <option value="Read" {% if matrix.Administrador and matrix.Administrador[mod] == 'Read' %}selected{% endif %}>Leitura</option>
+                                            <option value="None" {% if matrix.Administrador and matrix.Administrador[mod] == 'None' %}selected{% endif %}>Sem Acesso</option>
+                                        </select>
+                                    </td>
+
+                                    <!-- Empleado -->
+                                    <td class="p-3.5">
+                                        <select onchange="updatePermission('Empleado', '{{ mod }}', this.value)" class="bg-gray-100 dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 text-xs rounded-lg px-2 py-1 text-amber-600 dark:text-amber-400 font-bold">
+                                            <option value="Admin" {% if matrix.Empleado and matrix.Empleado[mod] == 'Admin' %}selected{% endif %}>Admin (Total)</option>
+                                            <option value="Write" {% if matrix.Empleado and matrix.Empleado[mod] == 'Write' %}selected{% endif %}>Escrita</option>
+                                            <option value="Read" {% if matrix.Empleado and matrix.Empleado[mod] == 'Read' %}selected{% endif %}>Leitura</option>
+                                            <option value="None" {% if matrix.Empleado and matrix.Empleado[mod] == 'None' %}selected{% endif %}>Sem Acesso</option>
+                                        </select>
+                                    </td>
+
+                                    <!-- Usuario -->
+                                    <td class="p-3.5">
+                                        <select onchange="updatePermission('Usuario', '{{ mod }}', this.value)" class="bg-gray-100 dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 text-xs rounded-lg px-2 py-1 text-emerald-600 dark:text-emerald-400 font-bold">
+                                            <option value="Admin" {% if matrix.Usuario and matrix.Usuario[mod] == 'Admin' %}selected{% endif %}>Admin (Total)</option>
+                                            <option value="Write" {% if matrix.Usuario and matrix.Usuario[mod] == 'Write' %}selected{% endif %}>Escrita</option>
+                                            <option value="Read" {% if matrix.Usuario and matrix.Usuario[mod] == 'Read' %}selected{% endif %}>Leitura</option>
+                                            <option value="None" {% if matrix.Usuario and matrix.Usuario[mod] == 'None' %}selected{% endif %}>Sem Acesso</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 4: SESSIONS -->
+                <div id="tab-sessions" class="tab-panel hidden space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-base font-bold text-gray-900 dark:text-white">Sessões & Acessos Ativos</h3>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">Monitorização em Tempo Real</span>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-neutral-800">
+                        <table class="w-full text-left text-xs text-gray-700 dark:text-gray-300">
+                            <thead class="card-sub-bg text-gray-600 dark:text-gray-400 font-semibold uppercase tracking-wider border-b border-gray-200 dark:border-neutral-800">
+                                <tr>
+                                    <th class="p-3.5">Utilizador / Cargo</th>
+                                    <th class="p-3.5">Endereço IP</th>
+                                    <th class="p-3.5">Navegador & Dispositivo</th>
+                                    <th class="p-3.5">Localização</th>
+                                    <th class="p-3.5">Hora de Login</th>
+                                    <th class="p-3.5">Estado / Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-neutral-800 bg-white/50 dark:bg-neutral-900/40">
+                                {% for s in sessions %}
+                                <tr class="hover:bg-orange-500/5 transition">
+                                    <td class="p-3.5">
+                                        <div class="font-bold text-gray-900 dark:text-white">{{ s.user_name }}</div>
+                                        <div class="text-gray-500 text-[11px] font-mono-code">{{ s.email }}</div>
+                                    </td>
+                                    <td class="p-3.5 font-mono text-orange-600 dark:text-orange-400 font-bold">{{ s.ip_address }}</td>
+                                    <td class="p-3.5 font-medium">{{ s.device_browser }}</td>
+                                    <td class="p-3.5 text-gray-500 dark:text-gray-400"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> {{ s.location }}</td>
+                                    <td class="p-3.5 font-mono text-gray-500 dark:text-gray-400 text-[11px]">{{ s.login_time }}</td>
+                                    <td class="p-3.5">
+                                        {% if s.is_active == 1 %}
+                                            <button onclick="revokeSession({{ s.id }})" class="px-2.5 py-1 rounded bg-rose-500/20 hover:bg-rose-500/30 text-rose-600 dark:text-rose-400 font-bold border border-rose-500/30 text-[11px] flex items-center gap-1 transition">
+                                                <i class="fa-solid fa-ban"></i> Revogar Sessão
+                                            </button>
+                                        {% else %}
+                                            <span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-neutral-800 text-gray-500 font-semibold text-[11px]">Encerrada</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 5: AUDIT TRAIL -->
+                <div id="tab-audit" class="tab-panel hidden space-y-4">
+                    <h3 class="text-base font-bold text-gray-900 dark:text-white">Trilho de Auditoria de Segurança</h3>
+                    <div class="font-mono text-xs card-sub-bg p-4 rounded-xl border border-gray-200 dark:border-neutral-800 space-y-3">
+                        {% for log in audit_logs %}
+                        <div class="p-2.5 rounded-lg bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 flex flex-wrap items-start justify-between gap-2 shadow-sm">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-gray-500">[{{ log.timestamp }}]</span>
+                                    {% if log.action_type == 'ROLE_CHANGE' %}
+                                        <span class="px-2 py-0.5 rounded bg-orange-500/20 text-orange-600 dark:text-orange-400 font-bold text-[10px]">ROLE_CHANGE</span>
+                                    {% elif log.action_type == 'PERMISSION_UPDATE' %}
+                                        <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold text-[10px]">PERMISSION_UPDATE</span>
+                                    {% elif log.action_type == 'SESSION_REVOKE' %}
+                                        <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold text-[10px]">SESSION_REVOKE</span>
+                                    {% else %}
+                                        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold text-[10px]">{{ log.action_type }}</span>
+                                    {% endif %}
+                                    <strong class="text-gray-900 dark:text-white">{{ log.actor_name }}</strong>
+                                </div>
+                                <div class="text-gray-700 dark:text-gray-300 font-sans text-xs pl-2 border-l-2 border-orange-500">
+                                    {{ log.details }}
+                                </div>
+                            </div>
+                            <span class="text-gray-500 text-[11px]">IP: {{ log.ip_address }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal to Add New User -->
+    <div id="addUserModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 p-6 rounded-2xl w-full max-w-md space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-neutral-800 pb-3">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white"><i class="fa-solid fa-user-plus text-orange-500 mr-2"></i> Adicionar Utilizador</h3>
+                <button onclick="closeAddUserModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="addUserSubmit(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Nome Completo</label>
+                    <input type="text" id="addName" required class="w-full bg-gray-100 dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 rounded-lg p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-orange-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Endereço de E-mail</label>
+                    <input type="email" id="addEmail" required class="w-full bg-gray-100 dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 rounded-lg p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-orange-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Cargo Inicial (Role)</label>
+                    <select id="addRole" class="w-full bg-gray-100 dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 rounded-lg p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-orange-500">
+                        <option value="Empleado">Empleado (Staff)</option>
+                        <option value="Usuario">Usuario (Cliente)</option>
+                        <option value="Administrador">Administrador</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Departamento</label>
+                    <input type="text" id="addDept" required placeholder="Ex: Vendas, Recursos Humanos, TI" class="w-full bg-gray-100 dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 rounded-lg p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-orange-500">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeAddUserModal()" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-neutral-700 font-semibold">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white font-semibold shadow-lg shadow-orange-500/30">Guardar Utilizador</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="header-bg border-t py-6 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500">
+            <p>© 2026 RoleCraft AI Enterprise — Governança de Roles & Auditoria</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Engine -->
+    <script>
+        // Light & Dark Theme Toggle Engine
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('rolecraft_theme', isDark ? 'dark' : 'light');
+            updateThemeUI(isDark);
+        }
+
+        function updateThemeUI(isDark) {
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            const label = document.getElementById('themeLabel');
+
+            if (isDark) {
+                icon.className = 'fa-solid fa-moon text-amber-400';
+                text.innerText = 'Modo Escuro';
+                if (label) label.innerText = 'Modo Escuro';
+            } else {
+                icon.className = 'fa-solid fa-sun text-orange-500';
+                text.innerText = 'Modo Claro';
+                if (label) label.innerText = 'Modo Claro';
+            }
+        }
+
+        // Saved Theme Memory Initialization
+        const savedTheme = localStorage.getItem('rolecraft_theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+            updateThemeUI(false);
+        } else {
+            document.documentElement.classList.add('dark');
+            updateThemeUI(true);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
+
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.getElementById('tab-btn-' + tabId).classList.add('tab-active');
+        }
+
+        function openAddUserModal() {
+            document.getElementById('addUserModal').classList.remove('hidden');
+        }
+
+        function closeAddUserModal() {
+            document.getElementById('addUserModal').classList.add('hidden');
+        }
+
+        async function addUserSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('addName').value;
+            const email = document.getElementById('addEmail').value;
+            const role_type = document.getElementById('addRole').value;
+            const department = document.getElementById('addDept').value;
+
+            const res = await fetch('/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, role_type, department })
+            });
+
+            if (res.ok) {
+                alert("Utilizador adicionado com sucesso!");
+                location.reload();
+            } else {
+                const err = await res.json();
+                alert("Erro: " + (err.error || "Falha ao criar utilizador"));
+            }
+        }
+
+        async function changeUserRole(userId, newRole) {
+            const res = await fetch(`/api/users/${userId}/role`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ role_type: newRole })
+            });
+            if (res.ok) {
+                location.reload();
+            }
+        }
+
+        async function toggleUserStatus(userId, newStatus) {
+            const res = await fetch(`/api/users/${userId}/role`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            });
+            if (res.ok) {
+                location.reload();
+            }
+        }
+
+        async function updatePermission(roleType, moduleName, accessLevel) {
+            const res = await fetch('/api/permissions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ role_type: roleType, module_name: moduleName, access_level: accessLevel })
+            });
+            if (res.ok) {
+                console.log(`Permissão atualizada: ${roleType} -> ${moduleName} = ${accessLevel}`);
+            }
+        }
+
+        async function revokeSession(sessionId) {
+            if (!confirm("Deseja revogar esta sessão ativa?")) return;
+            const res = await fetch(`/api/sessions/${sessionId}/revoke`, { method: 'POST' });
+            if (res.ok) {
+                location.reload();
+            }
+        }
+
+        // Initialize Chart
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('rolesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Administradores ({{ stats.admins }})', 'Empregados ({{ stats.empleados }})', 'Utilizadores ({{ stats.usuarios }})'],
+                    datasets: [{
+                        data: [{{ stats.admins }}, {{ stats.empleados }}, {{ stats.usuarios }}],
+                        backgroundColor: ['#ea580c', '#d97706', '#10b981'],
+                        borderColor: '#0f172a',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8', font: { size: 12 } } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

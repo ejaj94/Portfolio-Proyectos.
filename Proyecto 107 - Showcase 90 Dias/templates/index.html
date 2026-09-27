@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showcase 90 Dias & 90 Projetos — EJAJ Tech Space Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400;1,700&family=JetBrains+Mono:wght@400;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+        #spaceCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 20px 50px -10px rgba(124, 58, 237, 0.25);
+        }
+
+        .glow-border {
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.35);
+        }
+
+        /* Slide progress animation */
+        .progress-bar-fill {
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-purple-600 selection:text-white relative">
+
+    <!-- Cosmic HTML5 Canvas Background -->
+    <canvas id="spaceCanvas"></canvas>
+
+    <!-- Top Navigation Header -->
+    <header class="relative z-10 bg-slate-950/80 backdrop-blur-md border-b border-purple-900/50 sticky top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-400 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-purple-500/40 animate-pulse">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-2xl tracking-tight bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-300 bg-clip-text text-transparent">
+                        EJAJ TECH — SHOWCASE 90 DIAS
+                    </h1>
+                    <p class="text-xs text-purple-300/80 font-medium">90 Projetos Consecutivos • O Fim da Jornada dos 100 Dias Está Próximo</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 text-xs font-bold">
+                <span class="px-3.5 py-1.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center gap-2">
+                    <i class="fa-solid fa-users text-purple-400"></i> +3.000 Devs Unidos
+                </span>
+                <span class="px-3.5 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center gap-2">
+                    <i class="fa-solid fa-star text-amber-400"></i> Marca dos 90%
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow space-y-8">
+
+        <!-- Header Hero Banner -->
+        <section class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden text-center space-y-4">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <span class="px-4 py-1.5 rounded-full bg-purple-500/20 text-purple-300 text-xs font-black uppercase tracking-widest border border-purple-500/30 inline-flex items-center gap-2">
+                <i class="fa-solid fa-meteor text-amber-400"></i> Retrospectiva Galáctica • Projetos 81 a 90
+            </span>
+
+            <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight">
+                90 Dias de Paixão Pela Programação & Código
+            </h2>
+            
+            <p class="text-slate-300 text-sm sm:text-base max-w-3xl mx-auto leading-relaxed font-normal">
+                Chegámos ao marco dos <strong class="text-purple-400">90 Projetos</strong>! Um longo caminho percorrido com dedicação, superação diária e a força de uma comunidade com mais de 3.000 mentes apaixonadas por transformar o futuro através da tecnologia.
+            </p>
+        </section>
+
+        <!-- Slideshow Presentation (Projects 81 to 90) -->
+        <section class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 relative border border-purple-500/40 glow-border">
+            
+            <!-- Controls Bar: Title + Timer + Play/Pause + Prev/Next -->
+            <div class="flex flex-wrap justify-between items-center gap-4 border-b border-purple-900/50 pb-4">
+                <div class="flex items-center gap-3">
+                    <span id="slideCounter" class="px-3 py-1 rounded-xl bg-purple-600 text-white font-mono font-bold text-xs">
+                        1 / 10
+                    </span>
+                    <h3 id="slideTitle" class="text-lg font-extrabold text-white flex items-center gap-2">
+                        Dia 81 — BioCraft AI
+                    </h3>
+                </div>
+
+                <!-- Slide Navigation Controls -->
+                <div class="flex items-center gap-3">
+                    <!-- Play / Pause Button -->
+                    <button onclick="togglePlayPause()" id="playPauseBtn" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition flex items-center gap-2 shadow-lg shadow-purple-600/30">
+                        <i id="playPauseIcon" class="fa-solid fa-pause"></i> <span id="playPauseText">Pausar (7s)</span>
+                    </button>
+
+                    <button onclick="prevSlide()" class="w-9 h-9 rounded-xl bg-slate-800/80 hover:bg-purple-600 text-white font-bold transition flex items-center justify-center border border-purple-900/50">
+                        <i class="fa-solid fa-chevron-left text-sm"></i>
+                    </button>
+
+                    <button onclick="nextSlide()" class="w-9 h-9 rounded-xl bg-slate-800/80 hover:bg-purple-600 text-white font-bold transition flex items-center justify-center border border-purple-900/50">
+                        <i class="fa-solid fa-chevron-right text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Auto-Transition 7-Second Progress Bar -->
+            <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
+                <div id="progressBarFill" class="bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 h-full w-0 progress-bar-fill"></div>
+            </div>
+
+            <!-- Active Slide Content Display -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-2">
+                
+                <!-- Left Side: Video Player -->
+                <div class="lg:col-span-7 bg-slate-950 rounded-2xl overflow-hidden border border-purple-900/60 shadow-2xl aspect-video flex items-center justify-center relative group">
+                    <video id="slideVideo" autoplay loop muted playsinline class="w-full h-full object-cover">
+                        <source id="slideVideoSource" src="/videos/Proyecto 81 Bio Craft.mp4" type="video/mp4">
+                        O seu navegador não suporta reprodução de vídeo HTML5.
+                    </video>
+                    
+                    <div class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-md px-3 py-1 rounded-lg text-[11px] font-mono text-purple-300 border border-purple-900/50">
+                        <i class="fa-solid fa-circle text-rose-500 animate-ping mr-1"></i> Vídeo Demonstrativo
+                    </div>
+                </div>
+
+                <!-- Right Side: Project Info & Description -->
+                <div class="lg:col-span-5 space-y-5">
+                    <div>
+                        <span id="slideTag" class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold border border-cyan-500/30">
+                            PROJETO #81
+                        </span>
+                        <h4 id="slideName" class="text-2xl font-black text-white mt-2">
+                            BioCraft AI
+                        </h4>
+                        <p id="slideDesc" class="text-sm text-slate-300 mt-2 leading-relaxed">
+                            Plataforma de criação de Cartões Digitais e agregador Link-in-Bio com estatísticas de cliques em tempo real, personalização de temas e suporte a QR Code incorporado.
+                        </p>
+                    </div>
+
+                    <!-- Key Metrics / Tech Stack Tags -->
+                    <div class="space-y-2 pt-2 border-t border-purple-900/50">
+                        <span class="text-xs font-bold text-purple-300 uppercase tracking-wider block">Tecnologias Utilizadas:</span>
+                        <div id="slideTechStack" class="flex flex-wrap gap-2">
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-200 text-xs font-mono border border-purple-900/40">Python Flask</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-200 text-xs font-mono border border-purple-900/40">SQLite3</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-200 text-xs font-mono border border-purple-900/40">Tailwind CSS</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-200 text-xs font-mono border border-purple-900/40">JavaScript ES6</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Slide Navigation Dots (1 to 10) -->
+            <div class="flex justify-center items-center gap-2 pt-4 border-t border-purple-900/40">
+                <template id="dotTemplate">
+                    <button class="w-3 h-3 rounded-full bg-slate-800 hover:bg-purple-500 transition border border-purple-900/50"></button>
+                </template>
+                <div id="slideDotsContainer" class="flex gap-2"></div>
+            </div>
+
+        </section>
+
+        <!-- Official Voiceover Script Panel (Narrativa Dramática & Poética) -->
+        <section class="glass-card rounded-3xl p-6 sm:p-8 space-y-6">
+            <div class="flex flex-wrap justify-between items-center border-b border-purple-900/50 pb-4 gap-4">
+                <div>
+                    <span class="px-3.5 py-1.5 rounded-full bg-pink-500/20 text-pink-300 text-xs font-extrabold border border-pink-500/30 uppercase tracking-wider">
+                        <i class="fa-solid fa-microphone-lines mr-1"></i> Guião Oficial do Locutor
+                    </span>
+                    <h3 class="text-xl font-extrabold text-white mt-1">Narrativa Dramática & Inspiradora (100% pt-PT)</h3>
+                </div>
+
+                <button onclick="copyVoiceoverText()" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition flex items-center gap-2 shadow">
+                    <i class="fa-regular fa-copy"></i> Copiar Texto Completo
+                </button>
+            </div>
+
+            <!-- Voiceover Text in Full Single Paragraph Block -->
+            <div class="bg-slate-950/90 rounded-2xl p-6 border border-purple-900/60 space-y-4">
+                <p class="text-xs font-bold text-purple-400 uppercase tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-quote-left"></i> Texto Contínuo para Gravação de Voz:
+                </p>
+                <blockquote id="voiceoverFullText" class="text-base sm:text-lg italic text-slate-200 leading-relaxed font-serif pl-4 border-l-4 border-purple-500">
+                    "Aproxima-se o fim da grande jornada dos 100 dias e 100 projetos. Foi um caminho longo, exigente e que custou muito esforço a percorrer até aqui, mas tem sido um imenso prazer partilhar todo este conhecimento e habilidade com vocês. Muito obrigado por todo o apoio de coração — somos já mais de 3 mil pessoas unidas nesta comunidade por uma grande paixão pela programação e pelo desejo de trazer novas ideias para melhorar o mundo. Como esta viagem está a chegar à reta final, gostava muito que me dissessem nos comentários que conteúdos querem ver a seguir, deixem as vossas dúvidas e ideias para as resolvermos e criarmos esse novo projeto juntos. Podem também enviar mensagem privada no DM, que responderei a todos e farei os vossos pedidos realidade. Muito obrigado de verdade! Vamos a isso com garra para estes últimos 10 dias consecutivos até atingirmos o projeto número 100!"
+                </blockquote>
+            </div>
+
+            <!-- Structured 4-Part Breakdown -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div class="card-sub-bg p-4 rounded-xl border border-purple-900/40 space-y-1">
+                    <span class="font-bold text-purple-400 block uppercase">1. O Desafio & A Jornada</span>
+                    <p class="text-slate-300">Aproxima-se o fim da jornada dos 100 dias e 100 projetos. Um caminho longo e exigente até alcançar os 90% do percurso.</p>
+                </div>
+
+                <div class="card-sub-bg p-4 rounded-xl border border-purple-900/40 space-y-1">
+                    <span class="font-bold text-purple-400 block uppercase">2. O Impacto & A Comunidade</span>
+                    <p class="text-slate-300">Gratidão a uma comunidade vibrante com mais de 3.000 programadores unidos no propósito de mudar o mundo com código.</p>
+                </div>
+
+                <div class="card-sub-bg p-4 rounded-xl border border-purple-900/40 space-y-1">
+                    <span class="font-bold text-purple-400 block uppercase">3. A Chamada aos Comentários & DM</span>
+                    <p class="text-slate-300">Convite aberto para sugerir novos temas nos comentários ou DM para transformar pedidos de inscritos em novos projetos reais.</p>
+                </div>
+
+                <div class="card-sub-bg p-4 rounded-xl border border-purple-900/40 space-y-1">
+                    <span class="font-bold text-purple-400 block uppercase">4. Reta Final Rumo ao Projeto 100</span>
+                    <p class="text-slate-300">Foco e energia máxima para cumprir os últimos 10 dias de projetos diários consecutivos até à meta final.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 bg-slate-950/80 backdrop-blur-md border-t border-purple-900/50 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-purple-300/60">
+            <p>© 2026 EJAJ Tech — Showcase Galáctico do Dia 90 | Porta 6960</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Canvas & Slider Engine -->
+    <script>
+        // Projects Data List (Projects 81 to 90)
+        const projectsData = [
+            {
+                day: 81,
+                title: "Dia 81 — BioCraft AI",
+                name: "BioCraft AI",
+                tag: "PROJETO #81 • LINK IN BIO",
+                desc: "Plataforma de criação de Cartões Digitais e agregador Link-in-Bio com estatísticas de cliques em tempo real, personalização de temas e suporte a QR Code incorporado.",
+                video: "/videos/Proyecto 81 Bio Craft.mp4",
+                tech: ["Python Flask", "SQLite3", "Tailwind CSS", "JavaScript ES6"]
+            },
+            {
+                day: 82,
+                title: "Dia 82 — QRCraft AI",
+                name: "QRCraft AI",
+                tag: "PROJETO #82 • QR CODES",
+                desc: "Gerador e gestor de Códigos QR Dinâmicos com acompanhamento de scans, alteração de URL de destino em tempo real e personalização de cores e logos.",
+                video: "/videos/Proyecto 82 QR Craft.mp4",
+                tech: ["Python qrcode", "Flask", "SQLite3", "Chart.js"]
+            },
+            {
+                day: 83,
+                title: "Dia 83 — UptimePulse AI",
+                name: "UptimePulse AI",
+                tag: "PROJETO #83 • MONITORIZAÇÃO",
+                desc: "Sistema de monitorização de disponibilidade de sites e servidores em tempo real com alertas de latência e histórico de atividade de redes.",
+                video: "/videos/Proyecto 83 Uptime Pulse.mp4",
+                tech: ["Python Requests", "Flask", "SQLite3", "Tailwind CSS"]
+            },
+            {
+                day: 84,
+                title: "Dia 84 — PassCraft AI",
+                name: "PassCraft AI",
+                tag: "PROJETO #84 • SEGURANÇA",
+                desc: "Cofre e gestor de passwords encriptado com gerador de segredos de alta entropia e auditoria de força de credenciais.",
+                video: "/videos/Proyecto 84 Pass Craft.mp4",
+                tech: ["Cryptography Fernet", "Flask", "SQLite3", "Tailwind CSS"]
+            },
+            {
+                day: 85,
+                title: "Dia 85 — KeyCraft AI",
+                name: "KeyCraft AI",
+                tag: "PROJETO #85 • GERADOR DE CHAVES",
+                desc: "Ferramenta avançada de geração de passwords seguras e chaves criptográficas com medidor visual de entropia e filtros de símbolos.",
+                video: "/videos/Proyecto 85 Key Craft.mp4",
+                tech: ["Python Secrets", "Flask", "Tailwind CSS", "JS ES6"]
+            },
+            {
+                day: 86,
+                title: "Dia 86 — AuthCraft AI",
+                name: "AuthCraft AI",
+                tag: "PROJETO #86 • AUTENTICAÇÃO",
+                desc: "Sistema completo de autenticação de utilizadores com registo, login seguro com hashing bcrypt, recuperação de palavra-passe e controlo de sessões.",
+                video: "/videos/Proyecto 86 Auth Craft.mp4",
+                tech: ["Bcrypt", "Flask Session", "SQLite3", "Tailwind CSS"]
+            },
+            {
+                day: 87,
+                title: "Dia 87 — AdminPulse AI",
+                name: "AdminPulse AI",
+                tag: "PROJETO #87 • PAINEL ADMIN",
+                desc: "Painel de administração executivo para controlo de utilizadores, gestão de acessos, estatísticas globais e auditoria de registos de atividade.",
+                video: "/videos/Proyecto 87 Admin Pulse.mp4",
+                tech: ["Flask", "Chart.js", "SQLite3", "Tailwind CSS"]
+            },
+            {
+                day: 88,
+                title: "Dia 88 — RoleCraft AI",
+                name: "RoleCraft AI",
+                tag: "PROJETO #88 • ROLES & PERMISSÕES",
+                desc: "Sistema de gestão de papéis e permissões (RBAC) com matriz de acessos dinâmicos para utilizadores, administradores e colaboradores.",
+                video: "/videos/Proyecto 88 Role Craft.mp4",
+                tech: ["Python RBAC", "Flask", "SQLite3", "Tailwind CSS"]
+            },
+            {
+                day: 89,
+                title: "Dia 89 — APICraft AI",
+                name: "APICraft AI",
+                tag: "PROJETO #89 • API DASHBOARD",
+                desc: "Consola de gestão e governança de API Keys com registo de chamadas HTTP, diagnósticos de erros 4xx/5xx e controlo de Rate Limiting.",
+                video: "/videos/Proyecto 89 API Craft.mp4",
+                tech: ["Flask API Gateway", "Chart.js", "SQLite3", "Tailwind CSS"]
+            },
+            {
+                day: 90,
+                title: "Dia 90 — FileConvert AI",
+                name: "FileConvert AI",
+                tag: "PROJETO #90 • CONVERSOR DE FICHEIROS",
+                desc: "Plataforma de conversão multi-formato de ficheiros em tempo real com suporte a imagens, dados e documentos, e cálculo de otimização de tamanho.",
+                video: "/videos/Proyecto 90 File Convert.mp4",
+                tech: ["Pillow", "Flask", "SQLite3", "Tailwind CSS"]
+            }
+        ];
+
+        let currentIndex = 0;
+        let isPlaying = true;
+        const SLIDE_DURATION = 7000; // 7 Seconds
+        let slideStartTime = Date.now();
+        let animationFrameReq;
+
+        function initDots() {
+            const container = document.getElementById('slideDotsContainer');
+            container.innerHTML = '';
+            projectsData.forEach((proj, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `w-3 h-3 rounded-full transition border border-purple-900/50 ${idx === 0 ? 'bg-purple-500 scale-125' : 'bg-slate-800 hover:bg-purple-600'}`;
+                btn.title = proj.title;
+                btn.onclick = () => goToSlide(idx);
+                container.appendChild(btn);
+            });
+        }
+
+        function updateSlide(index) {
+            currentIndex = index;
+            const data = projectsData[index];
+
+            document.getElementById('slideCounter').innerText = `${index + 1} / 10`;
+            document.getElementById('slideTitle').innerText = data.title;
+            document.getElementById('slideName').innerText = data.name;
+            document.getElementById('slideTag').innerText = data.tag;
+            document.getElementById('slideDesc').innerText = data.desc;
+
+            // Video update
+            const video = document.getElementById('slideVideo');
+            const source = document.getElementById('slideVideoSource');
+            source.src = data.video;
+            video.load();
+            video.play().catch(e => {});
+
+            // Tech Stack update
+            const techContainer = document.getElementById('slideTechStack');
+            techContainer.innerHTML = '';
+            data.tech.forEach(t => {
+                const span = document.createElement('span');
+                span.className = "px-2.5 py-1 rounded-lg bg-slate-900 text-slate-200 text-xs font-mono border border-purple-900/40";
+                span.innerText = t;
+                techContainer.appendChild(span);
+            });
+
+            // Dots update
+            const dots = document.querySelectorAll('#slideDotsContainer button');
+            dots.forEach((d, idx) => {
+                if (idx === index) {
+                    d.className = 'w-3 h-3 rounded-full bg-purple-500 scale-125 transition border border-purple-400 shadow-md shadow-purple-500/50';
+                } else {
+                    d.className = 'w-3 h-3 rounded-full bg-slate-800 hover:bg-purple-600 transition border border-purple-900/50';
+                }
+            });
+
+            slideStartTime = Date.now();
+        }
+
+        function nextSlide() {
+            const nextIdx = (currentIndex + 1) % projectsData.length;
+            updateSlide(nextIdx);
+        }
+
+        function prevSlide() {
+            const prevIdx = (currentIndex - 1 + projectsData.length) % projectsData.length;
+            updateSlide(prevIdx);
+        }
+
+        function goToSlide(idx) {
+            updateSlide(idx);
+        }
+
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            const btnText = document.getElementById('playPauseText');
+            const btnIcon = document.getElementById('playPauseIcon');
+            if (isPlaying) {
+                btnText.innerText = 'Pausar (7s)';
+                btnIcon.className = 'fa-solid fa-pause';
+                slideStartTime = Date.now();
+            } else {
+                btnText.innerText = 'Reanudar';
+                btnIcon.className = 'fa-solid fa-play';
+            }
+        }
+
+        // Loop animation frame for 7s progress bar
+        function animateLoop() {
+            if (isPlaying) {
+                const elapsed = Date.now() - slideStartTime;
+                const pct = Math.min(100, (elapsed / SLIDE_DURATION) * 100);
+                document.getElementById('progressBarFill').style.width = pct + '%';
+
+                if (elapsed >= SLIDE_DURATION) {
+                    nextSlide();
+                }
+            }
+            requestAnimationFrame(animateLoop);
+        }
+
+        function copyVoiceoverText() {
+            const text = document.getElementById('voiceoverFullText').innerText;
+            navigator.clipboard.writeText(text);
+            alert("Guião do locutor copiado para a área de transferência!");
+        }
+
+        // HTML5 Canvas Cosmic Engine (Stars, Rockets, Meteors, Planets, Constellations)
+        function initSpaceCanvas() {
+            const canvas = document.getElementById('spaceCanvas');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Stars
+            const stars = Array.from({ length: 140 }, () => ({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                size: Math.random() * 2 + 0.5,
+                alpha: Math.random(),
+                speed: Math.random() * 0.02 + 0.005
+            }));
+
+            // Meteorites
+            const meteors = Array.from({ length: 4 }, () => ({
+                x: Math.random() * w,
+                y: Math.random() * h / 2,
+                length: Math.random() * 80 + 40,
+                speed: Math.random() * 8 + 4,
+                angle: Math.PI / 4,
+                alpha: 0
+            }));
+
+            // Planets
+            const planets = [
+                { x: w * 0.85, y: h * 0.2, radius: 45, color1: '#8b5cf6', color2: '#3b82f6', orbitAngle: 0 },
+                { x: w * 0.15, y: h * 0.75, radius: 60, color1: '#ec4899', color2: '#f97316', orbitAngle: 1 }
+            ];
+
+            // Spaceship Rocket
+            let rocket = {
+                x: -50,
+                y: h * 0.4,
+                speed: 1.5,
+                angle: 0.1
+            };
+
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+
+                // Cosmic Background Gradient
+                const bgGrad = ctx.createLinearGradient(0, 0, w, h);
+                bgGrad.addColorStop(0, '#030712');
+                bgGrad.addColorStop(0.5, '#0f0728');
+                bgGrad.addColorStop(1, '#020617');
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, w, h);
+
+                // Render Stars
+                stars.forEach(s => {
+                    s.alpha += s.speed;
+                    if (s.alpha > 1 || s.alpha < 0) s.speed = -s.speed;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(s.alpha)})`;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                // Render Constellation Connections
+                ctx.strokeStyle = 'rgba(168, 85, 247, 0.08)';
+                ctx.lineWidth = 0.8;
+                for (let i = 0; i < 35; i++) {
+                    for (let j = i + 1; j < 35; j++) {
+                        const dx = stars[i].x - stars[j].x;
+                        const dy = stars[i].y - stars[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(stars[i].x, stars[i].y);
+                            ctx.lineTo(stars[j].x, stars[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Render Planets
+                planets.forEach(p => {
+                    const pGrad = ctx.createRadialGradient(p.x - p.radius * 0.3, p.y - p.radius * 0.3, p.radius * 0.1, p.x, p.y, p.radius);
+                    pGrad.addColorStop(0, p.color1);
+                    pGrad.addColorStop(1, p.color2);
+                    ctx.fillStyle = pGrad;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Planet Ring
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.ellipse(p.x, p.y, p.radius * 1.6, p.radius * 0.4, Math.PI / 6, 0, Math.PI * 2);
+                    ctx.stroke();
+                });
+
+                // Render Meteorites
+                meteors.forEach(m => {
+                    m.x += m.speed;
+                    m.y += m.speed * 0.6;
+                    if (m.x > w || m.y > h) {
+                        m.x = Math.random() * w * 0.5;
+                        m.y = -50;
+                        m.alpha = Math.random() * 0.8 + 0.2;
+                    }
+                    const tailGrad = ctx.createLinearGradient(m.x, m.y, m.x - m.length, m.y - m.length * 0.6);
+                    tailGrad.addColorStop(0, `rgba(244, 114, 182, ${m.alpha})`);
+                    tailGrad.addColorStop(1, 'rgba(244, 114, 182, 0)');
+                    ctx.strokeStyle = tailGrad;
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(m.x, m.y);
+                    ctx.lineTo(m.x - m.length, m.y - m.length * 0.6);
+                    ctx.stroke();
+                });
+
+                // Render Rocket
+                rocket.x += rocket.speed;
+                rocket.y += Math.sin(rocket.x * 0.01) * 0.5;
+                if (rocket.x > w + 60) {
+                    rocket.x = -60;
+                    rocket.y = Math.random() * h * 0.6 + h * 0.1;
+                }
+
+                ctx.save();
+                ctx.translate(rocket.x, rocket.y);
+                ctx.rotate(0.08);
+
+                // Rocket Exhaust Flame
+                const flameGrad = ctx.createLinearGradient(-20, 0, -40, 0);
+                flameGrad.addColorStop(0, '#f97316');
+                flameGrad.addColorStop(1, 'rgba(239, 68, 68, 0)');
+                ctx.fillStyle = flameGrad;
+                ctx.beginPath();
+                ctx.moveTo(-15, -4);
+                ctx.lineTo(-35 - Math.random() * 10, 0);
+                ctx.lineTo(-15, 4);
+                ctx.closePath();
+                ctx.fill();
+
+                // Rocket Body
+                ctx.fillStyle = '#f8fafc';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, 18, 7, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Rocket Nose
+                ctx.fillStyle = '#ec4899';
+                ctx.beginPath();
+                ctx.arc(12, 0, 5, -Math.PI / 2, Math.PI / 2);
+                ctx.fill();
+
+                ctx.restore();
+
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        }
+
+        // Initialize Everything
+        window.addEventListener('DOMContentLoaded', () => {
+            initSpaceCanvas();
+            initDots();
+            updateSlide(0);
+            animateLoop();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FileConvert AI — Multi-Format File Converter Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+        /* Dark Mode styles */
+        .dark body {
+            background-color: #090d16;
+            color: #f1f5f9;
+        }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        .dark .header-bg {
+            background-color: rgba(11, 17, 32, 0.95);
+            border-color: #1e293b;
+        }
+        .dark .card-sub-bg {
+            background-color: #0f172a;
+            border-color: #1e293b;
+        }
+
+        /* Light Mode styles */
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.08);
+        }
+        .header-bg {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: #e2e8f0;
+        }
+        .card-sub-bg {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        /* Drag and Drop hover styles */
+        .dropzone-active {
+            border-color: #6366f1 !important;
+            background-color: rgba(99, 102, 241, 0.15) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="header-bg border-b sticky top-0 z-50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-500 flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-file-arrow-up text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl tracking-tight text-gray-900 dark:text-white">FileConvert AI</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Plataforma de Conversão Multi-Formato & Processamento de Ficheiros</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-xs">
+                <!-- Category Badges -->
+                <span class="px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-500 font-bold border border-indigo-500/20">
+                    <i class="fa-regular fa-image mr-1"></i> Imagens
+                </span>
+                <span class="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-500 font-bold border border-cyan-500/20">
+                    <i class="fa-solid fa-database mr-1"></i> Dados
+                </span>
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20">
+                    <i class="fa-regular fa-file-lines mr-1"></i> Documentos
+                </span>
+
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" id="themeToggleBtn" class="px-3 py-2 rounded-xl bg-gray-200 dark:bg-slate-800 text-gray-800 dark:text-gray-200 hover:bg-indigo-500 hover:text-white transition flex items-center gap-2 font-bold border border-gray-300 dark:border-slate-700 shadow">
+                    <i id="themeIcon" class="fa-solid fa-moon text-amber-400"></i>
+                    <span id="themeText">Modo Escuro</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- Left Sidebar: Conversion History -->
+        <aside class="lg:col-span-1 glass-card rounded-2xl p-4 flex flex-col justify-between space-y-4 max-h-[800px] overflow-hidden">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-indigo-500"></i> Histórico de Conversões
+                </h3>
+                <button onclick="clearHistory()" class="text-xs text-rose-500 hover:underline font-semibold">Limpar</button>
+            </div>
+
+            <div id="historyList" class="flex-grow space-y-2 overflow-y-auto pr-1">
+                {% for item in history %}
+                <div class="p-3 rounded-xl card-sub-bg border hover:border-indigo-500/50 transition space-y-1.5">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold 
+                            {% if item.category == 'Imagem' %}bg-indigo-500/20 text-indigo-400
+                            {% elif item.category == 'Dados' %}bg-cyan-500/20 text-cyan-400
+                            {% else %}bg-emerald-500/20 text-emerald-400{% endif %}">
+                            {{ item.category }}
+                        </span>
+                        <span class="font-mono text-[10px] text-gray-400">
+                            {{ item.source_format }} <i class="fa-solid fa-arrow-right text-[8px] mx-1"></i> {{ item.target_format }}
+                        </span>
+                    </div>
+                    <div class="text-xs font-mono-code truncate text-gray-800 dark:text-gray-200 font-semibold" title="{{ item.original_filename }}">
+                        {{ item.original_filename }}
+                    </div>
+                    <div class="flex justify-between items-center text-[10px] text-gray-400 pt-1 border-t border-gray-200 dark:border-slate-800/60">
+                        <span>{{ item.original_size_kb }} KB → <strong class="text-emerald-400">{{ item.converted_size_kb }} KB</strong></span>
+                        <a href="/api/download/{{ item.converted_filename }}" download class="text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-download"></i> Baixar
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </aside>
+
+        <!-- Right Main Converter Studio -->
+        <section class="lg:col-span-3 space-y-6">
+            
+            <!-- Upload Dropzone Card -->
+            <div class="glass-card rounded-2xl p-6 space-y-6">
+                
+                <div id="dropzone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onclick="document.getElementById('fileInput').click()" class="border-2 border-dashed border-indigo-500/40 hover:border-indigo-500 dark:bg-slate-900/50 bg-indigo-50/50 rounded-2xl p-8 text-center cursor-pointer transition flex flex-col items-center justify-center space-y-3">
+                    <input type="file" id="fileInput" onchange="handleFileSelect(event)" class="hidden">
+                    
+                    <div class="w-16 h-16 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-500 text-2xl shadow-inner">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+
+                    <div>
+                        <p class="text-base font-bold text-gray-900 dark:text-white">Arraste e largue o seu ficheiro aqui</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">ou clique para selecionar do seu computador (Suporta PNG, JPG, WEBP, CSV, JSON, TXT, MD...)</p>
+                    </div>
+
+                    <div id="fileSelectedBadge" class="hidden px-4 py-2 rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-400 font-mono-code text-xs font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-file text-sm"></i> <span id="selectedFileName">ficheiro.png</span> (<span id="selectedFileSize">0 KB</span>)
+                    </div>
+                </div>
+
+                <!-- Format Selection Options -->
+                <div id="formatSection" class="space-y-3 hidden">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                        Converter para o formato:
+                    </label>
+                    
+                    <div id="formatButtons" class="flex flex-wrap gap-2">
+                        <!-- Format buttons injected dynamically by JS based on file type -->
+                    </div>
+                </div>
+
+                <!-- Action Convert Button -->
+                <div class="flex justify-end pt-2">
+                    <button onclick="startConversion()" id="convertBtn" disabled class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-extrabold text-sm shadow-lg shadow-indigo-500/30 transition flex items-center gap-2 opacity-50 cursor-not-allowed">
+                        <i class="fa-solid fa-gear"></i> Iniciar Conversão
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Conversion Progress & Results Section -->
+            <div id="resultCard" class="glass-card rounded-2xl p-6 space-y-4 hidden">
+                <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-[#10b981] fa-circle-check text-emerald-500"></i> Ficheiro Convertido com Sucesso!
+                    </h3>
+                    <span id="savingsBadge" class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-extrabold text-xs border border-emerald-500/30">
+                        -0% Tamanho
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 py-2">
+                    <div class="card-sub-bg p-3.5 rounded-xl border">
+                        <span class="text-[10px] text-gray-400 font-bold block uppercase">Nome Convertido</span>
+                        <span id="resultFilename" class="text-xs font-mono-code font-bold text-gray-900 dark:text-white truncate block">converted.webp</span>
+                    </div>
+
+                    <div class="card-sub-bg p-3.5 rounded-xl border">
+                        <span class="text-[10px] text-gray-400 font-bold block uppercase">Tamanho Original</span>
+                        <span id="resultOrigSize" class="text-xs font-mono-code font-bold text-gray-900 dark:text-white block">1024 KB</span>
+                    </div>
+
+                    <div class="card-sub-bg p-3.5 rounded-xl border">
+                        <span class="text-[10px] text-gray-400 font-bold block uppercase">Tamanho Convertido</span>
+                        <span id="resultConvSize" class="text-xs font-mono-code font-bold text-emerald-400 block">350 KB</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <a id="downloadBtnLink" href="#" download class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-500/30 transition flex items-center gap-2">
+                        <i class="fa-solid fa-download"></i> Baixar Ficheiro Convertido
+                    </a>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <header-bg class="header-bg border-t py-6 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500">
+            <p>© 2026 FileConvert AI Studio — Processador de Ficheiros Multi-Formato | Porta 6958</p>
+        </div>
+    </header-bg>
+
+    <!-- JavaScript Engine -->
+    <script>
+        let currentFile = null;
+        let selectedTargetFormat = '';
+
+        const formatCategories = {
+            image: ['WEBP', 'PNG', 'JPG', 'ICO', 'BMP'],
+            data: ['JSON', 'CSV', 'TXT', 'MD', 'HTML'],
+            doc: ['TXT', 'MD', 'HTML']
+        };
+
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('fileconvert_theme', isDark ? 'dark' : 'light');
+            updateThemeUI(isDark);
+        }
+
+        function updateThemeUI(isDark) {
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (isDark) {
+                icon.className = 'fa-solid fa-moon text-amber-400';
+                text.innerText = 'Modo Escuro';
+            } else {
+                icon.className = 'fa-solid fa-sun text-indigo-500';
+                text.innerText = 'Modo Claro';
+            }
+        }
+
+        const savedTheme = localStorage.getItem('fileconvert_theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+            updateThemeUI(false);
+        } else {
+            document.documentElement.classList.add('dark');
+            updateThemeUI(true);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('dropzone').classList.add('dropzone-active');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            document.getElementById('dropzone').classList.remove('dropzone-active');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('dropzone').classList.remove('dropzone-active');
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                processSelectedFile(e.dataTransfer.files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            if (e.target.files && e.target.files.length > 0) {
+                processSelectedFile(e.target.files[0]);
+            }
+        }
+
+        function processSelectedFile(file) {
+            currentFile = file;
+            const sizeKb = (file.size / 1024).toFixed(1);
+            
+            document.getElementById('selectedFileName').innerText = file.name;
+            document.getElementById('selectedFileSize').innerText = sizeKb + ' KB';
+            document.getElementById('fileSelectedBadge').classList.remove('hidden');
+
+            // Detect extension category
+            const ext = file.name.split('.').pop().toLowerCase();
+            let options = formatCategories.doc;
+
+            if (['png', 'jpg', 'jpeg', 'webp', 'bmp', 'ico', 'gif'].includes(ext)) {
+                options = formatCategories.image;
+            } else if (['csv', 'json', 'txt', 'md', 'markdown'].includes(ext)) {
+                options = formatCategories.data;
+            }
+
+            renderFormatButtons(options, ext.toUpperCase());
+            document.getElementById('formatSection').classList.remove('hidden');
+        }
+
+        function renderFormatButtons(formats, currentExt) {
+            const container = document.getElementById('formatButtons');
+            container.innerHTML = '';
+            
+            // Filter out current format if possible
+            const available = formats.filter(f => f !== currentExt);
+            const list = available.length > 0 ? available : formats;
+
+            selectedTargetFormat = list[0];
+
+            list.forEach((fmt, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectFormat(fmt, btn);
+                btn.className = `format-opt-btn px-4 py-2 rounded-xl text-xs font-bold border transition ${idx === 0 ? 'bg-indigo-600 text-white border-indigo-500 shadow-md' : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-slate-700 hover:border-indigo-500'}`;
+                btn.innerText = fmt;
+                container.appendChild(btn);
+            });
+
+            enableConvertButton();
+        }
+
+        function selectFormat(fmt, btnElement) {
+            selectedTargetFormat = fmt;
+            document.querySelectorAll('.format-opt-btn').forEach(btn => {
+                btn.className = 'format-opt-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-slate-700 hover:border-indigo-500';
+            });
+            btnElement.className = 'format-opt-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-indigo-600 text-white border-indigo-500 shadow-md';
+        }
+
+        function enableConvertButton() {
+            const btn = document.getElementById('convertBtn');
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        async function startConversion() {
+            if (!currentFile || !selectedTargetFormat) return;
+
+            const btn = document.getElementById('convertBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> A Processar Conversão...';
+
+            const formData = new FormData();
+            formData.append('file', currentFile);
+            formData.append('target_format', selectedTargetFormat);
+
+            try {
+                const res = await fetch('/api/convert', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    renderResult(data);
+                    refreshHistory();
+                } else {
+                    const err = await res.json();
+                    alert("Erro na conversão: " + (err.error || 'Erro desconhecido.'));
+                }
+            } catch (e) {
+                alert("Erro ao enviar ficheiro: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-gear"></i> Iniciar Conversão';
+            }
+        }
+
+        function renderResult(data) {
+            document.getElementById('resultFilename').innerText = data.converted_filename;
+            document.getElementById('resultOrigSize').innerText = data.original_size_kb + ' KB';
+            document.getElementById('resultConvSize').innerText = data.converted_size_kb + ' KB';
+            document.getElementById('downloadBtnLink').href = data.download_url;
+
+            // Calculate savings
+            const diff = data.original_size_kb - data.converted_size_kb;
+            const pct = data.original_size_kb > 0 ? ((diff / data.original_size_kb) * 100).toFixed(1) : 0;
+            const badge = document.getElementById('savingsBadge');
+
+            if (diff >= 0) {
+                badge.innerText = `-${pct}% Otimizado`;
+                badge.className = "px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-extrabold text-xs border border-emerald-500/30";
+            } else {
+                badge.innerText = `+${Math.abs(pct)}% Tamanho`;
+                badge.className = "px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 font-extrabold text-xs border border-amber-500/30";
+            }
+
+            document.getElementById('resultCard').classList.remove('hidden');
+            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function refreshHistory() {
+            const res = await fetch('/api/history');
+            if (res.ok) {
+                const history = await res.json();
+                const container = document.getElementById('historyList');
+                container.innerHTML = '';
+                history.forEach(item => {
+                    const catClass = item.category === 'Imagem' ? 'bg-indigo-500/20 text-indigo-400' : (item.category === 'Dados' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-emerald-500/20 text-emerald-400');
+                    const div = document.createElement('div');
+                    div.className = "p-3 rounded-xl card-sub-bg border hover:border-indigo-500/50 transition space-y-1.5";
+                    div.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${catClass}">${item.category}</span>
+                            <span class="font-mono text-[10px] text-gray-400">
+                                ${item.source_format} <i class="fa-solid fa-arrow-right text-[8px] mx-1"></i> ${item.target_format}
+                            </span>
+                        </div>
+                        <div class="text-xs font-mono-code truncate text-gray-800 dark:text-gray-200 font-semibold" title="${item.original_filename}">
+                            ${item.original_filename}
+                        </div>
+                        <div class="flex justify-between items-center text-[10px] text-gray-400 pt-1 border-t border-gray-200 dark:border-slate-800/60">
+                            <span>${item.original_size_kb} KB → <strong class="text-emerald-400">${item.converted_size_kb} KB</strong></span>
+                            <a href="/api/download/${item.converted_filename}" download class="text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-download"></i> Baixar
+                            </a>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+        }
+
+        async function clearHistory() {
+            if (!confirm("Deseja apagar todo o histórico de conversões?")) return;
+            await fetch('/api/history', { method: 'DELETE' });
+            refreshHistory();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PassCraft AI — Gestor de Palavras-passe SaaS | EJAJ TECH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --bg-card: #111827;
+            --border-card: rgba(255, 255, 255, 0.1);
+            --accent-cyan: #38bdf8;
+            --accent-blue: #1d4ed8;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .dashboard-wrapper {
+            max-width: 1550px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        /* Header Navbar */
+        .brand-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 1.25rem 2rem;
+        }
+
+        .brand-logo { display: flex; align-items: center; gap: 0.85rem; }
+
+        .brand-icon {
+            width: 44px; height: 44px; border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; color: #fff; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .brand-text h1 { font-size: 1.3rem; font-weight: 800; color: #fff; }
+        .brand-text p { font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .vault-status-pill {
+            background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.82rem; font-weight: 800;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+
+        /* KPI Cards Grid */
+        .kpi-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;
+        }
+
+        .kpi-card {
+            background: #0f172a; border: 1px solid var(--border-card); border-radius: 18px;
+            padding: 1.35rem; display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .kpi-info h4 { font-size: 0.8rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; }
+        .kpi-val { font-size: 1.85rem; font-weight: 900; color: var(--accent-cyan); margin-top: 0.25rem; font-family: 'JetBrains Mono', monospace; }
+
+        .kpi-icon {
+            width: 48px; height: 48px; border-radius: 12px; background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+        }
+
+        /* Main Content 2-Columns */
+        .main-layout {
+            display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 1.75rem;
+        }
+
+        /* Left Side: Generator & Add Form */
+        .left-column {
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+
+        .card-box {
+            background: #1e293b; border: 1px solid var(--border-card); border-radius: 20px; padding: 1.5rem;
+            display: flex; flex-direction: column; gap: 1.2rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.6rem;
+            border-bottom: 1px solid var(--border-card); padding-bottom: 0.75rem;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .form-label { font-size: 0.82rem; font-weight: 700; color: var(--text-sub); }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%; background: #0f172a; border: 1px solid var(--border-card);
+            border-radius: 12px; padding: 0.75rem 1rem; color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;
+        }
+
+        .form-input:focus { border-color: var(--accent-cyan); }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            color: #fff; border: none; padding: 0.85rem; border-radius: 12px;
+            font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3); transition: transform 0.2s;
+        }
+
+        .btn-submit:hover { transform: translateY(-2px); }
+
+        /* Generator Box Styling */
+        .gen-output-box {
+            background: #0f172a; border: 1px solid var(--border-card); border-radius: 14px;
+            padding: 0.85rem 1rem; display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .gen-pwd-text {
+            font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--accent-cyan); letter-spacing: 1px;
+        }
+
+        .btn-icon-action {
+            background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3);
+            width: 36px; height: 36px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem; transition: all 0.2s;
+        }
+
+        .btn-icon-action:hover { background: var(--accent-cyan); color: #0f172a; }
+
+        /* Right Side: Vault Credentials */
+        .right-column {
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+
+        .filter-bar {
+            display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.25rem;
+        }
+
+        .filter-btn {
+            background: #1e293b; border: 1px solid var(--border-card); color: var(--text-sub);
+            padding: 0.5rem 1rem; border-radius: 50px; font-weight: 700; font-size: 0.82rem; cursor: pointer;
+            white-space: nowrap; transition: all 0.2s;
+        }
+
+        .filter-btn.active {
+            background: var(--accent-cyan); color: #0f172a; border-color: var(--accent-cyan);
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding-left: 2.75rem;
+        }
+
+        .search-icon {
+            position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-sub);
+        }
+
+        /* Credential Items List */
+        .vault-list {
+            display: flex; flex-direction: column; gap: 1rem;
+        }
+
+        .vault-card {
+            background: #0f172a; border: 1px solid var(--border-card); border-radius: 18px;
+            padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;
+            transition: border-color 0.2s;
+        }
+
+        .vault-card:hover { border-color: var(--accent-cyan); }
+
+        .vault-card-left {
+            display: flex; align-items: center; gap: 1rem;
+        }
+
+        .cat-icon-box {
+            width: 44px; height: 44px; border-radius: 12px; background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan); display: flex; align-items: center; justify-content: center; font-size: 1.15rem;
+        }
+
+        .vault-info h3 { font-size: 1.05rem; font-weight: 800; color: #fff; }
+        .vault-info p { font-size: 0.8rem; color: var(--text-sub); font-weight: 600; margin-top: 0.15rem; }
+
+        .vault-card-right {
+            display: flex; align-items: center; gap: 1.25rem;
+        }
+
+        .pwd-field {
+            display: flex; align-items: center; gap: 0.5rem; background: #1e293b; padding: 0.4rem 0.85rem;
+            border-radius: 10px; border: 1px solid var(--border-card);
+        }
+
+        .pwd-val {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #fff; font-weight: 700; width: 140px; text-align: center;
+        }
+
+        .strength-pill {
+            padding: 0.25rem 0.65rem; border-radius: 50px; font-size: 0.72rem; font-weight: 800;
+        }
+
+        .str-ultra { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .str-forte { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .str-fraca { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-wrapper">
+        
+        <!-- Header Navbar -->
+        <header class="brand-header">
+            <div class="brand-logo">
+                <div class="brand-icon"><i class="fa-solid fa-vault"></i></div>
+                <div class="brand-text">
+                    <h1>PassCraft AI</h1>
+                    <p>Gestor de Palavras-passe SaaS • EJAJ TECH</p>
+                </div>
+            </div>
+
+            <div class="vault-status-pill">
+                <i class="fa-solid fa-shield-halved"></i> ENCRIPTAÇÃO AES-256 ATIVA • PORT 6951
+            </div>
+        </header>
+
+        <!-- KPI Metrics Grid -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h4>Saúde do Cofre</h4>
+                    <div class="kpi-val" id="kpiHealth">{{ audit.health_score }}/100</div>
+                </div>
+                <div class="kpi-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h4>Credenciais Guardadas</h4>
+                    <div class="kpi-val">{{ audit.total_items }}</div>
+                </div>
+                <div class="kpi-icon"><i class="fa-solid fa-key"></i></div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h4>Palavras-passe Fracas</h4>
+                    <div class="kpi-val" style="color: {% if audit.weak_count > 0 %}var(--accent-red){% else %}var(--accent-green){% endif %};">
+                        {{ audit.weak_count }}
+                    </div>
+                </div>
+                <div class="kpi-icon" style="color: var(--accent-red);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h4>Autenticação 2FA</h4>
+                    <div class="kpi-val" style="color: var(--accent-green); font-size: 1.4rem; margin-top: 0.4rem;">
+                        <i class="fa-solid fa-lock"></i> ATIVO
+                    </div>
+                </div>
+                <div class="kpi-icon" style="color: var(--accent-green);"><i class="fa-solid fa-user-shield"></i></div>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            
+            <!-- Left Column: Generator & Add Form -->
+            <div class="left-column">
+                
+                <!-- Password Generator Card -->
+                <div class="card-box">
+                    <div class="section-title">
+                        <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> Gerador de Palavras-passe Fortes
+                    </div>
+
+                    <div class="gen-output-box">
+                        <span class="gen-pwd-text" id="genPwdDisplay">EjajTech#2026!Secured</span>
+                        <button class="btn-icon-action" onclick="copyGenPassword()" title="Copiar"><i class="fa-solid fa-copy"></i></button>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" style="display: flex; justify-content: space-between;">
+                            <span>Comprimento da Palavra-passe</span>
+                            <span id="lenValue" style="color: var(--accent-cyan); font-weight: 800;">16 Caracteres</span>
+                        </label>
+                        <input type="range" id="lenRange" min="8" max="32" value="16" oninput="updateLengthLabel(this.value)">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem; font-weight: 600;">
+                        <label><input type="checkbox" id="chkUpper" checked> Maiúsculas (A-Z)</label>
+                        <label><input type="checkbox" id="chkNumbers" checked> Números (0-9)</label>
+                        <label><input type="checkbox" id="chkSymbols" checked> Símbolos (!@#)</label>
+                    </div>
+
+                    <button class="btn-submit" onclick="generateNewPassword()"><i class="fa-solid fa-rotate"></i> Gerar Nova Palavra-passe</button>
+                </div>
+
+                <!-- Add Credential Form Card -->
+                <div class="card-box">
+                    <div class="section-title">
+                        <i class="fa-solid fa-plus-circle" style="color: var(--accent-cyan);"></i> Guardar Nova Credencial no Cofre
+                    </div>
+
+                    <form onsubmit="saveVaultItem(event)">
+                        <div class="form-group">
+                            <label class="form-label">Título da Conta / Serviço</label>
+                            <input type="text" id="vTitle" class="form-input" placeholder="ex: Figma Pro Empresarial" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Utilizador / E-mail</label>
+                            <input type="text" id="vUser" class="form-input" placeholder="ex: enmanuel@ejajtech.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Palavra-passe</label>
+                            <input type="text" id="vPwd" class="form-input" placeholder="Palavra-passe encriptada" required>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;" class="form-group">
+                            <select id="vCat" class="form-select">
+                                <option value="Trabalho">Trabalho 💼</option>
+                                <option value="Pessoal">Pessoal 👤</option>
+                                <option value="Bancos/Finanças">Bancos/Finanças 🏦</option>
+                                <option value="Redes Sociais">Redes Sociais 📱</option>
+                                <option value="Servidores/Dev">Servidores/Dev 💻</option>
+                            </select>
+                            <input type="url" id="vUrl" class="form-input" placeholder="https://website.com">
+                        </div>
+                        <button type="submit" class="btn-submit"><i class="fa-solid fa-lock"></i> Guardar no Cofre Encriptado</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Vault Items & Search -->
+            <div class="right-column">
+                
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="searchInput" class="form-input" placeholder="Pesquisar credenciais por título, utilizador ou serviço..." oninput="filterVault()">
+                </div>
+
+                <!-- Filter Pills -->
+                <div class="filter-bar">
+                    <button class="filter-btn active" onclick="setCategoryFilter('Todos')">Todos ({{ vault_items|length }})</button>
+                    <button class="filter-btn" onclick="setCategoryFilter('Trabalho')">💼 Trabalho</button>
+                    <button class="filter-btn" onclick="setCategoryFilter('Pessoal')">👤 Pessoal</button>
+                    <button class="filter-btn" onclick="setCategoryFilter('Bancos/Finanças')">🏦 Bancos</button>
+                    <button class="filter-btn" onclick="setCategoryFilter('Redes Sociais')">📱 Redes</button>
+                    <button class="filter-btn" onclick="setCategoryFilter('Servidores/Dev')">💻 Dev</button>
+                </div>
+
+                <!-- Vault Cards List -->
+                <div class="vault-list" id="vaultContainer">
+                    {% for item in vault_items %}
+                    <div class="vault-card" data-cat="{{ item.category }}" data-search="{{ item.title|lower }} {{ item.username|lower }}">
+                        <div class="vault-card-left">
+                            <div class="cat-icon-box">
+                                <i class="fa-solid {% if item.category == 'Trabalho' %}fa-briefcase{% elif item.category == 'Bancos/Finanças' %}fa-building-columns{% elif item.category == 'Redes Sociais' %}fa-share-nodes{% elif item.category == 'Servidores/Dev' %}fa-server{% else %}fa-user{% endif %}"></i>
+                            </div>
+                            <div class="vault-info">
+                                <h3>{{ item.title }}</h3>
+                                <p>{{ item.username }} • <span style="color: var(--accent-cyan);">{{ item.category }}</span></p>
+                            </div>
+                        </div>
+
+                        <div class="vault-card-right">
+                            <div class="pwd-field">
+                                <span class="pwd-val" id="pwd-text-{{ item.id }}">••••••••••••</span>
+                                <button class="btn-icon-action" onclick="togglePwdVisibility({{ item.id }}, '{{ item.encrypted_password }}')" title="Mostrar"><i class="fa-solid fa-eye"></i></button>
+                                <button class="btn-icon-action" onclick="copyText('{{ item.encrypted_password }}')" title="Copiar"><i class="fa-solid fa-copy"></i></button>
+                            </div>
+
+                            <span class="strength-pill {% if item.strength_score >= 90 %}str-ultra{% elif item.strength_score >= 70 %}str-forte{% else %}str-fraca{% endif %}">
+                                {{ item.strength_label }}
+                            </span>
+
+                            <button onclick="deleteVaultItem({{ item.id }})" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.45rem 0.75rem; border-radius: 10px; font-weight: 700; cursor: pointer;">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        let currentFilter = 'Todos';
+
+        function updateLengthLabel(val) {
+            document.getElementById('lenValue').innerText = val + ' Caracteres';
+        }
+
+        async function generateNewPassword() {
+            const length = document.getElementById('lenRange').value;
+            const uppercase = document.getElementById('chkUpper').checked;
+            const numbers = document.getElementById('chkNumbers').checked;
+            const symbols = document.getElementById('chkSymbols').checked;
+
+            const res = await fetch('/api/generate-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ length, uppercase, numbers, symbols })
+            });
+            const data = await res.json();
+            document.getElementById('genPwdDisplay').innerText = data.password;
+            document.getElementById('vPwd').value = data.password;
+        }
+
+        function copyGenPassword() {
+            const pwd = document.getElementById('genPwdDisplay').innerText;
+            navigator.clipboard.writeText(pwd);
+            alert("Palavra-passe copiada para a área de transferência!");
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            alert("Palavra-passe copiada para a área de transferência!");
+        }
+
+        function togglePwdVisibility(id, actualPwd) {
+            const el = document.getElementById(`pwd-text-${id}`);
+            if (el.innerText === '••••••••••••') {
+                el.innerText = actualPwd;
+            } else {
+                el.innerText = '••••••••••••';
+            }
+        }
+
+        async function saveVaultItem(e) {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('vTitle').value,
+                username: document.getElementById('vUser').value,
+                password: document.getElementById('vPwd').value,
+                category: document.getElementById('vCat').value,
+                website_url: document.getElementById('vUrl').value
+            };
+
+            await fetch('/api/vault', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            location.reload();
+        }
+
+        async function deleteVaultItem(id) {
+            if (!confirm("Deseja eliminar esta credencial do cofre?")) return;
+            await fetch(`/api/vault/${id}`, { method: 'DELETE' });
+            location.reload();
+        }
+
+        function setCategoryFilter(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            filterVault();
+        }
+
+        function filterVault() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.vault-card').forEach(card => {
+                const catMatch = (currentFilter === 'Todos' || card.getAttribute('data-cat') === currentFilter);
+                const searchMatch = card.getAttribute('data-search').includes(query);
+                if (catMatch && searchMatch) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

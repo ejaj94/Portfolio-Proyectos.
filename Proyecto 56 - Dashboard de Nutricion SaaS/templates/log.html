@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Registar Refeição{% endblock %}
+
+{% block content %}
+<div class="panel-card" style="border-top: 4px solid var(--green-primary);">
+    <div class="panel-header">
+        <div>
+            <h2><i class="fa-solid fa-pen-to-square" style="color: var(--green-primary);"></i> Registo de Consumo Alimentar</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+                Selecione o alimento consumido e a quantidade em gramas. Os valores de calorias e macros são calculados automaticamente.
+            </p>
+        </div>
+    </div>
+
+    <form onsubmit="submitMealLog(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+            <div class="form-group">
+                <label for="logDateInput"><i class="fa-solid fa-calendar-day"></i> Data do Registo</label>
+                <input type="date" id="logDateInput" class="form-control" value="{{ today_date }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mealTypeInput"><i class="fa-solid fa-clock"></i> Tipo de Refeição</label>
+                <select id="mealTypeInput" class="form-control">
+                    <option value="Pequeno-almoço">☕ Pequeno-almoço</option>
+                    <option value="Almoço" selected>🍲 Almoço</option>
+                    <option value="Jantar">🍽️ Jantar</option>
+                    <option value="Lanches">🍏 Lanches & Snacks</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+            <div class="form-group">
+                <label for="foodSelectInput"><i class="fa-solid fa-apple-whole"></i> Selecionar Alimento da Biblioteca</label>
+                <select id="foodSelectInput" class="form-control" required>
+                    <option value="">-- Escolha um alimento --</option>
+                    {% for food in foods %}
+                    <option value="{{ food['name'] }}" 
+                            data-cal="{{ food['calories_100g'] }}" 
+                            data-prot="{{ food['protein_g'] }}" 
+                            data-carbs="{{ food['carbs_g'] }}" 
+                            data-fat="{{ food['fat_g'] }}">
+                        {{ food['name'] }} ({{ food['category'] }}) — {{ food['calories_100g'] }} kcal/100g
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="gramsInput"><i class="fa-solid fa-scale-balanced"></i> Quantidade (Gramas)</label>
+                <input type="number" id="gramsInput" class="form-control" value="150" step="5" min="1" required>
+            </div>
+        </div>
+
+        <!-- Live Macro Calculation Notice -->
+        <div id="calcMacroNotice" style="background: var(--green-bg-tint); padding: 0.9rem 1.2rem; border-radius: 10px; border: 1px solid var(--green-light); margin-bottom: 1.5rem; font-size: 0.95rem; color: var(--green-mint-dark);">
+            Selecione um alimento e indique os gramas para ver a estimativa em tempo real.
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+            <a href="/" class="btn btn-secondary"><i class="fa-solid fa-xmark"></i> Cancelar</a>
+            <button type="submit" class="btn btn-green" style="font-size: 1rem; padding: 0.75rem 2rem;">
+                <i class="fa-solid fa-check"></i> Adicionar Refeição ao Diário
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Table of Recent Logs for Today -->
+<div class="panel-card" style="border-top: 4px solid var(--green-light);">
+    <div class="panel-header">
+        <h2><i class="fa-solid fa-clock-rotate-left" style="color: var(--green-primary);"></i> Registos de Hoje ({{ today_date }})</h2>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Refeição</th>
+                    <th>Alimento</th>
+                    <th>Gramas</th>
+                    <th>Calorias</th>
+                    <th>Proteína</th>
+                    <th>Carbohidratos</th>
+                    <th>Gordura</th>
+                    <th style="text-align: center;">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if recent_logs %}
+                    {% for log in recent_logs %}
+                    <tr>
+                        <td style="font-weight: 700; color: var(--text-dark);">{{ log['meal_type'] }}</td>
+                        <td style="font-weight: 700;">{{ log['food_name'] }}</td>
+                        <td>{{ log['quantity_g'] }} g</td>
+                        <td style="font-weight: 800; color: var(--green-hover);">{{ log['calories'] }} kcal</td>
+                        <td><span class="badge badge-purple">{{ log['protein_g'] }}g P</span></td>
+                        <td><span class="badge badge-blue">{{ log['carbs_g'] }}g C</span></td>
+                        <td><span class="badge badge-amber">{{ log['fat_g'] }}g G</span></td>
+                        <td style="text-align: center;">
+                            <button class="btn btn-danger btn-sm" onclick="deleteMealLog({{ log['id'] }})">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                            Nenhum registo efetuado hoje ainda.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

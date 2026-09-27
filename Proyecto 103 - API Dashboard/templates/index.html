@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APICraft AI — Developer API Gateway & Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        apibrand: {
+                            50: '#faf5ff',
+                            100: '#f3e8ff',
+                            500: '#a855f7',
+                            600: '#9333ea',
+                            700: '#7e22ce',
+                            900: '#581c87'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+        /* Dark Mode styles */
+        .dark body {
+            background-color: #080511;
+            color: #f3e8ff;
+        }
+        .dark .glass-card {
+            background: rgba(15, 10, 28, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+        }
+        .dark .header-bg {
+            background-color: rgba(12, 7, 24, 0.95);
+            border-color: #271442;
+        }
+        .dark .tab-active {
+            background: linear-gradient(135deg, #9333ea 0%, #c084fc 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 20px -2px rgba(168, 85, 247, 0.5);
+        }
+        .dark .card-sub-bg {
+            background-color: #0e081f;
+            border-color: #271442;
+        }
+
+        /* Light Mode styles */
+        body {
+            background-color: #faf5ff;
+            color: #1e1b4b;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.08);
+        }
+        .header-bg {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: #e9d5ff;
+        }
+        .tab-active {
+            background: linear-gradient(135deg, #9333ea 0%, #c084fc 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 20px -2px rgba(147, 51, 234, 0.4);
+        }
+        .card-sub-bg {
+            background-color: #f3e8ff;
+            border-color: #d8b4fe;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-purple-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="header-bg border-b sticky top-0 z-50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-fuchsia-600 to-pink-500 flex items-center justify-center text-white font-bold shadow-lg shadow-purple-500/30">
+                    <i class="fa-solid fa-bolt-lightning text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl tracking-tight text-gray-900 dark:text-white">APICraft AI</h1>
+                    <p class="text-xs text-purple-600 dark:text-purple-400">API Gateway, Gestão de Keys, Telemetria & Rate Limits</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-xs">
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" id="themeToggleBtn" class="px-3 py-2 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-900 dark:text-purple-200 hover:bg-purple-600 hover:text-white transition flex items-center gap-2 font-bold border border-purple-200 dark:border-purple-800 shadow">
+                    <i id="themeIcon" class="fa-solid fa-moon text-amber-500"></i>
+                    <span id="themeText">Modo Escuro</span>
+                </button>
+
+                <button onclick="simulateLiveRequest()" class="px-3 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/30 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-bolt animate-bounce"></i> Simular Request
+                </button>
+
+                <button onclick="openNewKeyModal()" class="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white font-semibold transition flex items-center gap-2 shadow-lg shadow-purple-500/30">
+                    <i class="fa-solid fa-key"></i> Criar Nova API Key
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow space-y-8">
+        
+        <!-- Hero Header Summary -->
+        <div class="p-6 rounded-2xl glass-card relative overflow-hidden border border-purple-500/30">
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-purple-500/15 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center">
+                <div class="lg:col-span-3 space-y-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-300 text-xs font-semibold">
+                        <i class="fa-solid fa-code"></i> API Infrastructure & Developer Hub
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Monitorização & Governança de APIs em Tempo Real</h2>
+                    <p class="text-gray-600 dark:text-purple-200/80 text-sm leading-relaxed max-w-3xl">
+                        Gerencie chaves de acesso seguro, acompanhe o tráfego nos endpoints (`/v1/users`, `/v1/auth`, `/v1/payments`), rastreie latência em milissegundos e previna estouros de quota com controlo inteligente de **Rate Limiting**.
+                    </p>
+                </div>
+                <div class="lg:col-span-1 card-sub-bg p-4 rounded-xl border space-y-2 text-xs">
+                    <div class="flex justify-between text-gray-600 dark:text-purple-300"><span>Chaves Ativas:</span> <strong class="text-purple-600 dark:text-purple-300">{{ stats.active_keys }} / {{ stats.total_keys }} Keys</strong></div>
+                    <div class="flex justify-between text-gray-600 dark:text-purple-300"><span>Latência Média:</span> <strong class="text-emerald-600 dark:text-emerald-400">{{ stats.avg_latency }} ms</strong></div>
+                    <div class="flex justify-between text-gray-600 dark:text-purple-300"><span>Taxa de Sucesso:</span> <strong class="text-emerald-600 dark:text-emerald-400">{{ stats.success_rate }}%</strong></div>
+                    <div class="flex justify-between text-gray-600 dark:text-purple-300"><span>Erros Registados:</span> <strong class="text-rose-600 dark:text-rose-400">{{ stats.total_errors }} Erros</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="p-5 rounded-xl glass-card transition">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-500 dark:text-purple-300/70 font-semibold uppercase tracking-wider">Total Requisições</span>
+                    <span class="p-2 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400"><i class="fa-solid fa-server text-lg"></i></span>
+                </div>
+                <div class="text-2xl font-extrabold text-gray-900 dark:text-white">{{ stats.total_requests }}</div>
+                <div class="mt-2 text-xs text-purple-600 dark:text-purple-400 flex items-center gap-1 font-medium">
+                    <i class="fa-solid fa-arrow-trend-up"></i> Tráfego Ativo
+                </div>
+            </div>
+
+            <div class="p-5 rounded-xl glass-card transition">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-500 dark:text-purple-300/70 font-semibold uppercase tracking-wider">Latência Média</span>
+                    <span class="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-gauge-high text-lg"></i></span>
+                </div>
+                <div class="text-2xl font-extrabold text-gray-900 dark:text-white">{{ stats.avg_latency }} ms</div>
+                <div class="mt-2 text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-medium">
+                    <i class="fa-solid fa-circle-check"></i> Desempenho Excelente
+                </div>
+            </div>
+
+            <div class="p-5 rounded-xl glass-card transition">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-500 dark:text-purple-300/70 font-semibold uppercase tracking-wider">Taxa de Erros</span>
+                    <span class="p-2 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400"><i class="fa-solid fa-triangle-exclamation text-lg"></i></span>
+                </div>
+                <div class="text-2xl font-extrabold text-gray-900 dark:text-white">{{ stats.error_rate }}%</div>
+                <div class="mt-2 text-xs text-rose-600 dark:text-rose-400 flex items-center gap-1 font-medium">
+                    <i class="fa-solid fa-bug"></i> 4xx & 5xx Logged
+                </div>
+            </div>
+
+            <div class="p-5 rounded-xl glass-card transition">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-500 dark:text-purple-300/70 font-semibold uppercase tracking-wider">API Keys Ativas</span>
+                    <span class="p-2 rounded-lg bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400"><i class="fa-solid fa-key text-lg"></i></span>
+                </div>
+                <div class="text-2xl font-extrabold text-gray-900 dark:text-white">{{ stats.active_keys }} / {{ stats.total_keys }}</div>
+                <div class="mt-2 text-xs text-fuchsia-600 dark:text-fuchsia-400 flex items-center gap-1 font-medium">
+                    <i class="fa-solid fa-shield-check"></i> Tokens Válidos
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs Container -->
+        <div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
+            
+            <!-- Tab Buttons -->
+            <div class="flex flex-wrap border-b border-purple-200 dark:border-purple-900/60 card-sub-bg p-2 gap-2">
+                <button onclick="switchTab('overview')" id="tab-btn-overview" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 transition text-gray-600 dark:text-purple-300 hover:text-purple-600 tab-active">
+                    <i class="fa-solid fa-chart-line"></i> Visão Geral & Métricas
+                </button>
+                <button onclick="switchTab('keys')" id="tab-btn-keys" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 transition text-gray-600 dark:text-purple-300 hover:text-purple-600">
+                    <i class="fa-solid fa-key"></i> Gestão de API Keys
+                </button>
+                <button onclick="switchTab('requests')" id="tab-btn-requests" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 transition text-gray-600 dark:text-purple-300 hover:text-purple-600">
+                    <i class="fa-solid fa-list-check"></i> Requests & Endpoints
+                </button>
+                <button onclick="switchTab('errors')" id="tab-btn-errors" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 transition text-gray-600 dark:text-purple-300 hover:text-purple-600">
+                    <i class="fa-solid fa-bug"></i> Registos de Erros (4xx/5xx)
+                </button>
+                <button onclick="switchTab('ratelimits')" id="tab-btn-ratelimits" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 transition text-gray-600 dark:text-purple-300 hover:text-purple-600">
+                    <i class="fa-solid fa-stopwatch"></i> Rate Limits & Quotas
+                </button>
+            </div>
+
+            <!-- Tab Panels Content -->
+            <div class="p-6">
+                
+                <!-- TAB 1: OVERVIEW & CHARTS -->
+                <div id="tab-overview" class="tab-panel space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 p-5 rounded-xl card-sub-bg border border-purple-200 dark:border-purple-900/60">
+                            <h3 class="text-sm font-bold text-gray-800 dark:text-purple-200 mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-chart-area text-purple-500"></i> Latência Média de Resposta (ms)
+                            </h3>
+                            <div class="h-64">
+                                <canvas id="latencyChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="p-5 rounded-xl card-sub-bg border border-purple-200 dark:border-purple-900/60 flex flex-col justify-between space-y-4">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800 dark:text-purple-200 mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-pie-chart text-purple-500"></i> Distribuição de HTTP Status
+                                </h3>
+                                <div class="h-44 flex justify-center">
+                                    <canvas id="statusChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20 text-xs text-purple-600 dark:text-purple-300 font-medium text-center">
+                                <i class="fa-solid fa-database mr-1"></i> Telemetria alimentada por SQLite api_craft.db
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: API KEYS -->
+                <div id="tab-keys" class="tab-panel hidden space-y-4">
+                    <div class="flex flex-wrap justify-between items-center gap-4">
+                        <div>
+                            <h3 class="text-base font-bold text-gray-900 dark:text-white">Chaves de API Autenticadas</h3>
+                            <p class="text-xs text-gray-500 dark:text-purple-300/70">Gerencie tokens de acesso para aplicações web, mobile e terceiros.</p>
+                        </div>
+                        <button onclick="openNewKeyModal()" class="px-3.5 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center gap-2 shadow">
+                            <i class="fa-solid fa-plus"></i> Gerar Nova Chave
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-purple-200 dark:border-purple-900/60">
+                        <table class="w-full text-left text-xs text-gray-700 dark:text-purple-200">
+                            <thead class="card-sub-bg text-gray-600 dark:text-purple-300 font-semibold uppercase tracking-wider border-b border-purple-200 dark:border-purple-900/60">
+                                <tr>
+                                    <th class="p-3.5">Nome da Aplicação</th>
+                                    <th class="p-3.5">Token de Acesso (API Key)</th>
+                                    <th class="p-3.5">Ambiente</th>
+                                    <th class="p-3.5">Permissões (Scope)</th>
+                                    <th class="p-3.5">Rate Limit</th>
+                                    <th class="p-3.5">Status</th>
+                                    <th class="p-3.5">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-purple-200 dark:divide-purple-900/60 bg-white/50 dark:bg-purple-950/40">
+                                {% for k in keys %}
+                                <tr class="hover:bg-purple-500/5 transition">
+                                    <td class="p-3.5 font-bold text-gray-900 dark:text-white">{{ k.name }}</td>
+                                    <td class="p-3.5 font-mono text-purple-600 dark:text-purple-400 font-semibold flex items-center gap-2">
+                                        <span>{{ k.key_token[:12] }}••••••••</span>
+                                        <button onclick="copyToClipboard('{{ k.key_token }}')" title="Copiar Token Completo" class="text-gray-400 hover:text-purple-500">
+                                            <i class="fa-regular fa-copy"></i>
+                                        </button>
+                                    </td>
+                                    <td class="p-3.5">
+                                        {% if k.environment == 'Production' %}
+                                            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold">Production</span>
+                                        {% else %}
+                                            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold">Staging</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="p-3.5 font-medium">{{ k.permission_scope }}</td>
+                                    <td class="p-3.5 font-mono text-gray-500 dark:text-purple-300/70">{{ k.rate_limit_per_min }} req/min</td>
+                                    <td class="p-3.5">
+                                        {% if k.status == 'Ativa' %}
+                                            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-semibold">Ativa</span>
+                                        {% else %}
+                                            <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-semibold">Revogada</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="p-3.5">
+                                        <button onclick="toggleRevokeKey({{ k.id }})" class="px-2.5 py-1 rounded bg-purple-100 dark:bg-purple-900/60 hover:bg-rose-500 hover:text-white text-purple-900 dark:text-purple-200 text-[11px] font-semibold border border-purple-200 dark:border-purple-800 transition">
+                                            {{ 'Revogar' if k.status == 'Ativa' else 'Reativar' }}
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 3: REQUESTS LOG -->
+                <div id="tab-requests" class="tab-panel hidden space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-base font-bold text-gray-900 dark:text-white">Registos de Requisições aos Endpoints</h3>
+                        <span class="text-xs text-gray-500 dark:text-purple-300/70">Registo ao Vivo</span>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-purple-200 dark:border-purple-900/60">
+                        <table class="w-full text-left text-xs text-gray-700 dark:text-purple-200">
+                            <thead class="card-sub-bg text-gray-600 dark:text-purple-300 font-semibold uppercase tracking-wider border-b border-purple-200 dark:border-purple-900/60">
+                                <tr>
+                                    <th class="p-3.5">Timestamp</th>
+                                    <th class="p-3.5">Método HTTP</th>
+                                    <th class="p-3.5">Endpoint</th>
+                                    <th class="p-3.5">Status HTTP</th>
+                                    <th class="p-3.5">Latência (ms)</th>
+                                    <th class="p-3.5">Payload</th>
+                                    <th class="p-3.5">IP de Origem</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-purple-200 dark:divide-purple-900/60 bg-white/50 dark:bg-purple-950/40 font-mono-code">
+                                {% for r in requests %}
+                                <tr class="hover:bg-purple-500/5 transition">
+                                    <td class="p-3.5 text-gray-500 text-[11px]">{{ r.timestamp }}</td>
+                                    <td class="p-3.5">
+                                        {% if r.http_method == 'GET' %}
+                                            <span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-600 dark:text-blue-400 font-bold">GET</span>
+                                        {% elif r.http_method == 'POST' %}
+                                            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold">POST</span>
+                                        {% elif r.http_method == 'PUT' %}
+                                            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold">PUT</span>
+                                        {% else %}
+                                            <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold">DELETE</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="p-3.5 font-bold text-gray-900 dark:text-white">{{ r.endpoint }}</td>
+                                    <td class="p-3.5 font-bold">
+                                        {% if r.status_code < 300 %}
+                                            <span class="text-emerald-600 dark:text-emerald-400">{{ r.status_code }} OK</span>
+                                        {% elif r.status_code == 429 %}
+                                            <span class="text-amber-600 dark:text-amber-400">429 Rate Limit</span>
+                                        {% else %}
+                                            <span class="text-rose-600 dark:text-rose-400">{{ r.status_code }} Error</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="p-3.5 text-purple-600 dark:text-purple-400">{{ r.latency_ms }} ms</td>
+                                    <td class="p-3.5 text-gray-500 text-[11px]">{{ r.payload_size_kb }} KB</td>
+                                    <td class="p-3.5 text-gray-500 text-[11px]">{{ r.ip_address }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 4: ERRORS LOG -->
+                <div id="tab-errors" class="tab-panel hidden space-y-4">
+                    <h3 class="text-base font-bold text-gray-900 dark:text-white">Diagnóstico de Erros (4xx / 5xx)</h3>
+                    <div class="font-mono text-xs card-sub-bg p-4 rounded-xl border border-purple-200 dark:border-purple-900/60 space-y-3">
+                        {% for err in errors %}
+                        <div class="p-3 rounded-lg bg-white dark:bg-purple-950/80 border border-purple-200 dark:border-purple-900/60 space-y-1.5 shadow-sm">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-gray-500">[{{ err.timestamp }}]</span>
+                                    {% if err.status_code >= 500 %}
+                                        <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold">HTTP {{ err.status_code }}</span>
+                                    {% else %}
+                                        <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold">HTTP {{ err.status_code }}</span>
+                                    {% endif %}
+                                    <strong class="text-gray-900 dark:text-white font-mono-code">{{ err.endpoint }}</strong>
+                                </div>
+                                <span class="text-gray-500 text-[11px]">IP Client: {{ err.client_ip }}</span>
+                            </div>
+                            <div class="text-gray-700 dark:text-purple-200 font-sans text-xs pl-2 border-l-2 border-rose-500">
+                                {{ err.error_message }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- TAB 5: RATE LIMITS -->
+                <div id="tab-ratelimits" class="tab-panel hidden space-y-6">
+                    <h3 class="text-base font-bold text-gray-900 dark:text-white">Consumo de Quotas & Rate Limits por Chave</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for k in keys %}
+                        <div class="p-4 rounded-xl card-sub-bg border border-purple-200 dark:border-purple-900/60 space-y-3">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="font-bold text-gray-900 dark:text-white">{{ k.name }}</div>
+                                    <div class="text-xs text-gray-500 font-mono-code">{{ k.key_token[:14] }}••••</div>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-xs font-bold bg-purple-500/20 text-purple-600 dark:text-purple-300">
+                                    {{ k.rate_limit_per_min }} req/min
+                                </span>
+                            </div>
+
+                            <!-- Simular Consumo Progress Bar -->
+                            {% set used = (k.id * 185 + 230) % k.rate_limit_per_min %}
+                            {% set pct = ((used / k.rate_limit_per_min) * 100) | round | int %}
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs text-gray-500 dark:text-purple-300/70">
+                                    <span>Quota Consumida: <strong>{{ used }} / {{ k.rate_limit_per_min }} req</strong></span>
+                                    <span>{{ pct }}%</span>
+                                </div>
+                                <div class="w-full bg-purple-200 dark:bg-purple-950/80 rounded-full h-2 overflow-hidden">
+                                    <div class="h-2 rounded-full {% if pct > 80 %}bg-rose-500{% elif pct > 50 %}bg-amber-500{% else %}bg-emerald-500{% endif %}" style="width: {{ pct }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal to Generate New API Key -->
+    <div id="newKeyModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-purple-950 border border-purple-200 dark:border-purple-800 p-6 rounded-2xl w-full max-w-md space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-purple-200 dark:border-purple-800 pb-3">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white"><i class="fa-solid fa-key text-purple-500 mr-2"></i> Nova API Key</h3>
+                <button onclick="closeNewKeyModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="createKeySubmit(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-purple-200 mb-1">Nome da Aplicação / Projeto</label>
+                    <input type="text" id="keyName" required placeholder="Ex: Mobile Android Production" class="w-full bg-purple-50 dark:bg-purple-900/50 border border-purple-200 dark:border-purple-800 rounded-lg p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-purple-200 mb-1">Ambiente</label>
+                    <select id="keyEnv" class="w-full bg-purple-50 dark:bg-purple-900/50 border border-purple-200 dark:border-purple-800 rounded-lg p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-purple-500">
+                        <option value="Production">Production (sk_live_...)</option>
+                        <option value="Staging">Staging (sk_test_...)</option>
+                        <option value="Development">Development (sk_dev_...)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-purple-200 mb-1">Escopo de Permissão</label>
+                    <select id="keyScope" class="w-full bg-purple-50 dark:bg-purple-900/50 border border-purple-200 dark:border-purple-800 rounded-lg p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-purple-500">
+                        <option value="Read-Write">Read-Write (Leitura & Escrita)</option>
+                        <option value="Read-only">Read-only (Apenas Leitura)</option>
+                        <option value="Admin">Admin (Acesso Total)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-purple-200 mb-1">Rate Limit (Requisições / minuto)</label>
+                    <input type="number" id="keyLimit" value="1000" min="100" max="10000" class="w-full bg-purple-50 dark:bg-purple-900/50 border border-purple-200 dark:border-purple-800 rounded-lg p-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-purple-500">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeNewKeyModal()" class="px-4 py-2 rounded-lg bg-purple-100 dark:bg-purple-900/60 text-purple-900 dark:text-purple-200 font-semibold">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-semibold shadow-lg shadow-purple-500/30">Gerar Token</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="header-bg border-t py-6 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500">
+            <p>© 2026 APICraft AI Enterprise — Gateway de APIs & Governança</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Engine -->
+    <script>
+        // Light & Dark Theme Toggle Engine
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('apicraft_theme', isDark ? 'dark' : 'light');
+            updateThemeUI(isDark);
+        }
+
+        function updateThemeUI(isDark) {
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (isDark) {
+                icon.className = 'fa-solid fa-moon text-amber-400';
+                text.innerText = 'Modo Escuro';
+            } else {
+                icon.className = 'fa-solid fa-sun text-purple-600';
+                text.innerText = 'Modo Claro';
+            }
+        }
+
+        const savedTheme = localStorage.getItem('apicraft_theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+            updateThemeUI(false);
+        } else {
+            document.documentElement.classList.add('dark');
+            updateThemeUI(true);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
+
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.getElementById('tab-btn-' + tabId).classList.add('tab-active');
+        }
+
+        function openNewKeyModal() {
+            document.getElementById('newKeyModal').classList.remove('hidden');
+        }
+
+        function closeNewKeyModal() {
+            document.getElementById('newKeyModal').classList.add('hidden');
+        }
+
+        async function createKeySubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('keyName').value;
+            const environment = document.getElementById('keyEnv').value;
+            const permission_scope = document.getElementById('keyScope').value;
+            const rate_limit_per_min = document.getElementById('keyLimit').value;
+
+            const res = await fetch('/api/keys', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, environment, permission_scope, rate_limit_per_min })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                alert("API Key Gerada com Sucesso!\nToken: " + data.key_token);
+                location.reload();
+            }
+        }
+
+        async function toggleRevokeKey(keyId) {
+            const res = await fetch(`/api/keys/${keyId}/revoke`, { method: 'POST' });
+            if (res.ok) {
+                location.reload();
+            }
+        }
+
+        async function simulateLiveRequest() {
+            const res = await fetch('/api/simulate-request', { method: 'POST' });
+            if (res.ok) {
+                location.reload();
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+            alert("API Key copiada para a área de transferência!");
+        }
+
+        // Initialize Charts
+        document.addEventListener('DOMContentLoaded', () => {
+            // Latency Line Chart
+            const ctxLat = document.getElementById('latencyChart').getContext('2d');
+            new Chart(ctxLat, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', 'Agora'],
+                    datasets: [{
+                        label: 'Latência Média (ms)',
+                        data: [42, 38, 95, 120, 85, 48, {{ stats.avg_latency }}],
+                        borderColor: '#a855f7',
+                        backgroundColor: 'rgba(168, 85, 247, 0.15)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#c084fc' } } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#c084fc' } },
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#c084fc' } }
+                    }
+                }
+            });
+
+            // HTTP Status Code Doughnut Chart
+            const ctxStatus = document.getElementById('statusChart').getContext('2d');
+            new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: ['2xx Success', '4xx Client Err / RateLimit', '5xx Server Err'],
+                    datasets: [{
+                        data: [{{ stats.total_requests - stats.total_errors }}, {{ (stats.total_errors * 0.7)|round|int }}, {{ (stats.total_errors * 0.3)|round|int }}],
+                        backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'],
+                        borderColor: '#0e081f',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#c084fc', font: { size: 10 } } } }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

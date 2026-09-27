@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreelanceCraft AI — Freelance Marketplace & Services Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        freebrand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+        /* Dark Mode styles */
+        .dark body {
+            background-color: #060913;
+            color: #f1f5f9;
+        }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .dark .header-bg {
+            background-color: rgba(10, 15, 29, 0.95);
+            border-color: #1e293b;
+        }
+        .dark .card-sub-bg {
+            background-color: #0b1120;
+            border-color: #1e293b;
+        }
+
+        /* Light Mode styles */
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.08);
+        }
+        .header-bg {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: #e2e8f0;
+        }
+        .card-sub-bg {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="header-bg border-b sticky top-0 z-50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-600 flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-500/30">
+                    <i class="fa-solid fa-briefcase text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl tracking-tight text-gray-900 dark:text-white">FreelanceCraft AI</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Marketplace de Talentos Freelancer, Serviços & Propostas</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 font-bold border border-emerald-500/20">
+                    <i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> Talentos Verificados
+                </span>
+
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" id="themeToggleBtn" class="px-3 py-2 rounded-xl bg-gray-200 dark:bg-slate-800 text-gray-800 dark:text-gray-200 hover:bg-emerald-500 hover:text-white transition flex items-center gap-2 font-bold border border-gray-300 dark:border-slate-700 shadow">
+                    <i id="themeIcon" class="fa-solid fa-moon text-amber-400"></i>
+                    <span id="themeText">Modo Escuro</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow space-y-6">
+        
+        <!-- Search & Filter Hero Bar -->
+        <section class="glass-card rounded-2xl p-6 space-y-4">
+            <div class="flex flex-wrap sm:flex-nowrap gap-3">
+                <div class="relative flex-grow">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400"></i>
+                    <input type="text" id="searchInput" oninput="filterServices()" placeholder="Pesquise por serviço ou tecnologia (Ex: SaaS, Figma, AI, DevOps...)" class="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500 font-medium">
+                </div>
+                <select id="categoryFilter" onchange="filterServices()" class="px-4 py-3 rounded-xl bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 text-xs text-gray-900 dark:text-white font-bold focus:outline-none focus:border-emerald-500">
+                    <option value="ALL">Todas as Categorias</option>
+                    <option value="Desenvolvimento Web">Desenvolvimento Web</option>
+                    <option value="Design & UX">Design & UX</option>
+                    <option value="DevOps & Cloud">DevOps & Cloud</option>
+                    <option value="Marketing & Redação">Marketing & Redação</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Services Marketplace Grid (Gigs) -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h3 class="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-store text-emerald-500"></i> Serviços em Destaque (Gigs)
+                </h3>
+            </div>
+
+            <div id="servicesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for s in services %}
+                <div class="service-card glass-card rounded-2xl p-5 space-y-4 border hover:border-emerald-500/50 transition flex flex-col justify-between" data-category="{{ s.category }}" data-title="{{ s.title }}">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold border border-emerald-500/30">
+                                {{ s.category }}
+                            </span>
+                            <span class="text-xs font-bold text-amber-400 flex items-center gap-1">
+                                <i class="fa-solid fa-star"></i> {{ s.rating }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-lg shadow-inner flex-shrink-0">
+                                <i class="fa-solid {{ s.thumbnail_icon }}"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-900 dark:text-white line-clamp-2">{{ s.title }}</h4>
+                                <span class="text-[11px] text-gray-400 font-medium">por <strong>{{ s.freelancer_name }}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-gray-200 dark:border-slate-800 flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] text-gray-400 uppercase font-bold block">A partir de</span>
+                            <span class="text-lg font-mono font-extrabold text-emerald-400">€{{ "%.2f"|format(s.price) }}</span>
+                        </div>
+                        <button onclick="openProposalModal('{{ s.title }}', {{ s.price }}, {{ s.delivery_days }})" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-500/30 transition">
+                            Proposta
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Top Freelancers Profiles Directory -->
+        <section class="space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h3 class="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-user-astronaut text-cyan-400"></i> Freelancers Recomendados
+                </h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for f in freelancers %}
+                <div class="glass-card rounded-2xl p-5 space-y-4 border hover:border-emerald-500/50 transition flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl shadow">
+                                <i class="fa-solid {{ f.avatar_icon }}"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                                    {{ f.name }} <i class="fa-solid fa-circle-check text-emerald-400 text-xs" title="Verificado"></i>
+                                </h4>
+                                <span class="text-[11px] text-gray-400 block line-clamp-1">{{ f.title }}</span>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">{{ f.bio }}</p>
+
+                        <div class="flex flex-wrap gap-1">
+                            {% for skill in f.skills.split(',') %}
+                            <span class="px-2 py-0.5 rounded text-[10px] bg-slate-200 dark:bg-slate-800 text-gray-700 dark:text-gray-300 font-mono">{{ skill.strip() }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-gray-200 dark:border-slate-800 flex justify-between items-center">
+                        <span class="text-xs font-mono font-bold text-emerald-400">€{{ "%.2f"|format(f.hourly_rate) }}/h</span>
+                        <span class="text-xs font-bold text-amber-400"><i class="fa-solid fa-star"></i> {{ f.rating }} ({{ f.reviews_count }})</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Proposals & Live Chat Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Commercial Proposals Submitted Table -->
+            <div class="lg:col-span-7 glass-card rounded-2xl p-6 space-y-4">
+                <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane text-emerald-500"></i> Propostas Comerciais Enviadas
+                    </h3>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-slate-800">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-gray-100 dark:bg-slate-900 text-gray-500 font-bold uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3">Serviço / Projeto</th>
+                                <th class="p-3">Cliente</th>
+                                <th class="p-3">Orçamento</th>
+                                <th class="p-3">Prazo</th>
+                                <th class="p-3 text-right">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-slate-800">
+                            {% for prop in proposals %}
+                            <tr>
+                                <td class="p-3 font-semibold text-gray-900 dark:text-white">{{ prop.service_title }}</td>
+                                <td class="p-3 text-gray-400">{{ prop.client_name }}</td>
+                                <td class="p-3 font-mono font-bold text-emerald-400">€{{ "%.2f"|format(prop.bid_amount) }}</td>
+                                <td class="p-3 font-mono text-gray-400">{{ prop.delivery_days }} dias</td>
+                                <td class="p-3 text-right">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {% if prop.status == 'Accepted' %}bg-emerald-500/20 text-emerald-400 border border-emerald-500/30{% else %}bg-amber-500/20 text-amber-400 border border-amber-500/30{% endif %}">
+                                        {{ prop.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Real-Time Chat Thread -->
+            <div class="lg:col-span-5 glass-card rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                <div class="border-b border-gray-200 dark:border-slate-800 pb-3 flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-cyan-400"></i> Chat Direto com Freelancer
+                    </h3>
+                    <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Online</span>
+                </div>
+
+                <div id="chatMessages" class="space-y-3 max-h-64 overflow-y-auto pr-1">
+                    {% for msg in messages %}
+                    <div class="card-sub-bg p-3 rounded-xl border text-xs space-y-1">
+                        <div class="flex justify-between font-bold">
+                            <span class="text-emerald-400">{{ msg.sender_name }}</span>
+                            <span class="text-[10px] text-gray-500 font-mono">{{ msg.created_at[11:16] if msg.created_at else '' }}</span>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ msg.message_text }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <form onsubmit="handleSendMessage(event)" class="flex gap-2 text-xs pt-2 border-t border-gray-200 dark:border-slate-800">
+                    <input type="text" id="chatInput" placeholder="Escreva a sua mensagem..." required class="flex-grow bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500">
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Proposal Submission Modal -->
+    <div id="proposalModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="glass-card rounded-2xl max-w-md w-full p-6 space-y-4 border border-emerald-500/40">
+            <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h4 class="text-sm font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-paper-plane text-emerald-500"></i> Enviar Proposta de Projeto
+                </h4>
+                <button onclick="closeProposalModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-base"></i></button>
+            </div>
+
+            <form onsubmit="handleProposalSubmit(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Serviço Selecionado</label>
+                    <input type="text" id="propServiceTitle" readonly class="w-full bg-gray-200 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white font-semibold">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Seu Nome / Empresa</label>
+                        <input type="text" id="propClientName" required placeholder="Ex: Rodrigo Neves" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white">
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Seu Email</label>
+                        <input type="email" id="propClientEmail" required placeholder="rodrigo@empresa.pt" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Proposta (€)</label>
+                        <input type="number" id="propBidAmount" required step="10" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white font-mono font-bold">
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Prazo (Dias)</label>
+                        <input type="number" id="propDeliveryDays" required min="1" max="60" class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white font-mono">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">Pitch / Detalhes do Projeto</label>
+                    <textarea id="propCoverLetter" rows="3" required placeholder="Descreva os requisitos do seu projeto..." class="w-full bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-xl p-2.5 text-gray-900 dark:text-white"></textarea>
+                </div>
+
+                <button type="submit" id="propSubmitBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-500/30 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> Enviar Proposta Comercial
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="header-bg border-t py-6 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500">
+            <p>© 2026 FreelanceCraft AI Studio — Marketplace de Talentos Freelancer & Serviços | Porta 6963</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Engine -->
+    <script>
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('freelancecraft_theme', isDark ? 'dark' : 'light');
+            updateThemeUI(isDark);
+        }
+
+        function updateThemeUI(isDark) {
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (isDark) {
+                icon.className = 'fa-solid fa-moon text-amber-400';
+                text.innerText = 'Modo Escuro';
+            } else {
+                icon.className = 'fa-solid fa-sun text-emerald-500';
+                text.innerText = 'Modo Claro';
+            }
+        }
+
+        const savedTheme = localStorage.getItem('freelancecraft_theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+            updateThemeUI(false);
+        } else {
+            document.documentElement.classList.add('dark');
+            updateThemeUI(true);
+        }
+
+        function filterServices() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cat = document.getElementById('categoryFilter').value;
+            const cards = document.querySelectorAll('.service-card');
+
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                const cardTitle = card.getAttribute('data-title').toLowerCase();
+                const matchesCat = (cat === 'ALL' || cardCat === cat);
+                const matchesQuery = (!query || cardTitle.includes(query) || cardCat.toLowerCase().includes(query));
+
+                if (matchesCat && matchesQuery) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function openProposalModal(title, price, days) {
+            document.getElementById('propServiceTitle').value = title;
+            document.getElementById('propBidAmount').value = price;
+            document.getElementById('propDeliveryDays').value = days;
+            document.getElementById('proposalModal').classList.remove('hidden');
+        }
+
+        function closeProposalModal() {
+            document.getElementById('proposalModal').classList.add('hidden');
+        }
+
+        async function handleProposalSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('propSubmitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> A Enviar Proposta...';
+
+            const service_title = document.getElementById('propServiceTitle').value;
+            const client_name = document.getElementById('propClientName').value;
+            const client_email = document.getElementById('propClientEmail').value;
+            const bid_amount = parseFloat(document.getElementById('propBidAmount').value);
+            const delivery_days = parseInt(document.getElementById('propDeliveryDays').value);
+            const cover_letter = document.getElementById('propCoverLetter').value;
+
+            try {
+                const res = await fetch('/api/proposals', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ service_title, client_name, client_email, bid_amount, delivery_days, cover_letter })
+                });
+
+                if (res.ok) {
+                    alert("Proposta enviada com sucesso!");
+                    window.location.reload();
+                } else {
+                    const err = await res.json();
+                    alert("Erro: " + err.error);
+                }
+            } catch (err) {
+                alert("Erro: " + err.message);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function handleSendMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            try {
+                const res = await fetch('/api/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sender_name: 'Cliente Exemplo', receiver_name: 'Angel Rafael', message_text: text })
+                });
+
+                if (res.ok) {
+                    input.value = '';
+                    window.location.reload();
+                }
+            } catch (err) {
+                alert("Erro ao enviar mensagem: " + err.message);
+            }
+        }
+    </script>
+</body>
+</html>

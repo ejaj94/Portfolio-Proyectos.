@@ -3,7 +3,7 @@ import glob
 import textwrap
 from PIL import Image, ImageDraw, ImageFont, ImageChops
 
-brain_dir = r"C:\Users\ANGEL RAFAEL\.gemini\antigravity\brain\ce4a2ece-d2d7-41c9-acca-716b5f94d19d"
+brain_dir = r"C:\Users\enman\.gemini\antigravity\brain\ce4a2ece-d2d7-41c9-acca-716b5f94d19d"
 output_dir = os.path.join(brain_dir, "scratch")
 os.makedirs(output_dir, exist_ok=True)
 
@@ -25,7 +25,7 @@ data = [
     {"title": "Aveia & Amêndoa", "drawing": "drawing_aveia_amendoa*.png", "ingredientes": "Glicerina 100% vegetal, essência natural de aveia e mel, mel, amêndoa e flocos de aveia e óleo de amêndoas doces.", "esteticos": "A amêndoa e a aveia são ricos em propriedades estéticas complementares ideais para nutrir, proteger e rejuvenescer a pele. Enquanto o óleo de amêndoa atua na hidratação e luminosidade, a aveia foca na regeneração celular, firmeza e suavidade.", "espiritual": "Elas nutrem o corpo físico para promover a clareza mental, o equilíbrio emocional e a elevação da vibração energética."}
 ]
 
-logo_path = r"C:\Users\ANGEL RAFAEL\.gemini\antigravity\scratch\com-cheiro-de-amor-pamphlet-preview\assets\logo.jpg"
+logo_path = r"C:\Users\enman\.gemini\antigravity\scratch\com-cheiro-de-amor-pamphlet-preview\assets\logo.jpg"
 width, height = 1080, 1600
 bg_color = "#FFFFFF"
 gold_color = (160, 120, 45)

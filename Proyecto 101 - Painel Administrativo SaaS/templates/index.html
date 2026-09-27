@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdminPulse AI — Painel Administrativo SaaS | EJAJ TECH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --bg-card: #111827;
+            --border-card: rgba(255, 255, 255, 0.1);
+            --accent-cyan: #38bdf8;
+            --accent-blue: #1d4ed8;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .dashboard-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        /* Header Navbar */
+        .brand-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 1.25rem 2rem;
+        }
+
+        .brand-logo { display: flex; align-items: center; gap: 0.85rem; }
+
+        .brand-icon {
+            width: 44px; height: 44px; border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; color: #fff; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .brand-text h1 { font-size: 1.3rem; font-weight: 800; color: #fff; }
+        .brand-text p { font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.82rem; font-weight: 800;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+
+        /* KPI Cards Grid */
+        .kpi-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;
+        }
+
+        .kpi-card {
+            background: #0f172a; border: 1px solid var(--border-card); border-radius: 18px;
+            padding: 1.35rem; display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .kpi-info h4 { font-size: 0.8rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; }
+        .kpi-val { font-size: 1.85rem; font-weight: 900; color: var(--accent-cyan); margin-top: 0.25rem; font-family: 'JetBrains Mono', monospace; }
+
+        .kpi-icon {
+            width: 48px; height: 48px; border-radius: 12px; background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+        }
+
+        /* Tabs Navigation */
+        .tab-menu {
+            display: flex; gap: 0.5rem; background: #1e293b; padding: 0.4rem; border-radius: 16px; border: 1px solid var(--border-card);
+        }
+
+        .tab-btn {
+            background: transparent; border: none; color: var(--text-sub);
+            padding: 0.7rem 1.25rem; border-radius: 12px; font-weight: 700; font-size: 0.88rem;
+            cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;
+        }
+
+        .tab-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+
+        .tab-btn.active {
+            background: var(--accent-cyan); color: #0f172a; font-weight: 800;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Tab Content Panel Cards */
+        .tab-panel {
+            display: none; background: #1e293b; border: 1px solid var(--border-card); border-radius: 22px; padding: 1.75rem;
+        }
+
+        .tab-panel.active { display: block; }
+
+        .section-title {
+            font-size: 1.15rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.6rem;
+            border-bottom: 1px solid var(--border-card); padding-bottom: 0.85rem; margin-bottom: 1.25rem;
+        }
+
+        /* Form Controls */
+        .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+        .form-label { font-size: 0.82rem; font-weight: 700; color: var(--text-sub); }
+
+        .form-input, .form-select {
+            width: 100%; background: #0f172a; border: 1px solid var(--border-card);
+            border-radius: 12px; padding: 0.75rem 1rem; color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;
+        }
+
+        .form-input:focus { border-color: var(--accent-cyan); }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            color: #fff; border: none; padding: 0.85rem 1.5rem; border-radius: 12px;
+            font-weight: 800; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3); transition: transform 0.2s;
+        }
+
+        .btn-submit:hover { transform: translateY(-2px); }
+
+        /* Tables & List */
+        .data-table {
+            width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.5rem;
+        }
+
+        .data-table th, .data-table td {
+            padding: 0.75rem 0.85rem; text-align: left; border-bottom: 1px solid var(--border-card);
+        }
+
+        .data-table th { color: var(--text-sub); font-weight: 700; background: #0f172a; }
+
+        .avatar-img {
+            width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-cyan);
+        }
+
+        .badge-op { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 800; }
+        .badge-off { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 800; }
+
+        .log-info { background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 0.15rem 0.5rem; border-radius: 6px; font-weight: 800; }
+        .log-warn { background: rgba(245, 158, 11, 0.15); color: #f59e0b; padding: 0.15rem 0.5rem; border-radius: 6px; font-weight: 800; }
+        .log-err { background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 0.15rem 0.5rem; border-radius: 6px; font-weight: 800; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-wrapper">
+        
+        <!-- Header Navbar -->
+        <header class="brand-header">
+            <div class="brand-logo">
+                <div class="brand-icon"><i class="fa-solid fa-gear"></i></div>
+                <div class="brand-text">
+                    <h1>AdminPulse AI</h1>
+                    <p>Painel Administrativo & Gestão SaaS • EJAJ TECH</p>
+                </div>
+            </div>
+
+            <div class="status-pill">
+                <i class="fa-solid fa-server"></i> CONSOLA EXECUTIVA ATIVA • PORT 6954
+            </div>
+        </header>
+
+        <!-- KPI Metrics Grid -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h4>Carga de CPU</h4>
+                    <div class="kpi-val">{{ stats.cpu_load }}%</div>
+                </div>
+                <div class="kpi-icon"><i class="fa-solid fa-microchip"></i></div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h4>Memória RAM</h4>
+                    <div class="kpi-val" style="font-size: 1.4rem;">{{ stats.ram_usage }}</div>
+                </div>
+                <div class="kpi-icon"><i class="fa-solid fa-memory"></i></div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h4>Sessões Ativas</h4>
+                    <div class="kpi-val" style="color: var(--accent-green);">{{ stats.active_sessions }}</div>
+                </div>
+                <div class="kpi-icon" style="color: var(--accent-green);"><i class="fa-solid fa-user-clock"></i></div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h4>Administradores</h4>
+                    <div class="kpi-val">{{ stats.active_users }}/{{ stats.total_users }}</div>
+                </div>
+                <div class="kpi-icon"><i class="fa-solid fa-users-gear"></i></div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="tab-menu">
+            <button class="tab-btn active" onclick="switchTab('stats')"><i class="fa-solid fa-chart-pie"></i> Estatísticas & Saúde</button>
+            <button class="tab-btn" onclick="switchTab('users')"><i class="fa-solid fa-users"></i> Gestão de Utilizadores</button>
+            <button class="tab-btn" onclick="switchTab('rbac')"><i class="fa-solid fa-shield-cat"></i> Funções & Permissões</button>
+            <button class="tab-btn" onclick="switchTab('config')"><i class="fa-solid fa-sliders"></i> Configurações Globais</button>
+            <button class="tab-btn" onclick="switchTab('logs')"><i class="fa-solid fa-file-waveform"></i> Logs do Sistema</button>
+        </nav>
+
+        <!-- TAB 1: ESTATÍSTICAS & SAÚDE -->
+        <div id="tab-stats" class="tab-panel active">
+            <div class="section-title"><i class="fa-solid fa-chart-line" style="color: var(--accent-cyan);"></i> Saúde do Servidor & Tráfego Executivo</div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div style="background: #0f172a; padding: 1.5rem; border-radius: 18px; border: 1px solid var(--border-card);">
+                    <div style="font-weight: 800; font-size: 1rem; color: #fff; margin-bottom: 1rem;">Distribuição de Recursos de Hardware</div>
+                    <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.85rem; font-weight: 700;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;"><span>CPU Core i9 (16 Cores)</span><span>24%</span></div>
+                            <div style="height: 8px; background: #1e293b; border-radius: 10px; overflow: hidden;"><div style="width: 24%; height: 100%; background: var(--accent-cyan);"></div></div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;"><span>Memória RAM ECC</span><span>26% (4.2 GB)</span></div>
+                            <div style="height: 8px; background: #1e293b; border-radius: 10px; overflow: hidden;"><div style="width: 26%; height: 100%; background: var(--accent-green);"></div></div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;"><span>Armazenamento SSD NVMe</span><span>42% (210 GB / 500 GB)</span></div>
+                            <div style="height: 8px; background: #1e293b; border-radius: 10px; overflow: hidden;"><div style="width: 42%; height: 100%; background: var(--accent-purple);"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #0f172a; padding: 1.5rem; border-radius: 18px; border: 1px solid var(--border-card);">
+                    <div style="font-weight: 800; font-size: 1rem; color: #fff; margin-bottom: 1rem;">Parâmetros de Produção Cloud</div>
+                    <div style="display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.85rem;">
+                        <div><strong>Plataforma:</strong> <span style="color: var(--accent-cyan);">{{ config.site_name }}</span></div>
+                        <div><strong>Gateway SMTP:</strong> <span style="color: #fff;">{{ config.smtp_host }}</span></div>
+                        <div><strong>Limite Upload:</strong> <span style="color: #fff;">{{ config.max_upload_mb }} MB</span></div>
+                        <div><strong>Modo Manutenção:</strong> {% if config.maintenance_mode %}<span class="badge-off">ATIVO</span>{% else %}<span class="badge-op">DESATIVADO</span>{% endif %}</div>
+                        <div><strong>SSL Forçado:</strong> {% if config.ssl_enforced %}<span class="badge-op">ATIVO (HTTPS)</span>{% else %}<span class="badge-off">DESATIVADO</span>{% endif %}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: UTILIZADORES -->
+        <div id="tab-users" class="tab-panel">
+            <div class="section-title"><i class="fa-solid fa-users" style="color: var(--accent-cyan);"></i> Gestão de Utilizadores Administradores</div>
+            
+            <div style="margin-bottom: 1.5rem; background: #0f172a; padding: 1.25rem; border-radius: 16px; border: 1px solid var(--border-card);">
+                <div style="font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 0.75rem;">Adicionar Novo Administrador</div>
+                <form onsubmit="addUserSubmit(event)" style="display: grid; grid-template-columns: 1fr 1fr 150px 140px; gap: 0.85rem;">
+                    <input type="text" id="addName" class="form-input" placeholder="Nome Completo" required>
+                    <input type="email" id="addEmail" class="form-input" placeholder="E-mail Corporativo" required>
+                    <select id="addRole" class="form-select">
+                        <option value="Super Admin">Super Admin</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Editor" selected>Editor</option>
+                        <option value="Viewer">Viewer</option>
+                    </select>
+                    <button type="submit" class="btn-submit"><i class="fa-solid fa-user-plus"></i> Adicionar</button>
+                </form>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Utilizador</th>
+                        <th>E-mail</th>
+                        <th>Função Atribuída</th>
+                        <th>Estado</th>
+                        <th>Último Login</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td style="font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.6rem;">
+                            <img src="{{ u.avatar_url }}" class="avatar-img" alt="Avatar">
+                            {{ u.name }}
+                        </td>
+                        <td>{{ u.email }}</td>
+                        <td><span style="font-weight: 800; color: var(--accent-cyan);">{{ u.role }}</span></td>
+                        <td>
+                            {% if u.status == 'Ativo' %}
+                            <span class="badge-op">Ativo</span>
+                            {% else %}
+                            <span class="badge-off">Inativo</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ u.last_login }}</td>
+                        <td style="display: flex; gap: 0.4rem;">
+                            <button onclick="toggleUserStatus({{ u.id }})" style="background: #1e293b; color: #fff; border: 1px solid var(--border-card); padding: 0.35rem 0.65rem; border-radius: 8px; font-weight: 700; font-size: 0.75rem; cursor: pointer;">
+                                Alternar Estado
+                            </button>
+                            <button onclick="deleteUser({{ u.id }})" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.35rem 0.65rem; border-radius: 8px; font-weight: 700; font-size: 0.75rem; cursor: pointer;">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TAB 3: FUNÇÕES & PERMISSÕES (RBAC) -->
+        <div id="tab-rbac" class="tab-panel">
+            <div class="section-title"><i class="fa-solid fa-shield-cat" style="color: var(--accent-cyan);"></i> Matriz Granular de Permissões (RBAC)</div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Função (Role)</th>
+                        <th>Ler (Read)</th>
+                        <th>Escrever (Write)</th>
+                        <th>Eliminar (Delete)</th>
+                        <th>Configurar (Config)</th>
+                        <th>Ver Logs</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in permissions %}
+                    <tr>
+                        <td style="font-weight: 800; color: #fff; font-size: 0.9rem;">{{ p.role_name }}</td>
+                        <td><input type="checkbox" id="read-{{ p.role_name }}" {% if p.can_read %}checked{% endif %}></td>
+                        <td><input type="checkbox" id="write-{{ p.role_name }}" {% if p.can_write %}checked{% endif %}></td>
+                        <td><input type="checkbox" id="delete-{{ p.role_name }}" {% if p.can_delete %}checked{% endif %}></td>
+                        <td><input type="checkbox" id="config-{{ p.role_name }}" {% if p.can_config %}checked{% endif %}></td>
+                        <td><input type="checkbox" id="logs-{{ p.role_name }}" {% if p.can_logs %}checked{% endif %}></td>
+                        <td>
+                            <button onclick="savePermissions('{{ p.role_name }}')" class="btn-submit" style="padding: 0.35rem 0.85rem; font-size: 0.78rem;">
+                                Guardar Permissões
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TAB 4: CONFIGURAÇÕES GLOBAIS -->
+        <div id="tab-config" class="tab-panel">
+            <div class="section-title"><i class="fa-solid fa-sliders" style="color: var(--accent-cyan);"></i> Configurações Globais do Sistema</div>
+            
+            <form onsubmit="saveGlobalConfig(event)" style="max-width: 600px; display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Nome da Plataforma Enterprise</label>
+                    <input type="text" id="cfgSiteName" class="form-input" value="{{ config.site_name }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Gateway SMTP de E-mail</label>
+                    <input type="text" id="cfgSmtp" class="form-input" value="{{ config.smtp_host }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Limite Máximo de Ficheiros (MB)</label>
+                    <input type="number" id="cfgMaxMb" class="form-input" value="{{ config.max_upload_mb }}">
+                </div>
+                <label style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.88rem; font-weight: 700; cursor: pointer;">
+                    <input type="checkbox" id="cfgMaint" {% if config.maintenance_mode %}checked{% endif %}> Ativar Modo de Manutenção (Apenas Admins)
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.88rem; font-weight: 700; cursor: pointer;">
+                    <input type="checkbox" id="cfgSsl" {% if config.ssl_enforced %}checked{% endif %}> Forçar Encriptação SSL / HTTPS
+                </label>
+                <button type="submit" class="btn-submit" style="margin-top: 1rem;"><i class="fa-solid fa-floppy-disk"></i> Guardar Alterações Globais</button>
+            </form>
+        </div>
+
+        <!-- TAB 5: LOGS DO SISTEMA -->
+        <div id="tab-logs" class="tab-panel">
+            <div class="section-title"><i class="fa-solid fa-file-waveform" style="color: var(--accent-cyan);"></i> Registos de Logs do Sistema em Tempo Real</div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Nível</th>
+                        <th>Módulo</th>
+                        <th>Mensagem de Log</th>
+                        <th>Endereço IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in logs %}
+                    <tr>
+                        <td>{{ l.timestamp }}</td>
+                        <td>
+                            {% if l.log_level == 'INFO' %}
+                            <span class="log-info">INFO</span>
+                            {% elif l.log_level == 'WARNING' %}
+                            <span class="log-warn">WARNING</span>
+                            {% else %}
+                            <span class="log-err">ERROR</span>
+                            {% endif %}
+                        </td>
+                        <td style="font-weight: 800; color: #fff;">{{ l.module }}</td>
+                        <td style="color: #e2e8f0;">{{ l.message }}</td>
+                        <td style="font-family: 'JetBrains Mono', monospace;">{{ l.ip_address }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT ENGINE -->
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+            event.currentTarget.classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
+        }
+
+        async function addUserSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('addName').value;
+            const email = document.getElementById('addEmail').value;
+            const role = document.getElementById('addRole').value;
+
+            const res = await fetch('/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, role })
+            });
+            if (res.ok) {
+                alert("Administrador adicionado!");
+                location.reload();
+            }
+        }
+
+        async function toggleUserStatus(id) {
+            await fetch(`/api/users/${id}/status`, { method: 'POST' });
+            location.reload();
+        }
+
+        async function deleteUser(id) {
+            if (!confirm("Deseja eliminar este utilizador?")) return;
+            await fetch(`/api/users/${id}`, { method: 'DELETE' });
+            location.reload();
+        }
+
+        async function savePermissions(roleName) {
+            const data = {
+                role_name: roleName,
+                can_read: document.getElementById(`read-${roleName}`).checked,
+                can_write: document.getElementById(`write-${roleName}`).checked,
+                can_delete: document.getElementById(`delete-${roleName}`).checked,
+                can_config: document.getElementById(`config-${roleName}`).checked,
+                can_logs: document.getElementById(`logs-${roleName}`).checked
+            };
+
+            const res = await fetch('/api/permissions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) alert("Permissões de " + roleName + " atualizadas!");
+        }
+
+        async function saveGlobalConfig(e) {
+            e.preventDefault();
+            const data = {
+                site_name: document.getElementById('cfgSiteName').value,
+                smtp_host: document.getElementById('cfgSmtp').value,
+                max_upload_mb: document.getElementById('cfgMaxMb').value,
+                maintenance_mode: document.getElementById('cfgMaint').checked,
+                ssl_enforced: document.getElementById('cfgSsl').checked
+            };
+
+            const res = await fetch('/api/config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) alert("Configurações globais salvas!");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | FitTracker SaaS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">Painel de Performance Desportiva</h1>
+        <p style="color: #64748b;">Acompanhe o volume total levantado, séries de trabalho e evolução de cargas.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="/log/new" class="btn btn-cyan"><i class="fa-solid fa-circle-play"></i> Registar Treino de Hoje</a>
+        <a href="/progress" class="btn btn-secondary"><i class="fa-solid fa-trophy"></i> Récords Pessoais</a>
+    </div>
+</div>
+
+<!-- KPI Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card cyan">
+        <div class="stat-title"><i class="fa-solid fa-fire"></i> Treinos Efetuados</div>
+        <div class="stat-value" style="color: #0f766e;">{{ total_workouts }}</div>
+    </div>
+
+    <div class="stat-card lime">
+        <div class="stat-title"><i class="fa-solid fa-weight-hanging"></i> Carga Total Movida</div>
+        <div class="stat-value" style="color: #10b981;">{{ "%.2f"|format(total_volume_tons) }} <span style="font-size: 1rem; color: #64748b;">Toneladas</span></div>
+    </div>
+
+    <div class="stat-card amber">
+        <div class="stat-title"><i class="fa-solid fa-award"></i> Récords Pessoais (PRs)</div>
+        <div class="stat-value" style="color: #b45309;">{{ total_prs }}</div>
+    </div>
+
+    <div class="stat-card blue">
+        <div class="stat-title"><i class="fa-solid fa-dumbbell"></i> Biblioteca Exercícios</div>
+        <div class="stat-value" style="color: #3b82f6;">{{ total_exercises }}</div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+    <!-- Left Column: Active Routines -->
+    <div>
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-list-check" style="color: #00f5d4;"></i> As Suas Rutinas de Treino</h2>
+                <a href="/routines" class="btn btn-secondary btn-sm">Ver Todas</a>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem;">
+                {% for r in routines %}
+                <div style="padding: 1.25rem; background: #f8fafc; border-radius: 10px; border: 1px solid #cbd5e1; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <span class="badge badge-cyan" style="margin-bottom: 0.5rem;">{{ r['category'] }}</span>
+                        <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem;">{{ r['name'] }}</h3>
+                        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 0.75rem;">{{ r['description'] }}</p>
+                        <div style="font-size: 0.8rem; font-weight: 700; color: #3b82f6; margin-bottom: 1rem;"><i class="fa-regular fa-calendar-days"></i> {{ r['target_days'] }}</div>
+                    </div>
+
+                    <a href="/log/new?routine_id={{ r['id'] }}" class="btn btn-cyan btn-sm" style="justify-content: center;">
+                        <i class="fa-solid fa-play"></i> Treinar Esta Rutina
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Recent Workout Sessions -->
+    <div>
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-clock-rotate-left" style="color: #10b981;"></i> Útimas Sessões Registadas</h2>
+                <a href="/history" class="btn btn-secondary btn-sm">Histórico</a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                {% for log in recent_logs %}
+                <div style="padding: 0.85rem 1rem; background: #f8fafc; border-radius: 8px; border-left: 4px solid #10b981;">
+                    <div style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">{{ log['routine_name'] }}</div>
+                    <div style="font-size: 0.8rem; color: #64748b; margin: 0.2rem 0;"><i class="fa-regular fa-calendar"></i> {{ log['workout_date'] }} • {{ log['duration_minutes'] }} min</div>
+                    <div style="font-size: 0.85rem; font-weight: 700; color: #10b981;">Volumen: {{ "%.1f"|format(log['total_volume_kg']) }} kg</div>
+                </div>
+                {% else %}
+                <p style="color: #94a3b8; font-size: 0.85rem; text-align: center; padding: 1.5rem;">Nenhuma sessão registada recentemente.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

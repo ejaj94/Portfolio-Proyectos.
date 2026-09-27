@@ -1,12 +1,12 @@
 import os
 from PIL import Image, ImageDraw
 
-brain_dir = r"C:\Users\ANGEL RAFAEL\.gemini\antigravity\brain\ce4a2ece-d2d7-41c9-acca-716b5f94d19d"
+brain_dir = r"C:\Users\enman\.gemini\antigravity\brain\ce4a2ece-d2d7-41c9-acca-716b5f94d19d"
 scratch_dir = os.path.join(brain_dir, "scratch")
-portfolio_dir = r"C:\Users\ANGEL RAFAEL\.gemini\antigravity\scratch\Portfolio-Proyectos"
+portfolio_dir = r"C:\Users\enman\.gemini\antigravity\scratch\Portfolio-Proyectos"
 
 # Encontrar la ruta del escritorio de OneDrive dinámicamente
-onedrive_dir = r"C:\Users\ANGEL RAFAEL\OneDrive"
+onedrive_dir = r"C:\Users\enman\OneDrive"
 desktop_folder_name = None
 for d in os.listdir(onedrive_dir):
     full_path = os.path.join(onedrive_dir, d)
@@ -17,7 +17,7 @@ for d in os.listdir(onedrive_dir):
 if desktop_folder_name:
     desktop_dir = os.path.join(onedrive_dir, desktop_folder_name)
 else:
-    desktop_dir = r"C:\Users\ANGEL RAFAEL\Desktop"
+    desktop_dir = r"C:\Users\enman\Desktop"
 
 print(f"Escritorio detectado: {desktop_dir}")
 
@@ -108,6 +108,6 @@ print(f"PDF Multihaja Creado exitosamente en: {pdf_output_path}")
 # Copiar a carpetas del portafolio y taller
 import shutil
 shutil.copy(pdf_output_path, os.path.join(portfolio_dir, "Proyecto 15 - Etiquetas de Jabones", "assets", "Etiquetas_Sabonetes_5xCada_A4.pdf"))
-shutil.copy(pdf_output_path, r"C:\Users\ANGEL RAFAEL\Desktop\Portfolio de programacion\Proyectos\Proyecto 15 - Etiquetas de Jabones\assets\Etiquetas_Sabonetes_5xCada_A4.pdf")
-shutil.copy(pdf_output_path, r"C:\Users\ANGEL RAFAEL\Desktop\Portfolio de programacion\Proyectos reales\Com cheiro de amor pagina web Stephanie Santos\Material workshop\Etiquetas_De_Sabonetes_A4_Para_Imprimir\Etiquetas_Sabonetes_5xCada_A4.pdf")
+shutil.copy(pdf_output_path, r"C:\Users\enman\Desktop\Portfolio de programacion\Proyectos\Proyecto 15 - Etiquetas de Jabones\assets\Etiquetas_Sabonetes_5xCada_A4.pdf")
+shutil.copy(pdf_output_path, r"C:\Users\enman\Desktop\Portfolio de programacion\Proyectos reales\Com cheiro de amor pagina web Stephanie Santos\Material workshop\Etiquetas_De_Sabonetes_A4_Para_Imprimir\Etiquetas_Sabonetes_5xCada_A4.pdf")
 print("Copiado a las carpetas del proyecto completado.")

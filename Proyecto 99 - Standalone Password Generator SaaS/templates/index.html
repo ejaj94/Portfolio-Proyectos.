@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeyCraft AI — Gerador de Palavras-passe | EJAJ TECH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --bg-card: #111827;
+            --border-card: rgba(255, 255, 255, 0.1);
+            --accent-cyan: #38bdf8;
+            --accent-blue: #1d4ed8;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .studio-wrapper {
+            max-width: 1550px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        /* Header Navbar */
+        .brand-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 1.25rem 2rem;
+        }
+
+        .brand-logo { display: flex; align-items: center; gap: 0.85rem; }
+
+        .brand-icon {
+            width: 44px; height: 44px; border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; color: #fff; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .brand-text h1 { font-size: 1.3rem; font-weight: 800; color: #fff; }
+        .brand-text p { font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.82rem; font-weight: 800;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+
+        /* 2-Columns Studio Grid */
+        .studio-layout {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem;
+        }
+
+        .card-box {
+            background: #1e293b; border: 1px solid var(--border-card); border-radius: 22px; padding: 1.75rem;
+            display: flex; flex-direction: column; gap: 1.35rem;
+        }
+
+        .section-title {
+            font-size: 1.15rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.6rem;
+            border-bottom: 1px solid var(--border-card); padding-bottom: 0.85rem;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 0.45rem; }
+        .form-label { font-size: 0.85rem; font-weight: 700; color: var(--text-sub); }
+
+        .range-slider-wrapper {
+            display: flex; align-items: center; gap: 1rem;
+        }
+
+        .range-slider-wrapper input[type="range"] {
+            flex: 1; accent-color: var(--accent-cyan); height: 8px; border-radius: 5px; cursor: pointer;
+        }
+
+        .len-badge {
+            background: #0f172a; border: 1px solid var(--border-card); color: var(--accent-cyan);
+            padding: 0.4rem 0.85rem; border-radius: 12px; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.1rem;
+        }
+
+        .toggle-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;
+            background: #0f172a; padding: 1rem; border-radius: 14px; border: 1px solid var(--border-card);
+        }
+
+        .toggle-item {
+            display: flex; align-items: center; gap: 0.6rem; font-size: 0.88rem; font-weight: 700; cursor: pointer; color: #e2e8f0;
+        }
+
+        .toggle-item input[type="checkbox"] {
+            width: 18px; height: 18px; accent-color: var(--accent-cyan); cursor: pointer;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            color: #fff; border: none; padding: 1rem; border-radius: 14px;
+            font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+            box-shadow: 0 4px 20px rgba(29, 78, 216, 0.4); transition: transform 0.2s;
+        }
+
+        .btn-generate:hover { transform: translateY(-2px); }
+
+        /* Output Box & Security Stage */
+        .output-stage-card {
+            background: #0f172a; border: 2px solid var(--border-card); border-radius: 20px;
+            padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; position: relative;
+        }
+
+        .pwd-display-wrapper {
+            background: #1e293b; border: 1px solid var(--border-card); border-radius: 16px;
+            padding: 1.2rem; display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .pwd-text-large {
+            font-family: 'JetBrains Mono', monospace; font-size: 1.3rem; font-weight: 800;
+            color: var(--accent-cyan); word-break: break-all; letter-spacing: 1px;
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #fff; border: none; padding: 0.75rem 1.25rem; border-radius: 12px;
+            font-weight: 800; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); transition: all 0.2s; white-space: nowrap;
+        }
+
+        .btn-copy:hover { transform: scale(1.03); }
+
+        /* Security Analysis Cards Grid */
+        .sec-cards-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+        }
+
+        .sec-mini-card {
+            background: #1e293b; border: 1px solid var(--border-card); border-radius: 14px;
+            padding: 1rem; text-align: center;
+        }
+
+        .sec-mini-val {
+            font-size: 1.25rem; font-weight: 900; color: var(--accent-green); font-family: 'JetBrains Mono', monospace; margin-top: 0.2rem;
+        }
+
+        .sec-mini-lbl {
+            font-size: 0.72rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase;
+        }
+
+        /* History Table */
+        .data-table {
+            width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.5rem;
+        }
+
+        .data-table th, .data-table td {
+            padding: 0.7rem 0.85rem; text-align: left; border-bottom: 1px solid var(--border-card);
+        }
+
+        .data-table th { color: var(--text-sub); font-weight: 700; background: #0f172a; }
+    </style>
+</head>
+<body>
+
+    <div class="studio-wrapper">
+        
+        <!-- Header Navbar -->
+        <header class="brand-header">
+            <div class="brand-logo">
+                <div class="brand-icon"><i class="fa-solid fa-key"></i></div>
+                <div class="brand-text">
+                    <h1>KeyCraft AI</h1>
+                    <p>Gerador de Palavras-passe SaaS • EJAJ TECH</p>
+                </div>
+            </div>
+
+            <div class="status-pill">
+                <i class="fa-solid fa-shield-halved"></i> ENTROPIA SHANNON ATIVA • PORT 6952
+            </div>
+        </header>
+
+        <!-- Studio 2-Columns Grid -->
+        <div class="studio-layout">
+            
+            <!-- Left Column: Generator Controls -->
+            <div class="card-box">
+                <div class="section-title">
+                    <i class="fa-solid fa-sliders" style="color: var(--accent-cyan);"></i> Parâmetros de Geração de Segurança
+                </div>
+
+                <!-- Slider Length -->
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="form-label">Comprimento da Palavra-passe</span>
+                        <span class="len-badge" id="lenBadgeDisplay">18</span>
+                    </div>
+                    <div class="range-slider-wrapper" style="margin-top: 0.5rem;">
+                        <input type="range" id="lenSlider" min="6" max="64" value="18" oninput="updateLenDisplay(this.value)">
+                    </div>
+                </div>
+
+                <!-- Character Toggles Grid -->
+                <div class="form-group">
+                    <span class="form-label">Conjunto de Caracteres</span>
+                    <div class="toggle-grid">
+                        <label class="toggle-item"><input type="checkbox" id="chkUpper" checked onchange="triggerGenerate()"> Maiúsculas (A-Z)</label>
+                        <label class="toggle-item"><input type="checkbox" id="chkLower" checked onchange="triggerGenerate()"> Minúsculas (a-z)</label>
+                        <label class="toggle-item"><input type="checkbox" id="chkNumbers" checked onchange="triggerGenerate()"> Números (0-9)</label>
+                        <label class="toggle-item"><input type="checkbox" id="chkSymbols" checked onchange="triggerGenerate()"> Símbolos (!@#$)</label>
+                    </div>
+                </div>
+
+                <!-- Exclude Ambiguous Checkbox -->
+                <label class="toggle-item" style="background: #0f172a; padding: 0.85rem; border-radius: 12px; border: 1px solid var(--border-card);">
+                    <input type="checkbox" id="chkAmbiguous" onchange="triggerGenerate()"> Excluir Caracteres Ambíguos (0, O, I, l, 1)
+                </label>
+
+                <button class="btn-generate" onclick="triggerGenerate()">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar Nova Palavra-passe
+                </button>
+            </div>
+
+            <!-- Right Column: Output & Security Analysis -->
+            <div class="card-box">
+                <div class="section-title">
+                    <i class="fa-solid fa-lock" style="color: var(--accent-cyan);"></i> Resultado & Análise de Segurança
+                </div>
+
+                <!-- Output Stage Card -->
+                <div class="output-stage-card">
+                    <div class="pwd-display-wrapper">
+                        <span class="pwd-text-large" id="pwdResult">K#92*xPz!8mL@2026</span>
+                        <button class="btn-copy" onclick="copyPassword()"><i class="fa-solid fa-copy"></i> Copiar</button>
+                    </div>
+
+                    <!-- Security Cards -->
+                    <div class="sec-cards-grid">
+                        <div class="sec-mini-card">
+                            <div class="sec-mini-lbl">Entropia de Shannon</div>
+                            <div class="sec-mini-val" id="valEntropy">118.2 Bits</div>
+                        </div>
+                        <div class="sec-mini-card">
+                            <div class="sec-mini-lbl">Nível de Força</div>
+                            <div class="sec-mini-val" id="valLabel" style="color: var(--accent-green);">Impenetrável</div>
+                        </div>
+                        <div class="sec-mini-card">
+                            <div class="sec-mini-lbl">Tempo de Quebra</div>
+                            <div class="sec-mini-val" id="valCrack" style="font-size: 0.95rem;">8.4 Triliões de Anos</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Generation History Section -->
+                <div style="background: #0f172a; border-radius: 16px; border: 1px solid var(--border-card); padding: 1.1rem;">
+                    <div style="font-weight: 800; font-size: 0.9rem; color: #fff; margin-bottom: 0.5rem; display: flex; justify-content: space-between;">
+                        <span><i class="fa-solid fa-history" style="color: var(--accent-cyan);"></i> Histórico Recente de Gerações</span>
+                        <span style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700;">{{ total_generated }} Palavras-passe Criadas</span>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Máscara</th>
+                                <th>Tamanho</th>
+                                <th>Entropia</th>
+                                <th>Estimativa de Quebra</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            {% for h in history %}
+                            <tr>
+                                <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #fff;">{{ h.password_mask }}</td>
+                                <td>{{ h.length }} char</td>
+                                <td style="color: var(--accent-cyan); font-weight: 700;">{{ h.entropy_bits }} bits</td>
+                                <td style="color: var(--accent-green); font-weight: 700;">{{ h.crack_time_est }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        function updateLenDisplay(val) {
+            document.getElementById('lenBadgeDisplay').innerText = val;
+            triggerGenerate();
+        }
+
+        async function triggerGenerate() {
+            const length = document.getElementById('lenSlider').value;
+            const uppercase = document.getElementById('chkUpper').checked;
+            const lowercase = document.getElementById('chkLower').checked;
+            const numbers = document.getElementById('chkNumbers').checked;
+            const symbols = document.getElementById('chkSymbols').checked;
+            const exclude_ambiguous = document.getElementById('chkAmbiguous').checked;
+
+            const res = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ length, uppercase, lowercase, numbers, symbols, exclude_ambiguous })
+            });
+            const data = await res.json();
+
+            document.getElementById('pwdResult').innerText = data.password;
+            document.getElementById('valEntropy').innerText = data.entropy_bits + ' Bits';
+            document.getElementById('valLabel').innerText = data.label;
+            document.getElementById('valCrack').innerText = data.crack_time;
+        }
+
+        function copyPassword() {
+            const pwd = document.getElementById('pwdResult').innerText;
+            navigator.clipboard.writeText(pwd);
+            alert("🔑 Palavra-passe copiada para a área de transferência!");
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            triggerGenerate();
+        });
+    </script>
+</body>
+</html>

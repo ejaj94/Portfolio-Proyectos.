@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Guião de Locução DÍA 20{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; font-weight: 900; color: #ffffff; display: flex; align-items: center; gap: 0.75rem;">
+        <i class="fa-solid fa-microphone-lines" style="color: var(--purple-accent);"></i> Guião do Locutor — DÍA 20 (Especial +2.000 Seguidores)
+    </h1>
+    <p style="color: var(--text-slate); font-size: 1.05rem;">
+        Texto de alto impacto emocional, reflexivo e inspirador para vídeo promocional de redes sociais (TikTok, Reels, Shorts).
+    </p>
+</div>
+
+<!-- Tabs selector for Pt-PT vs Spanish -->
+<div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+    <button type="button" class="btn btn-purple" onclick="switchLang('pt')"><i class="fa-solid fa-language"></i> Português Europeu (Pt-PT)</button>
+    <button type="button" class="btn btn-secondary" onclick="switchLang('es')"><i class="fa-solid fa-globe"></i> Español (Latam / España)</button>
+</div>
+
+<!-- Portuguese Script Container -->
+<div id="scriptPT" class="script-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <span class="badge badge-purple"><i class="fa-solid fa-clapperboard"></i> Guião Oficial em Português Europeu (Pt-PT)</span>
+        <span style="color: var(--text-slate); font-size: 0.85rem; font-weight: 700;">⏱️ Duração Estimada: 60 a 70 segundos</span>
+    </div>
+
+    <div class="script-quote">
+<strong>[00:00 - 00:10] 🎬 REFLEXÃO PROFUNDA & MEMÓRIA (Música: Violoncelo Solo & Piano Profundo)</strong>
+<em>(Enquadramento: Enmanuel Jimenez a olhar para o ecrã com expressão pensativa e luz ambiente suave)</em>
+"Día 20 a construir projetos sem falhar um único dia... Sabes o que isto realmente significa?
+Fecho os olhos e ainda me lembro perfeitamente de quando me sentei na academia pela primeira vez. Olhava para o ecrã em branco e a minha mente bloqueava. Eu não sabia escrever rigorosamente NADA... nem uma única linha de código."
+
+<strong>[00:10 - 00:24] ⚡ REVOLUÇÃO & EVOLUÇÃO (Música: Entrada de Percussão Épica & Sintetizadores Hybrid)</strong>
+<em>(Enquadramento: Rápida sucessão visual dos 20 softwares empresariais a funcionar em alta velocidade)</em>
+"Hoje, quase um ano de estudo implacável depois, o medo deu lugar ao domínio.
+Já não são apenas exercícios de aula... são 20 ecossistemas de software completos, potentes e reais, desenhados com engenharia de precisão para revolucionar empresas, otimizar negócios e servir a nossa comunidade!"
+
+<strong>[00:24 - 00:42] 🚀 GRATIDÃO À COMUNIDADE (Música: Melodia Triunfal & Envolvente)</strong>
+<em>(Enquadramento: Métricas de mais de 2.000 seguidores a brilhar e flashes da comunidade nas redes)</em>
+"Em apenas 20 dias, a nossa família cresceu para <strong>mais de 2.000 seguidores</strong>! Mais de 2.000 pessoas incríveis que diariamente acompanham e apoiam esta jornada.
+O meu obrigado de coração a cada um de vocês. Sem o vosso apoio, nada disto teria o mesmo significado."
+
+<strong>[00:42 - 01:00] 💡 OFERTA DE VALOR & APOIO TÉCNICO (Música: Ritmo Inspirador & Firme)</strong>
+<em>(Enquadramento: Enmanuel Jimenez a aproximar-se da câmara com voz firme e motivadora)</em>
+"Se tens um projeto em mente, se queres criar uma aplicação, um site profissional ou se tens qualquer dúvida sobre programação... não hesites.
+Comenta abaixo ou envia-me mensagem direta. Vou usar toda a minha experiência para te ajudar a transformar a tua ideia em realidade."
+
+<strong>[01:00 - 01:08] 🔥 ENCERRAMENTO & MARCA (Música: Acorde Épico Final)</strong>
+<em>(Enquadramento: Animação do Logo EJAJ TECH em púrpura e dourado com contacto WhatsApp)</em>
+"Comenta a palavra <strong>AJUDA</strong> ou manda mensagem no WhatsApp para <strong>+351 911 151 993</strong>.
+Siga o perfil e vamos continuar a construir o futuro, dia após dia, com a <strong>EJAJ TECH</strong>!"
+    </div>
+</div>
+
+<!-- Spanish Script Container -->
+<div id="scriptES" class="script-card" style="display: none; border-left: 5px solid var(--rose-accent);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <span class="badge badge-purple"><i class="fa-solid fa-clapperboard"></i> Guion Oficial en Español</span>
+        <span style="color: var(--text-slate); font-size: 0.85rem; font-weight: 700;">⏱️ Duración Estimada: 60 a 70 segundos</span>
+    </div>
+
+    <div class="script-quote">
+<strong>[00:00 - 00:10] 🎬 REFLEXIÓN EMOTIVA (Música: Violonchelo & Piano Cinematográfico Profundo)</strong>
+<em>(Tomas: Enmanuel frente a la pantalla con luz tenue y expresión pensativa)</em>
+"Día 20 construyendo proyectos sin fallar un solo día... ¿Sabes lo que esto realmente significa?
+Cierro los ojos y aún me acuerdo perfectamente de cuando me senté en la academia por primera vez. Miraba la pantalla en blanco y me paralizaba. No sabía escribir absolutamente NADA... ni una sola línea de código."
+
+<strong>[00:10 - 00:24] ⚡ SUPERACIÓN & IMPACTO (Música: Subida Épica con Percusión & Sintetizadores)</strong>
+<em>(Tomas: Montaje enérgico y veloz de los 20 proyectos de software funcionando)</em>
+"Hoy, casi un año de estudio implacable después, la duda se convirtió en maestría.
+Ya no son simples ejercicios... son 20 sistemas de software potentes, útiles y reales, diseñados con ingeniería de precisión para hacer crecer empresas e impactar positivamente en la sociedad."
+
+<strong>[00:24 - 00:42] 🚀 GRATITUD Y COMUNIDAD (Música: Melodía Triunfal Creciente)</strong>
+<em>(Tomas: Contador de más de 2.000 seguidores y flashes de la audiencia en redes)</em>
+"En tan solo 20 días, ¡nuestra comunidad ya supera los <strong>más de 2.000 seguidores</strong>! Más de 2.000 personas que cada día respaldan esta travesía.
+Gracias de todo corazón a cada uno de ustedes por el apoyo incondicional. Esto recién comienza."
+
+<strong>[00:42 - 01:00] 💡 OFERTA DE AYUDA Y ASESORÍA (Música: Tema Motivacional Poderoso)</strong>
+<em>(Tomas: Enmanuel mirando a la cámara con seguridad y cercanía)</em>
+"Si tienes una idea, un proyecto para tu empresa o cualquier duda sobre desarrollo de software, apps móviles o sitios web... no lo dudes.
+Comenta aquí abajo o escríbeme un mensaje. Pongo toda mi experiencia y esfuerzo a tu disposición para ayudarte a hacerlo realidad."
+
+<strong>[01:00 - 01:08] 🔥 CIERRE IMPACTANTE (Música: Remate Cinematográfico Épico)</strong>
+<em>(Tomas: Logo EJAJ TECH en púrpura y dorado con datos de WhatsApp)</em>
+"Comenta la palabra <strong>AJUDA</strong> or escríbeme por WhatsApp al <strong>+351 911 151 993</strong>.
+¡Síguenos en redes sociales y sigamos construyendo el futuro juntos con <strong>EJAJ TECH</strong>!"
+    </div>
+</div>
+
+<script>
+    function switchLang(lang) {
+        if (lang === 'pt') {
+            document.getElementById('scriptPT').style.display = 'block';
+            document.getElementById('scriptES').style.display = 'none';
+        } else {
+            document.getElementById('scriptPT').style.display = 'none';
+            document.getElementById('scriptES').style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

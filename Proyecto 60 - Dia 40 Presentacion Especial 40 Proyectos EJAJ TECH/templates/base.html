@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DÍA 40 - Apresentação Especial 40 Projetos Neón{% endblock %} | EJAJ TECH</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <i class="fa-solid fa-atom" style="color: var(--neon-cyan);"></i>
+            <div>EJAJ TECH <span>DÍA 40 NEON SHOWCASE</span></div>
+        </a>
+
+        <ul class="navbar-nav">
+            <li><a href="/" class="{% if request.path == '/' %}active{% endif %}"><i class="fa-solid fa-desktop"></i> Apresentação Projetos 31-40</a></li>
+            <li><a href="/script" class="{% if request.path == '/script' %}active{% endif %}"><i class="fa-solid fa-microphone-lines"></i> Monólogo do Locutor (Dia 40)</a></li>
+            <li>
+                <span class="badge-day40">
+                    <i class="fa-solid fa-bolt-lightning"></i> DÍA 40 — NEON ARCHITECTURE
+                </span>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer Support Callout -->
+    <footer style="background: #050811; color: #94a3b8; padding: 2.5rem 1.5rem; text-align: center; margin-top: 4rem; border-top: 2px solid var(--neon-pink);">
+        <p style="color: #ffffff; font-weight: 800; font-size: 1.1rem;">EJAJ TECH — Engenharia de Software com Inteligência Artificial & Arquiteturas de Alta Escala</p>
+        <p style="font-size: 0.9rem; margin-top: 0.3rem;">Fundador & Lead Architect: <strong>Enmanuel Jimenez</strong></p>
+        <div style="margin-top: 1.25rem;">
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20Dia%2040" target="_blank" style="color: #ffffff; font-weight: 900; text-decoration: none; background: linear-gradient(135deg, #ff007f 0%, #a855f7 100%); padding: 0.5rem 1.5rem; border-radius: 50px; box-shadow: 0 0 20px var(--neon-pink-glow);">
+                <i class="fa-brands fa-whatsapp"></i> Contactar Enmanuel Jimenez no WhatsApp: +351 911 151 993 (Digite "AJUDA")
+            </a>
+        </div>
+        <p style="margin-top: 1.25rem; font-size: 0.8rem; color: #64748b;">&copy; 2026 EJAJ TECH. 40 dias ininterruptos de criação de software real!</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/presentation.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

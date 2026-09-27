@@ -1,12 +1,12 @@
 import os
 from PIL import Image, ImageDraw, ImageOps, ImageChops
 
-brain_dir = r"C:\Users\ANGEL RAFAEL\.gemini\antigravity\brain\ce4a2ece-d2d7-41c9-acca-716b5f94d19d"
+brain_dir = r"C:\Users\enman\.gemini\antigravity\brain\ce4a2ece-d2d7-41c9-acca-716b5f94d19d"
 scratch_dir = os.path.join(brain_dir, "scratch")
-desktop_dir = r"C:\Users\ANGEL RAFAEL\Desktop\Etiquetas_A4_ParaImprimir"
+desktop_dir = r"C:\Users\enman\Desktop\Etiquetas_A4_ParaImprimir"
 os.makedirs(desktop_dir, exist_ok=True)
 
-logo_path = r"C:\Users\ANGEL RAFAEL\.gemini\antigravity\scratch\com-cheiro-de-amor-pamphlet-preview\assets\logo.jpg"
+logo_path = r"C:\Users\enman\.gemini\antigravity\scratch\com-cheiro-de-amor-pamphlet-preview\assets\logo.jpg"
 
 # === CONFIGURACIÓN ===
 DPI = 300

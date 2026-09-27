@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico de Conversas{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 1.8rem; font-weight: 900; color: var(--text-dark);">
+        <i class="fa-solid fa-clock-rotate-left" style="color: var(--robot-cyan);"></i> Histórico & Transcrição de Conversas
+    </h1>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Consulte as sessões de chat mantidas pelos clientes e analise as interações do assistente virtual.
+    </p>
+</div>
+
+{% if not convs %}
+<div class="panel-card" style="text-align: center; padding: 3rem;">
+    <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+    <h3 style="color: var(--text-dark);">Nenhuma conversa registada no histórico</h3>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Abra a interface de chat para iniciar a primeira sessão simulada.</p>
+    <a href="/chat" class="btn btn-cyan"><i class="fa-solid fa-comments"></i> Iniciar Chat de Teste</a>
+</div>
+{% endif %}
+
+{% for conv in convs %}
+<div class="panel-card" style="border-left: 5px solid var(--robot-cyan);">
+    <div class="panel-header" style="border-bottom: none; padding-bottom: 0;">
+        <div>
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-user-gear" style="color: var(--robot-cyan);"></i>
+                Sessão #{{ conv['id'] }} — {{ conv['customer_name'] }}
+            </h3>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">
+                Email: {{ conv['customer_email'] or 'Anónimo' }} | Data: {{ conv['created_at'] }}
+            </span>
+        </div>
+        <div>
+            <span class="badge {% if conv['status'] == 'Ativa' %}badge-green{% else %}badge-steel{% endif %}">
+                {{ conv['status'] }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Transcripts Box -->
+    <div style="background: #0b132b; color: #ffffff; padding: 1.25rem; border-radius: 12px; margin-top: 1rem; max-height: 250px; overflow-y: auto;">
+        {% set msgs = conv_messages[conv['id']] %}
+        {% if msgs %}
+            {% for m in msgs %}
+            <div style="margin-bottom: 0.75rem; font-size: 0.9rem;">
+                <span style="font-weight: 800; color: {% if m['sender'] == 'bot' %}#00d8f6{% else %}#10b981{% endif %}; uppercase font-size: 0.78rem;">
+                    [{{ m['timestamp'] }}] {{ m['sender'] | upper }}:
+                </span>
+                <span style="color: #e2e8f0; margin-left: 0.4rem;">{{ m['message_text'] }}</span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #64748b; font-size: 0.85rem;">Sem mensagens nesta sessão.</p>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

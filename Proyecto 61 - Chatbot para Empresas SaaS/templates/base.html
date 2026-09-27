@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BotCorp AI SaaS{% endblock %} | EJAJ TECH</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <nav class="navbar">
+        <a href="/admin" class="navbar-brand">
+            <i class="fa-solid fa-robot" style="color: var(--robot-cyan);"></i>
+            <div>BOTCORP <span>AI SAAS</span></div>
+        </a>
+
+        <ul class="navbar-nav">
+            <li><a href="/admin" class="{% if request.path == '/admin' %}active{% endif %}"><i class="fa-solid fa-chart-line"></i> Dashboard Admin</a></li>
+            <li><a href="/chat" class="{% if request.path == '/chat' %}active{% endif %}"><i class="fa-solid fa-comments"></i> Interface de Chat</a></li>
+            <li><a href="/admin/faqs" class="{% if request.path == '/admin/faqs' %}active{% endif %}"><i class="fa-solid fa-circle-question"></i> FAQs</a></li>
+            <li><a href="/admin/kb" class="{% if request.path == '/admin/kb' %}active{% endif %}"><i class="fa-solid fa-book-bookmark"></i> Conhecimento</a></li>
+            <li><a href="/admin/history" class="{% if request.path == '/admin/history' %}active{% endif %}"><i class="fa-solid fa-clock-rotate-left"></i> Histórico</a></li>
+            <li>
+                <a href="/chat" class="btn-header-cta">
+                    <i class="fa-solid fa-play"></i> Testar Robô
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer Support Callout -->
+    <footer style="background: #0b132b; color: #8d99ae; padding: 2.5rem 1.5rem; text-align: center; margin-top: 4rem; border-top: 3px solid var(--robot-cyan);">
+        <p style="color: #ffffff; font-weight: 800; font-size: 1.05rem;">BotCorp AI SaaS — Plataforma Robótica de Atendimento ao Cliente & Automação</p>
+        <p style="font-size: 0.88rem; margin-top: 0.25rem;">Desenvolvido por Enmanuel Jimenez | Lead Architect EJAJ TECH</p>
+        <div style="margin-top: 1rem;">
+            <a href="https://wa.me/351911151993?text=AJUDA%20-%20Chatbot%20Empresarial" target="_blank" style="color: #00d8f6; font-weight: 800; text-decoration: none; background: rgba(0, 216, 246, 0.1); padding: 0.4rem 1.2rem; border-radius: 50px; border: 1px solid var(--robot-cyan);">
+                <i class="fa-brands fa-whatsapp"></i> Suporte WhatsApp: +351 911 151 993 (Digite "AJUDA")
+            </a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.78rem; color: #64748b;">&copy; 2026 EJAJ TECH. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

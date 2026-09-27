@@ -328,7 +328,7 @@ def organizar_carpeta(ruta):
 
 if __name__ == "__main__":
     import sys
-    ruta_target = sys.argv[1] if len(sys.argv) > 1 else r"C:\Users\ANGEL RAFAEL\Downloads"
+    ruta_target = sys.argv[1] if len(sys.argv) > 1 else r"C:\Users\enman\Downloads"
     if os.path.exists(ruta_target):
         organizar_carpeta(ruta_target)
     else:

@@ -4,11 +4,11 @@ from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 from PIL import Image, ImageEnhance, ImageChops
 
-brain_dir = r"C:\Users\ANGEL RAFAEL\.gemini\antigravity\brain\ce4a2ece-d2d7-41c9-acca-716b5f94d19d"
+brain_dir = r"C:\Users\enman\.gemini\antigravity\brain\ce4a2ece-d2d7-41c9-acca-716b5f94d19d"
 scratch_dir = os.path.join(brain_dir, "scratch")
 
 # Encontrar la ruta del escritorio de OneDrive dinámicamente
-onedrive_dir = r"C:\Users\ANGEL RAFAEL\OneDrive"
+onedrive_dir = r"C:\Users\enman\OneDrive"
 desktop_folder_name = None
 for d in os.listdir(onedrive_dir):
     full_path = os.path.join(onedrive_dir, d)
@@ -19,12 +19,12 @@ for d in os.listdir(onedrive_dir):
 if desktop_folder_name:
     desktop_dir = os.path.join(onedrive_dir, desktop_folder_name)
 else:
-    desktop_dir = r"C:\Users\ANGEL RAFAEL\Desktop"
+    desktop_dir = r"C:\Users\enman\Desktop"
 
 print(f"Escritorio detectado para Logotipo: {desktop_dir}")
 
 # Ruta del logotipo original
-logo_path = r"C:\Users\ANGEL RAFAEL\.gemini\antigravity\scratch\com-cheiro-de-amor-pamphlet-preview\assets\logo.jpg"
+logo_path = r"C:\Users\enman\.gemini\antigravity\scratch\com-cheiro-de-amor-pamphlet-preview\assets\logo.jpg"
 
 if not os.path.exists(logo_path):
     print("FALTA el logotipo original.")

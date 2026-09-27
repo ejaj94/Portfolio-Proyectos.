@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Monólogo de Locução DÍA 30{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; font-weight: 900; color: #ffffff; display: flex; align-items: center; gap: 0.75rem;">
+        <i class="fa-solid fa-microphone-lines" style="color: var(--yellow-primary);"></i> Monólogo do Locutor — DÍA 30 (Português Europeu Pt-PT)
+    </h1>
+    <p style="color: var(--text-slate); font-size: 1.05rem;">
+        Texto de locução oficial de alta fidelidade em Português Europeu.
+    </p>
+</div>
+
+<!-- Tabs selector for Pt-PT vs Spanish -->
+<div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+    <button type="button" class="btn btn-yellow" onclick="switchLang('pt')"><i class="fa-solid fa-language"></i> Português Europeu (Pt-PT)</button>
+    <button type="button" class="btn btn-secondary" onclick="switchLang('es')"><i class="fa-solid fa-globe"></i> Español (Latam / España)</button>
+</div>
+
+<!-- Portuguese Monologue Container -->
+<div id="scriptPT" class="script-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <span class="badge-yellow"><i class="fa-solid fa-microphone"></i> Monólogo Oficial em Português Europeu (Pt-PT)</span>
+    </div>
+
+    <div class="script-monologue">
+Dia 30 a construir projetos sem parar...
+
+Durante muito tempo enfrentei problemas que pensei honestamente não terem solução. Deparei-me com obstáculos que pareciam muros impossíveis de derrubar. Mas não desisti.
+
+Após horas, horas, dias e semanas de raciocínio profundo, noites em branco e investigação incansável, aprendi a resolver coisas que hoje em dia, surpreendentemente, fazem parte da minha rotina diária.
+
+Hoje domino tecnologias e arquiteturas que antes me pareciam um mistério: Python, JavaScript, Node.js, Flask, bases de dados PostgreSQL e SQLite, APIs REST, WebSockets, Git, Docker e engenharia de sistemas.
+
+Quero dar o melhor de mim em todos os dias de vida que me restam para aportar o melhor ao mundo com esta habilidade que me foi concedida: a capacidade de programar, criar, pensar e resolver problemas reais.
+
+Se tens um projeto, um desafio complexo na tua empresa ou uma ideia que parece impossível de concretizar, segue-me nas redes sociais — talvez os projetos que tenho te ajudem a resolver um problema — ou escreve-me ou comenta a palavra AJUDA. Estou aqui para colocar toda a minha experiência ao teu serviço de forma 100% gratuita.
+    </div>
+</div>
+
+<!-- Spanish Monologue Container -->
+<div id="scriptES" class="script-card" style="display: none; border-left: 6px solid #ffffff;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <span class="badge-yellow"><i class="fa-solid fa-microphone"></i> Monólogo Oficial en Español</span>
+    </div>
+
+    <div class="script-monologue">
+Día 30 construyendo proyectos sin parar...
+
+Durante mucho tiempo me enfrenté a problemas que pensé honestamente que no tendrían solución. Me encontré con obstáculos que parecían muros imposibles de derribar. Pero no me rendí.
+
+Después de horas, horas, días y semanas de raciocinio profundo, noches en vela e investigación incansable, aprendí a resolver cosas que hoy en día, sorprendentemente, son parte de mi rutina diaria.
+
+Hoy domino tecnologías y arquitecturas que antes me parecían un misterio: Python, JavaScript, Node.js, Flask, bases de datos PostgreSQL y SQLite, APIs REST, WebSockets, Git, Docker y diseño de sistemas.
+
+Quiero dar lo mejor de mí en todos los días de vida que me restan para aportar lo mejor al mundo con esta habilidad que se me ha dado: la capacidad de programar, crear, pensar y resolver problemas reales.
+
+Si tienes un proyecto, un desafío complejo en tu empresa o una idea que parece imposible de hacer realidad, sígueme en las redes sociales —tal vez los proyectos que tengo te ayuden a resolver un problema— o escríbeme o comenta la palabra AJUDA. Estoy aquí para poner toda mi experiencia a tu servicio de manera 100 por ciento gratuita.
+    </div>
+</div>
+
+<script>
+    function switchLang(lang) {
+        if (lang === 'pt') {
+            document.getElementById('scriptPT').style.display = 'block';
+            document.getElementById('scriptES').style.display = 'none';
+        } else {
+            document.getElementById('scriptPT').style.display = 'none';
+            document.getElementById('scriptES').style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

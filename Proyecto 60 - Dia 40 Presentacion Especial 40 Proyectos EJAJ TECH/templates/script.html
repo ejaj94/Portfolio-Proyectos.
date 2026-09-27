@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Monólogo de Locução DÍA 40 Neón{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; font-weight: 900; color: #ffffff; display: flex; align-items: center; gap: 0.75rem;">
+        <i class="fa-solid fa-microphone-lines" style="color: var(--neon-pink);"></i> Monólogo do Locutor — DÍA 40 (Confiante, Desafiador & Reflexivo)
+    </h1>
+    <p style="color: var(--text-slate); font-size: 1.05rem;">
+        Texto oficial em Português Europeu (Pt-PT) para gravação de áudio de alta performance.
+    </p>
+</div>
+
+<!-- Tabs selector for Pt-PT vs Spanish -->
+<div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+    <button type="button" class="btn btn-neon" onclick="switchLang('pt')"><i class="fa-solid fa-language"></i> Português Europeu (Pt-PT)</button>
+    <button type="button" class="btn btn-secondary" onclick="switchLang('es')"><i class="fa-solid fa-globe"></i> Español (Latam / España)</button>
+</div>
+
+<!-- Portuguese Monologue Container -->
+<div id="scriptPT" class="script-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <span class="badge-neon-pink"><i class="fa-solid fa-microphone"></i> Monólogo Oficial em Português Europeu (Pt-PT)</span>
+    </div>
+
+    <div class="script-monologue">
+Día 40 a construir sistemas sem abrandar um único segundo...
+
+Olho para trás e vejo 40 dias de pura disciplina. Mas a verdadeira evolução não está no número de dias... está no nível do jogo que agora sou capaz de jogar.
+
+Aquele programador que hesitava no início deu lugar a um engenheiro confiante, audaz e sem medo de encarar os maiores desafios da indústria. Hoje já não construo apenas código tradicional: integro algoritmos de Inteligência Artificial, visão computacional OCR, motores de recomendação preditiva, automação autónoma e arquiteturas de alta escalabilidade que antes pareciam reservadas a gigantes tecnológicos.
+
+Desafio qualquer problema complexo que surja pela frente. Se há uma solução viável, eu vou encontrá-la, desenhá-la e construí-la. 
+
+No entanto, mantenho a minha essência: os pés bem assentes na terra, a humildade de quem aprende todos os dias e a consciência de que esta capacidade de criar, pensar e resolver problemas é um compromisso diário para entregar valor real às pessoas e às empresas.
+
+Se tens um desafio gigante na tua empresa, uma ideia ambiciosa ou um problema que ninguém conseguiu resolver, segue o meu perfil nas redes sociais — talvez os 40 sistemas que já construí te deem a resposta exata — ou escreve-me ou comenta a palavra AJUDA. Estou aqui para colocar todo este conhecimento e determinação ao teu serviço, de forma 100% gratuita.
+    </div>
+</div>
+
+<!-- Spanish Monologue Container -->
+<div id="scriptES" class="script-card" style="display: none; border-left: 6px solid var(--neon-cyan);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <span class="badge-neon-cyan"><i class="fa-solid fa-microphone"></i> Monólogo Oficial en Español</span>
+    </div>
+
+    <div class="script-monologue">
+Día 40 construyendo sistemas sin frenar ni un solo segundo...
+
+Miro hacia atrás y veo 40 días de pura disciplina. Pero la verdadera evolución no está en el número de días... está en el nivel del juego que ahora soy capaz de jugar.
+
+Aquel desarrollador que dudaba al principio ha dado paso a un ingeniero confiado, audaz y sin miedo a enfrentar los mayores desafíos de la industria. Hoy ya no construyo solo código tradicional: integro algoritmos de Inteligencia Artificial, visión computacional OCR, motores de recomendación predictiva, automatización autónoma y arquitecturas de alta escala que antes parecían reservadas a gigantes tecnológicos.
+
+Desafío cualquier problema complejo que se ponga por delante. Si hay una solución viable, la voy a encontrar, diseñar y construir.
+
+Sin embargo, mantengo mi esencia: los pies firmes en la tierra, la humildad de quien aprende cada día y la conciencia de que esta capacidad de crear, pensar y resolver problemas es un compromiso diario para aportar valor real a las personas y a las empresas.
+
+Si tienes un desafío gigante en tu empresa, una idea ambiciosa o un problema que nadie ha logrado resolver, sigue mi perfil en redes sociales —tal vez los 40 sistemas que he construido te den la respuesta exacta— o escríbeme o comenta la palabra AJUDA. Estoy aquí para poner todo este conocimiento y determinación a tu servicio, de manera 100% gratuita.
+    </div>
+</div>
+
+<script>
+    function switchLang(lang) {
+        if (lang === 'pt') {
+            document.getElementById('scriptPT').style.display = 'block';
+            document.getElementById('scriptES').style.display = 'none';
+        } else {
+            document.getElementById('scriptPT').style.display = 'none';
+            document.getElementById('scriptES').style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}
