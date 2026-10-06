@@ -2,6 +2,187 @@
    PRODUCT DATABASE (Artisanal Scented Candles, Bath Soaps, & Gift Sets)
    ========================================================================== */
 const PRODUCTS = [
+    {
+        id: "buque-cetim-rosas-vermelhas-1",
+        category: "buques_cetim",
+        price: 0,
+        priceLabel: "Sob Consulta",
+        image: "assets/buque_rosas_vermelhas.jpg",
+        qty: 1,
+        pt: {
+            name: "Buquê Real de Rosas Vermelhas de Cetim",
+            categoryLabel: "BUQUÊ DE CETIM • RECORDAÇÃO ETERNA",
+            aromaBrief: "Exuberante buquê artesanal com 7 rosas em cetim vermelho rubi nobre, renda com brilhos e embrulho geométrico preto de luxo.",
+            description: "Uma declaração apaixonante e memorável que dura para sempre! O Buquê Real de Rosas Vermelhas de Cetim é cuidadosamente confeccionado à mão, pétala por pétala, com fitas de cetim nobre de acabamento acetinado de alto brilho. Composto por 7 rosas vermelhas esculturais emolduradas por renda prateada com microbrilhos cintilantes, acabamento geométrico em papel preto translúcido e fita de cetim a condizer. Ao contrário de flores naturais, este buquê não murcha e mantém a sua perfeição intacta ao longo dos anos, tornando-se o presente perfeito para aniversários, pedidos especiais ou momentos inesquecíveis.",
+            aromaProfile: "Flores Eternas em Cetim Nobre, Rosas Artesanais, Renda Prata Cintilante"
+        },
+        es: {
+            name: "Ramo Real de Rosas Rojas de Satén",
+            categoryLabel: "RAMO DE SATÉN • RECUERDO ETERNO",
+            aromaBrief: "Exuberante ramo artesanal con 7 rosas en satén rojo rubí noble, encaje brillante y envoltorio geométrico negro de lujo.",
+            description: "¡Una declaración apasionada y memorable que dura para siempre! El Ramo Real de Rosas Rojas de Satén está confeccionado cuidadosamente a mano, pétalo a pétalo, con cintas de satén noble de alto brillo. Compuesto por 7 rosas rojas esculturales enmarcadas por encaje plateado con microbrillos, estructura geométrica en papel negro translúcido y lazo de satén a juego. No se marchita con el tiempo, siendo el regalo ideal para aniversarios, pedidas o momentos inolvidables.",
+            aromaProfile: "Flores Eternas en Satén Noble, Rosas Artesanales, Encaje Plateado"
+        },
+        en: {
+            name: "Royal Red Satin Roses Bouquet",
+            categoryLabel: "SATIN BOUQUET • EVERLASTING MEMORY",
+            aromaBrief: "Luxurious handcrafted bouquet featuring 7 ruby red satin ribbon roses, glitter lace, and geometric black wrap.",
+            description: "An everlasting symbol of passion and unmatched elegance! Hand-crafted petal by petal using premium lustrous red satin ribbons, this bouquet features 7 sculpted roses nestled in sparkling silver glitter lace, black geometric translucent wrap, and matching red satin bow. It never wilts, preserving your special moments forever.",
+            aromaProfile: "Everlasting Satin Flowers, Handcrafted Roses, Sparkling Silver Lace"
+        },
+        fr: {
+            name: "Bouquet Royal de Roses Rouges en Satin",
+            categoryLabel: "BOUQUET DE SATIN • SOUVENIR ÉTERNEL",
+            aromaBrief: "Somptueux bouquet artisanal composé de 7 roses en ruban de satin rouge rubis et dentelle scintillante.",
+            description: "Un symbole éternel de passion et de raffinement absolu ! Confectionné à la main avec du satin noble, ce bouquet de 7 roses rouge rubis enveloppé dans une structure noire élégante reste éclatant pour toujours.",
+            aromaProfile: "Fleurs Éternelles en Satin, Roses Sculptées, Dentelle Pailletée"
+        }
+    },
+    {
+        id: "buque-cetim-girassol-rosas-1",
+        category: "buques_cetim",
+        price: 0,
+        priceLabel: "Sob Consulta",
+        image: "assets/buque_girassol_rosas.jpg",
+        qty: 1,
+        pt: {
+            name: "Buquê Girassol & Rosas Brancas com Pérolas",
+            categoryLabel: "BUQUÊ DE CETIM • RECORDAÇÃO ETERNA",
+            aromaBrief: "Vibrante girassol em cetim amarelo solar rodeado por 6 rosas brancas de cetim com pérolas centrais e gipsofila.",
+            description: "Energia radiante, luz e carinho eterno numa composição deslumbrante! Este buquê artesanal une o calor solar de um girassol feito à mão em fitas de cetim amarelo dourado a seis elegantes rosas de cetim branco puro, cada uma finalizada com uma delicada pérola luminosa no centro. Complementado por raminhos de gipsofila (mosquitinho), folhagem verde e uma refinada embalagem branca com bordas douradas e laço de cetim amarelo. Uma peça exclusiva que irradia positividade e eterniza os melhores momentos.",
+            aromaProfile: "Girassol Dourado em Cetim, Rosas Brancas com Pérola, Detalhes Dourados"
+        },
+        es: {
+            name: "Ramo Girasol & Rosas Blancas con Perlas",
+            categoryLabel: "RAMO DE SATÉN • RECUERDO ETERNO",
+            aromaBrief: "Vibrante girasol en satén amarillo solar rodeado de 6 rosas blancas de satén con perlas centrales y paniculata.",
+            description: "¡Luz radiante, alegría y cariño eterno en una composición deslumbrante! Este ramo artesanal une la calidez solar de un girasol hecho a mano en cintas de satén amarillo dorado a seis elegantes rosas de satén blanco puro con perlas en el centro. Envoltorio blanco con ribetes dorados y lazo amarillo satinado. Una joya floral para graduaciones y ocasiones especiales.",
+            aromaProfile: "Girasol Dorado en Satén, Rosas Blancas con Perla, Detalles Dorados"
+        },
+        en: {
+            name: "Sunflower & Pearl White Roses Satin Bouquet",
+            categoryLabel: "SATIN BOUQUET • EVERLASTING MEMORY",
+            aromaBrief: "Radiant golden sunflower paired with 6 pearl-centered white satin roses, baby's breath, and gold accents.",
+            description: "Warm sunshine and timeless purity captured in handcrafted satin ribbons! A bold golden sunflower takes center stage surrounded by six silky white roses, each adorned with a lustrous central pearl. Beautifully wrapped in white and gold-lined boutique paper with a bright yellow satin bow.",
+            aromaProfile: "Golden Ribbon Sunflower, White Satin Roses, Lustrous Pearl Centers"
+        },
+        fr: {
+            name: "Bouquet Tournesol & Roses Blanches Perlées en Satin",
+            categoryLabel: "BOUQUET DE SATIN • SOUVENIR ÉTERNEL",
+            aromaBrief: "Tournesol éclatant en ruban de satin jaune entouré de 6 roses blanches ornées de perles.",
+            description: "Chaleur, lumière et douceur réunies dans une œuvre florale éternelle. Confectionné à la main avec rubans de satin doré et blanc pur orné de perles fines.",
+            aromaProfile: "Tournesol en Satin, Roses Blanches Perlées, Finitions Dorées"
+        }
+    },
+    {
+        id: "buque-cetim-tulipas-lirios-rosa-1",
+        category: "buques_cetim",
+        price: 0,
+        priceLabel: "Sob Consulta",
+        image: "assets/buque_tulipas_lirios_rosa.jpg",
+        qty: 1,
+        pt: {
+            name: "Buquê Suavidade: Tulipas & Lírios Rosa",
+            categoryLabel: "BUQUÊ ARTESANAL • CHENILLE & CETIM",
+            aromaBrief: "Composição poética com tulipas e lírios em tons rosa suave aveludado e acetinado com folho de tule e laço de cetim.",
+            description: "Ternura, doçura e romantismo em cada detalhe! O Buquê Suavidade é uma criação artesanal requintada que combina 4 tulipas e 2 lírios abertos esculpidos com textura aveludada e toque acetinado em tons de rosa blush e estames dourados. Envolvido em papel coreano rosa pastel com folhos de tule branco e laço de cetim fluído. Uma peça decorativa acolhedora que traz a frescura da primavera permanentemente para a sua decoração.",
+            aromaProfile: "Tulipas e Lírios Aveludados, Fita de Cetim Blush, Folhos de Tule"
+        },
+        es: {
+            name: "Ramo Suavidad: Tulipanes & Lirios Rosa",
+            categoryLabel: "RAMO ARTESANAL • CHENILLE Y SATÉN",
+            aromaBrief: "Composición poética con tulipanes y lirios en tonos rosa suave aterciopelado con tul blanco y lazo de satén.",
+            description: "¡Ternura, delicadeza y romanticismo en cada detalle! El Ramo Suavidad combina 4 tulipanes y 2 lirios abiertos con textura aterciopelada y satinada en tonos rosa empolvado. Envuelto en capas de papel blush con volantes de tul blanco y lazo de satén a juego. Una creación primaveral que llenará de armonía cualquier espacio.",
+            aromaProfile: "Tulipanes y Lirios Aterciopelados, Satén Rosa Blush, Tul Blanco"
+        },
+        en: {
+            name: "Soft Blossom: Pink Tulips & Lilies Bouquet",
+            categoryLabel: "HANDCRAFTED BOUQUET • VELVET & SATIN",
+            aromaBrief: "Poetic pastel arrangement of 4 soft pink tulips and 2 open lilies with ruffled white tulle and blush ribbon.",
+            description: "Delicate spring grace preserved forever! Handcrafted featuring velvety chenille and satin textures, this bouquet includes 4 blush pink tulips and 2 blossoming lilies with golden stamens. Wrapped in Korean blush paper with delicate ruffled white tulle and a fluid satin ribbon.",
+            aromaProfile: "Velvety Tulips & Lilies, Blush Pink Satin Ribbon, Delicate White Tulle"
+        },
+        fr: {
+            name: "Bouquet Douceur: Tulipes & Lys Roses",
+            categoryLabel: "BOUQUET ARTISANAL • CHENILLE & SATIN",
+            aromaBrief: "Composition poétique de tulipes et lys en velours et satin rose poudré avec tulle blanc et ruban.",
+            description: "Romantisme et douceur scandinave dans une création florale féerique. 4 tulipes et 2 lys façonnés à la main dans un écrin rose poudré et tulle blanc.",
+            aromaProfile: "Tulipes & Lys Veloutés, Ruban de Satin Poudré, Tulle Blanc"
+        }
+    },
+    {
+        id: "buque-cetim-tulipas-vinho-lirio-1",
+        category: "buques_cetim",
+        price: 0,
+        priceLabel: "Sob Consulta",
+        image: "assets/buque_tulipas_vinho_lirio.jpg",
+        qty: 1,
+        pt: {
+            name: "Buquê Imperial: Tulipas Vinho & Lírio",
+            categoryLabel: "BUQUÊ ARTESANAL • VELUDO & CETIM",
+            aromaBrief: "Arranjo outonal nobre com tulipas vinho tinto aveludadas, lírio rosa contrastante, mini flores e laço de chiffon.",
+            description: "Sofisticação profunda e aconchego em tons outonais nobres. O Buquê Imperial destaca-se pelo contraste deslumbrante entre tulipas em veludo bordô / vinho escuro e um magnífico lírio artesanal rosa com contorno aveludado a condizer, ornamentado por pequenas flores delicadas com pérolas. Estruturado com uma elegante combinação de juta rústica, tule branco estruturado, laço em chiffon vinho tinto e etiqueta kraft personalizada. Uma peça de autor para quem procura distinção, arte e exclusividade.",
+            aromaProfile: "Tulipas Veludo Vinho, Lírio Rosa Nobre, Juta Rústica & Chiffon"
+        },
+        es: {
+            name: "Ramo Imperial: Tulipanes Vino & Lirio",
+            categoryLabel: "RAMO ARTESANAL • TERCIOPELO Y SATÉN",
+            aromaBrief: "Arreglo otoñal noble con tulipanes vino tinto aterciopelados, lirio rosa en contraste, mini flores y lazo de chifón.",
+            description: "¡Sofisticación profunda y calidez otoñal en una creación artesanal de lujo! El Ramo Imperial contrasta tulipanes en terciopelo burdeos intenso con un lírio rosa perfilado en vino y flores de acento. Envoltura con malla de arpillera natural, tul blanco, lazo de gasa color vino y etiqueta kraft artesanal.",
+            aromaProfile: "Tulipanes Terciopelo Vino, Lirio Rosa Exclusivo, Yute y Chifón"
+        },
+        en: {
+            name: "Imperial Wine Tulips & Pink Lily Bouquet",
+            categoryLabel: "HANDCRAFTED BOUQUET • VELVET & SATIN",
+            aromaBrief: "Rich autumnal composition featuring deep burgundy velvet tulips, contrasting pink lily, and wine chiffon ribbon.",
+            description: "A statement of luxury and warm distinction. Hand-sculpted deep burgundy velvet tulips meet a contrasting pink lily with wine-trimmed petals, accented by mini pearl blossoms, natural burlap mesh, white structured tulle, and a flowing wine chiffon bow with craft tag.",
+            aromaProfile: "Deep Wine Velvet Tulips, Contrasting Pink Lily, Burlap & Wine Chiffon"
+        },
+        fr: {
+            name: "Bouquet Impérial: Tulipes Bordeaux & Lys Rose",
+            categoryLabel: "BOUQUET ARTISANAL • VELOURS & SATIN",
+            aromaBrief: "Composition automnale raffinée avec tulipes en velours bordeaux, lys rose contrasté et ruban mousseline.",
+            description: "Une création florale d'exception alliant velours bordeaux profond, lys rose orné de perles, toile de jute naturelle et nœud en mousseline couleur vin.",
+            aromaProfile: "Tulipes Velours Bordeaux, Lys Rose Précieux, Jute & Mousseline"
+        }
+    },
+
+    {
+        id: "candle-sensualidade-1",
+        category: "vela",
+        price: 7.90,
+        image: "assets/vela_sensualidade.jpg",
+        qty: 1,
+        pt: {
+            name: "Vela Sensualidade",
+            categoryLabel: "VELA ESCULPIDA ARTESANAL • COLEÇÃO FEMININA",
+            aromaBrief: "Escultura artesanal do busto feminino adornado com borboletas em relevo, em cera vegetal marmorizada fúcsia e branco leitoso.",
+            description: "Elegância, feminilidade e magnetismo numa peça de puro encanto! A Vela Sensualidade celebra a beleza das formas femininas através de uma silhueta graciosa vista de perfil e de costas, com cabelos apanhados num coque sofisticado e borboletas tridimensionais a esvoaçar suavemente sobre os ombros. Moldada à mão em cera vegetal premium com efeito marmorizado em tons de fúcsia vibrante e branco leitoso, é uma verdadeira escultura decorativa que emana romantismo e sofisticação.",
+            aromaProfile: "Orquídea Selvagem, Peónia Rosa, Framboesa Doce, Almíscar Branco"
+        },
+        es: {
+            name: "Vela Sensualidad",
+            categoryLabel: "VELA ESCULPIDA ARTESANAL • COLECCIÓN FEMENINA",
+            aromaBrief: "Escultura artesanal de busto femenino adornado con mariposas en relieve, en cera vegetal marmoleada fucsia y blanco lechoso.",
+            description: "¡Elegancia, feminidad y magnetismo en una pieza de puro encanto! La Vela Sensualidad celebra la belleza de las siluetas femeninas con un porte delicado visto de perfil y de espaldas, peinado recogido en moño elegante y mariposas en 3D sobre los hombros. Moldeada a mano en cera vegetal premium con efecto marmoleado en tonos fucsia vibrante y blanco lechoso. Una auténtica joya decorativa que llena de estilo y calidez cualquier estancia.",
+            aromaProfile: "Orquídea Salvaje, Peonía Rosa, Frambuesa Dulce, Almizcle Blanco"
+        },
+        en: {
+            name: "Sensualidade Candle",
+            categoryLabel: "HANDCRAFTED SCULPTED CANDLE • FEMININE COLLECTION",
+            aromaBrief: "Handcrafted woman bust wax sculpture embossed with delicate 3D butterflies in vivid fuchsia and marbled milk-white wax.",
+            description: "Elegance, grace, and alluring beauty captured in wax! The Sensualidade Candle portrays a serene feminine bust viewed from behind in profile, with an elegant updo bun and fluttering butterflies gracing her shoulders. Handcrafted from natural botanical wax in striking marbled fuchsia pink and soft white, this piece serves as both a high-end decorative sculpture and an aromatic statement of refined taste.",
+            aromaProfile: "Wild Orchid, Pink Peony, Sweet Raspberry, White Musk"
+        },
+        fr: {
+            name: "Bougie Sensualité",
+            categoryLabel: "BOUGIE SCULPTÉE ARTISANALE • COLLECTION FÉMININE",
+            aromaBrief: "Sculpture artisanale de buste féminin orné de papillons en relief, en cire végétale marbrée fuchsia et blanc laiteux.",
+            description: "Élégance, féminité et magnétisme dans une création d'artisanat d'art ! Façonnée à la main en cire végétale avec un sublime effet marbré fuchsia et blanc, cette bougie buste délicatement parée de papillons apporte une ambiance chaleureuse et raffinée à votre intérieur.",
+            aromaProfile: "Orchidée Sauvage, Pivoine Rose, Framboise Douce, Musc Blanc"
+        }
+    },
+
 {
         "id": "candle-crucifixo-sao-bento-1",
         "category": "vaso",
@@ -115,7 +296,7 @@ const PRODUCTS = [
         "qty": 1,
         "pt": {
                 "name": "Vela Bulldog Francês",
-                "categoryLabel": "COLEÇÃO DE OUTONO • ESCULTURA 3D EM VASO",
+                "categoryLabel": "VELA ESCULPIDA ARTESANAL • COLEÇÃO ANIMAIS",
                 "aromaBrief": "Adorable escultura 3D de cão Bulldog Francês em cera vegetal descansando sobre vaso de vidro.",
                 "description": "Uma obra-prima irresistível de pura fofura e aconchego! Moldada à mão em cera de soja 100% vegetal biodegradável, a Vela Bulldog Francês apresenta uma ultra-realista escultura 3D de um cachorrinho Bulldog Francês em tons beges quentes, descansando suavemente sobre uma base de cera vegetal num elegante copo de vidro cristalino. Perfuma o ambiente com um aroma reconfortante e suave de baunilha doce, biscoito amanteigado e flor de algodão.",
                 "aromaProfile": "Baunilha Doce, Biscoito Amanteigado, Flor de Algodão, Âmbar Suave"
@@ -5514,9 +5695,11 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (category === "all") {
             return PRODUCTS;
         } else if (category === "verao") {
-            return PRODUCTS.filter(p => p.id.startsWith("verao-"));
+            return PRODUCTS.filter(p => p.id && p.id.startsWith("verao-"));
+        } else if (category === "buques_cetim" || category === "buque") {
+            return PRODUCTS.filter(p => p.category === "buques_cetim" || p.category === "buque");
         } else if (category === "outono") {
-            return PRODUCTS.filter(p => OUTONO_PRODUCT_IDS.includes(p.id) || p.id.startsWith("outono-") || p.category === "outono");
+            return PRODUCTS.filter(p => (typeof OUTONO_PRODUCT_IDS !== 'undefined' && OUTONO_PRODUCT_IDS.includes(p.id)) || (p.id && p.id.startsWith("outono-")) || p.category === "outono");
         } else {
             return PRODUCTS.filter(p => p.category === category);
         }
@@ -5546,6 +5729,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Nav link for Coleção de Outono
+        const navLinkBuques = document.getElementById("nav-link-buques");
+    if (navLinkBuques) {
+        navLinkBuques.addEventListener("click", (e) => {
+            e.preventDefault();
+            const catalogSection = document.getElementById("catalogo");
+            if (catalogSection) {
+                catalogSection.scrollIntoView({ behavior: "smooth" });
+            }
+            const buquesFilterTab = document.getElementById("filter-buques-cetim");
+            if (buquesFilterTab) {
+                buquesFilterTab.click();
+            }
+        });
+    }
+
     const navLinkOutono = document.getElementById("nav-link-outono");
     if (navLinkOutono) {
         navLinkOutono.addEventListener("click", (e) => {
@@ -5751,11 +5949,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     <h3 class="product-name">${translation.name}</h3>
                     <p class="product-aroma-brief">${aromaBrief}</p>
                     <div class="product-footer">
-                        <span class="product-price">€${product.price.toFixed(2)}</span>
+                        <span class="product-price">${(product.category === 'buques_cetim' || product.category === 'buque' || product.price === 0 || product.priceLabel) ? (product.priceLabel || (currentLang === 'pt' ? 'Sob Consulta' : currentLang === 'es' ? 'Bajo Consulta' : currentLang === 'en' ? 'Upon Request' : 'Sur Demande')) : `€${product.price.toFixed(2)}`}</span>
+                        ${(product.category === 'buques_cetim' || product.category === 'buque' || product.price === 0 || product.priceLabel) ? `
+                        <button class="btn-add-cart btn-inquire" data-id="${product.id}" title="${currentLang === 'pt' ? 'Pedir Orçamento' : 'Consultar'}">
+                            ${currentLang === 'pt' ? 'Pedir Orçamento' : currentLang === 'es' ? 'Consultar' : currentLang === 'en' ? 'Inquire' : 'Devis'}
+                            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                        </button>` : `
                         <button class="btn-add-cart" data-id="${product.id}">
                             ${GRID_ADD_BUTTONS[currentLang]}
                             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-                        </button>
+                        </button>`}
                     </div>
                 </div>
             `;
@@ -5877,6 +6080,13 @@ document.addEventListener("DOMContentLoaded", () => {
             btn.addEventListener("click", (e) => {
                 e.stopPropagation();
                 const productId = btn.getAttribute("data-id");
+                const targetProduct = PRODUCTS.find(p => p.id === productId);
+                if (targetProduct && (targetProduct.category === 'buques_cetim' || targetProduct.category === 'buque' || targetProduct.price === 0 || targetProduct.priceLabel)) {
+                    const prodName = (targetProduct[currentLang] && targetProduct[currentLang].name) || (targetProduct.pt && targetProduct.pt.name) || 'Buquê de Cetim';
+                    const waText = encodeURIComponent(`Olá Com Cheiro de Amor! Gostaria de consultar o valor e encomendar o ${prodName}.`);
+                    window.open(`https://wa.me/351939636842?text=${waText}`, '_blank');
+                    return;
+                }
                 addToCart(productId, 1);
                 
                 // Visual feedback on button (briefly change state)
@@ -5947,7 +6157,7 @@ document.addEventListener("DOMContentLoaded", () => {
         modalImg.alt = translation.name;
         modalCategory.textContent = translation.categoryLabel;
         modalTitle.textContent = translation.name;
-        modalPrice.textContent = `€${product.price.toFixed(2)}`;
+        modalPrice.textContent = (product.price && product.price > 0) ? `€${product.price.toFixed(2)}` : (product.priceLabel || (currentLang === "pt" ? "Sob Consulta" : currentLang === "es" ? "Bajo Consulta" : currentLang === "en" ? "Upon Request" : "Sur Demande"));
         modalDescription.textContent = translation.description;
         if (aromaNotes) aromaNotes.textContent = translation.aromaProfile;
         
@@ -6005,6 +6215,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add to Cart from Modal
     modalAddToCartBtn.addEventListener("click", () => {
         if (activeModalProductId) {
+            let currentModalProd = PRODUCTS.find(p => p.id === activeModalProductId);
+            if (currentModalProd && (currentModalProd.category === 'buques_cetim' || currentModalProd.category === 'buque' || currentModalProd.price === 0 || currentModalProd.priceLabel)) {
+                const prodName = (currentModalProd[currentLang] && currentModalProd[currentLang].name) || (currentModalProd.pt && currentModalProd.pt.name) || 'Buquê de Cetim';
+                const waText = encodeURIComponent(`Olá Com Cheiro de Amor! Gostaria de consultar o valor e encomendar o ${prodName}.`);
+                window.open(`https://wa.me/351939636842?text=${waText}`, '_blank');
+                closeProductModal();
+                return;
+            }
             addToCart(activeModalProductId, activeModalQty);
             closeProductModal();
             openCart();
