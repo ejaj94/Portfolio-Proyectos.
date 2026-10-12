@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="64x64" href="/static/img/favicon-64x64.png"/>
+<link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
+<link rel="apple-touch-icon" href="/static/img/logo-icon-192.png"/>
+<title>Seguridad y Política de la Plataforma — Sigaleve</title>
+<script>(function(){var d=localStorage.getItem('sigaleve_dark');if(d==='true'||(d===null&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');})()</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class'}</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<style>
+:root{--bg:#fff;--card:#f9fafb;--txt:#111827;--sub:#6b7280;--bdr:#e5e7eb}
+.dark{--bg:#0d0d1a;--card:#16162a;--txt:#f9fafb;--sub:#9ca3af;--bdr:#2d2d4e}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0}
+.grad-text{background:linear-gradient(135deg,#9333ea,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad{background:linear-gradient(135deg,#9333ea,#ec4899)}
+.prose h2{font-size:1.35rem;font-weight:800;margin:2.2rem 0 .75rem;color:var(--txt);display:flex;align-items:center;gap:.5rem}
+.prose h3{font-size:1.05rem;font-weight:700;margin:1.5rem 0 .5rem;color:var(--txt)}
+.prose p,.prose li{font-size:.95rem;line-height:1.8;color:var(--sub);margin-bottom:.75rem}
+.prose ul{list-style:disc;padding-left:1.5rem;margin-bottom:1.25rem}
+.prose a{color:#9333ea;text-decoration:underline}
+.prose strong{color:var(--txt);font-weight:700}
+.rule-card{border-radius:1rem;padding:1.25rem;border:1px solid var(--bdr);background:var(--card);margin-bottom:1.5rem}
+.toc a{color:var(--sub);text-decoration:none;font-size:.85rem;display:block;padding:.35rem 0;border-left:2px solid var(--bdr);padding-left:.75rem;transition:all .15s}
+.toc a:hover,.toc a.active{color:#9333ea;border-color:#9333ea}
+section{scroll-margin-top:80px}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<nav class="sticky top-0 z-40 border-b" style="background:var(--bg);border-color:var(--bdr)">
+  <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
+    <a href="/" class="flex items-center gap-2 font-black text-lg grad-text">
+      <div class="w-7 h-7 grad rounded-xl flex items-center justify-center text-white text-xs"><i class="fa-solid fa-heart"></i></div>
+      Sigaleve
+    </a>
+    <div class="flex items-center gap-2">
+      <a href="/app" class="text-xs px-3.5 py-1.5 rounded-xl border font-bold transition-all hover:border-purple-500 hover:text-purple-500" style="border-color:var(--bdr);color:var(--sub)">Abrir App</a>
+      <button onclick="toggleDark()" class="w-8 h-8 flex items-center justify-center rounded-xl border text-sm" style="border-color:var(--bdr);color:var(--sub)"><i id="di" class="fa-solid fa-moon"></i></button>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-5xl mx-auto px-4 py-10 grid md:grid-cols-[260px,1fr] gap-10">
+  <!-- TOC Sidebar -->
+  <aside class="hidden md:block">
+    <div class="sticky top-24">
+      <p class="text-xs font-black tracking-widest uppercase mb-3 text-purple-500">Seguridad & Política</p>
+      <nav class="toc space-y-1">
+        <a href="#p1">1. Compromiso Fundamental</a>
+        <a href="#p2">2. Criptografía y Datos Médicos</a>
+        <a href="#p3">3. Geofencing y Privacidad de Ubicación</a>
+        <a href="#p4">4. Detección de Suplantación y Bots</a>
+        <a href="#p5">5. Prevención de Estafas Financieras</a>
+        <a href="#p6">6. Consejos de Seguridad en Citas Reales</a>
+        <a href="#p7">7. Protocolo de Emergencia y Denuncias</a>
+        <a href="#p8">8. Auditorías y Cumplimiento Legal</a>
+      </nav>
+      <div class="mt-6 flex flex-col gap-2 text-xs" style="color:var(--sub)">
+        <a href="/legal/community" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-book-open text-purple-500"></i> Reglas de la Comunidad</a>
+        <a href="/legal/accessibility" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-universal-access text-purple-500"></i> Declaración de Accesibilidad</a>
+        <a href="/legal/privacy" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-lock text-purple-500"></i> Política de Privacidad</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="prose max-w-none">
+    <div class="mb-8">
+      <span class="text-xs font-black px-3 py-1 rounded-full grad text-white tracking-wide uppercase">Documento Oficial</span>
+      <h1 class="text-3xl font-black mt-3 mb-2">Seguridad, Protección y Política de Plataforma</h1>
+      <p class="text-sm" style="color:var(--sub)">Última actualización: 30 de septiembre de 2026 • Versión 3.4 • Protocolo de Protección Global Sigaleve</p>
+    </div>
+
+    <div class="rule-card">
+      <p class="text-sm font-semibold text-purple-500 mb-1"><i class="fa-solid fa-shield-cat mr-2"></i>Marco de Protección Integral</p>
+      <p class="text-sm">Sigaleve es una comunidad diseñada para conectar a personas auténticas en un espacio libre de juicios y seguro para la salud personal. La integridad física, psicológica y digital de nuestros miembros es el principio no negociable que rige toda nuestra arquitectura de software y moderación.</p>
+    </div>
+
+    <section id="p1">
+      <h2><i class="fa-solid fa-hand-holding-heart text-purple-500"></i> 1. Compromiso Fundamental de Seguridad</h2>
+      <p>Entendemos que compartir aspectos de la salud física, diagnóstico personal o preferencias afectivas requiere un entorno con los estándares más estrictos del mundo tecnológico. Nuestra plataforma opera bajo tres pilares inquebrantables:</p>
+      <ul>
+        <li><strong>Confidencialidad Absoluta:</strong> Ningún dato de salud sensible es indexado por motores de búsqueda, ni vendido a empresas aseguradoras, anunciantes o redes publicitarias.</li>
+        <li><strong>Defensa Proactiva:</strong> Monitoreo constante de patrones de tráfico sospechosos, prevención de bots y verificación criptográfica de dispositivos.</li>
+        <li><strong>Autonomía del Usuario:</strong> Tú decides en cada instante qué información es visible, a qué distancia te muestras y quién puede enviarte mensajes directos.</li>
+      </ul>
+    </section>
+
+    <section id="p2">
+      <h2><i class="fa-solid fa-key text-pink-500"></i> 2. Criptografía y Tratamiento de Datos Médicos</h2>
+      <p>Nuestra infraestructura emplea protocolos de seguridad de grado bancario y normativas compatibles con estándares internacionales (LGPD, RGPD, HIPAA Safe Harbor):</p>
+      <ul>
+        <li><strong>Cifrado en Tránsito:</strong> Todas las comunicaciones se transportan mediante HTTPS/TLS 1.3 con certificados HSTS forzados de curva elíptica ECDHE-RSA-AES256-GCM-SHA384.</li>
+        <li><strong>Cifrado en Reposo (AES-256):</strong> Las bases de datos que almacenan identificadores personales y tokens de autenticación se encuentran encriptadas con llaves rotativas de 256 bits.</li>
+        <li><strong>Hashes Criptográficos para Diagnósticos:</strong> El estatus de salud seleccionado por el usuario no se expone en texto plano en la API pública. Se procesa mediante tokens de acceso que solo el receptor autorizado puede visualizar durante una interacción mutua confirmada.</li>
+        <li><strong>Autenticación de Dos Factores Obligatoria y Opcional:</strong> Disponibilidad inmediata de 2FA mediante Códigos de un Solo Uso enviados por Correo Electrónico y Códigos TOTP (Google Authenticator, Authy, Microsoft Authenticator) con generación de claves de respaldo de emergencia.</li>
+      </ul>
+    </section>
+
+    <section id="p3">
+      <h2><i class="fa-solid fa-location-crosshairs text-indigo-500"></i> 3. Geofencing y Privacidad de Ubicación</h2>
+      <p>Para evitar el rastreo físico o técnicas de triangulación espacial sobre nuestros miembros, Sigaleve aplica una política de <strong>Ubicación Difuminada (Geofence Jitter)</strong>:</p>
+      <div class="rule-card">
+        <p class="font-bold mb-1">¿Cómo protegemos tus coordenadas exactas?</p>
+        <p class="text-sm">Nunca compartimos la latitud y longitud milimétrica de tu GPS con otros usuarios ni con el cliente web. La app aplica un desplazamiento matemático aleatorio (de entre 500 y 1.200 metros) y únicamente reporta distancias aproximadas en kilómetros (ej. "a 3 km"). Si decides activar el modo incógnito o fijar una distancia personalizada, tus datos se protegen con mayor reserva.</p>
+      </div>
+    </section>
+
+    <section id="p4">
+      <h2><i class="fa-solid fa-robot text-amber-500"></i> 4. Detección de Suplantación, Catfishing y Bots</h2>
+      <p>El engaño y la falsificación de identidad destruyen la confianza comunitaria. Aplicamos medidas activas de verificación:</p>
+      <ul>
+        <li><strong>Verificación Biométrica de Foto de Perfil:</strong> Sistema de comparación de selfies con gestos en tiempo real para otorgar el distintivo de Verificado Oficial.</li>
+        <li><strong>Análisis Heurístico de Comportamiento:</strong> Detección automática de cuentas recién creadas que envían mensajes masivos idénticos o hipervínculos externos sospechosos.</li>
+        <li><strong>Aislamiento Inmediato (Shadowban & Quarantine):</strong> Cuentas que activan alertas de seguridad son puestas en cuarentena preventiva mientras el equipo de moderación humana revisa el caso en menos de 2 horas.</li>
+      </ul>
+    </section>
+
+    <section id="p5">
+      <h2><i class="fa-solid fa-money-bill-transfer text-rose-500"></i> 5. Prevención de Estafas Financieras y Extorsión</h2>
+      <p>Sigaleve es exclusivamente para conexiones afectivas, amistad y citas respetuosas. Las siguientes conductas están estrictamente prohibidas y son castigadas penalmente cuando corresponda:</p>
+      <ul>
+        <li><strong>Solicitud de Dinero:</strong> Pedir transferencias, criptomonedas, recargas telefónicas, billetes de avión o tarjetas de regalo bajo cualquier pretexto (urgencia médica, problemas de aduana o falsas emergencias).</li>
+        <li><strong>Sextorsión o Chantaje:</strong> Amenazar con divulgar fotos íntimas, conversaciones privadas o el diagnóstico de salud de una persona. Sigaleve colabora activamente con las autoridades judiciales y policiales aportando registros de auditoría forense para perseguir este delito.</li>
+        <li><strong>Enlaces de Phishing:</strong> Envío de URLs hacia páginas clonadas o capturas fraudulentas de credenciales. Los filtros automáticos de chat bloquean y censuran vínculos a sitios no verificados.</li>
+      </ul>
+    </section>
+
+    <section id="p6">
+      <h2><i class="fa-solid fa-people-arrows text-emerald-500"></i> 6. Consejos de Seguridad para Citas en el Mundo Real</h2>
+      <p>Cuando decidas llevar tu conexión al plano presencial, tu seguridad física es la prioridad primordial. Sigue siempre estas recomendaciones de los expertos:</p>
+      <div class="space-y-3">
+        <div class="rule-card">
+          <p class="font-bold text-sm text-emerald-500 mb-1"><i class="fa-solid fa-circle-check mr-2"></i>Lugares Públicos y Concurridos</p>
+          <p class="text-xs">Para las primeras citas, reúnete siempre en cafeterías, restaurantes, parques concurridos o centros culturales de día. Nunca aceptes encontrarte en domicilios privados, habitaciones de hotel o parajes aislados.</p>
+        </div>
+        <div class="rule-card">
+          <p class="font-bold text-sm text-emerald-500 mb-1"><i class="fa-solid fa-circle-check mr-2"></i>Informa a una Persona de Confianza</p>
+          <p class="text-xs">Comparte con un amigo o familiar a dónde vas, el nombre de la persona con la que te reunirás y tu ubicación en tiempo real en tu teléfono móvil.</p>
+        </div>
+        <div class="rule-card">
+          <p class="font-bold text-sm text-emerald-500 mb-1"><i class="fa-solid fa-circle-check mr-2"></i>Mantén el Control de tu Transporte</p>
+          <p class="text-xs">Llega y regresa por tus propios medios (vehículo particular, transporte público o taxi/app de movilidad verificada). No dependas del transporte de la otra persona para volver a casa.</p>
+        </div>
+        <div class="rule-card">
+          <p class="font-bold text-sm text-emerald-500 mb-1"><i class="fa-solid fa-circle-check mr-2"></i>Cuida tus Bebidas y Pertenencias</p>
+          <p class="text-xs">Nunca dejes tu bebida, comida o teléfono desatendidos. Si te ausentas al baño, solicita una bebida nueva directamente al camarero.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="p7">
+      <h2><i class="fa-solid fa-triangle-exclamation text-red-500"></i> 7. Protocolo de Denuncias y Soporte en Crisis</h2>
+      <p>Ponemos en tus manos herramientas directas y discretas para protegerte en cualquier instante de la experiencia:</p>
+      <ul>
+        <li><strong>Botón de Bloqueo Inmediato:</strong> Corta toda comunicación al instante sin que la otra persona reciba ninguna notificación. Tu perfil desaparecerá de su lista.</li>
+        <li><strong>Denuncia con Captura de Evidencia:</strong> Nuestro sistema almacena de forma segura las últimas interacciones para permitir a los moderadores examinar el contexto sin alterar la privacidad de tus otros chats.</li>
+        <li><strong>Canal de Respuesta Rápida:</strong> Nuestro equipo de confianza y seguridad (Trust & Safety) revisa incidentes graves las 24 horas del día, los 7 días de la semana a través del correo <a href="mailto:support@sigaleve.com">support@sigaleve.com</a>.</li>
+      </ul>
+    </section>
+
+    <section id="p8">
+      <h2><i class="fa-solid fa-scale-balanced text-purple-500"></i> 8. Auditorías Periódicas y Cumplimiento Legal</h2>
+      <p>Sigaleve realiza auditorías de código, pruebas de penetración (pentesting) e inspecciones de seguridad trimestrales junto con firmas de ciberseguridad independientes. Todo manejo de incidentes se ciñe a las normativas de protección de datos vigentes, garantizando el derecho al olvido, revocación del consentimiento y supresión permanente de registros a petición del usuario en Ajustes de Privacidad.</p>
+    </section>
+
+    <div class="mt-12 p-6 rounded-2xl border text-center" style="background:var(--card);border-color:var(--bdr)">
+      <p class="font-bold mb-2">¿Necesitas ayuda o deseas reportar una vulnerabilidad?</p>
+      <p class="text-xs mb-4" style="color:var(--sub)">Estamos disponibles para atender cualquier inquietud relacionada con tu privacidad y bienestar.</p>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="/app" class="px-5 py-2.5 rounded-xl grad text-white font-bold text-xs shadow-lg hover:opacity-90">Volver a la App</a>
+        <a href="mailto:support@sigaleve.com" class="px-5 py-2.5 rounded-xl border text-xs font-bold" style="border-color:var(--bdr);color:var(--txt)">Contactar Equipo de Seguridad</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/static/legal_i18n.js"></script>
+<script>
+function toggleDark(){
+  var isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('sigaleve_dark', isDark);
+  document.getElementById('di').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+}
+(function(){
+  var d = localStorage.getItem('sigaleve_dark');
+  if(d==='true'||(d===null&&window.matchMedia('(prefers-color-scheme:dark)').matches)){
+    document.getElementById('di').className = 'fa-solid fa-sun';
+  }
+})();
+</script>
+</body>
+</html>
+

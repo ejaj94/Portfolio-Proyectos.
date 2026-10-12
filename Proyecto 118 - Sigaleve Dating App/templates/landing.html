@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<script>
+(function(){
+  var urlParams = new URLSearchParams(window.location.search);
+  var qLang = urlParams.get('lang');
+  if (!qLang) {
+    var match = document.cookie.match(/sigaleve_lang=([^;]+)/);
+    if (match) qLang = match[1];
+  }
+  if (qLang) {
+    localStorage.setItem('sigaleve_lang', qLang);
+  }
+  var l = qLang || localStorage.getItem('sigaleve_lang') || 'pt';
+  window.LANDING_LANG = l;
+  document.documentElement.lang = l;
+})();
+</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>{{ seo_title | default('Sigaleve | Conecta com Autenticidade, Sem Julgamentos') }}</title>
+<meta name="description" content="{{ seo_desc | default('Sigaleve é a aplicação de encontros mais autêntica e inclusiva para conectar com pessoas reais, sem preconceitos.') }}"/>
+<link rel="canonical" href="https://sigaleve.com/{{ '?lang=' + current_lang if current_lang and current_lang != 'pt' else '' }}" />
+
+<!-- Multi-Language Hreflang Tags para Indexação do Google em Todos os Idiomas -->
+<link rel="alternate" hreflang="x-default" href="https://sigaleve.com/" />
+<link rel="alternate" hreflang="pt" href="https://sigaleve.com/?lang=pt" />
+<link rel="alternate" hreflang="es" href="https://sigaleve.com/?lang=es" />
+<link rel="alternate" hreflang="en" href="https://sigaleve.com/?lang=en" />
+<link rel="alternate" hreflang="fr" href="https://sigaleve.com/?lang=fr" />
+<link rel="alternate" hreflang="de" href="https://sigaleve.com/?lang=de" />
+<link rel="alternate" hreflang="it" href="https://sigaleve.com/?lang=it" />
+<link rel="alternate" hreflang="sw" href="https://sigaleve.com/?lang=sw" />
+<link rel="alternate" hreflang="yo" href="https://sigaleve.com/?lang=yo" />
+<link rel="alternate" hreflang="ha" href="https://sigaleve.com/?lang=ha" />
+<link rel="alternate" hreflang="ar" href="https://sigaleve.com/?lang=ar" />
+
+<!-- Open Graph / Meta Compartilhamento Social -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://sigaleve.com/" />
+<meta property="og:title" content="{{ seo_title | default('Sigaleve | Conecta com Autenticidade, Sem Julgamentos') }}" />
+<meta property="og:description" content="{{ seo_desc | default('A aplicação mais autêntica de relacionamentos e momentos sem preconceitos.') }}" />
+<meta property="og:image" content="https://sigaleve.com/static/img/sigaleve-logo-original.png" />
+<meta property="og:locale" content="{{ seo_locale | default('pt_PT') }}" />
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32x32.png?v=2"/>
+<link rel="icon" type="image/png" sizes="64x64" href="/static/img/favicon-64x64.png?v=2"/>
+<link rel="icon" type="image/x-icon" href="/static/img/favicon.ico?v=2"/>
+<link rel="apple-touch-icon" href="/static/img/logo-icon-192.png?v=2"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --tinder-pink: #fd267a;
+  --tinder-orange: #ff6036;
+  --tinder-grad: linear-gradient(135deg, #fd267a 0%, #ff6036 100%);
+  --tinder-grad-alt: linear-gradient(135deg, #fe3c72 0%, #ff655b 100%);
+  --tinder-dark: #111418;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #0b0e14;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Tinder Flame Logo Styling */
+.tinder-flame {
+  background: var(--tinder-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-tinder-gradient {
+  background: var(--tinder-grad);
+  color: #ffffff;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 30px rgba(253, 38, 122, 0.35);
+}
+.btn-tinder-gradient:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 38px rgba(253, 38, 122, 0.55);
+  filter: brightness(1.05);
+}
+.btn-tinder-gradient:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-tinder-white {
+  background: #ffffff;
+  color: #111418;
+  transition: all 0.2s ease;
+}
+.btn-tinder-white:hover {
+  background: #f1f3f5;
+  transform: scale(1.03);
+}
+
+/* Nav transparent blurring */
+.tinder-nav {
+  background: rgba(11, 14, 20, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.3s ease;
+}
+
+/* Hero background with authentic Tinder aesthetic overlay */
+.hero-wrapper {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: 
+    radial-gradient(circle at 50% 30%, rgba(253, 38, 122, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(255, 96, 54, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(11, 14, 20, 0.4) 0%, rgba(11, 14, 20, 0.95) 85%, #0b0e14 100%),
+    url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=2000&q=85') center/cover no-repeat;
+}
+
+/* Tinder dynamic cards carousel */
+.card-perspective {
+  perspective: 1200px;
+}
+.tinder-card-mockup {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.12);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+.tinder-card-mockup:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 35px 70px -10px rgba(253, 38, 122, 0.35), 0 0 0 1px rgba(253, 38, 122, 0.4);
+}
+
+/* Action button circle */
+.tinder-circle-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+.tinder-circle-btn:hover {
+  transform: scale(1.15);
+  background: rgba(255, 255, 255, 0.18);
+}
+.tinder-circle-btn.like:hover {
+  color: #2be897;
+  border-color: #2be897;
+  box-shadow: 0 0 24px rgba(43, 232, 151, 0.4);
+}
+.tinder-circle-btn.nope:hover {
+  color: #fd267a;
+  border-color: #fd267a;
+  box-shadow: 0 0 24px rgba(253, 38, 122, 0.4);
+}
+.tinder-circle-btn.super:hover {
+  color: #28a9ff;
+  border-color: #28a9ff;
+  box-shadow: 0 0 24px rgba(40, 169, 255, 0.4);
+}
+
+/* Testimonial slider / cards */
+.quote-card {
+  background: #181c24;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  padding: 32px 28px;
+  transition: all 0.3s ease;
+}
+.quote-card:hover {
+  border-color: rgba(253, 38, 122, 0.4);
+  transform: translateY(-4px);
+  background: #1c212b;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0e14;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2e39;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #fd267a;
+}
+</style>
+</head>
+<body class="selection:bg-pink-600 selection:text-white">
+
+<!-- ══════════════════════════════════════════════════════════════
+     HEADER / BARRA DE NAVEGACIÓN ESTILO TINDER.COM
+══════════════════════════════════════════════════════════════ -->
+<nav class="tinder-nav fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
+    
+    <!-- Logo Sigaleve Oficial (3ª Imagem) -->
+    <a href="/" class="flex items-center group py-1">
+      <img src="/static/img/sigaleve-logo-original.png" alt="Sigaleve" class="h-12 w-auto object-contain rounded-lg transition-transform group-hover:scale-105"/>
+    </a>
+
+    <!-- Navigation links desktop -->
+    <div class="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-gray-300">
+      <a href="#how" class="hover:text-white transition-colors" data-i18n="howItWorks">Como funciona</a>
+      <a href="#features" class="hover:text-white transition-colors" data-i18n="navDiscover">Descobrir</a>
+      <a href="#products" class="hover:text-white transition-colors" data-i18n="navProducts">Produtos</a>
+      <a href="#safety" class="hover:text-white transition-colors" data-i18n="navSafety">Segurança</a>
+      <a href="#stories" class="hover:text-white transition-colors" data-i18n="navStories">Histórias de Sucesso</a>
+      <a href="#download" class="hover:text-white transition-colors" data-i18n="navDownload">Descarregar</a>
+    </div>
+
+    <!-- Actions: Selector idioma + Iniciar sessão -->
+    <div class="flex items-center gap-2.5 sm:gap-4">
+      <!-- Selector de idioma Modal (Visible en Móvil y Escritorio) -->
+      <button type="button" onclick="openLandingLanguageModal()" class="flex items-center gap-2 px-3 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold backdrop-blur-md transition-all">
+        <i class="fa-solid fa-globe text-pink-400"></i>
+        <span id="landing-current-lang-flag">🇵🇹</span>
+        <span id="landing-current-lang-label" class="hidden sm:inline">Português</span>
+        <i class="fa-solid fa-chevron-down text-[10px] text-white/70 ml-0.5"></i>
+      </button>
+
+      <!-- Botão de Pânico / Saída Rápida Discreta (Imagem 2) -->
+      <div class="relative flex items-center group">
+        <button type="button" onclick="quickExit()" class="w-10 h-10 rounded-full flex items-center justify-center text-rose-400 bg-white/10 hover:bg-rose-500/20 hover:text-rose-300 border border-white/15 transition-all shadow-sm active:scale-95" title="Saída Rápida de Emergência (Fecha a app e abre receitas de bolachas)">
+          <i class="fa-solid fa-door-open text-base"></i>
+        </button>
+        <!-- Ícone i com círculo e modal informativo / tooltip -->
+        <button type="button" onclick="showPanicInfoModal()" class="w-5 h-5 -ml-2 -mt-5 rounded-full bg-zinc-800 border border-white/20 text-zinc-300 hover:text-white flex items-center justify-center text-[10px] font-bold shadow transition-all" title="Informação sobre o Botão de Pânico">
+          <i class="fa-solid fa-info"></i>
+        </button>
+      </div>
+
+      <!-- Iniciar Sessão (Botão Branco Puro estilo Tinder) -->
+      <a href="/app" class="btn-tinder-white text-[13px] sm:text-[15px] font-bold px-5 sm:px-6 py-2.5 rounded-full shadow-lg" data-i18n="login">
+        Iniciar Sessão
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ MODAL GLOBAL DE IDIOMAS (+100 IDIOMAS INTERNACIONALES) ══ -->
+<div id="modal-landing-language" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md transition-all">
+  <div class="w-full max-w-lg rounded-3xl p-5 sm:p-6 flex flex-col relative bg-[#111418] text-white border border-white/10 shadow-2xl max-h-[90vh]">
+    <!-- Header -->
+    <div class="flex items-center justify-between pb-3 border-b border-white/10 flex-shrink-0">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-pink-500 to-purple-600 text-white flex items-center justify-center text-sm shadow">
+          <i class="fa-solid fa-globe"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-black text-white">Seleccionar Idioma / Select Language</h3>
+          <p class="text-[11px] text-gray-400">Más de 100 idiomas oficiales disponibles</p>
+        </div>
+      </div>
+      <button type="button" onclick="closeLandingLanguageModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Buscador en tiempo real de idiomas -->
+    <div class="pt-3 pb-2 flex-shrink-0">
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-xs text-gray-400"></i>
+        <input type="text" id="lang-search-input" oninput="filterLandingLanguages(this.value)" placeholder="Buscar idioma / Search language..." class="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white/5 border border-white/10 text-white text-xs placeholder-gray-500 focus:outline-none focus:border-pink-500 transition-all"/>
+      </div>
+    </div>
+
+    <!-- Lista de Idiomas (+100 idiomas seleccionables con un clic) -->
+    <div id="landing-languages-grid" class="py-2 flex-1 overflow-y-auto space-y-1 pr-1 max-h-[50vh]">
+      <!-- Se inyectan dinámicamente -->
+    </div>
+
+    <!-- Footer -->
+    <div class="pt-3 border-t border-white/10 flex items-center justify-between text-xs flex-shrink-0">
+      <span class="text-gray-400 text-[11px]">Idioma actual: <strong class="text-white" id="modal-current-lang-text">Português</strong></span>
+      <button type="button" onclick="closeLandingLanguageModal()" class="px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold transition-all">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     HERO SECTION — "TODO COMIENZA CON UN SWIPE"
+══════════════════════════════════════════════════════════════ -->
+<header class="hero-wrapper pt-32 pb-24 px-6 text-center">
+  <div class="max-w-4xl mx-auto flex flex-col items-center z-10">
+    
+    <!-- Tagline Pill -->
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/20 backdrop-blur-md border border-pink-400/30 text-xs sm:text-sm font-bold uppercase tracking-wider text-pink-300 mb-6">
+      <i class="fa-solid fa-heart-pulse text-pink-400"></i>
+      <span data-i18n="heroTagline">NAMORO PARA PESSOAS COM INFEÇÕES SEXUALMENTE TRANSMISSÍVEIS</span>
+    </div>
+
+    <!-- Main Headline com Viva novas histórias -->
+    <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white mb-6 leading-[1.08]">
+      Amor sem preconceitos.<br/>
+      Conexões com quem entende.<br/>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-400">Viva novas histórias.</span>
+    </h1>
+
+    <p class="text-base sm:text-lg md:text-xl text-gray-200 max-w-3xl font-medium mb-10 leading-relaxed" data-i18n="heroDesc">
+      A primeira comunidade de namoro de Portugal para pessoas que vivem com infeções sexualmente transmissíveis (herpes, HPV, VIH e outras). Conhece pessoas que entendem o teu caminho, sem julgamentos e com total privacidade.
+    </p>
+
+    <!-- CTAs estilo Tinder -->
+    <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+      <a href="/app" class="btn-tinder-gradient w-full sm:w-auto text-base sm:text-lg font-black px-10 py-4 rounded-full flex items-center justify-center gap-3">
+        <span data-i18n="createAccount">Criar minha conta grátis</span>
+        <i class="fa-solid fa-arrow-right text-base"></i>
+      </a>
+
+      <a href="#how" class="w-full sm:w-auto px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-base backdrop-blur-md transition-all" data-i18n="howItWorks">
+        Como funciona
+      </a>
+    </div>
+
+    <!-- App Store Badges Quick Row -->
+    <div class="flex items-center gap-4 mt-12 text-xs font-semibold text-gray-400">
+      <span class="flex items-center gap-2">
+        <i class="fa-solid fa-shield-check text-emerald-400 text-sm"></i>
+        <span data-i18n="badgePrivate">100% Privado e Encriptado</span>
+      </span>
+      <span>•</span>
+      <span class="flex items-center gap-2">
+        <i class="fa-solid fa-bolt text-amber-400 text-sm"></i>
+        <span data-i18n="badgeMatches">Matches em Tempo Real</span>
+      </span>
+      <span>•</span>
+      <span class="flex items-center gap-2">
+        <i class="fa-solid fa-user-check text-blue-400 text-sm"></i>
+        <span data-i18n="badgeVerified">Apenas +18 Verificados</span>
+      </span>
+    </div>
+
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════════
+     MOCKUP DE INTERACCIÓN INTERACTIVA TINDER CARDS
+══════════════════════════════════════════════════════════════ -->
+<section id="features" class="py-24 px-6 relative bg-[#0b0e14]">
+  <div class="max-w-7xl mx-auto">
+    
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <p class="text-xs font-black tracking-widest uppercase text-pink-500 mb-2" data-i18n="featuresTag">Experiência Imersiva</p>
+      <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white mb-5">
+        <span data-i18n="featuresTitle">Desenhado para sentir a emoção de cada conexão</span>
+      </h2>
+      <p class="text-base sm:text-lg text-gray-400">
+        <span data-i18n="featuresDesc">A nossa dinâmica de cartões de alta fidelidade permite explorar pessoas perto de ti de forma fluida, privada e respeitosa.</span>
+      </p>
+    </div>
+
+    <!-- 3 Card Showcase Interactive -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center max-w-6xl mx-auto">
+      
+      <!-- Card 1 -->
+      <div class="tinder-card-mockup relative aspect-[3/4.4] bg-gray-900 group">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=85" alt="Perfil Sigaleve" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+        
+        <div class="absolute top-4 left-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 text-xs font-bold text-white flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> <span data-i18n="cardActiveNow">Ativa agora</span>
+        </div>
+
+        <div class="absolute bottom-6 left-6 right-6 text-white">
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="text-2xl font-black">Carolina, 24</h3>
+            <i class="fa-solid fa-circle-check text-sky-400 text-lg"></i>
+          </div>
+          <p class="text-xs text-gray-300 font-medium mb-3 flex items-center gap-1.5">
+            <i class="fa-solid fa-location-dot text-pink-500"></i> <span data-i18n="card1DistJob">A 4 km de distância • Designer</span>
+          </p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/20 backdrop-blur-md" data-i18n="tagPhoto">Fotografia</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/20 backdrop-blur-md" data-i18n="tagRedWine">Vinho Tinto</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/20 backdrop-blur-md" data-i18n="tagHiking">Caminhadas</span>
+          </div>
+
+          <!-- Bottom Action Buttons Demo -->
+          <div class="flex items-center justify-center gap-3 pt-2 border-t border-white/10">
+            <div class="tinder-circle-btn nope text-pink-500"><i class="fa-solid fa-xmark"></i></div>
+            <div class="tinder-circle-btn super text-sky-400"><i class="fa-solid fa-star text-sm"></i></div>
+            <div class="tinder-circle-btn like text-emerald-400"><i class="fa-solid fa-heart"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 (Center Heroic Card) -->
+      <div class="tinder-card-mockup relative aspect-[3/4.4] bg-gray-900 group md:-translate-y-4 border-2 border-pink-500/40">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=85" alt="Perfil Sigaleve" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+        
+        <div class="absolute top-4 left-4 bg-gradient-to-r from-pink-500 to-amber-500 px-3 py-1 rounded-full text-xs font-black text-white uppercase tracking-wider shadow-lg flex items-center gap-1.5">
+          <i class="fa-solid fa-fire"></i> <span data-i18n="cardTopPick">Top Pick</span>
+        </div>
+
+        <div class="absolute bottom-6 left-6 right-6 text-white">
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="text-2xl font-black">Mateus, 27</h3>
+            <i class="fa-solid fa-circle-check text-sky-400 text-lg"></i>
+          </div>
+          <p class="text-xs text-gray-300 font-medium mb-3 flex items-center gap-1.5">
+            <i class="fa-solid fa-location-dot text-pink-500"></i> <span data-i18n="card2DistJob">A 2 km de distância • Músico</span>
+          </p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/20 backdrop-blur-md" data-i18n="tagJazz">Jazz</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/20 backdrop-blur-md" data-i18n="tagCoffee">Café</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/20 backdrop-blur-md" data-i18n="tagTravel">Viagens</span>
+          </div>
+
+          <!-- Bottom Action Buttons Demo -->
+          <div class="flex items-center justify-center gap-3 pt-2 border-t border-white/10">
+            <div class="tinder-circle-btn nope text-pink-500"><i class="fa-solid fa-xmark"></i></div>
+            <div class="tinder-circle-btn super text-sky-400"><i class="fa-solid fa-star text-sm"></i></div>
+            <div class="tinder-circle-btn like text-emerald-400"><i class="fa-solid fa-heart"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="tinder-card-mockup relative aspect-[3/4.4] bg-gray-900 group">
+        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=85" alt="Perfil Sigaleve" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+        
+        <div class="absolute top-4 left-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 text-xs font-bold text-white flex items-center gap-1.5">
+          <i class="fa-solid fa-shield-halved text-purple-400"></i> <span data-i18n="cardVerified">Verificada</span>
+        </div>
+
+        <div class="absolute bottom-6 left-6 right-6 text-white">
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="text-2xl font-black">Lúcia, 26</h3>
+            <i class="fa-solid fa-circle-check text-sky-400 text-lg"></i>
+          </div>
+          <p class="text-xs text-gray-300 font-medium mb-3 flex items-center gap-1.5">
+            <i class="fa-solid fa-location-dot text-pink-500"></i> <span data-i18n="card3DistJob">A 6 km de distância • Arquiteta</span>
+          </p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/20 backdrop-blur-md" data-i18n="tagArt">Arte</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/20 backdrop-blur-md" data-i18n="tagYoga">Yoga</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/20 backdrop-blur-md" data-i18n="tagPets">Animais</span>
+          </div>
+
+          <!-- Bottom Action Buttons Demo -->
+          <div class="flex items-center justify-center gap-3 pt-2 border-t border-white/10">
+            <div class="tinder-circle-btn nope text-pink-500"><i class="fa-solid fa-xmark"></i></div>
+            <div class="tinder-circle-btn super text-sky-400"><i class="fa-solid fa-star text-sm"></i></div>
+            <div class="tinder-circle-btn like text-emerald-400"><i class="fa-solid fa-heart"></i></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     HOW IT WORKS SECTION (#how) — PASO A PASO ESTILO TINDER
+══════════════════════════════════════════════════════════════ -->
+<section id="how" class="py-24 px-6 relative bg-[#0e121a] border-t border-white/10">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 text-xs font-bold uppercase tracking-wider text-pink-400 mb-4">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="howTag">Simples, Rápido e Seguro</span>
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-black text-white mb-4" data-i18n="howTitle">
+        Como funciona o Sigaleve?
+      </h2>
+      <p class="text-gray-400 text-base sm:text-lg" data-i18n="howSubtitle">
+        Conectar de verdade é uma questão de segundos. Desenhamos um processo fluido para encontrares o teu par ideal com total confiança.
+      </p>
+    </div>
+
+    <!-- 3 Pasos Principales -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      
+      <!-- Passo 1 -->
+      <div class="p-8 rounded-3xl bg-[#141822] border border-white/10 relative hover:border-pink-500/40 transition-all group">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-pink-500 to-purple-600 text-white font-black text-xl flex items-center justify-center mb-6 shadow-lg shadow-pink-500/20 group-hover:scale-110 transition-transform">
+          1
+        </div>
+        <h3 class="text-xl font-black text-white mb-3" data-i18n="step1Title">Cria o teu Perfil Autêntico</h3>
+        <p class="text-gray-400 text-sm leading-relaxed mb-6" data-i18n="step1Desc">
+          Carrega as tuas melhores fotos da galeria ou da câmara em direto, escolhe as tuas paixões e partilha a tua biografia com sinceridade.
+        </p>
+        <div class="flex items-center gap-2 text-xs font-bold text-pink-400">
+          <i class="fa-solid fa-camera"></i> <span data-i18n="step1Highlight">Verificação facial instantânea</span>
+        </div>
+      </div>
+
+      <!-- Passo 2 -->
+      <div class="p-8 rounded-3xl bg-[#141822] border border-white/10 relative hover:border-pink-500/40 transition-all group">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-pink-500 to-orange-500 text-white font-black text-xl flex items-center justify-center mb-6 shadow-lg shadow-pink-500/20 group-hover:scale-110 transition-transform">
+          2
+        </div>
+        <h3 class="text-xl font-black text-white mb-3" data-i18n="step2Title">Desliza & Faz Match</h3>
+        <p class="text-gray-400 text-sm leading-relaxed mb-6" data-i18n="step2Desc">
+          Desliza para a direita para dar Like ou para a esquerda para passar. Quando ambos sentem a mesma conexão, dá-se o Match mútuo!
+        </p>
+        <div class="flex items-center gap-2 text-xs font-bold text-orange-400">
+          <i class="fa-solid fa-fire"></i> <span data-i18n="step2Highlight">Conexão mútua e respeitosa</span>
+        </div>
+      </div>
+
+      <!-- Passo 3 -->
+      <div class="p-8 rounded-3xl bg-[#141822] border border-white/10 relative hover:border-pink-500/40 transition-all group">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white font-black text-xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+          3
+        </div>
+        <h3 class="text-xl font-black text-white mb-3" data-i18n="step3Title">Conversa & Conecta</h3>
+        <p class="text-gray-400 text-sm leading-relaxed mb-6" data-i18n="step3Desc">
+          Conversa em tempo real num chat protegido com encriptação de ponta a ponta. Partilha momentos e organiza o teu primeiro encontro.
+        </p>
+        <div class="flex items-center gap-2 text-xs font-bold text-emerald-400">
+          <i class="fa-solid fa-shield-halved"></i> <span data-i18n="step3Highlight">100% Privado e Encriptado</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA directo al final de cómo funciona -->
+    <div class="text-center mt-12">
+      <a href="/app" class="btn-tinder-gradient inline-flex items-center gap-3 text-base sm:text-lg font-black px-10 py-3.5 rounded-full shadow-xl">
+        <span data-i18n="startNow">Começar Agora</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PRODUCT TIERS: SIGALEVE PLUS & VIP (TINDER PLUS / GOLD)
+══════════════════════════════════════════════════════════════ -->
+<section id="products" class="py-24 px-6 bg-[#111418] border-y border-white/10">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl sm:text-5xl font-black text-white mb-4" data-i18n="productsTitle">Eleva a tua vida amorosa</h2>
+      <p class="text-gray-400 text-base sm:text-lg" data-i18n="productsSubtitle">Acede a vantagens exclusivas e multiplica as tuas oportunidades de coincidir.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      
+      <!-- Tier 1: Sigaleve Básico -->
+      <div class="p-8 rounded-3xl bg-[#181c24] border border-white/10 flex flex-col justify-between hover:border-white/20 transition-all">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-white text-xl mb-6">
+            <i class="fa-solid fa-fire"></i>
+          </div>
+          <h3 class="text-2xl font-black text-white mb-2">Sigaleve Free</h3>
+          <p class="text-gray-400 text-sm mb-6" data-i18n="tierFreeDesc">A experiência clássica para conhecer pessoas genuínas perto de ti.</p>
+          <ul class="space-y-3.5 text-sm text-gray-300 font-medium mb-8">
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-pink-500"></i> <span data-i18n="tierFreeF1">Deslizar perfis na tua área</span></li>
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-pink-500"></i> <span data-i18n="tierFreeF2">Matches mútuos ilimitados</span></li>
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-pink-500"></i> <span data-i18n="tierFreeF3">Mensagens encriptadas 24h</span></li>
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-pink-500"></i> <span data-i18n="tierFreeF4">Localização aproximada protegida</span></li>
+          </ul>
+        </div>
+        <a href="/app" class="w-full py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-center block transition-all" data-i18n="tierFreeBtn">
+          Começar Grátis
+        </a>
+      </div>
+
+      <!-- Tier 2: Sigaleve Plus (Destacado) -->
+      <div class="p-8 rounded-3xl bg-gradient-to-b from-purple-900/40 to-[#181c24] border-2 border-pink-500 flex flex-col justify-between relative shadow-2xl shadow-pink-500/10">
+        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-pink-500 to-orange-500 text-white text-[11px] font-black uppercase tracking-wider px-4 py-1 rounded-full shadow-md" data-i18n="tierPopularTag">
+          Mais Popular
+        </div>
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-r from-pink-500 to-orange-500 flex items-center justify-center text-white text-xl mb-6 shadow-lg shadow-pink-500/30">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+          <h3 class="text-2xl font-black text-white mb-2">Sigaleve Plus®</h3>
+          <p class="text-gray-400 text-sm mb-6" data-i18n="tierPlusDesc">Likes ilimitados, Voltar Atrás e controlo total sobre quem te vê.</p>
+          <ul class="space-y-3.5 text-sm text-gray-200 font-medium mb-8">
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-pink-400"></i> <span data-i18n="tierPlusF1">Likes ilimitados todos os dias</span></li>
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-pink-400"></i> <span data-i18n="tierPlusF2">Voltar atrás em swipes acidentais</span></li>
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-pink-400"></i> <span data-i18n="tierPlusF3">Passaporte para qualquer cidade</span></li>
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-pink-400"></i> <span data-i18n="tierPlusF4">1 Boost grátis por mês</span></li>
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-pink-400"></i> <span data-i18n="tierPlusF5">Sem anúncios publicitários</span></li>
+          </ul>
+        </div>
+        <a href="/app" class="btn-tinder-gradient w-full py-3.5 rounded-full font-black text-center block shadow-lg" data-i18n="tierPlusBtn">
+          Obter Sigaleve Plus
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     HISTORIAS REALES (SWIPE STORIES ESTILO TINDER)
+══════════════════════════════════════════════════════════════ -->
+<section id="stories" class="py-24 px-6 bg-[#0b0e14]">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <p class="text-xs font-black tracking-widest uppercase text-pink-500 mb-2" data-i18n="storiesTag">Histórias Reais</p>
+      <h2 class="text-3xl sm:text-5xl font-black text-white mb-4" data-i18n="storiesTitle">Tudo começou com um Click</h2>
+      <p class="text-gray-400 text-base sm:text-lg" data-i18n="storiesSubtitle">Milhares de pessoas já encontraram amor, amizade e cumplicidade autêntica.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <!-- Story 1 -->
+      <div class="quote-card flex flex-col justify-between">
+        <div>
+          <div class="text-pink-500 text-3xl mb-4 font-serif">“</div>
+          <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 font-medium" data-i18n="story1Text">
+            Entré en Sigaleve sin muchas expectativas y al tercer día hice match con Diego. Nos dimos cuenta de que compartíamos las mismas pasiones y la misma necesidad de hablar con total honestidad. Hoy llevamos un año viviendo juntos.
+          </p>
+        </div>
+        <div class="flex items-center gap-3 pt-4 border-t border-white/10">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80" alt="Amanda" class="w-11 h-11 rounded-full object-cover border-2 border-pink-500"/>
+          <div>
+            <h4 class="font-bold text-white text-sm" data-i18n="story1Author">Amanda & Diego</h4>
+            <p class="text-xs text-gray-400" data-i18n="story1Location">Madrid, España</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Story 2 -->
+      <div class="quote-card flex flex-col justify-between">
+        <div>
+          <div class="text-pink-500 text-3xl mb-4 font-serif">“</div>
+          <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 font-medium" data-i18n="story2Text">
+            La privacidad era mi mayor preocupación. Con la verificación y el cifrado de datos pude estar tranquilo desde el primer segundo. Conocí a Elena, charlamos durante horas y el clic fue instantáneo.
+          </p>
+        </div>
+        <div class="flex items-center gap-3 pt-4 border-t border-white/10">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80" alt="Lucas" class="w-11 h-11 rounded-full object-cover border-2 border-pink-500"/>
+          <div>
+            <h4 class="font-bold text-white text-sm" data-i18n="story2Author">Lucas & Elena</h4>
+            <p class="text-xs text-gray-400" data-i18n="story2Location">Lisboa, Portugal</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Story 3 -->
+      <div class="quote-card flex flex-col justify-between">
+        <div>
+          <div class="text-pink-500 text-3xl mb-4 font-serif">“</div>
+          <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 font-medium" data-i18n="story3Text">
+            Lo mejor es que la gente aquí es real y directa. No hay poses forzadas. Hicimos match por un Super Like, quedamos a tomar un café y desde ese día no nos hemos separado. ¡Gracias Sigaleve!
+          </p>
+        </div>
+        <div class="flex items-center gap-3 pt-4 border-t border-white/10">
+          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=120&q=80" alt="Carla" class="w-11 h-11 rounded-full object-cover border-2 border-pink-500"/>
+          <div>
+            <h4 class="font-bold text-white text-sm" data-i18n="story3Author">Carla & Miguel</h4>
+            <p class="text-xs text-gray-400" data-i18n="story3Location">Barcelona, España</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SAFETY & PRIVACY SECTION (TINDER SAFETY TOOLKIT)
+══════════════════════════════════════════════════════════════ -->
+<section id="safety" class="py-24 px-6 bg-[#111418] border-t border-white/10">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-6">
+        <i class="fa-solid fa-shield-halved"></i> <span data-i18n="safetyTag">Segurança em Primeiro Lugar</span>
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-black text-white mb-6 leading-tight">
+        <span data-i18n="safetyTitle">A tua tranquilidade e privacidade são a nossa prioridade absoluta</span>
+      </h2>
+      <p class="text-gray-300 text-base sm:text-lg mb-8 leading-relaxed">
+        <span data-i18n="safetyDesc">Desenvolvemos ferramentas de segurança avançadas em cada conversa e perfil para que possas conhecer novas pessoas sentindo-te sempre no controlo.</span>
+      </p>
+
+      <div class="space-y-6">
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center flex-shrink-0 text-lg">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-base mb-1" data-i18n="safetyF1Title">Encriptação de Ponta a Ponta</h4>
+            <p class="text-sm text-gray-400" data-i18n="safetyF1Desc">Os teus dados confidenciais de perfil são guardados sob rigorosos protocolos de encriptação e nunca são expostos a terceiros.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center flex-shrink-0 text-lg">
+            <i class="fa-solid fa-location-crosshairs"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-base mb-1" data-i18n="safetyF2Title">Localização Aproximada Inteligente</h4>
+            <p class="text-sm text-gray-400" data-i18n="safetyF2Desc">Nunca revelamos as tuas coordenadas exatas. Apenas mostramos um raio aproximado para proteger a tua casa e rotina.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center flex-shrink-0 text-lg">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-base mb-1" data-i18n="safetyF3Title">Verificação Real de Fotos</h4>
+            <p class="text-sm text-gray-400" data-i18n="safetyF3Desc">Confirma que a pessoa com quem conversas corresponde fielmente às fotos da sua galeria através de verificação facial.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Graphic Box -->
+    <div class="relative flex items-center justify-center">
+      <div class="w-full max-w-md aspect-square rounded-3xl bg-gradient-to-tr from-pink-500/20 via-purple-600/20 to-blue-500/20 p-8 border border-white/10 backdrop-blur-2xl flex flex-col justify-center items-center text-center shadow-2xl">
+        <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-pink-500 to-orange-500 flex items-center justify-center text-4xl text-white shadow-xl shadow-pink-500/40 mb-6">
+          <i class="fa-solid fa-shield-heart"></i>
+        </div>
+        <h3 class="text-2xl font-black text-white mb-2" data-i18n="safetyCardTitle">Centro de Segurança 24/7</h3>
+        <p class="text-sm text-gray-300 max-w-xs mb-6" data-i18n="safetyCardDesc">Bloqueia, denuncia ou desfaz matches a qualquer momento com apenas um toque, sem explicações.</p>
+        <a href="/legal/privacy" class="text-xs font-bold uppercase tracking-wider text-pink-400 hover:text-pink-300 flex items-center gap-1.5 transition-colors">
+          <span data-i18n="safetyGuidelinesBtn">Ler Diretrizes da Comunidade</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     DOWNLOAD CALL TO ACTION BANNER
+══════════════════════════════════════════════════════════════ -->
+<section id="download" class="py-24 px-6 relative overflow-hidden bg-gradient-to-r from-[#17051a] via-[#1f0b27] to-[#120824] border-t border-white/10 text-center">
+  <div class="max-w-4xl mx-auto relative z-10">
+    <h2 class="text-4xl sm:text-6xl font-black text-white mb-6 tracking-tight">
+      <span data-i18n="downloadTitle">Pronto para dar o próximo passo?</span>
+    </h2>
+    <p class="text-lg sm:text-xl text-gray-300 mb-10 max-w-2xl mx-auto font-medium">
+      <span data-i18n="downloadSubtitle">Junta-te hoje a milhares de pessoas que escolhem conectar com autenticidade, empatia e sem julgamentos.</span>
+    </p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="/app" class="btn-tinder-gradient text-lg sm:text-xl font-black px-12 py-4 rounded-full w-full sm:w-auto shadow-2xl flex items-center justify-center gap-3">
+        <i class="fa-solid fa-fire"></i>
+        <span data-i18n="createAccountNow">Criar a minha conta agora</span>
+      </a>
+      <a href="/app" class="btn-tinder-white text-lg font-bold px-10 py-4 rounded-full w-full sm:w-auto" data-i18n="openWebVersion">
+        Abrir versão Web
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FOOTER ESTILO TINDER.COM OFICIAL
+══════════════════════════════════════════════════════════════ -->
+<footer class="bg-[#0b0e14] border-t border-white/10 pt-16 pb-12 px-6 text-gray-400 text-sm">
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Top Footer Links Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-14">
+      
+      <!-- Col 1: Legal -->
+      <div>
+        <h4 class="text-xs font-black uppercase tracking-wider text-white mb-4" data-i18n="footerLegal">Legal</h4>
+        <ul class="space-y-2.5 text-xs font-medium">
+          <li><a href="/legal/privacy" class="hover:text-white transition-colors" data-i18n="footerPrivacy">Privacidade</a></li>
+          <li><a href="/legal/terms" class="hover:text-white transition-colors" data-i18n="footerTerms">Termos e Condições</a></li>
+          <li><a href="/legal/cookies" class="hover:text-white transition-colors" data-i18n="footerCookies">Política de Cookies</a></li>
+          <li><a href="/legal/privacy" class="hover:text-white transition-colors" data-i18n="footerIntellectual">Propriedade Intelectual</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 2: Carrera y Empleo -->
+      <div>
+        <h4 class="text-xs font-black uppercase tracking-wider text-white mb-4" data-i18n="footerCareers">Emprego</h4>
+        <ul class="space-y-2.5 text-xs font-medium">
+          <li><a href="#" class="hover:text-white transition-colors" data-i18n="footerCareersJobs">Portal de Carreiras</a></li>
+          <li><a href="#" class="hover:text-white transition-colors" data-i18n="footerBlog">Blog de Engenharia</a></li>
+          <li><a href="#" class="hover:text-white transition-colors" data-i18n="footerCulture">Cultura e Valores</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Comunidad y Seguridad -->
+      <div>
+        <h4 class="text-xs font-black uppercase tracking-wider text-white mb-4" data-i18n="footerSafety">Segurança</h4>
+        <ul class="space-y-2.5 text-xs font-medium">
+          <li><a href="#safety" class="hover:text-white transition-colors" data-i18n="footerGuidelines">Diretrizes da Comunidade</a></li>
+          <li><a href="#safety" class="hover:text-white transition-colors" data-i18n="footerSafetyTips">Dicas de Segurança</a></li>
+          <li><a href="#safety" class="hover:text-white transition-colors" data-i18n="footerSafetyCenter">Centro de Segurança</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Redes Sociales -->
+      <div>
+        <h4 class="text-xs font-black uppercase tracking-wider text-white mb-4" data-i18n="footerSocial">Social</h4>
+        <ul class="space-y-2.5 text-xs font-medium">
+          <li><a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram mr-1.5"></i> Instagram</a></li>
+          <li><a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-tiktok mr-1.5"></i> TikTok</a></li>
+          <li><a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-youtube mr-1.5"></i> YouTube</a></li>
+          <li><a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-x-twitter mr-1.5"></i> Twitter / X</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 5: FAQs -->
+      <div>
+        <h4 class="text-xs font-black uppercase tracking-wider text-white mb-4" data-i18n="footerContact">Contacto</h4>
+        <ul class="space-y-2.5 text-xs font-medium">
+          <li><a href="/app" class="hover:text-white transition-colors" data-i18n="footerSupport">Suporte e Ajuda</a></li>
+          <li><a href="mailto:support@sigaleve.com" class="hover:text-white transition-colors" data-i18n="footerPress">Imprensa & Media</a></li>
+          <li><a href="/legal/terms" class="hover:text-white transition-colors" data-i18n="footerCustomerService">Apoio ao Utilizador</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom Legal Notice & Copyright -->
+    <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+      <div class="flex items-center gap-3">
+        <img src="/static/img/favicon-32x32.png" alt="Sigaleve" class="w-6 h-6 rounded-lg object-contain shadow"/>
+        <p data-i18n="footerCopyright">© 2026 Sigaleve, Inc. Todos os direitos reservados.</p>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <span data-i18n="footerGdpr">🇪🇺 Cumplimiento RGPD</span>
+        <span>•</span>
+        <span data-i18n="footer18">Uso estricto para mayores de 18 años</span>
+        <span>•</span>
+        <a href="/legal/privacy" class="hover:underline" data-i18n="footerPreferences">Preferencias de privacidad</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════
+// BASE DE DATOS DE MÁS DE 100 IDIOMAS INTERNACIONALES
+// ═══════════════════════════════════════════════════
+const GLOBAL_LANGUAGES = [
+  // Idiomas Principales
+  { code: 'es', name: 'Español', native: 'Español', flag: '🇪🇸' },
+  { code: 'pt', name: 'Português', native: 'Português', flag: '🇵🇹' },
+  { code: 'en', name: 'English', native: 'English', flag: '🇬🇧' },
+  { code: 'fr', name: 'Francés', native: 'Français', flag: '🇫🇷' },
+  { code: 'de', name: 'Alemán', native: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it', name: 'Italiano', native: 'Italiano', flag: '🇮🇹' },
+  { code: 'zh', name: 'Chino Mandarín', native: '中文 (简体)', flag: '🇨🇳' },
+  { code: 'ja', name: 'Japonés', native: '日本語', flag: '🇯🇵' },
+  { code: 'ko', name: 'Coreano', native: '한국어', flag: '🇰🇷' },
+  { code: 'ar', name: 'Árabe', native: 'العربية', flag: '🇸🇦' },
+  { code: 'ru', name: 'Ruso', native: 'Русский', flag: '🇷🇺' },
+  { code: 'hi', name: 'Hindi', native: 'हिन्दी', flag: '🇮🇳' },
+
+  // Idiomas Africanos
+  { code: 'sw', name: 'Suajili', native: 'Kiswahili', flag: '🇹🇿' },
+  { code: 'yo', name: 'Yoruba', native: 'Èdè Yorùbá', flag: '🇳🇬' },
+  { code: 'ha', name: 'Hausa', native: 'Harshen Hausa', flag: '🇳🇬' },
+  { code: 'ig', name: 'Igbo', native: 'Asụsụ Igbo', flag: '🇳🇬' },
+  { code: 'zu', name: 'Zulú', native: 'isiZulu', flag: '🇿🇦' },
+  { code: 'xh', name: 'Xhosa', native: 'isiXhosa', flag: '🇿🇦' },
+  { code: 'af', name: 'Afrikáans', native: 'Afrikaans', flag: '🇿🇦' },
+  { code: 'am', name: 'Amárico', native: 'አማርኛ', flag: '🇪🇹' },
+  { code: 'so', name: 'Somalí', native: 'Af-Soomaali', flag: '🇸🇴' },
+  { code: 'mg', name: 'Malgache', native: 'Malagasy', flag: '🇲🇬' },
+  { code: 'rw', name: 'Kinyarwanda', native: 'Ikinyarwanda', flag: '🇷🇼' },
+  { code: 'sn', name: 'Shona', native: 'chiShona', flag: '🇿🇼' },
+  { code: 'ln', name: 'Lingala', native: 'Lingála', flag: '🇨🇩' },
+
+  // Idiomas Europeos
+  { code: 'nl', name: 'Neerlandés', native: 'Nederlands', flag: '🇳🇱' },
+  { code: 'pl', name: 'Polaco', native: 'Polski', flag: '🇵🇱' },
+  { code: 'uk', name: 'Ucraniano', native: 'Українська', flag: '🇺🇦' },
+  { code: 'ro', name: 'Rumano', native: 'Română', flag: '🇷🇴' },
+  { code: 'el', name: 'Griego', native: 'Ελληνικά', flag: '🇬🇷' },
+  { code: 'cs', name: 'Checo', native: 'Čeština', flag: '🇨🇿' },
+  { code: 'sv', name: 'Sueco', native: 'Svenska', flag: '🇸🇪' },
+  { code: 'hu', name: 'Húngaro', native: 'Magyar', flag: '🇭🇺' },
+  { code: 'bg', name: 'Búlgaro', native: 'Български', flag: '🇧🇬' },
+  { code: 'da', name: 'Danés', native: 'Dansk', flag: '🇩🇰' },
+  { code: 'fi', name: 'Finlandés', native: 'Suomi', flag: '🇫🇮' },
+  { code: 'sk', name: 'Eslovaco', native: 'Slovenčina', flag: '🇸🇰' },
+  { code: 'no', name: 'Noruego', native: 'Norsk', flag: '🇳🇴' },
+  { code: 'hr', name: 'Croata', native: 'Hrvatski', flag: '🇭🇷' },
+  { code: 'sr', name: 'Serbio', native: 'Српски', flag: '🇷🇸' },
+  { code: 'lt', name: 'Lituano', native: 'Lietuvių', flag: '🇱🇹' },
+  { code: 'sl', name: 'Esloveno', native: 'Slovenščina', flag: '🇸🇮' },
+  { code: 'lv', name: 'Letón', native: 'Latviešu', flag: '🇱🇻' },
+  { code: 'et', name: 'Estonio', native: 'Eesti', flag: '🇪🇪' },
+  { code: 'is', name: 'Islandés', native: 'Íslenska', flag: '🇮🇸' },
+  { code: 'ga', name: 'Irlandés', native: 'Gaeilge', flag: '🇮🇪' },
+  { code: 'sq', name: 'Albanés', native: 'Shqip', flag: '🇦🇱' },
+  { code: 'mk', name: 'Macedonio', native: 'Македонски', flag: '🇲🇰' },
+  { code: 'bs', name: 'Bosnio', native: 'Bosanski', flag: '🇧🇦' },
+  { code: 'mt', name: 'Maltés', native: 'Malti', flag: '🇲🇹' },
+  { code: 'lb', name: 'Luxemburgués', native: 'Lëtzebuergesch', flag: '🇱🇺' },
+  { code: 'ca', name: 'Catalán', native: 'Català', flag: '🇪🇸' },
+  { code: 'gl', name: 'Gallego', native: 'Galego', flag: '🇪🇸' },
+  { code: 'eu', name: 'Euskera', native: 'Euskara', flag: '🇪🇸' },
+
+  // Idiomas de Asia y Oceanía
+  { code: 'tr', name: 'Turco', native: 'Türkçe', flag: '🇹🇷' },
+  { code: 'vi', name: 'Vietnamita', native: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: 'th', name: 'Tailandés', native: 'ไทย', flag: '🇹🇭' },
+  { code: 'id', name: 'Indonesio', native: 'Bahasa Indonesia', flag: '🇮🇩' },
+  { code: 'ms', name: 'Malayo', native: 'Bahasa Melayu', flag: '🇲🇾' },
+  { code: 'fil', name: 'Filipino / Tagalo', native: 'Wikang Filipino', flag: '🇵🇭' },
+  { code: 'fa', name: 'Persa / Farsi', native: 'فارسی', flag: '🇮🇷' },
+  { code: 'he', name: 'Hebreo', native: 'עברית', flag: '🇮🇱' },
+  { code: 'bn', name: 'Bengalí', native: 'বাংলা', flag: '🇧🇩' },
+  { code: 'pa', name: 'Panyabí', native: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
+  { code: 'mr', name: 'Maratí', native: 'मराठी', flag: '🇮🇳' },
+  { code: 'te', name: 'Telugu', native: 'తెలుగు', flag: '🇮🇳' },
+  { code: 'ta', name: 'Tamil', native: 'தமிழ்', flag: '🇮🇳' },
+  { code: 'ur', name: 'Urdu', native: 'اردو', flag: '🇵🇰' },
+  { code: 'gu', name: 'Guyaratí', native: 'ગુજરાતી', flag: '🇮🇳' },
+  { code: 'kn', name: 'Canarés', native: 'ಕನ್ನಡ', flag: '🇮🇳' },
+  { code: 'ml', name: 'Malayalam', native: 'മലയാളം', flag: '🇮🇳' },
+  { code: 'my', name: 'Birmano', native: 'မြန်မာစာ', flag: '🇲🇲' },
+  { code: 'km', name: 'Jemer', native: 'ភាសាខ្មែរ', flag: '🇰🇭' },
+  { code: 'lo', name: 'Lao', native: 'ພາສາລາວ', flag: '🇱🇦' },
+  { code: 'si', name: 'Cingalés', native: 'සිංහල', flag: '🇱🇰' },
+  { code: 'ne', name: 'Nepalí', native: 'नेपाली', flag: '🇳🇵' },
+  { code: 'mn', name: 'Mongol', native: 'Монгол хэл', flag: '🇲🇳' },
+  { code: 'ka', name: 'Georgiano', native: 'ქართული', flag: '🇬🇪' },
+  { code: 'hy', name: 'Armenio', native: 'Հայերեն', flag: '🇦🇲' },
+  { code: 'az', name: 'Azerbaiyano', native: 'Azərbaycan dili', flag: '🇦🇿' },
+  { code: 'kk', name: 'Kazajo', native: 'Қазақ тілі', flag: '🇰🇿' },
+  { code: 'uz', name: 'Uzbeko', native: 'Oʻzbekcha', flag: '🇺🇿' },
+  { code: 'sm', name: 'Samoano', native: 'Gagana Samoa', flag: '🇼🇸' },
+  { code: 'mi', name: 'Maorí', native: 'Te Reo Māori', flag: '🇳🇿' },
+  { code: 'fj', name: 'Fiyiano', native: 'Na Vosa Vakaviti', flag: '🇫🇯' },
+
+  // Idiomas Amerindios y Regionales Adicionales
+  { code: 'qu', name: 'Quechua', native: 'Runa Simi', flag: '🇵🇪' },
+  { code: 'gn', name: 'Guaraní', native: 'Avañeʼẽ', flag: '🇵🇾' },
+  { code: 'ay', name: 'Aimara', native: 'Aymar aru', flag: '🇧🇴' },
+  { code: 'cy', name: 'Galés', native: 'Cymraeg', flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿' },
+  { code: 'eo', name: 'Esperanto', native: 'Esperanto', flag: '🌐' },
+  { code: 'la', name: 'Latín', native: 'Latina', flag: '🏛️' }
+];
+
+// Diccionario de Traducciones Clave para la Landing Page
+const LANDING_TRANSLATIONS = {
+  es: {
+  "cardActiveNow": "Activa ahora",
+  "cardTopPick": "Top Pick",
+  "cardVerified": "Verificada",
+  "card1DistJob": "A 4 km de distancia • Diseñadora",
+  "card2DistJob": "A 2 km de distancia • Músico",
+  "card3DistJob": "A 6 km de distancia • Arquitecta",
+  "tagPhoto": "Fotografía",
+  "tagRedWine": "Vino Tinto",
+  "tagHiking": "Senderismo",
+  "tagJazz": "Jazz",
+  "tagCoffee": "Café",
+  "tagTravel": "Viajes",
+  "tagArt": "Arte",
+  "tagYoga": "Yoga",
+  "tagPets": "Mascotas",
+  "navProducts": "Productos",
+  "navDiscover": "Descubre",
+  "navSafety": "Seguridad",
+  "navStories": "Historias de éxito",
+  "navDownload": "Descargar",
+  "login": "Iniciar sesión",
+  "heroTagline": "Conecta con autenticidad. Sin juicios.",
+  "heroTitle": "Todo comienza con un",
+  "heroDesc": "La comunidad global más segura y libre de prejuicios. Encuentra personas reales que vibran en tu misma sintonía, a la distancia que tú elijas.",
+  "createAccount": "Crear una cuenta",
+  "howItWorks": "Cómo funciona",
+  "badgePrivate": "100% Privado y Cifrado",
+  "badgeMatches": "Matches en Tiempo Real",
+  "badgeVerified": "Solo +18 Verificados",
+  "featuresTag": "Experiencia Inmersiva",
+  "featuresTitle": "Diseñado para sentir la emoción de cada conexión",
+  "featuresDesc": "Nuestra mecánica de tarjetas de alta fidelidad te permite explorar personas cerca de ti de forma fluida, privada y respetuosa.",
+  "howTag": "Simple, Rápido y Seguro",
+  "howTitle": "¿Cómo funciona Sigaleve?",
+  "howSubtitle": "Conectar de verdad es cuestión de segundos. Diseñamos un proceso fluido para que encuentres tu match ideal con total confianza.",
+  "step1Title": "Crea tu Perfil Auténtico",
+  "step1Desc": "Sube tus mejores fotos desde la galería o la cámara en directo, elige tus pasiones y comparte tu biografía sin poses ni falsedad.",
+  "step1Highlight": "Verificación facial instantánea",
+  "step2Title": "Desliza & Haz Match",
+  "step2Desc": "Desliza a la derecha para dar Like o a la izquierda para pasar. Cuando ambos sienten la misma conexión, ¡se produce el Match mutuo!",
+  "step2Highlight": "Conexión mutua y respetuosa",
+  "step3Title": "Conversa & Conecta",
+  "step3Desc": "Habla en tiempo real en un chat protegido con cifrado de extremo a extremo. Comparte momentos, risas y organiza tu primera cita.",
+  "step3Highlight": "100% Privado y Cifrado",
+  "startNow": "Comenzar Ahora",
+  "productsTitle": "Eleva tu vida amorosa",
+  "productsSubtitle": "Accede a ventajas exclusivas y multiplica tus oportunidades de coincidir.",
+  "tierFreeDesc": "La experiencia clásica para conocer personas genuinas cerca de ti.",
+  "tierFreeF1": "Deslizar perfiles en tu zona",
+  "tierFreeF2": "Matches mutuos ilimitados",
+  "tierFreeF3": "Mensajería cifrada 24h",
+  "tierFreeF4": "Ubicación difusa protegida",
+  "tierFreeBtn": "Comenzar Gratis",
+  "tierPopularTag": "Más Popular",
+  "tierPlusDesc": "Likes ilimitados, Rebobinar y control total de quién te ve.",
+  "tierPlusF1": "Likes ilimitados cada día",
+  "tierPlusF2": "Rebobinar swipes accidentales",
+  "tierPlusF3": "Pasaporte a cualquier ciudad",
+  "tierPlusF4": "1 Boost gratis al mes",
+  "tierPlusF5": "Sin anuncios publicitarios",
+  "tierPlusBtn": "Obtener Sigaleve Plus",
+  "tierGoldDesc": "Descubre a quién le gustas antes de deslizar y ahorra tiempo.",
+  "tierGoldF1": "Saber quién te ha dado Like",
+  "tierGoldF2": "Matches instantáneos directos",
+  "tierGoldF3": "Top Picks seleccionados a diario",
+  "tierGoldF4": "Todo lo incluido en Sigaleve Plus",
+  "tierGoldBtn": "Obtener Gold",
+  "storiesTag": "Historias Reales",
+  "storiesTitle": "Todo comenzó con un Click",
+  "storiesSubtitle": "Miles de personas han encontrado amor, amistad y complicidad auténtica.",
+  "story1Text": "Entré en Sigaleve sin muchas expectativas y al tercer día hice match con Diego. Nos dimos cuenta de que compartíamos las mismas pasiones y la misma necesidad de hablar con total honestidad. Hoy llevamos un año viviendo juntos.",
+  "story1Author": "Amanda & Diego",
+  "story1Location": "Madrid, España",
+  "story2Text": "La privacidad era mi mayor preocupación. Con la verificación y el cifrado de datos pude estar tranquilo desde el primer segundo. Conocí a Elena, charlamos durante horas y el clic fue instantáneo.",
+  "story2Author": "Lucas & Elena",
+  "story2Location": "Lisboa, Portugal",
+  "story3Text": "Lo mejor es que la gente aquí es real y directa. No hay poses forzadas. Hicimos match por un Super Like, quedamos a tomar un café y desde ese día no nos hemos separado. ¡Gracias Sigaleve!",
+  "story3Author": "Carla & Miguel",
+  "story3Location": "Barcelona, España",
+  "safetyTag": "Seguridad Primero",
+  "safetyTitle": "Tu tranquilidad y privacidad son nuestra prioridad absoluta",
+  "safetyDesc": "Desarrollamos herramientas de seguridad avanzadas en cada conversación y perfil para que puedas conocer nuevas personas sintiéndote en control.",
+  "safetyF1Title": "Cifrado de Extremo a Extremo",
+  "safetyF1Desc": "Tus datos confidenciales de perfil se almacenan bajo rigurosos protocolos de cifrado y nunca son expuestos a terceros.",
+  "safetyF2Title": "Ubicación Difusa Inteligente",
+  "safetyF2Desc": "Nunca revelamos tus coordenadas exactas. Solo mostramos un radio de proximidad general para salvaguardar tu hogar y rutina.",
+  "safetyF3Title": "Verificación Real de Fotos",
+  "safetyF3Desc": "Comprueba que la persona con la que hablas coincide fielmente con las fotos de su galería mediante verificación facial.",
+  "safetyCardTitle": "Safety Center 24/7",
+  "safetyCardDesc": "Bloquea, reporta o deshaz matches en cualquier momento con un solo toque sin explicaciones.",
+  "safetyGuidelinesBtn": "Leer Directrices de la Comunidad",
+  "downloadTitle": "¿Listo para dar el siguiente paso?",
+  "downloadSubtitle": "Únete hoy a miles de personas que eligen conectar con autenticidad, empatía y sin juicios.",
+  "createAccountNow": "Crear mi cuenta ahora",
+  "openWebVersion": "Abrir versión Web",
+  "footerLegal": "Legal",
+  "footerPrivacy": "Privacidad",
+  "footerTerms": "Términos y Condiciones",
+  "footerCookies": "Política de Cookies",
+  "footerIntellectual": "Propiedad Intelectual",
+  "footerCareers": "Empleo",
+  "footerCareersJobs": "Portal de Empleo",
+  "footerBlog": "Blog de Ingeniería",
+  "footerCulture": "Cultura y Valores",
+  "footerSafety": "Seguridad",
+  "footerGuidelines": "Directrices de la Comunidad",
+  "footerSafetyTips": "Consejos de Seguridad",
+  "footerSafetyCenter": "Centro de Seguridad",
+  "footerSocial": "Social",
+  "footerContact": "Contacto",
+  "footerSupport": "Soporte y Ayuda",
+  "footerPress": "Prensa & Medios",
+  "footerCustomerService": "Atención al Usuario",
+  "footerCopyright": "© 2026 Sigaleve, Inc. Todos los derechos reservados.",
+  "footerGdpr": "🇪🇺 Cumplimiento RGPD",
+  "footer18": "Uso estricto para mayores de 18 años",
+  "footerPreferences": "Preferencias de privacidad"
+},
+  pt: {
+  "cardActiveNow": "Ativa agora",
+  "cardTopPick": "Top Pick",
+  "cardVerified": "Verificada",
+  "card1DistJob": "A 4 km de distância • Designer",
+  "card2DistJob": "A 2 km de distância • Músico",
+  "card3DistJob": "A 6 km de distância • Arquiteta",
+  "tagPhoto": "Fotografia",
+  "tagRedWine": "Vinho Tinto",
+  "tagHiking": "Caminhadas",
+  "tagJazz": "Jazz",
+  "tagCoffee": "Café",
+  "tagTravel": "Viagens",
+  "tagArt": "Arte",
+  "tagYoga": "Yoga",
+  "tagPets": "Animais",
+  "navProducts": "Produtos",
+  "navDiscover": "Descobrir",
+  "navSafety": "Segurança",
+  "navStories": "Histórias de Sucesso",
+  "navDownload": "Descarregar",
+  "login": "Iniciar Sessão",
+  "heroTagline": "NAMORO PARA PESSOAS COM INFEÇÕES SEXUALMENTE TRANSMISSÍVEIS",
+  "heroTitle": "Amor sem preconceitos. Conexões com quem entende. Viva novas histórias.",
+  "heroDesc": "A primeira comunidade de namoro de Portugal para pessoas que vivem com infeções sexualmente transmissíveis (herpes, HPV, VIH e outras). Conhece pessoas que entendem o teu caminho, sem julgamentos e com total privacidade.",
+  "createAccount": "Criar minha conta grátis",
+  "howItWorks": "Como funciona",
+  "badgePrivate": "100% Privado e Encriptado",
+  "badgeMatches": "Matches em Tempo Real",
+  "badgeVerified": "Apenas +18 Verificados",
+  "featuresTag": "Experiência Imersiva",
+  "featuresTitle": "Desenhado para sentir a emoção de cada conexão",
+  "featuresDesc": "A nossa dinâmica de cartões de alta fidelidade permite explorar pessoas perto de ti de forma fluida, privada e respeitosa.",
+  "howTag": "Simples, Rápido e Seguro",
+  "howTitle": "Como funciona o Sigaleve?",
+  "howSubtitle": "Conectar de verdade é uma questão de segundos. Desenhamos um processo fluido para encontrares o teu par ideal com total confiança.",
+  "step1Title": "Cria o teu Perfil Autêntico",
+  "step1Desc": "Carrega as tuas melhores fotos da galeria ou da câmara em direto, escolhe as tuas paixões e partilha a tua biografia com sinceridade.",
+  "step1Highlight": "Verificação facial instantânea",
+  "step2Title": "Desliza & Faz Match",
+  "step2Desc": "Desliza para a direita para dar Like ou para a esquerda para passar. Quando ambos sentem a mesma conexão, dá-se o Match mútuo!",
+  "step2Highlight": "Conexão mútua e respeitosa",
+  "step3Title": "Conversa & Conecta",
+  "step3Desc": "Conversa em tempo real num chat protegido com encriptação de ponta a ponta. Partilha momentos e organiza o teu primeiro encontro.",
+  "step3Highlight": "100% Privado e Encriptado",
+  "startNow": "Começar Agora",
+  "productsTitle": "Eleva a tua vida amorosa",
+  "productsSubtitle": "Acede a vantagens exclusivas e multiplica as tuas oportunidades de coincidir.",
+  "tierFreeDesc": "A experiência clássica para conhecer pessoas genuínas perto de ti.",
+  "tierFreeF1": "Deslizar perfis na tua área",
+  "tierFreeF2": "Matches mútuos ilimitados",
+  "tierFreeF3": "Mensagens encriptadas 24h",
+  "tierFreeF4": "Localização aproximada protegida",
+  "tierFreeBtn": "Começar Grátis",
+  "tierPopularTag": "Mais Popular",
+  "tierPlusDesc": "Likes ilimitados, Voltar Atrás e controlo total sobre quem te vê.",
+  "tierPlusF1": "Likes ilimitados todos os dias",
+  "tierPlusF2": "Voltar atrás em swipes acidentais",
+  "tierPlusF3": "Passaporte para qualquer cidade",
+  "tierPlusF4": "1 Boost grátis por mês",
+  "tierPlusF5": "Sem anúncios publicitários",
+  "tierPlusBtn": "Obter Sigaleve Plus",
+  "tierGoldDesc": "Descobre quem gosta de ti antes de deslizar e poupa tempo.",
+  "tierGoldF1": "Saber quem te deu Like",
+  "tierGoldF2": "Matches instantâneos diretos",
+  "tierGoldF3": "Top Picks selecionados diariamente",
+  "tierGoldF4": "Tudo o que está incluído no Sigaleve Plus",
+  "tierGoldBtn": "Obter Gold",
+  "storiesTag": "Histórias Reais",
+  "storiesTitle": "Tudo começou com um Click",
+  "storiesSubtitle": "Milhares de pessoas já encontraram amor, amizade e cumplicidade autêntica.",
+  "story1Text": "Entrei no Sigaleve sem grandes expectativas e ao terceiro dia dei match com o Diego. Percebemos que partilhávamos as mesmas paixões e a mesma vontade de falar com honestidade. Hoje já vivemos juntos há um ano.",
+  "story1Author": "Amanda & Diego",
+  "story1Location": "Madrid, Espanha",
+  "story2Text": "A privacidade era a minha maior preocupação. Com a verificação e a encriptação de dados pude sentir-me tranquilo desde o primeiro segundo. Conheci a Elena, conversámos durante horas e o clique foi imediato.",
+  "story2Author": "Lucas & Elena",
+  "story2Location": "Lisboa, Portugal",
+  "story3Text": "O melhor é que as pessoas aqui são reais e diretas. Sem poses forçadas. Demos match por um Super Like, fomos tomar um café e desde esse dia nunca mais nos largámos. Obrigado Sigaleve!",
+  "story3Author": "Carla & Miguel",
+  "story3Location": "Barcelona, Espanha",
+  "safetyTag": "Segurança em Primeiro Lugar",
+  "safetyTitle": "A tua tranquilidade e privacidade são a nossa prioridade absoluta",
+  "safetyDesc": "Desenvolvemos ferramentas de segurança avançadas em cada conversa e perfil para que possas conhecer novas pessoas sentindo-te sempre no controlo.",
+  "safetyF1Title": "Encriptação de Ponta a Ponta",
+  "safetyF1Desc": "Os teus dados confidenciais de perfil são guardados sob rigorosos protocolos de encriptação e nunca são expostos a terceiros.",
+  "safetyF2Title": "Localização Aproximada Inteligente",
+  "safetyF2Desc": "Nunca revelamos as tuas coordenadas exatas. Apenas mostramos um raio aproximado para proteger a tua casa e rotina.",
+  "safetyF3Title": "Verificação Real de Fotos",
+  "safetyF3Desc": "Confirma que a pessoa com quem conversas corresponde fielmente às fotos da sua galeria através de verificação facial.",
+  "safetyCardTitle": "Centro de Segurança 24/7",
+  "safetyCardDesc": "Bloqueia, denuncia ou desfaz matches a qualquer momento com apenas um toque, sem explicações.",
+  "safetyGuidelinesBtn": "Ler Diretrizes da Comunidade",
+  "downloadTitle": "Pronto para dar o próximo passo?",
+  "downloadSubtitle": "Junta-te hoje a milhares de pessoas que escolhem conectar com autenticidade, empatia e sem julgamentos.",
+  "createAccountNow": "Criar a minha conta agora",
+  "openWebVersion": "Abrir versão Web",
+  "footerLegal": "Legal",
+  "footerPrivacy": "Privacidade",
+  "footerTerms": "Termos e Condições",
+  "footerCookies": "Política de Cookies",
+  "footerIntellectual": "Propriedade Intelectual",
+  "footerCareers": "Emprego",
+  "footerCareersJobs": "Portal de Carreiras",
+  "footerBlog": "Blog de Engenharia",
+  "footerCulture": "Cultura e Valores",
+  "footerSafety": "Segurança",
+  "footerGuidelines": "Diretrizes da Comunidade",
+  "footerSafetyTips": "Dicas de Segurança",
+  "footerSafetyCenter": "Centro de Segurança",
+  "footerSocial": "Social",
+  "footerContact": "Contacto",
+  "footerSupport": "Suporte e Ajuda",
+  "footerPress": "Imprensa & Media",
+  "footerCustomerService": "Apoio ao Utilizador",
+  "footerCopyright": "© 2026 Sigaleve, Inc. Todos os direitos reservados.",
+  "footerGdpr": "🇪🇺 Conformidade RGPD",
+  "footer18": "Uso estrito para maiores de 18 anos",
+  "footerPreferences": "Preferências de privacidade"
+},
+  en: {
+  "cardActiveNow": "Active now",
+  "cardTopPick": "Top Pick",
+  "cardVerified": "Verified",
+  "card1DistJob": "4 km away • Designer",
+  "card2DistJob": "2 km away • Musician",
+  "card3DistJob": "6 km away • Architect",
+  "tagPhoto": "Photography",
+  "tagRedWine": "Red Wine",
+  "tagHiking": "Hiking",
+  "tagJazz": "Jazz",
+  "tagCoffee": "Coffee",
+  "tagTravel": "Travel",
+  "tagArt": "Art",
+  "tagYoga": "Yoga",
+  "tagPets": "Pets",
+  "navProducts": "Products",
+  "navDiscover": "Discover",
+  "navSafety": "Safety",
+  "navStories": "Success Stories",
+  "navDownload": "Download",
+  "login": "Log in",
+  "heroTagline": "Connect authentically. No judgments.",
+  "heroTitle": "It all starts with a",
+  "heroDesc": "The safest, judgment-free global community. Meet authentic people who share your vibe, wherever and whenever you want.",
+  "createAccount": "Create an account",
+  "howItWorks": "How it works",
+  "badgePrivate": "100% Private & Encrypted",
+  "badgeMatches": "Real-Time Matches",
+  "badgeVerified": "18+ Verified Only",
+  "featuresTag": "Immersive Experience",
+  "featuresTitle": "Designed to feel the thrill of every connection",
+  "featuresDesc": "Our high-fidelity card swipe mechanics let you explore people near you smoothly, privately, and respectfully.",
+  "howTag": "Simple, Fast & Secure",
+  "howTitle": "How does Sigaleve work?",
+  "howSubtitle": "Making genuine connections takes seconds. We crafted a seamless journey so you can find your ideal match with total confidence.",
+  "step1Title": "Create your Authentic Profile",
+  "step1Desc": "Upload your best photos from your gallery or live camera, select your passions, and share your bio with complete honesty.",
+  "step1Highlight": "Instant facial photo verification",
+  "step2Title": "Swipe & Match",
+  "step2Desc": "Swipe right to Like or left to pass. When both feel that spark, an instant mutual Match happens!",
+  "step2Highlight": "Mutual & respectful connection",
+  "step3Title": "Chat & Connect",
+  "step3Desc": "Talk in real time in a private chat protected with end-to-end encryption. Share laughs and plan your first date.",
+  "step3Highlight": "100% Private & Encrypted",
+  "startNow": "Start Now",
+  "productsTitle": "Elevate your dating journey",
+  "productsSubtitle": "Unlock exclusive perks and multiply your chances to match.",
+  "tierFreeDesc": "The classic experience to meet genuine people near you.",
+  "tierFreeF1": "Swipe profiles in your area",
+  "tierFreeF2": "Unlimited mutual matches",
+  "tierFreeF3": "24/7 encrypted messaging",
+  "tierFreeF4": "Protected fuzzy location",
+  "tierFreeBtn": "Start for Free",
+  "tierPopularTag": "Most Popular",
+  "tierPlusDesc": "Unlimited Likes, Rewind, and complete control over who sees you.",
+  "tierPlusF1": "Unlimited Likes every day",
+  "tierPlusF2": "Rewind accidental swipes",
+  "tierPlusF3": "Passport to any city in the world",
+  "tierPlusF4": "1 Free Boost per month",
+  "tierPlusF5": "Zero advertisements",
+  "tierPlusBtn": "Get Sigaleve Plus",
+  "tierGoldDesc": "See who Likes you before you swipe and save valuable time.",
+  "tierGoldF1": "See who has already Liked you",
+  "tierGoldF2": "Instant direct matches",
+  "tierGoldF3": "Daily curated Top Picks",
+  "tierGoldF4": "Everything included in Sigaleve Plus",
+  "tierGoldBtn": "Get Gold",
+  "storiesTag": "Real Stories",
+  "storiesTitle": "It all started with a Swipe",
+  "storiesSubtitle": "Thousands of people have found authentic love, friendship, and genuine chemistry.",
+  "story1Text": "I joined Sigaleve without high expectations and on the third day I matched with Diego. We quickly realized we shared the exact same passions and love for honest conversations. Today we have been living together for a year.",
+  "story1Author": "Amanda & Diego",
+  "story1Location": "Madrid, Spain",
+  "story2Text": "Privacy was my biggest concern. With profile verification and data encryption, I felt completely secure from the first second. I met Elena, chatted for hours, and the click was instantaneous.",
+  "story2Author": "Lucas & Elena",
+  "story2Location": "Lisbon, Portugal",
+  "story3Text": "The best part is people here are real and straightforward. No forced poses. We matched through a Super Like, met for coffee, and we haven't been apart since. Thank you Sigaleve!",
+  "story3Author": "Carla & Miguel",
+  "story3Location": "Barcelona, Spain",
+  "safetyTag": "Safety First",
+  "safetyTitle": "Your peace of mind and privacy are our top priority",
+  "safetyDesc": "We build advanced safety and privacy tools into every conversation and profile so you feel empowered and protected at every step.",
+  "safetyF1Title": "End-to-End Encryption",
+  "safetyF1Desc": "Your confidential profile information is stored using strict encryption standards and is never shared with third parties.",
+  "safetyF2Title": "Smart Fuzzy Location",
+  "safetyF2Desc": "We never expose your exact GPS coordinates. We only display an approximate proximity radius to keep your home safe.",
+  "safetyF3Title": "Real Photo Verification",
+  "safetyF3Desc": "Verify that the person you are chatting with truly matches their profile photos through real-time facial verification.",
+  "safetyCardTitle": "24/7 Safety Center",
+  "safetyCardDesc": "Block, report, or unmatch anyone at any time with a single tap, no questions asked.",
+  "safetyGuidelinesBtn": "Read Community Guidelines",
+  "downloadTitle": "Ready to take the next step?",
+  "downloadSubtitle": "Join thousands of people today who choose to connect authentically, with empathy and zero judgment.",
+  "createAccountNow": "Create my account now",
+  "openWebVersion": "Open Web Version",
+  "footerLegal": "Legal",
+  "footerPrivacy": "Privacy Policy",
+  "footerTerms": "Terms of Service",
+  "footerCookies": "Cookie Policy",
+  "footerIntellectual": "Intellectual Property",
+  "footerCareers": "Careers",
+  "footerCareersJobs": "Job Openings",
+  "footerBlog": "Engineering Blog",
+  "footerCulture": "Culture & Values",
+  "footerSafety": "Safety",
+  "footerGuidelines": "Community Guidelines",
+  "footerSafetyTips": "Safety Tips",
+  "footerSafetyCenter": "Safety Center",
+  "footerSocial": "Social",
+  "footerContact": "Contact",
+  "footerSupport": "Help & Support",
+  "footerPress": "Press & Media",
+  "footerCustomerService": "User Care",
+  "footerCopyright": "© 2026 Sigaleve, Inc. All rights reserved.",
+  "footerGdpr": "🇪🇺 GDPR Compliant",
+  "footer18": "Strictly for 18+ adults",
+  "footerPreferences": "Privacy Preferences"
+},
+  fr: {
+  "cardActiveNow": "En ligne actuellement",
+  "cardTopPick": "Coup de Cœur",
+  "cardVerified": "Vérifiée",
+  "card1DistJob": "À 4 km • Designer",
+  "card2DistJob": "À 2 km • Musicien",
+  "card3DistJob": "À 6 km • Architecte",
+  "tagPhoto": "Photographie",
+  "tagRedWine": "Vin Rouge",
+  "tagHiking": "Randonnée",
+  "tagJazz": "Jazz",
+  "tagCoffee": "Café",
+  "tagTravel": "Voyages",
+  "tagArt": "Art",
+  "tagYoga": "Yoga",
+  "tagPets": "Animaux",
+  "navProducts": "Produits",
+  "navDiscover": "Découvrir",
+  "navSafety": "Sécurité",
+  "navStories": "Témoignages",
+  "navDownload": "Télécharger",
+  "login": "Se connecter",
+  "heroTagline": "Connectez-vous avec authenticité. Sans jugement.",
+  "heroTitle": "Tout commence par un",
+  "heroDesc": "La communauté mondiale la plus sûre et bienveillante. Rencontrez des personnes qui partagent vos valeurs, à votre rythme.",
+  "createAccount": "Créer un compte",
+  "howItWorks": "Comment ça marche",
+  "badgePrivate": "100% Privé et Chiffré",
+  "badgeMatches": "Matches en Temps Réel",
+  "badgeVerified": "Réservé aux +18 Vérifiés",
+  "featuresTag": "Expérience Immersive",
+  "featuresTitle": "Conçu pour ressentir l'émotion de chaque connexion",
+  "featuresDesc": "Notre mécanique de cartes haute fidélité vous permet d'explorer les profils proches de manière fluide et respectueuse.",
+  "howTag": "Simple, Rapide et Sûr",
+  "howTitle": "Comment fonctionne Sigaleve ?",
+  "howSubtitle": "Se connecter prend quelques secondes. Nous avons conçu une expérience intuitive pour trouver votre match en toute sérénité.",
+  "step1Title": "Créez votre Profil Authentique",
+  "step1Desc": "Ajoutez vos meilleures photos, indiquez vos centres d'intérêt et rédigez votre bio en toute sincérité.",
+  "step1Highlight": "Vérification photo instantanée",
+  "step2Title": "Glissez & Matchez",
+  "step2Desc": "Glissez vers la droite pour un Like ou vers la gauche pour passer. Si c'est réciproque, c'est un Match !",
+  "step2Highlight": "Connexion mutuelle et respectueuse",
+  "step3Title": "Discutez & Connectez",
+  "step3Desc": "Échangez en direct dans un chat sécurisé avec chiffrement de bout en bout. Préparez votre première rencontre.",
+  "step3Highlight": "100% Privé et Chiffré",
+  "startNow": "Commencer Maintenant",
+  "productsTitle": "Sublimez votre vie amoureuse",
+  "productsSubtitle": "Accédez à des privilèges exclusifs et multipliez vos chances de rencontre.",
+  "tierFreeDesc": "L'expérience classique pour rencontrer des personnes authentiques autour de vous.",
+  "tierFreeF1": "Découvrir des profils locaux",
+  "tierFreeF2": "Matches mutuels illimités",
+  "tierFreeF3": "Messagerie sécurisée 24h/24",
+  "tierFreeF4": "Localisation approximative protégée",
+  "tierFreeBtn": "Commencer Gratuitement",
+  "tierPopularTag": "Le Plus Populaire",
+  "tierPlusDesc": "Likes illimités, Annuler et contrôle total de votre visibilité.",
+  "tierPlusF1": "Likes illimités chaque jour",
+  "tierPlusF2": "Annuler les swipes accidentels",
+  "tierPlusF3": "Passeport pour toutes les villes",
+  "tierPlusF4": "1 Boost gratuit par mois",
+  "tierPlusF5": "Aucune publicité",
+  "tierPlusBtn": "Obtenir Sigaleve Plus",
+  "tierGoldDesc": "Découvrez qui a liké votre profil avant de swiper et gagnez du temps.",
+  "tierGoldF1": "Voir qui vous a déjà liké",
+  "tierGoldF2": "Matches directs instantanés",
+  "tierGoldF3": "Sélection quotidienne Top Picks",
+  "tierGoldF4": "Tous les avantages de Sigaleve Plus",
+  "tierGoldBtn": "Obtenir Gold",
+  "storiesTag": "Histoires Vraies",
+  "storiesTitle": "Tout a commencé par un Swipe",
+  "storiesSubtitle": "Des milliers de personnes ont déjà trouvé l'amour, l'amitié et la complicité.",
+  "story1Text": "J'ai rejoint Sigaleve sans grandes attentes et au bout du troisième jour j'ai matché avec Diego. Nous avons vite réalisé que nous partagions les mêmes passions et la même envie d'authenticité. Aujourd'hui, nous vivons ensemble depuis un an.",
+  "story1Author": "Amanda & Diego",
+  "story1Location": "Madrid, Espagne",
+  "story2Text": "La confidentialité était ma priorité absolue. Avec la vérification de profil et le chiffrement des données, j'ai eu confiance dès la première seconde. J'ai rencontré Elena, on a discuté des heures et le déclic a été immédiat.",
+  "story2Author": "Lucas & Elena",
+  "story2Location": "Lisbonne, Portugal",
+  "story3Text": "Ce qu'il y a de mieux ici, c'est la franchise des gens. Aucune pose forcée. On a matché grâce à un Super Like, pris un café et depuis ce jour on ne s'est plus quittés. Merci Sigaleve !",
+  "story3Author": "Carla & Miguel",
+  "story3Location": "Barcelone, Espagne",
+  "safetyTag": "Sécurité Avant Tout",
+  "safetyTitle": "Votre tranquillité et votre vie privée sont notre priorité absolue",
+  "safetyDesc": "Nous concevons des outils de protection avancés pour que chaque rencontre se déroule en toute sérénité.",
+  "safetyF1Title": "Chiffrement de Bout en Bout",
+  "safetyF1Desc": "Vos données personnelles sont protégées par les protocoles de chiffrement les plus stricts.",
+  "safetyF2Title": "Localisation Floue Intelligente",
+  "safetyF2Desc": "Vos coordonnées exactes ne sont jamais divulguées, protégeant ainsi votre vie privée.",
+  "safetyF3Title": "Vérification Photo Réelle",
+  "safetyF3Desc": "Assurez-vous que votre interlocuteur correspond bien à ses photos grâce à notre technologie certifiée.",
+  "safetyCardTitle": "Centre de Sécurité 24/7",
+  "safetyCardDesc": "Bloquez, signalez ou retirez un match d'un simple geste à tout instant.",
+  "safetyGuidelinesBtn": "Lire les Règles de la Communauté",
+  "downloadTitle": "Prêt(e) à franchir le pas ?",
+  "downloadSubtitle": "Rejoignez dès aujourd'hui une communauté bienveillante qui valorise l'authenticité.",
+  "createAccountNow": "Créer mon compte maintenant",
+  "openWebVersion": "Ouvrir la version Web",
+  "footerLegal": "Légal",
+  "footerPrivacy": "Confidentialité",
+  "footerTerms": "Conditions d'utilisation",
+  "footerCookies": "Politique de cookies",
+  "footerIntellectual": "Propriété intellectuelle",
+  "footerCareers": "Carrières",
+  "footerCareersJobs": "Offres d'emploi",
+  "footerBlog": "Blog Technique",
+  "footerCulture": "Culture & Valeurs",
+  "footerSafety": "Sécurité",
+  "footerGuidelines": "Règles communautaires",
+  "footerSafetyTips": "Conseils de sécurité",
+  "footerSafetyCenter": "Centre de sécurité",
+  "footerSocial": "Social",
+  "footerContact": "Contact",
+  "footerSupport": "Aide & Support",
+  "footerPress": "Presse & Médias",
+  "footerCustomerService": "Service Utilisateur",
+  "footerCopyright": "© 2026 Sigaleve, Inc. Tous droits réservés.",
+  "footerGdpr": "🇪🇺 Conforme RGPD",
+  "footer18": "Strictement réservé aux adultes de 18+",
+  "footerPreferences": "Préférences de confidentialité"
+},
+  it: {
+  "cardActiveNow": "Attiva adesso",
+  "cardTopPick": "Top Pick",
+  "cardVerified": "Verificata",
+  "card1DistJob": "A 4 km di distanza • Designer",
+  "card2DistJob": "A 2 km di distanza • Musicista",
+  "card3DistJob": "A 6 km di distanza • Architetta",
+  "tagPhoto": "Fotografia",
+  "tagRedWine": "Vino Rosso",
+  "tagHiking": "Escursionismo",
+  "tagJazz": "Jazz",
+  "tagCoffee": "Caffè",
+  "tagTravel": "Viaggi",
+  "tagArt": "Arte",
+  "tagYoga": "Yoga",
+  "tagPets": "Animali",
+  "navProducts": "Prodotti",
+  "navDiscover": "Scopri",
+  "navSafety": "Sicurezza",
+  "navStories": "Storie di Successo",
+  "navDownload": "Scarica",
+  "login": "Accedi",
+  "heroTagline": "Connettiti con autenticità. Senza giudizi.",
+  "heroTitle": "Tutto comincia con un",
+  "heroDesc": "La comunità globale più sicura e priva di pregiudizi. Incontra persone autentiche che vibrano sulla tua stessa frequenza, alla distanza che preferisci.",
+  "createAccount": "Crea un account",
+  "howItWorks": "Come funziona",
+  "badgePrivate": "100% Privato e Crittografato",
+  "badgeMatches": "Affinità in Tempo Reale",
+  "badgeVerified": "Solo 18+ Verificati",
+  "featuresTag": "Esperienza Immersiva",
+  "featuresTitle": "Progettato per farti vivere l'emozione di ogni connessione",
+  "featuresDesc": "La nostra meccanica di schede ad alta fedeltà ti consente di scoprire persone vicino a te in modo fluido, riservato e rispettoso.",
+  "howTag": "Semplice, Veloce e Sicuro",
+  "howTitle": "Come funziona Sigaleve?",
+  "howSubtitle": "Connettersi davvero è questione di secondi. Abbiamo creato un percorso fluido per farti trovare la persona ideale in totale sicurezza.",
+  "step1Title": "Crea il tuo Profilo Autentico",
+  "step1Desc": "Carica le tue foto migliori dalla galleria o scattale direttamente con la fotocamera, scegli le tue passioni e scrivi la tua bio in tutta sincerità.",
+  "step1Highlight": "Verifica facciale istantanea delle foto",
+  "step2Title": "Scorri & Trova Affinità",
+  "step2Desc": "Scorri a destra per mettere Mi Piace o a sinistra per passare oltre. Quando l'interesse è reciproco, scatta subito l'Affinità!",
+  "step2Highlight": "Connessione reciproca e rispettosa",
+  "step3Title": "Chatta & Connettiti",
+  "step3Desc": "Parla in tempo reale in una chat protetta con crittografia end-to-end. Condividi momenti e organizza il tuo primo appuntamento.",
+  "step3Highlight": "100% Privato e Crittografato",
+  "startNow": "Inizia Ora",
+  "productsTitle": "Migliora la tua vita sentimentale",
+  "productsSubtitle": "Accedi a vantaggi esclusivi e moltiplica le tue opportunità di incontro.",
+  "tierFreeDesc": "L'esperienza classica per conoscere persone autentiche vicino a te.",
+  "tierFreeF1": "Scorri profili nella tua zona",
+  "tierFreeF2": "Affinità reciproche illimitate",
+  "tierFreeF3": "Messaggistica crittografata 24/7",
+  "tierFreeF4": "Posizione approssimativa protetta",
+  "tierFreeBtn": "Inizia Gratis",
+  "tierPopularTag": "Più Popolare",
+  "tierPlusDesc": "Mi Piace illimitati, Annulla swipe e pieno controllo su chi ti vede.",
+  "tierPlusF1": "Mi Piace illimitati ogni giorno",
+  "tierPlusF2": "Annulla swipe accidentali",
+  "tierPlusF3": "Passaporto per qualsiasi città nel mondo",
+  "tierPlusF4": "1 Boost gratuito al mese",
+  "tierPlusF5": "Nessuna pubblicità",
+  "tierPlusBtn": "Ottieni Sigaleve Plus",
+  "tierGoldDesc": "Scopri a chi piaci prima di scorrere e risparmia tempo prezioso.",
+  "tierGoldF1": "Scopri chi ti ha già messo Mi Piace",
+  "tierGoldF2": "Affinità istantanee e dirette",
+  "tierGoldF3": "Top Picks selezionati ogni giorno",
+  "tierGoldF4": "Tutto ciò che include Sigaleve Plus",
+  "tierGoldBtn": "Ottieni Gold",
+  "storiesTag": "Storie Vere",
+  "storiesTitle": "Tutto è iniziato con un Click",
+  "storiesSubtitle": "Migliaia di persone hanno trovato amore, amicizia e complicità autentica.",
+  "story1Text": "Sono entrata su Sigaleve senza grandi aspettative e al terzo giorno ho trovato l'affinità con Diego. Ci siamo accorti di condividere le stesse passioni e lo stesso bisogno di parlare con totale sincerità. Oggi conviviamo felicemente da un anno.",
+  "story1Author": "Amanda & Diego",
+  "story1Location": "Madrid, Spagna",
+  "story2Text": "La privacy era la mia preoccupazione principale. Con la verifica del profilo e la crittografia dei dati mi sono sentito tranquillo sin dal primo secondo. Ho conosciuto Elena, abbiamo parlato per ore e la scintilla è scattata all'istante.",
+  "story2Author": "Lucas & Elena",
+  "story2Location": "Lisbona, Portogallo",
+  "story3Text": "Il bello è che qui le persone sono autentiche e dirette. Niente pose finte. Abbiamo fatto match con un Super Like, ci siamo visti per un caffè e da quel giorno non ci siamo più separati. Grazie Sigaleve!",
+  "story3Author": "Carla & Miguel",
+  "story3Location": "Barcellona, Spagna",
+  "safetyTag": "La Sicurezza Prima di Tutto",
+  "safetyTitle": "La tua tranquillità e privacy sono la nostra priorità assoluta",
+  "safetyDesc": "Sviluppiamo strumenti di protezione avanzati in ogni chat e profilo affinché tu possa incontrare nuove persone sentendoti sempre al sicuro.",
+  "safetyF1Title": "Crittografia End-to-End",
+  "safetyF1Desc": "I tuoi dati riservati sono archiviati secondo rigidi standard di sicurezza crittografica e mai condivisi con terzi.",
+  "safetyF2Title": "Posizione Approssimativa Intelligente",
+  "safetyF2Desc": "Non riveliamo mai le tue coordinate GPS esatte. Mostriamo solo un raggio di vicinanza indicativo per tutelare la tua privacy.",
+  "safetyF3Title": "Verifica Reale delle Foto",
+  "safetyF3Desc": "Verifica che la persona con cui chatti corrisponda realmente alle sue foto tramite verifica biometrica istantanea.",
+  "safetyCardTitle": "Centro di Sicurezza 24/7",
+  "safetyCardDesc": "Blocca, segnala o annulla affinità in qualsiasi momento con un solo tocco, senza spiegazioni.",
+  "safetyGuidelinesBtn": "Leggi le Linee Guida della Community",
+  "downloadTitle": "Pronto a fare il prossimo passo?",
+  "downloadSubtitle": "Unisciti oggi a migliaia di persone che scelgono di connettersi con autenticità, empatia e senza giudizi.",
+  "createAccountNow": "Crea il mio account adesso",
+  "openWebVersion": "Apri versione Web",
+  "footerLegal": "Legale",
+  "footerPrivacy": "Informativa sulla Privacy",
+  "footerTerms": "Termini e Condizioni",
+  "footerCookies": "Informativa sui Cookie",
+  "footerIntellectual": "Proprietà Intellettuale",
+  "footerCareers": "Lavora con noi",
+  "footerCareersJobs": "Posizioni Aperte",
+  "footerBlog": "Blog Tecnico",
+  "footerCulture": "Cultura e Valori",
+  "footerSafety": "Sicurezza",
+  "footerGuidelines": "Linee Guida della Community",
+  "footerSafetyTips": "Consigli di Sicurezza",
+  "footerSafetyCenter": "Centro di Sicurezza",
+  "footerSocial": "Social",
+  "footerContact": "Contatti",
+  "footerSupport": "Assistenza e Supporto",
+  "footerPress": "Stampa e Media",
+  "footerCustomerService": "Supporto Utenti",
+  "footerCopyright": "© 2026 Sigaleve, Inc. Tutti i diritti riservati.",
+  "footerGdpr": "🇪🇺 Conforme al GDPR",
+  "footer18": "Riservato esclusivamente a maggiorenni (18+)",
+  "footerPreferences": "Preferenze sulla Privacy"
+}
+};
+
+// Cache en memoria para traducciones dinámicas de más de 100 idiomas
+const DYNAMIC_I18N_CACHE = {};
+
+async function fetchDynamicTranslation(text, targetLang) {
+  if (!text || targetLang === 'es') return text;
+  const cacheKey = targetLang + ':' + text;
+  if (DYNAMIC_I18N_CACHE[cacheKey]) return DYNAMIC_I18N_CACHE[cacheKey];
+
+  try {
+    const localSaved = localStorage.getItem('sigaleve_trans_' + cacheKey);
+    if (localSaved) {
+      DYNAMIC_I18N_CACHE[cacheKey] = localSaved;
+      return localSaved;
+    }
+  } catch (e) {}
+
+  try {
+    const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=' + encodeURIComponent(targetLang) + '&dt=t&q=' + encodeURIComponent(text);
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data[0]) {
+        const translated = data[0].map(item => item[0]).filter(Boolean).join('');
+        if (translated) {
+          DYNAMIC_I18N_CACHE[cacheKey] = translated;
+          try {
+            localStorage.setItem('sigaleve_trans_' + cacheKey, translated);
+          } catch(e) {}
+          return translated;
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Translation error for text:', text, err);
+  }
+  return text;
+}
+
+let currentLandingLang = localStorage.getItem('sigaleve_lang') || 'pt';
+
+function openLandingLanguageModal() {
+  const m = document.getElementById('modal-landing-language');
+  if (m) m.classList.remove('hidden');
+  const search = document.getElementById('lang-search-input');
+  if (search) search.value = '';
+  renderLandingLanguagesList();
+}
+
+function closeLandingLanguageModal() {
+  const m = document.getElementById('modal-landing-language');
+  if (m) m.classList.add('hidden');
+}
+
+function renderLandingLanguagesList(query = '') {
+  const container = document.getElementById('landing-languages-grid');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const q = query.toLowerCase().trim();
+  const list = q ? GLOBAL_LANGUAGES.filter(l => l.name.toLowerCase().includes(q) || l.native.toLowerCase().includes(q) || l.code.toLowerCase().includes(q)) : GLOBAL_LANGUAGES;
+
+  if (list.length === 0) {
+    container.innerHTML = '<div class="p-6 text-center text-xs text-gray-500">Ningún idioma coincide con "' + query + '"</div>';
+    return;
+  }
+
+  list.forEach(l => {
+    const isSelected = (l.code === currentLandingLang);
+    const item = document.createElement('div');
+    item.className = 'flex items-center justify-between p-3 rounded-2xl cursor-pointer transition-all border ' + (isSelected ? 'border-pink-500 bg-pink-500/15' : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/20');
+    
+    item.onclick = function() {
+      applyLandingLanguage(l.code);
+      closeLandingLanguageModal();
+    };
+
+    item.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="text-xl">${l.flag}</span>
+        <div>
+          <p class="text-xs font-bold ${isSelected ? 'text-white' : 'text-gray-200'}">${l.name}</p>
+          <p class="text-[10px] text-gray-400 font-medium">${l.native} (${l.code.toUpperCase()})</p>
+        </div>
+      </div>
+      <div class="${isSelected ? '' : 'hidden'} text-pink-400 font-black">
+        <i class="fa-solid fa-check text-xs"></i>
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+function filterLandingLanguages(query) {
+  renderLandingLanguagesList(query);
+}
+
+let activeTranslationVersion = 0;
+
+async function applyLandingLanguage(langCode) {
+  currentLandingLang = langCode;
+  localStorage.setItem('sigaleve_lang', langCode);
+  document.cookie = "sigaleve_lang=" + langCode + "; path=/; max-age=31536000";
+
+  // Actualizar todos los enlaces que apunten a /app para propagar ?lang=
+  document.querySelectorAll('a[href^="/app"]').forEach(el => {
+    el.href = '/app?lang=' + encodeURIComponent(langCode);
+  });
+
+  const langObj = GLOBAL_LANGUAGES.find(l => l.code === langCode) || { flag: '🌐', name: langCode.toUpperCase(), native: langCode };
+
+  // Actualizar botón del navbar
+  const flagEl = document.getElementById('landing-current-lang-flag');
+  if (flagEl) flagEl.textContent = langObj.flag;
+
+  const labelEl = document.getElementById('landing-current-lang-label');
+  if (labelEl) labelEl.textContent = langObj.name;
+
+  const summaryModal = document.getElementById('modal-current-lang-text');
+  if (summaryModal) summaryModal.textContent = langObj.name + ' (' + langObj.native + ')';
+
+  document.documentElement.lang = langCode;
+
+  // 1. Si tenemos diccionario pre-cargado (es, pt, en, fr)
+  if (LANDING_TRANSLATIONS[langCode]) {
+    const dict = LANDING_TRANSLATIONS[langCode];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key]) {
+        el.textContent = dict[key];
+      }
+    });
+    return;
+  }
+
+  // 2. Si es uno de los otros +100 idiomas (de, it, sw, yo, zh, ja, ar, ru, etc.), traducir dinámicamente con fallback en inglés
+  const currentVersion = ++activeTranslationVersion;
+  const esBase = LANDING_TRANSLATIONS['es'];
+
+  // Primero aplicamos inmediatamente la base para no dejar cosas vacías
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (esBase[key]) {
+      el.textContent = esBase[key];
+    }
+  });
+
+  // Traducir todos los elementos en lotes paralelos
+  const elements = Array.from(document.querySelectorAll('[data-i18n]'));
+  const batchSize = 6;
+  for (let i = 0; i < elements.length; i += batchSize) {
+    if (activeTranslationVersion !== currentVersion) break; // cancelado por nuevo cambio de idioma
+    const batch = elements.slice(i, i + batchSize);
+    await Promise.all(batch.map(async (el) => {
+      const key = el.getAttribute('data-i18n');
+      const baseText = esBase[key];
+      if (!baseText) return;
+      const translated = await fetchDynamicTranslation(baseText, langCode);
+      if (activeTranslationVersion === currentVersion && translated) {
+        el.textContent = translated;
+      }
+    }));
+  }
+}
+
+// ── SAÍDA RÁPIDA (QUICK EXIT) & BOTÃO DE PÂNICO ──
+const QUICK_EXIT_URL = 'https://www.google.com/search?q=receitas+de+bolacha';
+let _escCount = 0;
+let _escTimer = null;
+
+async function quickExit() {
+  try {
+    await fetch('/api/v1/auth/logout', { method: 'POST' }).catch(() => {});
+  } catch (e) {}
+  try {
+    sessionStorage.clear();
+    localStorage.removeItem('sigaleve_user_id');
+  } catch (e) {}
+  window.location.replace(QUICK_EXIT_URL);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+  if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+  _escCount++;
+  if (_escCount === 1) {
+    _escTimer = setTimeout(() => { _escCount = 0; }, 800);
+  } else if (_escCount >= 2) {
+    clearTimeout(_escTimer);
+    _escCount = 0;
+    quickExit();
+  }
+});
+
+function showPanicInfoModal() {
+  const existing = document.getElementById('modal-panic-info');
+  if (existing) {
+    existing.classList.remove('hidden');
+    return;
+  }
+  const modal = document.createElement('div');
+  modal.id = 'modal-panic-info';
+  modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm';
+  modal.innerHTML = `
+    <div class="w-full max-w-sm rounded-3xl p-6 bg-[#131326] text-white border border-[#252542] shadow-2xl text-center space-y-4">
+      <div class="w-14 h-14 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center mx-auto text-2xl">
+        <i class="fa-solid fa-door-open"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-black text-white">Botão de Pânico (Saída Rápida)</h3>
+        <p class="text-xs text-zinc-300 mt-2 leading-relaxed">
+          Se alguém se aproximar ou tentar espreitar o teu ecrã, clica neste botão (ou prime a tecla <strong>ESC duas vezes</strong>). A tua sessão é fechada imediatamente e serás redirecionado para uma pesquisa inofensiva de receitas de bolachas no Google, sem deixar rasto no histórico do navegador.
+        </p>
+      </div>
+      <button type="button" onclick="document.getElementById('modal-panic-info').classList.add('hidden')" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-xs shadow-lg hover:opacity-90 transition-all">
+        Entendido
+      </button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+</script>
+
+</body>
+</html>

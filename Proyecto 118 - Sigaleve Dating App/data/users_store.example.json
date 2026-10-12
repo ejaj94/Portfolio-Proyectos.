@@ -1,0 +1,42 @@
+{
+  "demo_user": {
+    "id": "demo_user",
+    "name": "Alex Costa",
+    "age": 28,
+    "email": "demo@sigaleve.app",
+    "bio": "Apaixonado por viagens, café e conversas sinceras. Aqui para conexões reais sem estigmas.",
+    "gender": "male",
+    "location": "Lisboa, Portugal",
+    "coordinates": {"lat": 38.7223, "lng": -9.1393},
+    "photos": [
+      "/static/img/avatar-demo-1.png"
+    ],
+    "interests": ["Tecnologia", "Café", "Música Indie", "Trilhos", "Culinária"],
+    "privacy_shield": true,
+    "panic_button_enabled": true,
+    "incognito": false,
+    "plan": "platinum",
+    "verified": true,
+    "created_at": "2026-09-01T10:00:00Z"
+  },
+  "demo_user_2": {
+    "id": "demo_user_2",
+    "name": "Beatriz Lima",
+    "age": 26,
+    "email": "beatriz@sigaleve.app",
+    "bio": "Designer criativa. Acredito na transparência e no respeito mútuo.",
+    "gender": "female",
+    "location": "Porto, Portugal",
+    "coordinates": {"lat": 41.1579, "lng": -8.6291},
+    "photos": [
+      "/static/img/avatar-demo-2.png"
+    ],
+    "interests": ["Arte", "Fotografia", "Cinema", "Design"],
+    "privacy_shield": true,
+    "panic_button_enabled": true,
+    "incognito": false,
+    "plan": "gold",
+    "verified": true,
+    "created_at": "2026-09-05T14:30:00Z"
+  }
+}

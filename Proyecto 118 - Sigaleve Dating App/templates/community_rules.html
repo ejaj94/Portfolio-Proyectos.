@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="64x64" href="/static/img/favicon-64x64.png"/>
+<link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
+<link rel="apple-touch-icon" href="/static/img/logo-icon-192.png"/>
+<title>Reglas de la Comunidad — Sigaleve</title>
+<script>(function(){var d=localStorage.getItem('sigaleve_dark');if(d==='true'||(d===null&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');})()</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class'}</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<style>
+:root{--bg:#fff;--card:#f9fafb;--txt:#111827;--sub:#6b7280;--bdr:#e5e7eb}
+.dark{--bg:#0d0d1a;--card:#16162a;--txt:#f9fafb;--sub:#9ca3af;--bdr:#2d2d4e}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0}
+.grad-text{background:linear-gradient(135deg,#9333ea,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad{background:linear-gradient(135deg,#9333ea,#ec4899)}
+.prose h2{font-size:1.35rem;font-weight:800;margin:2.2rem 0 .75rem;color:var(--txt);display:flex;align-items:center;gap:.5rem}
+.prose h3{font-size:1.05rem;font-weight:700;margin:1.5rem 0 .5rem;color:var(--txt)}
+.prose p,.prose li{font-size:.95rem;line-height:1.8;color:var(--sub);margin-bottom:.75rem}
+.prose ul{list-style:disc;padding-left:1.5rem;margin-bottom:1.25rem}
+.prose a{color:#9333ea;text-decoration:underline}
+.prose strong{color:var(--txt);font-weight:700}
+.rule-card{border-radius:1rem;padding:1.25rem;border:1px solid var(--bdr);background:var(--card);margin-bottom:1.5rem}
+.toc a{color:var(--sub);text-decoration:none;font-size:.85rem;display:block;padding:.35rem 0;border-left:2px solid var(--bdr);padding-left:.75rem;transition:all .15s}
+.toc a:hover,.toc a.active{color:#9333ea;border-color:#9333ea}
+section{scroll-margin-top:80px}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<nav class="sticky top-0 z-40 border-b" style="background:var(--bg);border-color:var(--bdr)">
+  <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
+    <a href="/" class="flex items-center gap-2 font-black text-lg grad-text">
+      <div class="w-7 h-7 grad rounded-xl flex items-center justify-center text-white text-xs"><i class="fa-solid fa-heart"></i></div>
+      Sigaleve
+    </a>
+    <div class="flex items-center gap-2">
+      <a href="/app" class="text-xs px-3.5 py-1.5 rounded-xl border font-bold transition-all hover:border-purple-500 hover:text-purple-500" style="border-color:var(--bdr);color:var(--sub)">Abrir App</a>
+      <button onclick="toggleDark()" class="w-8 h-8 flex items-center justify-center rounded-xl border text-sm" style="border-color:var(--bdr);color:var(--sub)"><i id="di" class="fa-solid fa-moon"></i></button>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-5xl mx-auto px-4 py-10 grid md:grid-cols-[240px,1fr] gap-10">
+  <!-- TOC Sidebar -->
+  <aside class="hidden md:block">
+    <div class="sticky top-24">
+      <p class="text-xs font-black tracking-widest uppercase mb-3 text-purple-500">Reglas de Convivencia</p>
+      <nav class="toc space-y-1">
+        <a href="#r1">1. Tolerancia Cero al Estigma</a>
+        <a href="#r2">2. Consentimiento y Respeto Mutuo</a>
+        <a href="#r3">3. Confidencialidad y Privacidad</a>
+        <a href="#r4">4. Autenticidad y Perfiles Reales</a>
+        <a href="#r5">5. Prohibición de Acoso y Odio</a>
+        <a href="#r6">6. Contenido Sexual No Solicitado</a>
+        <a href="#r7">7. Fraude, Comercio y Spam</a>
+        <a href="#r8">8. Consecuencias y Sanciones</a>
+      </nav>
+      <div class="mt-6 flex flex-col gap-2 text-xs" style="color:var(--sub)">
+        <a href="/legal/safety" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-purple-500"></i> Seguridad y Política</a>
+        <a href="/legal/privacy" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-lock text-pink-500"></i> Política de Privacidad</a>
+        <a href="/legal/terms" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-scale-balanced text-sky-500"></i> Términos de Servicio</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="prose max-w-none">
+    <div class="mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold text-purple-400 bg-purple-500/10 border border-purple-500/20 mb-3">
+        <i class="fa-solid fa-hand-holding-heart"></i> Código de Honor y Comunidad
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-black mb-3">Reglas de la Comunidad Sigaleve</h1>
+      <p class="text-sm font-semibold text-purple-400">Última actualización: Septiembre de 2026 · Versión 3.0</p>
+      <p class="text-base leading-relaxed mt-4">
+        Sigaleve nació con una misión innegociable: crear el espacio de citas, conexiones y apoyo más seguro, empático y libre de prejuicios del mundo. Nuestra comunidad reúne a personas con diagnósticos de salud específicos (como ETS, condiciones crónicas o personas que valoran la salud preventiva y transparente). Para que este santuario funcione, cada miembro debe cumplir estrictamente las siguientes directrices.
+      </p>
+    </div>
+
+    <!-- Regla 1 -->
+    <section id="r1" class="rule-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-sm font-black">1</span> Tolerancia Cero al Estigma y a la Discriminación</h2>
+      <p>
+        El respeto a la condición médica de cada usuario es el pilar central de Sigaleve. Está <strong>terminantemente prohibido</strong>:
+      </p>
+      <ul>
+        <li>Hacer burlas, comentarios despectivos, chistes denigrantes o juicios morales respecto a cualquier condición de salud, diagnóstico o historial médico.</li>
+        <li>Usar términos estigmatizantes para referirse a cualquier miembro de la comunidad.</li>
+        <li>Hacer preguntas invasivas o exigir detalles clínicos no autorizados previamente por la otra persona.</li>
+      </ul>
+    </section>
+
+    <!-- Regla 2 -->
+    <section id="r2" class="rule-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm font-black">2</span> Consentimiento y Respeto Mutuo</h2>
+      <p>
+        El consentimiento debe ser siempre libre, entusiasta, informado y continuo en cada interacción:
+      </p>
+      <ul>
+        <li>Un "No" siempre significa "No". La insistencia tras una negativa clara será catalogada como acoso.</li>
+        <li>Respeta el ritmo de cada persona. Nadie está obligado a compartir datos personales, redes sociales externas, fotografías íntimas ni citas presenciales hasta que se sienta en absoluta confianza.</li>
+        <li>Respeta la identidad de género, orientación sexual y metas de relación declaradas por cada miembro.</li>
+      </ul>
+    </section>
+
+    <!-- Regla 3 -->
+    <section id="r3" class="rule-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-sm font-black">3</span> Confidencialidad y Privacidad Inquebrantable</h2>
+      <p>
+        Lo que ves en Sigaleve, se queda en Sigaleve. Divulgar información de otros miembros fuera de la plataforma acarrea <strong>expulsión permanente y acciones legales</strong>:
+      </p>
+      <ul>
+        <li><strong>Prohibición estricta de "Outing" y Doxxing:</strong> Nunca reveles el diagnóstico, identidad, fotografías o conversaciones de un miembro a terceros, redes sociales o en la vida real.</li>
+        <li>Las capturas de pantalla tomadas con la intención de exponer, chantajear o ridiculizar a otro usuario resultarán en suspensión inmediata del dispositivo y reporte judicial si procede.</li>
+      </ul>
+    </section>
+
+    <!-- Regla 4 -->
+    <section id="r4" class="rule-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-black">4</span> Autenticidad y Perfiles Reales (Sin Catfishing)</h2>
+      <p>
+        La confianza requiere honestidad:
+      </p>
+      <ul>
+        <li>Debes usar fotos tuyas auténticas y recientes. No utilices imágenes de celebridades, modelos, terceros ni fotos generadas por inteligencia artificial para suplantar identidades.</li>
+        <li>Solo se permite una cuenta por persona física.</li>
+        <li>Debes ser mayor de 18 años para utilizar Sigaleve. Toda cuenta de menor de edad será eliminada fulminantemente.</li>
+      </ul>
+    </section>
+
+    <!-- Regla 5 -->
+    <section id="r5" class="rule-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm font-black">5</span> Prohibición Absoluta de Acoso, Odio y Violencia</h2>
+      <p>
+        No permitimos bajo ningún concepto:
+      </p>
+      <ul>
+        <li>Discurso de odio por motivos de raza, etnia, religión, género, orientación sexual, discapacidad o condición médica.</li>
+        <li>Amenazas de daño físico, violencia o chantaje emocional o económico.</li>
+        <li>Conductas de hostigamiento o persecución tras ser desemparejado o bloqueado.</li>
+      </ul>
+    </section>
+
+    <!-- Regla 6 -->
+    <section id="r6" class="rule-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-sm font-black">6</span> Contenido Sexual No Solicitado</h2>
+      <p>
+        Aunque fomentamos el romance y la intimidad sana, <strong>no toleramos el contenido sexual no solicitado</strong>:
+      </p>
+      <ul>
+        <li>El envío de fotos de desnudos o partes íntimas (dickpicks/nudes) sin consentimiento explícito y previo de la otra persona está estrictamente prohibido.</li>
+        <li>Las fotos de perfil públicas no deben contener desnudez explícita ni actos sexuales.</li>
+      </ul>
+    </section>
+
+    <!-- Regla 7 -->
+    <section id="r7" class="rule-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-sm font-black">7</span> Prohibición de Fraude, Venta y Spam</h2>
+      <p>
+        Sigaleve es una red para conexiones humanas reales, no un mercado comercial:
+      </p>
+      <ul>
+        <li>Prohibido pedir dinero, préstamos, donaciones o promover esquemas piramidales o de criptomonedas.</li>
+        <li>Prohibida la venta de servicios sexuales, contenido comercial pagado (OnlyFans, etc.) o promociones de productos.</li>
+        <li>Prohibido el uso de bots, scripts automáticos o perfiles comerciales.</li>
+      </ul>
+    </section>
+
+    <!-- Regla 8 -->
+    <section id="r8" class="rule-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center text-sm font-black">8</span> Consecuencias y Proceso de Moderación</h2>
+      <p>
+        Nuestro equipo de seguridad y algoritmos de moderación supervisan activamente la plataforma para proteger a los usuarios:
+      </p>
+      <ul>
+        <li><strong>Advertencia Formal:</strong> Para infracciones menores por descuido.</li>
+        <li><strong>Suspensión Temporal:</strong> Para conductas inapropiadas en el chat.</li>
+        <li><strong>Expulsión Definitiva & Bloqueo de Hardware/IP:</strong> Para estigma, acoso, extorsión, revelación de datos médicos de otros miembros o falsedad documental.</li>
+      </ul>
+      <p class="mt-4 text-xs font-semibold">
+        Si presencias una infracción, utiliza el botón "Reportar Usuario" en su perfil o en el chat. Cada reporte es analizado con máxima confidencialidad en menos de 2 horas.
+      </p>
+    </section>
+  </main>
+</div>
+
+<script src="/static/legal_i18n.js"></script>
+<script>
+function toggleDark(){
+  var isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('sigaleve_dark', isDark);
+  document.getElementById('di').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+}
+</script>
+</body>
+</html>
+

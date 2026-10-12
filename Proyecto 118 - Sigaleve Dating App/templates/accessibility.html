@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="64x64" href="/static/img/favicon-64x64.png"/>
+<link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
+<link rel="apple-touch-icon" href="/static/img/logo-icon-192.png"/>
+<title>Declaración de Accesibilidad — Sigaleve</title>
+<script>(function(){var d=localStorage.getItem('sigaleve_dark');if(d==='true'||(d===null&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');})()</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class'}</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<style>
+:root{--bg:#fff;--card:#f9fafb;--txt:#111827;--sub:#6b7280;--bdr:#e5e7eb}
+.dark{--bg:#0d0d1a;--card:#16162a;--txt:#f9fafb;--sub:#9ca3af;--bdr:#2d2d4e}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0}
+.grad-text{background:linear-gradient(135deg,#9333ea,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad{background:linear-gradient(135deg,#9333ea,#ec4899)}
+.prose h2{font-size:1.35rem;font-weight:800;margin:2.2rem 0 .75rem;color:var(--txt);display:flex;align-items:center;gap:.5rem}
+.prose h3{font-size:1.05rem;font-weight:700;margin:1.5rem 0 .5rem;color:var(--txt)}
+.prose p,.prose li{font-size:.95rem;line-height:1.8;color:var(--sub);margin-bottom:.75rem}
+.prose ul{list-style:disc;padding-left:1.5rem;margin-bottom:1.25rem}
+.prose a{color:#9333ea;text-decoration:underline}
+.prose strong{color:var(--txt);font-weight:700}
+.rule-card{border-radius:1rem;padding:1.25rem;border:1px solid var(--bdr);background:var(--card);margin-bottom:1.5rem}
+.toc a{color:var(--sub);text-decoration:none;font-size:.85rem;display:block;padding:.35rem 0;border-left:2px solid var(--bdr);padding-left:.75rem;transition:all .15s}
+.toc a:hover,.toc a.active{color:#9333ea;border-color:#9333ea}
+section{scroll-margin-top:80px}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<nav class="sticky top-0 z-40 border-b" style="background:var(--bg);border-color:var(--bdr)">
+  <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
+    <a href="/" class="flex items-center gap-2 font-black text-lg grad-text">
+      <div class="w-7 h-7 grad rounded-xl flex items-center justify-center text-white text-xs"><i class="fa-solid fa-heart"></i></div>
+      Sigaleve
+    </a>
+    <div class="flex items-center gap-2">
+      <a href="/app" class="text-xs px-3.5 py-1.5 rounded-xl border font-bold transition-all hover:border-purple-500 hover:text-purple-500" style="border-color:var(--bdr);color:var(--sub)">Abrir App</a>
+      <button onclick="toggleDark()" class="w-8 h-8 flex items-center justify-center rounded-xl border text-sm" style="border-color:var(--bdr);color:var(--sub)"><i id="di" class="fa-solid fa-moon"></i></button>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-5xl mx-auto px-4 py-10 grid md:grid-cols-[260px,1fr] gap-10">
+  <!-- TOC Sidebar -->
+  <aside class="hidden md:block">
+    <div class="sticky top-24">
+      <p class="text-xs font-black tracking-widest uppercase mb-3 text-purple-500">Accesibilidad</p>
+      <nav class="toc space-y-1">
+        <a href="#a1">1. Nuestro Compromiso Universal</a>
+        <a href="#a2">2. Pautas y Estándar WCAG 2.1 AA</a>
+        <a href="#a3">3. Medidas Técnicas Implementadas</a>
+        <a href="#a4">4. Soporte para Tecnologías Asistivas</a>
+        <a href="#a5">5. Navegación por Teclado</a>
+        <a href="#a6">6. Adaptación de Contraste y Tipografía</a>
+        <a href="#a7">7. Limitaciones Conocidas</a>
+        <a href="#a8">8. Comentarios y Contacto</a>
+      </nav>
+      <div class="mt-6 flex flex-col gap-2 text-xs" style="color:var(--sub)">
+        <a href="/legal/community" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-book-open text-purple-500"></i> Reglas de la Comunidad</a>
+        <a href="/legal/safety" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-purple-500"></i> Seguridad y Política</a>
+        <a href="/legal/privacy" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-lock text-purple-500"></i> Política de Privacidad</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="prose max-w-none">
+    <div class="mb-8">
+      <span class="text-xs font-black px-3 py-1 rounded-full grad text-white tracking-wide uppercase">Inclusión & Accesibilidad</span>
+      <h1 class="text-3xl font-black mt-3 mb-2">Declaración Oficial de Accesibilidad</h1>
+      <p class="text-sm" style="color:var(--sub)">Última actualización: 30 de septiembre de 2026 • Conforme a Web Content Accessibility Guidelines (WCAG) 2.1 Nivel AA</p>
+    </div>
+
+    <div class="rule-card">
+      <p class="text-sm font-semibold text-purple-500 mb-1"><i class="fa-solid fa-universal-access mr-2"></i>Acceso Igualitario sin Barreras</p>
+      <p class="text-sm">En Sigaleve creemos firmemente que toda persona, independientemente de sus capacidades físicas, sensoriales o cognitivas, tiene derecho pleno a experimentar el amor, la amistad y la empatía en una comunidad digital fluida, accesible y digna.</p>
+    </div>
+
+    <section id="a1">
+      <h2><i class="fa-solid fa-heart-circle-check text-purple-500"></i> 1. Nuestro Compromiso Universal</h2>
+      <p>Sigaleve se compromete a garantizar que sus servicios digitales sean accesibles para el público más amplio posible. Nos esforzamos continuamente por mejorar la experiencia de usuario de todas las personas y aplicar las normas de accesibilidad digital reconocidas a nivel mundial.</p>
+    </section>
+
+    <section id="a2">
+      <h2><i class="fa-solid fa-certificate text-pink-500"></i> 2. Pautas y Estándar de Conformidad WCAG 2.1 AA</h2>
+      <p>Las Pautas de Accesibilidad para el Contenido Web (WCAG) definen los requisitos para que diseñadores y desarrolladores mejoren la accesibilidad de las personas con discapacidad. Sigaleve ha sido diseñada y evaluada conforme al nivel <strong>WCAG 2.1 Nivel AA</strong> y principios fundamentales de la norma europea EN 301 549 y la Sección 508 de la Ley de Rehabilitación de EE.UU.</p>
+      <p>Nuestra plataforma responde rigurosamente a los cuatro principios del W3C:</p>
+      <ul>
+        <li><strong>Perceptible:</strong> La información y los componentes visuales e interactivos se presentan de forma que los usuarios puedan percibirlos mediante múltiples sentidos (visión, audición, tacto mediante síntesis por voz).</li>
+        <li><strong>Operable:</strong> Los componentes de la interfaz de usuario, navegación y botones se pueden operar íntegramente con teclado, interruptores o lectores de pantalla.</li>
+        <li><strong>Comprensible:</strong> El texto es claro, predecible y está respaldado por traducción instantánea a 107 idiomas para eliminar barreras lingüísticas.</li>
+        <li><strong>Robusto:</strong> El código HTML5 semántico se adapta a la evolución tecnológica y a la compatibilidad con agentes de usuario modernos y tecnologías asistivas.</li>
+      </ul>
+    </section>
+
+    <section id="a3">
+      <h2><i class="fa-solid fa-microchip text-indigo-500"></i> 3. Medidas Técnicas Implementadas</h2>
+      <p>Para asegurar una navegación sin fricción, aplicamos las siguientes directrices en todo el ecosistema:</p>
+      <ul>
+        <li><strong>Semántica HTML5 Clara:</strong> Uso de etiquetas estructurales (<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;footer&gt;</code>) y atributos ARIA (Accessible Rich Internet Applications) en elementos interactivos modales y dinámicos.</li>
+        <li><strong>Textos Alternativos Significativos:</strong> Cada imagen relevante dispone de su atributo <code>alt</code> contextualizado para lectores de pantalla. Las imágenes meramente decorativas utilizan <code>aria-hidden="true"</code>.</li>
+        <li><strong>Áreas de Pulsación Táctil Amplias:</strong> Todos los botones y selectores interactivos disponen de un objetivo táctil mínimo de 44x44 píxeles para facilitar su uso a personas con movilidad reducida o temblores.</li>
+        <li><strong>Formularios Accesibles:</strong> Indicadores claros de foco visual, etiquetas <code>&lt;label&gt;</code> explícitas e instrucciones de error audibles y visibles en tiempo real.</li>
+      </ul>
+    </section>
+
+    <section id="a4">
+      <h2><i class="fa-solid fa-headphones-simple text-amber-500"></i> 4. Soporte para Tecnologías Asistivas</h2>
+      <p>Nuestra plataforma ha sido auditada y optimizada para operar armónicamente con las principales tecnologías de asistencia:</p>
+      <div class="grid md:grid-cols-2 gap-3 my-4">
+        <div class="rule-card">
+          <p class="font-bold text-xs text-purple-500 mb-1">Lectores de Pantalla de Escritorio</p>
+          <p class="text-xs">Compatibilidad nativa probada con NVDA, JAWS (Windows) y VoiceOver (macOS) en navegadores Chrome, Firefox, Safari y Edge.</p>
+        </div>
+        <div class="rule-card">
+          <p class="font-bold text-xs text-pink-500 mb-1">Lectores de Pantalla Móviles</p>
+          <p class="text-xs">Soporte completo con TalkBack (Android) y VoiceOver (iOS), permitiendo la exploración por gestos y exploración táctil.</p>
+        </div>
+        <div class="rule-card">
+          <p class="font-bold text-xs text-indigo-500 mb-1">Software de Ampliación</p>
+          <p class="text-xs">Soporte de zoom hasta el 200% y 400% sin pérdida de funcionalidad ni superposición ilegible de contenidos.</p>
+        </div>
+        <div class="rule-card">
+          <p class="font-bold text-xs text-emerald-500 mb-1">Dispositivos de Entrada Alternativos</p>
+          <p class="text-xs">Acepta pulsadores de asistencia, trackballs ergonómicos y sistemas de comando por voz de los sistemas operativos.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="a5">
+      <h2><i class="fa-solid fa-keyboard text-emerald-500"></i> 5. Navegación por Teclado</h2>
+      <p>Es posible utilizar la plataforma prescindiendo por completo del ratón o pantalla táctil:</p>
+      <ul>
+        <li><strong>Tabulador (<kbd>Tab</kbd> / <kbd>Shift + Tab</kbd>):</strong> Recorrido secuencial e intuitivo a través de todos los controles interactivos y modales.</li>
+        <li><strong>Enter y Barra Espaciadora (<kbd>Enter</kbd> / <kbd>Space</kbd>):</strong> Activación de botones, casillas de selección, pestañas y apertura de menús laterales.</li>
+        <li><strong>Escape (<kbd>Esc</kbd>):</strong> Cierre inmediato de cualquier ventana emergente, modal o selector de idiomas, devolviendo el foco al elemento de origen.</li>
+        <li><strong>Anillos de Foco de Alto Contraste:</strong> Resaltado visual en color púrpura neón claramente diferenciable cuando un elemento se encuentra enfocado.</li>
+      </ul>
+    </section>
+
+    <section id="a6">
+      <h2><i class="fa-solid fa-circle-half-stroke text-blue-500"></i> 6. Adaptación de Contraste y Tipografía</h2>
+      <p>Reconocemos la diversidad visual de nuestros usuarios y ofrecemos opciones dedicadas:</p>
+      <ul>
+        <li><strong>Modo Oscuro y Claro Dinámico:</strong> Ajuste visual nativo que reduce el deslumbramiento y optimiza el consumo energético, superando una relación de contraste cromático de 4.5:1 para texto estándar y 3:1 para texto de gran tamaño.</li>
+        <li><strong>Tipografía Clara y Legible:</strong> Fuentes de sistema de alta legibilidad con espaciado entre líneas del 150% al 180% para evitar la fatiga visual y facilitar la lectura en personas con dislexia o baja visión.</li>
+      </ul>
+    </section>
+
+    <section id="a7">
+      <h2><i class="fa-solid fa-clock-rotate-left text-orange-500"></i> 7. Limitaciones Conocidas y Plan de Mejora</h2>
+      <p>Aunque nos esforzamos por lograr el 100% de cumplimiento en cada pantalla, algunas fotos subidas por los miembros de la comunidad pueden carecer temporalmente de descripciones completas en tiempo real. Estamos desplegando algoritmos de visión por computadora para generar descripciones automáticas optativas que asistan a los lectores de pantalla sin vulnerar la privacidad biométrica.</p>
+    </section>
+
+    <section id="a8">
+      <h2><i class="fa-solid fa-envelope-open-text text-purple-500"></i> 8. Comentarios y Coordinación de Accesibilidad</h2>
+      <p>Si encuentras alguna barrera de accesibilidad o tienes sugerencias para facilitar aún más tu experiencia en Sigaleve, te invitamos a ponerte en contacto con nuestro Responsable de Inclusión Digital:</p>
+      <div class="rule-card">
+        <p class="text-xs"><strong>Correo de Contacto Directo:</strong> <a href="mailto:support@sigaleve.com">support@sigaleve.com</a></p>
+        <p class="text-xs mt-1"><strong>Tiempo promedio de respuesta y resolución:</strong> Menos de 48 horas hábiles.</p>
+      </div>
+    </section>
+
+    <div class="mt-12 p-6 rounded-2xl border text-center" style="background:var(--card);border-color:var(--bdr)">
+      <p class="font-bold mb-2">Una comunidad abierta, acogedora y sin barreras</p>
+      <p class="text-xs mb-4" style="color:var(--sub)">Tu comodidad e inclusión son el motor de cada línea de código de Sigaleve.</p>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="/app" class="px-5 py-2.5 rounded-xl grad text-white font-bold text-xs shadow-lg hover:opacity-90">Volver a la App</a>
+        <a href="mailto:support@sigaleve.com" class="px-5 py-2.5 rounded-xl border text-xs font-bold" style="border-color:var(--bdr);color:var(--txt)">Enviar Sugerencia de Accesibilidad</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/static/legal_i18n.js"></script>
+<script>
+function toggleDark(){
+  var isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('sigaleve_dark', isDark);
+  document.getElementById('di').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+}
+(function(){
+  var d = localStorage.getItem('sigaleve_dark');
+  if(d==='true'||(d===null&&window.matchMedia('(prefers-color-scheme:dark)').matches)){
+    document.getElementById('di').className = 'fa-solid fa-sun';
+  }
+})();
+</script>
+</body>
+</html>
+

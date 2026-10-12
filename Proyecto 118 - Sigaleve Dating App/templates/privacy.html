@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="64x64" href="/static/img/favicon-64x64.png"/>
+<link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
+<link rel="apple-touch-icon" href="/static/img/logo-icon-192.png"/>
+<title>Política de Privacidad — Sigaleve</title>
+<script>(function(){var d=localStorage.getItem('sigaleve_dark');if(d==='true'||(d===null&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');})()</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class'}</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<style>
+:root{--bg:#fff;--card:#f9fafb;--txt:#111827;--sub:#6b7280;--bdr:#e5e7eb}
+.dark{--bg:#0d0d1a;--card:#16162a;--txt:#f9fafb;--sub:#9ca3af;--bdr:#2d2d4e}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0}
+.grad-text{background:linear-gradient(135deg,#9333ea,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad{background:linear-gradient(135deg,#9333ea,#ec4899)}
+.prose h2{font-size:1.25rem;font-weight:700;margin:2rem 0 .75rem;color:var(--txt)}
+.prose h3{font-size:1rem;font-weight:600;margin:1.5rem 0 .5rem;color:var(--txt)}
+.prose p,.prose li{font-size:.93rem;line-height:1.75;color:var(--sub);margin-bottom:.5rem}
+.prose ul{list-style:disc;padding-left:1.5rem;margin-bottom:1rem}
+.prose a{color:#9333ea;text-decoration:underline}
+.prose strong{color:var(--txt);font-weight:600}
+.toc a{color:var(--sub);text-decoration:none;font-size:.85rem;display:block;padding:.3rem 0;border-left:2px solid var(--bdr);padding-left:.75rem;transition:all .15s}
+.toc a:hover,.toc a.active{color:#9333ea;border-color:#9333ea}
+section{scroll-margin-top:80px}
+</style>
+</head>
+<body>
+<!-- TOP BAR -->
+<nav class="sticky top-0 z-40 border-b" style="background:var(--bg);border-color:var(--bdr)">
+  <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
+    <a href="/" class="flex items-center group py-0.5">
+      <img src="/static/img/sigaleve-logo-original.png" alt="Sigaleve" class="h-9 w-auto object-contain rounded-md shadow-sm group-hover:scale-105 transition-transform"/>
+    </a>
+    <div class="flex items-center gap-2">
+      <a href="/app" class="text-xs px-3 py-1.5 rounded-lg border font-medium transition-all hover:border-purple-500 hover:text-purple-500" style="border-color:var(--bdr);color:var(--sub)" id="nav-app">Abrir app</a>
+      <button onclick="toggleDark()" class="w-8 h-8 flex items-center justify-center rounded-lg border text-sm" style="border-color:var(--bdr);color:var(--sub)"><i id="di" class="fa-solid fa-moon"></i></button>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-5xl mx-auto px-4 py-10 grid md:grid-cols-[240px,1fr] gap-10">
+  <!-- TOC sidebar -->
+  <aside class="hidden md:block">
+    <div class="sticky top-24">
+      <p class="text-xs font-bold tracking-widest uppercase mb-3" style="color:var(--sub)" id="toc-t">Contenido</p>
+      <nav class="toc space-y-1" id="toc">
+        <a href="#s1" id="toc1">1. Responsable del tratamiento</a>
+        <a href="#s2" id="toc2">2. Datos que recopilamos</a>
+        <a href="#s3" id="toc3">3. Datos especiales de salud</a>
+        <a href="#s4" id="toc4">4. Cifrado y seguridad</a>
+        <a href="#s5" id="toc5">5. Geolocalización difusa</a>
+        <a href="#s6" id="toc6">6. Compartición de datos</a>
+        <a href="#s7" id="toc7">7. Cookies</a>
+        <a href="#s8" id="toc8">8. Derechos del usuario</a>
+        <a href="#s9" id="toc9">9. Autoridad de control</a>
+        <a href="#s10" id="toc10">10. Retención de datos</a>
+        <a href="#s11" id="toc11">11. Transferencias internacionales</a>
+        <a href="#s12" id="toc12">12. Menores de edad</a>
+        <a href="#s13" id="toc13">13. Cambios en la política</a>
+      </nav>
+      <div class="mt-6 flex flex-col gap-2 text-xs" style="color:var(--sub)">
+        <a href="/legal/terms" class="hover:text-purple-500 transition-colors" id="link-terms">Términos de servicio</a>
+        <a href="/legal/cookies" class="hover:text-purple-500 transition-colors" id="link-cookies">Política de cookies</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <article class="prose max-w-none">
+    <div class="mb-8">
+      <span class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(147,51,234,.1);color:#9333ea" id="badge">Última actualización: 26 de septiembre de 2024</span>
+      <h1 class="text-3xl font-black mt-4 mb-2" id="main-title">Política de Privacidad</h1>
+      <p id="intro">En Sigaleve tratamos tu privacidad como una prioridad absoluta, especialmente porque gestionamos datos sensibles de salud. Este documento describe de forma transparente qué datos recopilamos, cómo los protegemos y cuáles son tus derechos.</p>
+    </div>
+
+    <section id="s1">
+      <h2 id="h1">1. Responsable del tratamiento</h2>
+      <p id="p1">El responsable del tratamiento de tus datos personales es:</p>
+      <ul>
+        <li id="l1a"><strong>Empresa:</strong> Sigaleve SL</li>
+        <li id="l1b"><strong>CIF:</strong> B-12345678</li>
+        <li id="l1c"><strong>Domicilio:</strong> Calle Gran Vía 1, 28013 Madrid, España</li>
+        <li id="l1d"><strong>Email general:</strong> support@sigaleve.com</li>
+        <li id="l1e"><strong>Delegado de Protección de Datos (DPO):</strong> support@sigaleve.com</li>
+      </ul>
+    </section>
+
+    <section id="s2">
+      <h2 id="h2">2. Datos que recopilamos</h2>
+      <h3 id="h2a">2.1 Datos de registro</h3>
+      <ul>
+        <li id="l2a"><strong>Correo electrónico:</strong> Almacenado como hash HMAC-SHA256 (no reversible). Nunca se almacena en texto plano.</li>
+        <li id="l2b"><strong>Contraseña:</strong> Almacenada como hash bcrypt con salt. Nunca recuperable ni visible por Sigaleve.</li>
+        <li id="l2c"><strong>Fecha de nacimiento:</strong> Cifrada con Fernet (AES-128-CBC). Se usa solo para verificar la mayoría de edad y calcular la edad mostrada.</li>
+      </ul>
+      <h3 id="h2b">2.2 Datos del perfil</h3>
+      <ul>
+        <li id="l2d"><strong>Nombre para mostrar (pseudónimo):</strong> Cifrado en base de datos. Nunca es tu nombre real.</li>
+        <li id="l2e"><strong>Fotografías de perfil:</strong> Almacenadas en servidor seguro con acceso restringido.</li>
+        <li id="l2f"><strong>Biografía (opcional):</strong> Cifrada en base de datos.</li>
+        <li id="l2g"><strong>Código de diagnóstico:</strong> Almacenado como código interno (ALPHA, BETA, etc.), nunca como texto médico. El mapeo código-diagnóstico solo existe en el dispositivo del usuario.</li>
+        <li id="l2h"><strong>Ubicación:</strong> Coordenadas GPS recibidas temporalmente para calcular distancias. Solo se almacena la última posición conocida de forma cifrada.</li>
+      </ul>
+      <h3 id="h2c">2.3 Datos de actividad</h3>
+      <ul>
+        <li id="l2i">Historial de matches (quién gustó a quién) — necesario para el servicio</li>
+        <li id="l2j">Mensajes de chat: <strong>NO se almacenan permanentemente</strong>. Se guardan en memoria cifrada durante máximo 24 horas y luego se destruyen automáticamente</li>
+        <li id="l2k">Bloqueos de usuarios</li>
+      </ul>
+    </section>
+
+    <section id="s3">
+      <h2 id="h3">3. Datos especiales de categoría: datos de salud</h2>
+      <p id="p3">El código de diagnóstico de salud sexual es un <strong>dato de categoría especial</strong> según el Artículo 9 del Reglamento General de Protección de Datos (RGPD/GDPR).</p>
+      <ul>
+        <li id="l3a"><strong>Base legal:</strong> Consentimiento explícito del usuario (Art. 9.2.a RGPD) otorgado al registrarse y aceptar esta política.</li>
+        <li id="l3b"><strong>Protección adicional:</strong> El código se almacena como un identificador alfanumérico opaco (ALPHA, BETA…), no como término médico. Solo el usuario conoce el mapeo real.</li>
+        <li id="l3c"><strong>Acceso:</strong> Ningún empleado de Sigaleve tiene acceso al contenido descifrado de los datos de salud en condiciones normales de operación.</li>
+        <li id="l3d"><strong>Revocación:</strong> Puedes retirar tu consentimiento en cualquier momento eliminando tu cuenta.</li>
+      </ul>
+    </section>
+
+    <section id="s4">
+      <h2 id="h4">4. Cifrado y seguridad técnica</h2>
+      <ul>
+        <li id="l4a"><strong>Cifrado simétrico:</strong> Fernet (AES-128-CBC + HMAC-SHA256) para datos personales sensibles</li>
+        <li id="l4b"><strong>Hash de correo:</strong> HMAC-SHA256 con clave secreta — no invertible</li>
+        <li id="l4c"><strong>Contraseñas:</strong> bcrypt con factor de coste 12</li>
+        <li id="l4d"><strong>Chat efímero:</strong> Mensajes cifrados en memoria (Redis con TTL de 24h). Se destruyen al cerrar sesión o transcurridas 24 horas, lo que ocurra antes</li>
+        <li id="l4e"><strong>Transporte:</strong> TLS 1.3 en todas las comunicaciones</li>
+        <li id="l4f"><strong>Base de datos:</strong> PostgreSQL con PostGIS en servidor privado, acceso restringido por IP y VPN</li>
+        <li id="l4g"><strong>Cabeceras de seguridad:</strong> CSP, HSTS, X-Frame-Options, X-Content-Type-Options activas en todos los endpoints</li>
+        <li id="l4h"><strong>Rate limiting:</strong> Por UUID de usuario autenticado, no por IP — resistente a VPN y proxies rotativos</li>
+      </ul>
+    </section>
+
+    <section id="s5">
+      <h2 id="h5">5. Geolocalización difusa</h2>
+      <p id="p5">Sigaleve nunca comparte tu ubicación exacta (coordenadas GPS) con otros usuarios. El sistema convierte las coordenadas en etiquetas de distancia aproximada:</p>
+      <ul>
+        <li id="l5a">menos de 1 km</li>
+        <li id="l5b">menos de 5 km</li>
+        <li id="l5c">menos de 10 km</li>
+        <li id="l5d">menos de 25 km</li>
+        <li id="l5e">menos de 50 km</li>
+        <li id="l5f">más de 100 km</li>
+      </ul>
+      <p id="p5b">Las coordenadas (0,0) (null island) se rechazan automáticamente por el sistema como medida anti-fraude.</p>
+    </section>
+
+    <section id="s6">
+      <h2 id="h6">6. Compartición de datos con terceros</h2>
+      <p id="p6"><strong>Sigaleve no vende, alquila ni comparte tus datos personales con terceros con fines comerciales.</strong> Los únicos casos de acceso por terceros son:</p>
+      <ul>
+        <li id="l6a"><strong>Proveedor de infraestructura cloud:</strong> Servidor dedicado en la UE, bajo acuerdo de tratamiento de datos DPA</li>
+        <li id="l6b"><strong>Autoridades competentes:</strong> Únicamente ante requerimiento judicial firme conforme a la ley española</li>
+      </ul>
+    </section>
+
+    <section id="s7">
+      <h2 id="h7">7. Cookies</h2>
+      <p id="p7">Usamos cookies esenciales para el funcionamiento del servicio y cookies opcionales para mejorar la experiencia. Consulta nuestra <a href="/legal/cookies" id="link-ck">Política de Cookies</a> para el listado completo y cómo gestionarlas.</p>
+    </section>
+
+    <section id="s8">
+      <h2 id="h8">8. Tus derechos como usuario (RGPD)</h2>
+      <p id="p8">Según el RGPD tienes los siguientes derechos, ejercitables en un plazo de 30 días naturales:</p>
+      <ul>
+        <li id="l8a"><strong>Acceso (Art. 15):</strong> Solicitar una copia de todos tus datos personales</li>
+        <li id="l8b"><strong>Rectificación (Art. 16):</strong> Corregir datos incorrectos o incompletos</li>
+        <li id="l8c"><strong>Supresión / derecho al olvido (Art. 17):</strong> Eliminar todos tus datos — se ejecuta en 30 días</li>
+        <li id="l8d"><strong>Portabilidad (Art. 20):</strong> Recibir tus datos en formato estructurado y legible por máquina</li>
+        <li id="l8e"><strong>Oposición (Art. 21):</strong> Oponerte a determinados tratamientos</li>
+        <li id="l8f"><strong>Limitación (Art. 18):</strong> Limitar el tratamiento en determinados casos</li>
+      </ul>
+      <p id="p8b">Para ejercer cualquiera de estos derechos, contacta a: <a href="mailto:support@sigaleve.com">support@sigaleve.com</a></p>
+    </section>
+
+    <section id="s9">
+      <h2 id="h9">9. Autoridad de control</h2>
+      <p id="p9">Si consideras que el tratamiento de tus datos vulnera el RGPD, tienes derecho a presentar una reclamación ante la <strong>Agencia Española de Protección de Datos (AEPD)</strong>:</p>
+      <ul>
+        <li id="l9a">Web: <a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a></li>
+        <li id="l9b">Dirección: C/ Jorge Juan 6, 28001 Madrid</li>
+        <li id="l9c">Teléfono: 901 100 099</li>
+      </ul>
+    </section>
+
+    <section id="s10">
+      <h2 id="h10">10. Retención de datos</h2>
+      <ul>
+        <li id="l10a"><strong>Cuenta activa:</strong> Los datos se conservan mientras la cuenta esté activa</li>
+        <li id="l10b"><strong>Tras eliminar la cuenta:</strong> Eliminación completa e irreversible en 30 días naturales</li>
+        <li id="l10c"><strong>Mensajes de chat:</strong> Máximo 24 horas desde su envío, independientemente del estado de la cuenta</li>
+        <li id="l10d"><strong>Logs de seguridad:</strong> Conservados 90 días para detectar fraudes y cumplir obligaciones legales</li>
+      </ul>
+    </section>
+
+    <section id="s11">
+      <h2 id="h11">11. Transferencias internacionales</h2>
+      <p id="p11">Todos los datos de los usuarios de Sigaleve se almacenan y procesan <strong>exclusivamente en servidores ubicados en el Espacio Económico Europeo (EEE)</strong>. No realizamos transferencias internacionales de datos personales fuera del EEE.</p>
+    </section>
+
+    <section id="s12">
+      <h2 id="h12">12. Menores de edad</h2>
+      <p id="p12">Sigaleve está <strong>estrictamente prohibido para menores de 18 años</strong>. Verificamos la edad mediante la fecha de nacimiento durante el registro — el sistema calcula la edad en el servidor y rechaza fechas que resulten en edad inferior a 18 años.</p>
+      <p id="p12b">Si detectamos que un usuario es menor de edad, su cuenta será bloqueada y todos sus datos eliminados de forma inmediata conforme a la normativa aplicable.</p>
+    </section>
+
+    <section id="s13">
+      <h2 id="h13">13. Cambios en esta política</h2>
+      <p id="p13">Sigaleve puede actualizar esta política de privacidad cuando sea necesario. Te notificaremos por email y/o mediante aviso en la app con al menos 15 días de antelación antes de que entren en vigor cambios sustanciales que afecten a tus derechos.</p>
+      <p id="p13b">El uso continuado de Sigaleve tras la fecha de entrada en vigor implica la aceptación de la política actualizada.</p>
+    </section>
+
+    <!-- Footer legal links -->
+    <div class="mt-12 pt-8 border-t flex flex-wrap gap-4 text-sm" style="border-color:var(--bdr);color:var(--sub)">
+      <a href="/legal/terms" class="hover:text-purple-500 transition-colors" id="fl-terms">Términos de servicio</a>
+      <a href="/legal/cookies" class="hover:text-purple-500 transition-colors" id="fl-cookies">Política de cookies</a>
+      <a href="/app" class="hover:text-purple-500 transition-colors" id="fl-app">Volver a la app</a>
+      <a href="/" class="hover:text-purple-500 transition-colors" id="fl-home">Inicio</a>
+    </div>
+  </article>
+</div>
+
+<script src="/static/legal_i18n.js"></script>
+<script>
+function toggleDark(){const dark=!document.documentElement.classList.contains('dark');document.documentElement.classList.toggle('dark',dark);localStorage.setItem('sigaleve_dark',dark);document.getElementById('di').className=dark?'fa-solid fa-sun':'fa-solid fa-moon';}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('di').className=document.documentElement.classList.contains('dark')?'fa-solid fa-sun':'fa-solid fa-moon';
+  // TOC active highlight on scroll
+  const secs=document.querySelectorAll('section[id]');
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc a').forEach(a=>a.classList.remove('active'));const t=document.querySelector('.toc a[href="#'+e.target.id+'"]');if(t)t.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'});
+  secs.forEach(s=>obs.observe(s));
+});
+</script>
+</body>
+</html>

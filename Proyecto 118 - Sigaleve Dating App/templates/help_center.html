@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="64x64" href="/static/img/favicon-64x64.png"/>
+<link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
+<link rel="apple-touch-icon" href="/static/img/logo-icon-192.png"/>
+<title>Centro de Ajuda e Suporte — Sigaleve</title>
+<script>(function(){var d=localStorage.getItem('sigaleve_dark');if(d==='true'||(d===null&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');})()</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class'}</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<style>
+:root{--bg:#fff;--card:#f9fafb;--txt:#111827;--sub:#6b7280;--bdr:#e5e7eb;--inp:#f3f4f6}
+.dark{--bg:#0d0d1a;--card:#16162a;--txt:#f9fafb;--sub:#9ca3af;--bdr:#2d2d4e;--inp:#1f1f38}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0}
+.grad-text{background:linear-gradient(135deg,#9333ea,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad{background:linear-gradient(135deg,#9333ea,#ec4899)}
+.prose h2{font-size:1.35rem;font-weight:800;margin:2rem 0 .75rem;color:var(--txt);display:flex;align-items:center;gap:.5rem}
+.prose h3{font-size:1.05rem;font-weight:700;margin:1.3rem 0 .4rem;color:var(--txt)}
+.prose p,.prose li{font-size:.95rem;line-height:1.75;color:var(--sub);margin-bottom:.65rem}
+.prose ul{list-style:disc;padding-left:1.5rem;margin-bottom:1.2rem}
+.prose a{color:#9333ea;text-decoration:underline}
+.prose strong{color:var(--txt);font-weight:700}
+.help-card{border-radius:1.25rem;padding:1.4rem;border:1px solid var(--bdr);background:var(--card);margin-bottom:1.5rem;transition:all .2s ease}
+.help-card:hover{border-color:rgba(147,51,234,0.4);box-shadow:0 10px 25px -5px rgba(0,0,0,0.05)}
+.toc a{color:var(--sub);text-decoration:none;font-size:.85rem;display:block;padding:.35rem 0;border-left:2px solid var(--bdr);padding-left:.75rem;transition:all .15s}
+.toc a:hover,.toc a.active{color:#9333ea;border-color:#9333ea}
+.faq-accordion details{border-radius:.75rem;background:var(--card);border:1px solid var(--bdr);margin-bottom:.75rem;padding:.75rem 1rem}
+.faq-accordion summary{cursor:pointer;font-weight:700;font-size:.95rem;list-style:none;display:flex;align-items:center;justify-content:space-between;color:var(--txt)}
+.faq-accordion summary::-webkit-details-marker{display:none}
+.faq-accordion summary::after{content:'+';font-size:1.2rem;color:#9333ea}
+.faq-accordion details[open] summary::after{content:'–';color:#ec4899}
+.faq-accordion details[open] p{margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bdr)}
+section{scroll-margin-top:80px}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<nav class="sticky top-0 z-40 border-b backdrop-blur-md" style="background:var(--bg);border-color:var(--bdr)">
+  <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
+    <a href="/" class="flex items-center gap-2 font-black text-lg grad-text">
+      <div class="w-7 h-7 grad rounded-xl flex items-center justify-center text-white text-xs"><i class="fa-solid fa-heart"></i></div>
+      Sigaleve
+    </a>
+    <div class="flex items-center gap-2">
+      <a href="/app" class="text-xs px-3.5 py-1.5 rounded-xl border font-bold transition-all hover:border-purple-500 hover:text-purple-500" style="border-color:var(--bdr);color:var(--sub)">Abrir App</a>
+      <button onclick="toggleDark()" class="w-8 h-8 flex items-center justify-center rounded-xl border text-sm" style="border-color:var(--bdr);color:var(--sub)"><i id="di" class="fa-solid fa-moon"></i></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO HEADER -->
+<div class="border-b" style="border-color:var(--bdr);background:radial-gradient(ellipse at top, rgba(147,51,234,0.08), transparent 70%)">
+  <div class="max-w-5xl mx-auto px-4 py-12 text-center">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-purple-500 bg-purple-500/10 border border-purple-500/20 mb-4">
+      <i class="fa-solid fa-headset"></i> Centro de Ajuda e Suporte Oficial
+    </div>
+    <h1 class="text-3xl sm:text-5xl font-black mb-3">Como te podemos ajudar?</h1>
+    <p class="text-sm sm:text-base max-w-2xl mx-auto leading-relaxed" style="color:var(--sub)">
+      Documentação completa, guia de utilização, privacidade de dados de saúde, resolução de dúvidas e assistência direta da equipa do Sigaleve.
+    </p>
+    <div class="mt-6 max-w-md mx-auto relative">
+      <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-zinc-400 text-sm"></i>
+      <input type="text" id="help-search" oninput="searchHelpTopics(this.value)" placeholder="Pesquisar artigos, dúvidas ou problemas..." class="w-full pl-11 pr-4 py-3 rounded-2xl border text-sm outline-none shadow-sm transition-all focus:border-purple-500" style="background:var(--card);border-color:var(--bdr);color:var(--txt)">
+    </div>
+  </div>
+</div>
+
+<div class="max-w-5xl mx-auto px-4 py-10 grid md:grid-cols-[250px,1fr] gap-10">
+  <!-- TOC Sidebar -->
+  <aside class="hidden md:block">
+    <div class="sticky top-24">
+      <p class="text-xs font-black tracking-widest uppercase mb-3 text-purple-500">Tópicos de Ajuda</p>
+      <nav class="toc space-y-1">
+        <a href="#h1">1. Começar no Sigaleve</a>
+        <a href="#h2">2. Conta, Perfil e Verificação</a>
+        <a href="#h3">3. Saúde, Privacidade e Diagnóstico</a>
+        <a href="#h4">4. Matches, Radar e Conversas</a>
+        <a href="#h5">5. Subscrições e Planos VIP</a>
+        <a href="#h6">6. Segurança, Bloqueios e Denúncias</a>
+        <a href="#h7">7. Resolução de Problemas Técnicos</a>
+        <a href="#h8">8. Perguntas Frequentes (FAQ)</a>
+        <a href="#h9">9. Contacto com o Suporte</a>
+      </nav>
+      <div class="mt-8 flex flex-col gap-2.5 text-xs" style="color:var(--sub)">
+        <span class="font-bold uppercase tracking-wider text-[10px] text-zinc-400">Documentos Legais</span>
+        <a href="/legal/community" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-book-open text-purple-500"></i> Regras da Comunidade</a>
+        <a href="/legal/safety" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-pink-500"></i> Segurança e Política</a>
+        <a href="/legal/privacy" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-lock text-sky-500"></i> Política de Privacidade</a>
+        <a href="/legal/terms" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-scale-balanced text-amber-500"></i> Termos de Serviço</a>
+        <a href="/legal/cookies" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-cookie-bite text-emerald-500"></i> Política de Cookies</a>
+        <a href="/legal/accessibility" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-universal-access text-indigo-500"></i> Declaração de Acessibilidade</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="prose max-w-none">
+    
+    <!-- Seção 1 -->
+    <section id="h1" class="help-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-sm font-black">1</span> Começar no Sigaleve</h2>
+      <p>
+        O Sigaleve é a primeira plataforma global de encontros e conexões autênticas criada para oferecer um ambiente 100% livre de estigma, preconceito e constrangimento. Quer tenhas uma condição de saúde crónica, diagnóstico de DST/IST ou valorizes a transparência mútua, este é o teu espaço seguro.
+      </p>
+      <h3>Requisitos de Acesso</h3>
+      <ul>
+        <li>Ter no mínimo <strong>18 anos de idade</strong> completos.</li>
+        <li>Aceitar integralmente o nosso Código de Honra e as Regras da Comunidade.</li>
+        <li>Utilizar autenticação oficial e segura (Google ou E-mail verificado).</li>
+      </ul>
+    </section>
+
+    <!-- Seção 2 -->
+    <section id="h2" class="help-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm font-black">2</span> Conta, Perfil e Verificação</h2>
+      <p>
+        Podes personalizar o teu perfil a qualquer momento a partir da secção de edição. Para proteger a tua identidade civil, o Sigaleve permite a utilização de pseudónimos ou primeiros nomes.
+      </p>
+      <h3>Verificação de Foto em Tempo Real</h3>
+      <p>
+        Para garantir que todos os perfis são pessoas reais e combater perfis falsos ou catfishing, disponibilizamos a verificação biométrica por pose. Os perfis verificados exibem um selo azul de autenticidade no radar e nos matches.
+      </p>
+      <h3>Como alterar a tua palavra-passe ou e-mail</h3>
+      <p>
+        Acede às Definições > Segurança da Conta. Podes atualizar a tua palavra-passe, ativar autenticação de dois fatores (2FA por aplicação ou e-mail) ou solicitar a recuperação segura através de link enviado para a tua caixa de correio eletrónico.
+      </p>
+    </section>
+
+    <!-- Seção 3 -->
+    <section id="h3" class="help-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-black">3</span> Saúde, Privacidade e Diagnóstico</h2>
+      <p>
+        A confidencialidade dos teus dados de saúde é a nossa prioridade número um. Qualquer diagnóstico ou informação médica que decidas partilhar no teu perfil é protegido por encriptação forte em repouso e em trânsito.
+      </p>
+      <h3>Controlo Total de Visibilidade</h3>
+      <ul>
+        <li><strong>Público no perfil:</strong> Visível para potenciais matches na tua área.</li>
+        <li><strong>Apenas com Match:</strong> Revelado exclusivamente após haver interesse mútuo (match mútuo).</li>
+        <li><strong>Privado / Oculto:</strong> Não visível publicamente, servindo apenas para compatibilidade estatística anónima.</li>
+      </ul>
+      <p>
+        Nunca partilhamos dados médicos com anunciantes, corretores de dados ou entidades terceiras sob qualquer circunstância.
+      </p>
+    </section>
+
+    <!-- Seção 4 -->
+    <section id="h4" class="help-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-sm font-black">4</span> Matches, Radar e Mensagens Efêmeras</h2>
+      <p>
+        O radar do Sigaleve permite-te explorar pessoas perto de ti com filtros avançados de idade, distância, hábitos de vida e condições de saúde partilhadas.
+      </p>
+      <h3>Mensagens Efêmeras de 24 Horas</h3>
+      <p>
+        Para tua tranquilidade, todas as mensagens de conversação privada no Sigaleve possuem ciclo de vida efêmero, sendo eliminadas de forma automática e irreversível após 24 horas. Não mantemos registos permanentes de conversas nos servidores.
+      </p>
+      <h3>Desfazer Match</h3>
+      <p>
+        Podes desfazer um match a qualquer momento clicando nos três pontos do chat ou perfil. Ao desfazer o match, o contacto desaparece imediatamente para ambos e a conversa é eliminada.
+      </p>
+    </section>
+
+    <!-- Seção 5 -->
+    <section id="h5" class="help-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm font-black">5</span> Subscrições e Planos VIP</h2>
+      <p>
+        O Sigaleve oferece planos opcionais para quem deseja recursos adicionais de visibilidade e filtros alargados:
+      </p>
+      <ul>
+        <li><strong>Sigaleve Plus:</strong> Likes ilimitados, Passaporte Global para qualquer cidade e remoção de publicidade.</li>
+        <li><strong>Sigaleve Gold:</strong> Todos os benefícios do Plus + ver quem te deu like antes de deslizar e destaques semanais.</li>
+        <li><strong>Sigaleve Platinum:</strong> Prioridade máxima nas recomendações, mensagens antes do match e filtros médicos e avançados exclusivos.</li>
+      </ul>
+      <p>
+        Podes cancelar a tua subscrição a qualquer momento nas definições da conta. O teu acesso premium mantém-se ativo até ao termo do período faturado.
+      </p>
+    </section>
+
+    <!-- Seção 6 -->
+    <section id="h6" class="help-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-sm font-black">6</span> Segurança, Bloqueios e Denúncias</h2>
+      <p>
+        A nossa política contra assédio, extorsão, discriminação e conteúdo impróprio é estrita e impiedosa.
+      </p>
+      <h3>Como Bloquear ou Denunciar um Utilizador:</h3>
+      <ol class="list-decimal pl-6 space-y-2 text-sm" style="color:var(--sub)">
+        <li>Abre o perfil ou a conversa com a pessoa em questão.</li>
+        <li>Clica no ícone de opções (três pontos no canto superior direito).</li>
+        <li>Seleciona <strong>"Bloquear"</strong> para cessar qualquer visibilidade ou <strong>"Denunciar"</strong> para enviar um relatório à nossa equipa de moderação 24/7.</li>
+        <li>Escolhe o motivo da denúncia (Assédio, Perfil Falso, Comportamento Abusivo, etc.) e fornece detalhes adicionais se desejares.</li>
+      </ol>
+      <p class="mt-3">
+        Os relatórios são estritamente confidenciais. A pessoa denunciada nunca saberá quem efetuou a denúncia.
+      </p>
+    </section>
+
+    <!-- Seção 7 -->
+    <section id="h7" class="help-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-sm font-black">7</span> Resolução de Problemas Técnicos</h2>
+      <p>
+        Se estás a enfrentar dificuldades técnicas na aplicação web ou móvel, segue estes passos rápidos:
+      </p>
+      <ul>
+        <li><strong>Problemas de localização GPS:</strong> Certifica-te de que concedeste permissão de geolocalização ao teu navegador ou dispositivo. Se a precisão falhar, podes definir a cidade manualmente.</li>
+        <li><strong>Imagens não carregam:</strong> Limpa a cache do teu navegador ou atualiza a página pressionando <code>Ctrl + F5</code> (ou <code>Cmd + Shift + R</code> em Mac).</li>
+        <li><strong>Falhas de Notificação:</strong> Ativa as notificações push nas definições do navegador para receberes alertas de novos matches e mensagens.</li>
+      </ul>
+    </section>
+
+    <!-- Seção 8: FAQ -->
+    <section id="h8" class="help-card">
+      <h2><span class="w-8 h-8 rounded-xl bg-violet-500/20 text-violet-400 flex items-center justify-center text-sm font-black">8</span> Perguntas Frequentes (FAQ)</h2>
+      
+      <div class="faq-accordion mt-4 space-y-2">
+        <details>
+          <summary>Os meus amigos ou contactos vão saber que uso o Sigaleve?</summary>
+          <p>
+            Não. O Sigaleve não sincroniza nem acede à lista de contactos do teu telemóvel. Além disso, dispões da funcionalidade "Modo Incógnito" para que o teu perfil apenas seja mostrado a pessoas que tu decidas curtir primeiro.
+          </p>
+        </details>
+
+        <details>
+          <summary>É obrigatório declarar uma condição médica ou de saúde?</summary>
+          <p>
+            Não. A declaração de condições específicas é inteiramente voluntária. O Sigaleve acolhe tanto pessoas com condições específicas como pessoas aliadas que valorizam relações honestas e seguras.
+          </p>
+        </details>
+
+        <details>
+          <summary>Como posso eliminar a minha conta e todos os meus dados?</summary>
+          <p>
+            Podes eliminar permanentemente a tua conta acedendo a Definições > Rolar até ao fim > "Eliminar Conta". Todos os teus dados, fotos, matches e configurações serão destruídos de forma irreversível conforme o RGPD e LGPD.
+          </p>
+        </details>
+
+        <details>
+          <summary>Como funciona a distância mostrada no perfil?</summary>
+          <p>
+            Para tua segurança física, o Sigaleve nunca divulga as tuas coordenadas geográficas exatas. Aplicamos um filtro de difusão aproximado de distância em quilómetros, impossibilitando a triangulação da tua morada real.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Seção 9: Contacto Suporte -->
+    <section id="h9" class="help-card border-purple-500/30 bg-purple-500/5">
+      <h2><span class="w-8 h-8 rounded-xl bg-purple-500 text-white flex items-center justify-center text-sm font-black"><i class="fa-solid fa-envelope"></i></span> 9. Contacto com o Suporte Oficial</h2>
+      <p>
+        Não encontraste resposta para a tua dúvida? A nossa equipa de apoio ao cliente está disponível para te ajudar com qualquer situação técnica, de segurança ou de faturação.
+      </p>
+      
+      <div class="p-4 rounded-2xl border my-4 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 space-y-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-paper-plane"></i>
+          </div>
+          <div>
+            <p class="font-bold text-sm">Canal Oficial de E-mail</p>
+            <p class="text-xs text-purple-600 dark:text-purple-400 font-mono font-bold">support@sigaleve.com</p>
+          </div>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:var(--sub)">
+          Tempo médio de resposta: inferior a 24 horas úteis. Ao contactar, inclui o teu e-mail de registo para podermos agilizar o atendimento.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer legal links -->
+    <div class="mt-12 pt-8 border-t flex flex-wrap gap-4 text-sm" style="border-color:var(--bdr);color:var(--sub)">
+      <a href="/legal/terms" class="hover:text-purple-500 transition-colors">Termos de serviço</a>
+      <a href="/legal/privacy" class="hover:text-purple-500 transition-colors">Política de privacidade</a>
+      <a href="/legal/cookies" class="hover:text-purple-500 transition-colors">Política de cookies</a>
+      <a href="/legal/community" class="hover:text-purple-500 transition-colors">Regras da comunidade</a>
+      <a href="/app" class="hover:text-purple-500 transition-colors font-bold text-purple-500">Voltar à App</a>
+    </div>
+  </main>
+</div>
+
+<!-- Auto-tradutor universal -->
+<script src="/static/legal_i18n.js"></script>
+<script>
+function toggleDark(){
+  const dark=!document.documentElement.classList.contains('dark');
+  document.documentElement.classList.toggle('dark',dark);
+  localStorage.setItem('sigaleve_dark',dark);
+  document.getElementById('di').className=dark?'fa-solid fa-sun':'fa-solid fa-moon';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const isDark=document.documentElement.classList.contains('dark');
+  const di=document.getElementById('di');
+  if(di) di.className=isDark?'fa-solid fa-sun':'fa-solid fa-moon';
+
+  // TOC active highlight on scroll
+  const secs=document.querySelectorAll('section[id]');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        document.querySelectorAll('.toc a').forEach(a=>a.classList.remove('active'));
+        const t=document.querySelector('.toc a[href="#'+e.target.id+'"]');
+        if(t) t.classList.add('active');
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  secs.forEach(s=>obs.observe(s));
+});
+
+function searchHelpTopics(q) {
+  q = (q || '').toLowerCase().trim();
+  const cards = document.querySelectorAll('.help-card');
+  cards.forEach(card => {
+    const text = card.innerText.toLowerCase();
+    if (!q || text.includes(q)) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>

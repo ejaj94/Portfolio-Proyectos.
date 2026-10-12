@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="64x64" href="/static/img/favicon-64x64.png"/>
+<link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
+<link rel="apple-touch-icon" href="/static/img/logo-icon-192.png"/>
+<title>Política de Cookies — Sigaleve</title>
+<script>(function(){var d=localStorage.getItem('sigaleve_dark');if(d==='true'||(d===null&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');})()</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class'}</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<style>
+:root{--bg:#fff;--card:#f9fafb;--txt:#111827;--sub:#6b7280;--bdr:#e5e7eb}
+.dark{--bg:#0d0d1a;--card:#16162a;--txt:#f9fafb;--sub:#9ca3af;--bdr:#2d2d4e}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0}
+.grad-text{background:linear-gradient(135deg,#9333ea,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad{background:linear-gradient(135deg,#9333ea,#ec4899)}
+.prose h2{font-size:1.2rem;font-weight:700;margin:2rem 0 .75rem;color:var(--txt)}
+.prose h3{font-size:1rem;font-weight:600;margin:1.2rem 0 .4rem;color:var(--txt)}
+.prose p,.prose li{font-size:.93rem;line-height:1.75;color:var(--sub);margin-bottom:.5rem}
+.prose ul{list-style:disc;padding-left:1.5rem;margin-bottom:1rem}
+.prose strong{color:var(--txt);font-weight:600}
+.prose a{color:#9333ea;text-decoration:underline}
+table{width:100%;border-collapse:collapse;font-size:.85rem;margin:1rem 0}
+th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--bdr);font-weight:600;color:var(--txt)}
+td{padding:10px 12px;border-bottom:1px solid var(--bdr);color:var(--sub);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(147,51,234,.04)}
+.badge-essential{background:rgba(16,185,129,.1);color:#10b981;border-radius:100px;padding:2px 10px;font-size:.75rem;font-weight:600;white-space:nowrap}
+.badge-functional{background:rgba(59,130,246,.1);color:#3b82f6;border-radius:100px;padding:2px 10px;font-size:.75rem;font-weight:600;white-space:nowrap}
+.badge-analytics{background:rgba(245,158,11,.1);color:#f59e0b;border-radius:100px;padding:2px 10px;font-size:.75rem;font-weight:600;white-space:nowrap}
+.badge-none{background:rgba(107,114,128,.1);color:#6b7280;border-radius:100px;padding:2px 10px;font-size:.75rem;font-weight:600;white-space:nowrap}
+.tog2{width:44px;height:24px;background:#d1d5db;border-radius:12px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.tog2.on{background:#9333ea}
+.tog2::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .2s}
+.tog2.on::after{transform:translateX(20px)}
+section{scroll-margin-top:80px}
+</style>
+</head>
+<body>
+<nav class="sticky top-0 z-40 border-b" style="background:var(--bg);border-color:var(--bdr)">
+  <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
+    <a href="/" class="flex items-center group py-0.5">
+      <img src="/static/img/sigaleve-logo-original.png" alt="Sigaleve" class="h-9 w-auto object-contain rounded-md shadow-sm group-hover:scale-105 transition-transform"/>
+    </a>
+    <div class="flex items-center gap-2">
+      <a href="/app" class="text-xs px-3 py-1.5 rounded-lg border font-medium" style="border-color:var(--bdr);color:var(--sub)">Abrir app</a>
+      <button onclick="document.documentElement.classList.toggle('dark');localStorage.setItem('sigaleve_dark',document.documentElement.classList.contains('dark'))" class="w-8 h-8 flex items-center justify-center rounded-lg border text-sm" style="border-color:var(--bdr);color:var(--sub)"><i class="fa-solid fa-moon"></i></button>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-4xl mx-auto px-4 py-10">
+  <div class="mb-8">
+    <span class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(147,51,234,.1);color:#9333ea">Última actualización: 26 de septiembre de 2024</span>
+    <h1 class="text-3xl font-black mt-4 mb-2">Política de Cookies</h1>
+    <p style="color:var(--sub)">Esta política explica qué cookies utiliza Sigaleve, para qué y cómo puedes gestionarlas.</p>
+  </div>
+
+  <div class="prose max-w-none">
+    <section id="s1">
+      <h2>1. ¿Qué son las cookies?</h2>
+      <p>Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web o usas una aplicación. Permiten que la aplicación recuerde información entre visitas, como tus preferencias de idioma o tu sesión de usuario.</p>
+      <p>Sigaleve también usa tecnologías similares como <strong>localStorage</strong> del navegador para almacenar preferencias de manera local sin transmitir datos al servidor.</p>
+    </section>
+
+    <section id="s2">
+      <h2>2. Tipos de cookies que usamos</h2>
+
+      <h3>🟢 Cookies esenciales (siempre activas)</h3>
+      <p>Estas cookies son <strong>imprescindibles</strong> para el funcionamiento de la Aplicación. Sin ellas, la app no puede funcionar correctamente. No requieren tu consentimiento previo bajo la normativa aplicable.</p>
+
+      <h3>🔵 Cookies funcionales (opcionales)</h3>
+      <p>Mejoran tu experiencia recordando tus preferencias personales como el idioma o el tema visual. Puedes desactivarlas sin que la funcionalidad esencial se vea afectada.</p>
+
+      <h3>🟡 Cookies analíticas (opcionales)</h3>
+      <p>Nos ayudan a entender cómo se usa la Aplicación para mejorarla. Solo usamos datos anonimizados y agregados. Puedes desactivarlas sin problema.</p>
+
+      <h3>🚫 Cookies de marketing</h3>
+      <p><strong>NO utilizamos cookies de publicidad, rastreo o marketing</strong> de ningún tipo. Sigaleve no vende publicidad ni participa en redes publicitarias.</p>
+    </section>
+
+    <section id="s3">
+      <h2>3. Listado completo de cookies</h2>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Tipo</th>
+              <th>Duración</th>
+              <th>Finalidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>sigaleve_session</code></td>
+              <td><span class="badge-essential">Esencial</span></td>
+              <td>Sesión</td>
+              <td>Mantiene la sesión autenticada del usuario. Se destruye al cerrar el navegador.</td>
+            </tr>
+            <tr>
+              <td><code>sigaleve_lang</code></td>
+              <td><span class="badge-functional">Funcional</span></td>
+              <td>1 año</td>
+              <td>Recuerda el idioma seleccionado por el usuario (ES/EN/FR). Almacenado en localStorage.</td>
+            </tr>
+            <tr>
+              <td><code>sigaleve_dark</code></td>
+              <td><span class="badge-functional">Funcional</span></td>
+              <td>1 año</td>
+              <td>Recuerda la preferencia de tema visual (claro/oscuro). Almacenado en localStorage.</td>
+            </tr>
+            <tr>
+              <td><code>sigaleve_cookie_consent</code></td>
+              <td><span class="badge-essential">Esencial</span></td>
+              <td>1 año</td>
+              <td>Almacena la decisión del usuario sobre el consentimiento de cookies para no volver a preguntar.</td>
+            </tr>
+            <tr>
+              <td><code>io</code> (Socket.IO)</td>
+              <td><span class="badge-essential">Esencial</span></td>
+              <td>Sesión</td>
+              <td>Identificador de sesión WebSocket necesario para el chat en tiempo real.</td>
+            </tr>
+            <tr>
+              <td>Cookies analíticas</td>
+              <td><span class="badge-analytics">Analítica</span></td>
+              <td>Hasta 2 años</td>
+              <td>Si se aceptan, recopilan estadísticas de uso anónimas (páginas visitadas, tiempo de sesión). No incluyen datos personales.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="s4">
+      <h2>4. Gestionar preferencias de cookies</h2>
+
+      <!-- Interactive toggle panel -->
+      <div class="rounded-2xl p-6 my-6 border" style="background:var(--card);border-color:var(--bdr)">
+        <h3 style="margin-top:0">Panel de preferencias</h3>
+
+        <div class="flex items-center justify-between py-4 border-b" style="border-color:var(--bdr)">
+          <div>
+            <p class="font-semibold text-sm">Cookies esenciales</p>
+            <p class="text-xs mt-0.5" style="color:var(--sub)">Necesarias para el funcionamiento. No se pueden desactivar.</p>
+          </div>
+          <div class="tog2 on" style="cursor:not-allowed;opacity:.7"></div>
+        </div>
+
+        <div class="flex items-center justify-between py-4 border-b" style="border-color:var(--bdr)">
+          <div>
+            <p class="font-semibold text-sm">Cookies funcionales</p>
+            <p class="text-xs mt-0.5" style="color:var(--sub)">Idioma, tema visual y otras preferencias.</p>
+          </div>
+          <div class="tog2 on" id="tog-func" onclick="this.classList.toggle('on')"></div>
+        </div>
+
+        <div class="flex items-center justify-between py-4">
+          <div>
+            <p class="font-semibold text-sm">Cookies analíticas</p>
+            <p class="text-xs mt-0.5" style="color:var(--sub)">Estadísticas anónimas de uso para mejorar la app.</p>
+          </div>
+          <div class="tog2" id="tog-analytics" onclick="this.classList.toggle('on')"></div>
+        </div>
+
+        <div class="flex gap-3 mt-4 flex-wrap">
+          <button onclick="savePreferences()" class="grad text-white text-sm font-semibold px-5 py-2.5 rounded-xl">Guardar preferencias</button>
+          <button onclick="acceptAll()" class="text-sm font-semibold px-5 py-2.5 rounded-xl border" style="border-color:var(--bdr)">Aceptar todas</button>
+          <button onclick="rejectOptional()" class="text-sm px-5 py-2.5 rounded-xl" style="color:var(--sub)">Solo esenciales</button>
+        </div>
+        <p id="saved-msg" class="hidden text-sm mt-3" style="color:#10b981"><i class="fa-solid fa-check mr-1"></i>Preferencias guardadas correctamente.</p>
+      </div>
+
+      <h3>Gestionar cookies en tu navegador</h3>
+      <p>También puedes gestionar y eliminar cookies directamente desde tu navegador:</p>
+      <ul>
+        <li><strong>Chrome:</strong> Configuración → Privacidad y seguridad → Cookies y otros datos de sitios</li>
+        <li><strong>Firefox:</strong> Opciones → Privacidad y seguridad → Cookies y datos del sitio</li>
+        <li><strong>Safari:</strong> Preferencias → Privacidad → Gestionar datos de sitios web</li>
+        <li><strong>Edge:</strong> Configuración → Privacidad, búsqueda y servicios → Cookies</li>
+      </ul>
+      <p>Ten en cuenta que eliminar las cookies esenciales puede impedir el acceso a tu cuenta.</p>
+    </section>
+
+    <section id="s5">
+      <h2>5. Actualización de preferencias</h2>
+      <p>Puedes cambiar tus preferencias de cookies en cualquier momento usando el panel de arriba o pulsando el botón:</p>
+      <button onclick="resetConsent()" class="mt-2 px-5 py-2.5 rounded-xl border text-sm font-medium" style="border-color:var(--bdr);color:var(--sub)"><i class="fa-solid fa-rotate-left mr-2"></i>Restablecer preferencias de cookies</button>
+    </section>
+
+    <section id="s6">
+      <h2>6. Contacto</h2>
+      <p>Si tienes dudas sobre el uso de cookies en Sigaleve, contacta con nuestro equipo de privacidad:</p>
+      <ul>
+        <li><strong>Email:</strong> <a href="mailto:support@sigaleve.com">support@sigaleve.com</a></li>
+        <li><strong>Delegado de Protección de Datos:</strong> <a href="mailto:support@sigaleve.com">support@sigaleve.com</a></li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="mt-12 pt-8 border-t flex flex-wrap gap-4 text-sm" style="border-color:var(--bdr);color:var(--sub)">
+    <a href="/legal/privacy" class="hover:text-purple-500">Política de privacidad</a>
+    <a href="/legal/terms" class="hover:text-purple-500">Términos de servicio</a>
+    <a href="/app" class="hover:text-purple-500">Volver a la app</a>
+    <a href="/" class="hover:text-purple-500">Inicio</a>
+  </div>
+</div>
+
+<script>
+function savePreferences(){
+  const func=document.getElementById('tog-func').classList.contains('on');
+  const analytics=document.getElementById('tog-analytics').classList.contains('on');
+  localStorage.setItem('sigaleve_cookie_consent',JSON.stringify({essential:true,functional:func,analytics}));
+  const msg=document.getElementById('saved-msg');msg.classList.remove('hidden');
+  setTimeout(()=>msg.classList.add('hidden'),3000);
+}
+function acceptAll(){
+  document.getElementById('tog-func').classList.add('on');
+  document.getElementById('tog-analytics').classList.add('on');
+  savePreferences();
+}
+function rejectOptional(){
+  document.getElementById('tog-func').classList.remove('on');
+  document.getElementById('tog-analytics').classList.remove('on');
+  savePreferences();
+}
+function resetConsent(){
+  localStorage.removeItem('sigaleve_cookie_consent');
+  alert('Preferencias restablecidas. Recarga la página para ver el banner de cookies.');
+  location.reload();
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const stored=localStorage.getItem('sigaleve_cookie_consent');
+  if(stored){
+    try{
+      const prefs=JSON.parse(stored);
+      if(prefs.functional)document.getElementById('tog-func').classList.add('on');
+      if(prefs.analytics)document.getElementById('tog-analytics').classList.add('on');
+    }catch(e){}
+  }
+});
+</script>
+<script src="/static/legal_i18n.js"></script>
+</body>
+</html>
+
