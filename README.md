@@ -31,6 +31,7 @@ O resultado é um ecossistema com **mais de 100 aplicações completas**, varian
 
 | Projeto | Nome | Categoria | Descrição Principal | Porta Local |
 | :--- | :--- | :--- | :--- | :--- |
+| **#118** | **[Sigaleve Dating App](./Proyecto%20118%20-%20Sigaleve%20Dating%20App)** | `PWA Social & Privacy` | PWA inclusiva de conexões seguras e dating com Privacy Shield radical, Botão de Pânico com camuflagem instantânea, WebSockets em tempo real, 2FA OTP e planos VIP. | `:5001` |
 | **#117** | **[Showcase 100 Dias](./Proyecto%20117%20-%20Showcase%20100%20Dias)** | `Gala Showcase` | Celebração máxima dos 100 dias: motor físico de fogos de artifício em Canvas, teatro de vídeo dos projetos 91 a 100 e certificado dourado. | `:6970` |
 | **#116** | **[NEXUS Business OS](./Proyecto%20116%20-%20Business%20OS)** | `Enterprise Suite` | A obra-prima dos 100 dias: CRM, Clientes 360°, Faturação (23% IVA), Orçamentos 1-clique, Inventário, Tarefas, Calendário, Helpdesk e Copiloto IA. | `:6969` |
 | **#115** | **[Nexa AI Business Assistant](./Proyecto%20115%20-%20AI%20Business%20Assistant)** | `AI & Copilot` | Copiloto empresarial autónomo com chat cognitivo, auditoria de liquidez, geração de emails comerciais e análise preditiva. | `:6968` |
