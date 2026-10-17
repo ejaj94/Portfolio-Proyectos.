@@ -7,18 +7,34 @@ preview_server.py — Sigaleve Server 100% Funcional
 Servidor para Sigaleve con persistencia de usuarios, perfiles, sesiones,
 validación de contraseñas de alta seguridad, fotos HD y Socket.IO.
 """
-import random, uuid, datetime, re, os, json, smtplib, time
+import random, uuid, datetime, re, os, json, smtplib, time, secrets, threading
+import binascii
 import urllib.request
 import urllib.parse
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from flask import Flask, jsonify, redirect, render_template, request, session
+from flask import Flask, jsonify, redirect, render_template, request, session, send_from_directory
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "sigaleve-production-super-secret-key-2026")
+
+# ── SESSÃO PERSISTENTE (fix: desloga ao fechar/background no mobile) ────────
+# Cookie de sessão "browser-session" morre quando o navegador mobile é fechado.
+# Sessão permanente de 30 dias => login sobrevive a fechar app / reiniciar telemóvel.
+from datetime import timedelta
+app.permanent_session_lifetime = timedelta(days=30)
+SESSION_COOKIE_SAMESITE = "Lax"  # protege CSRF sem quebrar navegação normal
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SECURE=True,   # HTTPS only
+    SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_NAME="sigaleve_session",
+)
+# VPS: Secure=True requer HTTPS — já servido pelo nginx
+
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
@@ -37,6 +53,13 @@ if os.path.exists(ENV_FILE):
 
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "86970408130-8ugh10poqvbespttgfqr5553hkgvkn4d.apps.googleusercontent.com")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
+
+# ── PUSH NOTIFICATIONS (VAPID via pywebpush) — APÓS o loader do .env ────────
+# VAPID_PRIVATE_KEY no .env é base64 DER (formato que py_vapid aceita)
+VAPID_PRIVATE_KEY = os.environ.get("VAPID_PRIVATE_KEY", "")
+VAPID_PUBLIC_KEY = os.environ.get("VAPID_PUBLIC_KEY", "")
+VAPID_SUBJECT = os.environ.get("VAPID_SUBJECT", "mailto:contato@sigaleve.com")
+PUSH_ENABLED = bool(VAPID_PRIVATE_KEY and VAPID_PUBLIC_KEY)
 
 META_APP_ID = os.environ.get("META_APP_ID", "")
 META_APP_SECRET = os.environ.get("META_APP_SECRET", "")
@@ -98,8 +121,14 @@ def send_real_email(recipient: str, subject: str, html_content: str, text_conten
 
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+
+# 💳 Pagamentos manuais MB Way — importado DEPOIS que helpers existem.
 os.makedirs(DATA_DIR, exist_ok=True)
 USERS_FILE = os.path.join(DATA_DIR, "users_store.json")
+UPLOAD_DIR = os.path.join(DATA_DIR, "uploads")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+MAX_UPLOAD_BYTES = 8 * 1024 * 1024  # 8 MB por foto
+ALLOWED_UPLOAD_TYPES = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp", "image/gif": ".gif"}
 
 def load_users():
     users = {}
@@ -113,13 +142,18 @@ def load_users():
         try:
             with open(target_file, "r", encoding="utf-8") as f:
                 users = json.load(f)
+            import crypto as _crypto
+            users = {em: (_crypto.decrypt_user_sensitive(u) if isinstance(u, dict) else u) for em, u in users.items()}
         except Exception as e:
             print(f"[LOAD_USERS ERROR] {e}")
+            # Try reading backup if main file is temporarily corrupted
             backup_file = USERS_FILE + ".bak"
             if os.path.exists(backup_file):
                 try:
                     with open(backup_file, "r", encoding="utf-8") as f_bak:
                         users = json.load(f_bak)
+                    import crypto as _crypto
+                    users = {em: (_crypto.decrypt_user_sensitive(u) if isinstance(u, dict) else u) for em, u in users.items()}
                 except Exception:
                     users = {}
     return users
@@ -127,11 +161,19 @@ def load_users():
 def save_users(users):
     if not isinstance(users, dict):
         return
+    # Cifrar campos sensíveis (Art. 9 RGPD) antes de gravar em disco
+    import crypto as _crypto
+    safe_users = {}
+    for email, u in users.items():
+        if isinstance(u, dict):
+            safe_users[email] = _crypto.encrypt_user_sensitive(dict(u))
+        else:
+            safe_users[email] = u
     temp_file = USERS_FILE + ".tmp"
     backup_file = USERS_FILE + ".bak"
     try:
         with open(temp_file, "w", encoding="utf-8") as f:
-            json.dump(users, f, ensure_ascii=False, indent=2)
+            json.dump(safe_users, f, ensure_ascii=False, indent=2)
             f.flush()
             os.fsync(f.fileno())
         # If write succeeded, back up old file and atomically replace
@@ -145,32 +187,58 @@ def save_users(users):
     except Exception as e:
         print(f"[SAVE_USERS ERROR] {e}")
 
+
+def safe_photo(u: dict, fallback: str = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80") -> str:
+    """🚫 base64: fotos embutidas pesam MBs e explodiam o payload mobile.
+    Só devolve http(s):// URLs; base64 → fallback (o cliente recarrega a foto real
+    via /api/v1/user/<id> quando abre o perfil)."""
+    for v in (u.get("photo"), (u.get("photos") or [None])[0]):
+        s = v if isinstance(v, str) else ""
+        if s.startswith(("http://", "https://", "/")):
+            return s
+    return fallback
+
 def serialize_user(user: dict) -> dict:
     if not user:
         return {}
+    import crypto as _crypto
+    u = _crypto.decrypt_user_sensitive(user)
+    # 🔧 THUMBNAIL: fotos base64 pesam MBs — o login/matches não deve arrastá-las.
+    # A foto chega aqui como data:...base64 (grande) ou URL http (pequena).
+    def _thumb(v, max_len=180):
+        s = v if isinstance(v, str) else ""
+        return s if len(s) <= max_len or not s.startswith("data:") else None
+    photos_field = u.get("photos", [])
+    if isinstance(photos_field, list) and any(
+        isinstance(p, str) and p.startswith("data:") and len(p) > 512 for p in photos_field
+    ):
+        photos_field = []  # lista tem base64 pesado — cliente recarrega via /uploads/
     return {
-        "id": user.get("id"),
-        "email": user.get("email"),
-        "display_name": user.get("display_name", "Utilizador"),
-        "phone": user.get("phone", ""),
-        "age": user.get("age", 25),
-        "city": user.get("city", "Lisboa, Portugal"),
-        "bio": user.get("bio", ""),
-        "photo": user.get("photo", "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=85"),
-        "photos": user.get("photos", []),
-        "interests": user.get("interests", ["Viagens", "Música"]),
-        "diagnosis": user.get("diagnosis", "ALPHA"),
-        "custom_diagnosis": user.get("custom_diagnosis", ""),
-        "relationship_goal": user.get("relationship_goal", ""),
-        "zodiac": user.get("zodiac", ""),
-        "education": user.get("education", ""),
-        "height": user.get("height", ""),
-        "lifestyle": user.get("lifestyle", ""),
-        "seeking": user.get("seeking", "Todos"),
-        "max_distance": user.get("max_distance", 50),
-        "is_profile_configured": user.get("is_profile_configured", False),
-        "is_plus": user.get("is_plus", False),
-        "subscription": user.get("subscription", None)
+        "id": u.get("id"),
+        "email": u.get("email"),
+        "display_name": u.get("display_name", "Utilizador"),
+        "phone": u.get("phone", ""),
+        "age": u.get("age", 25),
+        "city": u.get("city", "Lisboa, Portugal"),
+        "bio": u.get("bio", ""),
+        "photo": _thumb(u.get("photo")) or "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=85",
+        "photos": photos_field,
+        "interests": u.get("interests", ["Viagens", "Música"]),
+        "diagnosis": u.get("diagnosis", "ALPHA"),
+        "custom_diagnosis": u.get("custom_diagnosis", ""),
+        "relationship_goal": u.get("relationship_goal", ""),
+        "zodiac": u.get("zodiac", ""),
+        "education": u.get("education", ""),
+        "height": u.get("height", ""),
+        "lifestyle": u.get("lifestyle", ""),
+        "profile_prompt": u.get("profile_prompt", ""),
+        "seeking": u.get("seeking", "Todos"),
+        "max_distance": u.get("max_distance", 50),
+        "is_profile_configured": u.get("is_profile_configured", False),
+        "is_plus": u.get("is_plus", False),
+        "subscription": u.get("subscription", None),
+        "last_active": u.get("last_active"),
+        "presence": presence_label(u.get("last_active"))["label"] if u.get("show_recent_activity", True) else None
     }
 
 # Base de dados de utilizadores
@@ -370,29 +438,31 @@ def add_security_and_no_cache_headers(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "0"
-    # Blindagem de Segurança Web
-    response.headers["X-Frame-Options"] = "DENY"
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
-    response.headers["Permissions-Policy"] = "camera=(self), microphone=(), geolocation=(self)"
+    # Segurança web: nginx (sites-enabled/sigaleve.com) é a fonte única dos headers
+    # (X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy, HSTS, CSP).
+    # Emiti-los aqui também duplicava tudo no response.
     return response
 
 # ── Dicionário SEO Multi-idioma para Google & Motores de Busca ────────────────
 SEO_LOCALES = {
     "pt": {
-        "title": "Sigaleve | Conecta com Autenticidade, Sem Julgamentos",
-        "description": "Sigaleve é a aplicação de encontros mais autêntica e inclusiva para conectar com pessoas reais, sem filtros nem preconceitos.",
+        "title": "Sigaleve | Namoro para pessoas com infeções sexualmente transmissíveis",
+        "description": "A comunidade de namoro de Portugal para pessoas que vivem com IST (herpes, HPV, VIH e outras). Conhece quem entende o teu caminho: sem julgamentos, perfis verificados e privacidade total.",
         "og_locale": "pt_PT"
     },
+    "br": {
+        "title": "Sigaleve | Namoro para pessoas com infecções sexualmente transmissíveis",
+        "description": "A comunidade de namoro para pessoas que vivem com IST (herpes, HPV, HIV e outras). Conheça quem entende o seu caminho: sem julgamentos, perfis verificados e privacidade total.",
+        "og_locale": "pt_BR"
+    },
     "es": {
-        "title": "Sigaleve | Citas, Conoce Gente y Conecta Sin Prejuicios",
-        "description": "Sigaleve es la app de citas más auténtica e inclusiva para conectar con personas reales, compartir momentos y empezar algo único.",
+        "title": "Sigaleve | Citas para personas con infecciones de transmisión sexual",
+        "description": "La comunidad de citas de Portugal para personas que viven con ITS (herpes, VPH, VIH y otras). Conoce a quien entiende tu camino: sin juicios, perfiles verificados y privacidad total.",
         "og_locale": "es_ES"
     },
     "en": {
-        "title": "Sigaleve | Authentic Dating, Meet People Without Judgments",
-        "description": "Sigaleve is the modern, judgment-free dating app to meet genuine people, share authentic moments, and spark real connections.",
+        "title": "Sigaleve | Dating for People Living with STIs",
+        "description": "Portugal's dating community for people living with sexually transmitted infections (herpes, HPV, HIV and others). Meet those who understand your journey: no judgment, verified profiles, total privacy.",
         "og_locale": "en_US"
     },
     "fr": {
@@ -444,9 +514,15 @@ def resolve_request_language():
     # 3. Accept-Language header de Googlebot / Navegadores
     accept = request.headers.get("Accept-Language", "")
     for part in accept.split(","):
-        code = part.split(";")[0].strip()[:2].lower()
+        code = part.split(";")[0].strip().lower()
         if code in SEO_LOCALES:
             return code
+        # pt-BR / pt_BR -> locale br (dicionário nativo pt-BR)
+        if code.startswith("pt-br") or code.startswith("pt_br"):
+            return "br"
+        base2 = code[:2]
+        if base2 in SEO_LOCALES:
+            return base2
     # Default oficial: Português
     return "pt"
 
@@ -456,12 +532,16 @@ def landing():
     lang = resolve_request_language()
     explicit_lang = request.args.get("lang")
     seo_data = SEO_LOCALES.get(lang, SEO_LOCALES["pt"])
+    # 💜 Histórias de sucesso aprovadas (curadoria do dono) — server-side
+    # para SEO ler o conteúdo real. O ensure cria as seeds no 1º boot.
+    approved_stories = success_stories.get_approved_stories(load_json_store, save_json_store)
     resp = app.make_response(render_template(
         "landing.html",
         current_lang=lang,
         seo_title=seo_data["title"],
         seo_desc=seo_data["description"],
-        seo_locale=seo_data["og_locale"]
+        seo_locale=seo_data["og_locale"],
+        success_stories=approved_stories
     ))
     if explicit_lang:
         resp.set_cookie("sigaleve_lang", explicit_lang, max_age=31536000, path="/")
@@ -744,6 +824,7 @@ def api_register():
 
     # Iniciar sessão diretamente
     session["user_id"] = user_id
+    session.permanent = True
     session["user_email"] = email
 
     return jsonify({
@@ -952,12 +1033,76 @@ def api_2fa_disable():
         }
     }), 200
 
+# ── Rate limiting simples em memória (brute force no login) ──────────────────
+_LOGIN_ATTEMPTS = {}  # chave: identificador -> {count, blocked_until}
+_LOGIN_MAX_ATTEMPTS = 5
+_LOGIN_LOCK_MINUTES = 15
+
+def _login_rate_check(identifier: str):
+    """Devolve (bloqueado, segundos_restantes). 5 tentativas -> 15 min de bloqueio."""
+    import time as _time
+    rec = _LOGIN_ATTEMPTS.get(identifier)
+    if not rec:
+        return False, 0
+    until = rec.get("blocked_until", 0)
+    if until and until > _time.time():
+        return True, int(until - _time.time())
+    return False, 0
+
+def _login_rate_fail(identifier: str):
+    import time as _time
+    rec = _LOGIN_ATTEMPTS.setdefault(identifier, {"count": 0, "blocked_until": 0})
+    rec["count"] += 1
+    if rec["count"] >= _LOGIN_MAX_ATTEMPTS:
+        rec["blocked_until"] = _time.time() + (_LOGIN_LOCK_MINUTES * 60)
+        rec["count"] = 0
+
+def _login_rate_clear(identifier: str):
+    _LOGIN_ATTEMPTS.pop(identifier, None)
+
+def presence_label(last_active):
+    """Converte last_active (epoch seg) num estado de presença honesto.
+    🔒 PRIVACIDADE: cada user pode desativar a partilha (show_recent_activity)."""
+    try:
+        elapsed = time.time() - float(last_active or 0)
+    except (TypeError, ValueError):
+        return {"online": False, "label": "Offline"}
+    if elapsed < 120:            # ativo nos últimos 2 minutos
+        return {"online": True, "label": "Online agora"}
+    if elapsed < 3600:            # última hora
+        return {"online": False, "label": "Ativo há pouco"}
+    if elapsed < 86400:           # últimas 24h
+        return {"online": False, "label": "Ativo recentemente"}
+    if elapsed < 7 * 86400:       # última semana
+        return {"online": False, "label": "Ativo esta semana"}
+    return {"online": False, "label": "Offline"}
+
+
+def touch_last_active(users, email):
+    """Marca o utilizador como ativo AGORA (chamado no login e a cada heartbeat)."""
+    u = users.get(email)
+    if not u:
+        return
+    # 🔒 respeitar privacidade: quem desativou "mostrar atividade" não publica presença
+    if u.get("show_recent_activity", True) is False:
+        u.pop("last_active", None)
+    else:
+        u["last_active"] = time.time()
+    save_users(users)
+
+
 @app.route("/api/v1/auth/login", methods=["POST"])
 def api_login():
     data = request.get_json(silent=True) or {}
     identifier = str(data.get("email", "")).strip().lower()
     password = str(data.get("password", ""))
     device_id = str(data.get("device_id", "web-default")).strip()
+
+    # 🔒 Rate limit: bloqueia brute force (5 tentativas -> 15 min)
+    blocked, wait_s = _login_rate_check(identifier)
+    if blocked:
+        mins = max(1, wait_s // 60)
+        return jsonify({"success": False, "error": f"Demasiadas tentativas. Tenta novamente em {mins} minuto(s)."}), 429
 
     users = load_users()
     user = users.get(identifier)
@@ -969,8 +1114,10 @@ def api_login():
                 break
 
     if not user or not check_password_hash(user["password_hash"], password):
+        _login_rate_fail(identifier)
         return jsonify({"success": False, "error": "Credenciais incorretas. Verifique o e-mail/utilizador e a palavra-passe."}), 401
 
+    _login_rate_clear(identifier)
     two_factor = user.get("two_factor", {})
     two_factor_enabled = two_factor.get("enabled", False)
     two_factor_method = two_factor.get("method", "none")
@@ -990,7 +1137,12 @@ def api_login():
 
     # Iniciar sessão diretamente
     session["user_id"] = user["id"]
+    session.permanent = True
     session["user_email"] = user["email"]
+    try:
+        touch_last_active(users, user["email"])
+    except Exception:
+        pass
 
     return jsonify({
         "success": True,
@@ -1050,7 +1202,12 @@ def api_verify_code():
     save_users(users)
 
     session["user_id"] = user["id"]
+    session.permanent = True
     session["user_email"] = user["email"]
+    try:
+        touch_last_active(users, user["email"])
+    except Exception:
+        pass
 
     return jsonify({
         "success": True,
@@ -1115,30 +1272,20 @@ def api_forgot_password():
                 break
 
     if not user:
-        return jsonify({"success": False, "error": "Não encontramos nenhuma conta associada a este e-mail."}), 404
+        # 🔒 Anti-enumeração: mesma resposta exista ou não conta (evita descobrir e-mails registados)
+        return jsonify({"success": True, "message": "Se existir uma conta associada, enviámos um e-mail com instruções para recuperar a tua conta."}), 200
 
-    # Gerar uma nova palavra-passe forte compatível com as regras:
-    # Mínimo 8 caracteres, maiúsculas, minúsculas, dígitos e símbolos
-    alpha_upper = "ABCDEFGHJKLMNPQRSTUVWXYZ"
-    alpha_lower = "abcdefghijkmnpqrstuvwxyz"
-    digits = "23456789"
-    specials = "!@#$*&"
-
-    part_upper = "".join(random.choice(alpha_upper) for _ in range(2))
-    part_lower = "".join(random.choice(alpha_lower) for _ in range(4))
-    part_digits = "".join(random.choice(digits) for _ in range(3))
-    part_spec = "".join(random.choice(specials) for _ in range(1))
-    
-    char_list = list(part_upper + part_lower + part_digits + part_spec)
-    random.shuffle(char_list)
-    new_password = "".join(char_list)
-
-    # Atualizar hash do usuário e salvar
-    user["password_hash"] = generate_password_hash(new_password)
+    # 🔒 SEGURANÇA: fluxo por LINK com token descartável (a senha nova em texto
+    # puro no e-mail era um risco real — violação da caixa = conta comprometida).
+    reset_token = secrets.token_urlsafe(32)
+    user["_reset_token_hash"] = generate_password_hash(reset_token)
+    user["_reset_token_expires"] = (datetime.datetime.utcnow() + timedelta(minutes=30)).isoformat()
     save_users(users)
 
+    reset_link = f"{request.host_url.rstrip('/')}/app?reset_token={reset_token}"
+
     # Assunto e modelo HTML do e-mail de recuperação
-    subject = "Recuperação de Palavra-passe | Nova Senha Sigaleve"
+    subject = "Recuperação de Palavra-passe | Sigaleve"
     html_content = f"""
     <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:560px;margin:0 auto;background:#0d0e15;color:#ffffff;border-radius:24px;padding:32px 24px;border:1px solid #27273a;">
       <div style="text-align:center;margin-bottom:24px;">
@@ -1146,37 +1293,38 @@ def api_forgot_password():
           🔑
         </div>
         <h1 style="color:#ffffff;font-size:24px;font-weight:900;margin:16px 0 6px 0;">Recuperação de Palavra-passe</h1>
-        <p style="color:#94a3b8;font-size:14px;margin:0;">Gerámos uma nova palavra-passe segura para a tua conta.</p>
+        <p style="color:#94a3b8;font-size:14px;margin:0;">Recebemos um pedido para redefinir a palavra-passe da tua conta Sigaleve.</p>
       </div>
 
       <div style="background:#171826;border-radius:18px;padding:22px;border:1px solid #27273a;margin-bottom:24px;text-align:center;">
         <p style="color:#c084fc;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px 0;">
-          A TUA NOVA PALAVRA-PASSE
+          LINK SEGURO DE RECUPERAÇÃO
         </p>
         <p style="color:#94a3b8;font-size:13px;margin:0 0 16px 0;">
-          Usa esta nova chave para aceder imediatamente à tua conta:
+          Clica no botão abaixo para escolher uma nova palavra-passe. O link é válido durante 30 minutos.
         </p>
-        <div style="background:#090a10;border-radius:14px;padding:16px;font-family:monospace;font-size:24px;font-weight:900;letter-spacing:3px;color:#38bdf8;border:1px dashed #38bdf8;word-break:break-all;">
-          {new_password}
-        </div>
+        <a href="{reset_link}" target="_blank" style="display:block;background:linear-gradient(135deg,#9333ea,#ec4899);color:#ffffff;text-decoration:none;padding:14px 20px;text-align:center;font-weight:900;font-size:14px;border-radius:14px;box-shadow:0 8px 20px rgba(147,51,234,0.35);">
+          Criar Nova Palavra-passe
+        </a>
+        <p style="color:#64748b;font-size:11px;margin:14px 0 0 0;word-break:break-all;line-height:1.5;">
+          Se o botão não funcionar, copia e cola este link no navegador:<br/>
+          <span style="color:#38bdf8;">{reset_link}</span>
+        </p>
       </div>
 
-      <div style="background:#171826;border-radius:18px;padding:18px;border:1px solid #27273a;margin-bottom:24px;">
-        <p style="color:#cbd5e1;font-size:13px;line-height:1.5;margin:0 0 14px 0;">
-          Recomendamos que inicies sessão com esta nova palavra-passe e a alteres se desejares após o login.
+      <div style="background:#171826;border-radius:18px;padding:18px;border:1px solid #27273a;margin-bottom:26px;">
+        <p style="color:#cbd5e1;font-size:13px;line-height:1.5;margin:0;">
+          Se não foste tu a pedir esta recuperação, ignora este e-mail — a tua palavra-passe atual permanece inalterada.
         </p>
-        <a href="{request.host_url.rstrip('/')}/app" target="_blank" style="display:block;background:linear-gradient(135deg,#9333ea,#ec4899);color:#ffffff;text-decoration:none;padding:14px 20px;text-align:center;font-weight:900;font-size:14px;border-radius:14px;box-shadow:0 8px 20px rgba(147,51,234,0.35);">
-          Entrar no Sigaleve Agora
-        </a>
       </div>
 
       <p style="color:#64748b;font-size:11px;text-align:center;margin:0;line-height:1.4;">
-        Se não solicitaste esta recuperação, por favor inicia sessão com a nova palavra-passe para garantir a segurança da tua conta.<br/>
+        Por segurança, este link só pode ser usado uma vez e expira em 30 minutos.<br/>
         Sigaleve &copy; 2026 — Segurança e Conexões Autênticas.
       </p>
     </div>
     """
-    text_content = f"Recuperação de Palavra-passe Sigaleve\n\nA tua nova palavra-passe é: {new_password}\n\nPodes iniciar sessão em: {request.host_url.rstrip('/')}/app\n"
+    text_content = f"Recuperação de Palavra-passe Sigaleve\n\nClica no link abaixo para criar uma nova palavra-passe (válido por 30 minutos):\n{reset_link}\n\nSe não pediste esta recuperação, ignora este e-mail."
     
     email_sent, mail_status = send_real_email(user["email"], subject, html_content, text_content)
 
@@ -1184,8 +1332,49 @@ def api_forgot_password():
         "success": True,
         "email_sent": email_sent,
         "email": user["email"],
-        "message": f"Se a conta existir, as instruções e a nova palavra-passe segura foram enviadas para o endereço de e-mail associado."
+        "message": f"Se a conta existir, enviámos um link de recuperação para o endereço de e-mail associado."
     }), 200
+
+# ── Redefinição de senha com token (link descartável do e-mail) ──────────────
+@app.route("/api/v1/auth/reset-password", methods=["POST"])
+def api_reset_password():
+    """Valida o token do e-mail e define a nova senha escolhida pelo utilizador."""
+    data = request.get_json(silent=True) or {}
+    token = str(data.get("token", "")).strip()
+    new_password = str(data.get("new_password", ""))
+
+    if not token or not new_password:
+        return jsonify({"success": False, "error": "Token e nova palavra-passe são obrigatórios."}), 400
+
+    # validar força da senha (mesma política do registo)
+    if len(new_password) < 8 or not re.search(r"[A-Z]", new_password) or not re.search(r"[a-z]", new_password) or not re.search(r"[0-9]", new_password):
+        return jsonify({"success": False, "error": "A palavra-passe deve ter pelo menos 8 caracteres, com maiúsculas, minúsculas e números."}), 400
+
+    users = load_users()
+    for email, user in users.items():
+        stored_hash = user.get("_reset_token_hash")
+        if stored_hash and check_password_hash(stored_hash, token):
+            expires_str = user.get("_reset_token_expires", "")
+            try:
+                expires = datetime.datetime.fromisoformat(expires_str)
+            except (ValueError, TypeError):
+                expires = None
+            if not expires or expires < datetime.datetime.utcnow():
+                # token expirado — limpar e recusar
+                user.pop("_reset_token_hash", None)
+                user.pop("_reset_token_expires", None)
+                save_users(users)
+                return jsonify({"success": False, "error": "O link de recuperação expirou. Pede um novo."}), 400
+
+            # trocar a senha e consumir o token (uso único)
+            user["password_hash"] = generate_password_hash(new_password)
+            user.pop("_reset_token_hash", None)
+            user.pop("_reset_token_expires", None)
+            save_users(users)
+            return jsonify({"success": True, "message": "Palavra-passe redefinida com sucesso. Já podes iniciar sessão."}), 200
+
+    # token inválido — resposta genérica (não revela se acertou o utilizador)
+    return jsonify({"success": False, "error": "Link de recuperação inválido ou já utilizado. Pede um novo."}), 400
 
 # ── Login Social: Google, Facebook, Instagram ──────────────────────────────
 @app.route("/api/v1/auth/social-login", methods=["POST"])
@@ -1264,7 +1453,12 @@ def api_social_login():
             save_users(users)
 
     session["user_id"] = user["id"]
+    session.permanent = True
     session["user_email"] = user["email"]
+    try:
+        touch_last_active(users, user["email"])
+    except Exception:
+        pass
 
     return jsonify({
         "success": True,
@@ -1340,7 +1534,12 @@ def api_social_instant():
             save_users(users)
 
     session["user_id"] = user["id"]
+    session.permanent = True
     session["user_email"] = user["email"]
+    try:
+        touch_last_active(users, user["email"])
+    except Exception:
+        pass
 
     return jsonify({
         "success": True,
@@ -1483,7 +1682,12 @@ def auth_google_callback():
             save_users(users)
 
         session["user_id"] = user["id"]
+        session.permanent = True
         session["user_email"] = user["email"]
+        try:
+            touch_last_active(users, user["email"])
+        except Exception:
+            pass
 
         # Redirecionar para o app com login automático
         return redirect("/app?google_auth_success=true")
@@ -1581,7 +1785,12 @@ def auth_facebook_callback():
             save_users(users)
 
         session["user_id"] = user["id"]
+        session.permanent = True
         session["user_email"] = user["email"]
+        try:
+            touch_last_active(users, user["email"])
+        except Exception:
+            pass
 
         return redirect("/app?social_auth_success=facebook")
     except Exception as e:
@@ -1686,7 +1895,12 @@ def auth_instagram_callback():
             save_users(users)
 
         session["user_id"] = user["id"]
+        session.permanent = True
         session["user_email"] = user["email"]
+        try:
+            touch_last_active(users, user["email"])
+        except Exception:
+            pass
 
         return redirect("/app?social_auth_success=instagram")
     except Exception as e:
@@ -1713,7 +1927,143 @@ def api_logout():
     session.clear()
     return jsonify({"success": True, "message": "Sessão terminada."}), 200
 
+@app.route("/api/v1/auth/delete-account", methods=["POST"])
+def api_delete_account():
+    """Eliminação permanente da conta (RGPD Art. 17 — direito ao apagamento)."""
+    email = session.get("user_email")
+    if not email:
+        return jsonify({"success": False, "error": "Sessão não iniciada."}), 401
+    try:
+        users = load_users()
+        removed = users.pop(email, None)
+        if removed is None:
+            return jsonify({"success": False, "error": "Conta não encontrada."}), 404
+        save_users(users)
+        # Remover também dos ficheiros auxiliares (momentos, likes, matches)
+        try:
+            moments_file = os.path.join(DATA_DIR, "moments_store.json")
+            if os.path.exists(moments_file):
+                with open(moments_file, "r", encoding="utf-8") as f:
+                    moments = json.load(f)
+                uid = removed.get("id", "")
+                moments = [m for m in (moments if isinstance(moments, list) else moments.get("moments", []))
+                           if isinstance(m, dict) and m.get("user_id") != uid]
+                with open(moments_file, "w", encoding="utf-8") as f:
+                    json.dump(moments if isinstance(moments, list) else {"moments": moments},
+                              f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            print(f"[DELETE_ACCOUNT moments cleanup warn] {e}")
+        session.clear()
+        return jsonify({"success": True,
+                        "message": "A tua conta foi eliminada permanentemente. Todos os dados foram apagados."}), 200
+    except Exception as e:
+        print(f"[DELETE_ACCOUNT ERROR] {e}")
+        return jsonify({"success": False, "error": "Erro interno ao eliminar a conta."}), 500
+
 # ── API de Perfil (Atualização Completa) ──────────────────────────────────────
+@app.route("/api/v1/verify/selfie", methods=["POST"])
+def api_verify_selfie():
+    """Verificação de perfil por selfie: compara rosto da selfie com fotos de perfil.
+    Nenhum dado biométrico é armazenado — apenas o booleano is_verified."""
+    import face_verify as fv
+
+    if not fv.is_available():
+        return jsonify({"success": False, "available": False,
+                        "error": "Verificação por selfie indisponível neste momento. Tenta novamente mais tarde."}), 503
+
+    email = session.get("user_email")
+    if not email:
+        return jsonify({"success": False, "error": "Sessão não iniciada."}), 401
+
+    data = request.get_json(silent=True) or {}
+    selfie = data.get("selfie")
+    if not selfie or not str(selfie).startswith("data:image"):
+        return jsonify({"success": False, "error": "Selfie inválida. Captura uma foto com a câmara."}), 400
+
+    users = load_users()
+    user = users.get(email)
+    if not user:
+        return jsonify({"success": False, "error": "Utilizador não encontrado."}), 404
+
+    profile_photos = [p for p in (user.get("photos") or []) if p] or ([user.get("photo")] if user.get("photo") else [])
+    if not profile_photos:
+        return jsonify({"success": False, "error": "Adiciona primeiro pelo menos uma foto de perfil com o teu rosto visível."}), 400
+
+    ok, msg, detail = fv.verify_selfie_vs_profile(selfie, profile_photos)
+    if ok:
+        user["is_verified"] = True
+        user["verified_at"] = datetime.datetime.utcnow().isoformat()
+        users[email] = user
+        save_users(users)
+
+    return jsonify({
+        "success": ok,
+        "message": msg,
+        "verified": ok,
+        "detail": {k: v for k, v in detail.items() if k != "available"},
+    }), (200 if ok else 422)
+
+@app.route("/api/v1/verify/status", methods=["GET"])
+def api_verify_status():
+    import face_verify as fv
+    email = session.get("user_email")
+    if not email:
+        return jsonify({"success": False, "error": "Sessão não iniciada."}), 401
+    users = load_users()
+    user = users.get(email) or {}
+    return jsonify({"success": True, "verified": bool(user.get("is_verified")),
+                    "available": fv.is_available()}), 200
+
+
+@app.route("/uploads/<path:filename>")
+def serve_upload(filename):
+    """Serve fotos salvas em data/uploads/ (nomes são UUIDs gerados pelo servidor)."""
+    return send_from_directory(UPLOAD_DIR, filename, max_age=86400)
+
+@app.route("/api/v1/photo/upload", methods=["POST"])
+def api_upload_photo():
+    """🖼️ Upload de foto em arquivo (multipart) — substitui base64 no JSON.
+    Aceita multipart (campo 'photo') OU JSON {"photo_data_url": "data:image/..."}.
+    Limite 8 MB, tipos validados, nome UUID; devolve URL /uploads/<nome>.
+    Requer sessão ativa; foto pertence ao usuário logado."""
+    email = session.get("user_email")
+    if not email:
+        return jsonify({"success": False, "error": "Sessão não iniciada."}), 401
+
+    raw = None
+    ext = None
+    f = request.files.get("photo")
+    if f and f.filename:
+        mime = (f.mimetype or "").lower()
+        ext = ALLOWED_UPLOAD_TYPES.get(mime)
+        if not ext:
+            return jsonify({"success": False, "error": "Tipo não suportado (use JPG, PNG, WebP ou GIF)."}), 415
+        f.stream.seek(0, 2)
+        size = f.stream.tell()
+        f.stream.seek(0)
+        if size > MAX_UPLOAD_BYTES:
+            return jsonify({"success": False, "error": "Foto maior que 8 MB."}), 413
+        raw = f.read()
+    else:
+        # captura de câmera: data:image/png|jpeg|webp;base64,...
+        data = request.get_json(silent=True) or {}
+        durl = str(data.get("photo_data_url") or "")
+        m = re.match(r"^data:image/(png|jpeg|jpg|webp|gif);base64,(.+)$", durl, re.S)
+        if not m:
+            return jsonify({"success": False, "error": "Ficheiro ausente ou formato inválido."}), 400
+        try:
+            raw = base64.b64decode(m.group(2), validate=False)
+        except (binascii.Error, ValueError):
+            return jsonify({"success": False, "error": "base64 inválido."}), 400
+        ext = {"png": ".png", "jpeg": ".jpg", "jpg": ".jpg", "webp": ".webp", "gif": ".gif"}[m.group(1)]
+        if len(raw) > MAX_UPLOAD_BYTES:
+            return jsonify({"success": False, "error": "Foto maior que 8 MB."}), 413
+
+    name = f"{uuid.uuid4().hex}{ext}"
+    with open(os.path.join(UPLOAD_DIR, name), "wb") as out:
+        out.write(raw)
+    return jsonify({"success": True, "url": f"/uploads/{name}"}), 201
+
 @app.route("/api/v1/profile/update", methods=["POST"])
 def api_update_profile():
     data = request.get_json(silent=True) or {}
@@ -1758,6 +2108,8 @@ def api_update_profile():
         user["height"] = str(data["height"]).strip()
     if "lifestyle" in data:
         user["lifestyle"] = str(data["lifestyle"]).strip()
+    if "profile_prompt" in data:
+        user["profile_prompt"] = str(data["profile_prompt"]).strip()[:200]
     if "seeking" in data:
         user["seeking"] = str(data["seeking"]).strip()
     if "max_distance" in data:
@@ -1779,10 +2131,15 @@ def api_update_profile():
 # ── API de Matchmaking e Descoberta ──────────────────────────────────────────
 @app.route("/api/v1/discover")
 def api_discover():
+    # 🔒 SEGURANÇA: discover exige sessão (perfis com fotos/cidade são dados pessoais)
+    if not session.get("user_id"):
+        return jsonify({"error": "Autenticação necessária"}), 401
     users = load_users()
     current_email = session.get("user_email")
     current_uid = session.get("user_id")
     real_profiles = []
+    # 📍 Cidade do utilizador logado para o km cosmético por comparação
+    my_city = ((users.get(current_email, {}) or {}).get("city") or "").strip().lower()
 
     # 1. Carregar utilizadores reais registados na aplicação
     for email, u in users.items():
@@ -1790,17 +2147,25 @@ def api_discover():
         if email == current_email or (current_uid and uid == str(current_uid)):
             continue
 
-        photo = u.get("photo") or (u.get("photos", [])[0] if u.get("photos") else "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=85")
+        photo = safe_photo(u, "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=85")
         photos_list = u.get("photos") if (u.get("photos") and len(u.get("photos")) > 0) else [photo]
         diag = u.get("diagnosis", "ALPHA")
         diag_code = diag[:1] if diag else "A"
+
+        # 📍 DISTÂNCIA REAL (cosmética): sem GPS, comparamos cidades.
+        # Mesma cidade → "Perto de ti"; senão apenas a cidade do perfil (sem nº falso).
+        city = u.get("city") or "Lisboa, Portugal"
+        if my_city and city.strip().lower() == my_city:
+            km_label = "Perto de ti"
+        else:
+            km_label = city
 
         real_profiles.append({
             "id": uid,
             "name": u.get("display_name") or u.get("name") or "Utilizador",
             "age": u.get("age", 25),
-            "city": u.get("city") or "Lisboa, Portugal",
-            "km": "3 km de distância",
+            "city": city,
+            "km": km_label,
             "code": diag_code,
             "activity": "Ativo agora",
             "photo": photo,
@@ -1811,8 +2176,9 @@ def api_discover():
             "education": u.get("education") or "",
             "height": u.get("height") or "",
             "lifestyle": u.get("lifestyle") or "",
+            "profile_prompt": u.get("profile_prompt") or "",
             "interests": u.get("interests", ["Viagens", "Música"]),
-            "verified": True,
+            "verified": bool(u.get("is_verified")),
             "is_real_user": True
         })
 
@@ -1849,8 +2215,11 @@ def api_like():
     current_email = session.get("user_email")
     current_uid = session.get("user_id")
 
-    if not current_email or not target_id:
-        return jsonify({"matched": False, "error": "Não autenticado ou alvo inválido"}), 400
+    if not current_email:
+        # 🔒 SEGURANÇA: sessão em falta separada de alvo inválido
+        return jsonify({"matched": False, "error": "Autenticação necessária"}), 401
+    if not target_id:
+        return jsonify({"matched": False, "error": "Alvo inválido"}), 400
 
     users = load_users()
     if current_email not in users:
@@ -1896,16 +2265,124 @@ def api_like():
 
     save_users(users)
 
+    # 🔔 PUSH: notificar o alvo do match recíproco
+    if matched:
+        target_name = (current_user.get("display_name") or "Alguém")
+        send_push_to_user(
+            target_id,
+            "É um Match! 💜",
+            f"{target_name} também gostou de ti — abre a conversa!",
+            "/app"
+        )
+        # 🔄 TEMPO REAL: avisar o alvo na hora (toast + lista de matches em vivo)
+        try:
+            socketio.emit("match", {
+                "with_user": {
+                    "id": my_id,
+                    "name": target_name,
+                    "photo": safe_photo(current_user)
+                },
+                "message": "É um Match! 💜"
+            }, to=f"user__{target_id}")
+        except Exception:
+            pass
+
     return jsonify({
         "matched": matched,
         "message": "É um Match! 💜" if matched else "Gosto enviado com sucesso!"
     }), 200
 
+@app.route("/api/v1/push/public-key", methods=["GET"])
+def api_push_public_key():
+    """Chave pública VAPID para o browser inscrever-se em push notifications."""
+    return jsonify({"public_key": VAPID_PUBLIC_KEY}), 200
+
+
+@app.route("/api/v1/push/subscribe", methods=["POST"])
+def api_push_subscribe():
+    """Guardar a subscrição push do utilizador logado."""
+    if not session.get("user_id"):
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
+    data = request.get_json(silent=True) or {}
+    sub = data.get("subscription")
+    if not sub or not isinstance(sub, dict) or not sub.get("endpoint"):
+        return jsonify({"success": False, "error": "Subscrição inválida"}), 400
+    subs = load_json_store(PUSH_SUBS_FILE, {})
+    uid = str(session.get("user_id"))
+    if uid not in subs or not isinstance(subs[uid], list):
+        subs[uid] = []
+    # dedupe por endpoint
+    endpoint = sub.get("endpoint")
+    if not any(s.get("endpoint") == endpoint for s in subs[uid]):
+        subs[uid].append(sub)
+    save_json_store(PUSH_SUBS_FILE, subs)
+    return jsonify({"success": True}), 200
+
+
+@app.route("/api/v1/push/unsubscribe", methods=["POST"])
+def api_push_unsubscribe():
+    """Remover a subscrição push (usuario pediu ou subscription expirou 410)."""
+    if not session.get("user_id"):
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
+    data = request.get_json(silent=True) or {}
+    endpoint = str(data.get("endpoint", ""))
+    subs = load_json_store(PUSH_SUBS_FILE, {})
+    uid = str(session.get("user_id"))
+    if uid in subs and isinstance(subs[uid], list):
+        before = len(subs[uid])
+        subs[uid] = [s for s in subs[uid] if s.get("endpoint") != endpoint]
+        save_json_store(PUSH_SUBS_FILE, subs)
+        return jsonify({"success": True, "removed": before - len(subs[uid])}), 200
+    return jsonify({"success": True, "removed": 0}), 200
+
+
+def send_push_to_user(user_id, title, body, url_path="/app"):
+    """Enviar push notification a todas as subscrições de um utilizador.
+    Limpa subscrições mortas (410/404). Silencioso — push é enhancement, nunca quebra o fluxo."""
+    try:
+        if not PUSH_ENABLED:
+            return
+        subs = load_json_store(PUSH_SUBS_FILE, {})
+        user_subs = subs.get(str(user_id), [])
+        if not user_subs:
+            return
+        from pywebpush import webpush, WebPushException
+        payload = json.dumps({
+            "title": title,
+            "body": body,
+            "url": url_path,
+            "ts": datetime.datetime.utcnow().isoformat() + "Z",
+        })
+        alive = []
+        for sub in user_subs:
+            try:
+                webpush(
+                    subscription_info=sub,
+                    data=payload,
+                    vapid_private_key=VAPID_PRIVATE_KEY,
+                    vapid_claims={"sub": VAPID_SUBJECT},
+                )
+                alive.append(sub)
+            except WebPushException as e:
+                # 404/410 = subscription expirada — remover
+                if e.response is not None and e.response.status_code in (404, 410):
+                    continue
+                alive.append(sub)  # erro transitorio — manter
+            except Exception:
+                alive.append(sub)  # falha de rede — manter
+        if len(alive) != len(user_subs):
+            subs[str(user_id)] = alive
+            save_json_store(PUSH_SUBS_FILE, subs)
+    except Exception:
+        pass  # push nunca derruba o fluxo principal
+
+
 @app.route("/api/v1/matches", methods=["GET"])
 def api_get_matches():
     current_email = session.get("user_email")
     if not current_email:
-        return jsonify({"matches": []}), 200
+        # 🔒 SEGURANÇA: 401 em vez de lista vazia (recurso é privado)
+        return jsonify({"error": "Autenticação necessária"}), 401
 
     users = load_users()
     if current_email not in users:
@@ -1923,7 +2400,7 @@ def api_get_matches():
 
         for em, u in users.items():
             if str(u.get("id")) == mid_str or em == mid_str:
-                photo = u.get("photo") or (u.get("photos", [])[0] if u.get("photos") else "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80")
+                photo = safe_photo(u)
                 matches_list.append({
                     "id": str(u.get("id") or em),
                     "name": u.get("display_name") or u.get("name") or "Utilizador",
@@ -1931,18 +2408,43 @@ def api_get_matches():
                     "city": u.get("city") or "Lisboa",
                     "photo": photo,
                     "code": (u.get("diagnosis") or "ALPHA")[:1],
-                    "time": "Agora mesmo",
+                    "last_active": u.get("last_active"),
+                    "presence": presence_label(u.get("last_active"))["label"] if u.get("show_recent_activity", True) else None,
+                    "time": presence_label(u.get("last_active"))["label"] if u.get("show_recent_activity", True) else "",
                     "is_real": True
                 })
                 break
 
     return jsonify({"matches": matches_list}), 200
 
+@app.route("/api/v1/presence/heartbeat", methods=["POST"])
+def api_presence_heartbeat():
+    """⏱️ Heartbeat de presença: o app aberto pinge a cada 60s e mantém
+    last_active fresco. Barato: só grava se passaram >45s desde a última."""
+    email = session.get("user_email")
+    if not email:
+        return jsonify({"ok": False}), 401
+    users = load_users()
+    u = users.get(email)
+    if not u:
+        return jsonify({"ok": False}), 401
+    agora = time.time()
+    if agora - float(u.get("last_active") or 0) > 45:
+        if u.get("show_recent_activity", True) is False:
+            u.pop("last_active", None)
+        else:
+            u["last_active"] = agora
+        save_users(users)
+    return jsonify({"ok": True, "last_active": u.get("last_active")}), 200
+
 @app.route("/api/v1/skip", methods=["POST"])
 def api_skip():
     data = request.get_json(silent=True) or {}
     target_id = str(data.get("target_id", "")).strip()
     current_email = session.get("user_email")
+    # 🔒 SEGURANÇA: skip exige sessão
+    if not current_email:
+        return jsonify({"error": "Autenticação necessária"}), 401
     if current_email and target_id:
         users = load_users()
         if current_email in users:
@@ -1952,24 +2454,50 @@ def api_skip():
                 save_users(users)
     return jsonify({"ok": True}), 200
 
+@app.route("/api/v1/profile/reset-skipped", methods=["POST"])
+def api_reset_skipped():
+    """Limpa a lista 'skipped' do utilizador logado (só skips — likes e
+    matches ficam intactos) para poder rever os perfis que passou."""
+    current_email = session.get("user_email")
+    # 🔒 SEGURANÇA: exige sessão iniciada
+    if not current_email:
+        return jsonify({"error": "Autenticação necessária"}), 401
+    users = load_users()
+    if current_email not in users:
+        return jsonify({"error": "Utilizador não encontrado"}), 404
+    users[current_email]["skipped"] = []
+    save_users(users)
+    return jsonify({"ok": True}), 200
+
 @app.route("/api/v1/user/<uid>")
 def api_get_user_profile(uid):
+    # 🔒 SEGURANÇA: dados de perfil exigem sessão iniciada (evita enumeração
+    # de perfis + exposição do código de condição de saúde sem autenticação)
+    if not session.get("user_id"):
+        return jsonify({"error": "Autenticação necessária"}), 401
     users = load_users()
+    # 📍 Cidade do utilizador logado (para o km cosmético por comparação de cidade)
+    cur_email = session.get("user_email")
+    my_city = ((users.get(cur_email, {}) or {}).get("city") or "").strip().lower()
     for email, u in users.items():
         if str(u.get("id")) == str(uid) or email == str(uid):
-            photo = u.get("photo") or (u.get("photos", [])[0] if u.get("photos") else "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=85")
+            photo = safe_photo(u, "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=85")
             photos_list = u.get("photos") if (u.get("photos") and len(u.get("photos")) > 0) else [photo]
             diag = u.get("diagnosis", "ALPHA")
             diag_code = diag[:1] if diag else "A"
+            city = u.get("city") or "Lisboa, Portugal"
+            km_label = "Perto de ti" if (my_city and city.strip().lower() == my_city) else city
             return jsonify({
                 "profile": {
                     "id": str(u.get("id") or email),
                     "name": u.get("display_name") or u.get("name") or "Utilizador",
                     "age": u.get("age", 25),
-                    "city": u.get("city") or "Lisboa, Portugal",
-                    "km": "3 km de distância",
+                    "city": city,
+                    "km": km_label,
                     "code": diag_code,
-                    "activity": "Ativo agora",
+                    "last_active": u.get("last_active"),
+                    "presence": presence_label(u.get("last_active"))["label"] if u.get("show_recent_activity", True) else None,
+                    "activity": presence_label(u.get("last_active"))["label"] if u.get("show_recent_activity", True) else "",
                     "photo": photo,
                     "photos": photos_list,
                     "bio": u.get("bio") or "Olá! Estou no Sigaleve para conexões reais, respeitosas e sem preconceito.",
@@ -1979,7 +2507,7 @@ def api_get_user_profile(uid):
                     "height": u.get("height") or "",
                     "lifestyle": u.get("lifestyle") or "",
                     "interests": u.get("interests", ["Viagens", "Música"]),
-                    "verified": True,
+                    "verified": bool(u.get("is_verified")),
                     "is_real_user": True
                 }
             }), 200
@@ -2049,6 +2577,9 @@ def api_subscription_plans():
 @app.route("/api/v1/subscription/subscribe", methods=["POST"])
 def api_subscribe():
     data = request.get_json(silent=True) or {}
+    # 🔒 SEGURANÇA: sessão valida-se primeiro (cartão/planos validam depois)
+    if not session.get("user_id"):
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
     card_number = str(data.get("card_number", "")).replace(" ", "")
     card_holder = str(data.get("card_holder", "")).strip()
     exp_date = str(data.get("exp_date", "")).strip()
@@ -2177,8 +2708,100 @@ def validate_content_privacy(text: str) -> tuple[bool, str]:
 
 # ── MÓDULO 2: ARMAZENAMENTO DE COFRE PRIVADO, INTERAÇÕES E MOMENTOS ──────────
 MOMENTS_FILE = os.path.join(DATA_DIR, "moments_store.json")
+MESSAGES_FILE = os.path.join(DATA_DIR, "messages_store.json")
 PHOTO_INTERACTIONS_FILE = os.path.join(DATA_DIR, "photo_interactions.json")
 PRIVATE_ALBUMS_FILE = os.path.join(DATA_DIR, "private_albums.json")
+PUSH_SUBS_FILE = os.path.join(DATA_DIR, "push_subscriptions.json")
+
+# ── MÓDULO 2b: Q&A ANÓNIMO DE SAÚDE (comunidade) ─────────────────────────────
+QA_HEALTH_FILE = os.path.join(DATA_DIR, "qa_health_store.json")
+
+def qa_anonymize(uid):
+    """Gera um pseudónimo estável por tópico: o mesmo utilizador tem o mesmo
+    'Anónimo Nº X' dentro do mesmo tópico, mas impossível de ligar entre tópicos."""
+    import hashlib
+    topic = "qa-health"
+    h = hashlib.sha256((str(uid) + topic).encode()).hexdigest()
+    return "Membro #" + str(int(h[:8], 16) % 9000 + 1000)
+
+def qa_filter_content(text):
+    """Moderação leve: bloqueia contactos externos e spam óbvio. Retorna (ok, motivo)."""
+    import re
+    t = (text or "").lower()
+    if re.search(r'(whatsapp|wa\.me|telegram|t\.me|@[a-z0-9._-]+\.(com|net|org|pt|es))', t):
+        return False, "Não podes partilhar contactos externos (WhatsApp, Telegram, e-mails) por segurança."
+    if re.search(r'https?://', t):
+        return False, "Não podes partilhar links por segurança."
+    if len(t.strip()) < 10:
+        return False, "Escreve um pouco mais — a pergunta/resposta precisa de contexto (mín. 10 caracteres)."
+    if len(t.strip()) > 2000:
+        return False, "Texto demasiado longo (máx. 2000 caracteres)."
+    return True, ""
+
+DEFAULT_QA_HEALTH = [
+    {
+        "id": "qa-seed-001",
+        "category": "diagnostico",
+        "question": "Como é que foi o dia em que recebi o diagnóstico (e o que aprendi)?",
+        "question_detail": "Recebi o resultado há duas semanas e ainda estou a processar. Como é que vocês lidaram com os primeiros dias?",
+        "answers": [
+            {
+                "id": "qa-seed-001-a1",
+                "author": "Membro #4821",
+                "text": "O meu foi numa terça-feira de manhã. Chorei no carro, liguei à minha irmã. Hoje, dois anos depois, dou por mim a esquecer-me disso na maior parte dos dias. O que me ajudou: uma psicóloga que já tinha pacientes com o mesmo diagnóstico, e perceber que não me tornou menos digna de amor.",
+                "likes": 14,
+                "created_at": 1770000000
+            },
+            {
+                "id": "qa-seed-001-a2",
+                "author": "Membro #3907",
+                "text": "O conselho mais honesto: dá tempo ao tempo. Nos primeiros meses lia tudo na internet e só piorava. O que funcionou foi falar com pessoas reais na mesma situação — foi aí que percebi que isto não define quem eu sou.",
+                "likes": 9,
+                "created_at": 1770086400
+            }
+        ],
+        "answers_count": 2,
+        "views": 187,
+        "created_at": 1769800000
+    },
+    {
+        "id": "qa-seed-002",
+        "category": "relacionamento",
+        "question": "Como e quando digo a alguém que estou a gostar que tenho IST?",
+        "question_detail": "Conheci alguém aqui no Sigaleve e está a ficar sério. Como é que vocês abordaram o assunto com parceiros que não têm o mesmo diagnóstico?",
+        "answers": [
+            {
+                "id": "qa-seed-002-a1",
+                "author": "Membro #1155",
+                "text": "Fiz o teste num consultório e pedi ao médico para me ajudar a explicar. Acabei por contar antes do primeiro encontro íntimo, num momento calmo, sem drama: 'há uma coisa que quero que saibas sobre mim'. Ele agradeceu a honestidade. Nem todos reagem bem — mas quem merece ficar, fica.",
+                "likes": 21,
+                "created_at": 1769900000
+            }
+        ],
+        "answers_count": 1,
+        "views": 342,
+        "created_at": 1769750000
+    },
+    {
+        "id": "qa-seed-003",
+        "category": "tratamento",
+        "question": "Que perguntas devo fazer ao médico na primeira consulta depois do diagnóstico?",
+        "question_detail": "Tenho consulta na próxima semana e não quero esquecer-me de nada importante.",
+        "answers": [
+            {
+                "id": "qa-seed-003-a1",
+                "author": "Membro #7788",
+                "text": "As que eu devia ter feito: Qual o tipo exato que tenho? É transmissível mesmo sem sintomas? Que precauções reduzem mesmo o risco? Como é o acompanhamento (frequência de testes)? Isto afeta planos de filhos? Anota as respostas — na primeira consulta não registamos metade.",
+                "likes": 17,
+                "created_at": 1770000000
+            }
+        ],
+        "answers_count": 1,
+        "views": 95,
+        "created_at": 1769950000
+    }
+]
+
 
 def load_json_store(filepath, default):
     if os.path.exists(filepath):
@@ -2197,6 +2820,87 @@ def save_json_store(filepath, data):
     except Exception as e:
         print(f"[STORE SAVE ERROR] {filepath}: {e}")
 
+
+# 💳 Pagamentos manuais MB Way (rotas /api/v1/subscription/mbway-* e
+# /admin/payments). init_payments injeta app+helpers (import não compartilha
+# globals entre módulos — padrão init evita import circular).
+import payments_manual  # noqa: E402
+payments_manual.init_payments(
+    app, session, load_json_store, save_json_store, load_users, save_users
+)
+
+# 💜 Histórias de sucesso (landing, curadoria do dono) — feature #2.
+import success_stories  # noqa: E402
+success_stories.init_stories(
+    app, session, load_json_store, save_json_store, load_users, save_users
+)
+
+# 💡 Ideias de 1º encontro (UGC + likes) — feature #1 dos concorrentes.
+# Mesmo padrão init() (pitfall 40): o módulo não vê globals do importador.
+import date_ideas  # noqa: E402
+date_ideas.init_date_ideas(
+    app, session, load_json_store, save_json_store, validate_content_privacy
+)
+
+
+# ── EXPIRAÇÃO AUTOMÁTICA DE MOMENTS (24H EM SERVIDOR) ─────────────────────────
+# O filtro do GET /api/v1/moments só limpava os vencidos quando alguém abria a
+# tela de moments. Sem visitas, os moments nunca eram apagados do disco.
+MOMENTS_LOCK = threading.Lock()
+MOMENTS_TTL_SECONDS = 86400          # 24 horas
+MOMENTS_PURGE_INTERVAL_SECONDS = 900 # 15 minutos
+
+
+def purge_expired_moments():
+    """Remove do disco os moments com mais de 24h, mesmo que ninguém abra a
+    tela de moments. O load+save fica dentro de MOMENTS_LOCK para que escritas
+    concorrentes feitas pelos handlers (POST/PUT/DELETE...) não sejam perdidas.
+    Devolve o número de moments removidos."""
+    removed = 0
+    try:
+        with MOMENTS_LOCK:
+            moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
+            if not isinstance(moments, list):
+                return 0
+            now = time.time()
+            valid_moments = []
+            changed = False
+            for m in moments:
+                if not isinstance(m, dict):
+                    removed += 1
+                    changed = True
+                    continue
+                created_at = m.get("created_at")
+                try:
+                    created_at = float(created_at)
+                    m["created_at"] = created_at
+                except (TypeError, ValueError):
+                    # Sem data válida: marca "agora" (mesmo critério do GET) e mantém
+                    created_at = now
+                    m["created_at"] = now
+                    changed = True
+
+                if (now - created_at) > MOMENTS_TTL_SECONDS:
+                    removed += 1
+                    changed = True
+                    continue
+
+                valid_moments.append(m)
+
+            if changed:
+                save_json_store(MOMENTS_FILE, valid_moments)
+    except Exception as e:
+        print(f"[MOMENTS PURGE ERROR] {e}")
+    return removed
+
+
+def _moments_purge_loop():
+    """Loop daemon: expurga moments vencidos a cada MOMENTS_PURGE_INTERVAL_SECONDS."""
+    while True:
+        purge_expired_moments()
+        time.sleep(MOMENTS_PURGE_INTERVAL_SECONDS)
+
+
 DEFAULT_MOMENTS = []
 
 # Fotos do cofre privado por utilizador (Álbum seguro - inicia 100% vazio para utilizadores reais)
@@ -2206,7 +2910,10 @@ DEFAULT_PRIVATE_ALBUMS = {}
 # ── ROTAS DE COFRE PRIVADO (ÁLBUM OCULTO COM AUTORIZAÇÃO) ────────────────────
 @app.route("/api/v1/profile/private-album/<user_id>", methods=["GET"])
 def api_get_private_album(user_id):
-    current_uid = session.get("user_id") or "default_owner"
+    # 🔒 SEGURANÇA: álbum privado exige sessão
+    current_uid = session.get("user_id")
+    if not current_uid:
+        return jsonify({"error": "Autenticação necessária"}), 401
     albums = load_json_store(PRIVATE_ALBUMS_FILE, DEFAULT_PRIVATE_ALBUMS)
     album = albums.get(user_id, {
         "photos": [],
@@ -2214,7 +2921,7 @@ def api_get_private_album(user_id):
         "pending_requests": []
     })
 
-    is_owner = (user_id == current_uid or user_id in ("me", "my_profile", "default_owner"))
+    is_owner = (user_id == current_uid or user_id in ("me", "my_profile"))
     has_access = is_owner or (current_uid in album.get("authorized_users", []))
     has_requested = current_uid in album.get("pending_requests", [])
 
@@ -2247,7 +2954,10 @@ def api_get_private_album(user_id):
 def api_request_private_album():
     data = request.get_json(silent=True) or {}
     target_user_id = data.get("target_user_id") or data.get("target_id")
-    current_uid = session.get("user_id") or "default_owner"
+    # 🔒 SEGURANÇA: identidade vem SÓ da sessão (default_owner permitia escrita anônima)
+    current_uid = session.get("user_id")
+    if not current_uid:
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
     requester_name = session.get("user_name") or "Utilizador Sigaleve"
 
     if not target_user_id:
@@ -2272,7 +2982,10 @@ def api_respond_private_album():
     data = request.get_json(silent=True) or {}
     requester_id = data.get("requester_id")
     action = data.get("action")  # "grant" / "accept" ou "deny" / "reject"
-    current_uid = session.get("user_id") or "default_owner"
+    # 🔒 SEGURANÇA: identidade vem SÓ da sessão (default_owner permitia escrita anônima)
+    current_uid = session.get("user_id")
+    if not current_uid:
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
 
     if not requester_id:
         return jsonify({"success": False, "error": "Parâmetros inválidos."}), 400
@@ -2336,7 +3049,10 @@ def api_manage_private_album():
 def api_photo_like():
     data = request.get_json(silent=True) or {}
     photo_id = str(data.get("photo_id", "")).strip()
-    current_uid = session.get("user_id") or "default_owner"
+    # 🔒 SEGURANÇA: identidade vem SÓ da sessão (default_owner permitia escrita anônima)
+    current_uid = session.get("user_id")
+    if not current_uid:
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
 
     if not photo_id:
         return jsonify({"success": False, "error": "Identificador de foto inválido."}), 400
@@ -2363,7 +3079,10 @@ def api_photo_comment():
     data = request.get_json(silent=True) or {}
     photo_id = str(data.get("photo_id", "")).strip()
     comment_text = str(data.get("comment") or data.get("text") or "").strip()
-    current_uid = session.get("user_id") or "default_owner"
+    # 🔒 SEGURANÇA: identidade vem SÓ da sessão (default_owner permitia escrita anônima)
+    current_uid = session.get("user_id")
+    if not current_uid:
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
     user_name = session.get("user_name") or "Utilizador"
     user_avatar = session.get("user_photo") or "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
 
@@ -2403,7 +3122,10 @@ def api_photo_comment():
 @app.route("/api/v1/photos/comments", methods=["GET"])
 def api_get_photo_comments():
     photo_id = request.args.get("photo_id", "")
-    current_uid = session.get("user_id") or "default_owner"
+    # 🔒 SEGURANÇA: identidade vem SÓ da sessão (default_owner permitia escrita anônima)
+    current_uid = session.get("user_id")
+    if not current_uid:
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
     store = load_json_store(PHOTO_INTERACTIONS_FILE, {})
     p_data = store.get(photo_id, {"likes": [], "comments": []})
 
@@ -2418,8 +3140,12 @@ def api_get_photo_comments():
 # ── ROTAS DE MOMENTOS / HISTÓRIAS EFÉMERAS (24 HORAS, SÓ ENTRE MATCHES) ──────
 @app.route("/api/v1/moments", methods=["GET"])
 def api_get_moments():
+    # 🔒 SEGURANÇA: moments exige sessão
+    if not session.get("user_id"):
+        return jsonify({"error": "Autenticação necessária"}), 401
     raw_moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
-    current_uid = str(request.args.get("user_id") or request.headers.get("X-User-Id") or session.get("user_id") or "default_owner")
+    # 🔒 SEGURANÇA: uid vem SÓ da sessão (X-User-Id permitia ver moments de outro utilizador)
+    current_uid = str(session.get("user_id"))
     matches_param = request.args.get("matches", "")
     allowed_match_ids = set()
     if matches_param:
@@ -2452,13 +3178,14 @@ def api_get_moments():
         valid_moments.append(m)
 
     if has_expired:
-        save_json_store(MOMENTS_FILE, valid_moments)
+        with MOMENTS_LOCK:
+            save_json_store(MOMENTS_FILE, valid_moments)
 
     # 2. Filtrar visibilidade: só o próprio autor ou pessoas que deram match
     enriched_moments = []
     for m in valid_moments:
         author_id = str(m.get("user_id", ""))
-        is_own = (author_id == current_uid or current_uid in ("default_owner", ""))
+        is_own = (author_id == current_uid)
         is_match = (author_id in allowed_match_ids)
 
         if not is_own and not is_match:
@@ -2488,13 +3215,24 @@ def api_create_moment():
     mood = str(data.get("mood", "☕ A relaxar")).strip()
     mood_emoji = str(data.get("mood_emoji", "☕")).strip()
     photo = str(data.get("photo_url", data.get("photo", ""))).strip()
+    # Multi-fotos: lista opcional (máx 5). photo_url continua aceito (1a foto).
+    photos_raw = data.get("photos")
+    photos = []
+    if isinstance(photos_raw, list):
+        photos = [str(p).strip() for p in photos_raw if str(p).strip()]
+        photos = photos[:5]
+    if photo and photo not in photos:
+        photos.insert(0, photo)
 
-    current_uid = str(data.get("user_id") or session.get("user_id") or "default_owner")
+    # 🔒 SEGURANÇA: identidade vem SÓ da sessão
+    current_uid = session.get("user_id")
+    if not current_uid:
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
     user_name = str(data.get("user_name") or session.get("user_name") or "Eu")
     user_avatar = str(data.get("user_avatar") or session.get("user_photo") or "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80")
     user_city = str(session.get("user_city") or "Lisboa")
 
-    if not text_content and not photo:
+    if not text_content and not photos:
         return jsonify({"success": False, "error": "Escreve um pensamento ou partilha uma foto/vídeo da tua história."}), 400
 
     if len(text_content) > 1000:
@@ -2509,30 +3247,33 @@ def api_create_moment():
             "security_blocked": True
         }), 400
 
-    now = time.time()
-    moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
-    new_moment = {
-        "id": f"m_{uuid.uuid4().hex[:8]}",
-        "user_id": current_uid,
-        "author_name": user_name,
-        "author_avatar": user_avatar,
-        "user_name": user_name,
-        "user_photo": user_avatar,
-        "city": user_city,
-        "mood": mood,
-        "mood_emoji": mood_emoji,
-        "text": text_content,
-        "photo": photo,
-        "photo_url": photo,
-        "created_at": now,
-        "time": "Agora mesmo",
-        "timestamp": "Agora mesmo",
-        "likes_count": 0,
-        "reactions": {"heart": 0, "hug": 0, "coffee": 0},
-        "user_reactions": {}
-    }
-    moments.insert(0, new_moment)
-    save_json_store(MOMENTS_FILE, moments)
+    now = float(time.time())
+    # MOMENTS_LOCK: impede que a thread de purgeExpired sobreponha esta escrita
+    with MOMENTS_LOCK:
+        moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
+        new_moment = {
+            "id": f"m_{uuid.uuid4().hex[:8]}",
+            "user_id": current_uid,
+            "author_name": user_name,
+            "author_avatar": user_avatar,
+            "user_name": user_name,
+            "user_photo": user_avatar,
+            "city": user_city,
+            "mood": mood,
+            "mood_emoji": mood_emoji,
+            "text": text_content,
+            "photo": photos[0] if photos else "",
+            "photo_url": photos[0] if photos else "",
+            "photos": photos,
+            "created_at": now,
+            "time": "Agora mesmo",
+            "timestamp": "Agora mesmo",
+            "likes_count": 0,
+            "reactions": {"heart": 0, "hug": 0, "coffee": 0},
+            "user_reactions": {}
+        }
+        moments.insert(0, new_moment)
+        save_json_store(MOMENTS_FILE, moments)
 
     return jsonify({
         "success": True,
@@ -2561,53 +3302,140 @@ def api_react_moment():
     if reaction not in ALLOWED_RX:
         reaction = "heart"
 
-    current_uid = str(data.get("user_id") or session.get("user_id") or "default_owner")
+    # 🔒 SEGURANÇA: identidade vem SÓ da sessão
+    current_uid = session.get("user_id")
+    if not current_uid:
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
 
-    moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
-    target = None
-    for m in moments:
-        if m["id"] == moment_id:
-            target = m
-            break
+    with MOMENTS_LOCK:
+        moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
+        target = None
+        for m in moments:
+            if m["id"] == moment_id:
+                target = m
+                break
 
-    if not target:
-        return jsonify({"success": False, "error": "Momento não encontrado."}), 404
+        if not target:
+            return jsonify({"success": False, "error": "Momento não encontrado."}), 404
 
-    # Garantir estrutura
-    rx = target.setdefault("reactions", {})
-    for k in ALLOWED_RX:
-        if k not in rx:
-            rx[k] = 0
-    # Limpar legados se existirem
-    if "❤️" in rx:
-        rx["heart"] = rx.get("heart", 0) + rx.pop("❤️")
-    if "✨" in rx:
-        rx["hug"] = rx.get("hug", 0) + rx.pop("✨")
+        # Garantir estrutura
+        rx = target.setdefault("reactions", {})
+        for k in ALLOWED_RX:
+            if k not in rx:
+                rx[k] = 0
+        # Limpar legados se existirem
+        if "❤️" in rx:
+            rx["heart"] = rx.get("heart", 0) + rx.pop("❤️")
+        if "✨" in rx:
+            rx["hug"] = rx.get("hug", 0) + rx.pop("✨")
 
-    user_rx = target.setdefault("user_reactions", {})
-    prev_reaction = user_rx.get(current_uid)
+        user_rx = target.setdefault("user_reactions", {})
+        prev_reaction = user_rx.get(current_uid)
 
-    if prev_reaction == reaction:
-        # Clicou novamente na mesma reação: remove (toggle off)
-        rx[reaction] = max(0, rx.get(reaction, 0) - 1)
-        user_rx.pop(current_uid, None)
-        active_reaction = None
-    else:
-        # Mudou de reação ou é a primeira reação
-        if prev_reaction and prev_reaction in rx:
-            rx[prev_reaction] = max(0, rx[prev_reaction] - 1)
-        rx[reaction] = rx.get(reaction, 0) + 1
-        user_rx[current_uid] = reaction
-        active_reaction = reaction
+        if prev_reaction == reaction:
+            # Clicou novamente na mesma reação: remove (toggle off)
+            rx[reaction] = max(0, rx.get(reaction, 0) - 1)
+            user_rx.pop(current_uid, None)
+            active_reaction = None
+        else:
+            # Mudou de reação ou é a primeira reação
+            if prev_reaction and prev_reaction in rx:
+                rx[prev_reaction] = max(0, rx[prev_reaction] - 1)
+            rx[reaction] = rx.get(reaction, 0) + 1
+            user_rx[current_uid] = reaction
+            active_reaction = reaction
 
-    target["likes_count"] = sum(rx.values())
-    save_json_store(MOMENTS_FILE, moments)
+        target["likes_count"] = sum(rx.values())
+        save_json_store(MOMENTS_FILE, moments)
 
     return jsonify({
         "success": True,
         "reactions": rx,
         "user_reaction": active_reaction,
         "total": target["likes_count"]
+    })
+
+@app.route("/api/v1/moments/comment", methods=["POST"])
+def api_moment_comment():
+    """💬 Comentários em Moments (histórias 24h, só entre matches).
+    Mesma segurança dos comentários de foto: identidade só da sessão,
+    filtro anti-doxxing (sem telefones, e-mails, redes sociais)."""
+    data = request.get_json(silent=True) or {}
+    moment_id = str(data.get("moment_id", "")).strip()
+    comment_text = str(data.get("text") or data.get("comment") or "").strip()
+
+    # 🔒 SEGURANÇA: identidade vem SÓ da sessão
+    current_uid = session.get("user_id")
+    if not current_uid:
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
+    user_name = session.get("user_name") or "Utilizador"
+    user_avatar = session.get("user_photo") or "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+
+    if not moment_id or not comment_text:
+        return jsonify({"success": False, "error": "O comentário não pode estar vazio."}), 400
+    if len(comment_text) > 500:
+        return jsonify({"success": False, "error": "Comentário demasiado longo (máx. 500 caracteres)."}), 400
+
+    with MOMENTS_LOCK:
+        moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
+        target = next((m for m in moments if m["id"] == moment_id), None)
+        if not target:
+            return jsonify({"success": False, "error": "Momento não encontrado."}), 404
+
+        # 🔒 PRIVACIDADE: matches só podem comentar momentos de matches mútuos
+        users = load_users()
+        me = users.get(session.get("user_email") or "", {})
+        author_id = target.get("user_id")
+        if str(author_id) != str(current_uid):
+            my_matches = me.get("matches") or []
+            if author_id not in my_matches:
+                return jsonify({"success": False, "error": "Só podes comentar histórias de matches."}), 403
+
+        # Validação estrita de privacidade contra números, e-mails ou redes sociais
+        is_safe, error_msg = validate_content_privacy(comment_text)
+        if not is_safe:
+            return jsonify({"success": False, "error": error_msg, "security_blocked": True}), 400
+
+        new_comment = {
+            "id": f"c_{uuid.uuid4().hex[:8]}",
+            "user_id": current_uid,
+            "user_name": user_name,
+            "user_avatar": user_avatar,
+            "text": comment_text,
+            "timestamp": "Agora mesmo"
+        }
+        target.setdefault("comments", []).append(new_comment)
+        save_json_store(MOMENTS_FILE, moments)
+
+    return jsonify({
+        "success": True,
+        "message": "Comentário publicado com sucesso!",
+        "comment": new_comment,
+        "total_comments": len(target["comments"])
+    }), 201
+
+@app.route("/api/v1/moments/comments", methods=["GET"])
+def api_get_moment_comments():
+    """Lista os comentários de um Moment (só autor e matches mútuos)."""
+    moment_id = request.args.get("moment_id", "")
+    current_uid = session.get("user_id")
+    if not current_uid:
+        return jsonify({"success": False, "error": "Autenticação necessária"}), 401
+
+    moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
+    target = next((m for m in moments if m["id"] == moment_id), None)
+    if not target:
+        return jsonify({"success": False, "error": "Momento não encontrado."}), 404
+
+    if str(target.get("user_id")) != str(current_uid):
+        users = load_users()
+        me = users.get(session.get("user_email") or "", {})
+        if target.get("user_id") not in (me.get("matches") or []):
+            return jsonify({"success": False, "error": "Só podes ver comentários de matches."}), 403
+
+    return jsonify({
+        "success": True,
+        "comments": target.get("comments", [])
     })
 
 @app.route("/api/v1/moments/<moment_id>", methods=["PUT"])
@@ -2631,28 +3459,35 @@ def api_update_moment(moment_id):
                 "security_blocked": True
             }), 400
 
-    moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
-    target = None
-    for m in moments:
-        if m.get("id") == moment_id:
-            target = m
-            break
+    with MOMENTS_LOCK:
+        moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
+        target = None
+        for m in moments:
+            if m.get("id") == moment_id:
+                target = m
+                break
 
-    if not target:
-        return jsonify({"success": False, "error": "Momento não encontrado."}), 404
+        if not target:
+            return jsonify({"success": False, "error": "Momento não encontrado."}), 404
 
-    # Verificar autoria estrita (apenas o dono da publicação)
-    target_owner = str(target.get("user_id") or "")
-    if target_owner and target_owner != current_uid:
-        return jsonify({"success": False, "error": "Não tens permissão para editar esta publicação."}), 403
+        # Verificar autoria estrita (apenas o dono da publicação)
+        target_owner = str(target.get("user_id") or "")
+        if target_owner and target_owner != current_uid:
+            return jsonify({"success": False, "error": "Não tens permissão para editar esta publicação."}), 403
 
-    if "text" in data:
-        target["text"] = new_text
-    if new_mood:
-        target["mood"] = new_mood
-    target["edited"] = True
+        # created_at tem de ser sempre float (segundos epoch) — não reinicia a expiração
+        try:
+            target["created_at"] = float(target.get("created_at"))
+        except (TypeError, ValueError):
+            target["created_at"] = float(time.time())
 
-    save_json_store(MOMENTS_FILE, moments)
+        if "text" in data:
+            target["text"] = new_text
+        if new_mood:
+            target["mood"] = new_mood
+        target["edited"] = True
+
+        save_json_store(MOMENTS_FILE, moments)
     return jsonify({
         "success": True,
         "message": "Momento atualizado com sucesso!",
@@ -2664,24 +3499,25 @@ def api_delete_moment(moment_id):
     current_uid = session.get("user_id")
     if not current_uid:
         return jsonify({"success": False, "error": "Sessão não iniciada."}), 401
-    moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
-    
-    target_idx = None
-    for idx, m in enumerate(moments):
-        if m.get("id") == moment_id:
-            target_idx = idx
-            break
+    with MOMENTS_LOCK:
+        moments = load_json_store(MOMENTS_FILE, DEFAULT_MOMENTS)
 
-    if target_idx is None:
-        return jsonify({"success": False, "error": "Momento não encontrado."}), 404
+        target_idx = None
+        for idx, m in enumerate(moments):
+            if m.get("id") == moment_id:
+                target_idx = idx
+                break
 
-    target = moments[target_idx]
-    target_owner = str(target.get("user_id") or "")
-    if target_owner and target_owner != current_uid:
-        return jsonify({"success": False, "error": "Não tens permissão para eliminar esta publicação."}), 403
+        if target_idx is None:
+            return jsonify({"success": False, "error": "Momento não encontrado."}), 404
 
-    moments.pop(target_idx)
-    save_json_store(MOMENTS_FILE, moments)
+        target = moments[target_idx]
+        target_owner = str(target.get("user_id") or "")
+        if target_owner and target_owner != current_uid:
+            return jsonify({"success": False, "error": "Não tens permissão para eliminar esta publicação."}), 403
+
+        moments.pop(target_idx)
+        save_json_store(MOMENTS_FILE, moments)
     return jsonify({"success": True, "message": "Momento eliminado com sucesso."})
 
 @app.route("/api/v1/health", methods=["GET"])
@@ -2696,17 +3532,74 @@ def api_health():
 @app.route("/api/v1/conversations", methods=["GET"])
 @app.route("/api/v1/chat/conversations", methods=["GET"])
 def api_get_conversations():
-    uid = session.get("user_id") or request.headers.get("X-User-Id") or request.args.get("user_id")
+    # 🔒 SEGURANÇA: conversas exigem sessão — o header X-User-Id/args user_id
+    # permitiam consultar a lista de conversas de QUALQUER utilizador sem login
+    uid = session.get("user_id")
+    if not uid:
+        return jsonify({"error": "Autenticação necessária"}), 401
     # Retorna lista de conversas ativas do utilizador
     return jsonify({
         "success": True,
         "conversations": []
     }), 200
 
+@app.route("/api/v1/chat/messages", methods=["GET"])
+def api_get_chat_messages():
+    """Histórico do chat: as mensagens da conversa entre o utilizador logado
+    e um match. Persistidas no envio, autodestruição real após 24h."""
+    uid = session.get("user_id")
+    if not uid:
+        return jsonify({"error": "Autenticação necessária"}), 401
+    other = request.args.get("peer_id", "")
+    if not other:
+        return jsonify({"error": "peer_id em falta"}), 400
+
+    # 🔒 PRIVACIDADE: só devolve a conversa ENTRE os dois (conv_id é ordenado)
+    ids = sorted([str(uid), str(other)])
+    conv_id = f"{ids[0]}__{ids[1]}"
+
+    messages = load_json_store(MESSAGES_FILE, {})
+    conv = messages.get(conv_id, [])
+
+    # 🧹 aplicar o corte efêmero também na leitura (caso o envio não tenha rodado)
+    cutoff = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+    kept = []
+    for m in conv:
+        try:
+            mdt = datetime.datetime.fromisoformat(m["ts"].replace("Z", "+00:00"))
+            if mdt.replace(tzinfo=None) >= cutoff:
+                kept.append(m)
+        except Exception:
+            kept.append(m)
+
+    return jsonify({
+        "success": True,
+        "messages": kept
+    }), 200
+
 # ── Socket.IO (Chat em Tempo Real Efêmero) ──────────────────────────────────
 @socketio.on("connect")
 def on_connect(auth=None):
+    # Sala pessoal: eventos globais (novo match, mensagem fora do chat, notificações)
+    uid = session.get("user_id")
+    if uid:
+        join_room(f"user__{uid}")
+        # E-mail também (ids internos às vezes são o próprio e-mail)
+        uemail = session.get("user_email")
+        if uemail:
+            join_room(f"user__{uemail}")
     emit("connected", {"status": "ok"})
+
+@socketio.on("register_user")
+def on_register_user(data):
+    """Frontend registra o id/e-mail do utilizador logado para receber eventos globais."""
+    uid = (data or {}).get("user_id") or session.get("user_id")
+    uemail = (data or {}).get("user_email") or session.get("user_email")
+    if uid:
+        join_room(f"user__{uid}")
+    if uemail:
+        join_room(f"user__{uemail}")
+    emit("registered", {"ok": True})
 
 @socketio.on("join_room")
 def on_join(data):
@@ -2725,12 +3618,62 @@ def on_message(data):
     content = str(data.get("content", "")).strip()
     if not content:
         return
+    # 💳 PAYWALL REAL: mensagem ilimitada exige subscrição ativa — validado
+    # NO SERVIDOR (o gate do frontend é burlável; este não).
     my_id = data.get("sender_id") or session.get("user_id") or "11111111-1111-1111-1111-111111111111"
+    sender_email = session.get("user_email")
+    if sender_email:
+        users = load_users()
+        u = users.get(sender_email)
+        sub = (u or {}).get("subscription") or {}
+        has_active_sub = bool((u or {}).get("is_plus")) or (
+            sub.get("active") is True
+            and str(sub.get("expires_at", "")) > datetime.datetime.utcnow().isoformat()
+        )
+        if not has_active_sub:
+            emit("subscription_required", {
+                "error": "subscricao_necessaria",
+                "message": "As mensagens ilimitadas são exclusivas de membros com subscrição ativa."
+            })
+            return
     other = data.get("other_user_id", "22222222-2222-2222-2222-222222222222")
     msg_id = data.get("msg_id", "")
     ids = sorted([str(my_id), str(other)])
     room = f"room__{ids[0]}__{ids[1]}"
     ts = datetime.datetime.utcnow().isoformat() + "Z"
+
+    # 💾 PERSISTÊNCIA REAL: guardar a mensagem no store antes de emitir.
+    # Sem isto o chat era 100% efêmero em RAM — mensagens sumiam ao fechar/refresh.
+    try:
+        messages = load_json_store(MESSAGES_FILE, {})
+        conv_id = f"{ids[0]}__{ids[1]}"
+        conv = messages.setdefault(conv_id, [])
+        # dedup por msg_id (reenvio/fallback HTTP pode duplicar)
+        if msg_id and any(str(m.get("msg_id")) == str(msg_id) for m in conv):
+            pass
+        else:
+            conv.append({
+                "id": msg_id or f"m_{uuid.uuid4().hex[:10]}",
+                "sender_id": str(my_id),
+                "content": content,
+                "ts": ts
+            })
+            # 🧹 EFÊMERO HONESTO: apagar de verdade mensagens com +24h
+            cutoff = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+            kept = []
+            for m in conv:
+                try:
+                    mdt = datetime.datetime.fromisoformat(m["ts"].replace("Z", "+00:00"))
+                except Exception:
+                    kept.append(m)
+                    continue
+                if mdt.replace(tzinfo=None) >= cutoff:
+                    kept.append(m)
+            messages[conv_id] = kept
+            save_json_store(MESSAGES_FILE, messages)
+    except Exception:
+        # Persistência nunca deve derrubar o envio em tempo real
+        pass
 
     # Transmitir a mensagem real exclusivamente entre as duas pessoas reais na sala
     socketio.emit("new_message", {
@@ -2740,6 +3683,46 @@ def on_message(data):
         "msg_id": msg_id
     }, to=room)
 
+    # 🔄 TEMPO REAL: notificar o destinatário na sua sala pessoal (para quando
+    # NÃO está com a conversa aberta — atualiza lista de conversas/badge em vivo)
+    try:
+        peer_name = "Alguém"
+        try:
+            users = load_users()
+            by_id = {str(u.get("id") or em): u for em, u in users.items()}
+            sender = by_id.get(str(my_id))
+            if sender:
+                peer_name = sender.get("display_name") or sender.get("name") or "Alguém"
+        except Exception:
+            pass
+        socketio.emit("chat_message", {
+            "sender_id": str(my_id),
+            "from": str(my_id),
+            "peer_name": peer_name,
+            "content": content,
+            "ts": ts,
+            "msg_id": msg_id
+        }, to=f"user__{other}")
+    except Exception:
+        pass
+
+    # 🔔 PUSH: notificar o destinatário se não estiver na sala
+    try:
+        target_uid = str(other)
+        users = load_users()
+        by_id = {str(u.get("id") or em): u for em, u in users.items()}
+        sender = by_id.get(str(my_id))
+        if sender:
+            sender_name = (sender.get("display_name") or "Alguém")
+            send_push_to_user(
+                target_uid,
+                f"💬 {sender_name}",
+                content[:120],
+                "/app"
+            )
+    except Exception:
+        pass  # push nunca derruba o envio da mensagem
+
 @socketio.on("leave_room")
 def on_leave(data):
     my_id = session.get("user_id") or "11111111-1111-1111-1111-111111111111"
@@ -2748,6 +3731,136 @@ def on_leave(data):
     room = f"room__{ids[0]}__{ids[1]}"
     leave_room(room)
 
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MÓDULO Q&A ANÓNIMO DE SAÚDE — Comunidade (estilo PositiveSingles Care STD Q&A)
+# Tudo anónimo: perguntas e respostas usam pseudónimo estável (qa_anonymize).
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.route("/api/v1/qa-health", methods=["GET"])
+def api_qa_health_list():
+    qa = load_json_store(QA_HEALTH_FILE, DEFAULT_QA_HEALTH)
+    category = request.args.get("category", "")
+    items = qa
+    if category:
+        items = [q for q in qa if q.get("category") == category]
+    # mais recentes primeiro
+    items = sorted(items, key=lambda q: q.get("created_at", 0), reverse=True)
+    # nunca expõe user_id: só pseudónimos já gravados
+    safe = []
+    for q in items:
+        q_copy = {k: v for k, v in q.items() if k not in ("user_id",)}
+        q_copy["answers"] = [
+            {k: v for k, v in a.items() if k not in ("user_id",)}
+            for a in q.get("answers", [])
+        ]
+        safe.append(q_copy)
+    return jsonify({"success": True, "questions": safe})
+
+
+@app.route("/api/v1/qa-health", methods=["POST"])
+def api_qa_health_create():
+    uid = session.get("user_id")
+    if not uid:
+        return jsonify({"success": False, "message": "Sessão necessária."}), 401
+    data = request.get_json(silent=True) or {}
+    question = str(data.get("question", "")).strip()
+    detail = str(data.get("detail", "")).strip()
+    category = str(data.get("category", "diagnostico")).strip()
+    if category not in ("diagnostico", "relacionamento", "tratamento", "bem-estar"):
+        category = "diagnostico"
+    ok, why = qa_filter_content(question)
+    if not ok:
+        return jsonify({"success": False, "message": why}), 400
+    if detail:
+        ok2, why2 = qa_filter_content(detail)
+        if not ok2:
+            return jsonify({"success": False, "message": why2}), 400
+    qa = load_json_store(QA_HEALTH_FILE, DEFAULT_QA_HEALTH)
+    qid = "qa-" + uuid.uuid4().hex[:12]
+    qa.insert(0, {
+        "id": qid,
+        "category": category,
+        "question": question[:200],
+        "question_detail": detail[:2000],
+        "author": qa_anonymize(uid),
+        "answers": [],
+        "answers_count": 0,
+        "views": 1,
+        "created_at": time.time()
+    })
+    save_json_store(QA_HEALTH_FILE, qa)
+    return jsonify({"success": True, "id": qid, "author": qa_anonymize(uid)}), 201
+
+
+@app.route("/api/v1/qa-health/<qid>/answers", methods=["POST"])
+def api_qa_health_answer(qid):
+    uid = session.get("user_id")
+    if not uid:
+        return jsonify({"success": False, "message": "Sessão necessária."}), 401
+    data = request.get_json(silent=True) or {}
+    text = str(data.get("text", "")).strip()
+    ok, why = qa_filter_content(text)
+    if not ok:
+        return jsonify({"success": False, "message": why}), 400
+    qa = load_json_store(QA_HEALTH_FILE, DEFAULT_QA_HEALTH)
+    target = next((q for q in qa if q.get("id") == qid), None)
+    if not target:
+        return jsonify({"success": False, "message": "Pergunta não encontrada."}), 404
+    aid = "qa-" + uuid.uuid4().hex[:12]
+    target.setdefault("answers", []).append({
+        "id": aid,
+        "author": qa_anonymize(uid),
+        "text": text[:2000],
+        "likes": 0,
+        "liked_by": [],
+        "created_at": time.time()
+    })
+    target["answers_count"] = len(target["answers"])
+    save_json_store(QA_HEALTH_FILE, qa)
+    return jsonify({"success": True, "id": aid}), 201
+
+
+@app.route("/api/v1/qa-health/<qid>/view", methods=["POST"])
+def api_qa_health_view(qid):
+    qa = load_json_store(QA_HEALTH_FILE, DEFAULT_QA_HEALTH)
+    target = next((q for q in qa if q.get("id") == qid), None)
+    if not target:
+        return jsonify({"success": False}), 404
+    target["views"] = int(target.get("views", 0)) + 1
+    save_json_store(QA_HEALTH_FILE, qa)
+    return jsonify({"success": True})
+
+
+@app.route("/api/v1/qa-health/<qid>/like", methods=["POST"])
+def api_qa_health_like(qid):
+    uid = session.get("user_id")
+    if not uid:
+        return jsonify({"success": False, "message": "Sessão necessária."}), 401
+    data = request.get_json(silent=True) or {}
+    aid = str(data.get("answer_id", ""))
+    qa = load_json_store(QA_HEALTH_FILE, DEFAULT_QA_HEALTH)
+    target = next((q for q in qa if q.get("id") == qid), None)
+    if not target:
+        return jsonify({"success": False}), 404
+    ans = next((a for a in target.get("answers", []) if a.get("id") == aid), None)
+    if not ans:
+        return jsonify({"success": False}), 404
+    liked_by = ans.get("liked_by", [])
+    if uid in liked_by:
+        liked_by.remove(uid)
+        ans["likes"] = max(0, int(ans.get("likes", 0)) - 1)
+        ans["liked_by"] = liked_by
+        liked = False
+    else:
+        liked_by.append(uid)
+        ans["likes"] = int(ans.get("likes", 0)) + 1
+        ans["liked_by"] = liked_by
+        liked = True
+    save_json_store(QA_HEALTH_FILE, qa)
+    return jsonify({"success": True, "liked": liked, "likes": ans["likes"]})
+
+
 if __name__ == "__main__":
     print("\n" + "=" * 60)
     print("  SIGALEVE ENGINE — 100% OPERACIONAL")
@@ -2755,4 +3868,11 @@ if __name__ == "__main__":
     print("  App Sigaleve : http://localhost:5001/app")
     print("  Credenciais Demo: demo@sigaleve.app | Sigaleve2026!")
     print("=" * 60 + "\n")
-    socketio.run(app, host="0.0.0.0", port=5001, debug=True, allow_unsafe_werkzeug=True)
+    # Thread daemon: purga moments vencidos (>24h) mesmo sem visitas à tela.
+    # daemon=True para não bloquear o shutdown do servidor.
+    threading.Thread(
+        target=_moments_purge_loop,
+        name="moments-purge",
+        daemon=True
+    ).start()
+    socketio.run(app, host="0.0.0.0", port=5001, debug=False, allow_unsafe_werkzeug=True)

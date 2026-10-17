@@ -245,16 +245,10 @@ body {
         <i class="fa-solid fa-chevron-down text-[10px] text-white/70 ml-0.5"></i>
       </button>
 
-      <!-- Botão de Pânico / Saída Rápida Discreta (Imagem 2) -->
-      <div class="relative flex items-center group">
-        <button type="button" onclick="quickExit()" class="w-10 h-10 rounded-full flex items-center justify-center text-rose-400 bg-white/10 hover:bg-rose-500/20 hover:text-rose-300 border border-white/15 transition-all shadow-sm active:scale-95" title="Saída Rápida de Emergência (Fecha a app e abre receitas de bolachas)">
-          <i class="fa-solid fa-door-open text-base"></i>
-        </button>
-        <!-- Ícone i com círculo e modal informativo / tooltip -->
-        <button type="button" onclick="showPanicInfoModal()" class="w-5 h-5 -ml-2 -mt-5 rounded-full bg-zinc-800 border border-white/20 text-zinc-300 hover:text-white flex items-center justify-center text-[10px] font-bold shadow transition-all" title="Informação sobre o Botão de Pânico">
-          <i class="fa-solid fa-info"></i>
-        </button>
-      </div>
+      <!-- Saída Rápida (privacidade: disfarça o site num clique) -->
+      <button type="button" onclick="landingQuickExit()" title="Saída Rápida: sai do Sigaleve imediatamente e abre um site neutro" class="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-red-500/30 border border-white/20 text-red-300 hover:text-red-200 text-sm transition-all" aria-label="Saída Rápida">
+        <i class="fa-solid fa-door-open"></i>
+      </button>
 
       <!-- Iniciar Sessão (Botão Branco Puro estilo Tinder) -->
       <a href="/app" class="btn-tinder-white text-[13px] sm:text-[15px] font-bold px-5 sm:px-6 py-2.5 rounded-full shadow-lg" data-i18n="login">
@@ -313,25 +307,23 @@ body {
   <div class="max-w-4xl mx-auto flex flex-col items-center z-10">
     
     <!-- Tagline Pill -->
-    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/20 backdrop-blur-md border border-pink-400/30 text-xs sm:text-sm font-bold uppercase tracking-wider text-pink-300 mb-6">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-bold uppercase tracking-wider text-pink-300 mb-8 animate-pulse">
       <i class="fa-solid fa-heart-pulse text-pink-400"></i>
-      <span data-i18n="heroTagline">NAMORO PARA PESSOAS COM INFEÇÕES SEXUALMENTE TRANSMISSÍVEIS</span>
+      <span data-i18n="heroTagline">Namoro para pessoas com infeções sexualmente transmissíveis</span>
     </div>
 
-    <!-- Main Headline com Viva novas histórias -->
-    <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white mb-6 leading-[1.08]">
-      Amor sem preconceitos.<br/>
-      Conexões com quem entende.<br/>
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-400">Viva novas histórias.</span>
+    <!-- Main Headline em tamanho gigante como Tinder -->
+    <h1 class="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-white mb-8 leading-[1.08]">
+      <span data-i18n="heroTitle">Amor sem preconceitos.</span> <span data-i18n="heroTitle2">Conexões com quem entende.</span> <span class="tinder-flame" data-i18n="heroTitle3">Viva novas histórias.</span>
     </h1>
 
-    <p class="text-base sm:text-lg md:text-xl text-gray-200 max-w-3xl font-medium mb-10 leading-relaxed" data-i18n="heroDesc">
+    <p class="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-2xl font-medium mb-10 leading-relaxed" data-i18n="heroDesc">
       A primeira comunidade de namoro de Portugal para pessoas que vivem com infeções sexualmente transmissíveis (herpes, HPV, VIH e outras). Conhece pessoas que entendem o teu caminho, sem julgamentos e com total privacidade.
     </p>
 
     <!-- CTAs estilo Tinder -->
     <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-      <a href="/app" class="btn-tinder-gradient w-full sm:w-auto text-base sm:text-lg font-black px-10 py-4 rounded-full flex items-center justify-center gap-3">
+      <a href="/app" class="btn-tinder-gradient w-full sm:w-auto text-lg sm:text-xl font-black px-12 py-4 rounded-full flex items-center justify-center gap-3">
         <span data-i18n="createAccount">Criar minha conta grátis</span>
         <i class="fa-solid fa-arrow-right text-base"></i>
       </a>
@@ -341,8 +333,17 @@ body {
       </a>
     </div>
 
+    <!-- Frase de confiança abaixo dos botões -->
+    <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-8 text-sm font-semibold text-gray-300">
+      <span class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> <span data-i18n="badgeFree">Cadastro gratuito</span></span>
+      <span>•</span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> <span data-i18n="badgeVerifiedProfiles">Perfis verificados</span></span>
+      <span>•</span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> <span data-i18n="badgePrivacy">Mais controle sobre sua privacidade</span></span>
+    </div>
+
     <!-- App Store Badges Quick Row -->
-    <div class="flex items-center gap-4 mt-12 text-xs font-semibold text-gray-400">
+    <div class="flex flex-wrap items-center justify-center gap-4 mt-8 text-xs font-semibold text-gray-400">
       <span class="flex items-center gap-2">
         <i class="fa-solid fa-shield-check text-emerald-400 text-sm"></i>
         <span data-i18n="badgePrivate">100% Privado e Encriptado</span>
@@ -351,11 +352,6 @@ body {
       <span class="flex items-center gap-2">
         <i class="fa-solid fa-bolt text-amber-400 text-sm"></i>
         <span data-i18n="badgeMatches">Matches em Tempo Real</span>
-      </span>
-      <span>•</span>
-      <span class="flex items-center gap-2">
-        <i class="fa-solid fa-user-check text-blue-400 text-sm"></i>
-        <span data-i18n="badgeVerified">Apenas +18 Verificados</span>
       </span>
     </div>
 
@@ -369,13 +365,20 @@ body {
   <div class="max-w-7xl mx-auto">
     
     <div class="text-center max-w-3xl mx-auto mb-16">
-      <p class="text-xs font-black tracking-widest uppercase text-pink-500 mb-2" data-i18n="featuresTag">Experiência Imersiva</p>
+      <p class="text-xs font-black tracking-widest uppercase text-pink-500 mb-2" data-i18n="featuresTag">Descubra pessoas</p>
       <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white mb-5">
-        <span data-i18n="featuresTitle">Desenhado para sentir a emoção de cada conexão</span>
+        <span data-i18n="featuresTitle">Tem muita gente interessante para conhecer.</span>
       </h2>
       <p class="text-base sm:text-lg text-gray-400">
-        <span data-i18n="featuresDesc">A nossa dinâmica de cartões de alta fidelidade permite explorar pessoas perto de ti de forma fluida, privada e respeitosa.</span>
+        <span data-i18n="featuresDesc">Descubra novos perfis, encontre pessoas com interesses em comum e deixe as boas conversas acontecerem. Sua próxima conexão pode estar mais perto do que você imagina.</span>
       </p>
+    </div>
+
+    <!-- Selos dos perfis -->
+    <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-12 text-xs font-semibold text-gray-300">
+      <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> <span data-i18n="badgeRecentlyActive">Ativo recentemente</span></span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-fire text-amber-400"></i> <span data-i18n="badgeFeaturedProfile">Perfil em destaque</span></span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-sky-400"></i> <span data-i18n="badgeVerifiedProfile">Perfil verificado</span></span>
     </div>
 
     <!-- 3 Card Showcase Interactive -->
@@ -477,6 +480,16 @@ body {
         </div>
       </div>
 
+    </div>
+
+    <!-- Texto de apoio + aviso de perfis demonstrativos -->
+    <div class="text-center max-w-2xl mx-auto mt-14">
+      <p class="text-base sm:text-lg text-gray-300 font-medium mb-3" data-i18n="featuresSupportText">
+        Cada pessoa tem uma história. Encontre alguém com quem valha a pena compartilhar a sua.
+      </p>
+      <p class="text-[11px] text-gray-500" data-i18n="demoProfilesDisclaimer">
+        * Perfis exibidos nesta página são exemplos demonstrativos, não são usuários reais da plataforma.
+      </p>
     </div>
 
   </div>
@@ -623,64 +636,27 @@ body {
 <section id="stories" class="py-24 px-6 bg-[#0b0e14]">
   <div class="max-w-7xl mx-auto">
     <div class="text-center max-w-3xl mx-auto mb-16">
-      <p class="text-xs font-black tracking-widest uppercase text-pink-500 mb-2" data-i18n="storiesTag">Histórias Reais</p>
-      <h2 class="text-3xl sm:text-5xl font-black text-white mb-4" data-i18n="storiesTitle">Tudo começou com um Click</h2>
-      <p class="text-gray-400 text-base sm:text-lg" data-i18n="storiesSubtitle">Milhares de pessoas já encontraram amor, amizade e cumplicidade autêntica.</p>
+      <p class="text-xs font-black tracking-widest uppercase text-pink-500 mb-2" data-i18n="storiesTag">Histórias da Comunidade</p>
+      <h2 class="text-3xl sm:text-5xl font-black text-white mb-4" data-i18n="storiesTitle">Tudo começou com um clique</h2>
+      <p class="text-gray-400 text-base sm:text-lg" data-i18n="storiesSubtitle">Pessoas reais, começos reais — histórias partilhadas por quem vive o mesmo que tu.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      
-      <!-- Story 1 -->
+      {% for s in success_stories %}
       <div class="quote-card flex flex-col justify-between">
         <div>
           <div class="text-pink-500 text-3xl mb-4 font-serif">“</div>
-          <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 font-medium" data-i18n="story1Text">
-            Entré en Sigaleve sin muchas expectativas y al tercer día hice match con Diego. Nos dimos cuenta de que compartíamos las mismas pasiones y la misma necesidad de hablar con total honestidad. Hoy llevamos un año viviendo juntos.
-          </p>
+          <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 font-medium">{{ s.text }}</p>
         </div>
         <div class="flex items-center gap-3 pt-4 border-t border-white/10">
-          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80" alt="Amanda" class="w-11 h-11 rounded-full object-cover border-2 border-pink-500"/>
+          <span class="w-11 h-11 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-sm font-black text-white flex-shrink-0">{{ s.names[:1] }}{{ s.names.split('&')[1].strip()[:1] if '&' in s.names else '' }}</span>
           <div>
-            <h4 class="font-bold text-white text-sm" data-i18n="story1Author">Amanda & Diego</h4>
-            <p class="text-xs text-gray-400" data-i18n="story1Location">Madrid, España</p>
+            <h4 class="font-bold text-white text-sm">{{ s.names }}</h4>
+            <p class="text-xs text-gray-400">{% if s.city %}{{ s.city }} · {% endif %}{% if s.seed %}história ilustrativa{% else %}membro verificado{% endif %}</p>
           </div>
         </div>
       </div>
-
-      <!-- Story 2 -->
-      <div class="quote-card flex flex-col justify-between">
-        <div>
-          <div class="text-pink-500 text-3xl mb-4 font-serif">“</div>
-          <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 font-medium" data-i18n="story2Text">
-            La privacidad era mi mayor preocupación. Con la verificación y el cifrado de datos pude estar tranquilo desde el primer segundo. Conocí a Elena, charlamos durante horas y el clic fue instantáneo.
-          </p>
-        </div>
-        <div class="flex items-center gap-3 pt-4 border-t border-white/10">
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80" alt="Lucas" class="w-11 h-11 rounded-full object-cover border-2 border-pink-500"/>
-          <div>
-            <h4 class="font-bold text-white text-sm" data-i18n="story2Author">Lucas & Elena</h4>
-            <p class="text-xs text-gray-400" data-i18n="story2Location">Lisboa, Portugal</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Story 3 -->
-      <div class="quote-card flex flex-col justify-between">
-        <div>
-          <div class="text-pink-500 text-3xl mb-4 font-serif">“</div>
-          <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 font-medium" data-i18n="story3Text">
-            Lo mejor es que la gente aquí es real y directa. No hay poses forzadas. Hicimos match por un Super Like, quedamos a tomar un café y desde ese día no nos hemos separado. ¡Gracias Sigaleve!
-          </p>
-        </div>
-        <div class="flex items-center gap-3 pt-4 border-t border-white/10">
-          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=120&q=80" alt="Carla" class="w-11 h-11 rounded-full object-cover border-2 border-pink-500"/>
-          <div>
-            <h4 class="font-bold text-white text-sm" data-i18n="story3Author">Carla & Miguel</h4>
-            <p class="text-xs text-gray-400" data-i18n="story3Location">Barcelona, España</p>
-          </div>
-        </div>
-      </div>
-
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -801,9 +777,9 @@ body {
       <div>
         <h4 class="text-xs font-black uppercase tracking-wider text-white mb-4" data-i18n="footerCareers">Emprego</h4>
         <ul class="space-y-2.5 text-xs font-medium">
-          <li><a href="#" class="hover:text-white transition-colors" data-i18n="footerCareersJobs">Portal de Carreiras</a></li>
-          <li><a href="#" class="hover:text-white transition-colors" data-i18n="footerBlog">Blog de Engenharia</a></li>
-          <li><a href="#" class="hover:text-white transition-colors" data-i18n="footerCulture">Cultura e Valores</a></li>
+          <li><a href="mailto:support@sigaleve.com" class="hover:text-white transition-colors" data-i18n="footerCareersJobs">Portal de Carreiras</a></li>
+          <li><a href="mailto:support@sigaleve.com" class="hover:text-white transition-colors" data-i18n="footerBlog">Blog de Engenharia</a></li>
+          <li><a href="mailto:support@sigaleve.com" class="hover:text-white transition-colors" data-i18n="footerCulture">Cultura e Valores</a></li>
         </ul>
       </div>
 
@@ -821,10 +797,10 @@ body {
       <div>
         <h4 class="text-xs font-black uppercase tracking-wider text-white mb-4" data-i18n="footerSocial">Social</h4>
         <ul class="space-y-2.5 text-xs font-medium">
-          <li><a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram mr-1.5"></i> Instagram</a></li>
-          <li><a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-tiktok mr-1.5"></i> TikTok</a></li>
-          <li><a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-youtube mr-1.5"></i> YouTube</a></li>
-          <li><a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-x-twitter mr-1.5"></i> Twitter / X</a></li>
+          <li><a href="mailto:support@sigaleve.com" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram mr-1.5"></i> Instagram</a></li>
+          <li><a href="mailto:support@sigaleve.com" class="hover:text-white transition-colors"><i class="fa-brands fa-tiktok mr-1.5"></i> TikTok</a></li>
+          <li><a href="mailto:support@sigaleve.com" class="hover:text-white transition-colors"><i class="fa-brands fa-youtube mr-1.5"></i> YouTube</a></li>
+          <li><a href="mailto:support@sigaleve.com" class="hover:text-white transition-colors"><i class="fa-brands fa-x-twitter mr-1.5"></i> Twitter / X</a></li>
         </ul>
       </div>
 
@@ -848,11 +824,11 @@ body {
       </div>
 
       <div class="flex items-center gap-6">
-        <span data-i18n="footerGdpr">🇪🇺 Cumplimiento RGPD</span>
+        <span data-i18n="footerGdpr">🇪🇺 Conformidade RGPD</span>
         <span>•</span>
-        <span data-i18n="footer18">Uso estricto para mayores de 18 años</span>
+        <span data-i18n="footer18">Uso estrito para maiores de 18 anos</span>
         <span>•</span>
-        <a href="/legal/privacy" class="hover:underline" data-i18n="footerPreferences">Preferencias de privacidad</a>
+        <a href="/legal/privacy" class="hover:underline" data-i18n="footerPreferences">Preferências de privacidade</a>
       </div>
     </div>
 
@@ -866,7 +842,8 @@ body {
 const GLOBAL_LANGUAGES = [
   // Idiomas Principales
   { code: 'es', name: 'Español', native: 'Español', flag: '🇪🇸' },
-  { code: 'pt', name: 'Português', native: 'Português', flag: '🇵🇹' },
+  { code: 'pt', name: 'Português (Portugal)', native: 'Português', flag: '🇵🇹' },
+  { code: 'br', name: 'Português (Brasil)', native: 'Português (BR)', flag: '🇧🇷' },
   { code: 'en', name: 'English', native: 'English', flag: '🇬🇧' },
   { code: 'fr', name: 'Francés', native: 'Français', flag: '🇫🇷' },
   { code: 'de', name: 'Alemán', native: 'Deutsch', flag: '🇩🇪' },
@@ -990,17 +967,26 @@ const LANDING_TRANSLATIONS = {
   "navStories": "Historias de éxito",
   "navDownload": "Descargar",
   "login": "Iniciar sesión",
-  "heroTagline": "Conecta con autenticidad. Sin juicios.",
-  "heroTitle": "Todo comienza con un",
-  "heroDesc": "La comunidad global más segura y libre de prejuicios. Encuentra personas reales que vibran en tu misma sintonía, a la distancia que tú elijas.",
-  "createAccount": "Crear una cuenta",
+  "heroTagline": "Citas para personas con infecciones de transmisión sexual",
+  "heroTitle": "Amor sin prejuicios.",
+  "heroTitle2": "Conexiones con quien entiende.",
+  "heroTitle3": "Vive nuevas historias.",
+  "heroDesc": "La primera comunidad de citas de Portugal para personas que viven con infecciones de transmisión sexual (herpes, VPH, VIH y otras). Conoce a personas que entienden tu camino, sin juicios y con total privacidad.",
+  "createAccount": "Crear mi cuenta gratis",
   "howItWorks": "Cómo funciona",
   "badgePrivate": "100% Privado y Cifrado",
   "badgeMatches": "Matches en Tiempo Real",
-  "badgeVerified": "Solo +18 Verificados",
-  "featuresTag": "Experiencia Inmersiva",
-  "featuresTitle": "Diseñado para sentir la emoción de cada conexión",
-  "featuresDesc": "Nuestra mecánica de tarjetas de alta fidelidad te permite explorar personas cerca de ti de forma fluida, privada y respetuosa.",
+  "badgeFree": "Registro gratuito",
+  "badgeVerifiedProfiles": "Perfiles verificados",
+  "badgePrivacy": "Más control sobre tu privacidad",
+  "featuresTag": "Descubre personas",
+  "featuresTitle": "Hay mucha gente interesante por conocer.",
+  "featuresDesc": "Descubre nuevos perfiles, encuentra personas con intereses en común y deja que surjan buenas conversaciones. Tu próxima conexión puede estar más cerca de lo que imaginas.",
+  "badgeRecentlyActive": "Activo recientemente",
+  "badgeFeaturedProfile": "Perfil destacado",
+  "badgeVerifiedProfile": "Perfil verificado",
+  "featuresSupportText": "Cada persona tiene una historia. Encuentra a alguien con quien valga la pena compartir la tuya.",
+  "demoProfilesDisclaimer": "* Los perfiles mostrados en esta página son ejemplos demostrativos, no son usuarios reales de la plataforma.",
   "howTag": "Simple, Rápido y Seguro",
   "howTitle": "¿Cómo funciona Sigaleve?",
   "howSubtitle": "Conectar de verdad es cuestión de segundos. Diseñamos un proceso fluido para que encuentres tu match ideal con total confianza.",
@@ -1036,9 +1022,9 @@ const LANDING_TRANSLATIONS = {
   "tierGoldF3": "Top Picks seleccionados a diario",
   "tierGoldF4": "Todo lo incluido en Sigaleve Plus",
   "tierGoldBtn": "Obtener Gold",
-  "storiesTag": "Historias Reales",
-  "storiesTitle": "Todo comenzó con un Click",
-  "storiesSubtitle": "Miles de personas han encontrado amor, amistad y complicidad auténtica.",
+  "storiesTag": "Historias de la comunidad",
+  "storiesTitle": "Todo comenzó con un clic",
+  "storiesSubtitle": "Personas reales, comienzos reales — historias compartidas por quien vive lo mismo que tú.",
   "story1Text": "Entré en Sigaleve sin muchas expectativas y al tercer día hice match con Diego. Nos dimos cuenta de que compartíamos las mismas pasiones y la misma necesidad de hablar con total honestidad. Hoy llevamos un año viviendo juntos.",
   "story1Author": "Amanda & Diego",
   "story1Location": "Madrid, España",
@@ -1109,17 +1095,26 @@ const LANDING_TRANSLATIONS = {
   "navStories": "Histórias de Sucesso",
   "navDownload": "Descarregar",
   "login": "Iniciar Sessão",
-  "heroTagline": "NAMORO PARA PESSOAS COM INFEÇÕES SEXUALMENTE TRANSMISSÍVEIS",
-  "heroTitle": "Amor sem preconceitos. Conexões com quem entende. Viva novas histórias.",
+  "heroTagline": "Namoro para pessoas com infeções sexualmente transmissíveis",
+  "heroTitle": "Amor sem preconceitos.",
+  "heroTitle2": "Conexões com quem entende.",
+  "heroTitle3": "Viva novas histórias.",
   "heroDesc": "A primeira comunidade de namoro de Portugal para pessoas que vivem com infeções sexualmente transmissíveis (herpes, HPV, VIH e outras). Conhece pessoas que entendem o teu caminho, sem julgamentos e com total privacidade.",
   "createAccount": "Criar minha conta grátis",
   "howItWorks": "Como funciona",
   "badgePrivate": "100% Privado e Encriptado",
   "badgeMatches": "Matches em Tempo Real",
-  "badgeVerified": "Apenas +18 Verificados",
-  "featuresTag": "Experiência Imersiva",
-  "featuresTitle": "Desenhado para sentir a emoção de cada conexão",
-  "featuresDesc": "A nossa dinâmica de cartões de alta fidelidade permite explorar pessoas perto de ti de forma fluida, privada e respeitosa.",
+  "badgeFree": "Cadastro gratuito",
+  "badgeVerifiedProfiles": "Perfis verificados",
+  "badgePrivacy": "Mais controle sobre sua privacidade",
+  "featuresTag": "Descubra pessoas",
+  "featuresTitle": "Tem muita gente interessante para conhecer.",
+  "featuresDesc": "Descubra novos perfis, encontre pessoas com interesses em comum e deixe as boas conversas acontecerem. Sua próxima conexão pode estar mais perto do que você imagina.",
+  "badgeRecentlyActive": "Ativo recentemente",
+  "badgeFeaturedProfile": "Perfil em destaque",
+  "badgeVerifiedProfile": "Perfil verificado",
+  "featuresSupportText": "Cada pessoa tem uma história. Encontre alguém com quem valha a pena compartilhar a sua.",
+  "demoProfilesDisclaimer": "* Perfis exibidos nesta página são exemplos demonstrativos, não são usuários reais da plataforma.",
   "howTag": "Simples, Rápido e Seguro",
   "howTitle": "Como funciona o Sigaleve?",
   "howSubtitle": "Conectar de verdade é uma questão de segundos. Desenhamos um processo fluido para encontrares o teu par ideal com total confiança.",
@@ -1155,9 +1150,9 @@ const LANDING_TRANSLATIONS = {
   "tierGoldF3": "Top Picks selecionados diariamente",
   "tierGoldF4": "Tudo o que está incluído no Sigaleve Plus",
   "tierGoldBtn": "Obter Gold",
-  "storiesTag": "Histórias Reais",
-  "storiesTitle": "Tudo começou com um Click",
-  "storiesSubtitle": "Milhares de pessoas já encontraram amor, amizade e cumplicidade autêntica.",
+  "storiesTag": "Histórias da Comunidade",
+  "storiesTitle": "Tudo começou com um clique",
+  "storiesSubtitle": "Pessoas reais, começos reais — histórias partilhadas por quem vive o mesmo que tu.",
   "story1Text": "Entrei no Sigaleve sem grandes expectativas e ao terceiro dia dei match com o Diego. Percebemos que partilhávamos as mesmas paixões e a mesma vontade de falar com honestidade. Hoje já vivemos juntos há um ano.",
   "story1Author": "Amanda & Diego",
   "story1Location": "Madrid, Espanha",
@@ -1206,6 +1201,134 @@ const LANDING_TRANSLATIONS = {
   "footer18": "Uso estrito para maiores de 18 anos",
   "footerPreferences": "Preferências de privacidade"
 },
+  br: {
+  "cardActiveNow": "Ativa agora",
+  "cardTopPick": "Top Pick",
+  "cardVerified": "Verificada",
+  "card1DistJob": "A 4 km de distância • Designer",
+  "card2DistJob": "A 2 km de distância • Músico",
+  "card3DistJob": "A 6 km de distância • Arquiteta",
+  "tagPhoto": "Fotografia",
+  "tagRedWine": "Vinho Tinto",
+  "tagHiking": "Caminhadas",
+  "tagJazz": "Jazz",
+  "tagCoffee": "Café",
+  "tagTravel": "Viagens",
+  "tagArt": "Arte",
+  "tagYoga": "Yoga",
+  "tagPets": "Animais",
+  "navProducts": "Produtos",
+  "navDiscover": "Descobrir",
+  "navSafety": "Segurança",
+  "navStories": "Histórias de Sucesso",
+  "navDownload": "Baixar",
+  "login": "Entrar",
+  "heroTagline": "Namoro para pessoas com infecções sexualmente transmissíveis",
+  "heroTitle": "Amor sem preconceitos.",
+  "heroTitle2": "Conexões com quem entende.",
+  "heroTitle3": "Viva novas histórias.",
+  "heroDesc": "A comunidade de namoro para pessoas que vivem com infecções sexualmente transmissíveis (herpes, HPV, HIV e outras). Conheça pessoas que entendem o seu caminho, sem julgamentos e com total privacidade.",
+  "createAccount": "Criar minha conta grátis",
+  "howItWorks": "Como funciona",
+  "badgePrivate": "100% Privado e Encriptado",
+  "badgeMatches": "Matches em Tempo Real",
+  "badgeFree": "Cadastro gratuito",
+  "badgeVerifiedProfiles": "Perfis verificados",
+  "badgePrivacy": "Mais controle sobre sua privacidade",
+  "featuresTag": "Descubra pessoas",
+  "featuresTitle": "Tem muita gente interessante para conhecer.",
+  "featuresDesc": "Descubra novos perfis, encontre pessoas com interesses em comum e deixe as boas conversas acontecerem. Sua próxima conexão pode estar mais perto do que você imagina.",
+  "badgeRecentlyActive": "Ativo recentemente",
+  "badgeFeaturedProfile": "Perfil em destaque",
+  "badgeVerifiedProfile": "Perfil verificado",
+  "featuresSupportText": "Cada pessoa tem uma história. Encontre alguém com quem valha a pena compartilhar a sua.",
+  "demoProfilesDisclaimer": "* Perfis exibidos nesta página são exemplos demonstrativos, não são usuários reais da plataforma.",
+  "howTag": "Simples, Rápido e Seguro",
+  "howTitle": "Como funciona o Sigaleve?",
+  "howSubtitle": "Conectar de verdade é uma questão de segundos. Projetamos um processo fluido para encontrar o seu par ideal com total confiança.",
+  "step1Title": "Cria o seu Perfil Autêntico",
+  "step1Desc": "Carregue as suas melhores fotos da galeria ou da câmara em direto, escolha as suas paixões e compartilhe a sua biografia com sinceridade.",
+  "step1Highlight": "Verificação facial instantânea",
+  "step2Title": "Deslize & Faça Match",
+  "step2Desc": "Deslize para a direita para dar Like ou para a esquerda para passar. Quando ambos sentem a mesma conexão, acontece o Match mútuo!",
+  "step2Highlight": "Conexão mútua e respeitosa",
+  "step3Title": "Conversa & Conecte-se",
+  "step3Desc": "Converse em tempo real num chat protegido com criptografia de ponta a ponta. Compartilhe momentos e marque seu primeiro encontro.",
+  "step3Highlight": "100% Privado e Encriptado",
+  "startNow": "Começar Agora",
+  "productsTitle": "Eleve sua vida amorosa",
+  "productsSubtitle": "Acesse a vantagens exclusivas e multiplique suas oportunidades de coincidir.",
+  "tierFreeDesc": "A experiência clássica para conhecer pessoas genuínas perto de ti.",
+  "tierFreeF1": "Deslizar perfis na sua área",
+  "tierFreeF2": "Matches mútuos ilimitados",
+  "tierFreeF3": "Mensagens criptografadas 24h",
+  "tierFreeF4": "Localização aproximada protegida",
+  "tierFreeBtn": "Começar Grátis",
+  "tierPopularTag": "Mais Popular",
+  "tierPlusDesc": "Likes ilimitados, Voltar Atrás e controle total sobre quem vê você.",
+  "tierPlusF1": "Likes ilimitados todos os dias",
+  "tierPlusF2": "Voltar atrás em swipes acidentais",
+  "tierPlusF3": "Passaporte para qualquer cidade",
+  "tierPlusF4": "1 Boost grátis por mês",
+  "tierPlusF5": "Sem anúncios publicitários",
+  "tierPlusBtn": "Obter Sigaleve Plus",
+  "tierGoldDesc": "Descobre quem gosta de ti antes de deslizar e poupa tempo.",
+  "tierGoldF1": "Saber quem te deu Like",
+  "tierGoldF2": "Matches instantâneos diretos",
+  "tierGoldF3": "Top Picks selecionados diariamente",
+  "tierGoldF4": "Tudo o que está incluído no Sigaleve Plus",
+  "tierGoldBtn": "Obter Gold",
+  "storiesTag": "Histórias da Comunidade",
+  "storiesTitle": "Tudo começou com um clique",
+  "storiesSubtitle": "Pessoas reais, começos reais — histórias partilhadas por quem vive o mesmo que tu.",
+  "story1Text": "Entrei no Sigaleve sem grandes expectativas e ao terceiro dia dei match com o Diego. Percebemos que partilhávamos as mesmas paixões e a mesma vontade de falar com honestidade. Hoje já vivemos juntos há um ano.",
+  "story1Author": "Amanda & Diego",
+  "story1Location": "Madrid, Espanha",
+  "story2Text": "A privacidade era a minha maior preocupação. Com a verificação e a criptografia de dados pude sentir-me tranquilo desde o primeiro segundo. Conheci a Elena, conversamos durante horas e o clique foi imediato.",
+  "story2Author": "Lucas & Elena",
+  "story2Location": "Lisboa, Portugal",
+  "story3Text": "O melhor é que as pessoas aqui são reais e diretas. Sem poses forçadas. Demos match por um Super Like, fomos tomar um café e desde esse dia nunca mais nos nos largamos. Obrigado Sigaleve!",
+  "story3Author": "Carla & Miguel",
+  "story3Location": "Barcelona, Espanha",
+  "safetyTag": "Segurança em Primeiro Lugar",
+  "safetyTitle": "A sua tranquilidade e privacidade são a nossa prioridade absoluta",
+  "safetyDesc": "Desenvolvemos ferramentas de segurança avançadas em cada conversa e perfil para que possa conhecer novas pessoas sentindo-se sempre no controle.",
+  "safetyF1Title": "Criptografia de Ponta a Ponta",
+  "safetyF1Desc": "Os seus dados confidenciais de perfil são guardados sob rigorosos protocolos de criptografia e nunca são expostos a terceiros.",
+  "safetyF2Title": "Localização Aproximada Inteligente",
+  "safetyF2Desc": "Nunca revelamos as suas coordenadas exatas. Apenas mostramos um raio aproximado para proteger a sua casa e rotina.",
+  "safetyF3Title": "Verificação Real de Fotos",
+  "safetyF3Desc": "Confirme que a pessoa com quem você conversa corresponde fielmente às fotos da sua galeria através de verificação facial.",
+  "safetyCardTitle": "Centro de Segurança 24/7",
+  "safetyCardDesc": "Bloqueie, denuncie ou desfaça matches a qualquer momento com apenas um toque, sem explicações.",
+  "safetyGuidelinesBtn": "Ler Diretrizes da Comunidade",
+  "downloadTitle": "Pronto para dar o próximo passo?",
+  "downloadSubtitle": "Junte-se hoje a milhares de pessoas que escolhem conectar com autenticidade, empatia e sem julgamentos.",
+  "createAccountNow": "Criar a minha conta agora",
+  "openWebVersion": "Abrir versão Web",
+  "footerLegal": "Legal",
+  "footerPrivacy": "Privacidade",
+  "footerTerms": "Termos e Condições",
+  "footerCookies": "Política de Cookies",
+  "footerIntellectual": "Propriedade Intelectual",
+  "footerCareers": "Emprego",
+  "footerCareersJobs": "Portal de Carreiras",
+  "footerBlog": "Blog de Engenharia",
+  "footerCulture": "Cultura e Valores",
+  "footerSafety": "Segurança",
+  "footerGuidelines": "Diretrizes da Comunidade",
+  "footerSafetyTips": "Dicas de Segurança",
+  "footerSafetyCenter": "Centro de Segurança",
+  "footerSocial": "Social",
+  "footerContact": "Contato",
+  "footerSupport": "Suporte e Ajuda",
+  "footerPress": "Imprensa & Media",
+  "footerCustomerService": "Apoio ao Usuário",
+  "footerCopyright": "© 2026 Sigaleve, Inc. Todos os direitos reservados.",
+  "footerGdpr": "🇪🇺 Conformidade RGPD",
+  "footer18": "Uso estrito para maiores de 18 anos",
+  "footerPreferences": "Preferências de privacidade"
+},
   en: {
   "cardActiveNow": "Active now",
   "cardTopPick": "Top Pick",
@@ -1228,17 +1351,26 @@ const LANDING_TRANSLATIONS = {
   "navStories": "Success Stories",
   "navDownload": "Download",
   "login": "Log in",
-  "heroTagline": "Connect authentically. No judgments.",
-  "heroTitle": "It all starts with a",
-  "heroDesc": "The safest, judgment-free global community. Meet authentic people who share your vibe, wherever and whenever you want.",
-  "createAccount": "Create an account",
+  "heroTagline": "Dating for people living with sexually transmitted infections",
+  "heroTitle": "Love without stigma.",
+  "heroTitle2": "Connections with those who understand.",
+  "heroTitle3": "Live new stories.",
+  "heroDesc": "Portugal's first dating community for people living with sexually transmitted infections (herpes, HPV, HIV and others). Meet people who understand your journey — no judgment, total privacy.",
+  "createAccount": "Create my free account",
   "howItWorks": "How it works",
   "badgePrivate": "100% Private & Encrypted",
   "badgeMatches": "Real-Time Matches",
-  "badgeVerified": "18+ Verified Only",
-  "featuresTag": "Immersive Experience",
-  "featuresTitle": "Designed to feel the thrill of every connection",
-  "featuresDesc": "Our high-fidelity card swipe mechanics let you explore people near you smoothly, privately, and respectfully.",
+  "badgeFree": "Free sign-up",
+  "badgeVerifiedProfiles": "Verified profiles",
+  "badgePrivacy": "More control over your privacy",
+  "featuresTag": "Discover people",
+  "featuresTitle": "There are so many interesting people to meet.",
+  "featuresDesc": "Discover new profiles, find people who share your interests and let great conversations happen. Your next connection may be closer than you think.",
+  "badgeRecentlyActive": "Recently active",
+  "badgeFeaturedProfile": "Featured profile",
+  "badgeVerifiedProfile": "Verified profile",
+  "featuresSupportText": "Every person has a story. Find someone worth sharing yours with.",
+  "demoProfilesDisclaimer": "* Profiles shown on this page are demo examples, not real platform users.",
   "howTag": "Simple, Fast & Secure",
   "howTitle": "How does Sigaleve work?",
   "howSubtitle": "Making genuine connections takes seconds. We crafted a seamless journey so you can find your ideal match with total confidence.",
@@ -1348,16 +1480,25 @@ const LANDING_TRANSLATIONS = {
   "navDownload": "Télécharger",
   "login": "Se connecter",
   "heroTagline": "Connectez-vous avec authenticité. Sans jugement.",
-  "heroTitle": "Tout commence par un",
-  "heroDesc": "La communauté mondiale la plus sûre et bienveillante. Rencontrez des personnes qui partagent vos valeurs, à votre rythme.",
-  "createAccount": "Créer un compte",
+  "heroTitle": "Rencontrez des gens.",
+  "heroTitle2": "Créez des connexions.",
+  "heroTitle3": "Vivez de nouvelles histoires.",
+  "heroDesc": "Faites de nouvelles amitiés, rencontrez des gens intéressants et découvrez qui vous correspond. Tout en simple, léger et à votre rythme.",
+  "createAccount": "Créer mon compte gratuit",
   "howItWorks": "Comment ça marche",
   "badgePrivate": "100% Privé et Chiffré",
   "badgeMatches": "Matches en Temps Réel",
-  "badgeVerified": "Réservé aux +18 Vérifiés",
-  "featuresTag": "Expérience Immersive",
-  "featuresTitle": "Conçu pour ressentir l'émotion de chaque connexion",
-  "featuresDesc": "Notre mécanique de cartes haute fidélité vous permet d'explorer les profils proches de manière fluide et respectueuse.",
+  "badgeFree": "Inscription gratuite",
+  "badgeVerifiedProfiles": "Profils vérifiés",
+  "badgePrivacy": "Plus de contrôle sur votre vie privée",
+  "featuresTag": "Découvrez des gens",
+  "featuresTitle": "Il y a tant de gens intéressants à rencontrer.",
+  "featuresDesc": "Découvrez de nouveaux profils, trouvez des personnes qui partagent vos centres d'intérêt et laissez les belles conversations naître. Votre prochaine connexion est peut-être plus proche que vous ne le pensez.",
+  "badgeRecentlyActive": "Actif récemment",
+  "badgeFeaturedProfile": "Profil en vedette",
+  "badgeVerifiedProfile": "Profil vérifié",
+  "featuresSupportText": "Chaque personne a une histoire. Trouvez quelqu'un avec qui elle vaut la peine d'être partagée.",
+  "demoProfilesDisclaimer": "* Les profils affichés sur cette page sont des exemples de démonstration, pas de vrais utilisateurs de la plateforme.",
   "howTag": "Simple, Rapide et Sûr",
   "howTitle": "Comment fonctionne Sigaleve ?",
   "howSubtitle": "Se connecter prend quelques secondes. Nous avons conçu une expérience intuitive pour trouver votre match en toute sérénité.",
@@ -1467,16 +1608,25 @@ const LANDING_TRANSLATIONS = {
   "navDownload": "Scarica",
   "login": "Accedi",
   "heroTagline": "Connettiti con autenticità. Senza giudizi.",
-  "heroTitle": "Tutto comincia con un",
-  "heroDesc": "La comunità globale più sicura e priva di pregiudizi. Incontra persone autentiche che vibrano sulla tua stessa frequenza, alla distanza che preferisci.",
-  "createAccount": "Crea un account",
+  "heroTitle": "Conosci persone.",
+  "heroTitle2": "Crea connessioni.",
+  "heroTitle3": "Vivi nuove storie.",
+  "heroDesc": "Fai nuove amicizie, incontra persone interessanti e scopri chi fa per te. Tutto in modo semplice, leggero e con i tuoi tempi.",
+  "createAccount": "Crea il mio account gratis",
   "howItWorks": "Come funziona",
   "badgePrivate": "100% Privato e Crittografato",
   "badgeMatches": "Affinità in Tempo Reale",
-  "badgeVerified": "Solo 18+ Verificati",
-  "featuresTag": "Esperienza Immersiva",
-  "featuresTitle": "Progettato per farti vivere l'emozione di ogni connessione",
-  "featuresDesc": "La nostra meccanica di schede ad alta fedeltà ti consente di scoprire persone vicino a te in modo fluido, riservato e rispettoso.",
+  "badgeFree": "Registrazione gratuita",
+  "badgeVerifiedProfiles": "Profili verificati",
+  "badgePrivacy": "Più controllo sulla tua privacy",
+  "featuresTag": "Scopri persone",
+  "featuresTitle": "C'è tanta gente interessante da conoscere.",
+  "featuresDesc": "Scopri nuovi profili, trova persone con interessi in comune e lascia nascere belle conversazioni. La tua prossima connessione potrebbe essere più vicina di quanto pensi.",
+  "badgeRecentlyActive": "Attivo di recente",
+  "badgeFeaturedProfile": "Profilo in evidenza",
+  "badgeVerifiedProfile": "Profilo verificato",
+  "featuresSupportText": "Ogni persona ha una storia. Trova qualcuno con cui valga la pena condividere la tua.",
+  "demoProfilesDisclaimer": "* I profili mostrati in questa pagina sono esempi dimostrativi, non sono utenti reali della piattaforma.",
   "howTag": "Semplice, Veloce e Sicuro",
   "howTitle": "Come funziona Sigaleve?",
   "howSubtitle": "Connettersi davvero è questione di secondi. Abbiamo creato un percorso fluido per farti trovare la persona ideale in totale sicurezza.",
@@ -1513,7 +1663,7 @@ const LANDING_TRANSLATIONS = {
   "tierGoldF4": "Tutto ciò che include Sigaleve Plus",
   "tierGoldBtn": "Ottieni Gold",
   "storiesTag": "Storie Vere",
-  "storiesTitle": "Tutto è iniziato con un Click",
+  "storiesTitle": "Tutto è iniziato con un clic",
   "storiesSubtitle": "Migliaia di persone hanno trovato amore, amicizia e complicità autentica.",
   "story1Text": "Sono entrata su Sigaleve senza grandi aspettative e al terzo giorno ho trovato l'affinità con Diego. Ci siamo accorti di condividere le stesse passioni e lo stesso bisogno di parlare con totale sincerità. Oggi conviviamo felicemente da un anno.",
   "story1Author": "Amanda & Diego",
@@ -1729,62 +1879,15 @@ async function applyLandingLanguage(langCode) {
   }
 }
 
-// ── SAÍDA RÁPIDA (QUICK EXIT) & BOTÃO DE PÂNICO ──
-const QUICK_EXIT_URL = 'https://www.google.com/search?q=receitas+de+bolacha';
-let _escCount = 0;
-let _escTimer = null;
-
-async function quickExit() {
-  try {
-    await fetch('/api/v1/auth/logout', { method: 'POST' }).catch(() => {});
-  } catch (e) {}
-  try {
-    sessionStorage.clear();
-    localStorage.removeItem('sigaleve_user_id');
-  } catch (e) {}
-  window.location.replace(QUICK_EXIT_URL);
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.key !== 'Escape') return;
-  const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
-  if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
-  _escCount++;
-  if (_escCount === 1) {
-    _escTimer = setTimeout(() => { _escCount = 0; }, 800);
-  } else if (_escCount >= 2) {
-    clearTimeout(_escTimer);
-    _escCount = 0;
-    quickExit();
-  }
+// Inicializar idioma guardado al cargar
+document.addEventListener('DOMContentLoaded', () => {
+  const l = (typeof window !== 'undefined' && window.LANDING_LANG) || localStorage.getItem('sigaleve_lang') || 'pt';
+  applyLandingLanguage(l);
 });
 
-function showPanicInfoModal() {
-  const existing = document.getElementById('modal-panic-info');
-  if (existing) {
-    existing.classList.remove('hidden');
-    return;
-  }
-  const modal = document.createElement('div');
-  modal.id = 'modal-panic-info';
-  modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm';
-  modal.innerHTML = `
-    <div class="w-full max-w-sm rounded-3xl p-6 bg-[#131326] text-white border border-[#252542] shadow-2xl text-center space-y-4">
-      <div class="w-14 h-14 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center mx-auto text-2xl">
-        <i class="fa-solid fa-door-open"></i>
-      </div>
-      <div>
-        <h3 class="text-base font-black text-white">Botão de Pânico (Saída Rápida)</h3>
-        <p class="text-xs text-zinc-300 mt-2 leading-relaxed">
-          Se alguém se aproximar ou tentar espreitar o teu ecrã, clica neste botão (ou prime a tecla <strong>ESC duas vezes</strong>). A tua sessão é fechada imediatamente e serás redirecionado para uma pesquisa inofensiva de receitas de bolachas no Google, sem deixar rasto no histórico do navegador.
-        </p>
-      </div>
-      <button type="button" onclick="document.getElementById('modal-panic-info').classList.add('hidden')" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-xs shadow-lg hover:opacity-90 transition-all">
-        Entendido
-      </button>
-    </div>
-  `;
-  document.body.appendChild(modal);
+// ── SAÍDA RÁPIDA (QUICK EXIT) ── um clique disfarça o site (privacidade do nicho IST)
+function landingQuickExit() {
+  window.location.replace('https://www.google.com/search?q=receitas+de+bolacha');
 }
 </script>
 

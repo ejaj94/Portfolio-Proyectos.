@@ -1,0 +1,19 @@
+{
+  "name": "Sigaleve — Conexões Autênticas",
+  "short_name": "Sigaleve",
+  "description": "Namoro e conexões autênticas com segurança e privacidade.",
+  "start_url": "/app?lang=pt&source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0e15",
+  "theme_color": "#9333ea",
+  "lang": "pt",
+  "categories": ["social", "lifestyle", "dating"],
+  "icons": [
+    { "src": "/static/img/logo-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/static/img/logo-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/static/img/logo-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/static/img/logo-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
