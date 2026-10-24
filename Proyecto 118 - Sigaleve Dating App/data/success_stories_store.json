@@ -1,0 +1,38 @@
+[
+  {
+    "id": "st_seed_1",
+    "names": "M. & R.",
+    "city": "Lisboa, Portugal",
+    "text": "Ambos receámos o mesmo: a conversa difícil no primeiro encontro. Aqui ela nunca precisou de acontecer — começámos já do mesmo ponto. Um café virou jantar, o jantar virou dois anos juntos.",
+    "author_email": "",
+    "anonymous": true,
+    "status": "approved",
+    "seed": true,
+    "created_ts": 1790617521.9278553,
+    "reviewed_ts": 1792431921.9278553
+  },
+  {
+    "id": "st_seed_2",
+    "names": "Sofia",
+    "city": "Porto, Portugal",
+    "text": "Tinha parado de tentar conhecer alguém porque cansava explicar a minha condição. Aqui não tive de explicar nada — e encontrei quem me respeita todos os dias.",
+    "author_email": "",
+    "anonymous": true,
+    "status": "approved",
+    "seed": true,
+    "created_ts": 1791222321.9278553,
+    "reviewed_ts": 1792431921.9278553
+  },
+  {
+    "id": "st_seed_3",
+    "names": "A. & J.",
+    "city": "Braga, Portugal",
+    "text": "Começámos a falar pelos Momentos dele. Ele publicava o que sentia e eu reconheci-me em cada linha. A primeira mensagem foi a mais fácil da minha vida.",
+    "author_email": "",
+    "anonymous": true,
+    "status": "approved",
+    "seed": true,
+    "created_ts": 1791827121.9278553,
+    "reviewed_ts": 1792431921.9278553
+  }
+]
