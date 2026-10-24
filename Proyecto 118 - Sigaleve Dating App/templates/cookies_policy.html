@@ -230,8 +230,11 @@ function rejectOptional(){
 }
 function resetConsent(){
   localStorage.removeItem('sigaleve_cookie_consent');
-  alert('Preferencias restablecidas. Recarga la página para ver el banner de cookies.');
-  location.reload();
+  const toast = document.createElement('div');
+  toast.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-[9999] px-5 py-3 rounded-2xl bg-zinc-950 border border-purple-500/50 text-white text-xs font-bold shadow-2xl flex items-center gap-2.5';
+  toast.innerHTML = '<i class="fa-solid fa-circle-check text-purple-400"></i> <span>Preferências de cookies restabelecidas. A atualizar...</span>';
+  document.body.appendChild(toast);
+  setTimeout(() => location.reload(), 1200);
 }
 document.addEventListener('DOMContentLoaded',()=>{
   const stored=localStorage.getItem('sigaleve_cookie_consent');

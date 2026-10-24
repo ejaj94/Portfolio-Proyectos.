@@ -1,0 +1,622 @@
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-synthesis:none}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none;font-family:'Plus Jakarta Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-feature-settings:"cv02","cv03","cv04","cv11"}
+svg,svg *{shape-rendering:geometricPrecision;text-rendering:geometricPrecision}
+img,video{image-rendering:-webkit-optimize-contrast;image-rendering:high-quality;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+i.fa-solid,i.fa-regular,i.fa-brands,.fas,.far,.fab{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:geometricPrecision;transform:translateZ(0)}
+/* Evitar rasterização borrada em cartões e botões com scale fracionário */
+button,a,.rounded-2xl,.rounded-3xl{-webkit-backface-visibility:hidden;backface-visibility:hidden}
+:root{--bg:#f8fafc;--card:#ffffff;--txt:#090d16;--sub:#475569;--bdr:#cbd5e1;--nav:#ffffff;--inp:#f1f5f9}
+:root.dark, html.dark, body.dark, .dark {--bg:#090914;--card:#121225;--txt:#f8fafc;--sub:#a1a1aa;--bdr:#27274a;--nav:#0f0f20;--inp:#1a1a34}
+body{background:var(--bg);color:var(--txt);margin:0;padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:100vh;min-height:100dvh}
+.app-max{width:100%;max-width:440px;height:100vh;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--bg);color:var(--txt);box-shadow:0 0 50px rgba(0,0,0,0.18)}
+
+html.dark body, body.dark {
+  background-color: #090914 !important;
+  color: #f8fafc !important;
+}
+html.dark .app-max {
+  background-color: #090914 !important;
+  color: #f8fafc !important;
+}
+html.dark #screen-auth {
+  background-color: transparent !important;
+  color: #f8fafc !important;
+}
+
+@media (min-width: 900px) {
+  body {
+    background: #f1f5f9;
+    background-image: radial-gradient(circle at 15% 15%, rgba(147,51,234,0.08) 0%, transparent 45%), radial-gradient(circle at 85% 85%, rgba(236,72,153,0.06) 0%, transparent 45%);
+  }
+  .dark body, body.dark, html.dark, html.dark body {
+    background: #090914 !important;
+    background-image: radial-gradient(circle at 15% 15%, rgba(147,51,234,0.14) 0%, transparent 45%), radial-gradient(circle at 85% 85%, rgba(236,72,153,0.12) 0%, transparent 45%) !important;
+  }
+  .app-max {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    display: flex;
+    flex-direction: row;
+  }
+  .app-max.is-auth {
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    min-height: 640px;
+    max-height: 94vh;
+    border-radius: 28px;
+    background: var(--card);
+    border: 1px solid var(--bdr);
+    box-shadow: 0 25px 60px -15px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
+    flex-direction: column;
+  }
+  .dark .app-max.is-auth, html.dark .app-max.is-auth {
+    background-color: #131326 !important;
+    border-color: #252542 !important;
+    box-shadow: 0 25px 60px -15px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.08) !important;
+  }
+}
+
+#screen-auth {
+  width: 100%;
+  flex: 1;
+}
+
+/* Auth Tab Switcher styling: ensures high-contrast solid text and clear state */
+.auth-tab-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 700;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.auth-tab-btn.active {
+  background: linear-gradient(135deg, #9333ea, #ec4899) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px -2px rgba(147, 51, 234, 0.35);
+}
+.auth-tab-btn:not(.active) {
+  background: transparent !important;
+  color: #475569 !important;
+  box-shadow: none !important;
+}
+html.dark .auth-tab-btn:not(.active) {
+  color: #94a3b8 !important;
+}
+.auth-tab-btn:not(.active):hover {
+  color: #0f172a !important;
+}
+html.dark .auth-tab-btn:not(.active):hover {
+  color: #f1f5f9 !important;
+}
+
+/* Cartões Tinder */
+.card-stack{position:relative;width:100%;max-width:430px;aspect-ratio:3/4.6;height:100%;max-height:100%;min-height:0;display:flex;align-items:center;justify-content:center}
+.s-card{position:absolute;inset:0;border-radius:24px;overflow:hidden;background:#0d0d18;box-shadow:0 25px 60px -10px rgba(0,0,0,.75);will-change:transform;touch-action:none;user-select:none;cursor:grab;border:1px solid rgba(255,255,255,0.08)}
+.s-card:active{cursor:grabbing}
+.s-card[data-depth="1"]{transform:scale(.96) translateY(8px);z-index:1}
+.s-card[data-depth="2"]{transform:scale(.92) translateY(16px);z-index:0}
+.s-card.top{z-index:10}
+.card-img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;background:#0d0d18;transition:opacity .25s ease}
+.dark .card-img{background:#0d0d18}
+.card-overlay{position:absolute;inset-x:0;bottom:0;height:65%;background:linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.2) 75%, transparent 100%);pointer-events:none}
+.card-info{position:absolute;bottom:0;inset-x:0;padding:20px;color:#fff;z-index:35;pointer-events:auto}
+
+/* Tinder Story Segments (Photo Indicators) */
+.story-bars{position:absolute;top:12px;inset-x:14px;z-index:30;display:flex;gap:5px}
+.story-bar{height:4px;flex:1;border-radius:3px;background:rgba(255,255,255,0.38);backdrop-filter:blur(4px);transition:background .2s}
+.story-bar.active{background:#ffffff;box-shadow:0 0 10px rgba(255,255,255,0.85)}
+
+/* Tap Zones to change photos (Left / Right) */
+.tap-zone{position:absolute;top:0;bottom:160px;width:50%;z-index:20;cursor:pointer}
+.tap-zone.left{left:0}
+.tap-zone.right{right:0}
+
+/* Tinder Info Card Expansion Modal / Drawer */
+.profile-modal{position:fixed;inset:0;background:var(--card);z-index:90;display:none;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;animation:slideUp .28s cubic-bezier(.34,1.2,.64,1)}
+.profile-modal.open{display:flex}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* Indicadores de Swipe (Estilo Tinder Stamp) */
+.sw-ind{position:absolute;top:30px;padding:6px 20px;border-radius:12px;border:4px solid;font-size:1.6rem;font-weight:900;letter-spacing:3px;opacity:0;pointer-events:none;z-index:35;transition:opacity .1s}
+.ind-like{left:24px;color:#00d26a;border-color:#00d26a;transform:rotate(-14deg)}
+.ind-nope{right:24px;color:#ff4458;border-color:#ff4458;transform:rotate(14deg)}
+.ind-super{top:45%;left:50%;transform:translate(-50%,-50%) rotate(0deg)!important;color:#00cfff;border-color:#00cfff}
+
+/* Big Tinder Red Heart Stamp Overlay */
+.heart-stamp{position:absolute;top:28px;right:28px;width:76px;height:76px;border-radius:50%;background:#ff4458;display:flex;align-items:center;justify-content:center;color:#fff;font-size:2.4rem;box-shadow:0 8px 30px rgba(255,68,88,0.6);pointer-events:none;z-index:40;opacity:0;transform:scale(0.5) rotate(12deg);transition:all .18s cubic-bezier(.34,1.56,.64,1)}
+.heart-stamp.show{opacity:1;transform:scale(1) rotate(0deg)}
+
+/* Saídas animadas */
+@keyframes eR{to{transform:translateX(150vw) rotate(30deg);opacity:0}}
+@keyframes eL{to{transform:translateX(-150vw) rotate(-30deg);opacity:0}}
+@keyframes eU{to{transform:translateY(-120vh) scale(.6);opacity:0}}
+.exit-r{animation:eR .42s ease-in forwards}
+.exit-l{animation:eL .42s ease-in forwards}
+.exit-u{animation:eU .42s ease-in forwards}
+.snap{transition:transform .3s cubic-bezier(.34,1.56,.64,1)!important}
+
+/* Botões de Ação estilo Tinder */
+.act-btn{border-radius:50%;border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,255,255,0.06);backdrop-filter:blur(8px);transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s,background .18s;outline:none}
+.act-btn:hover{transform:scale(1.12)!important}
+.act-btn:active{transform:scale(.92)!important}
+.btn-undo{width:48px;height:48px;color:#f59e0b;font-size:1.1rem}
+.btn-undo:hover{background:rgba(245,158,11,0.18);box-shadow:0 0 20px rgba(245,158,11,0.4)}
+.btn-nope{width:58px;height:58px;color:#ff4458;font-size:1.45rem}
+.btn-nope:hover{background:rgba(255,68,88,0.18);box-shadow:0 0 24px rgba(255,68,88,0.45)}
+.btn-super{width:48px;height:48px;color:#00cfff;font-size:1.15rem}
+.btn-super:hover{background:rgba(0,207,255,0.18);box-shadow:0 0 20px rgba(0,207,255,0.45)}
+.btn-like{width:62px;height:62px;color:#ff4458;font-size:1.55rem;border-color:rgba(255,68,88,0.3)}
+.btn-like:hover{background:rgba(255,68,88,0.22);box-shadow:0 0 26px rgba(255,68,88,0.55)}
+.btn-boost{width:48px;height:48px;color:#818cf8;font-size:1.15rem}
+.btn-boost:hover{background:rgba(129,140,248,0.18);box-shadow:0 0 20px rgba(129,140,248,0.45)}
+
+@media (max-width: 640px) {
+  .btn-undo{width:44px;height:44px;font-size:1rem}
+  .btn-nope{width:54px;height:54px;font-size:1.35rem}
+  .btn-super{width:44px;height:44px;font-size:1.05rem}
+  .btn-like{width:58px;height:58px;font-size:1.45rem}
+  .btn-boost{width:44px;height:44px;font-size:1.05rem}
+}
+
+/* Match Overlay */
+@keyframes mPop{0%{transform:scale(0);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+.match-pop{animation:mPop .5s cubic-bezier(.34,1.56,.64,1) both}
+/* 🎉 Confete do match: 18 partículas CSS (zero dependências) */
+.confetti{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:confettiFall linear forwards;pointer-events:none;z-index:1}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}80%{opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:0}}
+/* 💀 Skeleton shimmer (enquanto o baralho carrega) */
+.skeleton-card{position:absolute;inset:0;border-radius:24px;background:#0d0d18;border:1px solid rgba(255,255,255,0.08);overflow:hidden;box-shadow:0 25px 60px -10px rgba(0,0,0,.75)}
+.skeleton-card::before{content:'';position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.06) 50%,transparent 70%);animation:shimmer 1.4s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+/* ❤️ Pulso sutil no botão like (afinidade com o gesto principal) */
+@keyframes likePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,68,88,0)}50%{box-shadow:0 0 0 7px rgba(255,68,88,.18)}}
+.btn-like{animation:likePulse 2.6s ease-in-out infinite}
+
+/* Top bar do Desktop e Mobile */
+.top-bar{height:56px;display:flex;align-items:center;padding:0 14px;padding-top:env(safe-area-inset-top, 0px);flex-shrink:0;background:var(--card);border-bottom:1px solid var(--bdr);gap:10px}
+@media (min-width: 768px) {
+  .top-bar{height:64px;padding:0 20px;gap:14px}
+}
+
+/* Chat e Mensagens */
+@keyframes bIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.bubble{animation:bIn .2s ease both}
+.msg-area{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;overscroll-behavior:contain}
+#icebreaker-chips::-webkit-scrollbar{display:none}
+#icebreaker-chips .chip{flex-shrink:0;padding:6px 14px;border-radius:9999px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s ease;white-space:nowrap;border:1px solid;user-select:none}
+#icebreaker-chips .chip:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(147,51,234,.25)}
+.msg-area::-webkit-scrollbar{width:5px}
+.msg-area::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:4px}
+
+/* Rotação e Animação */
+.avatar-ring{width:64px;height:64px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,#9333ea,#ec4899);flex-shrink:0}
+.avatar-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid var(--bg)}
+.avatar-sm{width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0}
+
+/* Gaveta Lateral (Settings Tinder Real) */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(94vw,440px);background:var(--bg);color:var(--txt);z-index:100;transform:translateX(100%);transition:transform .3s cubic-bezier(.25,.46,.45,.94),background .2s,color .2s;overflow-y:auto;box-shadow:-10px 0 40px rgba(0,0,0,.3);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+.drawer.open{transform:translateX(0)}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(3px)}
+.drawer-overlay.open{opacity:1;pointer-events:auto}
+
+/* Tinder Settings Rows & Headers - Adaptável Claro / Escuro */
+.t-header{padding:14px 18px 6px 18px;font-size:12px;font-weight:900;letter-spacing:0.5px;color:var(--sub);text-transform:uppercase;display:flex;align-items:center;justify-content:space-between}
+.t-badge-gold{background:#eab308;color:#000000;font-size:10px;font-weight:900;padding:2px 7px;border-radius:12px;text-transform:uppercase;letter-spacing:0.3px}
+.t-badge-plus{background:#ef4444;color:#ffffff;font-size:10px;font-weight:900;padding:2px 7px;border-radius:12px;text-transform:uppercase;letter-spacing:0.3px}
+.t-row{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--bdr);cursor:pointer;background:var(--card);transition:background .15s}
+.t-row:hover{background:var(--inp)}
+.t-row-title{font-size:14.5px;font-weight:700;color:var(--txt);display:flex;align-items:center;gap:10px}
+.t-row-desc{font-size:12px;color:var(--sub);margin-top:2px;font-weight:500}
+.t-row-val{font-size:14px;color:var(--sub);display:flex;align-items:center;gap:6px;font-weight:600}
+.t-row-val.red-val{color:#ef4444}
+.t-info-box{padding:10px 18px 14px 18px;font-size:12px;color:var(--sub);line-height:1.45;border-bottom:1px solid var(--bdr);font-weight:500}
+
+/* Range Sliders estilo Tinder (Barra Vermelha) */
+.t-range{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:var(--bdr);outline:none}
+.t-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:#ffffff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid #ef4444}
+.t-range::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#ffffff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid #ef4444}
+
+/* Regras de suporte dentro do Drawer para modo claro e escuro */
+#settings-drawer .bg-black { background-color: var(--card) !important; }
+#settings-drawer .bg-black\/90 { background-color: var(--card) !important; }
+#settings-drawer .text-white { color: var(--txt) !important; font-weight: 700; }
+#settings-drawer .bg-zinc-900 { background-color: var(--card) !important; }
+#settings-drawer .border-zinc-800, #settings-drawer .border-zinc-900 { border-color: var(--bdr) !important; }
+#settings-drawer .divide-zinc-900 > :not([hidden]) ~ :not([hidden]) { border-color: var(--bdr) !important; }
+#settings-drawer .hover\:bg-zinc-900:hover, #settings-drawer .hover\:bg-zinc-800:hover { background-color: var(--inp) !important; }
+#settings-drawer .text-zinc-400, #settings-drawer .text-gray-400 { color: var(--sub) !important; }
+
+/* Toggle */
+.tog{width:48px;height:26px;background:#cbd5e1;border-radius:13px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.tog.on{background:#9333ea}
+.tog::after{content:'';position:absolute;width:20px;height:20px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tog.on::after{transform:translateX(22px)}
+
+/* Tinder Red Toggle */
+.t-toggle{width:48px;height:26px;background:#334155;border-radius:13px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.t-toggle.on{background:#ef4444}
+.t-toggle::after{content:'';position:absolute;width:20px;height:20px;background:#ffffff;border-radius:50%;top:3px;left:3px;transition:transform .2s;box-shadow:0 2px 4px rgba(0,0,0,0.4)}
+.t-toggle.on::after{transform:translateX(22px)}
+
+/* Sliders e Inputs */
+.inp{background:var(--inp);border:1px solid var(--bdr);border-radius:14px;padding:12px 16px;font-size:.92rem;color:var(--txt);width:100%;outline:none;transition:all .2s;caret-color:#000000!important;cursor:text}
+.inp:focus{border-color:#9333ea;box-shadow:0 0 0 3px rgba(147,51,234,.15)}
+.dark .inp{caret-color:#000000!important}
+.tag{display:inline-block;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);color:#fff;border-radius:100px;padding:4px 12px;font-size:.75rem;margin:2px}
+.ver{display:inline-flex;align-items:center;gap:4px;background:rgba(0,207,255,.2);color:#00cfff;border-radius:100px;padding:4px 12px;font-size:.75rem;font-weight:700}
+.diag{display:inline-flex;align-items:center;padding:5px 14px;border-radius:100px;font-size:.78rem;font-weight:700;margin-top:6px}
+
+/* Seções */
+.section{display:none!important;flex:1;flex-direction:column;min-height:0;width:100%;height:100%}
+.section.active{display:flex!important}
+.s-area{overflow-y:auto;overscroll-behavior:contain}
+.s-area::-webkit-scrollbar{width:5px}
+.s-area::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:4px}
+
+.auth-inp{background:var(--inp);border:1px solid var(--bdr);border-radius:14px;padding:14px 16px;font-size:.95rem;color:var(--txt);width:100%;outline:none;transition:all .2s;cursor:text!important}
+.auth-inp:focus{border-color:#9333ea;box-shadow:0 0 0 3px rgba(147,51,234,.15)}
+.dark .auth-inp{color:#f8fafc!important;caret-color:#f8fafc!important}
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"], textarea, .inp, .auth-inp {
+  caret-color: var(--txt) !important;
+  cursor: text !important;
+}
+input:focus, textarea:focus, .inp:focus, .auth-inp:focus {
+  caret-color: var(--txt) !important;
+}
+.dark input, .dark textarea, .dark .inp, .dark .auth-inp, html.dark input, html.dark textarea, html.dark .inp, html.dark .auth-inp {
+  caret-color: #f8fafc !important;
+}
+
+.match-item{display:flex;align-items:center;gap:14px;padding:14px 18px;cursor:pointer;border-bottom:1px solid var(--bdr);transition:all .15s}
+.match-item:hover{background:var(--inp)}
+.match-item.active-chat{background:var(--inp);border-left:4px solid #9333ea}
+
+.grad{background:linear-gradient(135deg,#9333ea,#ec4899)}
+.grad-text{background:linear-gradient(135deg,#9333ea,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Bottom Nav */
+.bot-nav{height:calc(54px + env(safe-area-inset-bottom, 0px));padding-bottom:env(safe-area-inset-bottom, 0px);display:flex;align-items:center;background:linear-gradient(135deg,rgba(168,85,247,.92) 0%,rgba(192,38,211,.88) 55%,rgba(236,72,153,.9) 100%);border-top:1px solid rgba(255,255,255,.18);flex-shrink:0;z-index:30;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 -4px 20px rgba(168,85,247,.25)}
+.bot-nav .nav-tab{color:rgba(255,255,255,.75)}
+.bot-nav .nav-tab i{color:rgba(255,255,255,.8)}
+.bot-nav .nav-tab.active,.bot-nav .nav-tab.active i{color:#fff}
+.bot-nav .nav-tab.active::after{background:#fff}
+@media (min-width: 768px) {
+  .bot-nav{height:60px;padding-bottom:0}
+}
+.nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;cursor:pointer;position:relative;transition:all .15s;color:var(--sub)}
+.nav-tab i{font-size:1.25rem;transition:all .15s}
+.nav-tab span{font-size:.68rem;font-weight:700;margin-top:2px;letter-spacing:.3px}
+.nav-tab.active{color:#9333ea}
+.nav-tab.active i{transform:scale(1.1)}
+/* Sobre gradiente da bot-nav: ativo = branco (regras acima do @media perdem
+   pra esta por ordem — reforçar com .bot-nav prefix) */
+.bot-nav .nav-tab.active{color:#fff}
+.bot-nav .nav-tab.active i{color:#fff;transform:scale(1.1)}
+.bot-nav .nav-tab.active span{color:#fff}
+.badge{position:absolute;top:7px;right:calc(50% - 18px);background:#ec4899;color:#fff;border-radius:10px;font-size:9px;font-weight:900;padding:1px 5px;line-height:14px;box-shadow:0 1px 4px rgba(0,0,0,.35);border:1.5px solid #fff}
+
+/* Keyboard hint bar on PC (Tinder Web exact style) */
+.key-hint-bar{display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 18px;background:transparent;user-select:none;flex-shrink:0}
+.key-hint-item{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#ffffff;letter-spacing:0.2px}
+.key-box{display:inline-flex;align-items:center;justify-content:center;padding:2px 8px;border-radius:6px;border:1.5px solid rgba(255,255,255,0.7);background:transparent;color:#ffffff;font-size:11px;font-weight:800;line-height:16px}
+.key-box.space-box{width:64px;height:18px;border-radius:5px}
+.key-pill-hide{display:inline-flex;align-items:center;justify-content:center;padding:5px 16px;border-radius:9999px;background:#ffffff;color:#000000;font-size:11px;font-weight:800;cursor:pointer;transition:transform .15s, opacity .15s}
+.key-pill-hide:hover{opacity:0.9;transform:scale(1.03)}
+
+/* Desktop Two-Pane Sidebar & Main Stage */
+.desktop-sidebar{width:var(--sidebar-w, 380px);min-width:280px;max-width:620px;border-right:1px solid var(--bdr);display:none;flex-direction:column;background:var(--card);flex-shrink:0;position:relative;transition:width 0.12s ease}
+.desktop-sidebar.is-resizing{transition:none!important;user-select:none}
+.sidebar-resizer{position:absolute;top:0;right:-5px;width:10px;height:100%;cursor:col-resize;z-index:45;display:flex;align-items:center;justify-content:center;group:resizer}
+.sidebar-resizer::after{content:'';width:3px;height:44px;border-radius:9999px;background:rgba(168,85,247,0.35);transition:all 0.2s ease}
+.sidebar-resizer:hover::after,.desktop-sidebar.is-resizing .sidebar-resizer::after{height:76px;width:4px;background:linear-gradient(180deg,#9333ea,#ec4899);box-shadow:0 0 12px rgba(236,72,153,0.65)}
+.desktop-stage{flex:1;display:flex;flex-direction:column;position:relative;background:var(--bg);min-width:0;height:100%}
+@media (min-width: 900px) {
+  .desktop-sidebar{display:flex}
+  .bot-nav{display:none!important}
+  .top-bar-mobile{display:none!important}
+}
+
+/* ═══════════════════════════════════════════════════
+   BLINDAGEM GLOBAL ANTI-SCREENSHOT, ANTI-COPY/PASTE E PROTEÇÃO DE FOTOS
+   ═══════════════════════════════════════════════════ */
+html, body, .app-max, #screen-app, .section {
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+/* Permitir cursor apenas para escrever nos campos de texto próprios, mas copy/paste será bloqueado via JS */
+input, textarea {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+img, video, svg, canvas {
+  -webkit-user-drag: none !important;
+  user-drag: none !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+@media print {
+  html, body {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+body.app-privacy-locked #screen-app,
+body.app-privacy-locked #screen-auth,
+body.app-privacy-locked .profile-modal,
+body.app-privacy-locked .drawer {
+  filter: blur(32px) brightness(0.25) grayscale(100%) !important;
+  pointer-events: none !important;
+  transition: none !important;
+}
+#global-privacy-shield {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(7, 7, 15, 0.96);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 28px;
+}
+body.app-privacy-locked #global-privacy-shield {
+  display: flex !important;
+}
+#sec-chat {
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  position: relative;
+}
+#sec-chat.chat-blurred .msg-area {
+  filter: blur(24px) grayscale(80%) !important;
+  transition: filter 0.15s ease-out;
+  pointer-events: none;
+}
+#chat-security-shield {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 99;
+  background: rgba(10, 10, 18, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+}
+#sec-chat.chat-blurred #chat-security-shield {
+  display: flex !important;
+}
+.chat-watermark-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  transition: background 0.35s ease, opacity 0.35s ease;
+}
+/* Logo Sigaleve Crisp Contrast & Light Mode Visibility */
+.auth-logo-badge {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 28px;
+  background: linear-gradient(145deg, #181829, #0f0f1d);
+  border: 1px solid rgba(147, 51, 234, 0.3);
+  box-shadow: 0 12px 30px -8px rgba(147, 51, 234, 0.35), 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease;
+}
+.auth-logo-img {
+  filter: drop-shadow(0 3px 12px rgba(236, 72, 153, 0.45)) contrast(115%) brightness(105%) saturate(120%) !important;
+}
+.dark .auth-logo-badge {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.6);
+}
+.dark .auth-logo-img {
+  filter: drop-shadow(0 4px 18px rgba(236, 72, 153, 0.5)) contrast(110%) saturate(120%) !important;
+}
+#auth-tagline {
+  color: #9333ea !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.5px;
+  text-shadow: 0 1px 2px rgba(147, 51, 234, 0.15);
+}
+.dark #auth-tagline {
+  color: #c084fc !important;
+  text-shadow: 0 2px 10px rgba(192, 132, 252, 0.3);
+}
+/* ═══════════════════════════════════════════════════
+   ESTADO VAZIO DO DISCOVER (vivo, caloroso e útil)
+   ═══════════════════════════════════════════════════ */
+.empty-anim-bg{background-size:260% 260%;animation:emptyBgShift 16s ease-in-out infinite}
+#empty-discover{scrollbar-width:none;-ms-overflow-style:none}
+#empty-discover::-webkit-scrollbar{display:none;width:0;height:0}
+@keyframes emptyBgShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+.empty-blob{position:absolute;border-radius:50%;filter:blur(52px);pointer-events:none;will-change:transform}
+.empty-blob-1{width:58%;height:46%;top:-10%;left:-14%;background:radial-gradient(circle at 35% 35%,rgba(168,85,247,.55),rgba(168,85,247,0) 70%);animation:blobDrift1 12s ease-in-out infinite}
+.empty-blob-2{width:62%;height:52%;bottom:-12%;right:-16%;background:radial-gradient(circle at 60% 40%,rgba(236,72,153,.45),rgba(236,72,153,0) 70%);animation:blobDrift2 15s ease-in-out infinite}
+.empty-blob-3{width:46%;height:40%;top:36%;left:34%;background:radial-gradient(circle at 50% 50%,rgba(244,114,182,.3),rgba(244,114,182,0) 70%);animation:blobDrift3 18s ease-in-out infinite}
+@keyframes blobDrift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(16%,12%) scale(1.12)}}
+@keyframes blobDrift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-14%,-11%) scale(1.1)}}
+@keyframes blobDrift3{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-11%,9%) scale(1.15)}66%{transform:translate(9%,-9%) scale(.94)}}
+
+.empty-heart-ring{position:absolute;inset:0;border-radius:9999px;border:2px solid rgba(192,132,252,.75);animation:efPulseRing 1.6s cubic-bezier(.22,.61,.36,1) infinite;pointer-events:none}
+@keyframes efPulseRing{0%{transform:scale(1);opacity:.75}70%{opacity:0}100%{transform:scale(1.75);opacity:0}}
+.empty-heart-core{animation:efHeartbeat 1.6s ease-in-out infinite}
+@keyframes efHeartbeat{0%,100%{transform:scale(1)}10%{transform:scale(1.12)}20%{transform:scale(1)}30%{transform:scale(1.1)}40%{transform:scale(1)}}
+
+.ef-deco{position:absolute;pointer-events:none;opacity:0;font-size:14px;animation-timing-function:linear;animation-iteration-count:infinite;will-change:transform,opacity}
+.ef-deco-1{left:7%;bottom:6%;color:#c084fc;animation:efFloatUpA 7s linear infinite}
+.ef-deco-2{right:9%;bottom:11%;color:#f472b6;font-size:12px;animation:efFloatUpB 9s linear infinite;animation-delay:1.2s}
+.ef-deco-3{left:17%;bottom:4%;color:#fbbf24;font-size:11px;animation:efFloatUpA 11s linear infinite;animation-delay:2.4s}
+.ef-deco-4{right:21%;bottom:5%;color:#a78bfa;font-size:13px;animation:efFloatUpC 13s linear infinite;animation-delay:.6s}
+.ef-deco-5{left:42%;bottom:9%;color:#ec4899;font-size:10px;animation:efFloatUpB 9s linear infinite;animation-delay:3.6s}
+.ef-deco-6{right:35%;bottom:13%;color:#c084fc;font-size:11px;animation:efFloatUpC 15s linear infinite;animation-delay:4.8s}
+@keyframes efFloatUpA{0%{transform:translate3d(0,12px,0) scale(.7);opacity:0}12%{opacity:.85}100%{transform:translate3d(34px,-230px,0) scale(1.15);opacity:0}}
+@keyframes efFloatUpB{0%{transform:translate3d(0,12px,0) scale(.7);opacity:0}12%{opacity:.8}100%{transform:translate3d(-38px,-250px,0) scale(1.1);opacity:0}}
+@keyframes efFloatUpC{0%{transform:translate3d(0,12px,0) scale(.6);opacity:0}15%{opacity:.7}50%{transform:translate3d(22px,-130px,0) scale(1.05)}100%{transform:translate3d(-16px,-240px,0) scale(1);opacity:0}}
+
+.ef-range{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:9999px;background:rgba(255,255,255,.14);outline:none}
+.ef-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#a855f7;cursor:pointer;border:2px solid #f5d0fe;box-shadow:0 2px 8px rgba(168,85,247,.55)}
+.ef-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#a855f7;cursor:pointer;border:2px solid #f5d0fe;box-shadow:0 2px 8px rgba(168,85,247,.55)}
+.ef-range::-moz-range-track{height:6px;border-radius:9999px;background:rgba(255,255,255,.14)}
+
+/* ═══════════ MODO CLARO — correção de contraste (WCAG AA) ═══════════
+   O template usa cores Tailwind fixas otimizadas para o tema escuro
+   (423 ocorrências de text-white/text-zinc-400/etc. sem variante dark:).
+   Em vez de reescrever cada elemento, remapeamos as utilitárias para
+   equivalentes legíveis APENAS quando <html> não tem a classe .dark.
+   Textos sobre botões/gradientes coloridos continuam brancos porque o
+   background continua colorido (o override só muda a COR DO TEXTO das
+   classes neutras claras). */
+html:not(.dark) .text-white:not(button):not(.grad):not([class*="bg-"]):not([style*="background"]):not([style*="bg"]),
+html:not(.dark) h1.text-white, html:not(.dark) h2.text-white, html:not(.dark) h3.text-white,
+html:not(.dark) h4.text-white, html:not(.dark) span.text-white:not([class*="bg-"]):not([style*="background"]),
+html:not(.dark) p.text-white, html:not(.dark) div.text-white:not([class*="bg-"]):not([style*="background"]),
+html:not(.dark) a.text-white:not([class*="bg-"]):not(.grad):not([style*="background"]) {
+  color: #090d16 !important;
+}
+/* subtítulos/labels cinza-claro → cinza escuro legível */
+html:not(.dark) .text-zinc-100:not([class*="bg-"]) { color: #1e293b !important; }
+html:not(.dark) .text-zinc-200:not([class*="bg-"]) { color: #334155 !important; }
+html:not(.dark) .text-zinc-300:not([class*="bg-"]) { color: #475569 !important; }
+html:not(.dark) .text-zinc-400:not([class*="bg-"]) { color: #64748b !important; }
+html:not(.dark) .text-zinc-500:not([class*="bg-"]) { color: #475569 !important; }
+html:not(.dark) .text-gray-300:not([class*="bg-"]) { color: #475569 !important; }
+html:not(.dark) .text-gray-400:not([class*="bg-"]) { color: #556476 !important; }
+html:not(.dark) .text-gray-200:not([class*="bg-"]) { color: #334155 !important; }
+html:not(.dark) .text-slate-300:not([class*="bg-"]) { color: #475569 !important; }
+html:not(.dark) .text-slate-400:not([class*="bg-"]) { color: #64748b !important; }
+/* acentos coloridos (roxo/rosa/amarelo pastel) → versões saturadas escuras */
+html:not(.dark) .text-purple-300:not([class*="bg-"]) { color: #7c3aed !important; }
+html:not(.dark) .text-purple-400:not([class*="bg-"]) { color: #7c3aed !important; }
+html:not(.dark) .text-pink-300:not([class*="bg-"]) { color: #be185d !important; }
+html:not(.dark) .text-pink-400:not([class*="bg-"]) { color: #be185d !important; }
+html:not(.dark) .text-amber-300:not([class*="bg-"]) { color: #a16207 !important; }
+html:not(.dark) .text-amber-400:not([class*="bg-"]) { color: #a16207 !important; }
+html:not(.dark) .text-emerald-300:not([class*="bg-"]) { color: #047857 !important; }
+html:not(.dark) .text-emerald-400:not([class*="bg-"]) { color: #047857 !important; }
+html:not(.dark) .text-red-400:not([class*="bg-"]) { color: #b91c1c !important; }
+/* badges "X restantes" com fundo translúcido colorido: escurecer o chip inteiro */
+html:not(.dark) [class*="bg-amber-500/20"] { background-color: rgba(180, 83, 9, 0.14) !important; }
+html:not(.dark) [class*="bg-purple-500/20"] { background-color: rgba(124, 58, 237, 0.12) !important; }
+html:not(.dark) [class*="bg-emerald-500/20"] { background-color: rgba(4, 120, 87, 0.12) !important; }
+/* cards escuros fixos (bg-zinc-900) ficam escuros em AMBOS os temas por design
+   — mas seus textos brancos precisam de fundo REALMENTE escuro. Em claro o
+   card pode ter virado claro em algum browser; garantir: */
+html:not(.dark) .bg-zinc-900, html:not(.dark) .bg-zinc-850 { background-color: #18181b !important; }
+html:not(.dark) .bg-zinc-900 p, html:not(.dark) .bg-zinc-850 p { color: #f8fafc !important; }
+/* botões text-white dentro do drawer (rodapé repintado claro em light):
+   "Partilhar Sigaleve" etc. — o rodapé do drawer usa var(--card) em claro */
+html:not(.dark) #settings-drawer button.text-white,
+html:not(.dark) #settings-drawer .text-white { color: #090d16 !important; }
+/* badge PLUS (10px, muito pequeno p/ AA-large): vermelho mais escuro em claro */
+html:not(.dark) .t-badge-plus { background: #b91c1c !important; color: #ffffff !important; }
+/* placeholders de inputs em claro — NO ECRÃ DE AUTH O PLACEHOLDER É O RÓTULO
+   DO CAMPO (não existem <label>), por isso precisa de contraste real de texto.
+   #94a3b8 sobre #f1f5f9 dava ~2,6:1 (ilegível); #5b6778 dá ~5,4:1 (AA). */
+html:not(.dark) input::placeholder, html:not(.dark) textarea::placeholder { color: #5b6778 !important; }
+/* Campos do ecrã de auth em claro: --inp #f1f5f9 era quase invisível sobre o
+   cartão branco (--card #ffffff) e engolia os placeholders. Passamos a fundo
+   branco real + borda definida + sombra subtil, para o campo ser distinguível
+   e o texto saltar à vista. No tema escuro nada disto se aplica. */
+html:not(.dark) .auth-inp { background: #ffffff !important; border-color: #cbd5e1 !important; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05) }
+html:not(.dark) .auth-inp:focus { border-color: #9333ea !important; box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.16) }
+/* regras da palavra-passe (11-12px = texto pequeno): #64748b dava só 4,77:1
+   sobre --card #ffffff. #475569 dá ~7,4:1. Cumprido → #047857 (5,9:1). */
+html:not(.dark) #rule-len, html:not(.dark) #rule-upper,
+html:not(.dark) #rule-num, html:not(.dark) #rule-spec { color: #475569 !important; }
+html:not(.dark) #rule-len.text-green-600, html:not(.dark) #rule-upper.text-green-600,
+html:not(.dark) #rule-num.text-green-600, html:not(.dark) #rule-spec.text-green-600 { color: #047857 !important; }
+/* "Lembrar-me" (#6b7280 = 4,8:1, justo no limite) → folga AA confortável */
+html:not(.dark) #screen-auth label.text-gray-500 { color: #475569 !important; }
+/* linhas divisórias claras sobre claro */
+html:not(.dark) [class*="border-white/"], html:not(.dark) [class*="border-zinc-7"], html:not(.dark) [class*="border-white"] { border-color: #cbd5e1 !important; }
+/* links rosa (Esqueceu a senha?) e acentos pink/red de texto em claro */
+html:not(.dark) .text-pink-500:not([class*="bg-"]) { color: #be185d !important; }
+html:not(.dark) .text-red-500:not([class*="bg-"]) { color: #b91c1c !important; }
+/* Logo Sigaleve (PNG majoritariamente branco): invisível sobre fundo claro.
+   Escurece a marca no tema CLARO apenas (tema escuro fica idêntico ao atual).
+   Alcance: top-bar, splash de arranque e rodapé do drawer de ajustes.
+   O logo do ecrã de auth fica dentro do .auth-logo-badge, que já é escuro em
+   modo claro, por isso é excluído para não ficar negro sobre preto. */
+html:not(.dark) img[src*="sigaleve-logo"]:not(.auth-logo-img) {
+  filter: brightness(0.2) contrast(1.1) saturate(1.6) !important;
+}
+/* ═══════════════════════════════════════════════════════════════════
+   MODAIS = CARTÕES ESCUROS EM AMBOS OS TEMAS (fix #modal-subscription)
+   ───────────────────────────────────────────────────────────────────
+   BUG: os ~20 modais (assinatura, 2FA, cofre, moments, editar perfil…)
+   usam bg-zinc-950 + text-white PORQUE SÃO escuros por design. Mas o
+   override "MODO CLARO" converte .text-white → #090d16 (quase preto).
+   Resultado no tema claro: texto quase-preto sobre fundo #09090b
+   = CONTRASTE 1,02:1 = invisível. Era o caso do modal de assinatura.
+   Correção: DENTRO de cartões escuros reafirmamos as cores claras, com
+   especificidade maior (acrescenta .bg-zinc-950) para vencer os
+   !important já existentes. Fora desses cartões nada muda. */
+html:not(.dark) .bg-zinc-950 { background-color: #09090b !important; }
+html:not(.dark) .bg-zinc-950 .text-white:not(button):not(.grad):not([class*="bg-"]):not([style*="background"]):not([style*="bg"]),
+html:not(.dark) .bg-zinc-950 h1.text-white, html:not(.dark) .bg-zinc-950 h2.text-white,
+html:not(.dark) .bg-zinc-950 h3.text-white, html:not(.dark) .bg-zinc-950 h4.text-white,
+html:not(.dark) .bg-zinc-950 p.text-white,  html:not(.dark) .bg-zinc-950 span.text-white,
+html:not(.dark) .bg-zinc-950 div.text-white, html:not(.dark) .bg-zinc-950 a.text-white,
+html:not(.dark) .bg-zinc-950 label.text-white, html:not(.dark) .bg-zinc-950 strong.text-white,
+html:not(.dark) .bg-zinc-950 li.text-white, html:not(.dark) .bg-zinc-950 i.text-white {
+  color: #f8fafc !important;
+}
+/* secundários dentro dos cartões escuros: cinzas legíveis sobre #09090b */
+html:not(.dark) .bg-zinc-950 .text-zinc-300:not([class*="bg-"]) { color: #d4d4d8 !important; }
+html:not(.dark) .bg-zinc-950 .text-zinc-400:not([class*="bg-"]) { color: #a1a1aa !important; }
+html:not(.dark) .bg-zinc-950 .text-zinc-450:not([class*="bg-"]) { color: #a1a1aa !important; }
+html:not(.dark) .bg-zinc-950 .text-zinc-500:not([class*="bg-"]) { color: #8b8b99 !important; }
+html:not(.dark) .bg-zinc-900  .text-zinc-500:not([class*="bg-"]) { color: #8b8b99 !important; }
+/* acentos saturados restaurados (a remapagem geral escurecia-os p/ fundo claro) */
+html:not(.dark) .bg-zinc-950 .text-purple-400:not([class*="bg-"]) { color: #c084fc !important; }
+html:not(.dark) .bg-zinc-950 .text-pink-400:not([class*="bg-"])   { color: #f472b6 !important; }
+html:not(.dark) .bg-zinc-950 .text-emerald-400:not([class*="bg-"]){ color: #34d399 !important; }
+html:not(.dark) .bg-zinc-950 .text-red-400:not([class*="bg-"])    { color: #f87171 !important; }
+html:not(.dark) .bg-zinc-950 .text-amber-400:not([class*="bg-"])  { color: #fbbf24 !important; }
+/* inputs de pagamento dentro do modal: bg-zinc-900 continua escuro (linha
+   acima), logo o texto branco tem de ficar branco — senão fica preto sobre
+   #18181b. Placeholders claros, não o #5b6778 do ecrã de auth. */
+html:not(.dark) .bg-zinc-900 input, html:not(.dark) .bg-zinc-950 input { color: #f8fafc !important; caret-color: #f8fafc !important; }
+html:not(.dark) .bg-zinc-900 input::placeholder, html:not(.dark) .bg-zinc-950 input::placeholder { color: #8b8b99 !important; }
+html:not(.dark) .bg-zinc-900 textarea, html:not(.dark) .bg-zinc-950 textarea { color: #f8fafc !important; caret-color: #f8fafc !important; }
+html:not(.dark) .bg-zinc-900 textarea::placeholder, html:not(.dark) .bg-zinc-950 textarea::placeholder { color: #8b8b99 !important; }
+/* bordas internas dos cartões escuros: manter escuras (a regra geral passaria
+   qualquer "border-*" para #cbd5e1 e a estrutura do modal desaparecia) */
+html:not(.dark) .bg-zinc-950 [class*="border-zinc-7"], html:not(.dark) .bg-zinc-950 [class*="border-zinc-8"],
+html:not(.dark) .bg-zinc-900  [class*="border-zinc-7"], html:not(.dark) .bg-zinc-900  [class*="border-zinc-8"] {
+  border-color: #27272a !important;
+}
+/* chips de estado com fundo translúcido colorido: restaurar o tom escuro
+   original (a regra geral clareava-os para fundo claro) */
+html:not(.dark) .bg-zinc-950 [class*="bg-emerald-500/2"] { background-color: rgba(16, 185, 129, 0.16) !important; }
+html:not(.dark) .bg-zinc-950 [class*="bg-red-500/1"]      { background-color: rgba(239, 68, 68, 0.16) !important; }
+html:not(.dark) .bg-zinc-950 [class*="bg-amber-500/2"]   { background-color: rgba(245, 158, 11, 0.16) !important; }
+html:not(.dark) .bg-zinc-950 [class*="bg-purple-500/2"]  { background-color: rgba(168, 85, 247, 0.16) !important; }
+
+  .boot-spinner{width:30px;height:30px;border-radius:50%;border:3px solid rgba(147,51,234,.25);border-top-color:#9333ea;animation:bootSpin .8s linear infinite}
+  @keyframes bootSpin{to{transform:rotate(360deg)}}
+
+#date-ideas-cats::-webkit-scrollbar{display:none}
+
+#moment-mood-chips::-webkit-scrollbar{display:none}
