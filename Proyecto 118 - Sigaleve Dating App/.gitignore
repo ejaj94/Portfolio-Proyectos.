@@ -46,3 +46,6 @@ data/sessions/
 Thumbs.db
 .vscode/
 .idea/
+*.bak
+*.tmp
+data/uploads/
