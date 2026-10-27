@@ -297,7 +297,14 @@ function renderDateIdeas() {
       mysteryAvatarsHtml += `<span class="w-6 h-6 rounded-full bg-zinc-900 border border-purple-500/40 flex items-center justify-center text-[10px] text-purple-300 -ml-1.5 first:ml-0 shadow" title="Identidade secreta (Encontro às Cegas)"><i class="fa-solid fa-user-secret"></i></span>`;
     }
 
-    const locationLabel = i.country ? `${i.city}, ${i.country}` : (i.city || '');
+    let locationLabel = '';
+    if (i.city && i.country) {
+      locationLabel = `${i.city}, ${i.country}`;
+    } else if (i.city) {
+      locationLabel = i.city;
+    } else if (i.country) {
+      locationLabel = i.country;
+    }
 
     const commentsList = i.comments || [];
     const commentsCount = Number(i.comments_count || commentsList.length || 0);
