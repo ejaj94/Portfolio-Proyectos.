@@ -265,7 +265,11 @@ def validate_content_privacy(text: str) -> tuple[bool, str]:
     if re.search(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', clean_lower):
         return False, "Por motivos de segurança, não é permitido partilhar endereços de e-mail nesta secção."
 
-    # 4. Deteção de links e URLs web
+    # 4. Deteção de injeção de código / scripts HTML (XSS)
+    if re.search(r'<\s*script\b|javascript:|onerror\s*=|onload\s*=|onclick\s*=|<\s*iframe\b|<\s*img\b|<\s*svg\b|<\s*style\b|<\s*link\b', clean_lower):
+        return False, "Por motivos de segurança, código ou tags HTML não são permitidos nesta aplicação."
+
+    # 5. Deteção de links e URLs web
     if re.search(r'(https?:\/\/|www\.|\b[a-zA-Z0-9-]+\.(com|pt|es|net|org|io|me|app)\b)', clean_lower):
         return False, "Não é permitida a publicação de hiperligações externas."
 

@@ -225,11 +225,15 @@ def init_date_ideas(app, session, load_json_store, save_json_store, validate_con
         if not is_safe:
             return _jsonify({"success": False, "error": error_msg, "security_blocked": True}), 400
 
+        import html as _html
+        clean_title = _html.escape(title)
+        clean_description = _html.escape(description)
+
         author_name, author_avatar = _get_user_info(uid=current_uid, email=session.get("user_email"))
         new_idea = {
             "id": f"di_{_uuid.uuid4().hex[:8]}",
-            "title": title,
-            "description": description,
+            "title": clean_title,
+            "description": clean_description,
             "category": category,
             "country": country,
             "city": city,
@@ -339,6 +343,9 @@ def init_date_ideas(app, session, load_json_store, save_json_store, validate_con
         if not is_safe:
             return _jsonify({"success": False, "error": error_msg, "security_blocked": True}), 400
 
+        import html as _html
+        clean_text = _html.escape(text)
+
         user_name, user_avatar = _get_user_info(uid=current_uid, email=session.get("user_email"))
 
         new_comment = {
@@ -346,7 +353,7 @@ def init_date_ideas(app, session, load_json_store, save_json_store, validate_con
             "user_id": current_uid,
             "user_name": user_name,
             "user_avatar": user_avatar,
-            "text": text,
+            "text": clean_text,
             "created_at": _time.time(),
         }
 

@@ -3,6 +3,16 @@
  */
 'use strict';
 
+if (typeof window.esc !== 'function') {
+  window.esc = function(s) {
+    if (s === null || s === undefined) return '';
+    const d = document.createElement('div');
+    d.textContent = String(s);
+    return d.innerHTML;
+  };
+}
+var esc = window.esc;
+
 // ═══════════════════════════════════════════════════
 // COMUNIDADE & SAÚDE — Q&A ANÓNIMO
 // ═══════════════════════════════════════════════════
