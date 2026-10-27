@@ -228,6 +228,19 @@ def api_get_moments():
         m_copy["remaining_time"] = f"{rem_hours}h {rem_min}m"
         m_copy["expires_in_sec"] = remaining_sec
 
+        # Tempo decorrido dinâmico
+        elapsed_sec = max(0, int(now - created_at))
+        if elapsed_sec < 60:
+            elapsed_label = "Agora mesmo"
+        elif elapsed_sec < 3600:
+            elapsed_label = f"Há {elapsed_sec // 60} min"
+        else:
+            eh = elapsed_sec // 3600
+            em = (elapsed_sec % 3600) // 60
+            elapsed_label = f"Há {eh}h" if em == 0 else f"Há {eh}h {em}m"
+        m_copy["time"] = elapsed_label
+        m_copy["elapsed_sec"] = elapsed_sec
+
         user_reactions = m.get("user_reactions", {})
         m_copy["my_reaction"] = user_reactions.get(str(current_uid), None)
         enriched_moments.append(m_copy)

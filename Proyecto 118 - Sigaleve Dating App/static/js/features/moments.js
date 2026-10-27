@@ -556,7 +556,7 @@ async function loadMomentsFeed() {
                   <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">${esc(m.mood || '✨')}</span>
                 </h4>
                 <p class="text-[11px] text-zinc-400 flex items-center gap-1.5 mt-0.5">
-                  <span>${esc(m.time || m.timestamp || 'Agora')}</span>
+                  <span id="moment-elapsed-${m.id}" data-created="${m.created_at || ''}">${esc(m.time || m.timestamp || 'Agora mesmo')}</span>
                   <span class="text-zinc-600">·</span>
                   <span class="text-zinc-400" title="História efémera visível apenas por 24h para matches">
                     <i class="fa-regular fa-clock text-[10px]"></i> <span id="moment-countdown-${m.id}" data-expires="${m.created_at ? Math.floor(Number(m.created_at)*1000 + 86400000) : 0}">${esc(remainingTime)}</span>
@@ -578,37 +578,38 @@ async function loadMomentsFeed() {
 
           ${m.text ? `<p class="text-[15px] sm:text-base text-zinc-50 leading-relaxed font-normal mb-1">${esc(m.text)}</p>` : ''}
 
-          ${mediaSrc || (m.photos && m.photos.length > 1) ? (() => {
-            const listaFotos = (m.photos && m.photos.length ? m.photos : [mediaSrc]).filter(Boolean);
+          ${(mediaSrc && mediaSrc !== 'null' && mediaSrc !== 'undefined') || (m.photos && m.photos.length > 0) ? (() => {
+            const listaFotos = (m.photos && m.photos.length ? m.photos : [mediaSrc]).filter(f => f && f !== 'null' && f !== 'undefined');
+            if (listaFotos.length === 0) return '';
             const ehCarrossel = listaFotos.length > 1;
-            const ehVideo = mediaSrc.startsWith('data:video/') || mediaSrc.match(/\.(mp4|webm|mov|ogg)($|\?)/i);
+            const ehVideo = mediaSrc && (mediaSrc.startsWith('data:video/') || mediaSrc.match(/\.(mp4|webm|mov|ogg)($|\?)/i));
             return `
-            <div class="relative mt-3 rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-950 flex items-center justify-center p-1 sm:p-2" style="max-height:85vh;width:100%;">
+            <div class="relative mt-3 rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-950 flex items-center justify-center p-1 sm:p-2 moment-media-box" style="max-height:85vh;width:100%;">
               ${ehCarrossel ? `
                 <div class="w-full flex overflow-x-auto snap-x snap-mandatory gap-1 moment-carousel" data-moment="${m.id}" style="scrollbar-width:none;">
                   ${listaFotos.map((f, idx) => {
                     const fv = f.startsWith('data:video/') || f.match(/\.(mp4|webm|mov|ogg)($|\?)/i);
                     return fv ? `
                       <div class="snap-center flex-shrink-0 w-full flex items-center justify-center">
-                        <video controls playsinline preload="metadata" class="w-auto h-auto rounded-xl bg-black" style="max-width:100%;max-height:75vh;object-fit:contain;">
+                        <video controls playsinline preload="metadata" class="w-auto h-auto rounded-xl bg-black" style="max-width:100%;max-height:75vh;object-fit:contain;" onerror="this.parentElement.style.display='none'">
                           <source src="${f}" type="${f.startsWith('data:video/mp4') ? 'video/mp4' : 'video/webm'}">
                           O teu navegador não suporta a reprodução deste vídeo.
                         </video>
                       </div>
                     ` : `
                       <div class="snap-center flex-shrink-0 w-full flex items-center justify-center">
-                        <img src="${f}" class="w-auto h-auto rounded-xl block mx-auto" style="max-width:100%;max-height:75vh;width:auto;height:auto;object-fit:contain;" alt="História de ${esc(m.user_name || 'Utilizador')} (${idx+1}/${listaFotos.length})" onerror="this.style.display='none'"/>
+                        <img src="${f}" class="w-auto h-auto rounded-xl block mx-auto" style="max-width:100%;max-height:75vh;width:auto;height:auto;object-fit:contain;" alt="História de ${esc(m.user_name || 'Utilizador')} (${idx+1}/${listaFotos.length})" onerror="this.closest('.moment-media-box') ? this.closest('.moment-media-box').style.display='none' : (this.style.display='none')"/>
                       </div>
                     `;
                   }).join('')}
                 </div>
               ` : ehVideo ? `
-                <video controls playsinline preload="metadata" class="w-auto h-auto rounded-xl bg-black" style="max-width:100%;max-height:75vh;object-fit:contain;">
+                <video controls playsinline preload="metadata" class="w-auto h-auto rounded-xl bg-black" style="max-width:100%;max-height:75vh;object-fit:contain;" onerror="this.closest('.moment-media-box') ? this.closest('.moment-media-box').style.display='none' : (this.style.display='none')">
                   <source src="${mediaSrc}" type="${mediaSrc.startsWith('data:video/mp4') ? 'video/mp4' : 'video/webm'}">
                   O teu navegador não suporta a reprodução deste vídeo.
                 </video>
               ` : `
-                <img src="${mediaSrc}" class="w-auto h-auto rounded-xl block mx-auto" style="max-width:100%;max-height:75vh;width:auto;height:auto;object-fit:contain;" alt="História de ${esc(m.user_name || 'Utilizador')}" onerror="this.style.display='none'"/>
+                <img src="${mediaSrc}" class="w-auto h-auto rounded-xl block mx-auto" style="max-width:100%;max-height:75vh;width:auto;height:auto;object-fit:contain;" alt="História de ${esc(m.user_name || 'Utilizador')}" onerror="this.closest('.moment-media-box') ? this.closest('.moment-media-box').style.display='none' : (this.style.display='none')"/>
               `}
               ${ehCarrossel ? `<div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5" id="moment-dots-${m.id}">
                   ${listaFotos.map((_, i) => `<span class="w-1.5 h-1.5 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/40'} transition-colors"></span>`).join('')}
@@ -656,11 +657,27 @@ function wireMomentCarousels() {
   });
 }
 
-// ══ CONTADOR 24H AO VIVO NOS CARDS DE MOMENTS ══════════════════════════════
+// ══ FORMATADOR DE TEMPO DECORRIDO EM TEMPO REAL ═════════════════════════════
+function formatMomentElapsedTime(createdAtSeconds) {
+  if (!createdAtSeconds) return 'Agora mesmo';
+  const nowSec = Math.floor(Date.now() / 1000);
+  const elapsedSec = Math.max(0, nowSec - Number(createdAtSeconds));
+  if (elapsedSec < 60) return 'Agora mesmo';
+  const minutes = Math.floor(elapsedSec / 60);
+  if (minutes < 60) return `Há ${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  if (hours >= 24) return 'Expirado';
+  if (remainingMinutes === 0) return `Há ${hours}h`;
+  return `Há ${hours}h ${remainingMinutes}m`;
+}
+
+// ══ CONTADOR 24H E TEMPO DECORRIDO AO VIVO NOS CARDS DE MOMENTS ══════════════
 let _momentsCountdownTimer = null;
 
 function updateMomentCountdowns() {
   const apply = () => {
+    // 1. Atualizar contagem regressiva para expirar (24h)
     document.querySelectorAll('[id^="moment-countdown-"]').forEach(el => {
       const expires = Number(el.dataset.expires || 0);
       const msLeft = expires - Date.now();
@@ -672,6 +689,14 @@ function updateMomentCountdowns() {
       const h = Math.floor(totalMin / 60);
       const mnt = totalMin % 60;
       el.textContent = h > 0 ? `${h}h ${mnt}m` : `${mnt}m`;
+    });
+
+    // 2. Atualizar tempo decorrido desde a publicação em tempo real ("Há Xh Ym")
+    document.querySelectorAll('[id^="moment-elapsed-"]').forEach(el => {
+      const createdAt = el.dataset.created;
+      if (createdAt) {
+        el.textContent = formatMomentElapsedTime(createdAt);
+      }
     });
   };
   apply();
