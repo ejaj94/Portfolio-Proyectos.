@@ -84,14 +84,23 @@ def api_update_profile():
     if not user:
         return jsonify({"success": False, "error": "Utilizador não encontrado."}), 404
 
+    import html as _html
+
+    text_fields_to_validate = []
     if "display_name" in data and str(data["display_name"]).strip():
-        user["display_name"] = str(data["display_name"]).strip()
+        val = str(data["display_name"]).strip()
+        text_fields_to_validate.append(val)
+        user["display_name"] = _html.escape(val[:60])
     if "phone" in data:
-        user["phone"] = str(data["phone"]).strip()
+        user["phone"] = _html.escape(str(data["phone"]).strip()[:30])
     if "city" in data and str(data["city"]).strip():
-        user["city"] = str(data["city"]).strip()
+        val = str(data["city"]).strip()
+        text_fields_to_validate.append(val)
+        user["city"] = _html.escape(val[:80])
     if "bio" in data:
-        user["bio"] = str(data["bio"]).strip()
+        val = str(data["bio"]).strip()
+        text_fields_to_validate.append(val)
+        user["bio"] = _html.escape(val[:1000])
     if "photo" in data and str(data["photo"]).strip():
         user["photo"] = str(data["photo"]).strip()
         if "photos" not in user or not user["photos"]:
@@ -100,30 +109,39 @@ def api_update_profile():
             if user["photo"] not in user["photos"]:
                 user["photos"].insert(0, user["photo"])
     if "interests" in data and isinstance(data["interests"], list):
-        user["interests"] = data["interests"]
+        user["interests"] = [_html.escape(str(i).strip()[:40]) for i in data["interests"] if str(i).strip()]
     if "diagnosis" in data and str(data["diagnosis"]).strip():
-        user["diagnosis"] = str(data["diagnosis"]).strip()
+        user["diagnosis"] = _html.escape(str(data["diagnosis"]).strip()[:40])
     if "custom_diagnosis" in data:
-        user["custom_diagnosis"] = str(data["custom_diagnosis"]).strip()
+        user["custom_diagnosis"] = _html.escape(str(data["custom_diagnosis"]).strip()[:60])
     if "relationship_goal" in data and str(data["relationship_goal"]).strip():
-        user["relationship_goal"] = str(data["relationship_goal"]).strip()
+        user["relationship_goal"] = _html.escape(str(data["relationship_goal"]).strip()[:60])
     if "zodiac" in data:
-        user["zodiac"] = str(data["zodiac"]).strip()
+        user["zodiac"] = _html.escape(str(data["zodiac"]).strip()[:30])
     if "education" in data:
-        user["education"] = str(data["education"]).strip()
+        user["education"] = _html.escape(str(data["education"]).strip()[:80])
     if "height" in data:
-        user["height"] = str(data["height"]).strip()
+        user["height"] = _html.escape(str(data["height"]).strip()[:20])
     if "lifestyle" in data:
-        user["lifestyle"] = str(data["lifestyle"]).strip()
+        user["lifestyle"] = _html.escape(str(data["lifestyle"]).strip()[:60])
     if "profile_prompt" in data:
-        user["profile_prompt"] = str(data["profile_prompt"]).strip()[:200]
+        val = str(data["profile_prompt"]).strip()
+        text_fields_to_validate.append(val)
+        user["profile_prompt"] = _html.escape(val[:250])
     if "seeking" in data:
-        user["seeking"] = str(data["seeking"]).strip()
+        user["seeking"] = _html.escape(str(data["seeking"]).strip()[:30])
     if "max_distance" in data:
         try:
             user["max_distance"] = int(data["max_distance"])
         except ValueError:
             pass
+
+    # Validar se algum campo contém tentativas de injeção XSS ou dados proibidos
+    from services.common import validate_content_privacy
+    for text_sample in text_fields_to_validate:
+        is_safe, error_msg = validate_content_privacy(text_sample)
+        if not is_safe:
+            return jsonify({"success": False, "error": error_msg}), 400
 
     user["is_profile_configured"] = True
     users[email] = user

@@ -200,26 +200,34 @@ def serialize_user(user: dict) -> dict:
         isinstance(p, str) and p.startswith("data:") and len(p) > 512 for p in photos_field
     ):
         photos_field = []
+    import html as _html
+
+    def _safe_str(val, max_len=None):
+        if not val or not isinstance(val, str):
+            return "" if val is None else str(val)
+        s = val[:max_len] if max_len else val
+        return _html.escape(s)
+
     return {
         "id": u.get("id"),
         "email": u.get("email"),
-        "display_name": u.get("display_name", "Utilizador"),
-        "phone": u.get("phone", ""),
+        "display_name": _safe_str(u.get("display_name", "Utilizador"), 60),
+        "phone": _safe_str(u.get("phone", ""), 30),
         "age": u.get("age", 25),
-        "city": u.get("city", "Lisboa, Portugal"),
-        "bio": u.get("bio", ""),
+        "city": _safe_str(u.get("city", "Lisboa, Portugal"), 80),
+        "bio": _safe_str(u.get("bio", ""), 1000),
         "photo": _thumb(u.get("photo")) or "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=85",
         "photos": photos_field,
-        "interests": u.get("interests", ["Viagens", "Música"]),
-        "diagnosis": u.get("diagnosis", "ALPHA"),
-        "custom_diagnosis": u.get("custom_diagnosis", ""),
-        "relationship_goal": u.get("relationship_goal", ""),
-        "zodiac": u.get("zodiac", ""),
-        "education": u.get("education", ""),
-        "height": u.get("height", ""),
-        "lifestyle": u.get("lifestyle", ""),
-        "profile_prompt": u.get("profile_prompt", ""),
-        "seeking": u.get("seeking", "Todos"),
+        "interests": [_safe_str(i, 40) for i in u.get("interests", ["Viagens", "Música"]) if isinstance(i, str)],
+        "diagnosis": _safe_str(u.get("diagnosis", "ALPHA"), 40),
+        "custom_diagnosis": _safe_str(u.get("custom_diagnosis", ""), 60),
+        "relationship_goal": _safe_str(u.get("relationship_goal", ""), 60),
+        "zodiac": _safe_str(u.get("zodiac", ""), 30),
+        "education": _safe_str(u.get("education", ""), 80),
+        "height": _safe_str(u.get("height", ""), 20),
+        "lifestyle": _safe_str(u.get("lifestyle", ""), 60),
+        "profile_prompt": _safe_str(u.get("profile_prompt", ""), 250),
+        "seeking": _safe_str(u.get("seeking", "Todos"), 30),
         "max_distance": u.get("max_distance", 50),
         "is_profile_configured": u.get("is_profile_configured", False),
         "is_plus": u.get("is_plus", False),

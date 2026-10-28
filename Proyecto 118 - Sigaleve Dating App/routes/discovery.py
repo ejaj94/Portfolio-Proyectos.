@@ -44,24 +44,32 @@ def api_discover():
         else:
             km_label = city
 
+        import html as _html
+
+        def _safe_str(val, max_len=None):
+            if not val or not isinstance(val, str):
+                return "" if val is None else str(val)
+            s = val[:max_len] if max_len else val
+            return _html.escape(s)
+
         real_profiles.append({
             "id": uid,
-            "name": u.get("display_name") or u.get("name") or "Utilizador",
+            "name": _safe_str(u.get("display_name") or u.get("name") or "Utilizador", 60),
             "age": u.get("age", 25),
-            "city": city,
-            "km": km_label,
-            "code": diag_code,
+            "city": _safe_str(city, 80),
+            "km": _safe_str(km_label, 80),
+            "code": _safe_str(diag_code, 10),
             "activity": "Ativo agora",
             "photo": photo,
             "photos": photos_list,
-            "bio": u.get("bio") or "Olá! Estou no Sigaleve para conexões reais, respeitosas e sem preconceito.",
-            "relationship_goal": u.get("relationship_goal") or "Relação séria",
-            "zodiac": u.get("zodiac") or "",
-            "education": u.get("education") or "",
-            "height": u.get("height") or "",
-            "lifestyle": u.get("lifestyle") or "",
-            "profile_prompt": u.get("profile_prompt") or "",
-            "interests": u.get("interests", ["Viagens", "Música"]),
+            "bio": _safe_str(u.get("bio") or "Olá! Estou no Sigaleve para conexões reais, respeitosas e sem preconceito.", 1000),
+            "relationship_goal": _safe_str(u.get("relationship_goal") or "Relação séria", 60),
+            "zodiac": _safe_str(u.get("zodiac") or "", 30),
+            "education": _safe_str(u.get("education") or "", 80),
+            "height": _safe_str(u.get("height") or "", 20),
+            "lifestyle": _safe_str(u.get("lifestyle") or "", 60),
+            "profile_prompt": _safe_str(u.get("profile_prompt") or "", 250),
+            "interests": [_safe_str(i, 40) for i in u.get("interests", ["Viagens", "Música"]) if isinstance(i, str)],
             "verified": bool(u.get("is_verified")),
             "is_real_user": True
         })

@@ -124,6 +124,10 @@ def api_register():
         except Exception:
             return jsonify({"success": False, "error": "Formato de data de nascimento inválido."}), 400
 
+    import html as _html
+    name = _html.escape(name[:60])
+    phone = _html.escape(phone[:30])
+
     users = load_users()
     if email in users:
         return jsonify({"success": False, "error": "Este e-mail já está registado. Por favor, usa outro e-mail ou inicia sessão."}), 409
